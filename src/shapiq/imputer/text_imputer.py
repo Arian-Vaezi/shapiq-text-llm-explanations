@@ -131,8 +131,7 @@ class TextImputer(Imputer):
                 results.extend(scores)
 
         return np.array(results, dtype=float)
-    
-    
+
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
         """Core function.
 
@@ -141,7 +140,6 @@ class TextImputer(Imputer):
         texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
         outputs = self._evaluate_texts(texts)
         return self.insert_empty_value(outputs, coalitions)
-    
 
     # ----------------- Helpers ------------------
     @property
