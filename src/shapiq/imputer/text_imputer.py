@@ -145,10 +145,7 @@ class TextImputer(Imputer):
         coalition = np.asarray(coalition, dtype=bool)
 
         if coalition.shape != (self.n_features,):
-            msg = (
-                f"Coalition must have shape ({self.n_features},), "
-                f"got {coalition.shape}."
-            )
+            msg = f"Coalition must have shape ({self.n_features},), got {coalition.shape}."
             raise ValueError(msg)
 
         return coalition
