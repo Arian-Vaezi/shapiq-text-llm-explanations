@@ -101,7 +101,7 @@ class TextImputer(Imputer):
         # ---------------- NORMALIZATION ----------------
         # Compute the real empty prediction before value_function inserts empty values.
         empty = np.zeros((1, self.n_features), dtype=bool)
-        empty_text = self._decode(self._coalition_to_tokens(empty[0]))
+        empty_text = self._coalition_to_text(empty[0])
         self.empty_prediction = self._evaluate_texts([empty_text])[0]
         self.normalization_value = self.empty_prediction
 

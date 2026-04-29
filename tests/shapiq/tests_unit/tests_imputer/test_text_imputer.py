@@ -112,8 +112,7 @@ def test_empty_prediction_uses_real_empty_model_output(monkeypatch):
 
 # Word segmentation should use whitespace-split words as players.
 def test_word_segmentation_sets_word_players():
-    imputer = TextImputer(
-        "dummy", "I love machine learning", segmentation="word")
+    imputer = TextImputer("dummy", "I love machine learning", segmentation="word")
 
     assert imputer.players.tolist() == ["I", "love", "machine", "learning"]
     assert imputer.n_features == 4
@@ -131,13 +130,7 @@ def test_players_returns_copy():
 def test_word_segmentation_can_differ_from_token_segmentation():
     imputer = TextImputer("dummy", "the story of RBG is unbelievable", segmentation="word")
 
-# A single word can map to multiple tokenizer tokens.
-def test_word_segmentation_can_differ_from_token_segmentation():
-    imputer = TextImputer(
-        "dummy", "the story of RBG is unbelievable", segmentation="word")
-
-    assert imputer.players.tolist() == [
-        "the", "story", "of", "RBG", "is", "unbelievable"]
+    assert imputer.players.tolist() == ["the", "story", "of", "RBG", "is", "unbelievable"]
     assert imputer.tokens.tolist() == [1, 2, 3, 4, 5, 6, 7]
 
 
