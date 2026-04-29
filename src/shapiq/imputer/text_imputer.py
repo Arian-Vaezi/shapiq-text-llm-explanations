@@ -81,7 +81,7 @@ class TextImputer(Imputer):
         self._mask_token_id = self._tokenizer.mask_token_id
 
         # ---------------- SEGMENTATION ----------------
-        data = self._tokens.reshape(1, -1)
+        data = np.arange(len(self._players)).reshape(1, -1)
 
         super().__init__(
             model=self._classifier,
@@ -100,8 +100,8 @@ class TextImputer(Imputer):
 
     # ------------------- Masking -------------------
     # TODO @yuanyuan-yili: implement [MASK] replacement and token removal strategy (#8)
-    def _coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
-        """Convert a coalition mask into token ids."""
+    def _token_coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
+        """Convert a token-level coalition mask into token ids."""
         if self.mask_strategy == "remove":
             return self._tokens[coalition]
 
@@ -111,6 +111,26 @@ class TextImputer(Imputer):
 
     def _decode(self, tokens: np.ndarray) -> str:
         return self._tokenizer.decode(tokens)
+    
+    def _word_coalition_to_text(self, coalition: np.ndarray) -> str:
+        """Convert a word-level coalition mask into a masked text string."""
+        # coalitions refer to words
+        words = self._players.astype(str)
+
+        if self.mask_strategy == "remove":
+            return " ".join(words[coalition])
+
+        masked_words = words.copy()
+        masked_words[~coalition] = "[MASK]"
+        return " ".join(masked_words)
+    
+    def _coalition_to_text(self, coalition: np.ndarray) -> str:
+        """Convert a coalition mask into a text string."""
+        # dispatch
+        if self.segmentation == "word":
+            return self._word_coalition_to_text(coalition)
+
+        return self._decode(self._token_coalition_to_tokens(coalition))
 
     # ------------------- Value Function -------------------
     def _evaluate_texts(self, texts: list[str]) -> np.ndarray:
@@ -137,7 +157,7 @@ class TextImputer(Imputer):
 
         coalition → masked text → batched model call → score.
         """
-        texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
+        texts = [self._coalition_to_text(c) for c in coalitions]
         outputs = self._evaluate_texts(texts)
         return self.insert_empty_value(outputs, coalitions)
 

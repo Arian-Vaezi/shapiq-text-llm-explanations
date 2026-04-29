@@ -16,8 +16,19 @@ class FakeTokenizer:
     mask_token_id = 103
 
     def __call__(self, text, **kwargs):
-        word_ids = list(range(1, len(text.split()) + 1))
-        return {"input_ids": [0, *word_ids, 2]}
+        token_ids = []
+        next_id = 1
+
+        for word in text.split():
+            # Simulate subword tokenization
+            if word == "unbelievable":
+                token_ids.extend([next_id, next_id + 1])
+                next_id += 2
+            else:
+                token_ids.append(next_id)
+                next_id += 1
+
+        return {"input_ids": [0, *token_ids, 2]}
 
     def decode(self, token_ids):
         return " ".join(str(t) for t in token_ids)
@@ -99,9 +110,21 @@ def test_empty_prediction_uses_real_empty_model_output(monkeypatch):
     assert imputer.normalization_value == pytest.approx(0.42)
 
 
+# Word segmentation should use whitespace-split words as players.
 def test_word_segmentation_sets_word_players():
     imputer = TextImputer(
         "dummy", "I love machine learning", segmentation="word")
 
     assert imputer.players.tolist() == ["I", "love", "machine", "learning"]
     assert imputer.n_features == 4
+
+
+# A single word can map to multiple tokenizer tokens.
+def test_word_segmentation_can_differ_from_token_segmentation():
+    imputer = TextImputer(
+        "dummy", "the story of RBG is unbelievable", segmentation="word")
+
+    assert imputer.players.tolist() == [
+        "the", "story", "of", "RBG", "is", "unbelievable"]
+    assert imputer.tokens.tolist() == [1, 2, 3, 4, 5, 6, 7]
+    assert imputer.n_features == 6
