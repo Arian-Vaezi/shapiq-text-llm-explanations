@@ -40,6 +40,7 @@ def mock_pipeline(monkeypatch):
 # ---------------------------------------------------------------------------
 
 
+# invalid mask strategy + segmentation
 def test_invalid_config():
     with pytest.raises(ValueError):
         TextImputer("dummy", "test", mask_strategy="invalid")
@@ -47,6 +48,7 @@ def test_invalid_config():
         TextImputer("dummy", "test", segmentation="invalid")
 
 
+# output shape check
 def test_value_function():
     imputer = TextImputer("dummy", "I love machine learning")
     n = imputer.n_features
@@ -56,9 +58,18 @@ def test_value_function():
     assert np.all(np.isfinite(values))
 
 
+# normalization
 def test_empty_prediction():
     imputer = TextImputer("dummy", "I love machine learning")
     n = imputer.n_features
     empty = np.zeros((1, n), dtype=bool)
     values = imputer.value_function(empty)
     assert values[0] == pytest.approx(imputer.normalization_value)
+
+
+# fake model test
+def test_fake_model_negative_label():
+    imputer = TextImputer("dummy", "I hate this")
+    imputer._classifier = lambda texts: [{"label": "NEGATIVE", "score": 0.9} for _ in texts]
+    values = imputer.value_function(np.ones((1, imputer.n_features), dtype=bool))
+    assert values[0] < 0
