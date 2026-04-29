@@ -73,3 +73,27 @@ def test_fake_model_negative_label():
     imputer._classifier = lambda texts: [{"label": "NEGATIVE", "score": 0.9} for _ in texts]
     values = imputer.value_function(np.ones((1, imputer.n_features), dtype=bool))
     assert values[0] < 0
+
+
+def test_empty_prediction_uses_real_empty_model_output(monkeypatch):
+    class EmptyAwareClassifier:
+        tokenizer = FakeTokenizer()
+
+        def __call__(self, texts, **kwargs):
+            outputs = []
+            for text in texts:
+                if "103" in text:
+                    outputs.append({"label": "POSITIVE", "score": 0.42})
+                else:
+                    outputs.append({"label": "POSITIVE", "score": 0.8})
+            return outputs
+
+    monkeypatch.setattr(
+        "transformers.pipeline",
+        lambda *args, **kwargs: EmptyAwareClassifier(),
+    )
+
+    imputer = TextImputer("dummy", "I love machine learning")
+
+    assert imputer.empty_prediction == pytest.approx(0.42)
+    assert imputer.normalization_value == pytest.approx(0.42)
