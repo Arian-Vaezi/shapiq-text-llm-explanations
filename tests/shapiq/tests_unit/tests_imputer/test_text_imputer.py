@@ -118,16 +118,16 @@ def test_word_segmentation_sets_word_players():
     assert imputer.players.tolist() == ["I", "love", "machine", "learning"]
     assert imputer.n_features == 4
 
+
 def test_players_returns_copy():
-    imputer = TextImputer(
-        "dummy", "I love machine learning", segmentation="word")
+    imputer = TextImputer("dummy", "I love machine learning", segmentation="word")
 
     players = imputer.players
     players[0] = "changed"
 
     assert imputer.players.tolist() == ["I", "love", "machine", "learning"]
 
-# A single word can map to multiple tokenizer tokens
+
 def test_word_segmentation_can_differ_from_token_segmentation():
     imputer = TextImputer("dummy", "the story of RBG is unbelievable", segmentation="word")
 
@@ -139,4 +139,21 @@ def test_word_segmentation_can_differ_from_token_segmentation():
     assert imputer.players.tolist() == [
         "the", "story", "of", "RBG", "is", "unbelievable"]
     assert imputer.tokens.tolist() == [1, 2, 3, 4, 5, 6, 7]
-    assert imputer.n_features == 6
+
+
+def test_word_and_token_segmentation_have_different_feature_counts():
+    text = "the story of RBG is unbelievable"
+
+    word_imputer = TextImputer("dummy", text, segmentation="word")
+    token_imputer = TextImputer("dummy", text, segmentation="token")
+
+    assert word_imputer.n_features == 6
+    assert token_imputer.n_features == 7
+
+
+def test_token_segmentation_sets_token_players():
+    imputer = TextImputer("dummy", "I love machine learning", segmentation="token")
+
+    assert imputer.players.tolist() == [1, 2, 3, 4]
+    assert imputer.tokens.tolist() == [1, 2, 3, 4]
+    assert imputer.n_features == 4
