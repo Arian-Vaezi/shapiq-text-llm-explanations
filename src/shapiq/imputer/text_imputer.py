@@ -70,7 +70,9 @@ class TextImputer(Imputer):
             self._players = self._tokens
 
         elif segmentation == "word":
-            # naive word split (can be improved)
+            # Initial word-level segmentation.
+            # This intentionally uses whitespace splitting and can later be replaced
+            # by a tokenizer-aware word/span alignment.
             words = input_text.split()
             self._players = np.array(words)
 
@@ -126,11 +128,25 @@ class TextImputer(Imputer):
 
     def _coalition_to_text(self, coalition: np.ndarray) -> str:
         """Convert a coalition mask into a text string."""
-        # dispatch
+        coalition = self._validate_coalition(coalition)
+
         if self.segmentation == "word":
             return self._word_coalition_to_text(coalition)
 
         return self._decode(self._token_coalition_to_tokens(coalition))
+    
+    def _validate_coalition(self, coalition: np.ndarray) -> np.ndarray:
+        """Validate and normalize a single coalition mask."""
+        coalition = np.asarray(coalition, dtype=bool)
+
+        if coalition.shape != (self.n_features,):
+            msg = (
+                f"Coalition must have shape ({self.n_features},), "
+                f"got {coalition.shape}."
+            )
+            raise ValueError(msg)
+
+        return coalition
 
     # ------------------- Value Function -------------------
     def _evaluate_texts(self, texts: list[str]) -> np.ndarray:

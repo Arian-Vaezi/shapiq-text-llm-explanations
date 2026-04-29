@@ -193,3 +193,12 @@ def test_token_coalition_removes_token_ids():
     text = imputer._coalition_to_text(coalition)
 
     assert text == "1 3"
+
+
+def test_coalition_with_wrong_length_raises():
+    imputer = TextImputer("dummy", "I love NLP", segmentation="word")
+
+    coalition = np.array([True, False])
+
+    with pytest.raises(ValueError):
+        imputer._coalition_to_text(coalition)
