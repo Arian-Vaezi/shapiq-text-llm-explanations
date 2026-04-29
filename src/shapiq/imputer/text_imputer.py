@@ -1,12 +1,19 @@
 from __future__ import annotations
 
 import numpy as np
+import torch
 from transformers import pipeline
 
 from shapiq.imputer.base import Imputer
 
 
 class TextImputer(Imputer):
+    """Text Imputer for LLM / NLP models.
+
+    This class treats tokens (or words) as players and evaluates coalitions
+    by masking/removing parts of the input and calling a model.
+    """
+
     def __init__(
         self,
         model_name: str,
@@ -14,63 +21,115 @@ class TextImputer(Imputer):
         *,
         mask_strategy: str = "mask",
         device: int | str | None = None,
+        batch_size: int = 32,
+        segmentation: str = "token",  # "token" | "word"
+        verbose: bool = False,
     ):
-        # generalized to support other models
+        if mask_strategy not in {"mask", "remove"}:
+            raise ValueError(f"Invalid mask_strategy: {mask_strategy}")
+
+        if segmentation not in {"token", "word"}:
+            raise ValueError(f"Invalid segmentation: {segmentation}")
+
+        self.mask_strategy = mask_strategy
+        self.batch_size = batch_size
+        self.segmentation = segmentation
+
+        # ---------------- MODEL ----------------
+        # TODO: (Arian - #7)
+        # add HF classifier wrapper
         self._classifier = pipeline(
-            model=model_name,
             task="sentiment-analysis",
+            model=model_name,
             device=device,
         )
         self._tokenizer = self._classifier.tokenizer
 
-        # tokenize input
         self.original_text = input_text
-        self._tokens = np.array(
-            self._tokenizer(input_text)["input_ids"][1:-1]
-        )
 
-        self.mask_strategy = mask_strategy
+        # ---------------- SEGMENTATION ----------------
+        # TODO: (Yuanyuan/Yili - #8)
+        # implement word-level/token-level segmentation
+        if segmentation == "token":
+            tokens = self._tokenizer(input_text)["input_ids"][1:-1]
+            self._tokens = np.array(tokens)
+            self._players = self._tokens
+
+        elif segmentation == "word":
+            # naive word split (can be improved)
+            words = input_text.split()
+            self._players = np.array(words)
+
+            # map words -> tokens later if needed
+            tokens = self._tokenizer(input_text)["input_ids"][1:-1]
+            self._tokens = np.array(tokens)
+
         self._mask_token_id = self._tokenizer.mask_token_id
 
-        n_features = len(self._tokens)
-
-        # dummy data (required by base class)
-        dummy_data = np.zeros((1, n_features))
+        # ---------------- SEGMENTATION ----------------
+        data = self._tokens.reshape(1, -1)
 
         super().__init__(
             model=self._classifier,
-            data=dummy_data,
-            x=self._tokens,
+            data=data,
+            x=data,
             sample_size=1,
+            verbose=verbose,
         )
 
-        # compute empty + full outputs
-        self.empty_prediction = self._model_call(
-            [self._decode(np.full_like(self._tokens, self._mask_token_id))]
-        )[0]
-
+        # ---------------- NORMALIZATION ----------------
+        # compute empty prediction (all masked)
+        empty = np.zeros((1, self.n_features), dtype=bool)
+        self.empty_prediction = self._raw_value_function(empty)[0]
         self.normalization_value = self.empty_prediction
 
-    def _decode(self, tokens):
+    # ------------------- Masking -------------------
+    # TODO: (Yuanyuan/Yili - #8)
+    # Implement [Mask] replacement and token removal strategy
+    def _coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
+        """Convert a coalition mask into token ids."""
+        if self.mask_strategy == "remove":
+            return self._tokens[coalition]
+
+        tokens = self._tokens.copy()
+        tokens[~coalition] = self._mask_token_id
+        return tokens
+
+    def _decode(self, tokens: np.ndarray) -> str:
         return self._tokenizer.decode(tokens)
 
-    def _model_call(self, texts):
-        outputs = self._classifier(texts)
-        return np.array([
-            o["score"] if o["label"] == "POSITIVE" else -o["score"]
-            for o in outputs
-        ])
-
+    # ------------------- Value Function -------------------
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
-        texts = []
+        """Core function:
+        coalition → masked text → batched model call → score
+        """
+        # 1. build texts from coalitions
+        texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
 
-        for coalition in coalitions:
-            if self.mask_strategy == "remove":
-                tokens = self._tokens[coalition]
-            else:
-                tokens = self._tokens.copy()
-                tokens[~coalition] = self._mask_token_id
+        results = []
 
-            texts.append(self._decode(tokens))
+        # 2. (batched) model call to do sentiment classification on each coalition
+        with torch.inference_mode():
+            for i in range(0, len(texts), self.batch_size):
+                batch = texts[i : i + self.batch_size]
 
-        return self._model_call(texts)
+                # feeding the batch into the model/classifier
+                outputs = self._classifier(batch)
+
+                scores = [o["score"] if o["label"] == "POSITIVE" else -o["score"] for o in outputs]
+
+                results.extend(scores)
+
+        outputs = np.array(results, dtype=float)
+
+        # 3. normalization handling
+        return self.insert_empty_value(outputs, coalitions)
+
+    # ----------------- Helpers ------------------
+    @property
+    def tokens(self) -> np.ndarray:
+        return self._tokens.copy()
+
+    @property
+    def players(self):
+        return self._players
