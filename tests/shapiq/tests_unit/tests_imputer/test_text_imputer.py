@@ -200,5 +200,24 @@ def test_coalition_with_wrong_length_raises():
 
     coalition = np.array([True, False])
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Coalition must have shape"):
         imputer._coalition_to_text(coalition)
+
+
+def test_mask_strategy_requires_mask_token(monkeypatch):
+    class TokenizerWithoutMaskToken(FakeTokenizer):
+        mask_token_id = None
+
+    class ClassifierWithoutMaskToken:
+        tokenizer = TokenizerWithoutMaskToken()
+
+        def __call__(self, texts, **kwargs):
+            return [{"label": "POSITIVE", "score": 0.8} for _ in texts]
+
+    monkeypatch.setattr(
+        "transformers.pipeline",
+        lambda *args, **kwargs: ClassifierWithoutMaskToken(),
+    )
+
+    with pytest.raises(ValueError, match="requires tokenizer.mask_token_id"):
+        TextImputer("dummy", "I love NLP", mask_strategy="mask")

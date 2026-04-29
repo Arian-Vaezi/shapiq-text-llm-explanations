@@ -81,6 +81,11 @@ class TextImputer(Imputer):
             self._tokens = np.array(tokens)
 
         self._mask_token_id = self._tokenizer.mask_token_id
+        self._mask_token = getattr(self._tokenizer, "mask_token", "[MASK]")
+
+        if self.mask_strategy == "mask" and self._mask_token_id is None:
+            msg = "mask_strategy='mask' requires tokenizer.mask_token_id."
+            raise ValueError(msg)
 
         # ---------------- IMPUTER DATA ----------------
         data = np.arange(len(self._players)).reshape(1, -1)
@@ -123,7 +128,7 @@ class TextImputer(Imputer):
             return " ".join(words[coalition])
 
         masked_words = words.copy()
-        masked_words[~coalition] = "[MASK]"
+        masked_words[~coalition] = self._mask_token
         return " ".join(masked_words)
 
     def _coalition_to_text(self, coalition: np.ndarray) -> str:
@@ -134,7 +139,7 @@ class TextImputer(Imputer):
             return self._word_coalition_to_text(coalition)
 
         return self._decode(self._token_coalition_to_tokens(coalition))
-    
+
     def _validate_coalition(self, coalition: np.ndarray) -> np.ndarray:
         """Validate and normalize a single coalition mask."""
         coalition = np.asarray(coalition, dtype=bool)
