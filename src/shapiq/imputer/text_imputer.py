@@ -1,3 +1,5 @@
+"""Text imputer for LLM / NLP models using Shapley value explanations."""
+
 from __future__ import annotations
 
 import numpy as np
@@ -22,24 +24,36 @@ class TextImputer(Imputer):
         batch_size: int = 32,
         segmentation: str = "token",  # "token" | "word"
         verbose: bool = False,
-    ):
+    ) -> None:
+        """Initialize the TextImputer.
+
+        Args:
+            model_name: HuggingFace model identifier.
+            input_text: The text to explain.
+            mask_strategy: Either ``"mask"`` (replace with [MASK]) or ``"remove"``.
+            device: Device for the HuggingFace pipeline (e.g. 0 for GPU, ``"cpu"``).
+            batch_size: Number of masked texts to score in one model call.
+            segmentation: Either ``"token"`` or ``"word"`` player granularity.
+            verbose: Whether to print progress information.
+        """
         # moved import inside the class to not break CI
         from transformers import pipeline
 
         if mask_strategy not in {"mask", "remove"}:
-            raise ValueError(f"Invalid mask_strategy: {mask_strategy}")
+            msg = f"Invalid mask_strategy: {mask_strategy}"
+            raise ValueError(msg)
 
         if segmentation not in {"token", "word"}:
-            raise ValueError(f"Invalid segmentation: {segmentation}")
+            msg = f"Invalid segmentation: {segmentation}"
+            raise ValueError(msg)
 
         self.mask_strategy = mask_strategy
         self.batch_size = batch_size
         self.segmentation = segmentation
 
         # ---------------- MODEL ----------------
-        # TODO: (Arian - #7)
-        # add HF classifier wrapper
-        self._classifier = pipeline(
+        # TODO @arian: add HF classifier wrapper (#7)
+        self._classifier = pipeline(  # ty: ignore[no-matching-overload]
             "sentiment-analysis",
             model=model_name,
             device=device,
@@ -49,8 +63,7 @@ class TextImputer(Imputer):
         self.original_text = input_text
 
         # ---------------- SEGMENTATION ----------------
-        # TODO: (Yuanyuan/Yili - #8)
-        # implement word-level/token-level segmentation
+        # TODO @yuanyuan-yili: implement word-level/token-level segmentation (#8)
         if segmentation == "token":
             tokens = self._tokenizer(input_text)["input_ids"][1:-1]
             self._tokens = np.array(tokens)
@@ -85,8 +98,7 @@ class TextImputer(Imputer):
         self.normalization_value = self.empty_prediction
 
     # ------------------- Masking -------------------
-    # TODO: (Yuanyuan/Yili - #8)
-    # Implement [Mask] replacement and token removal strategy
+    # TODO @yuanyuan-yili: implement [MASK] replacement and token removal strategy (#8)
     def _coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
         """Convert a coalition mask into token ids."""
         if self.mask_strategy == "remove":
@@ -101,8 +113,9 @@ class TextImputer(Imputer):
 
     # ------------------- Value Function -------------------
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
-        """Core function:
-        coalition → masked text → batched model call → score
+        """Core function.
+
+        coalition → masked text → batched model call → score.
         """
         # 1. build texts from coalitions
         texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
@@ -131,8 +144,10 @@ class TextImputer(Imputer):
     # ----------------- Helpers ------------------
     @property
     def tokens(self) -> np.ndarray:
+        """Return a copy of the token id array."""
         return self._tokens.copy()
 
     @property
-    def players(self):
+    def players(self) -> np.ndarray:
+        """Return the player array (tokens or words depending on segmentation)."""
         return self._players

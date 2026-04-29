@@ -17,7 +17,7 @@ class FakeTokenizer:
 
     def __call__(self, text, **kwargs):
         word_ids = list(range(1, len(text.split()) + 1))
-        return {"input_ids": [0] + word_ids + [2]}
+        return {"input_ids": [0, *word_ids, 2]}
 
     def decode(self, token_ids):
         return " ".join(str(t) for t in token_ids)
