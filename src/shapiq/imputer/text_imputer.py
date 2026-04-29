@@ -169,5 +169,5 @@ class TextImputer(Imputer):
 
     @property
     def players(self) -> np.ndarray:
-        """Return the player array (tokens or words depending on segmentation)."""
-        return self._players
+        """Return a copy of the player array."""
+        return self._players.copy()
