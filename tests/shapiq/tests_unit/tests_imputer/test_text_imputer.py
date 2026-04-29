@@ -157,3 +157,39 @@ def test_token_segmentation_sets_token_players():
     assert imputer.players.tolist() == [1, 2, 3, 4]
     assert imputer.tokens.tolist() == [1, 2, 3, 4]
     assert imputer.n_features == 4
+
+
+def test_word_coalition_masks_words():
+    imputer = TextImputer("dummy", "I love NLP", segmentation="word")
+
+    coalition = np.array([True, False, True])
+    text = imputer._coalition_to_text(coalition)
+
+    assert text == "I [MASK] NLP"
+
+
+def test_token_coalition_masks_token_ids():
+    imputer = TextImputer("dummy", "I love NLP", segmentation="token")
+
+    coalition = np.array([True, False, True])
+    text = imputer._coalition_to_text(coalition)
+
+    assert text == "1 103 3"
+
+
+def test_word_coalition_removes_words():
+    imputer = TextImputer("dummy", "I love NLP", segmentation="word", mask_strategy="remove")
+
+    coalition = np.array([True, False, True])
+    text = imputer._coalition_to_text(coalition)
+
+    assert text == "I NLP"
+
+
+def test_token_coalition_removes_token_ids():
+    imputer = TextImputer("dummy", "I love NLP", segmentation="token", mask_strategy="remove")
+
+    coalition = np.array([True, False, True])
+    text = imputer._coalition_to_text(coalition)
+
+    assert text == "1 3"

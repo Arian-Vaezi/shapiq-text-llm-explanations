@@ -63,7 +63,7 @@ class TextImputer(Imputer):
         self.original_text = input_text
 
         # ---------------- SEGMENTATION ----------------
-        # TODO @yuanyuan-yili: implement word-level/token-level segmentation (#8)
+        # Build players according to the selected segmentation.
         if segmentation == "token":
             tokens = self._tokenizer(input_text)["input_ids"][1:-1]
             self._tokens = np.array(tokens)
@@ -80,7 +80,7 @@ class TextImputer(Imputer):
 
         self._mask_token_id = self._tokenizer.mask_token_id
 
-        # ---------------- SEGMENTATION ----------------
+        # ---------------- IMPUTER DATA ----------------
         data = np.arange(len(self._players)).reshape(1, -1)
 
         super().__init__(
@@ -111,11 +111,11 @@ class TextImputer(Imputer):
 
     def _decode(self, tokens: np.ndarray) -> str:
         return self._tokenizer.decode(tokens)
-    
+
     def _word_coalition_to_text(self, coalition: np.ndarray) -> str:
         """Convert a word-level coalition mask into a masked text string."""
         # coalitions refer to words
-        words = self._players.astype(str)
+        words = self._players.astype(object)
 
         if self.mask_strategy == "remove":
             return " ".join(words[coalition])
@@ -123,7 +123,7 @@ class TextImputer(Imputer):
         masked_words = words.copy()
         masked_words[~coalition] = "[MASK]"
         return " ".join(masked_words)
-    
+
     def _coalition_to_text(self, coalition: np.ndarray) -> str:
         """Convert a coalition mask into a text string."""
         # dispatch
