@@ -92,9 +92,10 @@ class TextImputer(Imputer):
         )
 
         # ---------------- NORMALIZATION ----------------
-        # compute empty prediction (all masked)
+        # Compute the real empty prediction before value_function inserts empty values.
         empty = np.zeros((1, self.n_features), dtype=bool)
-        self.empty_prediction = self.value_function(empty)[0]
+        empty_text = self._decode(self._coalition_to_tokens(empty[0]))
+        self.empty_prediction = self._evaluate_texts([empty_text])[0]
         self.normalization_value = self.empty_prediction
 
     # ------------------- Masking -------------------
@@ -112,33 +113,32 @@ class TextImputer(Imputer):
         return self._tokenizer.decode(tokens)
 
     # ------------------- Value Function -------------------
+    def _evaluate_texts(self, texts: list[str]) -> np.ndarray:
+        """Evaluate the classifier on a batch of texts."""
+        results = []
+
+        import torch
+
+        with torch.inference_mode():
+            for i in range(0, len(texts), self.batch_size):
+                batch = texts[i : i + self.batch_size]
+                outputs = self._classifier(batch)
+
+                scores = [
+                    output["score"] if output["label"] == "POSITIVE" else -output["score"]
+                    for output in outputs
+                ]
+                results.extend(scores)
+
+        return np.array(results, dtype=float)
+
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
         """Core function.
 
         coalition → masked text → batched model call → score.
         """
-        # 1. build texts from coalitions
         texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
-
-        results = []
-
-        import torch
-
-        # 2. (batched) model call to do sentiment classification on each coalition
-        with torch.inference_mode():
-            for i in range(0, len(texts), self.batch_size):
-                batch = texts[i : i + self.batch_size]
-
-                # feeding the batch into the model/classifier
-                outputs = self._classifier(batch)
-
-                scores = [o["score"] if o["label"] == "POSITIVE" else -o["score"] for o in outputs]
-
-                results.extend(scores)
-
-        outputs = np.array(results, dtype=float)
-
-        # 3. normalization handling
+        outputs = self._evaluate_texts(texts)
         return self.insert_empty_value(outputs, coalitions)
 
     # ----------------- Helpers ------------------
