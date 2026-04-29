@@ -40,7 +40,7 @@ class TextImputer(Imputer):
         # TODO: (Arian - #7)
         # add HF classifier wrapper
         self._classifier = pipeline(
-            task="sentiment-analysis",
+            "sentiment-analysis",
             model=model_name,
             device=device,
         )
@@ -108,6 +108,8 @@ class TextImputer(Imputer):
         texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
 
         results = []
+
+        import torch
 
         # 2. (batched) model call to do sentiment classification on each coalition
         with torch.inference_mode():
