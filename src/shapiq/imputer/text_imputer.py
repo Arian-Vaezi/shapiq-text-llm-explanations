@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import numpy as np
-import torch
-from transformers import pipeline
 
 from shapiq.imputer.base import Imputer
 
@@ -25,6 +23,9 @@ class TextImputer(Imputer):
         segmentation: str = "token",  # "token" | "word"
         verbose: bool = False,
     ):
+        # moved import inside the class to not break CI
+        from transformers import pipeline
+
         if mask_strategy not in {"mask", "remove"}:
             raise ValueError(f"Invalid mask_strategy: {mask_strategy}")
 

@@ -105,10 +105,12 @@ def test_text_imputer_value_function_shape():
         segmentation="token",
     )
 
-    coalitions = np.array([
-        np.ones(imputer.n_features, dtype=bool),
-        np.zeros(imputer.n_features, dtype=bool),
-    ])
+    coalitions = np.array(
+        [
+            np.ones(imputer.n_features, dtype=bool),
+            np.zeros(imputer.n_features, dtype=bool),
+        ]
+    )
 
     values = imputer.value_function(coalitions)
 
