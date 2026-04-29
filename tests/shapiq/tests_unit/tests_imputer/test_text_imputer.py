@@ -97,3 +97,11 @@ def test_empty_prediction_uses_real_empty_model_output(monkeypatch):
 
     assert imputer.empty_prediction == pytest.approx(0.42)
     assert imputer.normalization_value == pytest.approx(0.42)
+
+
+def test_word_segmentation_sets_word_players():
+    imputer = TextImputer(
+        "dummy", "I love machine learning", segmentation="word")
+
+    assert imputer.players.tolist() == ["I", "love", "machine", "learning"]
+    assert imputer.n_features == 4
