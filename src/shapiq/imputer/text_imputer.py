@@ -80,7 +80,7 @@ class TextImputer(Imputer):
         # ---------------- NORMALIZATION ----------------
         # compute empty prediction (all masked)
         empty = np.zeros((1, self.n_features), dtype=bool)
-        self.empty_prediction = self._raw_value_function(empty)[0]
+        self.empty_prediction = self.value_function(empty)[0]
         self.normalization_value = self.empty_prediction
 
     # ------------------- Masking -------------------
