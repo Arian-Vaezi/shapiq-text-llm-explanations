@@ -63,14 +63,16 @@ class TextImputer(Imputer):
         self.original_text = input_text
 
         # ---------------- SEGMENTATION ----------------
-        # TODO @yuanyuan-yili: implement word-level/token-level segmentation (#8)
+        # Build players according to the selected segmentation.
         if segmentation == "token":
             tokens = self._tokenizer(input_text)["input_ids"][1:-1]
             self._tokens = np.array(tokens)
             self._players = self._tokens
 
         elif segmentation == "word":
-            # naive word split (can be improved)
+            # Initial word-level segmentation.
+            # This intentionally uses whitespace splitting and can later be replaced
+            # by a tokenizer-aware word/span alignment.
             words = input_text.split()
             self._players = np.array(words)
 
@@ -79,9 +81,14 @@ class TextImputer(Imputer):
             self._tokens = np.array(tokens)
 
         self._mask_token_id = self._tokenizer.mask_token_id
+        self._mask_token = getattr(self._tokenizer, "mask_token", "[MASK]")
 
-        # ---------------- SEGMENTATION ----------------
-        data = self._tokens.reshape(1, -1)
+        if self.mask_strategy == "mask" and self._mask_token_id is None:
+            msg = "mask_strategy='mask' requires tokenizer.mask_token_id."
+            raise ValueError(msg)
+
+        # ---------------- IMPUTER DATA ----------------
+        data = np.arange(len(self._players)).reshape(1, -1)
 
         super().__init__(
             model=self._classifier,
@@ -94,14 +101,14 @@ class TextImputer(Imputer):
         # ---------------- NORMALIZATION ----------------
         # Compute the real empty prediction before value_function inserts empty values.
         empty = np.zeros((1, self.n_features), dtype=bool)
-        empty_text = self._decode(self._coalition_to_tokens(empty[0]))
+        empty_text = self._coalition_to_text(empty[0])
         self.empty_prediction = self._evaluate_texts([empty_text])[0]
         self.normalization_value = self.empty_prediction
 
     # ------------------- Masking -------------------
     # TODO @yuanyuan-yili: implement [MASK] replacement and token removal strategy (#8)
-    def _coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
-        """Convert a coalition mask into token ids."""
+    def _token_coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
+        """Convert a token-level coalition mask into token ids."""
         if self.mask_strategy == "remove":
             return self._tokens[coalition]
 
@@ -111,6 +118,37 @@ class TextImputer(Imputer):
 
     def _decode(self, tokens: np.ndarray) -> str:
         return self._tokenizer.decode(tokens)
+
+    def _word_coalition_to_text(self, coalition: np.ndarray) -> str:
+        """Convert a word-level coalition mask into a masked text string."""
+        # coalitions refer to words
+        words = self._players.astype(object)
+
+        if self.mask_strategy == "remove":
+            return " ".join(words[coalition])
+
+        masked_words = words.copy()
+        masked_words[~coalition] = self._mask_token
+        return " ".join(masked_words)
+
+    def _coalition_to_text(self, coalition: np.ndarray) -> str:
+        """Convert a coalition mask into a text string."""
+        coalition = self._validate_coalition(coalition)
+
+        if self.segmentation == "word":
+            return self._word_coalition_to_text(coalition)
+
+        return self._decode(self._token_coalition_to_tokens(coalition))
+
+    def _validate_coalition(self, coalition: np.ndarray) -> np.ndarray:
+        """Validate and normalize a single coalition mask."""
+        coalition = np.asarray(coalition, dtype=bool)
+
+        if coalition.shape != (self.n_features,):
+            msg = f"Coalition must have shape ({self.n_features},), got {coalition.shape}."
+            raise ValueError(msg)
+
+        return coalition
 
     # ------------------- Value Function -------------------
     def _evaluate_texts(self, texts: list[str]) -> np.ndarray:
@@ -137,7 +175,7 @@ class TextImputer(Imputer):
 
         coalition → masked text → batched model call → score.
         """
-        texts = [self._decode(self._coalition_to_tokens(c)) for c in coalitions]
+        texts = [self._coalition_to_text(c) for c in coalitions]
         outputs = self._evaluate_texts(texts)
         return self.insert_empty_value(outputs, coalitions)
 
@@ -149,5 +187,5 @@ class TextImputer(Imputer):
 
     @property
     def players(self) -> np.ndarray:
-        """Return the player array (tokens or words depending on segmentation)."""
-        return self._players
+        """Return a copy of the player array."""
+        return self._players.copy()
