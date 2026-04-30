@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import sys
+from types import SimpleNamespace
+
 import numpy as np
 import pytest
 
@@ -43,7 +46,14 @@ class FakeClassifier:
 
 @pytest.fixture(autouse=True)
 def mock_pipeline(monkeypatch):
-    monkeypatch.setattr("transformers.pipeline", lambda *args, **kwargs: FakeClassifier())
+    def fake_pipeline(*args, **kwargs):
+        return FakeClassifier()
+
+    monkeypatch.setitem(
+        sys.modules,
+        "transformers",
+        SimpleNamespace(pipeline=fake_pipeline),
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -99,9 +109,10 @@ def test_empty_prediction_uses_real_empty_model_output(monkeypatch):
                     outputs.append({"label": "POSITIVE", "score": 0.8})
             return outputs
 
-    monkeypatch.setattr(
-        "transformers.pipeline",
-        lambda *args, **kwargs: EmptyAwareClassifier(),
+    monkeypatch.setitem(
+        sys.modules,
+        "transformers",
+        SimpleNamespace(pipeline=lambda *args, **kwargs: EmptyAwareClassifier()),
     )
 
     imputer = TextImputer("dummy", "I love machine learning")
@@ -207,9 +218,10 @@ def test_mask_strategy_requires_mask_token(monkeypatch):
         def __call__(self, texts, **kwargs):
             return [{"label": "POSITIVE", "score": 0.8} for _ in texts]
 
-    monkeypatch.setattr(
-        "transformers.pipeline",
-        lambda *args, **kwargs: ClassifierWithoutMaskToken(),
+    monkeypatch.setitem(
+        sys.modules,
+        "transformers",
+        SimpleNamespace(pipeline=lambda *args, **kwargs: ClassifierWithoutMaskToken()),
     )
 
     with pytest.raises(ValueError, match="requires tokenizer.mask_token_id"):
