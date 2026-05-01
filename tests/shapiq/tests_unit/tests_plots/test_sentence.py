@@ -54,3 +54,16 @@ def test_sentence_plot():
     assert isinstance(fig, plt.Figure)
     assert isinstance(ax, plt.Axes)
     plt.close(fig)
+
+
+def test_sentence_interaction_heatmap_empty_figure():
+    """Test that the sentence interaction heatmap returns a figure and axis."""
+    from shapiq.plot.sentence import sentence_interaction_heatmap
+
+    words, iv = _text_values()
+
+    fig, ax = sentence_interaction_heatmap(iv, words, show=False)
+
+    assert isinstance(fig, plt.Figure)
+    assert isinstance(ax, plt.Axes)
+    plt.close(fig)

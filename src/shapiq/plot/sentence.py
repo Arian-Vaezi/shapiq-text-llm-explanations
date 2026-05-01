@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+import numpy as np
 from typing import TYPE_CHECKING
 
 from matplotlib import pyplot as plt
@@ -199,5 +200,22 @@ def sentence_plot(
     # draw the plot
     if not show:
         return fig, ax
+    plt.show()
+    return None
+
+
+def sentence_interaction_heatmap(
+    interaction_values: InteractionValues,
+    words: Sequence[str],
+    *,
+    show: bool = False,
+) -> tuple[Figure, Axes] | None:
+    """Plot a minimal pairwise interaction heatmap for sentence players."""
+    # before: pass (Temporary placeholder)
+    fig, ax = plt.subplots()
+
+    if not show:
+        return fig, ax
+
     plt.show()
     return None
