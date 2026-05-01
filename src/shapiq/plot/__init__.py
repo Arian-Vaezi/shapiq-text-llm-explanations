@@ -23,6 +23,7 @@ __all__ = [
     "bar_plot",
     "waterfall_plot",
     "sentence_plot",
+    "sentence_interaction_heatmap",
     "upset_plot",
     "beeswarm_plot",
     # utils

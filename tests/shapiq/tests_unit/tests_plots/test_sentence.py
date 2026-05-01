@@ -66,5 +66,5 @@ def test_sentence_interaction_heatmap_empty_figure():
 
     assert isinstance(fig, plt.Figure)
     assert isinstance(ax, plt.Axes)
-    assert len(ax.images) == 1 #draw heatmap images in achxis
+    assert len(ax.images) == 1  # draw heatmap images in achxis
     plt.close(fig)
