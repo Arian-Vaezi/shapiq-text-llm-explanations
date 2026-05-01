@@ -227,10 +227,12 @@ def test_mask_strategy_requires_mask_token(monkeypatch):
     with pytest.raises(ValueError, match="requires tokenizer.mask_token_id"):
         TextImputer("dummy", "I love NLP", mask_strategy="mask")
 
+
 def test_sentence_plot_with_word_players():
-    from shapiq.plot import sentence_plot
-    from shapiq.interaction_values import InteractionValues
     import numpy as np
+
+    from shapiq.interaction_values import InteractionValues
+    from shapiq.plot import sentence_plot
 
     text = "RBG was a very good jurist"
     imputer = TextImputer("dummy", text, segmentation="word")
