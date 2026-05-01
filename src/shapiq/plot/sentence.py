@@ -213,10 +213,21 @@ def sentence_interaction_heatmap(
     """Plot a minimal pairwise interaction heatmap for sentence players."""
     # before: pass (Temporary placeholder)
     fig, ax = plt.subplots()
-    # 2d matix
+    # 2d matrix init
     n_words = len(words)
 
     interaction_matrix = np.zeros((n_words, n_words))
+    
+    # diagonal
+    for i in range(n_words):
+        interaction_matrix[i, i] = interaction_values[(i,)]
+
+    #pairwise interaction
+    for i in range(n_words):
+        for j in range(i + 1, n_words):
+            value = interaction_values[(i, j)]
+            interaction_matrix[i, j] = value
+            interaction_matrix[j, i] = value
 
     if not show:
         return fig, ax
