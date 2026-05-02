@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 from typing import TYPE_CHECKING
 
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import FancyBboxPatch, PathPatch
@@ -199,5 +200,72 @@ def sentence_plot(
     # draw the plot
     if not show:
         return fig, ax
+    plt.show()
+    return None
+
+
+def sentence_interaction_heatmap(
+    interaction_values: InteractionValues,
+    words: Sequence[str],
+    *,
+    show: bool = False,
+    max_score: float | None = None,  # color range of the heatmap
+) -> tuple[Figure, Axes] | None:
+    """Plot a minimal pairwise interaction heatmap for sentence players."""
+    # before: pass (Temporary placeholder)
+    fig, ax = plt.subplots()
+    # 2d matrix init
+    n_words = len(words)
+
+    # player index debug
+    if n_words != interaction_values.n_players:
+        msg = (
+            f"Number of words must match number of players. "
+            f"Got {n_words} words and {interaction_values.n_players} players."
+        )
+        raise ValueError(msg)
+
+    interaction_matrix = np.zeros((n_words, n_words))
+
+    # diagonal
+    for i in range(n_words):
+        interaction_matrix[i, i] = interaction_values[(i,)]
+
+    # pairwise interaction
+    for i in range(n_words):
+        for j in range(i + 1, n_words):
+            value = interaction_values[(i, j)]
+            interaction_matrix[i, j] = value
+            interaction_matrix[j, i] = value
+
+    max_abs_score = np.max(np.abs(interaction_matrix)) if max_score is None else max_score
+
+    if max_abs_score == 0:
+        max_abs_score = 1.0
+
+    # draw interaction matrix
+    image = ax.imshow(
+        interaction_matrix,
+        cmap="coolwarm",
+        vmin=-max_abs_score,
+        vmax=max_abs_score,
+    )
+
+    # x&y achses show word/player lables
+    ax.set_xticks(np.arange(n_words))
+    ax.set_yticks(np.arange(n_words))
+    ax.set_xticklabels(words, rotation=45, ha="right")
+    ax.set_yticklabels(words)
+
+    ax.set_xlabel("Player")
+    ax.set_ylabel("Player")
+    ax.set_title("Pairwise sentence interaction heatmap")
+
+    fig.colorbar(image, ax=ax)
+    fig.tight_layout()
+
+    if not show:
+        return fig, ax
+
     plt.show()
     return None
