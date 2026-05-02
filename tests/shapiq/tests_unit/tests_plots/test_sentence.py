@@ -77,3 +77,32 @@ def test_sentence_interaction_heatmap_word_count_mismatch():
 
     with pytest.raises(ValueError, match="Number of words must match number of players"):
         sentence_interaction_heatmap(iv, words[:-1], show=False)
+
+
+def test_sentence_interaction_heatmap_zero_values_show(monkeypatch):
+    """Test zero-valued heatmap and show=True path."""
+    words, _ = _text_values()
+
+    iv = InteractionValues(
+        n_players=len(words),
+        values=np.zeros(len(words)),
+        index="SV",
+        min_order=1,
+        max_order=1,
+        estimated=False,
+        baseline_value=0.0,
+    )
+
+    show_called = []
+
+    def fake_show():
+        show_called.append(True)
+
+    monkeypatch.setattr(plt, "show", fake_show)
+
+    result = sentence_interaction_heatmap(iv, words, show=True)
+
+    assert result is None
+    assert show_called == [True]
+
+    plt.close("all")
