@@ -147,3 +147,26 @@ def test_sentence_interaction_heatmap_zero_values_show(monkeypatch):
     assert show_called == [True]
 
     plt.close("all")
+
+
+def test_token_attribution_bar_plot_zero_values():
+    """Test zero-valued token attribution bar plot."""
+    words, _ = _text_values()
+
+    iv = InteractionValues(
+        n_players=len(words),
+        values=np.zeros(len(words)),
+        index="SV",
+        min_order=1,
+        max_order=1,
+        estimated=False,
+        baseline_value=0.0,
+    )
+
+    fig, ax = token_attribution_bar_plot(iv, words, show=False)
+
+    assert isinstance(fig, plt.Figure)
+    assert isinstance(ax, plt.Axes)
+    assert ax.get_xlim() == (-1.0, 1.0)
+
+    plt.close(fig)
