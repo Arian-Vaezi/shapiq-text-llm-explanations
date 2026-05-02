@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pytest
 
 from shapiq.interaction_values import InteractionValues
-from shapiq.plot import sentence_plot
+from shapiq.plot import sentence_interaction_heatmap, sentence_plot
 
 
 def _text_values() -> tuple[list[str], InteractionValues]:
@@ -58,7 +59,6 @@ def test_sentence_plot():
 
 def test_sentence_interaction_heatmap_empty_figure():
     """Test that the sentence interaction heatmap returns a figure and axis."""
-    from shapiq.plot.sentence import sentence_interaction_heatmap
 
     words, iv = _text_values()
 
@@ -68,3 +68,12 @@ def test_sentence_interaction_heatmap_empty_figure():
     assert isinstance(ax, plt.Axes)
     assert len(ax.images) == 1  # draw heatmap images in achxis
     plt.close(fig)
+
+
+def test_sentence_interaction_heatmap_word_count_mismatch():
+    """Test that the heatmap raises if words and players do not match."""
+
+    words, iv = _text_values()
+
+    with pytest.raises(ValueError, match="Number of words must match number of players"):
+        sentence_interaction_heatmap(iv, words[:-1], show=False)
