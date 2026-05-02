@@ -105,6 +105,19 @@ sv.plot_sentence(words=token_names)
 sv_neg.plot_sentence(words=token_names_neg)
 
 # %%
+# Token Attribution Bar Plot
+# ---------------------------
+# The :func:`~shapiq.plot.token_attribution_bar_plot` shows each token's
+# first-order attribution as a horizontal bar. Positive values contribute
+# toward the predicted sentiment, while negative values contribute against it.
+
+shapiq.plot.token_attribution_bar_plot(sv, token_names)
+
+# %%
+
+shapiq.plot.token_attribution_bar_plot(sv_neg, token_names_neg)
+
+# %%
 # References
 # ----------
 # .. footbibliography::

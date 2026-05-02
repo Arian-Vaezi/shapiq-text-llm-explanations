@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from shapiq.interaction_values import InteractionValues
-from shapiq.plot import sentence_interaction_heatmap, sentence_plot
+from shapiq.plot import sentence_interaction_heatmap, sentence_plot, token_attribution_bar_plot
 
 
 def _text_values() -> tuple[list[str], InteractionValues]:
@@ -55,6 +55,47 @@ def test_sentence_plot():
     assert isinstance(fig, plt.Figure)
     assert isinstance(ax, plt.Axes)
     plt.close(fig)
+
+
+def test_token_attribution_bar_plot():
+    """Test that the token attribution bar plot returns a figure and axis."""
+    words, iv = _text_values()
+
+    fig, ax = token_attribution_bar_plot(iv, words, show=False)
+
+    assert isinstance(fig, plt.Figure)
+    assert isinstance(ax, plt.Axes)
+    assert len(ax.patches) == len(words)
+    assert ax.get_title() == "Token attribution bar plot"
+
+    plt.close(fig)
+
+
+def test_token_attribution_bar_plot_word_count_mismatch():
+    """Test that the token attribution bar plot raises if words and players do not match."""
+    words, iv = _text_values()
+
+    with pytest.raises(ValueError, match="Number of words must match number of players"):
+        token_attribution_bar_plot(iv, words[:-1], show=False)
+
+
+def test_token_attribution_bar_plot_show(monkeypatch):
+    """Test the show=True path of the token attribution bar plot."""
+    words, iv = _text_values()
+
+    show_called = []
+
+    def fake_show():
+        show_called.append(True)
+
+    monkeypatch.setattr(plt, "show", fake_show)
+
+    result = token_attribution_bar_plot(iv, words, show=True)
+
+    assert result is None
+    assert show_called == [True]
+
+    plt.close("all")
 
 
 def test_sentence_interaction_heatmap_empty_figure():
