@@ -1,18 +1,18 @@
-"""
-app.py
-=======
-Gradio web application for the Sentiment Analysis demo.
+"""Gradio web application for the Sentiment Analysis demo.
 
-This file contains ONLY the UI logic.
+This file contains only the UI logic.
 All computation is handled by sentiment_analysis.py.
 """
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import gradio as gr
+from sentiment_analysis import blank_placeholder, run_pipeline
 
-from sentiment_analysis import run_pipeline, blank_placeholder
-
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -371,7 +371,8 @@ def load_example(example: list[str]) -> str:
     return example[0]
 
 
-def on_analyse(text: str):
+def on_analyse(text: str) -> Iterator[tuple[object, object, object, object, object]]:
+    """Run the analysis callback and stream UI updates."""
     text = text.strip()
 
     if not text:
@@ -395,28 +396,28 @@ def on_analyse(text: str):
 
     result = run_pipeline(text)
 
-    label    = result["label"]
-    score    = result["score"]
-    words    = result["words"]
+    label = result["label"]
+    score = result["score"]
+    words = result["words"]
     baseline = result["baseline"]
-    n        = result["n_players"]
-    sv       = result["sv"]
-    top_int  = result["top_interactions"]
+    n = result["n_players"]
+    sv = result["sv"]
+    top_int = result["top_interactions"]
 
     emoji = "😊" if label == "POSITIVE" else "😠"
     color = "#10b981" if label == "POSITIVE" else "#ef4444"
 
     sv_rows = ""
-    for word, val in zip(words, sv.values):
-        bar_len  = min(int(abs(val) * 15), 10)
+    for word, val in zip(words, sv.values, strict=False):
+        bar_len = min(int(abs(val) * 15), 10)
         bar_color = "#10b981" if val >= 0 else "#ef4444"
-        bar       = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
-        sv_rows  += f"| {word} | {val:+.4f} | {bar} |\n"
+        bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
+        sv_rows += f"| {word} | {val:+.4f} | {bar} |\n"
 
     int_rows = ""
     for w1, w2, val in top_int:
-        sign      = "synergy" if val > 0 else "redundancy"
-        icon      = "🟢" if val > 0 else "🔵"
+        sign = "synergy" if val > 0 else "redundancy"
+        icon = "🟢" if val > 0 else "🔵"
         int_rows += f"| {w1} + {w2} | {val:+.4f} | {icon} {sign} |\n"
 
     result_md = f"""
@@ -468,7 +469,6 @@ def on_analyse(text: str):
 
 
 with gr.Blocks(title="Sentiment Explainer", css=CSS) as demo:
-
     gr.HTML("""
     <div class="hero">
         <div class="hero-badge">Explainable AI Demo</div>
@@ -482,9 +482,7 @@ with gr.Blocks(title="Sentiment Explainer", css=CSS) as demo:
     """)
 
     with gr.Row(equal_height=False):
-
         with gr.Column(scale=1, min_width=350):
-
             with gr.Group(elem_classes=["input-card"]):
                 gr.HTML('<div class="section-title">Input Sentence</div>')
                 text_input = gr.Textbox(
@@ -535,7 +533,6 @@ with gr.Blocks(title="Sentiment Explainer", css=CSS) as demo:
                 """)
 
         with gr.Column(scale=2):
-
             result_md = gr.Markdown(
                 "### Enter a sentence and run the analysis.",
                 elem_classes=["result-panel"],

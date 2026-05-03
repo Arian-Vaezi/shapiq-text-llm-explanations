@@ -1,9 +1,6 @@
-"""
-sentiment_analysis.py
-======================
-Core logic for the Sentiment Analysis demo.
+"""Core logic for the Sentiment Analysis demo.
 
-This module contains ALL computation — model loading, TextImputer setup,
+This module contains model loading, TextImputer setup,
 Shapley value computation, k-SII interaction computation, and plot generation.
 
 It is intentionally decoupled from the UI (app.py) so that:
@@ -30,23 +27,24 @@ import os
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("MKL_NUM_THREADS", "1")
 
-import matplotlib
-matplotlib.use("Agg")  # non-interactive backend — required for server-side rendering
+import matplotlib as mpl
+
+mpl.use("Agg")  # non-interactive backend — required for server-side rendering
 import matplotlib.pyplot as plt
-import numpy as np
 from PIL import Image
 
 import shapiq
 from shapiq.imputer import TextImputer
-from shapiq.plot import sentence_plot, sentence_interaction_heatmap
+from shapiq.plot import sentence_interaction_heatmap, sentence_plot
 
 # ── Configuration (same as notebook) ─────────────────────────────────────────
-MODEL_NAME   = "lvwerra/distilbert-imdb"  # DistilBERT fine-tuned on IMDb reviews
-RANDOM_STATE = 42                          # fixed seed for reproducibility
-BUDGET       = 200                         # coalition budget (exact for ≤7 players)
+MODEL_NAME = "lvwerra/distilbert-imdb"  # DistilBERT fine-tuned on IMDb reviews
+RANDOM_STATE = 42  # fixed seed for reproducibility
+BUDGET = 200  # coalition budget (exact for ≤7 players)
 
 
 # ── Plot helper ───────────────────────────────────────────────────────────────
+
 
 def fig_to_pil(fig: plt.Figure) -> Image.Image:
     """Convert a matplotlib Figure to a PIL Image for Gradio rendering.
@@ -58,8 +56,7 @@ def fig_to_pil(fig: plt.Figure) -> Image.Image:
         A PIL Image object with the figure content.
     """
     buf = io.BytesIO()
-    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight",
-                facecolor=fig.get_facecolor())
+    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
     buf.seek(0)
     img = Image.open(buf).copy()
     buf.close()
@@ -81,13 +78,22 @@ def blank_placeholder(message: str = "") -> Image.Image:
     fig, ax = plt.subplots(figsize=(6, 1.5))
     fig.patch.set_facecolor("#0d0d1a")
     ax.set_facecolor("#0d0d1a")
-    ax.text(0.5, 0.5, message, ha="center", va="center",
-            color="#555577", fontsize=11, transform=ax.transAxes)
+    ax.text(
+        0.5,
+        0.5,
+        message,
+        ha="center",
+        va="center",
+        color="#555577",
+        fontsize=11,
+        transform=ax.transAxes,
+    )
     ax.axis("off")
     return fig_to_pil(fig)
 
 
 # ── Step 1: TextImputer setup ─────────────────────────────────────────────────
+
 
 def build_imputer(text: str) -> TextImputer:
     """Build and return a TextImputer for the given input text.
@@ -105,13 +111,14 @@ def build_imputer(text: str) -> TextImputer:
     return TextImputer(
         MODEL_NAME,
         text,
-        segmentation="word",   # each word = one player
+        segmentation="word",  # each word = one player
         mask_strategy="mask",  # absent words → [MASK] token
-        device="cpu",          # CPU inference — no GPU required
+        device="cpu",  # CPU inference — no GPU required
     )
 
 
 # ── Step 2: Raw model prediction ─────────────────────────────────────────────
+
 
 def get_prediction(imputer: TextImputer, text: str) -> tuple[str, float]:
     """Get the raw model prediction for the full input text.
@@ -127,11 +134,12 @@ def get_prediction(imputer: TextImputer, text: str) -> tuple[str, float]:
         A tuple of (label, score) where label is "POSITIVE" or "NEGATIVE"
         and score is the model confidence in [0, 1].
     """
-    result = imputer._classifier(text)[0]
+    result = imputer._classifier(text)[0]  # noqa: SLF001
     return result["label"], result["score"]
 
 
 # ── Step 3: Shapley Values (first-order) ─────────────────────────────────────
+
 
 def compute_shapley_values(imputer: TextImputer) -> shapiq.InteractionValues:
     """Compute first-order Shapley Values using KernelSHAP.
@@ -156,6 +164,7 @@ def compute_shapley_values(imputer: TextImputer) -> shapiq.InteractionValues:
 
 
 # ── Step 4: k-SII Pairwise Interactions ──────────────────────────────────────
+
 
 def compute_interactions(imputer: TextImputer) -> shapiq.InteractionValues:
     """Compute pairwise Shapley Interactions using KernelSHAPIQ (k-SII, order 2).
@@ -189,6 +198,7 @@ def compute_interactions(imputer: TextImputer) -> shapiq.InteractionValues:
 
 # ── Step 5: Extract top interactions ─────────────────────────────────────────
 
+
 def get_top_interactions(
     sii: shapiq.InteractionValues,
     words: list[str],
@@ -208,11 +218,7 @@ def get_top_interactions(
         List of (word1, word2, interaction_value) tuples sorted by |value|.
     """
     # filter to order-2 interactions only
-    order2 = {
-        k: v
-        for k, v in sii.interaction_lookup.items()
-        if len(k) == 2
-    }
+    order2 = {k: v for k, v in sii.interaction_lookup.items() if len(k) == 2}
 
     # sort by absolute value — strongest interactions first
     sorted_pairs = sorted(
@@ -222,12 +228,12 @@ def get_top_interactions(
     )[:top_k]
 
     return [
-        (words[indices[0]], words[indices[1]], sii.values[idx])
-        for indices, idx in sorted_pairs
+        (words[indices[0]], words[indices[1]], sii.values[idx]) for indices, idx in sorted_pairs
     ]
 
 
 # ── Step 6: Visualization ────────────────────────────────────────────────────
+
 
 def make_sentence_plot(
     sv: shapiq.InteractionValues,
@@ -286,7 +292,7 @@ def make_network_plot(
         fig.patch.set_facecolor("white")
         fig.set_size_inches(7, 7)
         return fig_to_pil(fig)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return blank_placeholder(f"Network error: {e}")
 
 
@@ -296,7 +302,7 @@ def make_heatmap_plot(
 ) -> Image.Image:
     """Generate the pairwise interaction heatmap.
 
-    A word × word matrix where each cell shows the k-SII value
+    A word x word matrix where each cell shows the k-SII value
     for that pair. Strong interactions appear as bright red (positive)
     or bright blue (negative) cells.
 
@@ -318,11 +324,12 @@ def make_heatmap_plot(
         fig.set_size_inches(7, 6)
         fig.tight_layout()
         return fig_to_pil(fig)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return blank_placeholder(f"Heatmap error: {e}")
 
 
 # ── Full pipeline (called by app.py) ─────────────────────────────────────────
+
 
 def run_pipeline(text: str) -> dict:
     """Run the full sentiment explanation pipeline on a given text.
@@ -358,7 +365,7 @@ def run_pipeline(text: str) -> dict:
     """
     # Step 1 — build imputer
     imputer = build_imputer(text)
-    words   = imputer.players.tolist()
+    words = imputer.players.tolist()
 
     # Step 2 — raw prediction
     label, score = get_prediction(imputer, text)
@@ -374,19 +381,19 @@ def run_pipeline(text: str) -> dict:
 
     # Step 6 — plots
     img_sentence = make_sentence_plot(sv, words)
-    img_network  = make_network_plot(sii, words)
-    img_heatmap  = make_heatmap_plot(sii, words)
+    img_network = make_network_plot(sii, words)
+    img_heatmap = make_heatmap_plot(sii, words)
 
     return {
-        "label":            label,
-        "score":            score,
-        "words":            words,
-        "baseline":         imputer.normalization_value,
-        "n_players":        imputer.n_features,
-        "sv":               sv,
-        "sii":              sii,
+        "label": label,
+        "score": score,
+        "words": words,
+        "baseline": imputer.normalization_value,
+        "n_players": imputer.n_features,
+        "sv": sv,
+        "sii": sii,
         "top_interactions": top_interactions,
-        "img_sentence":     img_sentence,
-        "img_network":      img_network,
-        "img_heatmap":      img_heatmap,
+        "img_sentence": img_sentence,
+        "img_network": img_network,
+        "img_heatmap": img_heatmap,
     }
