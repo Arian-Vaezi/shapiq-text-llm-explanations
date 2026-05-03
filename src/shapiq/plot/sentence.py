@@ -204,6 +204,66 @@ def sentence_plot(
     return None
 
 
+def token_attribution_bar_plot(
+    interaction_values: InteractionValues,
+    words: Sequence[str],
+    *,
+    show: bool = False,
+    max_score: float | None = None,
+) -> tuple[Figure, Axes] | None:
+    """Plot first-order token attributions as a horizontal bar plot.
+
+    Args:
+        interaction_values: The interaction values as an interaction object.
+        words: The words or tokens of the sentence.
+        show: Whether to show the plot. Defaults to ``False``.
+        max_score: The maximum absolute score used for the x-axis range. This is useful if multiple
+            token attribution plots should use the same scale. Defaults to ``None``.
+
+    Returns:
+        If ``show`` is ``True``, the function returns ``None``. Otherwise, it returns a tuple with
+        the figure and the axis of the plot.
+    """
+    n_words = len(words)
+
+    if n_words != interaction_values.n_players:
+        msg = (
+            f"Number of words must match number of players. "
+            f"Got {n_words} words and {interaction_values.n_players} players."
+        )
+        raise ValueError(msg)
+
+    attributions = np.array([interaction_values[(i,)] for i in range(n_words)])
+
+    max_abs_score = np.max(np.abs(attributions)) if max_score is None else max_score
+    if max_abs_score == 0:
+        max_abs_score = 1.0
+
+    colors = [RED.hex if value >= 0 else BLUE.hex for value in attributions]
+
+    fig, ax = plt.subplots()
+    y_positions = np.arange(n_words)
+
+    ax.barh(y_positions, attributions, color=colors)
+    ax.axvline(0, color="black", linewidth=0.8)
+
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels(words)
+    ax.invert_yaxis()
+
+    ax.set_xlim(-max_abs_score, max_abs_score)
+    ax.set_xlabel("Attribution")
+    ax.set_title("Token attribution bar plot")
+
+    fig.tight_layout()
+
+    if not show:
+        return fig, ax
+
+    plt.show()
+    return None
+
+
 def sentence_interaction_heatmap(
     interaction_values: InteractionValues,
     words: Sequence[str],
