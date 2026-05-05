@@ -70,6 +70,22 @@ target such as:
 
 The relevant hook is `RAGRetrievalGame.score_context` in `rag_game.py`.
 
+## Implementation Notes
+
+The comments in the Python files mark the main replacement points:
+
+- `lexical_grounding_score` is demo scaffolding, not the final scientific
+  scorer.
+- `split_sentences` is a simple regex splitter for curated examples; replace it
+  with the project segmentation utilities if the final demo needs robust
+  sentence handling.
+- The chunk interaction network is demo-only visualization, while
+  `token_attribution_bar_plot` and `sentence_interaction_heatmap` are reused
+  from the package's sentence/text visualization code.
+- The sentence drilldown intentionally runs as a second stage after chunk-level
+  attribution: first find important retrieved chunks, then inspect all
+  sentences inside the retrieved context.
+
 ## Suggested Final Demo Story
 
 Use one real RAG trace with 4-8 retrieved chunks:

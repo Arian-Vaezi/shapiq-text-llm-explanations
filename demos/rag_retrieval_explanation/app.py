@@ -223,7 +223,12 @@ def clean_key(value: str) -> str:
 
 
 def chunk_editor(default_chunks: list[dict[str, str]], trace_key: str) -> list[RetrievedChunk]:
-    """Render chunk inputs and return edited chunks."""
+    """Render chunk inputs and return edited chunks.
+
+    DEMO UI: keeping chunks editable makes it easy to test edge cases in class
+    without changing files. In a real RAG trace viewer, these fields would
+    usually be read-only outputs from the retriever.
+    """
     st.sidebar.subheader("Retrieved Chunks")
     chunk_count = st.sidebar.slider(
         "Number of chunks",
@@ -252,13 +257,24 @@ def chunk_editor(default_chunks: list[dict[str, str]], trace_key: str) -> list[R
 
 
 def split_sentences(text: str) -> list[str]:
-    """Split a retrieved chunk into simple sentence-like units."""
+    """Split a retrieved chunk into simple sentence-like units.
+
+    DEMO SCAFFOLD: this regex splitter is enough for the curated English
+    examples. Replace it with the project's TextImputer segmentation utilities,
+    spaCy, or another tokenizer if the final demo needs robust multilingual or
+    abbreviation-aware splitting.
+    """
     sentences = re.split(r"(?<=[.!?])\s+", text.strip())
     return [sentence.strip() for sentence in sentences if sentence.strip()]
 
 
 def interaction_values_to_frame(values: shapiq.InteractionValues, labels: list[str]) -> pd.DataFrame:
-    """Convert first-order interaction values to a display frame."""
+    """Convert first-order interaction values to a display frame.
+
+    shapiq stores interactions as tuples of player indices. For the ranking tab
+    we keep only one-player tuples, then sort by absolute attribution so strong
+    positive or negative evidence is not hidden.
+    """
     rows = []
     for interaction, score in values.dict_values.items():
         if len(interaction) == 1:
@@ -278,7 +294,11 @@ def interaction_values_to_frame(values: shapiq.InteractionValues, labels: list[s
 
 
 def make_approximator(index: str, n_players: int, max_order: int):
-    """Create an approximator compatible with the selected interaction index."""
+    """Create an approximator compatible with the selected interaction index.
+
+    The UI exposes several shapiq indices so the demo can show both plain
+    Shapley values (`SV`) and interaction-aware views (`k-SII`, `STII`, `FSII`).
+    """
     if index == "SV":
         return shapiq.KernelSHAP(n=n_players, random_state=42)
     if index == "STII":
@@ -320,7 +340,11 @@ def pairwise_matrix_from_explanation(
     explanation: shapiq.InteractionValues,
     n_players: int,
 ) -> np.ndarray:
-    """Extract the second-order interaction matrix from shapiq results."""
+    """Extract the second-order interaction matrix from shapiq results.
+
+    If the selected index is `SV`, there are no second-order values, so the app
+    shows a zero matrix instead of failing.
+    """
     if explanation.max_order < 2:
         return np.zeros((n_players, n_players), dtype=float)
     return explanation.get_n_order_values(2)
@@ -329,7 +353,12 @@ def pairwise_matrix_from_explanation(
 def build_sentence_players(
     chunks: list[RetrievedChunk],
 ) -> tuple[list[RetrievedChunk], list[str], pd.DataFrame]:
-    """Split all retrieved chunks into sentence-level players."""
+    """Split all retrieved chunks into sentence-level players.
+
+    This is the second stage of the demo: after chunk-level attribution locates
+    important retrieved documents, sentence-level players let us inspect which
+    exact statements inside those chunks carry support.
+    """
     sentence_chunks = []
     sentence_labels = []
     metadata_rows = []
@@ -419,7 +448,12 @@ def build_interpretation_notes(
 
 
 def coalition_audit_frame(game: RAGRetrievalGame) -> pd.DataFrame:
-    """Build a small exact coalition audit table for transparency."""
+    """Build a small exact coalition audit table for transparency.
+
+    This table is not required by shapiq; it is a demo/debug view. It makes the
+    value function visible by showing scores for empty, single, pair, and small
+    triple coalitions.
+    """
     rows = []
     n_players = game.n_players
     for size in range(0, min(n_players, 3) + 1):
@@ -438,7 +472,11 @@ def coalition_audit_frame(game: RAGRetrievalGame) -> pd.DataFrame:
 
 
 def plot_heatmap(matrix: np.ndarray, labels: list[str]) -> plt.Figure:
-    """Render pairwise interaction matrix."""
+    """Render pairwise interaction matrix.
+
+    This is custom demo plotting for chunk-level interactions. The package
+    sentence heatmap is reused later for sentence-level players.
+    """
     fig, ax = plt.subplots(figsize=(6.6, 5.1))
     max_abs = max(float(np.max(np.abs(matrix))), 0.01)
     image = ax.imshow(matrix, cmap="RdBu_r", vmin=-max_abs, vmax=max_abs)
@@ -456,7 +494,12 @@ def plot_heatmap(matrix: np.ndarray, labels: list[str]) -> plt.Figure:
 
 
 def plot_prompt_graph(matrix: np.ndarray, attributions: pd.DataFrame, labels: list[str]) -> plt.Figure:
-    """Render a compact chunk interaction network without extra dependencies."""
+    """Render a compact chunk interaction network without extra dependencies.
+
+    DEMO VISUALIZATION: this is not a core shapiq feature. It is a lightweight
+    companion view for presentations: node size follows first-order attribution,
+    edge width follows second-order interaction magnitude.
+    """
     fig, ax = plt.subplots(figsize=(7.2, 4.8))
     ax.set_axis_off()
 
@@ -548,7 +591,12 @@ def plot_prompt_graph(matrix: np.ndarray, attributions: pd.DataFrame, labels: li
 
 
 def polish_sentence_bar_plot(fig: plt.Figure, ax: plt.Axes) -> plt.Figure:
-    """Make the package sentence bar plot fit the Streamlit drilldown panel."""
+    """Make the package sentence bar plot fit the Streamlit drilldown panel.
+
+    We reuse the package visualization, then only adjust styling/labels for this
+    Streamlit layout. The underlying attribution plot still comes from
+    `shapiq.plot.token_attribution_bar_plot`.
+    """
     fig.set_size_inches(6.2, 3.4)
     ax.set_title("", loc="center")
     ax.set_title("Sentence Attribution", loc="left", fontsize=12, pad=8)
@@ -583,7 +631,12 @@ def polish_sentence_heatmap(
     ax: plt.Axes,
     sentence_meta: pd.DataFrame,
 ) -> plt.Figure:
-    """Make the package sentence heatmap fit the Streamlit drilldown panel."""
+    """Make the package sentence heatmap fit the Streamlit drilldown panel.
+
+    The rectangles are demo-specific annotations: they outline sentences that
+    came from the same retrieved chunk, making the chunk -> sentence hierarchy
+    visible in the heatmap.
+    """
     fig.set_size_inches(5.8, 4.4)
     ax.set_title("", loc="center")
     ax.set_title("Sentence Interaction Heatmap", loc="left", fontsize=12, pad=8)
@@ -733,6 +786,9 @@ def main() -> None:
         return
 
     with st.spinner("Computing shapiq attributions..."):
+        # Stage 1: chunk-level game. Each retrieved chunk is one player, so the
+        # resulting first-order values answer "which retrieved chunks matter?"
+        # and the second-order values answer "which chunk pairs interact?"
         approximator = make_approximator(index, game.n_players, max_order)
         explanation = approximator.approximate(budget=budget, game=game)
         first_order = explanation.get_n_order(order=1)
@@ -804,6 +860,10 @@ def main() -> None:
             st.pyplot(plot_prompt_graph(pairwise_matrix, first_order_frame, labels), clear_figure=True)
 
     with sentence_tab:
+        # Stage 2: sentence-level drilldown. This intentionally runs after the
+        # chunk-level explanation and reuses the same RAGRetrievalGame class,
+        # but each sentence is now a player. This is where we call the package
+        # sentence visualization functions implemented outside this demo.
         sentence_chunks, sentence_labels, sentence_meta = build_sentence_players(
             chunks,
         )
@@ -821,6 +881,10 @@ def main() -> None:
                 target_answer=target_answer,
                 chunks=sentence_chunks,
             )
+            # Keep the sentence drilldown fixed to k-SII/order 2 for a stable
+            # classroom story: first-order sentence evidence plus pairwise
+            # sentence interactions. The chunk-level settings above remain
+            # user-configurable.
             sentence_budget = budget_for_exactish_demo(sentence_game.n_players)
             sentence_approximator = shapiq.KernelSHAPIQ(
                 n=sentence_game.n_players,

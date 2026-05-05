@@ -69,9 +69,13 @@ def lexical_grounding_score(
 ) -> float:
     """Lightweight support score for local demos.
 
-    This intentionally avoids model downloads. It scores how much of the target
-    answer is supported by the selected context, with a small question-overlap
-    bonus and a length penalty for noisy context.
+    DEMO SCAFFOLD: this intentionally avoids model downloads/API keys. It
+    scores how much of the target answer is supported by the selected context,
+    with a small question-overlap bonus and a length penalty for noisy context.
+
+    FINAL DEMO: replace this with a real value function, such as target-answer
+    log-likelihood, entailment/groundedness score, or answer confidence from a
+    RAG pipeline.
     """
     if not selected_chunks:
         return 0.0
@@ -91,10 +95,10 @@ def lexical_grounding_score(
     if question_terms:
         question_bonus = len(question_terms & context_terms) / len(question_terms)
 
-    noise_penalty = 0.035 * max(0, len(selected_chunks) - 2)
     # A mildly convex support curve makes complementary evidence easier to see:
     # partial chunks receive modest scores, while near-complete answer support
     # rises sharply. This is only the local demo scorer, not the final method.
+    noise_penalty = 0.035 * max(0, len(selected_chunks) - 2)
     support_score = answer_coverage**1.35
     score = 0.88 * support_score + 0.12 * question_bonus - noise_penalty
     return float(max(0.0, min(1.0, score)))
@@ -130,6 +134,9 @@ class RAGRetrievalGame(Game):
         self.target_answer = target_answer
         self.chunks = chunks
         self.scorer = scorer or lexical_grounding_score
+        # shapiq can normalize the game at the empty-context value. For the
+        # default lexical scorer this is zero, but a model-backed scorer may
+        # assign a nonzero prior to the target answer even without retrieved text.
         empty_score = self.score_context([])
 
         super().__init__(
@@ -154,7 +161,12 @@ class RAGRetrievalGame(Game):
         return self.scorer(self.question, self.target_answer, selected_chunks)
 
     def build_prompt(self, selected_chunks: list[RetrievedChunk]) -> str:
-        """Build the prompt used by a model-backed scorer."""
+        """Build the prompt that a future model-backed scorer could evaluate.
+
+        The current lexical scorer does not call this prompt. It is shown in the
+        Streamlit UI so the demo audience can see what each coalition would mean
+        in a real RAG prompt: only the selected chunks are visible.
+        """
         context_blocks = [
             f"[{idx}] {chunk.title}\n{chunk.text}"
             for idx, chunk in enumerate(selected_chunks, start=1)
@@ -168,7 +180,12 @@ class RAGRetrievalGame(Game):
         )
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
-        """Evaluate each coalition of retrieved chunks."""
+        """Evaluate each coalition of retrieved chunks.
+
+        This is the method shapiq calls repeatedly. Each row is a boolean mask
+        over retrieved chunks; the returned value is the answer-support score for
+        that selected context.
+        """
         values = np.zeros(coalitions.shape[0], dtype=float)
         for row_idx, coalition in enumerate(coalitions):
             values[row_idx] = self.score_context(self.selected_chunks(coalition))

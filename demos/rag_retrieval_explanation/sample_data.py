@@ -1,8 +1,17 @@
-"""Sample RAG traces for the Streamlit retrieval-explanation demo."""
+"""Sample RAG traces for the Streamlit retrieval-explanation demo.
+
+DEMO FIXTURES: these examples are hand-curated so the attribution patterns are
+easy to explain live. For a final project run, keep the same schema but replace
+or supplement these with real traces from a retriever: question, target answer,
+and the actual retrieved chunks in rank order.
+"""
 
 from __future__ import annotations
 
 SCENARIO_PAGES = {
+    # Each page is a different demo story. The app filters SAMPLE_TRACES by this
+    # label so the UI can separate interaction-heavy cases from ranking-heavy
+    # cases instead of mixing all examples in one dropdown.
     "Page 1 - Puzzle Pieces": {
         "title": "Puzzle Pieces: Multi-Chunk Grounding",
         "goal": (
@@ -39,6 +48,9 @@ SCENARIO_PAGES = {
 
 
 SAMPLE_TRACES = {
+    # Page 1: designed to make multi-chunk support visible. Chunk 1 gives the
+    # Physics evidence and chunk 2 gives the Chemistry evidence; neither should
+    # be treated as the whole story alone.
     "Marie Curie Nobel categories": {
         "page": "Page 1 - Puzzle Pieces",
         "question": "Which two Nobel Prize categories did Marie Curie win?",
@@ -81,6 +93,8 @@ SAMPLE_TRACES = {
             },
         ],
     },
+    # Page 2: designed for first-order ranking. Chunk 1 should be the strongest
+    # evidence, while the other chunks are realistic retrieval distractors.
     "2008 Beijing Olympics host city": {
         "page": "Page 2 - Signal vs. Distractors",
         "question": "Which city hosted the 2008 Summer Olympics?",
@@ -123,6 +137,8 @@ SAMPLE_TRACES = {
             },
         ],
     },
+    # Page 3: designed as a sanity check. A good explanation should show weak
+    # support when retrieval misses the key answer fact.
     "Unsupported Eiffel Tower answer": {
         "page": "Page 3 - Missing Evidence",
         "question": "Who designed the Eiffel Tower?",
@@ -163,6 +179,8 @@ SAMPLE_TRACES = {
             },
         ],
     },
+    # Page 4: designed to show a correct chunk competing with plausible wrong
+    # associations. This is useful for discussing negative or redundant effects.
     "Australia capital confusion": {
         "page": "Page 4 - Conflicting Context",
         "question": "What is the capital city of Australia?",
