@@ -396,8 +396,4 @@ def run_pipeline(text: str) -> dict:
         "img_sentence": img_sentence,
         "img_network": img_network,
         "img_heatmap": img_heatmap,
-<<<<<<< HEAD
     }
-=======
-    }
->>>>>>> d5dcf00 (Fixes)
