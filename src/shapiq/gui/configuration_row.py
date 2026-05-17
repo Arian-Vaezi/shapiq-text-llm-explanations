@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import gradio as gr
 
-
 SEGMENTATION_OPTIONS = [
     "token",
     "word",
@@ -24,9 +23,7 @@ class ConfigurationRow:
     """Reusable configuration row component."""
 
     def __init__(self) -> None:
-
         with gr.Row():
-
             self.segmentation_dropdown = gr.Dropdown(
                 choices=SEGMENTATION_OPTIONS,
                 value="word",
@@ -57,7 +54,6 @@ class ConfigurationRow:
     @property
     def inputs(self) -> list:
         """Return all interactive inputs."""
-
         return [
             self.segmentation_dropdown,
             self.masking_dropdown,
