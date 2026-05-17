@@ -2,14 +2,13 @@ from __future__ import annotations
 
 import torch
 from transformers import (
-    AutoTokenizer,
     AutoModelForCausalLM,
     AutoModelForSequenceClassification,
+    AutoTokenizer,
 )
 
 
 class HFModelWrapper:
-
     ENCODER_MODELS = [
         "distilbert",
         "roberta",
@@ -21,14 +20,12 @@ class HFModelWrapper:
         "llama",
         "gemma",
         "qwen",
-
         # lightweight models
         "phi",
         "tinyllama",
         "stablelm",
         "gpt-neo",
         "gemma-2",
-
     ]
 
     def __init__(

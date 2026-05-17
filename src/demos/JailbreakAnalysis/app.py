@@ -16,9 +16,9 @@ MODEL_CACHE: dict[str, object] = {}
 # Load Model
 # ============================================================
 
+
 def load_model(model_name: str):
     """Load and cache HuggingFace pipelines."""
-
     if model_name in MODEL_CACHE:
         return MODEL_CACHE[model_name]
 
@@ -38,7 +38,6 @@ def load_model(model_name: str):
     # --------------------------------------------------------
 
     except Exception:
-
         pipe = pipeline(
             task="sentiment-analysis",
             model=model_name,
@@ -53,13 +52,13 @@ def load_model(model_name: str):
 # Generate Reply
 # ============================================================
 
+
 def generate_reply(
     message: str,
     history: list[dict],
     model_name: str,
 ) -> str:
     """Generate assistant reply."""
-
     pipe = load_model(model_name)
 
     # --------------------------------------------------------
@@ -69,7 +68,6 @@ def generate_reply(
     conversation = ""
 
     for chat in history:
-
         role = chat["role"]
         content = chat["content"]
 
@@ -86,7 +84,6 @@ def generate_reply(
     # --------------------------------------------------------
 
     try:
-
         result = pipe(
             conversation,
             max_new_tokens=128,
@@ -96,26 +93,19 @@ def generate_reply(
 
         generated_text = result[0]["generated_text"]
 
-        reply = generated_text.split(
-            "Assistant:"
-        )[-1].strip()
+        reply = generated_text.split("Assistant:")[-1].strip()
 
     # --------------------------------------------------------
     # Fallback for classification models
     # --------------------------------------------------------
 
     except Exception:
-
         result = pipe(message)
 
         label = result[0]["label"]
         score = result[0]["score"]
 
-        reply = (
-            f"Classification Result\n\n"
-            f"Label: {label}\n"
-            f"Score: {score:.4f}"
-        )
+        reply = f"Classification Result\n\nLabel: {label}\nScore: {score:.4f}"
 
     return reply
 
@@ -124,9 +114,9 @@ def generate_reply(
 # Explain Button HTML
 # ============================================================
 
+
 def build_explain_button() -> str:
     """Small placeholder explain button."""
-
     return """
     <div style='display:flex; justify-content:flex-end; margin-top:8px;'>
         <button
@@ -148,6 +138,7 @@ def build_explain_button() -> str:
 # Chat Function
 # ============================================================
 
+
 def chat_fn(
     message: str,
     history: list[dict],
@@ -156,7 +147,6 @@ def chat_fn(
     model_name: str,
 ):
     """Main chat callback."""
-
     # --------------------------------------------------------
     # Generate Reply
     # --------------------------------------------------------
@@ -198,10 +188,7 @@ def chat_fn(
 # UI
 # ============================================================
 
-with gr.Blocks(
-    title="Jailbreak Analysis Demo"
-) as demo:
-
+with gr.Blocks(title="Jailbreak Analysis Demo") as demo:
     gr.Markdown(
         """
         # Jailbreak Analysis Demo
@@ -226,7 +213,6 @@ with gr.Blocks(
     # ========================================================
 
     with gr.Row():
-
         user_input = gr.Textbox(
             placeholder="Enter your message...",
             show_label=False,
@@ -271,7 +257,6 @@ with gr.Blocks(
 # ============================================================
 
 if __name__ == "__main__":
-
     demo.launch(
         server_name="0.0.0.0",
         server_port=7860,

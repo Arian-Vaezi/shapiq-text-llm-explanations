@@ -114,10 +114,10 @@ model = HFModelWrapper(
 
 ## HFModelWrapper responsibilities
 
-- Load model  
-- Load tokenizer  
+- Load model
+- Load tokenizer
 - Provide logits/probabilities （model call）
-- Provide generic inference utilities  
+- Provide generic inference utilities
 
 #  Notes
 - Large models may require HuggingFace authentication （such as Gemma-7B）
