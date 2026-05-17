@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import torch
+import numpy as np
+
+from torch.nn.functional import log_softmax
 from transformers import (
     AutoModelForCausalLM,
     AutoModelForSequenceClassification,
@@ -9,6 +12,7 @@ from transformers import (
 
 
 class HFModelWrapper:
+
     ENCODER_MODELS = [
         "distilbert",
         "roberta",
@@ -20,7 +24,6 @@ class HFModelWrapper:
         "llama",
         "gemma",
         "qwen",
-        # lightweight models
         "phi",
         "tinyllama",
         "stablelm",
@@ -36,9 +39,9 @@ class HFModelWrapper:
     ):
         self.model_name = model_name
 
-        # -----------------------------
-        # device handling
-        # -----------------------------
+        # =====================================================
+        # DEVICE
+        # =====================================================
         if device == "cuda" and torch.cuda.is_available():
             self.device = "cuda"
         elif isinstance(device, int):
@@ -46,26 +49,27 @@ class HFModelWrapper:
         else:
             self.device = "cpu"
 
-        # -----------------------------
-        # tokenizer (always needed)
-        # -----------------------------
+        # =====================================================
+        # TOKENIZER
+        # =====================================================
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name,
             token=hf_token,
             use_fast=True,
         )
 
-        # fix decoder-only padding issue
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        # -----------------------------
-        # routing (simple + stable)
-        # -----------------------------
-        self.is_encoder = any(x in model_name.lower() for x in self.ENCODER_MODELS)
+        # =====================================================
+        # MODEL TYPE ROUTING
+        # =====================================================
+        self.is_encoder = any(
+            x in model_name.lower() for x in self.ENCODER_MODELS
+        )
 
         # =====================================================
-        # ENCODER MODELS (DistilBERT, RoBERTa)
+        # ENCODER MODELS
         # =====================================================
         if self.is_encoder:
             self.model = AutoModelForSequenceClassification.from_pretrained(
@@ -75,14 +79,77 @@ class HFModelWrapper:
             self.model.to(self.device)
 
         # =====================================================
-        # CAUSAL MODELS (Mistral, LLaMA, Gemma, Qwen, etc.)
+        # CAUSAL MODELS
         # =====================================================
         else:
             self.model = AutoModelForCausalLM.from_pretrained(
                 model_name,
-                torch_dtype=torch.float16 if "cuda" in self.device else torch.float32,
+                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
                 device_map="auto" if self.device == "cuda" else None,
                 token=hf_token,
             )
 
         self.model.eval()
+
+    # =========================================================
+    # ENCODER SCORING (classification models)
+    # =========================================================
+    @torch.no_grad()
+    def score_classifier(self, texts: list[str]) -> np.ndarray:
+
+        inputs = self.tokenizer(
+            texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+        ).to(self.device)
+
+        logits = self.model(**inputs).logits
+        probs = torch.softmax(logits, dim=-1)
+
+        # binary classification case
+        if probs.shape[-1] == 2:
+            return probs[:, 1].cpu().numpy()
+
+        return torch.max(probs, dim=-1).values.cpu().numpy()
+
+    # =========================================================
+    # CAUSAL LM SCORING (log P(completion | prompt))
+    # =========================================================
+    @torch.no_grad()
+    def score_next_token(
+        self,
+        prompts: list[str],
+        target_text: str,
+    ) -> np.ndarray:
+
+        scores = []
+
+        for prompt in prompts:
+
+            full_text = prompt + target_text
+
+            inputs = self.tokenizer(
+                full_text,
+                return_tensors="pt",
+                padding=False,
+                truncation=True,
+            ).to(self.model.device)
+
+            input_ids = inputs["input_ids"]
+
+            outputs = self.model(input_ids=input_ids)
+            logits = outputs.logits  # (B, T, V)
+
+            # shift for next-token prediction
+            log_probs = log_softmax(logits[:, :-1, :], dim=-1)
+            target_ids = input_ids[:, 1:]
+
+            token_log_probs = log_probs.gather(
+                -1,
+                target_ids.unsqueeze(-1)
+            ).squeeze(-1)
+
+            scores.append(token_log_probs.sum().item())
+
+        return np.array(scores)
