@@ -2,6 +2,16 @@
 # Model Creation Guide (HFModelWrapper)
 
 ---
+## How to use HF models in your demo
+```python
+from demos.shared.hf_model import HFModelWrapper
+self.model = HFModelWrapper(
+            model_name,
+            device=device
+        )
+```
+You can add this code snippet in your game class. Currently added models are listed below.
+
 
 ##  Decoder-only models (7B class)
 

@@ -67,6 +67,7 @@ class HFModelWrapper:
         self.is_encoder = any(
             x in model_name.lower() for x in self.ENCODER_MODELS
         )
+        self.is_causal = not self.is_encoder
 
         # =====================================================
         # ENCODER MODELS
@@ -77,6 +78,7 @@ class HFModelWrapper:
                 token=hf_token,
             )
             self.model.to(self.device)
+        
 
         # =====================================================
         # CAUSAL MODELS
