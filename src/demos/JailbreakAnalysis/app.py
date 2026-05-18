@@ -1,7 +1,14 @@
+"""Gradio web application for the Jailbreak Analysis demo.
+
+This file contains the UI layout and interaction handlers.
+"""
+
+from __future__ import annotations
+
 import gradio as gr
 
+from demos.JailbreakAnalysis.ui_configColumn import ExplanationConfigColumn
 from demos.shared.hf_model import HFModelWrapper
-from demos.JailbreakAnalysis import JailbreakGame
 
 # ============================================================
 # MODEL CACHE
@@ -11,6 +18,8 @@ MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
     "google/gemma-2-2b-it",
+    #"microsoft/phi-2",
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
 ]
 
 
@@ -18,14 +27,16 @@ PRELOAD_MODELS = [
 # PRELOAD MODELS
 # ============================================================
 
-def preload_models():
 
+def preload_models() -> None:
+    """Preloads the configured models in PRELOAD_MODELS into the MODEL_CACHE."""
     print("Preloading models...")
 
-    MODEL_CACHE["google/gemma-2-2b-it"] = HFModelWrapper(
-        model_name="google/gemma-2-2b-it",
-        device="cuda",
-    )
+    for model_name in PRELOAD_MODELS:
+        MODEL_CACHE[model_name] = HFModelWrapper(
+            model_name=model_name,
+            device="cuda",
+        )
 
     print("Finished preloading.")
 
@@ -34,8 +45,9 @@ def preload_models():
 # GET MODEL
 # ============================================================
 
-def get_model(model_name: str) -> HFModelWrapper:
 
+def get_model(model_name: str) -> HFModelWrapper:
+    """Retrieves a model from the cache, lazy-loading it if not present."""
     # already loaded
     if model_name in MODEL_CACHE:
         return MODEL_CACHE[model_name]
@@ -55,12 +67,13 @@ def get_model(model_name: str) -> HFModelWrapper:
 # EXPLANATION
 # ============================================================
 
-def get_explanation(
-    dropdown_model,
-    dropdown_segmentation,
-    dropdown_masking,
-):
 
+def get_explanation(
+    dropdown_model: str,
+    dropdown_segmentation: str,
+    dropdown_masking: str,
+) -> str:
+    """Generates the explanation markdown content."""
     return (
         f"## Explanation\n\n"
         f"- Model: {dropdown_model}\n"
@@ -74,29 +87,32 @@ def get_explanation(
 # CHAT RESPONSE
 # ============================================================
 
+
 def respond(
-    message,
-    chat_history,
-    dropdown_model,
-    dropdown_segmentation,
-    dropdown_masking,
-):
+    message: str,
+    chat_history: list[tuple[str, str]],
+    dropdown_model: str,
+    dropdown_segmentation: str,
+    dropdown_masking: str,
+) -> tuple[list[tuple[str, str]], str, dict, dict]:
+    """Generates the chat response using the selected model."""
+    # Unused arguments that are passed by Gradio:
+    _ = dropdown_segmentation
+    _ = dropdown_masking
 
     model = get_model(dropdown_model)
 
     bot_message = model.generate_text(
         prompt=message,
-        max_new_tokens=16,
+        max_new_tokens=32,
     )
 
-    chat_history.append(
-        (message, bot_message)
-    )
+    chat_history.append((message, bot_message))
 
     return (
         chat_history,
         "",
-        gr.update(visible=True),   # show explain button
+        gr.update(visible=True),  # show explain button
         gr.update(open=False, visible=False),
     )
 
@@ -105,12 +121,13 @@ def respond(
 # SHOW EXPLANATION
 # ============================================================
 
-def show_explanation(
-    dropdown_model,
-    dropdown_segmentation,
-    dropdown_masking,
-):
 
+def show_explanation(
+    dropdown_model: str,
+    dropdown_segmentation: str,
+    dropdown_masking: str,
+) -> tuple[dict, dict]:
+    """Generates and displays the explanation block."""
     explanation_content = get_explanation(
         dropdown_model,
         dropdown_segmentation,
@@ -128,67 +145,29 @@ def show_explanation(
 # ============================================================
 
 with gr.Blocks() as demo:
-
     gr.Markdown("# Shapiq Jailbreak Explainability Demo")
 
     with gr.Row():
-
         # ====================================================
         # CONFIG
         # ====================================================
 
-        with gr.Column(scale=1, min_width=100):
-
-            gr.Markdown("## Explaination Config")
-
-            dropdown_model = gr.Dropdown(
-                label="Model for Explanation",
-                choices=[
-                    "google/gemma-2-2b-it",
-                     "microsoft/phi-2",
-                     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-                     "EleutherAI/gpt-neo-1.3B",
-
-                ],
-                value="google/gemma-2-2b-it",
-                allow_custom_value=False,
-            )
-
-            dropdown_segmentation = gr.Dropdown(
-                label="Segmentation",
-                choices=[
-                    "word-level",
-                    "token-level",
-                ],
-                value="word-level",
-                allow_custom_value=False,
-            )
-
-            dropdown_masking = gr.Dropdown(
-                label="Masking Strategy",
-                choices=[
-                    "remove",
-                    "mask",
-                    "distributional sampling",
-                    "generative infilling",
-                ],
-                value="remove",
-                allow_custom_value=False,
-            )
+        config_col = ExplanationConfigColumn()
+        dropdown_model = config_col.dropdown_model
+        dropdown_segmentation = config_col.dropdown_segmentation
+        dropdown_masking = config_col.dropdown_masking
 
         # ====================================================
         # CHAT
         # ====================================================
 
         with gr.Column(scale=3):
-
             chatbot = gr.Chatbot(
                 label="Chat History",
                 height=500,
             )
 
             with gr.Row():
-
                 msg_input = gr.Textbox(
                     placeholder="Enter prompt...",
                     show_label=False,
@@ -221,10 +200,7 @@ with gr.Blocks() as demo:
                 open=False,
                 visible=False,
             ) as explanation_accordion:
-
-                explanation_md = gr.Markdown(
-                    visible=False
-                )
+                explanation_md = gr.Markdown(visible=False)
 
     # ========================================================
     # EVENTS
