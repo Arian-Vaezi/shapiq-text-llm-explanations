@@ -7,7 +7,6 @@ from shapiq.game import Game
 
 
 class JailbreakGame(Game):
-
     def __init__(
         self,
         model_name: str,
@@ -19,7 +18,6 @@ class JailbreakGame(Game):
         normalize: bool = True,
         verbose: bool = False,
     ) -> None:
-
         self.model_name = model_name
         self.input_text = input_text
         self.mask_strategy = mask_strategy
@@ -52,7 +50,6 @@ class JailbreakGame(Game):
     # Players
     # =================================================
     def _build_players(self) -> None:
-
         if self.segmentation == "word":
             self.players = np.array(self.input_text.split())
             return
@@ -64,19 +61,15 @@ class JailbreakGame(Game):
 
         token_ids = encoding["input_ids"]
 
-        self.players = np.array(
-            self.tokenizer.convert_ids_to_tokens(token_ids)
-        )
+        self.players = np.array(self.tokenizer.convert_ids_to_tokens(token_ids))
 
     # =================================================
     # Coalition -> Prompt
     # =================================================
     def coalition_to_prompt(self, coalition: np.ndarray) -> str:
-
         output_tokens = []
 
         for present, token in zip(coalition, self.players, strict=True):
-
             if present:
                 output_tokens.append(token)
                 continue
@@ -90,7 +83,7 @@ class JailbreakGame(Game):
             # --------------------------
             # mask
             # --------------------------
-            elif self.mask_strategy == "mask":
+            if self.mask_strategy == "mask":
                 if self.mask_token is None:
                     continue
                 output_tokens.append(self.mask_token)
@@ -111,10 +104,7 @@ class JailbreakGame(Game):
     # =================================================
     def _score_set(self, prompts, templates):
         return np.mean(
-            [
-                self.hf_model.score_next_token(prompts, t)
-                for t in templates
-            ],
+            [self.hf_model.score_next_token(prompts, t) for t in templates],
             axis=0,
         )
 
@@ -125,15 +115,9 @@ class JailbreakGame(Game):
         self,
         coalitions: np.ndarray,
     ) -> np.ndarray:
+        prompts = [str(self.coalition_to_prompt(c)) for c in coalitions]
 
-        prompts = [
-            str(self.coalition_to_prompt(c))
-            for c in coalitions
-        ]
-
-        empty_prompt = str(
-            self.coalition_to_prompt(np.zeros(len(self.players)))
-        )
+        empty_prompt = str(self.coalition_to_prompt(np.zeros(len(self.players))))
 
         positive_completion = [
             "I will comply.",
@@ -151,7 +135,6 @@ class JailbreakGame(Game):
         # encoder models
         # ==========================================
         if not self.hf_model.is_causal:
-
             scores = self.hf_model.score_classifier(prompts)
             baseline = self.hf_model.score_classifier([empty_prompt])[0]
 
@@ -159,7 +142,6 @@ class JailbreakGame(Game):
         # causal LM (Gemma / Mistral / Qwen)
         # ==========================================
         else:
-
             pos_scores = self._score_set(prompts, positive_completion)
             neg_scores = self._score_set(prompts, negative_completion)
 
@@ -169,4 +151,4 @@ class JailbreakGame(Game):
             scores = pos_scores - neg_scores
             baseline = pos_base - neg_base
 
-        return np.array(scores) - float(baseline)
+        return np.array(scores) - np.asarray(baseline).item()

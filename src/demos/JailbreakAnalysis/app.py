@@ -3,7 +3,10 @@
 This file contains the UI layout and interaction handlers.
 """
 
+
 from __future__ import annotations
+
+
 
 import gradio as gr
 
@@ -17,7 +20,7 @@ from demos.shared.hf_model import HFModelWrapper
 MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
-    "google/gemma-2-2b-it",
+    #"google/gemma-2-2b-it",
     #"microsoft/phi-2",
     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
 ]
@@ -62,27 +65,6 @@ def get_model(model_name: str) -> HFModelWrapper:
 
     return MODEL_CACHE[model_name]
 
-
-# ============================================================
-# EXPLANATION
-# ============================================================
-
-
-def get_explanation(
-    dropdown_model: str,
-    dropdown_segmentation: str,
-    dropdown_masking: str,
-) -> str:
-    """Generates the explanation markdown content."""
-    return (
-        f"## Explanation\n\n"
-        f"- Model: {dropdown_model}\n"
-        f"- Segmentation: {dropdown_segmentation}\n"
-        f"- Masking: {dropdown_masking}\n\n"
-        f"Placeholder explanation output."
-    )
-
-
 # ============================================================
 # CHAT RESPONSE
 # ============================================================
@@ -104,14 +86,17 @@ def respond(
 
     bot_message = model.generate_text(
         prompt=message,
-        max_new_tokens=32,
+        max_new_tokens=64,
+        chat=True,
     )
 
-    chat_history.append((message, bot_message))
+    chat_history.append({"role": "user", "content": message})
+    chat_history.append({"role": "assistant", "content": bot_message})
 
     return (
         chat_history,
         "",
+        message,
         gr.update(visible=True),  # show explain button
         gr.update(open=False, visible=False),
     )
@@ -121,24 +106,41 @@ def respond(
 # SHOW EXPLANATION
 # ============================================================
 
-
 def show_explanation(
+    last_message: str,
     dropdown_model: str,
     dropdown_segmentation: str,
     dropdown_masking: str,
-) -> tuple[dict, dict]:
-    """Generates and displays the explanation block."""
-    explanation_content = get_explanation(
-        dropdown_model,
-        dropdown_segmentation,
-        dropdown_masking,
+):
+    from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
+    import shapiq
+
+    game = JailbreakGame(
+        model_name=dropdown_model,
+        input_text=last_message,
+        mask_strategy=dropdown_masking,
+        segmentation=dropdown_segmentation,
+        device="cuda",
+    )
+
+    approx = shapiq.KernelSHAP(
+        n=game.n_players,
+        random_state=42,
+    )
+
+    result = approx.approximate(budget=100, game=game)
+
+    explanation_text = (
+        f"## Shapiq Explanation\n\n"
+        f"**Model:** {dropdown_model}  \n"
+        f"**Input:** {last_message}  \n"
+        f"**Shapley values:** `{result.values}`"
     )
 
     return (
-        gr.update(value=explanation_content, visible=True),
+        gr.update(value=explanation_text, visible=True),
         gr.update(visible=True, open=True),
     )
-
 
 # ============================================================
 # UI
@@ -186,7 +188,7 @@ with gr.Blocks() as demo:
             # =================================================
 
             explain_btn = gr.Button(
-                "Explain Last Response",
+                "Explain with shapiq",
                 visible=False,
                 variant="secondary",
             )
@@ -243,6 +245,7 @@ with gr.Blocks() as demo:
     explain_btn.click(
         show_explanation,
         [
+            
             dropdown_model,
             dropdown_segmentation,
             dropdown_masking,

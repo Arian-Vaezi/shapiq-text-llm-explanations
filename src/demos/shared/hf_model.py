@@ -172,9 +172,26 @@ class HFModelWrapper:
     # TEXT GENERATION
     # =========================================================
 
-    def generate_text(self, prompt: str, max_new_tokens: int = 32) -> str:
+    def generate_text(
+        self,
+        prompt: str,
+        max_new_tokens: int = 32,
+        chat: bool = False,
+    ) -> str:
+        """Generates text from the model given a prompt.
+
+        If chat=True, formats the prompt using the model's chat template.
+        """
         if self.is_encoder:
             raise ValueError(f"Model '{self.model_name}' cannot generate text.")
+
+        if chat:
+            messages = [{"role": "user", "content": prompt}]
+            prompt = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
 
         result = self.pipe(
             prompt,

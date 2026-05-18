@@ -24,7 +24,7 @@ class ExplanationConfigColumn:
                     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
                     #"EleutherAI/gpt-neo-1.3B",
                 ],
-                value="google/gemma-2-2b-it",
+                value="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
                 allow_custom_value=False,
             )
 
