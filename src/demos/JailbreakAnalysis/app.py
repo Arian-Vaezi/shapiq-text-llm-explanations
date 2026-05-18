@@ -1,36 +1,78 @@
 import gradio as gr
+
 from demos.shared.hf_model import HFModelWrapper
+from demos.JailbreakAnalysis import JailbreakGame
 
 # ============================================================
-# GLOBAL MODEL CACHE
+# MODEL CACHE
 # ============================================================
 
 MODEL_CACHE = {}
 
+PRELOAD_MODELS = [
+    "google/gemma-2-2b-it",
+]
+
+
+# ============================================================
+# PRELOAD MODELS
+# ============================================================
+
+def preload_models():
+
+    print("Preloading models...")
+
+    MODEL_CACHE["google/gemma-2-2b-it"] = HFModelWrapper(
+        model_name="google/gemma-2-2b-it",
+        device="cuda",
+    )
+
+    print("Finished preloading.")
+
+
+# ============================================================
+# GET MODEL
+# ============================================================
 
 def get_model(model_name: str) -> HFModelWrapper:
 
-    if model_name not in MODEL_CACHE:
+    # already loaded
+    if model_name in MODEL_CACHE:
+        return MODEL_CACHE[model_name]
 
-        MODEL_CACHE[model_name] = HFModelWrapper(
-            model_name=model_name,
-            device="cuda",
-        )
+    # lazy-load non-preloaded models
+    print(f"Lazily loading {model_name}")
+
+    MODEL_CACHE[model_name] = HFModelWrapper(
+        model_name=model_name,
+        device="cuda",
+    )
 
     return MODEL_CACHE[model_name]
 
 
-def get_explanation(dropdown_model, dropdown_segmentation, dropdown_masking):
-    """
-    Simulates generating an explanation based on the chosen config.
-    """
+# ============================================================
+# EXPLANATION
+# ============================================================
+
+def get_explanation(
+    dropdown_model,
+    dropdown_segmentation,
+    dropdown_masking,
+):
+
     return (
         f"## Explanation\n\n"
-        f"- **Model:** {dropdown_model}\n"
-        f"- **Segmentation:** {dropdown_segmentation}\n"
-        f"- **Masking Strategy:** {dropdown_masking}\n\n"
-        f"This section contains the explanation for the last response."
+        f"- Model: {dropdown_model}\n"
+        f"- Segmentation: {dropdown_segmentation}\n"
+        f"- Masking: {dropdown_masking}\n\n"
+        f"Placeholder explanation output."
     )
+
+
+# ============================================================
+# CHAT RESPONSE
+# ============================================================
 
 def respond(
     message,
@@ -44,7 +86,7 @@ def respond(
 
     bot_message = model.generate_text(
         prompt=message,
-        max_new_tokens=128,
+        max_new_tokens=16,
     )
 
     chat_history.append(
@@ -54,17 +96,20 @@ def respond(
     return (
         chat_history,
         "",
+        gr.update(visible=True),   # show explain button
         gr.update(open=False, visible=False),
     )
+
+
+# ============================================================
+# SHOW EXPLANATION
+# ============================================================
 
 def show_explanation(
     dropdown_model,
     dropdown_segmentation,
     dropdown_masking,
 ):
-    """
-    Generates and reveals the explanation section.
-    """
 
     explanation_content = get_explanation(
         dropdown_model,
@@ -78,15 +123,21 @@ def show_explanation(
     )
 
 
+# ============================================================
+# UI
+# ============================================================
+
 with gr.Blocks() as demo:
-    gr.Markdown("# Jailbreak Analysis Demo")
+
+    gr.Markdown("# Shapiq Jailbreak Explainability Demo")
 
     with gr.Row():
 
-        # ============================================================
-        # Config Panel (Reduced Width)
-        # ============================================================
-        with gr.Column(scale=0.8, min_width=150):
+        # ====================================================
+        # CONFIG
+        # ====================================================
+
+        with gr.Column(scale=1, min_width=100):
 
             gr.Markdown("## Explaination Config")
 
@@ -94,13 +145,13 @@ with gr.Blocks() as demo:
                 label="Model for Explanation",
                 choices=[
                     "google/gemma-2-2b-it",
-                    "microsoft/phi-2",
-                    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-                    "EleutherAI/gpt-neo-1.3B",
+                     "microsoft/phi-2",
+                     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+                     "EleutherAI/gpt-neo-1.3B",
+
                 ],
                 value="google/gemma-2-2b-it",
                 allow_custom_value=False,
-                interactive=True,
             )
 
             dropdown_segmentation = gr.Dropdown(
@@ -111,7 +162,6 @@ with gr.Blocks() as demo:
                 ],
                 value="word-level",
                 allow_custom_value=False,
-                interactive=True,
             )
 
             dropdown_masking = gr.Dropdown(
@@ -124,12 +174,12 @@ with gr.Blocks() as demo:
                 ],
                 value="remove",
                 allow_custom_value=False,
-                interactive=True,
             )
 
-        # ============================================================
-        # Chat Area
-        # ============================================================
+        # ====================================================
+        # CHAT
+        # ====================================================
+
         with gr.Column(scale=3):
 
             chatbot = gr.Chatbot(
@@ -140,7 +190,7 @@ with gr.Blocks() as demo:
             with gr.Row():
 
                 msg_input = gr.Textbox(
-                    placeholder="Enter your prompt here...",
+                    placeholder="Enter prompt...",
                     show_label=False,
                     container=False,
                     scale=8,
@@ -148,15 +198,23 @@ with gr.Blocks() as demo:
 
                 send_btn = gr.Button(
                     "Send",
-                    scale=1,
                     variant="primary",
+                    scale=1,
                 )
+
+            # =================================================
+            # Explain button BELOW chat
+            # =================================================
 
             explain_btn = gr.Button(
                 "Explain Last Response",
+                visible=False,
                 variant="secondary",
-                size="sm",
             )
+
+            # =================================================
+            # Explanation Accordion
+            # =================================================
 
             with gr.Accordion(
                 "Explanation and Analysis",
@@ -168,9 +226,9 @@ with gr.Blocks() as demo:
                     visible=False
                 )
 
-    # ============================================================
-    # Event Listeners
-    # ============================================================
+    # ========================================================
+    # EVENTS
+    # ========================================================
 
     msg_input.submit(
         respond,
@@ -184,6 +242,7 @@ with gr.Blocks() as demo:
         [
             chatbot,
             msg_input,
+            explain_btn,
             explanation_accordion,
         ],
     )
@@ -200,6 +259,7 @@ with gr.Blocks() as demo:
         [
             chatbot,
             msg_input,
+            explain_btn,
             explanation_accordion,
         ],
     )
@@ -218,5 +278,10 @@ with gr.Blocks() as demo:
     )
 
 
+# ============================================================
+# MAIN
+# ============================================================
+
 if __name__ == "__main__":
+    preload_models()
     demo.launch()

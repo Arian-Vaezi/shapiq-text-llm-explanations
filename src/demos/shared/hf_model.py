@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from transformers.models.chameleon import image_processing_chameleon_fast
+
+
 import torch
 import numpy as np
 
@@ -37,21 +40,37 @@ class HFModelWrapper:
         device: str | int = "cuda",
         hf_token: str | None = None,
     ):
+
         self.model_name = model_name
 
         # =====================================================
         # DEVICE
         # =====================================================
-        if device == "cuda" and torch.cuda.is_available():
-            self.device = "cuda"
+
+        if device == "cuda":
+
+            if torch.cuda.is_available():
+                self.device = "cuda"
+
+            elif torch.backends.mps.is_available():
+                self.device = "mps"
+
+            else:
+                self.device = "cpu"
+
         elif isinstance(device, int):
+
             self.device = f"cuda:{device}"
+
         else:
-            self.device = "cpu"
+            self.device = device
+
+        print(f"Using device: {self.device}")
 
         # =====================================================
         # TOKENIZER
         # =====================================================
+
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name,
             token=hf_token,
@@ -64,40 +83,66 @@ class HFModelWrapper:
         # =====================================================
         # MODEL TYPE ROUTING
         # =====================================================
+
         self.is_encoder = any(
-            x in model_name.lower() for x in self.ENCODER_MODELS
+            x in model_name.lower()
+            for x in self.ENCODER_MODELS
         )
-        self.is_causal = not self.is_encoder
+
+        self.is_causal = any(
+            x in model_name.lower()
+            for x in self.CAUSAL_MODELS
+        )
 
         # =====================================================
         # ENCODER MODELS
         # =====================================================
+
         if self.is_encoder:
-            self.model = AutoModelForSequenceClassification.from_pretrained(
-                model_name,
-                token=hf_token,
+
+            self.model = (
+                AutoModelForSequenceClassification.from_pretrained(
+                    model_name,
+                    token=hf_token,
+                )
             )
+
             self.model.to(self.device)
-        
 
         # =====================================================
         # CAUSAL MODELS
         # =====================================================
-        else:
+
+        elif self.is_causal:
+
+            dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+
             self.model = AutoModelForCausalLM.from_pretrained(
                 model_name,
-                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
-                device_map="auto" if self.device == "cuda" else None,
-                token=hf_token,
+                torch_dtype=dtype,         
+                device_map=None,          
+                low_cpu_mem_usage=False,     
+            )
+
+            self.device = self.model.device
+
+        else:
+
+            raise ValueError(
+                f"Unsupported model type for model: {model_name}"
             )
 
         self.model.eval()
 
     # =========================================================
-    # ENCODER SCORING (classification models)
+    # ENCODER SCORING
     # =========================================================
+
     @torch.no_grad()
-    def score_classifier(self, texts: list[str]) -> np.ndarray:
+    def score_classifier(
+        self,
+        texts: list[str],
+    ) -> np.ndarray:
 
         inputs = self.tokenizer(
             texts,
@@ -109,15 +154,19 @@ class HFModelWrapper:
         logits = self.model(**inputs).logits
         probs = torch.softmax(logits, dim=-1)
 
-        # binary classification case
+        # binary classification
         if probs.shape[-1] == 2:
             return probs[:, 1].cpu().numpy()
 
-        return torch.max(probs, dim=-1).values.cpu().numpy()
+        return torch.max(
+            probs,
+            dim=-1,
+        ).values.cpu().numpy()
 
     # =========================================================
-    # CAUSAL LM SCORING (log P(completion | prompt))
+    # CAUSAL LM SCORING
     # =========================================================
+
     @torch.no_grad()
     def score_next_token(
         self,
@@ -136,64 +185,71 @@ class HFModelWrapper:
                 return_tensors="pt",
                 padding=False,
                 truncation=True,
-            ).to(self.model.device)
+            ).to(self.device)
 
             input_ids = inputs["input_ids"]
 
-            outputs = self.model(input_ids=input_ids)
-            logits = outputs.logits  # (B, T, V)
+            outputs = self.model(
+                input_ids=input_ids
+            )
 
-            # shift for next-token prediction
-            log_probs = log_softmax(logits[:, :-1, :], dim=-1)
+            logits = outputs.logits
+
+            log_probs = log_softmax(
+                logits[:, :-1, :],
+                dim=-1,
+            )
+
             target_ids = input_ids[:, 1:]
 
             token_log_probs = log_probs.gather(
                 -1,
-                target_ids.unsqueeze(-1)
+                target_ids.unsqueeze(-1),
             ).squeeze(-1)
 
-            scores.append(token_log_probs.sum().item())
+            scores.append(
+                token_log_probs.sum().item()
+            )
 
         return np.array(scores)
 
-    
     # =========================================================
     # TEXT GENERATION
     # =========================================================
+
     @torch.no_grad()
     def generate_text(
         self,
         prompt: str,
-        max_new_tokens: int = 256,
-        temperature: float = 0.7,
-        do_sample: bool = True,
+        max_new_tokens: int = 32,
     ) -> str:
 
         if self.is_encoder:
             raise ValueError(
-                f"Model '{self.model_name}' is an encoder model "
-                "and cannot generate text."
+                f"Model '{self.model_name}' "
+                "cannot generate text."
             )
 
         inputs = self.tokenizer(
             prompt,
             return_tensors="pt",
-        ).to(self.model.device)
+        ).to(self.device)
 
         generated_ids = self.model.generate(
             **inputs,
             max_new_tokens=max_new_tokens,
-            temperature=temperature,
-            do_sample=do_sample,
+            do_sample=False,
+            use_cache=True,
             pad_token_id=self.tokenizer.eos_token_id,
         )
 
-        generated_text = self.tokenizer.decode(
-            generated_ids[0],
+        input_length = inputs["input_ids"].shape[1]
+
+        new_tokens = generated_ids[0][input_length:]
+
+        response = self.tokenizer.decode(
+            new_tokens,
             skip_special_tokens=True,
         )
 
-        # remove original prompt from output
-        response = generated_text[len(prompt):].strip()
-
-        return response
+        return response.strip()
