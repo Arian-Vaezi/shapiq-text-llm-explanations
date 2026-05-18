@@ -1,263 +1,222 @@
-from __future__ import annotations
-
 import gradio as gr
-from transformers import pipeline
-
-from shapiq.gui.configuration_row import ConfigurationRow
+from demos.shared.hf_model import HFModelWrapper
 
 # ============================================================
-# Model Cache
+# GLOBAL MODEL CACHE
 # ============================================================
 
-MODEL_CACHE: dict[str, object] = {}
+MODEL_CACHE = {}
 
 
-# ============================================================
-# Load Model
-# ============================================================
+def get_model(model_name: str) -> HFModelWrapper:
 
+    if model_name not in MODEL_CACHE:
 
-def load_model(model_name: str):
-    """Load and cache HuggingFace pipelines."""
-    if model_name in MODEL_CACHE:
-        return MODEL_CACHE[model_name]
-
-    # --------------------------------------------------------
-    # Try loading as chat/text-generation model first
-    # --------------------------------------------------------
-
-    try:
-        pipe = pipeline(
-            task="text-generation",
-            model=model_name,
-            device_map="auto",
+        MODEL_CACHE[model_name] = HFModelWrapper(
+            model_name=model_name,
+            device="cuda",
         )
 
-    # --------------------------------------------------------
-    # Fallback: classification pipeline
-    # --------------------------------------------------------
-
-    except Exception:
-        pipe = pipeline(
-            task="sentiment-analysis",
-            model=model_name,
-        )
-
-    MODEL_CACHE[model_name] = pipe
-
-    return pipe
+    return MODEL_CACHE[model_name]
 
 
-# ============================================================
-# Generate Reply
-# ============================================================
+def get_explanation(dropdown_model, dropdown_segmentation, dropdown_masking):
+    """
+    Simulates generating an explanation based on the chosen config.
+    """
+    return (
+        f"## Explanation\n\n"
+        f"- **Model:** {dropdown_model}\n"
+        f"- **Segmentation:** {dropdown_segmentation}\n"
+        f"- **Masking Strategy:** {dropdown_masking}\n\n"
+        f"This section contains the explanation for the last response."
+    )
 
+def respond(
+    message,
+    chat_history,
+    dropdown_model,
+    dropdown_segmentation,
+    dropdown_masking,
+):
 
-def generate_reply(
-    message: str,
-    history: list[dict],
-    model_name: str,
-) -> str:
-    """Generate assistant reply."""
-    pipe = load_model(model_name)
+    model = get_model(dropdown_model)
 
-    # --------------------------------------------------------
-    # Build Conversation Context
-    # --------------------------------------------------------
+    bot_message = model.generate_text(
+        prompt=message,
+        max_new_tokens=128,
+    )
 
-    conversation = ""
+    chat_history.append(
+        (message, bot_message)
+    )
 
-    for chat in history:
-        role = chat["role"]
-        content = chat["content"]
+    return (
+        chat_history,
+        "",
+        gr.update(open=False, visible=False),
+    )
 
-        if role == "user":
-            conversation += f"User: {content}\n"
-
-        elif role == "assistant":
-            conversation += f"Assistant: {content}\n"
-
-    conversation += f"User: {message}\nAssistant:"
-
-    # --------------------------------------------------------
-    # Generate
-    # --------------------------------------------------------
-
-    try:
-        result = pipe(
-            conversation,
-            max_new_tokens=128,
-            do_sample=True,
-            temperature=0.7,
-        )
-
-        generated_text = result[0]["generated_text"]
-
-        reply = generated_text.split("Assistant:")[-1].strip()
-
-    # --------------------------------------------------------
-    # Fallback for classification models
-    # --------------------------------------------------------
-
-    except Exception:
-        result = pipe(message)
-
-        label = result[0]["label"]
-        score = result[0]["score"]
-
-        reply = f"Classification Result\n\nLabel: {label}\nScore: {score:.4f}"
-
-    return reply
-
-
-# ============================================================
-# Explain Button HTML
-# ============================================================
-
-
-def build_explain_button() -> str:
-    """Small placeholder explain button."""
-    return """
-    <div style='display:flex; justify-content:flex-end; margin-top:8px;'>
-        <button
-            style='
-                font-size:12px;
-                padding:4px 10px;
-                border-radius:8px;
-                border:none;
-                cursor:pointer;
-            '
-        >
-            Explain
-        </button>
-    </div>
+def show_explanation(
+    dropdown_model,
+    dropdown_segmentation,
+    dropdown_masking,
+):
+    """
+    Generates and reveals the explanation section.
     """
 
-
-# ============================================================
-# Chat Function
-# ============================================================
-
-
-def chat_fn(
-    message: str,
-    history: list[dict],
-    segmentation: str,
-    masking_strategy: str,
-    model_name: str,
-):
-    """Main chat callback."""
-    # --------------------------------------------------------
-    # Generate Reply
-    # --------------------------------------------------------
-
-    reply = generate_reply(
-        message=message,
-        history=history,
-        model_name=model_name,
+    explanation_content = get_explanation(
+        dropdown_model,
+        dropdown_segmentation,
+        dropdown_masking,
     )
 
-    # --------------------------------------------------------
-    # Add Explain Button Placeholder
-    # --------------------------------------------------------
-
-    reply += build_explain_button()
-
-    # --------------------------------------------------------
-    # Update Chat History
-    # --------------------------------------------------------
-
-    history.append(
-        {
-            "role": "user",
-            "content": message,
-        }
+    return (
+        gr.update(value=explanation_content, visible=True),
+        gr.update(visible=True, open=True),
     )
 
-    history.append(
-        {
-            "role": "assistant",
-            "content": reply,
-        }
-    )
 
-    return "", history
-
-
-# ============================================================
-# UI
-# ============================================================
-
-with gr.Blocks(title="Jailbreak Analysis Demo") as demo:
-    gr.Markdown(
-        """
-        # Jailbreak Analysis Demo
-
-        Chat with different models and later explain
-        outputs with shapiq.
-        """
-    )
-
-    # ========================================================
-    # Chatbot
-    # ========================================================
-
-    chatbot = gr.Chatbot(
-        height=650,
-        label="Chat",
-        render_markdown=True,
-    )
-
-    # ========================================================
-    # Bottom Input Row
-    # ========================================================
+with gr.Blocks() as demo:
+    gr.Markdown("# Jailbreak Analysis Demo")
 
     with gr.Row():
-        user_input = gr.Textbox(
-            placeholder="Enter your message...",
-            show_label=False,
-            scale=20,
-        )
 
-        config_row = ConfigurationRow()
+        # ============================================================
+        # Config Panel (Reduced Width)
+        # ============================================================
+        with gr.Column(scale=0.8, min_width=150):
 
-    # ========================================================
+            gr.Markdown("## Explaination Config")
+
+            dropdown_model = gr.Dropdown(
+                label="Model for Explanation",
+                choices=[
+                    "google/gemma-2-2b-it",
+                    "microsoft/phi-2",
+                    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+                    "EleutherAI/gpt-neo-1.3B",
+                ],
+                value="google/gemma-2-2b-it",
+                allow_custom_value=False,
+                interactive=True,
+            )
+
+            dropdown_segmentation = gr.Dropdown(
+                label="Segmentation",
+                choices=[
+                    "word-level",
+                    "token-level",
+                ],
+                value="word-level",
+                allow_custom_value=False,
+                interactive=True,
+            )
+
+            dropdown_masking = gr.Dropdown(
+                label="Masking Strategy",
+                choices=[
+                    "remove",
+                    "mask",
+                    "distributional sampling",
+                    "generative infilling",
+                ],
+                value="remove",
+                allow_custom_value=False,
+                interactive=True,
+            )
+
+        # ============================================================
+        # Chat Area
+        # ============================================================
+        with gr.Column(scale=3):
+
+            chatbot = gr.Chatbot(
+                label="Chat History",
+                height=500,
+            )
+
+            with gr.Row():
+
+                msg_input = gr.Textbox(
+                    placeholder="Enter your prompt here...",
+                    show_label=False,
+                    container=False,
+                    scale=8,
+                )
+
+                send_btn = gr.Button(
+                    "Send",
+                    scale=1,
+                    variant="primary",
+                )
+
+            explain_btn = gr.Button(
+                "Explain Last Response",
+                variant="secondary",
+                size="sm",
+            )
+
+            with gr.Accordion(
+                "Explanation and Analysis",
+                open=False,
+                visible=False,
+            ) as explanation_accordion:
+
+                explanation_md = gr.Markdown(
+                    visible=False
+                )
+
+    # ============================================================
     # Event Listeners
-    # ========================================================
+    # ============================================================
 
-    config_row.send_button.click(
-        fn=chat_fn,
-        inputs=[
-            user_input,
+    msg_input.submit(
+        respond,
+        [
+            msg_input,
             chatbot,
-            *config_row.inputs,
+            dropdown_model,
+            dropdown_segmentation,
+            dropdown_masking,
         ],
-        outputs=[
-            user_input,
+        [
             chatbot,
-        ],
-    )
-
-    user_input.submit(
-        fn=chat_fn,
-        inputs=[
-            user_input,
-            chatbot,
-            *config_row.inputs,
-        ],
-        outputs=[
-            user_input,
-            chatbot,
+            msg_input,
+            explanation_accordion,
         ],
     )
 
+    send_btn.click(
+        respond,
+        [
+            msg_input,
+            chatbot,
+            dropdown_model,
+            dropdown_segmentation,
+            dropdown_masking,
+        ],
+        [
+            chatbot,
+            msg_input,
+            explanation_accordion,
+        ],
+    )
 
-# ============================================================
-# Launch
-# ============================================================
+    explain_btn.click(
+        show_explanation,
+        [
+            dropdown_model,
+            dropdown_segmentation,
+            dropdown_masking,
+        ],
+        [
+            explanation_md,
+            explanation_accordion,
+        ],
+    )
+
 
 if __name__ == "__main__":
-    demo.launch(
-        server_name="0.0.0.0",
-        server_port=7860,
-    )
+    demo.launch()

@@ -155,3 +155,45 @@ class HFModelWrapper:
             scores.append(token_log_probs.sum().item())
 
         return np.array(scores)
+
+    
+    # =========================================================
+    # TEXT GENERATION
+    # =========================================================
+    @torch.no_grad()
+    def generate_text(
+        self,
+        prompt: str,
+        max_new_tokens: int = 256,
+        temperature: float = 0.7,
+        do_sample: bool = True,
+    ) -> str:
+
+        if self.is_encoder:
+            raise ValueError(
+                f"Model '{self.model_name}' is an encoder model "
+                "and cannot generate text."
+            )
+
+        inputs = self.tokenizer(
+            prompt,
+            return_tensors="pt",
+        ).to(self.model.device)
+
+        generated_ids = self.model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            temperature=temperature,
+            do_sample=do_sample,
+            pad_token_id=self.tokenizer.eos_token_id,
+        )
+
+        generated_text = self.tokenizer.decode(
+            generated_ids[0],
+            skip_special_tokens=True,
+        )
+
+        # remove original prompt from output
+        response = generated_text[len(prompt):].strip()
+
+        return response
