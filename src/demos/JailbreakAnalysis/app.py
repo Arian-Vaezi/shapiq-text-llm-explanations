@@ -114,6 +114,8 @@ def show_explanation(
 ):
     from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
     import shapiq
+    
+    cached_model = MODEL_CACHE.get(dropdown_model) 
 
     game = JailbreakGame(
         model_name=dropdown_model,
@@ -121,6 +123,7 @@ def show_explanation(
         mask_strategy=dropdown_masking,
         segmentation=dropdown_segmentation,
         device="cuda",
+        hf_model=cached_model,
     )
 
     approx = shapiq.KernelSHAP(

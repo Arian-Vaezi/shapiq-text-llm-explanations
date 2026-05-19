@@ -18,6 +18,7 @@ class JailbreakGame(Game):
         normalize: bool = True,
         verbose: bool = False,
         batch_size: int = 32,
+        hf_model: HFModelWrapper | None = None,
     ) -> None:
         self.model_name = model_name
         self.input_text = input_text
@@ -26,9 +27,9 @@ class JailbreakGame(Game):
         self.batch_size = batch_size
 
         # ==========================================
-        # HF model
+        # HF model — reuse pre-loaded instance if provided
         # ==========================================
-        self.hf_model = HFModelWrapper(
+        self.hf_model = hf_model or HFModelWrapper(
             model_name=model_name,
             device=device,
         )
