@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from threading import Thread
+
 import numpy as np
 import torch
 from torch.nn.functional import log_softmax
@@ -7,6 +9,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    TextIteratorStreamer,
     pipeline,
 )
 
@@ -156,7 +159,7 @@ class HFModelWrapper:
                 return_tensors="pt",
                 padding=False,
                 truncation=True,
-                max_length=max_length,   # explicit — avoids fast tokenizer bug
+                max_length=max_length,  # explicit — avoids fast tokenizer bug
             ).to(self.device)
 
             input_ids = inputs["input_ids"]
@@ -204,3 +207,48 @@ class HFModelWrapper:
         )
 
         return result[0]["generated_text"].strip()
+
+    # =========================================================
+    # TEXT GENERATION STREAMING
+    # =========================================================
+
+    def generate_text_stream(
+        self,
+        prompt: str,
+        max_new_tokens: int = 32,
+        chat: bool = False,
+    ):
+        """Same as generate_text but yields tokens as they are produced."""
+        if self.is_encoder:
+            raise ValueError(f"Model '{self.model_name}' cannot generate text.")
+
+        if chat:
+            messages = [{"role": "user", "content": prompt}]
+            prompt = self.tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+
+        streamer = TextIteratorStreamer(
+            self.tokenizer,
+            skip_prompt=True,
+            skip_special_tokens=True,
+        )
+
+        generation_kwargs = dict(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=False,
+            streamer=streamer,
+        )
+
+        thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
+        thread.start()
+
+        for token in streamer:
+            yield token
+
+        thread.join()

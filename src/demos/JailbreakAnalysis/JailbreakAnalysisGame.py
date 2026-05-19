@@ -59,7 +59,8 @@ class JailbreakGame(Game):
 
         if self.segmentation == "sentence":
             import re
-            sentences = re.split(r'(?<=[.!?])\s+', self.input_text.strip())
+
+            sentences = re.split(r"(?<=[.!?])\s+", self.input_text.strip())
             self.players = np.array([s for s in sentences if s])
             return
 
@@ -112,10 +113,7 @@ class JailbreakGame(Game):
     # helper: split prompts into batches
     # =================================================
     def _batch(self, prompts: list[str]) -> list[list[str]]:
-        return [
-            prompts[i : i + self.batch_size]
-            for i in range(0, len(prompts), self.batch_size)
-        ]
+        return [prompts[i : i + self.batch_size] for i in range(0, len(prompts), self.batch_size)]
 
     # =================================================
     # helper: score template set (batched)

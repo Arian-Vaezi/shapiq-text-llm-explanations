@@ -22,7 +22,7 @@ class ExplanationConfigColumn:
                     "google/gemma-2-2b-it",
                     "microsoft/phi-2",
                     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-                    #"EleutherAI/gpt-neo-1.3B",
+                    # "EleutherAI/gpt-neo-1.3B",
                 ],
                 value="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
                 allow_custom_value=False,

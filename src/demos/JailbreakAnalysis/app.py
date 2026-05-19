@@ -5,8 +5,10 @@ This file contains the UI layout and interaction handlers.
 
 from __future__ import annotations
 
-import numpy as np
+from collections.abc import Iterator
+
 import gradio as gr
+import numpy as np
 
 from demos.JailbreakAnalysis.ui_configColumn import ExplanationConfigColumn
 from demos.shared.hf_model import HFModelWrapper
@@ -18,8 +20,8 @@ from demos.shared.hf_model import HFModelWrapper
 MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
-    #"google/gemma-2-2b-it",
-    #"microsoft/phi-2",
+    # "google/gemma-2-2b-it",
+    # "microsoft/phi-2",
     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
 ]
 
@@ -73,31 +75,24 @@ def respond(
     message: str,
     chat_history: list[tuple[str, str]],
     dropdown_model: str,
-    dropdown_segmentation: str,
-    dropdown_masking: str,
-):
-    """Generates the chat response using the selected model."""
-    print(f"[respond] Generating text")
-    _ = dropdown_segmentation
-    _ = dropdown_masking
+) -> Iterator[tuple[object, object, object, object]]:
+    print("[respond] Streaming response.")
 
     model = get_model(dropdown_model)
 
-    bot_message = model.generate_text(
-        prompt=message,
-        max_new_tokens=64,
-        chat=True,
-    )
-
     chat_history.append({"role": "user", "content": message})
-    chat_history.append({"role": "assistant", "content": bot_message})
+    chat_history.append({"role": "assistant", "content": ""})
 
-    return (
-        chat_history,                          # chatbot
-        "",                                    # msg_input (clear)
-        gr.update(visible=True),               # explain_btn
-        gr.update(open=False, visible=False),  # explanation_accordion (reset)
-    )
+    for token in model.generate_text_stream(prompt=message, max_new_tokens=64, chat=True):
+        chat_history[-1]["content"] += token
+        yield (
+            chat_history,
+            "",
+            gr.update(visible=True),
+            gr.update(open=False, visible=False),
+        )
+
+    print("[respond] Done.")
 
 
 # ============================================================
@@ -146,9 +141,9 @@ def show_explanation(
     dropdown_model: str,
     dropdown_segmentation: str,
     dropdown_masking: str,
-):
-    from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
+) -> Iterator[tuple[object, object]]:
     import shapiq
+    from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
 
     print(f"[show_explanation] Starting explanation for: '{message[:60]}...'")
     print(f"    - Model: {dropdown_model}")
@@ -160,7 +155,7 @@ def show_explanation(
         gr.update(visible=True, open=True),
     )
     cached_model = MODEL_CACHE.get(dropdown_model)
-    print(f"[show_explanation] creating game instance")
+    print("[show_explanation] creating game instance")
     game = JailbreakGame(
         model_name=dropdown_model,
         input_text=message,
@@ -174,15 +169,15 @@ def show_explanation(
     full_coalition = np.ones((1, game.n_players))
     compliance_score = float(game.value_function(full_coalition)[0])
     print(f"[show_explanation] calculating compliance score: {compliance_score}")
-    
+
     approx = shapiq.KernelSHAP(
         n=game.n_players,
         random_state=42,
     )
-    print(f"[show_explanation] running approximation")
+    print("[show_explanation] running approximation")
     result = approx.approximate(budget=100, game=game)
-    
-    print(f"[show_explanation] building html")
+
+    print("[show_explanation] building html")
     html = build_explanation_html(
         message=message,
         dropdown_model=dropdown_model,
@@ -192,8 +187,8 @@ def show_explanation(
     )
 
     yield (
-        gr.update(value=html, visible=True),   # explanation_html
-        gr.update(visible=True, open=True),    # explanation_accordion
+        gr.update(value=html, visible=True),  # explanation_html
+        gr.update(visible=True, open=True),  # explanation_accordion
     )
 
 
@@ -259,8 +254,6 @@ with gr.Blocks() as demo:
         msg_input,
         chatbot,
         dropdown_model,
-        dropdown_segmentation,
-        dropdown_masking,
     ]
 
     respond_outputs = [
