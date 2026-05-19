@@ -33,6 +33,7 @@ class ExplanationConfigColumn:
                 choices=[
                     "word-level",
                     "token-level",
+                    "sentence-level",
                 ],
                 value="word-level",
                 allow_custom_value=False,

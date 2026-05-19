@@ -57,6 +57,12 @@ class JailbreakGame(Game):
             self.players = np.array(self.input_text.split())
             return
 
+        if self.segmentation == "sentence":
+            import re
+            sentences = re.split(r'(?<=[.!?])\s+', self.input_text.strip())
+            self.players = np.array([s for s in sentences if s])
+            return
+
         encoding = self.tokenizer(
             self.input_text,
             add_special_tokens=False,
