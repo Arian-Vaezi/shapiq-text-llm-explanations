@@ -20,9 +20,11 @@ from demos.shared.hf_model import HFModelWrapper
 MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
-    # "google/gemma-2-2b-it",
-    # "microsoft/phi-2",
+    
+    
     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "google/gemma-2-2b-it",
+    "microsoft/phi-2",
 ]
 
 
@@ -99,30 +101,42 @@ def respond(
 # BUILD EXPLANATION HTML
 # ============================================================
 
-
 def build_explanation_html(
     message: str,
     dropdown_model: str,
     compliance_score: float,
-    tokens: list[str],
+    players: list[str],
     sv_values: np.ndarray,
 ) -> str:
     sv_rows = ""
-    for token, val in zip(tokens, sv_values, strict=False):
+
+    for player, val in zip(players, sv_values, strict=False):
         bar_len = min(int(abs(val) * 15), 10)
         bar_color = "#10b981" if val >= 0 else "#ef4444"
         bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
-        sv_rows += f"<tr><td>{token}</td><td>{val:+.4f}</td><td>{bar}</td></tr>\n"
+
+        sv_rows += (
+            f"<tr>"
+            f"<td>{player}</td>"
+            f"<td>{val:+.4f}</td>"
+            f"<td>{bar}</td>"
+            f"</tr>\n"
+        )
 
     return f"""
 <h2>Shapiq Explanation</h2>
 <p><b>Model:</b> {dropdown_model}</p>
 <p><b>Input:</b> {message}</p>
 <p><b>Compliance Score:</b> {compliance_score:+.4f}</p>
+
 <h3>Shapley Values</h3>
 <table>
   <thead>
-    <tr><th>Players</th><th>Shapley Value</th><th>Contribution</th></tr>
+    <tr>
+      <th>Players</th>
+      <th>Shapley Value</th>
+      <th>Contribution</th>
+    </tr>
   </thead>
   <tbody>
     {sv_rows}
@@ -175,14 +189,14 @@ def show_explanation(
         random_state=42,
     )
     print("[show_explanation] running approximation")
-    result = approx.approximate(budget=100, game=game)
+    result = approx.approximate(budget=10, game=game)
 
     print("[show_explanation] building html")
     html = build_explanation_html(
         message=message,
         dropdown_model=dropdown_model,
         compliance_score=compliance_score,
-        tokens=game.players.tolist(),
+        players=game.players.tolist(),
         sv_values=result.values,
     )
 
