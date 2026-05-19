@@ -5,6 +5,7 @@ This file contains the UI layout and interaction handlers.
 
 from __future__ import annotations
 
+import numpy as np
 import gradio as gr
 
 from demos.JailbreakAnalysis.ui_configColumn import ExplanationConfigColumn
@@ -99,6 +100,42 @@ def respond(
 
 
 # ============================================================
+# BUILD EXPLANATION HTML
+# ============================================================
+
+
+def build_explanation_html(
+    message: str,
+    dropdown_model: str,
+    compliance_score: float,
+    tokens: list[str],
+    sv_values: np.ndarray,
+) -> str:
+    sv_rows = ""
+    for token, val in zip(tokens, sv_values, strict=False):
+        bar_len = min(int(abs(val) * 15), 10)
+        bar_color = "#10b981" if val >= 0 else "#ef4444"
+        bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
+        sv_rows += f"<tr><td>{token}</td><td>{val:+.4f}</td><td>{bar}</td></tr>\n"
+
+    return f"""
+<h2>Shapiq Explanation</h2>
+<p><b>Model:</b> {dropdown_model}</p>
+<p><b>Input:</b> {message}</p>
+<p><b>Compliance Score:</b> {compliance_score:+.4f}</p>
+<h3>Shapley Values</h3>
+<table>
+  <thead>
+    <tr><th>Token</th><th>Value</th><th>Contribution</th></tr>
+  </thead>
+  <tbody>
+    {sv_rows}
+  </tbody>
+</table>
+"""
+
+
+# ============================================================
 # SHOW EXPLANATION
 # ============================================================
 
@@ -123,6 +160,10 @@ def show_explanation(
         hf_model=cached_model,
     )
 
+    # Compliance score: value of the full coalition (all tokens present)
+    full_coalition = np.ones((1, game.n_players))
+    compliance_score = float(game.value_function(full_coalition)[0])
+
     approx = shapiq.KernelSHAP(
         n=game.n_players,
         random_state=42,
@@ -130,16 +171,17 @@ def show_explanation(
 
     result = approx.approximate(budget=100, game=game)
 
-    explanation_text = (
-        f"## Shapiq Explanation\n\n"
-        f"**Model:** {dropdown_model}  \n"
-        f"**Input:** {message}  \n"
-        f"**Shapley values:** `{result.values}`"
+    html = build_explanation_html(
+        message=message,
+        dropdown_model=dropdown_model,
+        compliance_score=compliance_score,
+        tokens=game.players.tolist(),
+        sv_values=result.values,
     )
 
     return (
-        gr.update(value=explanation_text, visible=True),  # explanation_md
-        gr.update(visible=True, open=True),               # explanation_accordion
+        gr.update(value=html, visible=True),   # explanation_html
+        gr.update(visible=True, open=True),    # explanation_accordion
     )
 
 
@@ -195,7 +237,7 @@ with gr.Blocks() as demo:
                 open=False,
                 visible=True,
             ) as explanation_accordion:
-                explanation_md = gr.Markdown(visible=False)
+                explanation_html = gr.HTML(visible=False)
 
     # ========================================================
     # EVENTS
@@ -225,7 +267,7 @@ with gr.Blocks() as demo:
     ]
 
     explanation_outputs = [
-        explanation_md,
+        explanation_html,
         explanation_accordion,
     ]
 
