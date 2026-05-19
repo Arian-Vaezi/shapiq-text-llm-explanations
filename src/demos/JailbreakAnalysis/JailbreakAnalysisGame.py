@@ -17,11 +17,13 @@ class JailbreakGame(Game):
         device: str | int | None = None,
         normalize: bool = True,
         verbose: bool = False,
+        batch_size: int = 32,
     ) -> None:
         self.model_name = model_name
         self.input_text = input_text
         self.mask_strategy = mask_strategy
         self.segmentation = segmentation
+        self.batch_size = batch_size
 
         # ==========================================
         # HF model
@@ -100,25 +102,31 @@ class JailbreakGame(Game):
         return " ".join(output_tokens)
 
     # =================================================
-    # helper: score template set
+    # helper: split prompts into batches
     # =================================================
-    def _score_set(self, prompts, templates):
-        return np.mean(
-            [self.hf_model.score_next_token(prompts, t) for t in templates],
-            axis=0,
-        )
+    def _batch(self, prompts: list[str]) -> list[list[str]]:
+        return [
+            prompts[i : i + self.batch_size]
+            for i in range(0, len(prompts), self.batch_size)
+        ]
 
     # =================================================
-    # VALUE FUNCTION
+    # helper: score template set (batched)
     # =================================================
-    def value_function(
-        self,
-        coalitions: np.ndarray,
-    ) -> np.ndarray:
-        prompts = [str(self.coalition_to_prompt(c)) for c in coalitions]
+    def _score_set(self, prompts: list[str], templates: list[str]) -> np.ndarray:
+        results = []
+        for batch in self._batch(prompts):
+            batch_scores = np.mean(
+                [self.hf_model.score_next_token(batch, t) for t in templates],
+                axis=0,
+            )
+            results.append(batch_scores)
+        return np.concatenate(results, axis=0)
 
-        empty_prompt = str(self.coalition_to_prompt(np.zeros(len(self.players))))
-
+    # =================================================
+    # helper: batched model call
+    # =================================================
+    def batched_model_call(self, prompts: list[str], empty_prompt: str) -> np.ndarray:
         positive_completion = [
             "I will comply.",
             "Sure, I can help.",
@@ -135,7 +143,10 @@ class JailbreakGame(Game):
         # encoder models
         # ==========================================
         if not self.hf_model.is_causal:
-            scores = self.hf_model.score_classifier(prompts)
+            scores = np.concatenate(
+                [self.hf_model.score_classifier(batch) for batch in self._batch(prompts)],
+                axis=0,
+            )
             baseline = self.hf_model.score_classifier([empty_prompt])[0]
 
         # ==========================================
@@ -149,6 +160,14 @@ class JailbreakGame(Game):
             neg_base = self._score_set([empty_prompt], negative_completion)
 
             scores = pos_scores - neg_scores
-            baseline = pos_base - neg_base
+            baseline = (pos_base - neg_base).item()
 
-        return np.array(scores) - np.asarray(baseline).item()
+        return np.array(scores) - baseline
+
+    # =================================================
+    # VALUE FUNCTION
+    # =================================================
+    def value_function(self, coalitions: np.ndarray) -> np.ndarray:
+        prompts = [str(self.coalition_to_prompt(c)) for c in coalitions]
+        empty_prompt = str(self.coalition_to_prompt(np.zeros(len(self.players))))
+        return self.batched_model_call(prompts, empty_prompt)
