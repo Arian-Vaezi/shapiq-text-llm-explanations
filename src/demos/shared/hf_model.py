@@ -145,6 +145,9 @@ class HFModelWrapper:
     def score_next_token(self, prompts: list[str], target_text: str) -> np.ndarray:
         scores = []
 
+        # safe upper bound — respect model limit but cap at 2048
+        max_length = min(getattr(self.tokenizer, "model_max_length", 2048), 2048)
+
         for prompt in prompts:
             full_text = prompt + target_text
 
@@ -153,6 +156,7 @@ class HFModelWrapper:
                 return_tensors="pt",
                 padding=False,
                 truncation=True,
+                max_length=max_length,   # explicit — avoids fast tokenizer bug
             ).to(self.device)
 
             input_ids = inputs["input_ids"]
@@ -163,7 +167,6 @@ class HFModelWrapper:
             target_ids = input_ids[:, 1:]
 
             token_log_probs = log_probs.gather(-1, target_ids.unsqueeze(-1)).squeeze(-1)
-
             scores.append(token_log_probs.sum().item())
 
         return np.array(scores)

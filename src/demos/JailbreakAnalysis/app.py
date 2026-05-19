@@ -77,6 +77,7 @@ def respond(
     dropdown_masking: str,
 ):
     """Generates the chat response using the selected model."""
+    print(f"[respond] Generating text")
     _ = dropdown_segmentation
     _ = dropdown_masking
 
@@ -126,7 +127,7 @@ def build_explanation_html(
 <h3>Shapley Values</h3>
 <table>
   <thead>
-    <tr><th>Token</th><th>Value</th><th>Contribution</th></tr>
+    <tr><th>Players</th><th>Shapley Value</th><th>Contribution</th></tr>
   </thead>
   <tbody>
     {sv_rows}
@@ -149,8 +150,17 @@ def show_explanation(
     from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
     import shapiq
 
-    cached_model = MODEL_CACHE.get(dropdown_model)
+    print(f"[show_explanation] Starting explanation for: '{message[:60]}...'")
+    print(f"    - Model: {dropdown_model}")
+    print(f"    - Segmentation: {dropdown_segmentation}")
+    print(f"    - Masking: {dropdown_masking}")
 
+    yield (
+        gr.update(value="<p><i>⏳ Explanation in progress...</i></p>", visible=True),
+        gr.update(visible=True, open=True),
+    )
+    cached_model = MODEL_CACHE.get(dropdown_model)
+    print(f"[show_explanation] creating game instance")
     game = JailbreakGame(
         model_name=dropdown_model,
         input_text=message,
@@ -163,14 +173,16 @@ def show_explanation(
     # Compliance score: value of the full coalition (all tokens present)
     full_coalition = np.ones((1, game.n_players))
     compliance_score = float(game.value_function(full_coalition)[0])
-
+    print(f"[show_explanation] calculating compliance score: {compliance_score}")
+    
     approx = shapiq.KernelSHAP(
         n=game.n_players,
         random_state=42,
     )
-
+    print(f"[show_explanation] running approximation")
     result = approx.approximate(budget=100, game=game)
-
+    
+    print(f"[show_explanation] building html")
     html = build_explanation_html(
         message=message,
         dropdown_model=dropdown_model,
@@ -179,7 +191,7 @@ def show_explanation(
         sv_values=result.values,
     )
 
-    return (
+    yield (
         gr.update(value=html, visible=True),   # explanation_html
         gr.update(visible=True, open=True),    # explanation_accordion
     )
