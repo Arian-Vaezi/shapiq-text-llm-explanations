@@ -29,13 +29,13 @@ class ExplanationConfigColumn:
             )
 
             self.dropdown_segmentation = gr.Dropdown(
-                label="Segmentation",
+                label="Segmentation level",
                 choices=[
-                    "word-level",
-                    "token-level",
-                    "sentence-level",
+                    "word",
+                    "token",
+                    "sentence",
                 ],
-                value="word-level",
+                value="sentence",
                 allow_custom_value=False,
             )
 

@@ -20,11 +20,9 @@ from demos.shared.hf_model import HFModelWrapper
 MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
-    
-    
     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    "google/gemma-2-2b-it",
-    "microsoft/phi-2",
+    #"google/gemma-2-2b-it",
+    #"microsoft/phi-2",
 ]
 
 
@@ -178,6 +176,7 @@ def show_explanation(
         device="cuda",
         hf_model=cached_model,
     )
+    print(game.players.tolist())
 
     # Compliance score: value of the full coalition (all tokens present)
     full_coalition = np.ones((1, game.n_players))
