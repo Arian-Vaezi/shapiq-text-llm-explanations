@@ -3,10 +3,7 @@
 This file contains the UI layout and interaction handlers.
 """
 
-
 from __future__ import annotations
-
-
 
 import gradio as gr
 
@@ -36,6 +33,8 @@ def preload_models() -> None:
     print("Preloading models...")
 
     for model_name in PRELOAD_MODELS:
+        if model_name in MODEL_CACHE:
+            continue
         MODEL_CACHE[model_name] = HFModelWrapper(
             model_name=model_name,
             device="cuda",
@@ -51,11 +50,9 @@ def preload_models() -> None:
 
 def get_model(model_name: str) -> HFModelWrapper:
     """Retrieves a model from the cache, lazy-loading it if not present."""
-    # already loaded
     if model_name in MODEL_CACHE:
         return MODEL_CACHE[model_name]
 
-    # lazy-load non-preloaded models
     print(f"Lazily loading {model_name}")
 
     MODEL_CACHE[model_name] = HFModelWrapper(
@@ -64,6 +61,7 @@ def get_model(model_name: str) -> HFModelWrapper:
     )
 
     return MODEL_CACHE[model_name]
+
 
 # ============================================================
 # CHAT RESPONSE
@@ -76,9 +74,8 @@ def respond(
     dropdown_model: str,
     dropdown_segmentation: str,
     dropdown_masking: str,
-) -> tuple[list[tuple[str, str]], str, dict, dict]:
+):
     """Generates the chat response using the selected model."""
-    # Unused arguments that are passed by Gradio:
     _ = dropdown_segmentation
     _ = dropdown_masking
 
@@ -94,11 +91,10 @@ def respond(
     chat_history.append({"role": "assistant", "content": bot_message})
 
     return (
-        chat_history,
-        "",
-        message,
-        gr.update(visible=True),  # show explain button
-        gr.update(open=False, visible=False),
+        chat_history,                          # chatbot
+        "",                                    # msg_input (clear)
+        gr.update(visible=True),               # explain_btn
+        gr.update(open=False, visible=False),  # explanation_accordion (reset)
     )
 
 
@@ -106,20 +102,21 @@ def respond(
 # SHOW EXPLANATION
 # ============================================================
 
+
 def show_explanation(
-    last_message: str,
+    message: str,
     dropdown_model: str,
     dropdown_segmentation: str,
     dropdown_masking: str,
 ):
     from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
     import shapiq
-    
-    cached_model = MODEL_CACHE.get(dropdown_model) 
+
+    cached_model = MODEL_CACHE.get(dropdown_model)
 
     game = JailbreakGame(
         model_name=dropdown_model,
-        input_text=last_message,
+        input_text=message,
         mask_strategy=dropdown_masking,
         segmentation=dropdown_segmentation,
         device="cuda",
@@ -136,14 +133,15 @@ def show_explanation(
     explanation_text = (
         f"## Shapiq Explanation\n\n"
         f"**Model:** {dropdown_model}  \n"
-        f"**Input:** {last_message}  \n"
+        f"**Input:** {message}  \n"
         f"**Shapley values:** `{result.values}`"
     )
 
     return (
-        gr.update(value=explanation_text, visible=True),
-        gr.update(visible=True, open=True),
+        gr.update(value=explanation_text, visible=True),  # explanation_md
+        gr.update(visible=True, open=True),               # explanation_accordion
     )
+
 
 # ============================================================
 # UI
@@ -186,24 +184,16 @@ with gr.Blocks() as demo:
                     scale=1,
                 )
 
-            # =================================================
-            # Explain button BELOW chat
-            # =================================================
-
             explain_btn = gr.Button(
                 "Explain with shapiq",
-                visible=False,
+                visible=True,
                 variant="secondary",
             )
-
-            # =================================================
-            # Explanation Accordion
-            # =================================================
 
             with gr.Accordion(
                 "Explanation and Analysis",
                 open=False,
-                visible=False,
+                visible=True,
             ) as explanation_accordion:
                 explanation_md = gr.Markdown(visible=False)
 
@@ -211,53 +201,37 @@ with gr.Blocks() as demo:
     # EVENTS
     # ========================================================
 
-    msg_input.submit(
-        respond,
-        [
-            msg_input,
-            chatbot,
-            dropdown_model,
-            dropdown_segmentation,
-            dropdown_masking,
-        ],
-        [
-            chatbot,
-            msg_input,
-            explain_btn,
-            explanation_accordion,
-        ],
-    )
+    respond_inputs = [
+        msg_input,
+        chatbot,
+        dropdown_model,
+        dropdown_segmentation,
+        dropdown_masking,
+    ]
 
-    send_btn.click(
-        respond,
-        [
-            msg_input,
-            chatbot,
-            dropdown_model,
-            dropdown_segmentation,
-            dropdown_masking,
-        ],
-        [
-            chatbot,
-            msg_input,
-            explain_btn,
-            explanation_accordion,
-        ],
-    )
+    respond_outputs = [
+        chatbot,
+        msg_input,
+        explain_btn,
+        explanation_accordion,
+    ]
 
-    explain_btn.click(
-        show_explanation,
-        [
-            
-            dropdown_model,
-            dropdown_segmentation,
-            dropdown_masking,
-        ],
-        [
-            explanation_md,
-            explanation_accordion,
-        ],
-    )
+    # explain reads directly from msg_input — independent of chat
+    explanation_inputs = [
+        msg_input,
+        dropdown_model,
+        dropdown_segmentation,
+        dropdown_masking,
+    ]
+
+    explanation_outputs = [
+        explanation_md,
+        explanation_accordion,
+    ]
+
+    msg_input.submit(respond, respond_inputs, respond_outputs)
+    send_btn.click(respond, respond_inputs, respond_outputs)
+    explain_btn.click(show_explanation, explanation_inputs, explanation_outputs)
 
 
 # ============================================================
