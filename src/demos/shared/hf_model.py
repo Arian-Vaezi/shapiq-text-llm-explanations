@@ -1,6 +1,10 @@
 from __future__ import annotations
 
 from threading import Thread
+from typing import TYPE_CHECKING, ClassVar
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 import numpy as np
 import torch
@@ -15,13 +19,13 @@ from transformers import (
 
 
 class HFModelWrapper:
-    ENCODER_MODELS = [
+    ENCODER_MODELS: ClassVar[list[str]] = [
         "distilbert",
         "roberta",
         "bert",
     ]
 
-    CAUSAL_MODELS = [
+    CAUSAL_MODELS: ClassVar[list[str]] = [
         "mistral",
         "llama",
         "gemma",
@@ -38,7 +42,7 @@ class HFModelWrapper:
         model_name: str,
         device: str | int = "cuda",
         hf_token: str | None = None,
-    ):
+    ) -> None:
         self.model_name = model_name
 
         # =====================================================
@@ -115,7 +119,8 @@ class HFModelWrapper:
             )
 
         else:
-            raise ValueError(f"Unsupported model type for model: {model_name}")
+            msg = f"Unsupported model type for model: {model_name}"
+            raise ValueError(msg)
 
         self.model.eval()
 
@@ -182,6 +187,7 @@ class HFModelWrapper:
         self,
         prompt: str,
         max_new_tokens: int = 32,
+        *,
         chat: bool = False,
     ) -> str:
         """Generates text from the model given a prompt.
@@ -189,7 +195,8 @@ class HFModelWrapper:
         If chat=True, formats the prompt using the model's chat template.
         """
         if self.is_encoder:
-            raise ValueError(f"Model '{self.model_name}' cannot generate text.")
+            msg = f"Model '{self.model_name}' cannot generate text."
+            raise ValueError(msg)
 
         if chat:
             messages = [{"role": "user", "content": prompt}]
@@ -216,11 +223,13 @@ class HFModelWrapper:
         self,
         prompt: str,
         max_new_tokens: int = 32,
+        *,
         chat: bool = False,
-    ):
+    ) -> Iterator[str]:
         """Same as generate_text but yields tokens as they are produced."""
         if self.is_encoder:
-            raise ValueError(f"Model '{self.model_name}' cannot generate text.")
+            msg = f"Model '{self.model_name}' cannot generate text."
+            raise ValueError(msg)
 
         if chat:
             messages = [{"role": "user", "content": prompt}]
@@ -248,7 +257,6 @@ class HFModelWrapper:
         thread = Thread(target=self.model.generate, kwargs=generation_kwargs)
         thread.start()
 
-        for token in streamer:
-            yield token
+        yield from streamer
 
         thread.join()

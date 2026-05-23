@@ -5,13 +5,16 @@ This file contains the UI layout and interaction handlers.
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from typing import TYPE_CHECKING
 
 import gradio as gr
 import numpy as np
 
 from demos.JailbreakAnalysis.ui_configColumn import ExplanationConfigColumn
 from demos.shared.hf_model import HFModelWrapper
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 # ============================================================
 # MODEL CACHE
@@ -21,8 +24,8 @@ MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    #"google/gemma-2-2b-it",
-    #"microsoft/phi-2",
+    # "google/gemma-2-2b-it",
+    # "microsoft/phi-2",
 ]
 
 
@@ -83,7 +86,7 @@ def respond(
     chat_history.append({"role": "user", "content": message})
     chat_history.append({"role": "assistant", "content": ""})
 
-    for token in model.generate_text_stream(prompt=message, max_new_tokens=64, chat=True):
+    for token in model.generate_text_stream(prompt=message, max_new_tokens=128, chat=True):
         chat_history[-1]["content"] += token
         yield (
             chat_history,
@@ -99,6 +102,7 @@ def respond(
 # BUILD EXPLANATION HTML
 # ============================================================
 
+
 def build_explanation_html(
     message: str,
     dropdown_model: str,
@@ -113,13 +117,7 @@ def build_explanation_html(
         bar_color = "#10b981" if val >= 0 else "#ef4444"
         bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
 
-        sv_rows += (
-            f"<tr>"
-            f"<td>{player}</td>"
-            f"<td>{val:+.4f}</td>"
-            f"<td>{bar}</td>"
-            f"</tr>\n"
-        )
+        sv_rows += f"<tr><td>{player}</td><td>{val:+.4f}</td><td>{bar}</td></tr>\n"
 
     return f"""
 <h2>Shapiq Explanation</h2>

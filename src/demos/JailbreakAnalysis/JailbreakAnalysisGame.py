@@ -98,9 +98,6 @@ class JailbreakGame(Game):
                     continue
                 output_tokens.append(self.mask_token)
 
-            # --------------------------
-            # distributional / generative (placeholders)
-            # --------------------------
             elif self.mask_strategy in ["distributional", "generative"]:
                 output_tokens.append(token)
 
