@@ -22,8 +22,8 @@ sentence/text players:
 From the repository root:
 
 ```bash
-uv pip install -r demos/agentic_tool_use_explanation/requirements.txt
-uv run streamlit run demos/agentic_tool_use_explanation/app.py
+uv pip install -r src/demos/agentic_tool_use_explanation/requirements.txt
+uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
 ```
 
 ## What The App Shows
