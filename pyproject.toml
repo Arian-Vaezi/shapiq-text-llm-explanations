@@ -23,6 +23,17 @@ dependencies = [
     "networkx",
     "colour",
     "pillow",
+    "gradio>=6.14.0",
+    "transformers>=5.3.0",
+    "torch>=2.10.0",
+    "accelerate>=1.13.0",
+<<<<<<< Updated upstream
+=======
+    "sentence-transformers>=5.5.1",
+    "python-dotenv>=1.2.2",
+    "groq>=1.4.0",
+    "google-genai>=2.8.0",
+>>>>>>> Stashed changes
 ]
 authors = [
     {name = "Maximilian Muschalik", email = "Maximilian.Muschalik@lmu.de"},
@@ -71,7 +82,7 @@ write_to = "src/shapiq/_version.py"
 
 [tool.setuptools.packages.find]
 where = ["./src"]
-include = ["shapiq*", "lazy_dispatch"]
+include = ["shapiq*", "lazy_dispatch", "demos*"]
 
 [tool.setuptools.dynamic]
 readme = {file = ["README.md", "CHANGELOG.md"], content-type = "text/markdown"}
@@ -177,8 +188,14 @@ exclude = [
     "ANN001",  # type annotations are not required in examples
     "INP",  # examples are an implicit namespace package
 ]
-"demos/SentimentAnalysis/__init__.py" = [
+"src/demos/SentimentAnalysis/__init__.py" = [
     "N999",  # SentimentAnalysis is a demo folder name, not an importable public package
+]
+"src/demos/**/*.py" = [
+    "T20",   # demos can have print statements
+    "D",     # docstrings are not required in demos
+    "INP",   # demos can be an implicit namespace package
+    "N999",  # demos can have camelCase module/file names
 ]
 "docs/source/*.py" = [
     "A001",  # some conf.py variables shadow builtins which is okay here
@@ -210,7 +227,20 @@ convention = "google"
 
 [tool.ty.src]
 include = ["src/shapiq"]
-exclude = ["tests", "docs", "benchmark", "scripts", "src/shapiq_games"]
+exclude = [
+    "tests",
+    "docs",
+    "benchmark",
+    "scripts",
+    "src/shapiq_games",
+    "src/shapiq/explainer/",
+    "src/shapiq/game.py",
+    "src/shapiq/game_theory/",
+    "src/shapiq/imputer/",
+    "src/shapiq/interaction_values.py",
+    "src/shapiq/plot/",
+    "src/shapiq/tree/",
+]
 
 [tool.ty.environment]
 python-version = "3.12"
