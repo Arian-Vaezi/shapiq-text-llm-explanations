@@ -44,7 +44,7 @@ A shared utility for loading and using HuggingFace models across demos.
 | DistilBERT SST-2 | `distilbert-base-uncased-finetuned-sst-2-english` | 66M |
 | RoBERTa Sentiment | `cardiffnlp/twitter-roberta-base-sentiment` | 125M |
 
-> ⚠️ **Gated model** — Gemma-7B requires a HuggingFace account and accepted terms of service. 
+> ⚠️ **Gated model** — Gemma-7B requires a HuggingFace account and accepted terms of service.
 
 ---
 
@@ -55,7 +55,7 @@ from demos.shared.hf_model import HFModelWrapper
 
 model = HFModelWrapper(
     model_name="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    device="cuda",       
+    device="cuda",
 )
 ```
 
