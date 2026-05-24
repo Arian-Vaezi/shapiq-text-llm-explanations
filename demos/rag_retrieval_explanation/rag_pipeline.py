@@ -1021,65 +1021,6 @@ def retrieve_relevant_chunks_with_debug(
     return ranked, debug
 
 
-def retrieve_relevant_chunks_tfidf(
-    question: str,
-    chunks: list[CandidateChunk],
-    *,
-    top_k: int,
-) -> list[RankedChunk]:
-    """Retrieve the top-k chunks with a local sparse TF-IDF retriever."""
-    ranked, _debug = retrieve_relevant_chunks_with_debug(
-        question,
-        chunks,
-        top_k=top_k,
-        method="TF-IDF",
-        embedding_model_id="",
-        embedding_device="cpu",
-    )
-    return ranked
-
-
-def retrieve_relevant_chunks_dense(
-    question: str,
-    chunks: list[CandidateChunk],
-    *,
-    top_k: int,
-    embedding_model_id: str,
-    embedding_device: str,
-) -> list[RankedChunk]:
-    """Retrieve top-k chunks with dense embedding cosine similarity."""
-    ranked, _debug = retrieve_relevant_chunks_with_debug(
-        question,
-        chunks,
-        top_k=top_k,
-        method="Dense embeddings",
-        embedding_model_id=embedding_model_id,
-        embedding_device=embedding_device,
-    )
-    return ranked
-
-
-def retrieve_relevant_chunks(
-    question: str,
-    chunks: list[CandidateChunk],
-    *,
-    top_k: int,
-    method: str,
-    embedding_model_id: str,
-    embedding_device: str,
-) -> list[RankedChunk]:
-    """Retrieve top-k chunks with the configured retriever."""
-    ranked, _debug = retrieve_relevant_chunks_with_debug(
-        question,
-        chunks,
-        top_k=top_k,
-        method=method,
-        embedding_model_id=embedding_model_id,
-        embedding_device=embedding_device,
-    )
-    return ranked
-
-
 def format_rag_context(chunks: list[RetrievedChunk]) -> str:
     """Format retrieved chunks for a grounded generation prompt."""
     if not chunks:

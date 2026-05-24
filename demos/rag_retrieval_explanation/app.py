@@ -1975,11 +1975,11 @@ def render_retrieval_debug(trace: dict[str, object]) -> None:
         st.caption("Original query")
         st.code(str(debug.get("original_query", "")))
         expanded = debug.get("expanded_queries", [])
-        if isinstance(expanded, list):
+        if expanded:
             st.caption("Expanded queries")
             st.write(expanded)
         coverage = debug.get("aspect_coverage", {})
-        if isinstance(coverage, dict) and coverage:
+        if coverage:
             st.caption("Aspect coverage summary")
             st.json(coverage)
         for title, key in [
@@ -1989,7 +1989,7 @@ def render_retrieval_debug(trace: dict[str, object]) -> None:
             ("Final prompt order", "selected_context"),
         ]:
             rows = debug.get(key, [])
-            if isinstance(rows, list) and rows:
+            if rows:
                 st.caption(title)
                 st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
 
@@ -2021,7 +2021,6 @@ def render_attribution_chart(
     loo_vals = chart_frame["loo"].dropna().tolist() if has_loo else []
     all_vals = list(chart_frame["attribution"]) + loo_vals
     max_abs = max((abs(v) for v in all_vals), default=0.01)
-    max_abs = max(max_abs, 0.01)
     x_domain = [-1.08 * max_abs, 1.08 * max_abs]
     height = min(360, max(260, 58 * len(chart_frame)))
 
@@ -3118,6 +3117,52 @@ def render_settings_page() -> None:
         )
 
 
+def _run_sentence_drilldown(
+    *,
+    value_function: object,
+    value_mode: str,
+    question: str,
+    target_answer: str,
+    sentence_chunks: list[RetrievedChunk],
+    sentence_labels: list[str],
+    progress: ProgressHandle,
+    message: MessageHandle,
+    progress_base: float,
+    progress_span: float,
+) -> pd.DataFrame:
+    """Run sentence-level attribution and return the first-order frame."""
+    sentence_budget = budget_for_exactish_demo(len(sentence_chunks))
+    message.info(
+        f"{value_mode}: sentence drilldown has {len(sentence_chunks)} sentence players "
+        f"and will score about {sentence_budget} coalitions."
+    )
+    sentence_scorer = ProgressScorer(
+        value_function,
+        label=f"{value_mode} sentence drilldown",
+        progress=progress,
+        message=message,
+        expected_calls=sentence_budget + 12,
+        base_progress=progress_base + 0.58 * progress_span,
+        progress_span=0.35 * progress_span,
+    )
+    sentence_game = RAGRetrievalGame(
+        question=question,
+        target_answer=target_answer,
+        chunks=sentence_chunks,
+        scorer=sentence_scorer,
+    )
+    if st.session_state.interaction_index == "SV":
+        sentence_approximator = shapiq.KernelSHAP(n=sentence_game.n_players, random_state=42)
+    else:
+        sentence_approximator = shapiq.KernelSHAPIQ(
+            n=sentence_game.n_players, index="k-SII", max_order=2, random_state=42
+        )
+    sentence_explanation = sentence_approximator.approximate(
+        budget=sentence_budget, game=sentence_game
+    )
+    return interaction_values_to_frame(sentence_explanation.get_n_order(order=1), sentence_labels)
+
+
 def run_single_explanation(
     *,
     scenario_name: str,
@@ -3190,50 +3235,20 @@ def run_single_explanation(
         loo_batch[_i, _i] = False
     loo_scores = [full_score - float(v) for v in game(loo_batch)]
 
-    sentence_labels: list[str] = []
-    sentence_meta = pd.DataFrame(columns=["sentence", "source_chunk", "text"])
     sentence_first_order_frame = pd.DataFrame()
     sentence_chunks, sentence_labels, sentence_meta = build_sentence_players(chunks)
     if st.session_state.run_sentence_drilldown and len(sentence_chunks) >= 2:
-        sentence_budget = budget_for_exactish_demo(len(sentence_chunks))
-        message.info(
-            f"{value_mode}: sentence drilldown has {len(sentence_chunks)} sentence players "
-            f"and will score about {sentence_budget} coalitions."
-        )
-        sentence_scorer = ProgressScorer(
-            value_function,
-            label=f"{value_mode} sentence drilldown",
-            progress=progress,
-            message=message,
-            expected_calls=sentence_budget + 12,
-            base_progress=progress_base + 0.58 * progress_span,
-            progress_span=0.35 * progress_span,
-        )
-        sentence_game = RAGRetrievalGame(
+        sentence_first_order_frame = _run_sentence_drilldown(
+            value_function=value_function,
+            value_mode=value_mode,
             question=question,
             target_answer=target_answer,
-            chunks=sentence_chunks,
-            scorer=sentence_scorer,
-        )
-        if st.session_state.interaction_index == "SV":
-            sentence_approximator = shapiq.KernelSHAP(
-                n=sentence_game.n_players,
-                random_state=42,
-            )
-        else:
-            sentence_approximator = shapiq.KernelSHAPIQ(
-                n=sentence_game.n_players,
-                index="k-SII",
-                max_order=2,
-                random_state=42,
-            )
-        sentence_explanation = sentence_approximator.approximate(
-            budget=sentence_budget,
-            game=sentence_game,
-        )
-        sentence_first_order_frame = interaction_values_to_frame(
-            sentence_explanation.get_n_order(order=1),
-            sentence_labels,
+            sentence_chunks=sentence_chunks,
+            sentence_labels=sentence_labels,
+            progress=progress,
+            message=message,
+            progress_base=progress_base,
+            progress_span=progress_span,
         )
 
     progress.progress(progress_base + progress_span)
@@ -3543,7 +3558,6 @@ def render_pdf_entry_attribution(entry: dict) -> None:
         return
     result = entry_results[0]
 
-    # Retrieved chunks — simple table avoids complex HTML that breaks inside expanders
     scores = attribution_lookup(result.first_order_frame)
     chunk_rows = [
         {

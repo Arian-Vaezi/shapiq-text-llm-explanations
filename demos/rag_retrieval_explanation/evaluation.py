@@ -126,11 +126,7 @@ def insertion_evaluation(game: RAGRetrievalGame, attribution_frame: pd.DataFrame
 
 
 def random_deletion_baseline(game: RAGRetrievalGame, max_perms: int = 60) -> np.ndarray:
-    """Average deletion curve over all (or sampled) random orderings.
-
-    RAGRetrievalGame caches scored coalitions, so any coalition already
-    evaluated during the Shapley run is retrieved from cache at zero cost.
-    """
+    """Average deletion curve over all (or sampled) random orderings."""
     n = game.n_players
     all_perms = list(permutations(range(n)))
     if len(all_perms) > max_perms:

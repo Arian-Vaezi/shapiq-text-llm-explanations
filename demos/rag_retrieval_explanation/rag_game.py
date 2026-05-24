@@ -112,26 +112,12 @@ def lexical_grounding_score(
 
 
 def budget_for_exactish_demo(n_players: int, max_budget: int = 512) -> int:
-    """Return a budget that covers all 2^n coalitions, capped for safety.
-
-    For n <= 9 the exact 2^n value is used (≤ 512). For larger n the cap
-    forces the approximator to sample rather than enumerate, avoiding
-    combinatorial explosion with HF model-backed scorers.
-    """
+    """Exact 2^n budget for small games, capped at max_budget to force sampling for larger ones."""
     return min(2**n_players, max_budget)
 
 
 class RAGRetrievalGame(Game):
-    """Coalition game for RAG retrieval attribution.
-
-    Args:
-        question: User question sent to the RAG system.
-        target_answer: Answer whose grounding/support should be attributed.
-        chunks: Retrieved chunks. Each chunk is one player.
-        scorer: Optional scoring function. If omitted, a lexical grounding
-            scorer is used.
-        normalize: Whether to center values at the empty context score.
-    """
+    """Coalition game for RAG retrieval attribution."""
 
     def __init__(
         self,
@@ -152,12 +138,7 @@ class RAGRetrievalGame(Game):
         self.target_answer = target_answer
         self.chunks = chunks
         self.scorer = scorer or lexical_grounding_score
-        # Cache scored coalitions so random baselines and repeated evaluations
-        # never re-invoke the scorer for a coalition already evaluated.
         self._score_cache: dict[tuple[int, ...], float] = {}
-        # shapiq can normalize the game at the empty-context value. For the
-        # default lexical scorer this is zero, but a model-backed scorer may
-        # assign a nonzero prior to the target answer even without retrieved text.
         empty_score = self.score_context([])
 
         super().__init__(
