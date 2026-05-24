@@ -2,20 +2,24 @@
 
 from __future__ import annotations
 
-import itertools
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
+from sample_data import SAMPLE_TRACES, TOOLS
+from tool_game import ToolUseGame, ToolUseSegment, budget_for_demo
 
 import shapiq
 from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
 
-from sample_data import SAMPLE_TRACES, TOOLS
-from tool_game import ToolUseGame, ToolUseSegment, budget_for_demo
+if TYPE_CHECKING:
+    import matplotlib.pyplot as plt
+
+
+DEFAULT_INDEX = "k-SII"
+DEFAULT_MAX_ORDER = 2
 
 
 st.set_page_config(
@@ -209,35 +213,18 @@ def clean_key(value: str) -> str:
     return value.lower().replace(" ", "_").replace("-", "_").replace("/", "_")
 
 
-def segment_editor(default_segments: list[str], prefix: str, source: str) -> list[ToolUseSegment]:
-    """Render editable segment inputs."""
-    # TODO(final-demo): Manual segmentation is good for a controlled demo.
-    # For a model-backed demo, consider adding segmentation modes such as:
-    # sentence split, word split, tool-schema split, or message-role split.
-    st.sidebar.subheader(f"{source.title()} Segments")
-    segment_count = st.sidebar.slider(
-        f"Number of {source} segments",
-        1,
-        8,
-        len(default_segments),
-        key=f"{prefix}_{source}_count",
-    )
-    segments = []
-    for idx in range(segment_count):
-        fallback = default_segments[idx] if idx < len(default_segments) else ""
-        text = st.sidebar.text_area(
-            f"{source.title()} segment {idx + 1}",
-            fallback,
-            height=72,
-            key=f"{prefix}_{source}_{idx}",
-        )
-        if text.strip():
-            label = f"{source[0].upper()}{idx + 1}"
-            segments.append(ToolUseSegment(source=source, label=label, text=text.strip()))
-    return segments
+def build_segments(default_segments: list[str], source: str) -> list[ToolUseSegment]:
+    """Create fixed demo segments for a prompt source."""
+    return [
+        ToolUseSegment(source=source, label=f"{source[0].upper()}{idx + 1}", text=text.strip())
+        for idx, text in enumerate(default_segments)
+        if text.strip()
+    ]
 
 
-def values_to_frame(values: shapiq.InteractionValues, segments: list[ToolUseSegment]) -> pd.DataFrame:
+def values_to_frame(
+    values: shapiq.InteractionValues, segments: list[ToolUseSegment]
+) -> pd.DataFrame:
     """Convert first-order values to a display frame."""
     rows = []
     for interaction, score in values.dict_values.items():
@@ -260,7 +247,7 @@ def values_to_frame(values: shapiq.InteractionValues, segments: list[ToolUseSegm
     return frame.sort_values("abs_attribution", ascending=False).drop(columns=["abs_attribution"])
 
 
-def make_approximator(index: str, n_players: int, max_order: int):
+def make_approximator(index: str, n_players: int, max_order: int) -> object:
     """Create a shapiq approximator for the selected index."""
     if index == "SV":
         return shapiq.KernelSHAP(n=n_players, random_state=42)
@@ -316,57 +303,32 @@ def build_interpretation_notes(
 
     source_split = attribution_frame.groupby("source")["attribution"].sum().to_dict()
     notes.append(
-        (
-            f"System-rule contribution sums to {source_split.get('system', 0.0):.3f}; "
-            f"user-request contribution sums to {source_split.get('user', 0.0):.3f}. "
-            "This separates policy pressure from request-trigger pressure."
-        )
+        f"System-rule contribution sums to {source_split.get('system', 0.0):.3f}; "
+        f"user-request contribution sums to {source_split.get('user', 0.0):.3f}. "
+        "This separates policy pressure from request-trigger pressure."
     )
 
     if abs(pair_value) < 0.03:
-        notes.append("Second-order effects are weak; the decision is mostly explained by individual segments.")
+        notes.append(
+            "Second-order effects are weak; the decision is mostly explained by individual segments."
+        )
     elif pair_value > 0:
         notes.append(
-            (
-                f"The strongest pair is `{pair_label}` ({pair_value:.3f}). Positive interaction means "
-                "the selected index assigns extra shared support to that segment pair."
-            )
+            f"The strongest pair is `{pair_label}` ({pair_value:.3f}). Positive interaction means "
+            "the selected index assigns extra shared support to that segment pair."
         )
     else:
         notes.append(
-            (
-                f"The strongest pair is `{pair_label}` ({pair_value:.3f}). Negative interaction means "
-                "the selected index treats the pair as redundant, saturating, or partly conflicting."
-            )
+            f"The strongest pair is `{pair_label}` ({pair_value:.3f}). Negative interaction means "
+            "the selected index treats the pair as redundant, saturating, or partly conflicting."
         )
 
     notes.append(
-        (
-            f"The full-prompt target-tool support score is {full_score:.3f}. "
-            "This is still lexical scaffolding until `ToolUseGame.score_segments` is replaced "
-            "with an LLM/tool-router scorer."
-        )
+        f"The full-prompt target-tool support score is {full_score:.3f}. "
+        "This is still lexical scaffolding until `ToolUseGame.score_segments` is replaced "
+        "with an LLM/tool-router scorer."
     )
     return notes
-
-
-def coalition_audit_frame(game: ToolUseGame, segments: list[ToolUseSegment]) -> pd.DataFrame:
-    """Show exact scores for small coalitions."""
-    rows = []
-    n_players = game.n_players
-    for size in range(0, min(n_players, 3) + 1):
-        for combo in itertools.combinations(range(n_players), size):
-            coalition = np.zeros((1, n_players), dtype=bool)
-            coalition[0, list(combo)] = True
-            score = float(game(coalition)[0])
-            rows.append(
-                {
-                    "coalition": ", ".join(segments[idx].label for idx in combo) or "empty",
-                    "selected_segments": size,
-                    "target_tool_score": score,
-                }
-            )
-    return pd.DataFrame(rows).sort_values("target_tool_score", ascending=False)
 
 
 def polish_bar(fig: plt.Figure, ax: plt.Axes) -> plt.Figure:
@@ -472,20 +434,18 @@ def main() -> None:
         index=list(TOOLS).index(trace["target_tool"]),
         key=f"{key}_target_tool",
     )
-    system_segments = segment_editor(trace["system_segments"], key, "system")
-    user_segments = segment_editor(trace["user_segments"], key, "user")
+    system_segments = build_segments(trace["system_segments"], "system")
+    user_segments = build_segments(trace["user_segments"], "user")
     segments = system_segments + user_segments
 
-    st.sidebar.subheader("Explanation Settings")
-    index = st.sidebar.selectbox("Interaction index", ["k-SII", "STII", "FSII", "SV"], index=0)
-    max_order = 1 if index == "SV" else st.sidebar.slider("Max interaction order", 2, 3, 2)
-    budget = st.sidebar.slider(
-        "Approximation budget",
-        16,
-        512,
-        budget_for_demo(len(segments)),
-        step=8,
-    )
+    index = DEFAULT_INDEX
+    max_order = DEFAULT_MAX_ORDER
+    budget = budget_for_demo(len(segments))
+    st.sidebar.subheader("Fixed Explanation Setup")
+    st.sidebar.caption(f"Index: `{index}`")
+    st.sidebar.caption(f"Max interaction order: `{max_order}`")
+    st.sidebar.caption(f"Approximation budget: `{budget}` auto")
+    st.sidebar.caption("Prompt segments are fixed by the selected scenario.")
 
     if len(segments) < 2:
         st.warning("Add at least two prompt segments.")
@@ -507,7 +467,8 @@ def main() -> None:
             <div class="scenario-hint">
                 <strong>Target tool:</strong> {target_tool}<br>
                 <strong>Available tools:</strong> {", ".join(TOOLS)}<br>
-                <strong>Players:</strong> system and user prompt segments
+                <strong>Players:</strong> system and user prompt segments<br>
+                <strong>Value function:</strong> v(S) = score(target tool | prompt_S)
             </div>
         </div>
         """,
@@ -517,37 +478,57 @@ def main() -> None:
     metric_html = f"""
     <div class="metric-strip">
         <div class="metric-card"><span>Segments</span><strong>{len(segments)}</strong></div>
-        <div class="metric-card"><span>Empty Prompt</span><strong>{empty_score:.3f}</strong></div>
-        <div class="metric-card"><span>Full Prompt</span><strong>{full_score:.3f}</strong></div>
+        <div class="metric-card"><span>Baseline Score</span><strong>{empty_score:.3f}</strong></div>
+        <div class="metric-card"><span>Full Prompt Score</span><strong>{full_score:.3f}</strong></div>
     </div>
     """
     st.markdown(metric_html, unsafe_allow_html=True)
+    st.caption(
+        "Baseline Score is the target-tool score with no prompt segments. "
+        "Full Prompt Score uses all system and user segments."
+    )
 
-    left, right = st.columns([1.15, 0.85])
-    with left:
-        st.markdown('<div class="section-label">Input Trace</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Prompt Segments</div>', unsafe_allow_html=True)
+    segment_left, segment_right = st.columns(2)
+    with segment_left:
         st.markdown("**System prompt segments**")
         for segment in system_segments:
             st.markdown(
                 f"<div class='segment-box'><h4>{segment.label}</h4><p>{segment.text}</p></div>",
                 unsafe_allow_html=True,
             )
+    with segment_right:
         st.markdown("**User request segments**")
         for segment in user_segments:
             st.markdown(
                 f"<div class='segment-box user'><h4>{segment.label}</h4><p>{segment.text}</p></div>",
                 unsafe_allow_html=True,
             )
-    with right:
-        st.markdown('<div class="section-label">Game Setup</div>', unsafe_allow_html=True)
+
+    left, right = st.columns([1.15, 0.85])
+    with left:
+        st.markdown('<div class="section-label">Value Function</div>', unsafe_allow_html=True)
         st.markdown(
             """
-            This demo creates one player per prompt segment. A coalition means
-            “show only these system/user segments,” then the scorer estimates how
-            strongly the visible prompt supports the target tool call.
+            Following SHAP and TokenSHAP, this demo treats prompt segments as
+            players. A coalition means “keep only these system/user segments.”
+            The value function is `v(S) = score(target tool | prompt_S)`: how
+            strongly the coalition prompt supports calling the selected tool.
             """
         )
-        with st.expander("Prompt preview for a model-backed scorer"):
+        st.markdown(
+            """
+            References:
+            [SHAP](https://arxiv.org/abs/1705.07874) and
+            [TokenSHAP](https://aclanthology.org/2024.nlp4science-1.1.pdf).
+            """
+        )
+    with right:
+        st.markdown(
+            '<div class="section-label">LLM Scoring Prompt Preview</div>', unsafe_allow_html=True
+        )
+        st.caption("This preview shows the prompt a future LLM-based scorer would evaluate.")
+        with st.expander("Show scoring prompt"):
             preview_system = "\n".join(f"- {segment.text}" for segment in system_segments)
             preview_user = " ".join(segment.text for segment in user_segments)
             st.code(
@@ -558,9 +539,9 @@ def main() -> None:
                 language="text",
             )
 
-    run = st.button("Run explanation", type="primary", use_container_width=True)
+    run = st.button("Run comparison", type="primary", use_container_width=True)
     if not run:
-        st.info("Choose a scenario and run the explanation.")
+        st.info("Choose a scenario and run the scorer comparison.")
         return
 
     with st.spinner("Computing tool-use attributions..."):
@@ -569,7 +550,6 @@ def main() -> None:
         first_order = explanation.get_n_order(order=1)
         attribution_frame = values_to_frame(first_order, segments)
         pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
-        audit_frame = coalition_audit_frame(game, segments)
         pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
         notes = build_interpretation_notes(
             attribution_frame,
@@ -583,21 +563,32 @@ def main() -> None:
     top_score = 0.0 if top is None else float(top["attribution"])
     source_split = attribution_frame.groupby("source")["attribution"].sum().to_dict()
 
+    # Placeholder until the LLM scorer is implemented. Keeping the comparison
+    # layout now lets the scorer/game work land without another UI reshuffle.
+    llm_full_score = full_score
+    llm_top_label = top_label
+    llm_source_split = source_split
+    llm_attribution_frame = attribution_frame.copy()
+    llm_first_order = first_order
+    llm_explanation = explanation
+
+    st.markdown('<div class="section-label">Scorer Comparison</div>', unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="verdict">
             <div class="verdict-card">
-                <span>Decision Explained</span>
+                <span>Target Tool</span>
                 <strong>{target_tool}</strong>
             </div>
             <div class="verdict-card">
-                <span>Main Driver</span>
+                <span>Lexical Baseline</span>
                 <strong>{top_label}</strong>
-                <p>{top_score:.3f}</p>
+                <p>Full score {full_score:.3f} / attribution {top_score:.3f}</p>
             </div>
             <div class="verdict-card">
-                <span>System vs User</span>
-                <strong>S: {source_split.get("system", 0.0):.3f} / U: {source_split.get("user", 0.0):.3f}</strong>
+                <span>LLM Target-Tool Judge</span>
+                <strong>{llm_top_label}</strong>
+                <p>Placeholder: uses lexical result until scorer is implemented.</p>
             </div>
         </div>
         """,
@@ -611,28 +602,62 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    ranking_tab, interaction_tab, audit_tab = st.tabs(
-        ["Attribution Ranking", "Segment Interactions", "Coalition Audit"],
+    comparison_left, comparison_right = st.columns(2)
+    with comparison_left:
+        st.markdown("**Lexical baseline summary**")
+        st.write(f"Full Prompt Score: `{full_score:.3f}`")
+        st.write(f"Top driver: `{top_label}`")
+        st.write(
+            f"System/User contribution: "
+            f"`{source_split.get('system', 0.0):.3f}` / `{source_split.get('user', 0.0):.3f}`"
+        )
+    with comparison_right:
+        st.markdown("**LLM target-tool judge summary**")
+        st.caption("Placeholder for the next implementation step.")
+        st.write(f"Full Prompt Score: `{llm_full_score:.3f}`")
+        st.write(f"Top driver: `{llm_top_label}`")
+        st.write(
+            f"System/User contribution: "
+            f"`{llm_source_split.get('system', 0.0):.3f}` / "
+            f"`{llm_source_split.get('user', 0.0):.3f}`"
+        )
+
+    ranking_tab, interaction_tab = st.tabs(
+        ["Attribution Ranking Comparison", "Segment Interaction Comparison"],
     )
     with ranking_tab:
-        table_col, chart_col = st.columns([1.08, 0.92])
-        with table_col:
+        lexical_col, llm_col = st.columns(2)
+        with lexical_col:
+            st.markdown("**Lexical baseline**")
             st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
-        with chart_col:
             fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
+            if fig_ax is not None:
+                fig, ax = fig_ax
+                st.pyplot(polish_bar(fig, ax), clear_figure=True)
+        with llm_col:
+            st.markdown("**LLM target-tool judge**")
+            st.caption("Placeholder: currently mirrors lexical baseline.")
+            st.dataframe(llm_attribution_frame, use_container_width=True, hide_index=True)
+            fig_ax = token_attribution_bar_plot(llm_first_order, labels, show=False)
             if fig_ax is not None:
                 fig, ax = fig_ax
                 st.pyplot(polish_bar(fig, ax), clear_figure=True)
 
     with interaction_tab:
-        fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
-        if fig_ax is not None:
-            fig, ax = fig_ax
-            st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
-
-    with audit_tab:
-        st.caption("Exact target-tool scores for empty, single-segment, pair, and small triple coalitions.")
-        st.dataframe(audit_frame, use_container_width=True, hide_index=True)
+        lexical_col, llm_col = st.columns(2)
+        with lexical_col:
+            st.markdown("**Lexical baseline**")
+            fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
+            if fig_ax is not None:
+                fig, ax = fig_ax
+                st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
+        with llm_col:
+            st.markdown("**LLM target-tool judge**")
+            st.caption("Placeholder: currently mirrors lexical baseline.")
+            fig_ax = sentence_interaction_heatmap(llm_explanation, labels, show=False)
+            if fig_ax is not None:
+                fig, ax = fig_ax
+                st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
 
     st.caption(f"Demo path: `{Path(__file__).parent.relative_to(Path.cwd())}`")
 
