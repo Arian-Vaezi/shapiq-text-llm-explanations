@@ -6,15 +6,13 @@ are visible to the answer scorer.
 
 from __future__ import annotations
 
-import math
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 import numpy as np
 
 from shapiq.game import Game
-
 
 STOPWORDS = {
     "a",
@@ -51,6 +49,15 @@ class RetrievedChunk:
 
     title: str
     text: str
+    page_number: int | None = None
+    chunk_type: str = "body_text"
+    section_title: str = ""
+    text_length: int = 0
+    retrieval_score: float | None = None
+    dense_score: float | None = None
+    keyword_score: float | None = None
+    rerank_score: float | None = None
+    flags: tuple[str, ...] = ()
 
 
 ScoreCallable = Callable[[str, str, list[RetrievedChunk]], float]
@@ -104,6 +111,16 @@ def lexical_grounding_score(
     return float(max(0.0, min(1.0, score)))
 
 
+def budget_for_exactish_demo(n_players: int, max_budget: int = 512) -> int:
+    """Return a budget that covers all 2^n coalitions, capped for safety.
+
+    For n <= 9 the exact 2^n value is used (≤ 512). For larger n the cap
+    forces the approximator to sample rather than enumerate, avoiding
+    combinatorial explosion with HF model-backed scorers.
+    """
+    return min(2**n_players, max_budget)
+
+
 class RAGRetrievalGame(Game):
     """Coalition game for RAG retrieval attribution.
 
@@ -126,6 +143,7 @@ class RAGRetrievalGame(Game):
         normalize: bool = True,
         verbose: bool = False,
     ) -> None:
+        """Initialize the retrieval coalition game."""
         if not chunks:
             msg = "RAGRetrievalGame requires at least one retrieved chunk."
             raise ValueError(msg)
@@ -134,6 +152,9 @@ class RAGRetrievalGame(Game):
         self.target_answer = target_answer
         self.chunks = chunks
         self.scorer = scorer or lexical_grounding_score
+        # Cache scored coalitions so random baselines and repeated evaluations
+        # never re-invoke the scorer for a coalition already evaluated.
+        self._score_cache: dict[tuple[int, ...], float] = {}
         # shapiq can normalize the game at the empty-context value. For the
         # default lexical scorer this is zero, but a model-backed scorer may
         # assign a nonzero prior to the target answer even without retrieved text.
@@ -173,7 +194,8 @@ class RAGRetrievalGame(Game):
         ]
         context = "\n\n".join(context_blocks) if context_blocks else "(no retrieved context)"
         return (
-            "Answer the question using only the retrieved context.\n\n"
+            "Answer the question using only the retrieved context. If the context does not "
+            "contain the answer, say that the provided context is insufficient.\n\n"
             f"Question:\n{self.question}\n\n"
             f"Retrieved context:\n{context}\n\n"
             "Answer:"
@@ -184,14 +206,13 @@ class RAGRetrievalGame(Game):
 
         This is the method shapiq calls repeatedly. Each row is a boolean mask
         over retrieved chunks; the returned value is the answer-support score for
-        that selected context.
+        that selected context. Results are cached so repeated evaluations of the
+        same coalition (e.g. by random baselines) do not re-invoke the scorer.
         """
         values = np.zeros(coalitions.shape[0], dtype=float)
         for row_idx, coalition in enumerate(coalitions):
-            values[row_idx] = self.score_context(self.selected_chunks(coalition))
+            key = tuple(int(i) for i in np.where(coalition)[0])
+            if key not in self._score_cache:
+                self._score_cache[key] = self.score_context(self.selected_chunks(coalition))
+            values[row_idx] = self._score_cache[key]
         return values
-
-
-def budget_for_exactish_demo(n_players: int) -> int:
-    """Reasonable default budget for a small interactive demo."""
-    return int(min(2**n_players, max(32, 8 * n_players * math.log2(n_players + 1))))
