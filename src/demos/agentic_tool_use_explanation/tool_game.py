@@ -5,11 +5,14 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 
 from shapiq.game import Game
+
+if TYPE_CHECKING:
+    from scorers import ToolScorerProtocol
 
 SegmentSource = Literal["system", "user"]
 
@@ -88,7 +91,7 @@ def lexical_tool_score(
     point to the target tool. Replace it with target-tool log-likelihood from a
     real tool-calling model for a final demo.
     """
-    # TODO(final-demo): Replace this lexical heuristic with a model-backed scorer.
+    # Final-demo note: replace this lexical heuristic with a model-backed scorer.
     # Good options:
     # - target tool-name log-likelihood from a tool-calling LLM,
     # - probability from a small trained tool-router classifier,
@@ -133,6 +136,8 @@ class ToolUseGame(Game):
         *,
         target_tool: str,
         segments: list[ToolUseSegment],
+        scorer: ToolScorerProtocol | None = None,
+        tool_descriptions: dict[str, str] | None = None,
         normalize: bool = True,
         verbose: bool = False,
     ) -> None:
@@ -141,6 +146,8 @@ class ToolUseGame(Game):
             raise ValueError(msg)
         self.target_tool = target_tool
         self.segments = segments
+        self.scorer = scorer
+        self.tool_descriptions = tool_descriptions or {}
         empty_score = self.score_segments([])
         super().__init__(
             n_players=len(segments),
@@ -157,10 +164,29 @@ class ToolUseGame(Game):
 
     def score_segments(self, selected_segments: list[ToolUseSegment]) -> float:
         """Score support for the target tool from selected prompt segments."""
-        # TODO(final-demo): Keep this method as the stable integration point.
-        # Swap `lexical_tool_score` for an LLM/tool-router scorer without changing
-        # the shapiq game or Streamlit visualization code.
+        if self.scorer is not None:
+            prompt = self.build_prompt(selected_segments)
+            return self.scorer.score_batch(
+                [prompt],
+                target_tool=self.target_tool,
+                tool_descriptions=self.tool_descriptions,
+            )[0]
         return lexical_tool_score(selected_segments, self.target_tool)
+
+    def build_prompt(self, selected_segments: list[ToolUseSegment]) -> str:
+        """Build the coalition prompt from selected system/user segments."""
+        system_lines = [
+            f"- {segment.text}" for segment in selected_segments if segment.source == "system"
+        ]
+        user_lines = [
+            f"- {segment.text}" for segment in selected_segments if segment.source == "user"
+        ]
+        return (
+            "System rules:\n"
+            + ("\n".join(system_lines) if system_lines else "(none)")
+            + "\n\nUser request:\n"
+            + ("\n".join(user_lines) if user_lines else "(none)")
+        )
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
         """Evaluate support for each coalition of prompt segments."""

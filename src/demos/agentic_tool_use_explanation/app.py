@@ -9,6 +9,7 @@ import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
+from scorers import LLMToolScorer, MockLLM
 from tool_game import ToolUseGame, ToolUseSegment, budget_for_demo
 
 import shapiq
@@ -452,9 +453,18 @@ def main() -> None:
         return
 
     game = ToolUseGame(target_tool=target_tool, segments=segments)
+    llm_scorer = LLMToolScorer(llm=MockLLM())
+    llm_game = ToolUseGame(
+        target_tool=target_tool,
+        segments=segments,
+        scorer=llm_scorer,
+        tool_descriptions=TOOLS,
+    )
     labels = [segment.label for segment in segments]
     full_score = float(game(game.grand_coalition)[0])
     empty_score = float(game(game.empty_coalition)[0])
+    llm_full_score = float(llm_game(llm_game.grand_coalition)[0])
+    llm_empty_score = float(llm_game(llm_game.empty_coalition)[0])
 
     st.markdown(
         f"""
@@ -478,14 +488,14 @@ def main() -> None:
     metric_html = f"""
     <div class="metric-strip">
         <div class="metric-card"><span>Segments</span><strong>{len(segments)}</strong></div>
-        <div class="metric-card"><span>Baseline Score</span><strong>{empty_score:.3f}</strong></div>
-        <div class="metric-card"><span>Full Prompt Score</span><strong>{full_score:.3f}</strong></div>
+        <div class="metric-card"><span>Lexical Full Score</span><strong>{full_score:.3f}</strong></div>
+        <div class="metric-card"><span>Mock LLM Full Score</span><strong>{llm_full_score:.3f}</strong></div>
     </div>
     """
     st.markdown(metric_html, unsafe_allow_html=True)
     st.caption(
-        "Baseline Score is the target-tool score with no prompt segments. "
-        "Full Prompt Score uses all system and user segments."
+        f"Baseline scores with no prompt segments: lexical `{empty_score:.3f}`, "
+        f"mock LLM `{llm_empty_score:.3f}`. Full scores use all system and user segments."
     )
 
     st.markdown('<div class="section-label">Prompt Segments</div>', unsafe_allow_html=True)
@@ -527,15 +537,14 @@ def main() -> None:
         st.markdown(
             '<div class="section-label">LLM Scoring Prompt Preview</div>', unsafe_allow_html=True
         )
-        st.caption("This preview shows the prompt a future LLM-based scorer would evaluate.")
+        st.caption("This preview shows the prompt used by the mock LLM scorer.")
         with st.expander("Show scoring prompt"):
-            preview_system = "\n".join(f"- {segment.text}" for segment in system_segments)
-            preview_user = " ".join(segment.text for segment in user_segments)
             st.code(
-                "Available tools:\n"
-                + "\n".join(f"- {name}: {desc}" for name, desc in TOOLS.items())
-                + f"\n\nSystem rules:\n{preview_system}\n\nUser request:\n{preview_user}\n\n"
-                + "Choose exactly one tool or no_tool.",
+                llm_scorer.build_scoring_prompt(
+                    llm_game.build_prompt(segments),
+                    target_tool=target_tool,
+                    tool_descriptions=TOOLS,
+                ),
                 language="text",
             )
 
@@ -547,10 +556,16 @@ def main() -> None:
     with st.spinner("Computing tool-use attributions..."):
         approximator = make_approximator(index, game.n_players, max_order)
         explanation = approximator.approximate(budget=budget, game=game)
+        llm_approximator = make_approximator(index, llm_game.n_players, max_order)
+        llm_explanation = llm_approximator.approximate(budget=budget, game=llm_game)
         first_order = explanation.get_n_order(order=1)
+        llm_first_order = llm_explanation.get_n_order(order=1)
         attribution_frame = values_to_frame(first_order, segments)
+        llm_attribution_frame = values_to_frame(llm_first_order, segments)
         pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
+        llm_pairwise_matrix = pairwise_matrix_from_explanation(llm_explanation, llm_game.n_players)
         pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
+        llm_pair_label, llm_pair_value = strongest_pair(llm_pairwise_matrix, labels)
         notes = build_interpretation_notes(
             attribution_frame,
             pair_label,
@@ -562,15 +577,14 @@ def main() -> None:
     top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
     top_score = 0.0 if top is None else float(top["attribution"])
     source_split = attribution_frame.groupby("source")["attribution"].sum().to_dict()
-
-    # Placeholder until the LLM scorer is implemented. Keeping the comparison
-    # layout now lets the scorer/game work land without another UI reshuffle.
-    llm_full_score = full_score
-    llm_top_label = top_label
+    llm_top = llm_attribution_frame.iloc[0] if not llm_attribution_frame.empty else None
+    llm_top_label = (
+        "No segment" if llm_top is None else f"{llm_top['segment']} ({llm_top['source']})"
+    )
+    llm_top_score = 0.0 if llm_top is None else float(llm_top["attribution"])
     llm_source_split = source_split
-    llm_attribution_frame = attribution_frame.copy()
-    llm_first_order = first_order
-    llm_explanation = explanation
+    if not llm_attribution_frame.empty:
+        llm_source_split = llm_attribution_frame.groupby("source")["attribution"].sum().to_dict()
 
     st.markdown('<div class="section-label">Scorer Comparison</div>', unsafe_allow_html=True)
     st.markdown(
@@ -586,9 +600,9 @@ def main() -> None:
                 <p>Full score {full_score:.3f} / attribution {top_score:.3f}</p>
             </div>
             <div class="verdict-card">
-                <span>LLM Target-Tool Judge</span>
+                <span>Mock LLM Target-Tool Judge</span>
                 <strong>{llm_top_label}</strong>
-                <p>Placeholder: uses lexical result until scorer is implemented.</p>
+                <p>Full score {llm_full_score:.3f} / attribution {llm_top_score:.3f}</p>
             </div>
         </div>
         """,
@@ -612,8 +626,10 @@ def main() -> None:
             f"`{source_split.get('system', 0.0):.3f}` / `{source_split.get('user', 0.0):.3f}`"
         )
     with comparison_right:
-        st.markdown("**LLM target-tool judge summary**")
-        st.caption("Placeholder for the next implementation step.")
+        st.markdown("**Mock LLM target-tool judge summary**")
+        st.caption(
+            "Mock scorer for wiring and tests; replace its generator with a real model later."
+        )
         st.write(f"Full Prompt Score: `{llm_full_score:.3f}`")
         st.write(f"Top driver: `{llm_top_label}`")
         st.write(
@@ -621,6 +637,7 @@ def main() -> None:
             f"`{llm_source_split.get('system', 0.0):.3f}` / "
             f"`{llm_source_split.get('user', 0.0):.3f}`"
         )
+        st.write(f"Strongest pair: `{llm_pair_label}` ({llm_pair_value:.3f})")
 
     ranking_tab, interaction_tab = st.tabs(
         ["Attribution Ranking Comparison", "Segment Interaction Comparison"],
@@ -635,8 +652,7 @@ def main() -> None:
                 fig, ax = fig_ax
                 st.pyplot(polish_bar(fig, ax), clear_figure=True)
         with llm_col:
-            st.markdown("**LLM target-tool judge**")
-            st.caption("Placeholder: currently mirrors lexical baseline.")
+            st.markdown("**Mock LLM target-tool judge**")
             st.dataframe(llm_attribution_frame, use_container_width=True, hide_index=True)
             fig_ax = token_attribution_bar_plot(llm_first_order, labels, show=False)
             if fig_ax is not None:
@@ -652,8 +668,7 @@ def main() -> None:
                 fig, ax = fig_ax
                 st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
         with llm_col:
-            st.markdown("**LLM target-tool judge**")
-            st.caption("Placeholder: currently mirrors lexical baseline.")
+            st.markdown("**Mock LLM target-tool judge**")
             fig_ax = sentence_interaction_heatmap(llm_explanation, labels, show=False)
             if fig_ax is not None:
                 fig, ax = fig_ax
