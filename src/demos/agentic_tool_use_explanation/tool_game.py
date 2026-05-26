@@ -2,12 +2,9 @@
 
 from __future__ import annotations
 
-import math
-import re
+import numpy as np
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal
-
-import numpy as np
 
 from shapiq.game import Game
 
@@ -26,108 +23,6 @@ class ToolUseSegment:
     text: str
 
 
-TOOL_KEYWORDS = {
-    "weather_tool": {
-        "weather",
-        "rain",
-        "forecast",
-        "temperature",
-        "snow",
-        "wind",
-        "berlin",
-        "tomorrow",
-        "morning",
-    },
-    "calculator_tool": {
-        "calculate",
-        "compute",
-        "times",
-        "multiply",
-        "plus",
-        "minus",
-        "divide",
-        "percent",
-        "number",
-        "final",
-    },
-    "web_search_tool": {
-        "latest",
-        "newest",
-        "current",
-        "recent",
-        "today",
-        "weekend",
-        "won",
-        "race",
-        "product",
-        "search",
-        "web",
-    },
-    "no_tool": {
-        "explain",
-        "what",
-        "simple",
-        "terms",
-        "conceptual",
-        "stable",
-        "knowledge",
-        "directly",
-    },
-}
-
-
-def normalize_tokens(text: str) -> set[str]:
-    """Return lowercase alphanumeric tokens."""
-    return set(re.findall(r"[a-zA-Z0-9]+", text.lower()))
-
-
-def lexical_tool_score(
-    selected_segments: list[ToolUseSegment],
-    target_tool: str,
-) -> float:
-    """Lightweight local scorer for a tool-call decision.
-
-    This is scaffolding: it scores how strongly the visible system/user segments
-    point to the target tool. Replace it with target-tool log-likelihood from a
-    real tool-calling model for a final demo.
-    """
-    # Final-demo note: replace this lexical heuristic with a model-backed scorer.
-    # Good options:
-    # - target tool-name log-likelihood from a tool-calling LLM,
-    # - probability from a small trained tool-router classifier,
-    # - structured tool-call probability from a real agent trace,
-    # - contrastive log-odds between `target_tool` and `no_tool`.
-    if not selected_segments:
-        return 0.0
-
-    target_keywords = TOOL_KEYWORDS[target_tool]
-    user_tokens = set()
-    system_tokens = set()
-    for segment in selected_segments:
-        if segment.source == "user":
-            user_tokens |= normalize_tokens(segment.text)
-        else:
-            system_tokens |= normalize_tokens(segment.text)
-
-    user_hits = len(user_tokens & target_keywords)
-    system_hits = len(system_tokens & target_keywords)
-    explicit_tool_rule = target_tool.lower() in " ".join(
-        segment.text.lower() for segment in selected_segments if segment.source == "system"
-    )
-
-    competing_hits = 0
-    for tool, keywords in TOOL_KEYWORDS.items():
-        if tool == target_tool:
-            continue
-        competing_hits += len(user_tokens & keywords) * 0.35
-
-    raw_score = 0.85 * user_hits + 0.65 * system_hits + (1.25 if explicit_tool_rule else 0.0)
-    raw_score -= competing_hits
-
-    # Smooth into [0, 1] while keeping empty/weak coalitions low.
-    return float(1 / (1 + math.exp(-(raw_score - 1.3))))
-
-
 class ToolUseGame(Game):
     """Game where players are system/user prompt segments and value is target-tool support."""
 
@@ -136,7 +31,7 @@ class ToolUseGame(Game):
         *,
         target_tool: str,
         segments: list[ToolUseSegment],
-        scorer: ToolScorerProtocol | None = None,
+        scorer: "ToolScorerProtocol | None" = None,
         tool_descriptions: dict[str, str] | None = None,
         normalize: bool = True,
         verbose: bool = False,
@@ -146,7 +41,13 @@ class ToolUseGame(Game):
             raise ValueError(msg)
         self.target_tool = target_tool
         self.segments = segments
-        self.scorer = scorer
+        if scorer is not None:
+            self.scorer = scorer
+        else:
+            # Use the lexical baseline scorer implemented in scorers.py
+            from scorers import LexicalToolScorer
+
+            self.scorer = LexicalToolScorer()
         self.tool_descriptions = tool_descriptions or {}
         empty_score = self.score_segments([])
         super().__init__(
@@ -164,14 +65,16 @@ class ToolUseGame(Game):
 
     def score_segments(self, selected_segments: list[ToolUseSegment]) -> float:
         """Score support for the target tool from selected prompt segments."""
-        if self.scorer is not None:
-            prompt = self.build_prompt(selected_segments)
-            return self.scorer.score_batch(
-                [prompt],
-                target_tool=self.target_tool,
-                tool_descriptions=self.tool_descriptions,
-            )[0]
-        return lexical_tool_score(selected_segments, self.target_tool)
+        prompt = self.build_prompt(selected_segments)
+        scores = self.scorer.score_batch(
+            [prompt],
+            target_tool=self.target_tool,
+            tool_descriptions=self.tool_descriptions,
+        )
+        if len(scores) != 1:
+            msg = "ToolScorerProtocol.score_batch must return one score per prompt."
+            raise ValueError(msg)
+        return float(scores[0])
 
     def build_prompt(self, selected_segments: list[ToolUseSegment]) -> str:
         """Build the coalition prompt from selected system/user segments."""
@@ -190,12 +93,15 @@ class ToolUseGame(Game):
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
         """Evaluate support for each coalition of prompt segments."""
-        values = np.zeros(coalitions.shape[0], dtype=float)
-        for row_idx, coalition in enumerate(coalitions):
-            values[row_idx] = self.score_segments(self.selected_segments(coalition))
-        return values
+        prompts = [self.build_prompt(self.selected_segments(coalition)) for coalition in coalitions]
+        scores = self.scorer.score_batch(
+            prompts,
+            target_tool=self.target_tool,
+            tool_descriptions=self.tool_descriptions,
+        )
+        return np.asarray(scores, dtype=float)
 
 
 def budget_for_demo(n_players: int) -> int:
     """Small interactive default budget."""
-    return int(min(2**n_players, max(48, 8 * n_players * math.log2(n_players + 1))))
+    return int(min(2**n_players, max(48, 8 * n_players * np.log2(n_players + 1))))
