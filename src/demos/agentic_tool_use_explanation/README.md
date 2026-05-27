@@ -22,13 +22,50 @@ sentence/text players:
 From the repository root:
 
 ```bash
-uv pip install -r src/demos/agentic_tool_use_explanation/requirements.txt
-uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
+MPLCONFIGDIR=.cache/matplotlib XDG_CACHE_HOME=.cache PYTHONPATH=src \
+  .venv/bin/streamlit run src/demos/agentic_tool_use_explanation/app.py \
+  --server.port 8501 \
+  --server.headless true \
+  --browser.gatherUsageStats false
 ```
+
+Then open:
+
+```text
+http://localhost:8501
+```
+
+`localhost` only works on the machine running Streamlit. Other users need to run
+the command on their own machine, or use the displayed Network URL if they are on
+the same local network.
+
+The `MPLCONFIGDIR` and `XDG_CACHE_HOME` settings keep Matplotlib/fontconfig
+caches inside the project. This avoids slow or failing startup on macOS when the
+default user cache directories are not writable.
+
+If port `8501` is already in use, change `--server.port` to another port such as
+`8502` and open that local URL instead.
+
+### Minimal Local Environment
+
+This branch has been tested with a local `.venv` using Python 3.12. To recreate
+the minimal environment needed for the current Streamlit demo:
+
+```bash
+/Users/yililalo/.local/bin/python3.12 -m venv .venv
+.venv/bin/python -m pip install streamlit pandas matplotlib scipy tqdm scikit-learn sparse-transform galois colour networkx
+```
+
+This does not install a real LLM backend. Do not install `torch` or
+`transformers` unless you are working on the later Gemma integration.
 
 ## What The App Shows
 
-- Editable system prompt segments and user request segments.
+- A default **Mock LLM Router** mode with a user-input box.
+- A mock assistant response that recommends one of the available tools and shows
+  a short reason plus per-tool scores.
+- A sample-scenario mode with fixed system prompt segments and user request
+  segments.
 - Target tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
 - Metric cards for number of prompt segments, empty-prompt score, and full-prompt score.
 - First-order attribution ranking: which segment most pushes the tool decision.
@@ -49,9 +86,27 @@ model-backed version, the segmentation can be replaced or extended with:
 
 ## Scoring Mode
 
-The current scorer is lightweight lexical scaffolding. It does not call a real
-LLM. Its purpose is to validate the game, shapiq computation, and visualization
-pipeline without API keys or GPU dependencies.
+The current scorer is lightweight lexical scaffolding. The Mock LLM Router does
+not call a real LLM and does not execute any tools. It only selects which tool
+the agent should use for the user request.
+
+The router returns the handoff shape expected by a future local Gemma backend:
+
+```python
+{
+    "tool": "weather_tool",
+    "reason": "Matched rain, berlin, tomorrow; the question asks about weather.",
+    "scores": {
+        "weather_tool": 0.82,
+        "calculator_tool": 0.05,
+        "web_search_tool": 0.10,
+        "no_tool": 0.03,
+    },
+}
+```
+
+This lets the UI and shapiq explanation flow be developed without API keys, GPU
+dependencies, or Hugging Face model downloads.
 
 For the final project demo, replace `ToolUseGame.score_segments` in `tool_game.py`
 with a model-backed scorer such as:
