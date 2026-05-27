@@ -84,6 +84,9 @@ def normalize_tokens(text: str) -> set[str]:
 
 def clamp_score(score: float) -> float:
     """Clamp a numeric score to the value-function range."""
+    if not math.isfinite(score):
+        msg = "Score must be finite."
+        raise ValueError(msg)
     return float(min(1.0, max(0.0, score)))
 
 
@@ -245,8 +248,12 @@ class LLMToolScorer:
         """Return a safe fallback score for one prompt."""
         if self.fallback_scorer is None:
             return 0.0
-        return self.fallback_scorer.score_batch(
+        scores = self.fallback_scorer.score_batch(
             [prompt],
             target_tool=target_tool,
             tool_descriptions=tool_descriptions,
-        )[0]
+        )
+        if len(scores) != 1:
+            msg = "Fallback scorer must return one score per prompt."
+            raise ValueError(msg)
+        return clamp_score(float(scores[0]))

@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-import numpy as np
+import math
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Literal
+
+import numpy as np
 
 from shapiq.game import Game
 
@@ -45,7 +47,10 @@ class ToolUseGame(Game):
             self.scorer = scorer
         else:
             # Use the lexical baseline scorer implemented in scorers.py
-            from scorers import LexicalToolScorer
+            try:
+                from demos.agentic_tool_use_explanation.scorers import LexicalToolScorer
+            except ModuleNotFoundError:
+                from scorers import LexicalToolScorer
 
             self.scorer = LexicalToolScorer()
         self.tool_descriptions = tool_descriptions or {}
@@ -74,7 +79,11 @@ class ToolUseGame(Game):
         if len(scores) != 1:
             msg = "ToolScorerProtocol.score_batch must return one score per prompt."
             raise ValueError(msg)
-        return float(scores[0])
+        score = float(scores[0])
+        if not math.isfinite(score):
+            msg = "ToolScorerProtocol.score_batch must return finite numeric scores."
+            raise ValueError(msg)
+        return score
 
     def build_prompt(self, selected_segments: list[ToolUseSegment]) -> str:
         """Build the coalition prompt from selected system/user segments."""
@@ -99,7 +108,17 @@ class ToolUseGame(Game):
             target_tool=self.target_tool,
             tool_descriptions=self.tool_descriptions,
         )
-        return np.asarray(scores, dtype=float)
+        if len(scores) != len(prompts):
+            msg = "ToolScorerProtocol.score_batch must return one score per prompt."
+            raise ValueError(msg)
+        values = np.asarray(scores, dtype=float)
+        if values.shape != (len(prompts),):
+            msg = "ToolScorerProtocol.score_batch must return a one-dimensional score list."
+            raise ValueError(msg)
+        if not np.all(np.isfinite(values)):
+            msg = "ToolScorerProtocol.score_batch must return finite numeric scores."
+            raise ValueError(msg)
+        return values
 
 
 def budget_for_demo(n_players: int) -> int:
