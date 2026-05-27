@@ -57,6 +57,16 @@ TOOL_KEYWORDS = {
 }
 
 
+@dataclass(frozen=True)
+class ToolChoice:
+    """A lightweight tool-router decision."""
+
+    tool: str
+    score: float
+    reason: str
+    scores: dict[str, float]
+
+
 class ToolScorerProtocol(Protocol):
     """Common interface for coalition value-function scorers."""
 
@@ -139,6 +149,47 @@ class LexicalToolScorer:
         raw_score = 0.85 * target_hits + (1.25 if explicit_tool_name else 0.0)
         raw_score -= competing_hits
         return float(1 / (1 + math.exp(-(raw_score - 1.3))))
+
+
+@dataclass
+class LexicalToolRouter:
+    """Small local router used when no real LLM backend is loaded."""
+
+    scorer: LexicalToolScorer = field(default_factory=LexicalToolScorer)
+
+    def choose_tool(self, prompt: str, tool_descriptions: dict[str, str]) -> ToolChoice:
+        """Choose the most supported tool for a user prompt."""
+        scores = {
+            tool_name: self.scorer.score_prompt(
+                prompt,
+                target_tool=tool_name,
+                tool_descriptions=tool_descriptions,
+            )
+            for tool_name in tool_descriptions
+        }
+        selected_tool = max(scores, key=scores.get)
+        return ToolChoice(
+            tool=selected_tool,
+            score=scores[selected_tool],
+            reason=self._build_reason(prompt, selected_tool),
+            scores=scores,
+        )
+
+    def _build_reason(self, prompt: str, selected_tool: str) -> str:
+        tokens = normalize_tokens(prompt)
+        hits = sorted(tokens & self.scorer.tool_keywords[selected_tool])
+        if selected_tool == "weather_tool":
+            purpose = "the question asks about weather, forecast, place, or time."
+        elif selected_tool == "calculator_tool":
+            purpose = "the question asks for exact arithmetic or a numeric result."
+        elif selected_tool == "web_search_tool":
+            purpose = "the question depends on current, recent, latest, or external facts."
+        else:
+            purpose = "the question can be answered directly from stable knowledge."
+
+        if hits:
+            return f"Matched {', '.join(hits[:5])}; {purpose}"
+        return purpose
 
 
 @dataclass

@@ -10,7 +10,7 @@ import numpy as np
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
-from scorers import LexicalToolScorer, LLMToolScorer, MockLLM  # noqa: E402
+from scorers import LexicalToolRouter, LexicalToolScorer, LLMToolScorer, MockLLM  # noqa: E402
 from tool_game import ToolUseGame, ToolUseSegment  # noqa: E402
 
 TOOL_DESCRIPTIONS = {
@@ -77,6 +77,20 @@ def test_lexical_tool_scorer_returns_one_score_per_prompt() -> None:
 
     assert len(scores) == 2
     assert all(0.0 <= score <= 1.0 for score in scores)
+
+
+def test_lexical_tool_router_returns_mock_llm_choice() -> None:
+    router = LexicalToolRouter()
+
+    choice = router.choose_tool(
+        "Will it rain in Berlin tomorrow morning?",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert choice.tool == "weather_tool"
+    assert 0.0 <= choice.score <= 1.0
+    assert set(choice.scores) == set(TOOL_DESCRIPTIONS)
+    assert "weather" in choice.reason or "rain" in choice.reason
 
 
 def test_tool_use_game_accepts_llm_scorer() -> None:

@@ -2,25 +2,35 @@
 
 from __future__ import annotations
 
+import math
+import re
+from dataclasses import dataclass
+from html import escape
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
-from scorers import LLMToolScorer, MockLLM
-from tool_game import ToolUseGame, ToolUseSegment, budget_for_demo
-
-import shapiq
-from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
+from scorers import LLMToolScorer, LexicalToolRouter, MockLLM, ToolChoice
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
+    import shapiq
+
+SegmentSource = Literal["system", "user"]
 
 
 DEFAULT_INDEX = "k-SII"
 DEFAULT_MAX_ORDER = 2
+DEFAULT_MOCK_QUERY = "Will it rain in Berlin tomorrow morning?"
+MOCK_SYSTEM_SEGMENTS = [
+    "Use weather_tool for weather, rain, temperature, forecast, or city-date questions.",
+    "Use calculator_tool for exact arithmetic, totals, percentages, and numeric expressions.",
+    "Use web_search_tool when the answer depends on current, latest, recent, or live information.",
+    "Use no_tool for stable conceptual explanations that do not require external data.",
+]
 
 
 st.set_page_config(
@@ -205,8 +215,52 @@ section[data-testid="stSidebar"] {
     line-height: 1.45;
     margin: 0.25rem 0;
 }
+.mock-chat {
+    background: #fffdf8;
+    border: 1px solid #ded6c4;
+    border-radius: 7px;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 0 1rem 0;
+    padding: 0.9rem 1rem;
+}
+.mock-message {
+    border-left: 4px solid #b15d3b;
+    padding-left: 0.75rem;
+}
+.mock-message.assistant {
+    border-left-color: #2d6f73;
+}
+.mock-message span {
+    color: #6d6658;
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+.mock-message p {
+    color: #403d37;
+    line-height: 1.42;
+    margin: 0;
+}
 </style>
 """
+
+
+@dataclass(frozen=True)
+class ToolUseSegment:
+    """Lightweight prompt segment for rendering the UI before shapiq loads."""
+
+    source: SegmentSource
+    label: str
+    text: str
+
+
+def budget_for_demo(n_players: int) -> int:
+    """Small interactive default budget."""
+    return int(min(2**n_players, max(48, 8 * n_players * math.log2(n_players + 1))))
 
 
 def clean_key(value: str) -> str:
@@ -221,6 +275,51 @@ def build_segments(default_segments: list[str], source: str) -> list[ToolUseSegm
         for idx, text in enumerate(default_segments)
         if text.strip()
     ]
+
+
+def build_coalition_prompt(selected_segments: list[ToolUseSegment]) -> str:
+    """Build a coalition prompt without importing the full shapiq game stack."""
+    system_lines = [
+        f"- {segment.text}" for segment in selected_segments if segment.source == "system"
+    ]
+    user_lines = [f"- {segment.text}" for segment in selected_segments if segment.source == "user"]
+    return (
+        "System rules:\n"
+        + ("\n".join(system_lines) if system_lines else "(none)")
+        + "\n\nUser request:\n"
+        + ("\n".join(user_lines) if user_lines else "(none)")
+    )
+
+
+def split_user_request(user_input: str) -> list[str]:
+    """Split a custom user request into a few stable explanation segments."""
+    cleaned = " ".join(user_input.strip().split())
+    if not cleaned:
+        return []
+
+    parts = [part.strip(" .?!,;:") for part in re.split(r"[,;?.!]+", cleaned) if part.strip()]
+    if len(parts) > 1:
+        return parts[:4]
+
+    words = cleaned.split()
+    if len(words) <= 6:
+        return [cleaned]
+
+    chunk_size = max(2, math.ceil(len(words) / 3))
+    return [" ".join(words[idx : idx + chunk_size]) for idx in range(0, len(words), chunk_size)]
+
+
+def build_mock_trace(user_input: str, choice: ToolChoice) -> dict[str, object]:
+    """Create a trace from a mock-router conversation."""
+    return {
+        "target_tool": choice.tool,
+        "system_segments": MOCK_SYSTEM_SEGMENTS,
+        "user_segments": split_user_request(user_input),
+        "takeaway": (
+            "The mock LLM router only chooses a tool. It does not call external APIs or run "
+            "the selected tool; shapiq explains the text evidence behind the chosen route."
+        ),
+    }
 
 
 def values_to_frame(
@@ -250,6 +349,8 @@ def values_to_frame(
 
 def make_approximator(index: str, n_players: int, max_order: int) -> object:
     """Create a shapiq approximator for the selected index."""
+    import shapiq
+
     if index == "SV":
         return shapiq.KernelSHAP(n=n_players, random_state=42)
     if index == "STII":
@@ -424,17 +525,66 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    trace_name = st.sidebar.selectbox("Scenario", list(SAMPLE_TRACES))
-    trace = SAMPLE_TRACES[trace_name]
-    key = clean_key(trace_name)
-
-    st.sidebar.subheader("Target Tool")
-    target_tool = st.sidebar.selectbox(
-        "Explain decision for",
-        list(TOOLS),
-        index=list(TOOLS).index(trace["target_tool"]),
-        key=f"{key}_target_tool",
+    mode = st.sidebar.radio(
+        "Demo Mode",
+        ["Sample Scenario", "Mock LLM Router"],
+        index=1,
+        horizontal=False,
     )
+    router = LexicalToolRouter()
+    mock_input = st.text_area(
+        "Mock LLM user input",
+        value=DEFAULT_MOCK_QUERY,
+        height=86,
+        disabled=mode != "Mock LLM Router",
+        help="This local mock router chooses a tool only. It does not call a real model or any tool.",
+    )
+    mock_choice = router.choose_tool(mock_input, TOOLS)
+
+    if mode == "Mock LLM Router":
+        trace_name = "Mock LLM Router"
+        trace = build_mock_trace(mock_input, mock_choice)
+        key = "mock_llm_router"
+        target_tool = mock_choice.tool
+    else:
+        trace_name = st.sidebar.selectbox("Scenario", list(SAMPLE_TRACES))
+        trace = SAMPLE_TRACES[trace_name]
+        key = clean_key(trace_name)
+        st.sidebar.subheader("Target Tool")
+        target_tool = st.sidebar.selectbox(
+            "Explain decision for",
+            list(TOOLS),
+            index=list(TOOLS).index(trace["target_tool"]),
+            key=f"{key}_target_tool",
+        )
+
+    if mode == "Mock LLM Router":
+        st.markdown('<div class="section-label">Mock LLM Tool Router</div>', unsafe_allow_html=True)
+        score_lines = "<br>".join(
+            f"{tool}: {score:.3f}" for tool, score in sorted(mock_choice.scores.items())
+        )
+        st.markdown(
+            f"""
+            <div class="mock-chat">
+                <div class="mock-message">
+                    <span>User</span>
+                    <p>{escape(mock_input)}</p>
+                </div>
+                <div class="mock-message assistant">
+                    <span>Mock assistant</span>
+                    <p><strong>Recommended tool:</strong> {mock_choice.tool}<br>
+                    <strong>Reason:</strong> {escape(mock_choice.reason)}<br>
+                    <strong>Scores:</strong><br>{score_lines}</p>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.caption(
+            "This is the handoff point for yuanyuan: replace the mock router with a Gemma "
+            "backend that returns the same tool, reason, and scores fields."
+        )
+
     system_segments = build_segments(trace["system_segments"], "system")
     user_segments = build_segments(trace["user_segments"], "user")
     segments = system_segments + user_segments
@@ -452,19 +602,30 @@ def main() -> None:
         st.warning("Add at least two prompt segments.")
         return
 
-    game = ToolUseGame(target_tool=target_tool, segments=segments)
     llm_scorer = LLMToolScorer(llm=MockLLM())
-    llm_game = ToolUseGame(
-        target_tool=target_tool,
-        segments=segments,
-        scorer=llm_scorer,
-        tool_descriptions=TOOLS,
-    )
     labels = [segment.label for segment in segments]
-    full_score = float(game(game.grand_coalition)[0])
-    empty_score = float(game(game.empty_coalition)[0])
-    llm_full_score = float(llm_game(llm_game.grand_coalition)[0])
-    llm_empty_score = float(llm_game(llm_game.empty_coalition)[0])
+    full_prompt = build_coalition_prompt(segments)
+    empty_prompt = build_coalition_prompt([])
+    full_score = router.scorer.score_batch(
+        [full_prompt],
+        target_tool=target_tool,
+        tool_descriptions=TOOLS,
+    )[0]
+    empty_score = router.scorer.score_batch(
+        [empty_prompt],
+        target_tool=target_tool,
+        tool_descriptions=TOOLS,
+    )[0]
+    llm_full_score = llm_scorer.score_batch(
+        [full_prompt],
+        target_tool=target_tool,
+        tool_descriptions=TOOLS,
+    )[0]
+    llm_empty_score = llm_scorer.score_batch(
+        [empty_prompt],
+        target_tool=target_tool,
+        tool_descriptions=TOOLS,
+    )[0]
 
     st.markdown(
         f"""
@@ -541,7 +702,7 @@ def main() -> None:
         with st.expander("Show scoring prompt"):
             st.code(
                 llm_scorer.build_scoring_prompt(
-                    llm_game.build_prompt(segments),
+                    full_prompt,
                     target_tool=target_tool,
                     tool_descriptions=TOOLS,
                 ),
@@ -552,6 +713,24 @@ def main() -> None:
     if not run:
         st.info("Choose a scenario and run the scorer comparison.")
         return
+
+    try:
+        from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
+        from tool_game import ToolUseGame
+    except Exception as error:  # noqa: BLE001
+        st.error(
+            "The Mock LLM router window is ready, but the full shapiq explanation stack "
+            f"could not be imported in this local environment: {error}"
+        )
+        return
+
+    game = ToolUseGame(target_tool=target_tool, segments=segments)
+    llm_game = ToolUseGame(
+        target_tool=target_tool,
+        segments=segments,
+        scorer=llm_scorer,
+        tool_descriptions=TOOLS,
+    )
 
     with st.spinner("Computing tool-use attributions..."):
         approximator = make_approximator(index, game.n_players, max_order)
