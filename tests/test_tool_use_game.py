@@ -11,7 +11,9 @@ import pytest
 def load_tool_game_module():
     root = Path(__file__).resolve().parents[1]
     module_path = root / "src" / "demos" / "agentic_tool_use_explanation" / "tool_game.py"
-    spec = importlib.util.spec_from_file_location("agentic_tool_use_explanation.tool_game", module_path)
+    spec = importlib.util.spec_from_file_location(
+        "agentic_tool_use_explanation.tool_game", module_path
+    )
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
@@ -25,7 +27,9 @@ class FakeScorer:
         self.target_tool = None
         self.tool_descriptions = None
 
-    def score_batch(self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]) -> list[float]:
+    def score_batch(
+        self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]
+    ) -> list[float]:
         self.prompts = prompts
         self.calls.append(prompts)
         self.target_tool = target_tool
@@ -34,14 +38,18 @@ class FakeScorer:
 
 
 class MismatchedBatchScorer:
-    def score_batch(self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]) -> list[float]:
+    def score_batch(
+        self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]
+    ) -> list[float]:
         if len(prompts) == 1:
             return [0.0]
         return [0.5]
 
 
 class NonFiniteScorer:
-    def score_batch(self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]) -> list[float]:
+    def score_batch(
+        self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]
+    ) -> list[float]:
         return [float("nan") for _ in prompts]
 
 

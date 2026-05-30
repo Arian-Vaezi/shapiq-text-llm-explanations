@@ -33,7 +33,7 @@ class ToolUseGame(Game):
         *,
         target_tool: str,
         segments: list[ToolUseSegment],
-        scorer: "ToolScorerProtocol | None" = None,
+        scorer: ToolScorerProtocol | None = None,
         tool_descriptions: dict[str, str] | None = None,
         normalize: bool = True,
         verbose: bool = False,

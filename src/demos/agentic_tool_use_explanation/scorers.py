@@ -432,7 +432,7 @@ class LogProbToolScorer:
         *,
         target_tool: str,
         tool_descriptions: dict[str, str],
-    ) -> "np.ndarray":
+    ) -> np.ndarray:
         """Return target-tool probabilities from candidate continuation logprobs."""
         import numpy as np
 

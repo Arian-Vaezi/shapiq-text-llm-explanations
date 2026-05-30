@@ -16,9 +16,9 @@ from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
     DEFAULT_LOGPROB_MODEL_ID,
-    LLMToolScorer,
     LexicalToolRouter,
     LexicalToolScorer,
+    LLMToolScorer,
     LogProbToolScorer,
     MockLLM,
     ToolChoice,
@@ -26,6 +26,7 @@ from scorers import (
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
+
     import shapiq
 
 SegmentSource = Literal["system", "user"]
@@ -776,8 +777,9 @@ def main() -> None:
         return
 
     try:
-        from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
         from tool_game import ToolUseGame
+
+        from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
     except Exception as error:  # noqa: BLE001
         st.error(
             "The demo controls are ready, but the full shapiq explanation stack "
@@ -847,9 +849,7 @@ def main() -> None:
     top_score = 0.0 if top is None else float(top["attribution"])
     interpretation_sentence = notes[0] if notes else "No interpretation is available for this run."
 
-    compare_with_lexical = (
-        show_lexical_comparison and primary_label != "Keyword baseline"
-    )
+    compare_with_lexical = show_lexical_comparison and primary_label != "Keyword baseline"
     llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
     lexical_result = None
     if compare_with_lexical:
