@@ -13,7 +13,7 @@ import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
-from scorers import LLMToolScorer, LexicalToolRouter, MockLLM, ToolChoice
+from scorers import LLMToolScorer, LexicalToolRouter, LexicalToolScorer, MockLLM, ToolChoice
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
@@ -111,7 +111,7 @@ section[data-testid="stSidebar"] {
 }
 .metric-strip {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
     margin: 0.75rem 0 1.1rem 0;
 }
@@ -244,6 +244,32 @@ section[data-testid="stSidebar"] {
     color: #403d37;
     line-height: 1.42;
     margin: 0;
+}
+.setup-line {
+    background: #fffdf8;
+    border: 1px solid #ded6c4;
+    border-radius: 7px;
+    color: #2d2923;
+    margin: 0 0 1rem 0;
+    padding: 0.8rem 0.95rem;
+}
+.setup-line code {
+    background: #efe8d9;
+    border-radius: 4px;
+    padding: 0.08rem 0.22rem;
+}
+@media (max-width: 850px) {
+    .scenario-panel,
+    .mock-chat,
+    .metric-strip,
+    .verdict {
+        grid-template-columns: 1fr;
+    }
+    .scenario-hint,
+    .verdict-card {
+        border-left: 0;
+        padding-left: 0;
+    }
 }
 </style>
 """
@@ -427,8 +453,8 @@ def build_interpretation_notes(
 
     notes.append(
         f"The full-prompt target-tool support score is {full_score:.3f}. "
-        "This is still lexical scaffolding until `ToolUseGame.score_segments` is replaced "
-        "with an LLM/tool-router scorer."
+        "This is still lexical/mock scoring scaffolding until a real local "
+        "tool-router scorer is integrated."
     )
     return notes
 
@@ -513,7 +539,7 @@ def polish_heatmap(
     return fig
 
 
-def main() -> None:
+def _legacy_main() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
     st.markdown(
         """
@@ -852,6 +878,381 @@ def main() -> None:
             if fig_ax is not None:
                 fig, ax = fig_ax
                 st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
+
+    st.caption(f"Demo path: `{Path(__file__).parent.relative_to(Path.cwd())}`")
+
+
+def main() -> None:
+    st.markdown(CSS, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="tool-title">
+            <h1>Agentic Tool-Use Explanation</h1>
+            <p>Explain target-tool support by attributing it to system and user prompt segments.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    mode = st.sidebar.radio(
+        "Demo Mode",
+        ["Sample Scenario", "Mock LLM Router"],
+        index=0,
+    )
+    scorer_backend = st.sidebar.selectbox(
+        "Scorer backend",
+        ["Mock LLM judge", "Lexical baseline", "Compare both"],
+        index=0,
+    )
+    st.sidebar.caption("Local HuggingFace/Gemma scorer will be added next.")
+
+    router = LexicalToolRouter()
+    if mode == "Sample Scenario":
+        trace_name = st.sidebar.selectbox("Scenario", list(SAMPLE_TRACES))
+        trace = SAMPLE_TRACES[trace_name]
+        key = clean_key(trace_name)
+        default_target = str(trace["target_tool"])
+        mock_choice = None
+    else:
+        st.markdown('<div class="section-label">Scenario / User Input</div>', unsafe_allow_html=True)
+        mock_input = st.text_area(
+            "Mock LLM user input",
+            value=DEFAULT_MOCK_QUERY,
+            height=86,
+            help=(
+                "This local mock router chooses a tool only. It does not call a real model "
+                "or any tool."
+            ),
+        )
+        mock_choice = router.choose_tool(mock_input, TOOLS)
+        trace_name = "Mock LLM Router"
+        trace = build_mock_trace(mock_input, mock_choice)
+        key = "mock_llm_router"
+        default_target = mock_choice.tool
+
+    target_tool = st.sidebar.selectbox(
+        "Target tool",
+        list(TOOLS),
+        index=list(TOOLS).index(default_target),
+        key=f"{key}_target_tool",
+    )
+
+    system_segments = build_segments(trace["system_segments"], "system")
+    user_segments = build_segments(trace["user_segments"], "user")
+    segments = system_segments + user_segments
+    labels = [segment.label for segment in segments]
+    budget = budget_for_demo(len(segments))
+
+    with st.sidebar.expander("Advanced settings", expanded=False):
+        st.caption(f"index: fixed `{DEFAULT_INDEX}`")
+        st.caption(f"max_order: fixed `{DEFAULT_MAX_ORDER}`")
+        st.caption(f"budget: `{budget}` auto")
+        show_prompt_segments = st.checkbox("show prompt segments", value=False)
+        show_value_function_details = st.checkbox("show value function details", value=False)
+        show_scoring_prompt_preview = st.checkbox("show scoring prompt preview", value=False)
+        show_lexical_comparison = st.checkbox("show lexical comparison", value=False)
+
+    if len(segments) < 2:
+        st.warning("Add at least two prompt segments.")
+        return
+
+    user_request = " ".join(trace["user_segments"])
+    players_text = f"{len(system_segments)} system segments + {len(user_segments)} user segments"
+    full_prompt = build_coalition_prompt(segments)
+    empty_prompt = build_coalition_prompt([])
+    index = DEFAULT_INDEX
+    max_order = DEFAULT_MAX_ORDER
+
+    st.markdown('<div class="section-label">Scenario</div>', unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="scenario-panel">
+            <div>
+                <span class="scenario-tag">Agentic tool-use</span>
+                <h3>{escape(trace_name)}</h3>
+                <p>{escape(user_request)}</p>
+            </div>
+            <div class="scenario-hint">
+                <strong>Target tool:</strong> {escape(target_tool)}<br>
+                <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
+                <strong>Players:</strong> {escape(players_text)}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<div class="section-label">Router Decision Summary</div>', unsafe_allow_html=True)
+    if mock_choice is None:
+        st.info(f"Sample trace target: `{trace['target_tool']}`. {trace['takeaway']}")
+    else:
+        router_left, router_right = st.columns([0.85, 1.15])
+        with router_left:
+            st.metric("Recommended tool", mock_choice.tool, f"{mock_choice.score:.3f}")
+            st.caption(mock_choice.reason)
+        with router_right:
+            score_frame = pd.DataFrame(
+                [
+                    {"tool": tool, "score": score}
+                    for tool, score in sorted(
+                        mock_choice.scores.items(),
+                        key=lambda item: item[1],
+                        reverse=True,
+                    )
+                ]
+            )
+            st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
+
+    st.markdown('<div class="section-label">Explanation Setup</div>', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="setup-line">
+            <strong>Value function:</strong>
+            <code>v(S) = score(target tool | prompt built from selected segments S)</code><br>
+            A coalition keeps only selected system/user segments.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    with st.expander("Why this is a Shapley game", expanded=False):
+        st.markdown(
+            """
+            Prompt segments are treated as cooperative-game players. For each coalition, the app
+            rebuilds the prompt using only the selected system and user segments, scores support
+            for the target tool, and asks shapiq to attribute that score back to individual
+            segments and segment pairs.
+
+            This follows the same idea as SHAP and TokenSHAP: explain a model-facing value
+            function by comparing many subsets of input parts.
+
+            References: [SHAP](https://arxiv.org/abs/1705.07874) and
+            [TokenSHAP](https://aclanthology.org/2024.nlp4science-1.1.pdf).
+            """
+        )
+
+    with st.expander("Show prompt segments / players", expanded=show_prompt_segments):
+        segment_left, segment_right = st.columns(2)
+        with segment_left:
+            st.markdown("**System prompt segments**")
+            for segment in system_segments:
+                st.markdown(
+                    (
+                        "<div class='segment-box'>"
+                        f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
+                    ),
+                    unsafe_allow_html=True,
+                )
+        with segment_right:
+            st.markdown("**User request segments**")
+            for segment in user_segments:
+                st.markdown(
+                    (
+                        "<div class='segment-box user'>"
+                        f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+    run = st.button("Run explanation", type="primary", use_container_width=True)
+    if not run:
+        st.info("Choose a scenario and target tool, then run the explanation.")
+        return
+
+    try:
+        from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
+        from tool_game import ToolUseGame
+    except Exception as error:  # noqa: BLE001
+        st.error(
+            "The demo controls are ready, but the full shapiq explanation stack "
+            f"could not be imported in this local environment: {error}"
+        )
+        return
+
+    llm_scorer = LLMToolScorer(llm=MockLLM())
+    lexical_scorer = LexicalToolScorer()
+    if scorer_backend == "Lexical baseline":
+        primary_scorer = lexical_scorer
+        primary_label = "Lexical baseline"
+    else:
+        primary_scorer = llm_scorer
+        primary_label = "Mock LLM judge"
+
+    full_score = primary_scorer.score_batch(
+        [full_prompt],
+        target_tool=target_tool,
+        tool_descriptions=TOOLS,
+    )[0]
+    empty_score = primary_scorer.score_batch(
+        [empty_prompt],
+        target_tool=target_tool,
+        tool_descriptions=TOOLS,
+    )[0]
+
+    with st.spinner("Computing tool-use attributions..."):
+        game = ToolUseGame(
+            target_tool=target_tool,
+            segments=segments,
+            scorer=primary_scorer,
+            tool_descriptions=TOOLS,
+        )
+        approximator = make_approximator(index, game.n_players, max_order)
+        explanation = approximator.approximate(budget=budget, game=game)
+        first_order = explanation.get_n_order(order=1)
+        attribution_frame = values_to_frame(first_order, segments)
+        pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
+        pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
+        notes = build_interpretation_notes(
+            attribution_frame,
+            pair_label,
+            pair_value,
+            full_score,
+        )
+
+    top = attribution_frame.iloc[0] if not attribution_frame.empty else None
+    top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
+    top_score = 0.0 if top is None else float(top["attribution"])
+    interpretation_sentence = notes[0] if notes else "No interpretation is available for this run."
+
+    compare_with_lexical = (
+        scorer_backend == "Compare both"
+        or (show_lexical_comparison and primary_label != "Lexical baseline")
+    )
+    lexical_result = None
+    if compare_with_lexical:
+        with st.spinner("Computing lexical baseline comparison..."):
+            lexical_game = ToolUseGame(
+                target_tool=target_tool,
+                segments=segments,
+                scorer=lexical_scorer,
+                tool_descriptions=TOOLS,
+            )
+            lexical_approximator = make_approximator(index, lexical_game.n_players, max_order)
+            lexical_explanation = lexical_approximator.approximate(
+                budget=budget,
+                game=lexical_game,
+            )
+            lexical_first_order = lexical_explanation.get_n_order(order=1)
+            lexical_frame = values_to_frame(lexical_first_order, segments)
+            lexical_matrix = pairwise_matrix_from_explanation(
+                lexical_explanation,
+                lexical_game.n_players,
+            )
+            lexical_pair_label, lexical_pair_value = strongest_pair(lexical_matrix, labels)
+            lexical_full_score = lexical_scorer.score_batch(
+                [full_prompt],
+                target_tool=target_tool,
+                tool_descriptions=TOOLS,
+            )[0]
+            lexical_empty_score = lexical_scorer.score_batch(
+                [empty_prompt],
+                target_tool=target_tool,
+                tool_descriptions=TOOLS,
+            )[0]
+            lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
+            lexical_result = {
+                "label": "Lexical baseline",
+                "full_score": lexical_full_score,
+                "empty_score": lexical_empty_score,
+                "top": "No segment"
+                if lexical_top is None
+                else f"{lexical_top['segment']} ({lexical_top['source']})",
+                "top_value": 0.0 if lexical_top is None else float(lexical_top["attribution"]),
+                "pair": lexical_pair_label,
+                "pair_value": lexical_pair_value,
+            }
+
+    debug_requested = (
+        show_value_function_details
+        or show_scoring_prompt_preview
+        or compare_with_lexical
+        or scorer_backend == "Compare both"
+    )
+    tab_names = ["Summary", "Attribution", "Interactions"]
+    if debug_requested:
+        tab_names.append("Debug")
+    tabs = st.tabs(tab_names)
+
+    with tabs[0]:
+        st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="metric-strip">
+                <div class="metric-card"><span>Target Tool</span><strong>{escape(target_tool)}</strong></div>
+                <div class="metric-card"><span>Full Support Score</span><strong>{full_score:.3f}</strong></div>
+                <div class="metric-card"><span>Empty-Prompt Score</span><strong>{empty_score:.3f}</strong></div>
+                <div class="metric-card"><span>Scorer</span><strong>{escape(primary_label)}</strong></div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        summary_left, summary_right = st.columns(2)
+        with summary_left:
+            st.metric("Top contributing segment", top_label, f"{top_score:.3f}")
+        with summary_right:
+            st.metric("Strongest pairwise interaction", pair_label, f"{pair_value:.3f}")
+        st.info(interpretation_sentence)
+
+    with tabs[1]:
+        st.markdown("**First-order attribution ranking**")
+        st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
+        fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
+        if fig_ax is not None:
+            fig, ax = fig_ax
+            st.pyplot(polish_bar(fig, ax), clear_figure=True)
+
+    with tabs[2]:
+        st.markdown("**Pairwise interaction heatmap**")
+        fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
+        if fig_ax is not None:
+            fig, ax = fig_ax
+            st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
+        st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
+
+    if debug_requested:
+        with tabs[3]:
+            if lexical_result is not None:
+                st.markdown("**Lexical vs Mock comparison**")
+                comparison_rows = [
+                    {
+                        "scorer": primary_label,
+                        "full_score": full_score,
+                        "empty_score": empty_score,
+                        "top_segment": top_label,
+                        "top_attribution": top_score,
+                        "strongest_pair": pair_label,
+                        "pair_value": pair_value,
+                    },
+                    {
+                        "scorer": lexical_result["label"],
+                        "full_score": lexical_result["full_score"],
+                        "empty_score": lexical_result["empty_score"],
+                        "top_segment": lexical_result["top"],
+                        "top_attribution": lexical_result["top_value"],
+                        "strongest_pair": lexical_result["pair"],
+                        "pair_value": lexical_result["pair_value"],
+                    },
+                ]
+                comparison_frame = pd.DataFrame(comparison_rows)
+                st.dataframe(comparison_frame, use_container_width=True, hide_index=True)
+            if show_scoring_prompt_preview:
+                st.markdown("**Scoring prompt preview**")
+                st.code(
+                    llm_scorer.build_scoring_prompt(
+                        full_prompt,
+                        target_tool=target_tool,
+                        tool_descriptions=TOOLS,
+                    ),
+                    language="text",
+                )
+            if show_value_function_details:
+                st.markdown("**Value function details**")
+                st.write(f"Index: `{index}`")
+                st.write(f"Max order: `{max_order}`")
+                st.write(f"Budget: `{budget}`")
+                st.write("Full coalition prompt:")
+                st.code(full_prompt, language="text")
+                st.write("Empty coalition prompt:")
+                st.code(empty_prompt, language="text")
 
     st.caption(f"Demo path: `{Path(__file__).parent.relative_to(Path.cwd())}`")
 

@@ -7,9 +7,9 @@ cooperative game. For each coalition of prompt segments, the app scores how
 strongly the visible text supports calling a target tool, then uses shapiq to
 estimate first-order attributions and second-order interactions.
 
-The interface follows the same structure as the RAG retrieval demo: scenario
-panel, metric cards, input trace, game setup, verdict, interpretation notes, and
-result tabs.
+The current interface is intentionally compact for development-stage demos:
+scenario/input first, a short router summary, a minimal explanation setup, and
+results only after running the explanation.
 
 The demo intentionally reuses package visualization functions implemented for
 sentence/text players:
@@ -22,11 +22,7 @@ sentence/text players:
 From the repository root:
 
 ```bash
-MPLCONFIGDIR=.cache/matplotlib XDG_CACHE_HOME=.cache PYTHONPATH=src \
-  .venv/bin/streamlit run src/demos/agentic_tool_use_explanation/app.py \
-  --server.port 8501 \
-  --server.headless true \
-  --browser.gatherUsageStats false
+uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
 ```
 
 Then open:
@@ -39,12 +35,11 @@ http://localhost:8501
 the command on their own machine, or use the displayed Network URL if they are on
 the same local network.
 
-The `MPLCONFIGDIR` and `XDG_CACHE_HOME` settings keep Matplotlib/fontconfig
-caches inside the project. This avoids slow or failing startup on macOS when the
-default user cache directories are not writable.
-
 If port `8501` is already in use, change `--server.port` to another port such as
 `8502` and open that local URL instead.
+
+If your environment has unwritable Matplotlib/fontconfig cache directories, set
+`MPLCONFIGDIR` and `XDG_CACHE_HOME` to writable paths before starting Streamlit.
 
 ### Minimal Local Environment
 
@@ -59,19 +54,34 @@ the minimal environment needed for the current Streamlit demo:
 This does not install a real LLM backend. Do not install `torch` or
 `transformers` unless you are working on the later Gemma integration.
 
+## Current UI Flow
+
+1. Select either a curated sample scenario or the local Mock LLM Router input.
+2. Choose the target tool to explain.
+3. Pick a scorer backend. The default is the Mock LLM judge; lexical comparison
+   is hidden unless selected or enabled in advanced settings.
+4. Run the explanation.
+5. Inspect the Summary, Attribution, and Interactions tabs.
+6. Use advanced/debug controls only when you need prompt segments,
+   value-function details, scoring prompt previews, or lexical comparison.
+
+This demo currently uses lexical/mock scoring scaffolding. A real local
+HuggingFace/Gemma scorer is the next integration step.
+
 ## What The App Shows
 
-- A default **Mock LLM Router** mode with a user-input box.
-- A mock assistant response that recommends one of the available tools and shows
-  a short reason plus per-tool scores.
 - A sample-scenario mode with fixed system prompt segments and user request
   segments.
+- A **Mock LLM Router** mode with a user-input box, recommended tool, short
+  reason, and per-tool scores.
 - Target tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
-- Metric cards for number of prompt segments, empty-prompt score, and full-prompt score.
+- A compact setup panel for the coalition value function.
+- Summary metrics for target-tool support after running the explanation.
 - First-order attribution ranking: which segment most pushes the tool decision.
 - Segment interaction heatmap: which system/user segments interact under the selected shapiq index.
 - System/user block outlines on the heatmap, so the hierarchy of prompt parts is visible at a glance.
-- Coalition audit table: exact target-tool scores for small segment combinations.
+- Advanced/debug sections for prompt segments, scoring prompts, value-function
+  details, and lexical comparison.
 
 ## Segmentation
 
