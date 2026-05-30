@@ -386,12 +386,14 @@ class LogProbToolScorer:
         self,
         model_id: str = DEFAULT_LOGPROB_MODEL_ID,
         candidate_template: str = DEFAULT_CANDIDATE_TEMPLATE,
+        candidate_texts: dict[str, str] | None = None,
         device: str | None = None,
         dtype: str = "auto",
         normalize_by_length: bool = True,
     ) -> None:
         self.model_id = model_id
         self.candidate_template = candidate_template
+        self.candidate_texts = candidate_texts or {}
         self.device = device
         self.dtype = dtype
         self.normalize_by_length = normalize_by_length
@@ -418,6 +420,12 @@ class LogProbToolScorer:
         self.model.to(self.device)
         self.model.eval()
 
+    def _candidate_continuation(self, tool_name: str) -> str:
+        """Return the continuation used to score one candidate tool."""
+        if tool_name in self.candidate_texts:
+            return self.candidate_texts[tool_name]
+        return self.candidate_template.format(tool_name=tool_name)
+
     def score_batch(
         self,
         prompts: list[str],
@@ -439,13 +447,13 @@ class LogProbToolScorer:
         target_index = candidate_tools.index(target_tool)
         scores = []
         for prompt in prompts:
+            candidate_continuations = [
+                self._candidate_continuation(tool_name) for tool_name in candidate_tools
+            ]
             candidate_logprobs = np.asarray(
                 [
-                    self._sequence_logprob(
-                        prompt,
-                        self.candidate_template.format(tool_name=tool_name),
-                    )
-                    for tool_name in candidate_tools
+                    self._sequence_logprob(prompt, continuation)
+                    for continuation in candidate_continuations
                 ],
                 dtype=float,
             )
@@ -458,6 +466,7 @@ class LogProbToolScorer:
                 {
                     "target_tool": target_tool,
                     "candidate_tools": candidate_tools.copy(),
+                    "candidate_continuations": candidate_continuations,
                     "candidate_logprobs": candidate_logprobs.tolist(),
                     "candidate_probs": candidate_probs.tolist(),
                     "final_score": final_score,

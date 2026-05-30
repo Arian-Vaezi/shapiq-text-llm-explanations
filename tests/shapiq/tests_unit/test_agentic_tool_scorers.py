@@ -28,9 +28,13 @@ TOOL_DESCRIPTIONS = {
 }
 
 
-def make_fake_logprob_scorer(logprobs: dict[str, float]) -> LogProbToolScorer:
+def make_fake_logprob_scorer(
+    logprobs: dict[str, float],
+    candidate_texts: dict[str, str] | None = None,
+) -> LogProbToolScorer:
     scorer = LogProbToolScorer.__new__(LogProbToolScorer)
     scorer.candidate_template = "The correct tool is {tool_name}."
+    scorer.candidate_texts = candidate_texts or {}
     scorer.normalize_by_length = True
     scorer.last_debug_outputs = []
 
@@ -240,6 +244,58 @@ def test_logprob_tool_scorer_debug_probabilities_sum_to_one() -> None:
     assert set(debug_output["candidate_tools"]) == set(TOOL_DESCRIPTIONS)
     assert np.isclose(sum(debug_output["candidate_probs"]), 1.0)
     assert 0.0 <= debug_output["final_score"] <= 1.0
+
+
+def test_logprob_tool_scorer_uses_candidate_text_override_for_no_tool() -> None:
+    no_tool_text = "The assistant should answer directly without using an external tool."
+    scorer = make_fake_logprob_scorer(
+        {"weather_tool": 1.0, "no_tool": 0.5},
+        candidate_texts={"no_tool": no_tool_text},
+    )
+
+    scorer.score_batch(
+        ["Explain photosynthesis."],
+        target_tool="no_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    debug_output = scorer.last_debug_outputs[0]
+    no_tool_index = debug_output["candidate_tools"].index("no_tool")
+    assert debug_output["candidate_continuations"][no_tool_index] == no_tool_text
+
+
+def test_logprob_tool_scorer_falls_back_to_template_for_missing_candidate_text() -> None:
+    scorer = make_fake_logprob_scorer(
+        {"weather_tool": 1.0, "no_tool": 0.5},
+        candidate_texts={"no_tool": "Answer directly."},
+    )
+
+    scorer.score_batch(
+        ["Will it rain tomorrow?"],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    debug_output = scorer.last_debug_outputs[0]
+    weather_index = debug_output["candidate_tools"].index("weather_tool")
+    assert (
+        debug_output["candidate_continuations"][weather_index]
+        == "The correct tool is weather_tool."
+    )
+
+
+def test_logprob_tool_scorer_debug_contains_candidate_continuations() -> None:
+    scorer = make_fake_logprob_scorer({"weather_tool": 1.0})
+
+    scorer.score_batch(
+        ["Will it rain tomorrow?"],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    debug_output = scorer.last_debug_outputs[0]
+    assert "candidate_continuations" in debug_output
+    assert len(debug_output["candidate_continuations"]) == len(TOOL_DESCRIPTIONS)
 
 
 def test_logprob_tool_scorer_requires_candidate_tools() -> None:

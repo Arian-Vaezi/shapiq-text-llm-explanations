@@ -42,6 +42,12 @@ MOCK_SYSTEM_SEGMENTS = [
     "Use web_search_tool when the answer depends on current, latest, recent, or live information.",
     "Use no_tool for stable conceptual explanations that do not require external data.",
 ]
+DESCRIPTIVE_CANDIDATE_TEXTS = {
+    "weather_tool": "The assistant should use the weather forecast tool.",
+    "calculator_tool": "The assistant should use the calculator tool.",
+    "web_search_tool": "The assistant should use the web search tool.",
+    "no_tool": "The assistant should answer directly without using an external tool.",
+}
 
 
 st.set_page_config(
@@ -73,12 +79,14 @@ def load_hf_generator(
 def load_logprob_scorer(
     model_id: str,
     candidate_template: str,
+    candidate_texts: dict[str, str] | None,
     normalize_by_length: bool,
 ) -> LogProbToolScorer:
     """Load and cache the optional local HuggingFace logprob scorer."""
     return LogProbToolScorer(
         model_id=model_id,
         candidate_template=candidate_template,
+        candidate_texts=candidate_texts,
         normalize_by_length=normalize_by_length,
     )
 
@@ -617,6 +625,7 @@ def main() -> None:
     hf_token = ""
     logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
     candidate_template = DEFAULT_CANDIDATE_TEMPLATE
+    candidate_texts = None
     normalize_by_length = True
     if scorer_backend == "Local model scorer":
         with st.sidebar.expander("Local model settings", expanded=True):
@@ -638,6 +647,12 @@ def main() -> None:
                 "candidate template",
                 value=DEFAULT_CANDIDATE_TEMPLATE,
             )
+            use_descriptive_candidates = st.checkbox(
+                "use descriptive candidate continuations",
+                value=False,
+            )
+            if use_descriptive_candidates:
+                candidate_texts = DESCRIPTIVE_CANDIDATE_TEXTS
             normalize_by_length = st.checkbox("normalize by length", value=True)
 
     router = LexicalToolRouter()
@@ -838,6 +853,7 @@ def main() -> None:
                 primary_scorer = load_logprob_scorer(
                     logprob_model_id,
                     candidate_template,
+                    candidate_texts,
                     bool(normalize_by_length),
                 )
             except Exception as error:  # noqa: BLE001
@@ -1006,6 +1022,7 @@ def main() -> None:
                         "used_fallback",
                         "fallback_score",
                         "candidate_tools",
+                        "candidate_continuations",
                         "candidate_logprobs",
                         "candidate_probs",
                         "final_score",

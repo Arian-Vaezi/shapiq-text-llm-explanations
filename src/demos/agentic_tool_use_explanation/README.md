@@ -152,6 +152,14 @@ softmax-normalizes those candidate scores into a target-tool probability. This
 is inspired by the same general idea as the jailbreak demo: use continuation
 likelihoods as coalition values rather than free-form generated scores.
 
+The logprob scorer can also use per-tool candidate continuations instead of one
+uniform template. This can improve calibration when tool names have overlapping
+semantics, such as `weather_tool` versus `web_search_tool`, or when the literal
+tool name is unnatural, such as `no_tool`. In the Streamlit UI, enable
+descriptive candidate continuations in the Logprob scorer settings to score
+phrases like "The assistant should answer directly without using an external
+tool." for `no_tool`.
+
 Run the app with:
 
 ```bash
@@ -179,7 +187,15 @@ Colab-style scorer wiring:
 from demos.agentic_tool_use_explanation.scorers import LogProbToolScorer
 from demos.agentic_tool_use_explanation.tool_game import ToolUseGame
 
-scorer = LogProbToolScorer(model_id="Qwen/Qwen2.5-1.5B-Instruct")
+scorer = LogProbToolScorer(
+    model_id="Qwen/Qwen2.5-1.5B-Instruct",
+    candidate_texts={
+        "weather_tool": "The assistant should use the weather forecast tool.",
+        "calculator_tool": "The assistant should use the calculator tool.",
+        "web_search_tool": "The assistant should use the web search tool.",
+        "no_tool": "The assistant should answer directly without using an external tool.",
+    },
+)
 game = ToolUseGame(
     target_tool="weather_tool",
     segments=segments,
