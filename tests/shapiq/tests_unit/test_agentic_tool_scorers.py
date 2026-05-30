@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
@@ -21,6 +22,51 @@ TOOL_DESCRIPTIONS = {
 }
 
 
+class FakeGenerator:
+    """Small deterministic generator for scorer tests."""
+
+    def __init__(self, response: str) -> None:
+        self.response = response
+
+    def generate(self, prompt: str) -> str:
+        del prompt
+        return self.response
+
+
+def test_llm_tool_scorer_parse_score_accepts_plain_number() -> None:
+    scorer = LLMToolScorer(llm=FakeGenerator("0.7"))
+
+    assert scorer.parse_score("0.7") == 0.7
+
+
+def test_llm_tool_scorer_parse_score_accepts_labeled_number() -> None:
+    scorer = LLMToolScorer(llm=FakeGenerator("Score: 0.7"))
+
+    assert scorer.parse_score("Score: 0.7") == 0.7
+    assert scorer.parse_score("The score is 0.7\n") == 0.7
+
+
+def test_llm_tool_scorer_parse_score_rejects_out_of_range_number() -> None:
+    scorer = LLMToolScorer(llm=FakeGenerator("1.5"))
+
+    with pytest.raises(ValueError):
+        scorer.parse_score("1.5")
+
+
+def test_llm_tool_scorer_parse_score_rejects_tool_index() -> None:
+    scorer = LLMToolScorer(llm=FakeGenerator("tool 3"))
+
+    with pytest.raises(ValueError):
+        scorer.parse_score("tool 3")
+
+
+def test_llm_tool_scorer_parse_score_rejects_text_without_number() -> None:
+    scorer = LLMToolScorer(llm=FakeGenerator("not a number"))
+
+    with pytest.raises(ValueError):
+        scorer.parse_score("not a number")
+
+
 def test_llm_tool_scorer_parses_numeric_output() -> None:
     scorer = LLMToolScorer(llm=MockLLM("0.75"))
 
@@ -33,21 +79,61 @@ def test_llm_tool_scorer_parses_numeric_output() -> None:
     assert scores == [0.75]
 
 
-def test_llm_tool_scorer_clamps_numeric_output() -> None:
-    scorer = LLMToolScorer(llm=MockLLM("1.7"))
+def test_llm_tool_scorer_falls_back_on_out_of_range_numeric_output() -> None:
+    fallback = LexicalToolScorer()
+    scorer = LLMToolScorer(llm=MockLLM("1.7"), fallback_scorer=fallback)
+    prompt = "User asks whether it will rain in Berlin tomorrow."
 
     scores = scorer.score_batch(
-        ["User asks whether it will rain in Berlin tomorrow."],
+        [prompt],
         target_tool="weather_tool",
         tool_descriptions=TOOL_DESCRIPTIONS,
     )
 
-    assert scores == [1.0]
+    assert scores == fallback.score_batch(
+        [prompt],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+    assert scorer.last_debug_outputs[0]["used_fallback"] is True
+
+
+def test_llm_tool_scorer_score_batch_uses_fake_generator() -> None:
+    scorer = LLMToolScorer(llm=FakeGenerator("0.8"))
+
+    scores = scorer.score_batch(
+        [
+            "Use weather_tool for forecasts.",
+            "Will it rain in Berlin tomorrow?",
+        ],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == [0.8, 0.8]
+    assert scorer.last_debug_outputs == [
+        {
+            "target_tool": "weather_tool",
+            "raw_output": "0.8",
+            "parsed_score": 0.8,
+            "used_fallback": False,
+            "fallback_score": None,
+            "final_score": 0.8,
+        },
+        {
+            "target_tool": "weather_tool",
+            "raw_output": "0.8",
+            "parsed_score": 0.8,
+            "used_fallback": False,
+            "fallback_score": None,
+            "final_score": 0.8,
+        },
+    ]
 
 
 def test_llm_tool_scorer_falls_back_on_invalid_output() -> None:
     fallback = LexicalToolScorer()
-    scorer = LLMToolScorer(llm=MockLLM("not a score"), fallback_scorer=fallback)
+    scorer = LLMToolScorer(llm=FakeGenerator("not a score"), fallback_scorer=fallback)
     prompt = "Use weather_tool for forecast questions. Will it rain in Berlin tomorrow?"
 
     scores = scorer.score_batch(
@@ -61,6 +147,13 @@ def test_llm_tool_scorer_falls_back_on_invalid_output() -> None:
         target_tool="weather_tool",
         tool_descriptions=TOOL_DESCRIPTIONS,
     )
+    assert len(scorer.last_debug_outputs) == 1
+    debug_output = scorer.last_debug_outputs[0]
+    assert debug_output["raw_output"] == "not a score"
+    assert debug_output["parsed_score"] is None
+    assert debug_output["used_fallback"] is True
+    assert debug_output["fallback_score"] == scores[0]
+    assert debug_output["final_score"] == scores[0]
 
 
 def test_lexical_tool_scorer_returns_one_score_per_prompt() -> None:

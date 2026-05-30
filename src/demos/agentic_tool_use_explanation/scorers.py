@@ -4,8 +4,12 @@ from __future__ import annotations
 
 import math
 import re
+import sys
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Protocol
+
+DEFAULT_HF_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 
 TOOL_KEYWORDS = {
     "weather_tool": {
@@ -85,6 +89,41 @@ class TextGeneratorProtocol(Protocol):
 
     def generate(self, prompt: str) -> str:
         """Generate a text response for one prompt."""
+
+
+@dataclass
+class HuggingFaceTextGenerator:
+    """Adapt the shared HuggingFace wrapper to TextGeneratorProtocol."""
+
+    model_id: str = DEFAULT_HF_MODEL_ID
+    device: str = "auto"
+    hf_token: str | None = None
+    max_new_tokens: int = 8
+    use_chat_template: bool = True
+
+    def __post_init__(self) -> None:
+        wrapper_device = "cuda" if self.device == "auto" else self.device
+        try:
+            from demos.shared.hf_model import HFModelWrapper
+        except ModuleNotFoundError:
+            src_dir = Path(__file__).resolve().parents[2]
+            if str(src_dir) not in sys.path:
+                sys.path.insert(0, str(src_dir))
+            from demos.shared.hf_model import HFModelWrapper
+
+        self._model = HFModelWrapper(
+            model_name=self.model_id,
+            device=wrapper_device,
+            hf_token=self.hf_token or None,
+        )
+
+    def generate(self, prompt: str) -> str:
+        """Generate one scoring response for an LLM-as-a-judge prompt."""
+        return self._model.generate_text(
+            prompt,
+            max_new_tokens=self.max_new_tokens,
+            chat=self.use_chat_template,
+        ).strip()
 
 
 def normalize_tokens(text: str) -> set[str]:
@@ -229,6 +268,7 @@ class LLMToolScorer:
 
     llm: TextGeneratorProtocol
     fallback_scorer: ToolScorerProtocol | None = None
+    last_debug_outputs: list[dict[str, object]] = field(default_factory=list, init=False)
 
     def __post_init__(self) -> None:
         if self.fallback_scorer is None:
@@ -242,6 +282,7 @@ class LLMToolScorer:
         tool_descriptions: dict[str, str],
     ) -> list[float]:
         """Score prompts with the LLM, falling back per prompt when needed."""
+        self.last_debug_outputs = []
         scores = []
         for prompt in prompts:
             scoring_prompt = self.build_scoring_prompt(
@@ -249,17 +290,33 @@ class LLMToolScorer:
                 target_tool=target_tool,
                 tool_descriptions=tool_descriptions,
             )
+            raw_output = None
+            parsed_score = None
+            fallback_score = None
+            used_fallback = False
             try:
-                output = self.llm.generate(scoring_prompt)
-                scores.append(self.parse_score(output))
+                raw_output = self.llm.generate(scoring_prompt)
+                parsed_score = self.parse_score(raw_output)
+                final_score = parsed_score
             except (RuntimeError, TypeError, ValueError):
-                scores.append(
-                    self._fallback_score(
-                        prompt,
-                        target_tool=target_tool,
-                        tool_descriptions=tool_descriptions,
-                    )
+                used_fallback = True
+                fallback_score = self._fallback_score(
+                    prompt,
+                    target_tool=target_tool,
+                    tool_descriptions=tool_descriptions,
                 )
+                final_score = fallback_score
+            scores.append(final_score)
+            self.last_debug_outputs.append(
+                {
+                    "target_tool": target_tool,
+                    "raw_output": raw_output,
+                    "parsed_score": parsed_score,
+                    "used_fallback": used_fallback,
+                    "fallback_score": fallback_score,
+                    "final_score": final_score,
+                }
+            )
         return scores
 
     def build_scoring_prompt(
@@ -283,11 +340,18 @@ class LLMToolScorer:
 
     def parse_score(self, output: str) -> float:
         """Parse and validate one LLM score."""
-        score = float(output.strip())
+        match = re.search(r"[-+]?(?:\d*\.\d+|\d+)(?:[eE][-+]?\d+)?", output)
+        if match is None:
+            msg = "LLM output did not contain a numeric score."
+            raise ValueError(msg)
+        score = float(match.group(0))
         if not math.isfinite(score):
             msg = "LLM score must be finite."
             raise ValueError(msg)
-        return clamp_score(score)
+        if not 0.0 <= score <= 1.0:
+            msg = "LLM score must be between 0 and 1."
+            raise ValueError(msg)
+        return score
 
     def _fallback_score(
         self,

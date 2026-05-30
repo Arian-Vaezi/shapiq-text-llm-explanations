@@ -13,7 +13,15 @@ import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
-from scorers import LLMToolScorer, LexicalToolRouter, LexicalToolScorer, MockLLM, ToolChoice
+from scorers import (
+    DEFAULT_HF_MODEL_ID,
+    HuggingFaceTextGenerator,
+    LLMToolScorer,
+    LexicalToolRouter,
+    LexicalToolScorer,
+    MockLLM,
+    ToolChoice,
+)
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
@@ -34,10 +42,28 @@ MOCK_SYSTEM_SEGMENTS = [
 
 
 st.set_page_config(
-    page_title="Agentic Tool-Use Explanation",
+    page_title="Explaining tool selection",
     page_icon="T",
     layout="wide",
 )
+
+
+@st.cache_resource
+def load_hf_generator(
+    model_id: str,
+    device: str,
+    hf_token: str | None,
+    max_new_tokens: int,
+    use_chat_template: bool,
+) -> HuggingFaceTextGenerator:
+    """Load and cache the optional local HuggingFace text generator."""
+    return HuggingFaceTextGenerator(
+        model_id=model_id,
+        device=device,
+        hf_token=hf_token,
+        max_new_tokens=max_new_tokens,
+        use_chat_template=use_chat_template,
+    )
 
 
 CSS = """
@@ -544,35 +570,53 @@ def main() -> None:
     st.markdown(
         """
         <div class="tool-title">
-            <h1>Agentic Tool-Use Explanation</h1>
-            <p>Explain target-tool support by attributing it to system and user prompt segments.</p>
+            <h1>Explaining tool selection</h1>
+            <p>Inspect which prompt parts support a tool choice.</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
     mode = st.sidebar.radio(
-        "Demo Mode",
-        ["Sample Scenario", "Mock LLM Router"],
+        "Input",
+        ["Example request", "Custom request"],
         index=0,
     )
     scorer_backend = st.sidebar.selectbox(
-        "Scorer backend",
-        ["Mock LLM judge", "Lexical baseline", "Compare both"],
+        "Scoring method",
+        ["Mock model scorer", "Keyword baseline", "Compare methods", "Local model scorer"],
         index=0,
     )
+    hf_model_id = DEFAULT_HF_MODEL_ID
+    hf_device = "auto"
+    hf_max_new_tokens = 8
+    hf_use_chat_template = True
+    hf_token = ""
+    if scorer_backend == "Local model scorer":
+        with st.sidebar.expander("Local model settings", expanded=True):
+            hf_model_id = st.text_input("model id", value=DEFAULT_HF_MODEL_ID)
+            hf_device = st.selectbox("device", ["auto", "cpu", "cuda", "mps"], index=0)
+            hf_max_new_tokens = st.number_input(
+                "max_new_tokens",
+                min_value=1,
+                max_value=64,
+                value=8,
+                step=1,
+            )
+            hf_use_chat_template = st.checkbox("use_chat_template", value=True)
+            hf_token = st.text_input("HF token", value="", type="password")
 
     router = LexicalToolRouter()
-    if mode == "Sample Scenario":
+    if mode == "Example request":
         trace_name = st.sidebar.selectbox("Scenario", list(SAMPLE_TRACES))
         trace = SAMPLE_TRACES[trace_name]
         key = clean_key(trace_name)
         default_target = str(trace["target_tool"])
         mock_choice = None
     else:
-        st.markdown('<div class="section-label">Scenario / User Input</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-label">Request</div>', unsafe_allow_html=True)
         mock_input = st.text_area(
-            "Mock LLM user input",
+            "Request text",
             value=DEFAULT_MOCK_QUERY,
             height=86,
             help=(
@@ -581,13 +625,13 @@ def main() -> None:
             ),
         )
         mock_choice = router.choose_tool(mock_input, TOOLS)
-        trace_name = "Mock LLM Router"
+        trace_name = "Custom request"
         trace = build_mock_trace(mock_input, mock_choice)
         key = "mock_llm_router"
         default_target = mock_choice.tool
 
     target_tool = st.sidebar.selectbox(
-        "Target tool",
+        "Tool to explain",
         list(TOOLS),
         index=list(TOOLS).index(default_target),
         key=f"{key}_target_tool",
@@ -599,14 +643,14 @@ def main() -> None:
     labels = [segment.label for segment in segments]
     budget = budget_for_demo(len(segments))
 
-    with st.sidebar.expander("Advanced settings", expanded=False):
+    with st.sidebar.expander("More options", expanded=False):
         st.caption(f"index: fixed `{DEFAULT_INDEX}`")
         st.caption(f"max_order: fixed `{DEFAULT_MAX_ORDER}`")
         st.caption(f"budget: `{budget}` auto")
         show_prompt_segments = st.checkbox("show prompt segments", value=False)
         show_value_function_details = st.checkbox("show value function details", value=False)
         show_scoring_prompt_preview = st.checkbox("show scoring prompt preview", value=False)
-        show_lexical_comparison = st.checkbox("show lexical comparison", value=False)
+        show_lexical_comparison = st.checkbox("show keyword comparison", value=False)
 
     if len(segments) < 2:
         st.warning("Add at least two prompt segments.")
@@ -619,17 +663,17 @@ def main() -> None:
     index = DEFAULT_INDEX
     max_order = DEFAULT_MAX_ORDER
 
-    st.markdown('<div class="section-label">Scenario</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="scenario-panel">
             <div>
-                <span class="scenario-tag">Agentic tool-use</span>
+                <span class="scenario-tag">Tool selection</span>
                 <h3>{escape(trace_name)}</h3>
                 <p>{escape(user_request)}</p>
             </div>
             <div class="scenario-hint">
-                <strong>Target tool:</strong> {escape(target_tool)}<br>
+                <strong>Tool to explain:</strong> {escape(target_tool)}<br>
                 <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
                 <strong>Players:</strong> {escape(players_text)}
             </div>
@@ -638,13 +682,16 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="section-label">Router Decision Summary</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Initial tool suggestion</div>', unsafe_allow_html=True)
+    st.caption(
+        "This is only a setup preview. Click Run explanation to compute segment attributions."
+    )
     if mock_choice is None:
-        st.info(f"Sample trace target: `{trace['target_tool']}`. {trace['takeaway']}")
+        st.info(f"Example target: `{trace['target_tool']}`. {trace['takeaway']}")
     else:
         router_left, router_right = st.columns([0.85, 1.15])
         with router_left:
-            st.metric("Recommended tool", mock_choice.tool, f"{mock_choice.score:.3f}")
+            st.metric("Suggested tool", mock_choice.tool, f"{mock_choice.score:.3f}")
             st.caption(mock_choice.reason)
         with router_right:
             score_frame = pd.DataFrame(
@@ -659,7 +706,10 @@ def main() -> None:
             )
             st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
 
-    st.markdown('<div class="section-label">Explanation Setup</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-label">How the explanation is computed</div>',
+        unsafe_allow_html=True,
+    )
     st.markdown(
         """
         <div class="setup-line">
@@ -709,7 +759,7 @@ def main() -> None:
                     unsafe_allow_html=True,
                 )
 
-    run = st.button("Run explanation", type="primary", use_container_width=True)
+    run = st.button("Run explanation", type="primary")
     if not run:
         st.info("Choose a scenario and target tool, then run the explanation.")
         return
@@ -726,12 +776,31 @@ def main() -> None:
 
     llm_scorer = LLMToolScorer(llm=MockLLM())
     lexical_scorer = LexicalToolScorer()
-    if scorer_backend == "Lexical baseline":
+    if scorer_backend == "Keyword baseline":
         primary_scorer = lexical_scorer
-        primary_label = "Lexical baseline"
+        primary_label = "Keyword baseline"
+    elif scorer_backend == "Local model scorer":
+        with st.spinner(f"Loading local HuggingFace model `{hf_model_id}`..."):
+            try:
+                hf_generator = load_hf_generator(
+                    hf_model_id,
+                    hf_device,
+                    hf_token or None,
+                    int(hf_max_new_tokens),
+                    bool(hf_use_chat_template),
+                )
+            except Exception as error:  # noqa: BLE001
+                st.error(
+                    "Could not load the local model scorer. "
+                    "Try a smaller model, CPU mode, or check your HuggingFace token. "
+                    f"Details: {error}"
+                )
+                return
+        primary_scorer = LLMToolScorer(llm=hf_generator)
+        primary_label = "Local model scorer"
     else:
         primary_scorer = llm_scorer
-        primary_label = "Mock LLM judge"
+        primary_label = "Mock model scorer"
 
     full_score = primary_scorer.score_batch(
         [full_prompt],
@@ -770,9 +839,10 @@ def main() -> None:
     interpretation_sentence = notes[0] if notes else "No interpretation is available for this run."
 
     compare_with_lexical = (
-        scorer_backend == "Compare both"
-        or (show_lexical_comparison and primary_label != "Lexical baseline")
+        scorer_backend == "Compare methods"
+        or (show_lexical_comparison and primary_label != "Keyword baseline")
     )
+    llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
     lexical_result = None
     if compare_with_lexical:
         with st.spinner("Computing lexical baseline comparison..."):
@@ -806,7 +876,7 @@ def main() -> None:
             )[0]
             lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
             lexical_result = {
-                "label": "Lexical baseline",
+                "label": "Keyword baseline",
                 "full_score": lexical_full_score,
                 "empty_score": lexical_empty_score,
                 "top": "No segment"
@@ -821,7 +891,8 @@ def main() -> None:
         show_value_function_details
         or show_scoring_prompt_preview
         or compare_with_lexical
-        or scorer_backend == "Compare both"
+        or scorer_backend == "Compare methods"
+        or bool(llm_debug_outputs)
     )
     tab_names = ["Summary", "Attribution", "Interactions"]
     if debug_requested:
@@ -833,10 +904,10 @@ def main() -> None:
         st.markdown(
             f"""
             <div class="metric-strip">
-                <div class="metric-card"><span>Target Tool</span><strong>{escape(target_tool)}</strong></div>
+                <div class="metric-card"><span>Tool to explain</span><strong>{escape(target_tool)}</strong></div>
                 <div class="metric-card"><span>Full Support Score</span><strong>{full_score:.3f}</strong></div>
                 <div class="metric-card"><span>Empty-Prompt Score</span><strong>{empty_score:.3f}</strong></div>
-                <div class="metric-card"><span>Scorer</span><strong>{escape(primary_label)}</strong></div>
+                <div class="metric-card"><span>Scoring method</span><strong>{escape(primary_label)}</strong></div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -866,8 +937,33 @@ def main() -> None:
 
     if debug_requested:
         with tabs[3]:
+            if llm_debug_outputs:
+                with st.expander("Model output diagnostics", expanded=False):
+                    displayed_debug_outputs = llm_debug_outputs[:10]
+                    if (
+                        primary_label == "Local model scorer"
+                        and displayed_debug_outputs
+                        and all(row.get("used_fallback") for row in displayed_debug_outputs)
+                    ):
+                        st.warning(
+                            "The local model did not return numeric scores for this run, "
+                            "so the keyword baseline was used as fallback."
+                        )
+                    debug_frame = pd.DataFrame(displayed_debug_outputs)
+                    debug_columns = [
+                        "raw_output",
+                        "parsed_score",
+                        "used_fallback",
+                        "fallback_score",
+                        "final_score",
+                    ]
+                    st.dataframe(
+                        debug_frame[[column for column in debug_columns if column in debug_frame]],
+                        use_container_width=True,
+                        hide_index=True,
+                    )
             if lexical_result is not None:
-                st.markdown("**Lexical vs Mock comparison**")
+                st.markdown("**Scorer comparison**")
                 comparison_rows = [
                     {
                         "scorer": primary_label,

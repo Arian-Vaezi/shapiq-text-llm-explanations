@@ -1,4 +1,4 @@
-# Agentic Tool-Use Explanation Demo
+# Explaining Tool Selection Demo
 
 Streamlit framework for the **Agentic tool-use explanations** demo.
 
@@ -56,32 +56,34 @@ This does not install a real LLM backend. Do not install `torch` or
 
 ## Current UI Flow
 
-1. Select either a curated sample scenario or the local Mock LLM Router input.
-2. Choose the target tool to explain.
-3. Pick a scorer backend. The default is the Mock LLM judge; lexical comparison
-   is hidden unless selected or enabled in advanced settings.
+1. Select either an example request or a custom request.
+2. Choose the tool to explain.
+3. Pick a scoring method. The default is the Mock model scorer; keyword
+   comparison is hidden unless selected or enabled in more options.
 4. Run the explanation.
 5. Inspect the Summary, Attribution, and Interactions tabs.
 6. Use advanced/debug controls only when you need prompt segments,
-   value-function details, scoring prompt previews, or lexical comparison.
+   value-function details, scoring prompt previews, or keyword comparison.
 
-This demo currently uses lexical/mock scoring scaffolding. A real local
-HuggingFace/Gemma scorer is the next integration step.
+The default demo currently uses keyword/mock scoring scaffolding. A local model
+scorer is optional and loaded only when selected.
 
 ## What The App Shows
 
-- A sample-scenario mode with fixed system prompt segments and user request
+- An example-request mode with fixed system prompt segments and user request
   segments.
-- A **Mock LLM Router** mode with a user-input box, recommended tool, short
+- A custom-request mode with a user-input box, suggested tool, short
   reason, and per-tool scores.
-- Target tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
+- Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
+- Optional Local model scorer backend, loaded lazily only after it is
+  selected and the explanation is run.
 - A compact setup panel for the coalition value function.
 - Summary metrics for target-tool support after running the explanation.
 - First-order attribution ranking: which segment most pushes the tool decision.
 - Segment interaction heatmap: which system/user segments interact under the selected shapiq index.
 - System/user block outlines on the heatmap, so the hierarchy of prompt parts is visible at a glance.
 - Advanced/debug sections for prompt segments, scoring prompts, value-function
-  details, and lexical comparison.
+  details, and keyword comparison.
 
 ## Segmentation
 
@@ -96,7 +98,7 @@ model-backed version, the segmentation can be replaced or extended with:
 
 ## Scoring Mode
 
-The current scorer is lightweight lexical scaffolding. The Mock LLM Router does
+The current scorer is lightweight keyword scaffolding. The custom-request router does
 not call a real LLM and does not execute any tools. It only selects which tool
 the agent should use for the user request.
 
@@ -118,8 +120,37 @@ The router returns the handoff shape expected by a future local Gemma backend:
 This lets the UI and shapiq explanation flow be developed without API keys, GPU
 dependencies, or Hugging Face model downloads.
 
-For the final project demo, replace `ToolUseGame.score_segments` in `tool_game.py`
-with a model-backed scorer such as:
+## Optional Local Model Scorer
+
+The default scoring method is the **Mock model scorer** so the demo stays fast and
+usable on a clean local machine. The optional **Local model scorer** backend
+reuses `src/demos/shared/hf_model.py::HFModelWrapper` through a small text
+generator adapter.
+
+For each coalition, the LLM receives the coalition prompt, the target tool, and
+the available tool names and descriptions. It is asked to return one numeric
+target-tool support score from `0` to `1`, where `0` means the coalition prompt
+does not support selecting the target tool and `1` means it strongly supports
+selecting it. shapiq then uses these coalition scores to compute segment
+attributions and pairwise interactions.
+
+Run the app with:
+
+```bash
+uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
+```
+
+Suggested first model:
+
+```text
+TinyLlama/TinyLlama-1.1B-Chat-v1.0
+```
+
+Gemma model ids can be tried manually if the machine has enough memory and the
+required Hugging Face access.
+
+For the final project demo, pass a richer model-backed scorer into `ToolUseGame`
+such as:
 
 - target tool-name log-likelihood from a tool-calling LLM,
 - probability from a small tool-router classifier,
