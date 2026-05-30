@@ -7,9 +7,14 @@ import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Protocol
+from typing import TYPE_CHECKING, Any, Protocol
+
+if TYPE_CHECKING:
+    import numpy as np
 
 DEFAULT_HF_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+DEFAULT_LOGPROB_MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
+DEFAULT_CANDIDATE_TEMPLATE = "The correct tool is {tool_name}."
 
 TOOL_KEYWORDS = {
     "weather_tool": {
@@ -372,3 +377,118 @@ class LLMToolScorer:
             msg = "Fallback scorer must return one score per prompt."
             raise ValueError(msg)
         return clamp_score(float(scores[0]))
+
+
+class LogProbToolScorer:
+    """Score target-tool support from local LM continuation likelihoods."""
+
+    def __init__(
+        self,
+        model_id: str = DEFAULT_LOGPROB_MODEL_ID,
+        candidate_template: str = DEFAULT_CANDIDATE_TEMPLATE,
+        device: str | None = None,
+        dtype: str = "auto",
+        normalize_by_length: bool = True,
+    ) -> None:
+        self.model_id = model_id
+        self.candidate_template = candidate_template
+        self.device = device
+        self.dtype = dtype
+        self.normalize_by_length = normalize_by_length
+        self.last_debug_outputs: list[dict[str, object]] = []
+
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        self._torch = torch
+        if self.device is None or self.device == "auto":
+            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        model_kwargs: dict[str, Any] = {}
+        if dtype != "auto":
+            model_kwargs["torch_dtype"] = getattr(torch, dtype)
+        elif self.device == "cuda":
+            model_kwargs["torch_dtype"] = torch.float16
+
+        self.model = AutoModelForCausalLM.from_pretrained(model_id, **model_kwargs)
+        self.model.to(self.device)
+        self.model.eval()
+
+    def score_batch(
+        self,
+        prompts: list[str],
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> "np.ndarray":
+        """Return target-tool probabilities from candidate continuation logprobs."""
+        import numpy as np
+
+        candidate_tools = list(tool_descriptions)
+        if not candidate_tools:
+            msg = "LogProbToolScorer requires tool_descriptions with candidate tools."
+            raise ValueError(msg)
+        if target_tool not in candidate_tools:
+            candidate_tools.append(target_tool)
+
+        self.last_debug_outputs = []
+        target_index = candidate_tools.index(target_tool)
+        scores = []
+        for prompt in prompts:
+            candidate_logprobs = np.asarray(
+                [
+                    self._sequence_logprob(
+                        prompt,
+                        self.candidate_template.format(tool_name=tool_name),
+                    )
+                    for tool_name in candidate_tools
+                ],
+                dtype=float,
+            )
+            shifted = candidate_logprobs - np.max(candidate_logprobs)
+            candidate_probs = np.exp(shifted)
+            candidate_probs = candidate_probs / candidate_probs.sum()
+            final_score = float(candidate_probs[target_index])
+            scores.append(final_score)
+            self.last_debug_outputs.append(
+                {
+                    "target_tool": target_tool,
+                    "candidate_tools": candidate_tools.copy(),
+                    "candidate_logprobs": candidate_logprobs.tolist(),
+                    "candidate_probs": candidate_probs.tolist(),
+                    "final_score": final_score,
+                    "prompt_preview": prompt[:240],
+                }
+            )
+        return np.asarray(scores, dtype=float)
+
+    def _sequence_logprob(self, prompt: str, continuation: str) -> float:
+        """Score continuation token likelihood under a causal LM."""
+        torch = self._torch
+        prompt_inputs = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
+        full_inputs = self.tokenizer(
+            prompt + continuation,
+            return_tensors="pt",
+            add_special_tokens=False,
+        )
+        prompt_len = int(prompt_inputs["input_ids"].shape[-1])
+        input_ids = full_inputs["input_ids"].to(self.device)
+        continuation_len = int(input_ids.shape[-1] - prompt_len)
+        if continuation_len <= 0:
+            msg = "Continuation must add at least one token."
+            raise ValueError(msg)
+
+        with torch.inference_mode():
+            logits = self.model(input_ids=input_ids).logits
+            log_probs = torch.log_softmax(logits[:, :-1, :], dim=-1)
+            target_ids = input_ids[:, 1:]
+            token_log_probs = log_probs.gather(-1, target_ids.unsqueeze(-1)).squeeze(-1)
+            continuation_log_probs = token_log_probs[:, prompt_len - 1 :]
+            score = float(continuation_log_probs.sum().item())
+        if self.normalize_by_length:
+            score /= continuation_len
+        return score

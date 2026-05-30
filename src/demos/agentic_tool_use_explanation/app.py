@@ -14,11 +14,14 @@ import streamlit as st
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
+    DEFAULT_CANDIDATE_TEMPLATE,
     DEFAULT_HF_MODEL_ID,
+    DEFAULT_LOGPROB_MODEL_ID,
     HuggingFaceTextGenerator,
     LLMToolScorer,
     LexicalToolRouter,
     LexicalToolScorer,
+    LogProbToolScorer,
     MockLLM,
     ToolChoice,
 )
@@ -63,6 +66,20 @@ def load_hf_generator(
         hf_token=hf_token,
         max_new_tokens=max_new_tokens,
         use_chat_template=use_chat_template,
+    )
+
+
+@st.cache_resource
+def load_logprob_scorer(
+    model_id: str,
+    candidate_template: str,
+    normalize_by_length: bool,
+) -> LogProbToolScorer:
+    """Load and cache the optional local HuggingFace logprob scorer."""
+    return LogProbToolScorer(
+        model_id=model_id,
+        candidate_template=candidate_template,
+        normalize_by_length=normalize_by_length,
     )
 
 
@@ -584,7 +601,13 @@ def main() -> None:
     )
     scorer_backend = st.sidebar.selectbox(
         "Scoring method",
-        ["Mock model scorer", "Keyword baseline", "Compare methods", "Local model scorer"],
+        [
+            "Mock model scorer",
+            "Keyword baseline",
+            "Compare methods",
+            "Local model scorer",
+            "Logprob-based HF scorer",
+        ],
         index=0,
     )
     hf_model_id = DEFAULT_HF_MODEL_ID
@@ -592,6 +615,9 @@ def main() -> None:
     hf_max_new_tokens = 8
     hf_use_chat_template = True
     hf_token = ""
+    logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
+    candidate_template = DEFAULT_CANDIDATE_TEMPLATE
+    normalize_by_length = True
     if scorer_backend == "Local model scorer":
         with st.sidebar.expander("Local model settings", expanded=True):
             hf_model_id = st.text_input("model id", value=DEFAULT_HF_MODEL_ID)
@@ -605,6 +631,14 @@ def main() -> None:
             )
             hf_use_chat_template = st.checkbox("use_chat_template", value=True)
             hf_token = st.text_input("HF token", value="", type="password")
+    elif scorer_backend == "Logprob-based HF scorer":
+        with st.sidebar.expander("Logprob scorer settings", expanded=True):
+            logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
+            candidate_template = st.text_input(
+                "candidate template",
+                value=DEFAULT_CANDIDATE_TEMPLATE,
+            )
+            normalize_by_length = st.checkbox("normalize by length", value=True)
 
     router = LexicalToolRouter()
     if mode == "Example request":
@@ -798,6 +832,22 @@ def main() -> None:
                 return
         primary_scorer = LLMToolScorer(llm=hf_generator)
         primary_label = "Local model scorer"
+    elif scorer_backend == "Logprob-based HF scorer":
+        with st.spinner(f"Loading logprob scorer `{logprob_model_id}`..."):
+            try:
+                primary_scorer = load_logprob_scorer(
+                    logprob_model_id,
+                    candidate_template,
+                    bool(normalize_by_length),
+                )
+            except Exception as error:  # noqa: BLE001
+                st.error(
+                    "Could not load the logprob-based scorer. "
+                    "Try a smaller causal language model or check your environment. "
+                    f"Details: {error}"
+                )
+                return
+        primary_label = "Logprob-based HF scorer"
     else:
         primary_scorer = llm_scorer
         primary_label = "Mock model scorer"
@@ -955,7 +1005,11 @@ def main() -> None:
                         "parsed_score",
                         "used_fallback",
                         "fallback_score",
+                        "candidate_tools",
+                        "candidate_logprobs",
+                        "candidate_probs",
                         "final_score",
+                        "prompt_preview",
                     ]
                     st.dataframe(
                         debug_frame[[column for column in debug_columns if column in debug_frame]],

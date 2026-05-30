@@ -11,7 +11,13 @@ import pytest
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
-from scorers import LexicalToolRouter, LexicalToolScorer, LLMToolScorer, MockLLM  # noqa: E402
+from scorers import (  # noqa: E402
+    LexicalToolRouter,
+    LexicalToolScorer,
+    LLMToolScorer,
+    LogProbToolScorer,
+    MockLLM,
+)
 from tool_game import ToolUseGame, ToolUseSegment  # noqa: E402
 
 TOOL_DESCRIPTIONS = {
@@ -20,6 +26,23 @@ TOOL_DESCRIPTIONS = {
     "web_search_tool": "Search the web for current, recent, or external facts.",
     "no_tool": "Answer directly without calling an external tool.",
 }
+
+
+def make_fake_logprob_scorer(logprobs: dict[str, float]) -> LogProbToolScorer:
+    scorer = LogProbToolScorer.__new__(LogProbToolScorer)
+    scorer.candidate_template = "The correct tool is {tool_name}."
+    scorer.normalize_by_length = True
+    scorer.last_debug_outputs = []
+
+    def fake_sequence_logprob(prompt: str, continuation: str) -> float:
+        del prompt
+        for tool_name, score in logprobs.items():
+            if tool_name in continuation:
+                return score
+        return -10.0
+
+    scorer._sequence_logprob = fake_sequence_logprob
+    return scorer
 
 
 class FakeGenerator:
@@ -154,6 +177,80 @@ def test_llm_tool_scorer_falls_back_on_invalid_output() -> None:
     assert debug_output["used_fallback"] is True
     assert debug_output["fallback_score"] == scores[0]
     assert debug_output["final_score"] == scores[0]
+
+
+def test_logprob_tool_scorer_returns_array_for_prompts() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": 2.0,
+            "calculator_tool": 0.0,
+            "web_search_tool": -1.0,
+            "no_tool": -2.0,
+        }
+    )
+
+    scores = scorer.score_batch(
+        ["Prompt one", "Prompt two"],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert isinstance(scores, np.ndarray)
+    assert scores.shape == (2,)
+    assert len(scorer.last_debug_outputs) == 2
+
+
+def test_logprob_tool_scorer_prefers_highest_target_logprob() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": 4.0,
+            "calculator_tool": 0.0,
+            "web_search_tool": -1.0,
+            "no_tool": -2.0,
+        }
+    )
+
+    scores = scorer.score_batch(
+        ["Will it rain tomorrow?"],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores[0] > 0.5
+
+
+def test_logprob_tool_scorer_debug_probabilities_sum_to_one() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": 1.5,
+            "calculator_tool": 0.5,
+            "web_search_tool": -0.5,
+            "no_tool": -1.5,
+        }
+    )
+
+    scorer.score_batch(
+        ["Will it rain tomorrow?"],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    debug_output = scorer.last_debug_outputs[0]
+    assert debug_output["target_tool"] == "weather_tool"
+    assert set(debug_output["candidate_tools"]) == set(TOOL_DESCRIPTIONS)
+    assert np.isclose(sum(debug_output["candidate_probs"]), 1.0)
+    assert 0.0 <= debug_output["final_score"] <= 1.0
+
+
+def test_logprob_tool_scorer_requires_candidate_tools() -> None:
+    scorer = make_fake_logprob_scorer({"weather_tool": 1.0})
+
+    with pytest.raises(ValueError):
+        scorer.score_batch(
+            ["Will it rain tomorrow?"],
+            target_tool="weather_tool",
+            tool_descriptions={},
+        )
 
 
 def test_lexical_tool_scorer_returns_one_score_per_prompt() -> None:

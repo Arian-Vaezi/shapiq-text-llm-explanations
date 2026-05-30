@@ -75,8 +75,8 @@ scorer is optional and loaded only when selected.
 - A custom-request mode with a user-input box, suggested tool, short
   reason, and per-tool scores.
 - Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
-- Optional Local model scorer backend, loaded lazily only after it is
-  selected and the explanation is run.
+- Optional Local model scorer and Logprob-based HF scorer backends, loaded lazily
+  only after they are selected and the explanation is run.
 - A compact setup panel for the coalition value function.
 - Summary metrics for target-tool support after running the explanation.
 - First-order attribution ranking: which segment most pushes the tool decision.
@@ -96,11 +96,19 @@ model-backed version, the segmentation can be replaced or extended with:
 - message-role splitting (`system`, `user`, tool schema),
 - tool-schema splitting by tool description and parameter descriptions.
 
-## Scoring Mode
+## Scoring Methods
 
-The current scorer is lightweight keyword scaffolding. The custom-request router does
-not call a real LLM and does not execute any tools. It only selects which tool
-the agent should use for the user request.
+The demo keeps several scoring methods side by side:
+
+- `LexicalToolScorer` is a fast keyword baseline.
+- `LLMToolScorer` is a generation-based numeric judge. It asks a model to return
+  one score in `[0, 1]` and falls back to the keyword baseline when the output
+  cannot be parsed.
+- `LogProbToolScorer` avoids numeric parsing by scoring candidate tool
+  completions with model likelihood and normalizing those scores over tools.
+
+The custom-request router does not call a real LLM and does not execute any
+tools. It only selects which tool the agent should use for the user request.
 
 The router returns the handoff shape expected by a future local Gemma backend:
 
@@ -120,7 +128,7 @@ The router returns the handoff shape expected by a future local Gemma backend:
 This lets the UI and shapiq explanation flow be developed without API keys, GPU
 dependencies, or Hugging Face model downloads.
 
-## Optional Local Model Scorer
+## Optional Local Model Scorers
 
 The default scoring method is the **Mock model scorer** so the demo stays fast and
 usable on a clean local machine. The optional **Local model scorer** backend
@@ -134,6 +142,16 @@ does not support selecting the target tool and `1` means it strongly supports
 selecting it. shapiq then uses these coalition scores to compute segment
 attributions and pairwise interactions.
 
+In Colab, TinyLlama can load successfully but still fail as a generation-based
+numeric judge by returning text such as `Assistant:\nSure` or
+`Target tool:\nweather`. When every generated output is non-numeric,
+`LLMToolScorer` correctly falls back to the keyword baseline. The
+`LogProbToolScorer` was added for this case: it scores continuations such as
+`The correct tool is weather_tool.` directly with log probabilities, then
+softmax-normalizes those candidate scores into a target-tool probability. This
+is inspired by the same general idea as the jailbreak demo: use continuation
+likelihoods as coalition values rather than free-form generated scores.
+
 Run the app with:
 
 ```bash
@@ -146,8 +164,29 @@ Suggested first model:
 TinyLlama/TinyLlama-1.1B-Chat-v1.0
 ```
 
+Suggested first logprob model:
+
+```text
+Qwen/Qwen2.5-1.5B-Instruct
+```
+
 Gemma model ids can be tried manually if the machine has enough memory and the
 required Hugging Face access.
+
+Colab-style scorer wiring:
+
+```python
+from demos.agentic_tool_use_explanation.scorers import LogProbToolScorer
+from demos.agentic_tool_use_explanation.tool_game import ToolUseGame
+
+scorer = LogProbToolScorer(model_id="Qwen/Qwen2.5-1.5B-Instruct")
+game = ToolUseGame(
+    target_tool="weather_tool",
+    segments=segments,
+    scorer=scorer,
+    tool_descriptions=tool_descriptions,
+)
+```
 
 For the final project demo, pass a richer model-backed scorer into `ToolUseGame`
 such as:
