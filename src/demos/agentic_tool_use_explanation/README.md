@@ -65,8 +65,11 @@ This does not install a real LLM backend. Do not install `torch` or
 6. Use advanced/debug controls only when you need prompt segments,
    value-function details, scoring prompt previews, or keyword comparison.
 
-The default demo currently uses keyword/mock scoring scaffolding. A local model
-scorer is optional and loaded only when selected.
+The UI currently exposes three scoring methods:
+
+1. Mock model scorer for lightweight deterministic demo behavior.
+2. Keyword baseline for a transparent lexical baseline.
+3. LLM logprob scorer for local Hugging Face likelihood-based scoring.
 
 ## What The App Shows
 
@@ -75,8 +78,8 @@ scorer is optional and loaded only when selected.
 - A custom-request mode with a user-input box, suggested tool, short
   reason, and per-tool scores.
 - Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
-- Optional Local model scorer and Logprob-based HF scorer backends, loaded lazily
-  only after they are selected and the explanation is run.
+- Optional LLM logprob scorer backend, loaded lazily only after it is selected
+  and the explanation is run.
 - A compact setup panel for the coalition value function.
 - Summary metrics for target-tool support after running the explanation.
 - First-order attribution ranking: which segment most pushes the tool decision.
@@ -98,12 +101,12 @@ model-backed version, the segmentation can be replaced or extended with:
 
 ## Scoring Methods
 
-The demo keeps several scoring methods side by side:
+The demo keeps several scoring implementations side by side, though the UI only
+exposes the presentation-ready methods listed above:
 
 - `LexicalToolScorer` is a fast keyword baseline.
-- `LLMToolScorer` is a generation-based numeric judge. It asks a model to return
-  one score in `[0, 1]` and falls back to the keyword baseline when the output
-  cannot be parsed.
+- `LLMToolScorer` is a generation-based numeric judge. It remains in code for
+  experiments, but is hidden from the Streamlit scoring-method dropdown.
 - `LogProbToolScorer` avoids numeric parsing by scoring candidate tool
   completions with model likelihood and normalizing those scores over tools.
 
@@ -128,19 +131,17 @@ The router returns the handoff shape expected by a future local Gemma backend:
 This lets the UI and shapiq explanation flow be developed without API keys, GPU
 dependencies, or Hugging Face model downloads.
 
-## Optional Local Model Scorers
+## Optional LLM Logprob Scorer
 
 The default scoring method is the **Mock model scorer** so the demo stays fast and
-usable on a clean local machine. The optional **Local model scorer** backend
-reuses `src/demos/shared/hf_model.py::HFModelWrapper` through a small text
-generator adapter.
+usable on a clean local machine. The optional **LLM logprob scorer** uses a
+local Hugging Face causal language model.
 
 For each coalition, the LLM receives the coalition prompt, the target tool, and
-the available tool names and descriptions. It is asked to return one numeric
-target-tool support score from `0` to `1`, where `0` means the coalition prompt
-does not support selecting the target tool and `1` means it strongly supports
-selecting it. shapiq then uses these coalition scores to compute segment
-attributions and pairwise interactions.
+the available tool names and descriptions. It scores candidate tool
+continuations with model likelihood, then softmax-normalizes those candidate
+scores into a target-tool probability. shapiq then uses these coalition scores
+to compute segment attributions and pairwise interactions.
 
 In Colab, TinyLlama can load successfully but still fail as a generation-based
 numeric judge by returning text such as `Assistant:\nSure` or

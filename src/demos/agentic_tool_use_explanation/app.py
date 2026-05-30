@@ -15,9 +15,7 @@ from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
-    DEFAULT_HF_MODEL_ID,
     DEFAULT_LOGPROB_MODEL_ID,
-    HuggingFaceTextGenerator,
     LLMToolScorer,
     LexicalToolRouter,
     LexicalToolScorer,
@@ -55,24 +53,6 @@ st.set_page_config(
     page_icon="T",
     layout="wide",
 )
-
-
-@st.cache_resource
-def load_hf_generator(
-    model_id: str,
-    device: str,
-    hf_token: str | None,
-    max_new_tokens: int,
-    use_chat_template: bool,
-) -> HuggingFaceTextGenerator:
-    """Load and cache the optional local HuggingFace text generator."""
-    return HuggingFaceTextGenerator(
-        model_id=model_id,
-        device=device,
-        hf_token=hf_token,
-        max_new_tokens=max_new_tokens,
-        use_chat_template=use_chat_template,
-    )
 
 
 @st.cache_resource
@@ -609,38 +589,20 @@ def main() -> None:
     )
     scorer_backend = st.sidebar.selectbox(
         "Scoring method",
+        # Only presentation-ready scoring methods are exposed. Other experimental scorers
+        # remain in code but are hidden from the UI.
         [
             "Mock model scorer",
             "Keyword baseline",
-            "Compare methods",
-            "Local model scorer",
-            "Logprob-based HF scorer",
+            "LLM logprob scorer",
         ],
         index=0,
     )
-    hf_model_id = DEFAULT_HF_MODEL_ID
-    hf_device = "auto"
-    hf_max_new_tokens = 8
-    hf_use_chat_template = True
-    hf_token = ""
     logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
     candidate_template = DEFAULT_CANDIDATE_TEMPLATE
     candidate_texts = None
     normalize_by_length = True
-    if scorer_backend == "Local model scorer":
-        with st.sidebar.expander("Local model settings", expanded=True):
-            hf_model_id = st.text_input("model id", value=DEFAULT_HF_MODEL_ID)
-            hf_device = st.selectbox("device", ["auto", "cpu", "cuda", "mps"], index=0)
-            hf_max_new_tokens = st.number_input(
-                "max_new_tokens",
-                min_value=1,
-                max_value=64,
-                value=8,
-                step=1,
-            )
-            hf_use_chat_template = st.checkbox("use_chat_template", value=True)
-            hf_token = st.text_input("HF token", value="", type="password")
-    elif scorer_backend == "Logprob-based HF scorer":
+    if scorer_backend == "LLM logprob scorer":
         with st.sidebar.expander("Logprob scorer settings", expanded=True):
             logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
             candidate_template = st.text_input(
@@ -828,26 +790,7 @@ def main() -> None:
     if scorer_backend == "Keyword baseline":
         primary_scorer = lexical_scorer
         primary_label = "Keyword baseline"
-    elif scorer_backend == "Local model scorer":
-        with st.spinner(f"Loading local HuggingFace model `{hf_model_id}`..."):
-            try:
-                hf_generator = load_hf_generator(
-                    hf_model_id,
-                    hf_device,
-                    hf_token or None,
-                    int(hf_max_new_tokens),
-                    bool(hf_use_chat_template),
-                )
-            except Exception as error:  # noqa: BLE001
-                st.error(
-                    "Could not load the local model scorer. "
-                    "Try a smaller model, CPU mode, or check your HuggingFace token. "
-                    f"Details: {error}"
-                )
-                return
-        primary_scorer = LLMToolScorer(llm=hf_generator)
-        primary_label = "Local model scorer"
-    elif scorer_backend == "Logprob-based HF scorer":
+    elif scorer_backend == "LLM logprob scorer":
         with st.spinner(f"Loading logprob scorer `{logprob_model_id}`..."):
             try:
                 primary_scorer = load_logprob_scorer(
@@ -863,7 +806,7 @@ def main() -> None:
                     f"Details: {error}"
                 )
                 return
-        primary_label = "Logprob-based HF scorer"
+        primary_label = "LLM logprob scorer"
     else:
         primary_scorer = llm_scorer
         primary_label = "Mock model scorer"
@@ -905,8 +848,7 @@ def main() -> None:
     interpretation_sentence = notes[0] if notes else "No interpretation is available for this run."
 
     compare_with_lexical = (
-        scorer_backend == "Compare methods"
-        or (show_lexical_comparison and primary_label != "Keyword baseline")
+        show_lexical_comparison and primary_label != "Keyword baseline"
     )
     llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
     lexical_result = None
@@ -957,7 +899,6 @@ def main() -> None:
         show_value_function_details
         or show_scoring_prompt_preview
         or compare_with_lexical
-        or scorer_backend == "Compare methods"
         or bool(llm_debug_outputs)
     )
     tab_names = ["Summary", "Attribution", "Interactions"]
@@ -1007,7 +948,7 @@ def main() -> None:
                 with st.expander("Model output diagnostics", expanded=False):
                     displayed_debug_outputs = llm_debug_outputs[:10]
                     if (
-                        primary_label == "Local model scorer"
+                        primary_label == "LLM logprob scorer"
                         and displayed_debug_outputs
                         and all(row.get("used_fallback") for row in displayed_debug_outputs)
                     ):
