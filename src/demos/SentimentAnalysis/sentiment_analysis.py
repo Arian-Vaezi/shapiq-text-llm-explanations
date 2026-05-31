@@ -1,21 +1,21 @@
 """Core logic for the Sentiment Analysis demo.
 
-This module contains model loading, TextImputer setup,
+This module contains ALL computation — model loading, imputer setup,
 Shapley value computation, k-SII interaction computation, and plot generation.
 
-It is intentionally decoupled from the UI (app.py) so that:
-  - The same logic can be used in the notebook AND the Gradio app
-  - The UI can be swapped (Gradio → Streamlit → CLI) without touching this file
-  - Each function can be tested independently
+Two pipelines are supported:
 
-Pipeline (mirrors 01_sentiment_analysis_interactions.ipynb):
-    TextImputer(model, text, segmentation="word")
-        ↓
-    KernelSHAP → InteractionValues (first-order Shapley Values)
-        ↓
-    KernelSHAPIQ(k-SII, order=2) → InteractionValues (pairwise interactions)
-        ↓
-    sentence_plot / plot_network / sentence_interaction_heatmap
+  1. ENCODER pipeline (default) — uses TextImputer + DistilBERT:
+       TextImputer(word, [MASK]) → KernelSHAP → KernelSHAPIQ(k-SII)
+
+  2. DECODER pipeline — uses SentimentDecoderGame + Gemma/TinyLlama:
+       SentimentDecoderGame(word, remove) → KernelSHAP → KernelSHAPIQ(k-SII)
+
+Both pipelines produce the same output format so app.py stays unchanged.
+The decoder pipeline uses contrastive log-odds as the value function:
+    v(S) = mean(log P(positive templates | S)) - mean(log P(negative templates | S))
+
+
 """
 
 from __future__ import annotations
@@ -37,14 +37,57 @@ import shapiq
 from shapiq.imputer import TextImputer
 from shapiq.plot import sentence_interaction_heatmap, sentence_plot
 
-# ── Configuration (same as notebook) ─────────────────────────────────────────
-MODEL_NAME = "lvwerra/distilbert-imdb"  # DistilBERT fine-tuned on IMDb reviews
-RANDOM_STATE = 42  # fixed seed for reproducibility
-BUDGET = 200  # coalition budget (exact for ≤7 players)
+# ── Configuration ─────────────────────────────────────────────────────────────
+
+# Encoder model — DistilBERT fine-tuned on IMDb reviews
+ENCODER_MODEL = "lvwerra/distilbert-imdb"
+
+# Decoder models — causal LMs using contrastive log-odds value function
+DECODER_MODELS = {
+    "gemma":     "google/gemma-3-1b-it",
+    "tinyllama": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+}
+
+RANDOM_STATE = 42   # fixed seed for reproducibility
+BUDGET       = 200  # coalition budget (exact for ≤7 players due to border trick)
+
+# ── Model caches — loaded once, reused on every call ─────────────────────────
+# Without caching, every Analyse click reloads the model from disk.
+_ENCODER_CACHE: dict = {}
+_DECODER_CACHE: dict = {}
 
 
-# ── Plot helper ───────────────────────────────────────────────────────────────
+def _get_encoder():
+    """Return cached HuggingFace encoder pipeline, loading only on first call."""
+    if "clf" not in _ENCODER_CACHE:
+        from transformers import pipeline as hf_pipeline
+        _ENCODER_CACHE["clf"] = hf_pipeline(
+            "sentiment-analysis",
+            model=ENCODER_MODEL,
+            device="cpu",
+        )
+    return _ENCODER_CACHE["clf"]
 
+
+def _get_decoder(model_name: str):
+    """Return cached HFModelWrapper for decoder model, loading only on first call.
+
+    Args:
+        model_name: HuggingFace model identifier string.
+
+    Returns:
+        Cached HFModelWrapper instance.
+    """
+    if model_name not in _DECODER_CACHE:
+        from demos.shared.hf_model import HFModelWrapper
+        _DECODER_CACHE[model_name] = HFModelWrapper(
+            model_name=model_name,
+            device="cuda",  # auto-falls back to mps/cpu
+        )
+    return _DECODER_CACHE[model_name]
+
+
+# ── Plot helpers ──────────────────────────────────────────────────────────────
 
 def fig_to_pil(fig: plt.Figure) -> Image.Image:
     """Convert a matplotlib Figure to a PIL Image for Gradio rendering.
@@ -56,21 +99,20 @@ def fig_to_pil(fig: plt.Figure) -> Image.Image:
         A PIL Image object with the figure content.
     """
     buf = io.BytesIO()
-    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor=fig.get_facecolor())
+    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight",
+                facecolor=fig.get_facecolor())
     buf.seek(0)
     img = Image.open(buf).copy()
     buf.close()
-    plt.close(fig)  # free memory — important in long-running server apps
+    plt.close(fig)  # free memory
     return img
 
 
 def blank_placeholder(message: str = "") -> Image.Image:
-    """Generate a placeholder image with a centered message.
-
-    Used when a plot is unavailable or computation hasn't started yet.
+    """Generate a dark placeholder image with a centered message.
 
     Args:
-        message: Text to display in the center of the placeholder.
+        message: Text to display in the center.
 
     Returns:
         A PIL Image with a dark background and centered message.
@@ -78,125 +120,54 @@ def blank_placeholder(message: str = "") -> Image.Image:
     fig, ax = plt.subplots(figsize=(6, 1.5))
     fig.patch.set_facecolor("#0d0d1a")
     ax.set_facecolor("#0d0d1a")
-    ax.text(
-        0.5,
-        0.5,
-        message,
-        ha="center",
-        va="center",
-        color="#555577",
-        fontsize=11,
-        transform=ax.transAxes,
-    )
+    ax.text(0.5, 0.5, message, ha="center", va="center",
+            color="#555577", fontsize=11, transform=ax.transAxes)
     ax.axis("off")
     return fig_to_pil(fig)
 
 
-# ── Step 1: TextImputer setup ─────────────────────────────────────────────────
+# ── Shared computation functions ──────────────────────────────────────────────
+# These work with any shapiq Game object — encoder or decoder.
 
-
-def build_imputer(text: str) -> TextImputer:
-    """Build and return a TextImputer for the given input text.
-
-    This is Step 1 of the pipeline (mirrors notebook Cell 4).
-    Each word in the sentence becomes one player in the cooperative game.
-    Absent words are replaced with [MASK] when evaluating coalitions.
-
-    Args:
-        text: The input sentence to explain.
-
-    Returns:
-        A configured TextImputer instance ready for Shapley computation.
-    """
-    return TextImputer(
-        MODEL_NAME,
-        text,
-        segmentation="word",  # each word = one player
-        mask_strategy="mask",  # absent words → [MASK] token
-        device="cpu",  # CPU inference — no GPU required
-    )
-
-
-# ── Step 2: Raw model prediction ─────────────────────────────────────────────
-
-
-def get_prediction(imputer: TextImputer, text: str) -> tuple[str, float]:
-    """Get the raw model prediction for the full input text.
-
-    Calls the classifier directly on the original sentence (no masking).
-    This is separate from the Shapley computation which evaluates subsets.
-
-    Args:
-        imputer: A configured TextImputer (used to access the classifier).
-        text: The original input sentence.
-
-    Returns:
-        A tuple of (label, score) where label is "POSITIVE" or "NEGATIVE"
-        and score is the model confidence in [0, 1].
-    """
-    result = imputer._classifier(text)[0]  # noqa: SLF001
-    return result["label"], result["score"]
-
-
-# ── Step 3: Shapley Values (first-order) ─────────────────────────────────────
-
-
-def compute_shapley_values(imputer: TextImputer) -> shapiq.InteractionValues:
+def compute_shapley_values(game) -> shapiq.InteractionValues:
     """Compute first-order Shapley Values using KernelSHAP.
 
-    This is Step 3 of the pipeline (mirrors notebook Cell 6).
-    Each word receives a score indicating its individual contribution
-    to pushing the prediction above the baseline (all-masked) score.
-
-    For ≤7 players and budget=200, the border trick gives exact results.
+    Works with any shapiq Game — TextImputer or SentimentDecoderGame.
+    Each word receives a score for its individual contribution.
 
     Args:
-        imputer: A configured TextImputer instance.
+        game: Any shapiq Game with n_players and value_function.
 
     Returns:
         InteractionValues containing one SV per word.
     """
     approx = shapiq.KernelSHAP(
-        n=imputer.n_features,
+        n=game.n_players,
         random_state=RANDOM_STATE,
     )
-    return approx.approximate(budget=BUDGET, game=imputer)
+    return approx.approximate(budget=BUDGET, game=game)
 
 
-# ── Step 4: k-SII Pairwise Interactions ──────────────────────────────────────
+def compute_interactions(game) -> shapiq.InteractionValues:
+    """Compute pairwise k-SII interactions using KernelSHAPIQ.
 
-
-def compute_interactions(imputer: TextImputer) -> shapiq.InteractionValues:
-    """Compute pairwise Shapley Interactions using KernelSHAPIQ (k-SII, order 2).
-
-    This is Step 4 of the pipeline (mirrors notebook Cell 10).
-    For every pair of words, k-SII measures how much that pair contributes
-    TOGETHER beyond what each word contributes individually:
-
-      - Positive interaction = synergy (e.g. "not" + "bad" flip sentiment together)
-      - Negative interaction = redundancy (e.g. "loved" + "amazing" compete)
-
-    Why k-SII and not STII or FSII?
-      - k-SII at order 2 gives directly interpretable pairwise scores
-      - Efficient approximation even for longer sentences
-      - Clean side-by-side comparison with first-order SVs
+    Works with any shapiq Game — TextImputer or SentimentDecoderGame.
+    For every word pair, measures how much they contribute TOGETHER
+    beyond their individual SVs.
 
     Args:
-        imputer: A configured TextImputer instance.
+        game: Any shapiq Game with n_players and value_function.
 
     Returns:
-        InteractionValues containing SVs (order 1) and pairwise k-SII (order 2).
+        InteractionValues containing k-SII scores for all word pairs.
     """
     approx = shapiq.KernelSHAPIQ(
-        n=imputer.n_features,
+        n=game.n_players,
         index="k-SII",
         max_order=2,
         random_state=RANDOM_STATE,
     )
-    return approx.approximate(budget=BUDGET, game=imputer)
-
-
-# ── Step 5: Extract top interactions ─────────────────────────────────────────
+    return approx.approximate(budget=BUDGET, game=game)
 
 
 def get_top_interactions(
@@ -206,9 +177,6 @@ def get_top_interactions(
 ) -> list[tuple[str, str, float]]:
     """Extract the top-k pairwise interactions by absolute value.
 
-    Filters the k-SII results to only order-2 interactions and sorts
-    them by magnitude so the most impactful word pairs appear first.
-
     Args:
         sii: InteractionValues from compute_interactions().
         words: List of word strings (players).
@@ -217,37 +185,25 @@ def get_top_interactions(
     Returns:
         List of (word1, word2, interaction_value) tuples sorted by |value|.
     """
-    # filter to order-2 interactions only
     order2 = {k: v for k, v in sii.interaction_lookup.items() if len(k) == 2}
-
-    # sort by absolute value — strongest interactions first
     sorted_pairs = sorted(
         order2.items(),
         key=lambda x: abs(sii.values[x[1]]),
         reverse=True,
     )[:top_k]
-
     return [
-        (words[indices[0]], words[indices[1]], sii.values[idx]) for indices, idx in sorted_pairs
+        (words[indices[0]], words[indices[1]], sii.values[idx])
+        for indices, idx in sorted_pairs
     ]
 
 
-# ── Step 6: Visualization ────────────────────────────────────────────────────
+# ── Visualization functions ───────────────────────────────────────────────────
 
-
-def make_sentence_plot(
-    sv: shapiq.InteractionValues,
-    words: list[str],
-) -> Image.Image:
-    """Generate the sentence-level attribution plot.
-
-    Colors each word by its first-order Shapley Value.
-    Pink/red = positive contribution, blue = negative contribution.
-
-    Mirrors notebook Cell 7 (sentence_plot).
+def make_sentence_plot(sv: shapiq.InteractionValues, words: list[str]) -> Image.Image:
+    """Generate sentence-level attribution plot (word colors = SV values).
 
     Args:
-        sv: First-order Shapley Values from compute_shapley_values().
+        sv: First-order Shapley Values.
         words: List of word strings.
 
     Returns:
@@ -260,34 +216,23 @@ def make_sentence_plot(
     return fig_to_pil(fig)
 
 
-def make_network_plot(
-    sii: shapiq.InteractionValues,
-    words: list[str],
-) -> Image.Image:
-    """Generate the k-SII interaction network plot.
+def make_network_plot(sii: shapiq.InteractionValues, words: list[str]) -> Image.Image:
+    """Generate k-SII interaction network plot.
 
-    Nodes = words, edges = pairwise k-SII values.
-    Edge thickness and color encode interaction strength and sign:
-      - Red/pink edges = positive (synergy)
-      - Blue edges = negative (redundancy)
-
-    The headline result "(not, bad) = +2.878" appears as a single
-    dominant red edge when analysing "This film is not bad at all".
-
-    Mirrors notebook Cell 11 (plot_network).
+    Nodes = words, edges = k-SII values.
+    Red edges = positive (synergy), blue = negative (redundancy).
 
     Args:
-        sii: k-SII InteractionValues from compute_interactions().
+        sii: k-SII InteractionValues.
         words: List of word strings.
 
     Returns:
-        PIL Image of the network plot, or a placeholder if unavailable.
+        PIL Image of the network plot.
     """
     try:
         result = sii.plot_network(feature_names=words, show=False)
         if result is None:
             return blank_placeholder("Network plot unavailable")
-        # plot_network returns either a Figure or a (fig, ax) tuple
         fig = result[0] if isinstance(result, tuple) else result
         fig.patch.set_facecolor("white")
         fig.set_size_inches(7, 7)
@@ -296,27 +241,15 @@ def make_network_plot(
         return blank_placeholder(f"Network error: {e}")
 
 
-def make_heatmap_plot(
-    sii: shapiq.InteractionValues,
-    words: list[str],
-) -> Image.Image:
-    """Generate the pairwise interaction heatmap.
-
-    A word x word matrix where each cell shows the k-SII value
-    for that pair. Strong interactions appear as bright red (positive)
-    or bright blue (negative) cells.
-
-    When (not, bad) = +2.878, that cell dominates the colorscale —
-    visually demonstrating how extreme the negation interaction is.
-
-    Mirrors notebook Cell 11 (sentence_interaction_heatmap).
+def make_heatmap_plot(sii: shapiq.InteractionValues, words: list[str]) -> Image.Image:
+    """Generate word x word k-SII interaction heatmap.
 
     Args:
-        sii: k-SII InteractionValues from compute_interactions().
+        sii: k-SII InteractionValues.
         words: List of word strings.
 
     Returns:
-        PIL Image of the heatmap, or a placeholder if unavailable.
+        PIL Image of the heatmap.
     """
     try:
         fig, _ = sentence_interaction_heatmap(sii, words, show=False)
@@ -328,72 +261,124 @@ def make_heatmap_plot(
         return blank_placeholder(f"Heatmap error: {e}")
 
 
-# ── Full pipeline (called by app.py) ─────────────────────────────────────────
-
+# ── Pipeline 1: Encoder (DistilBERT + TextImputer) ───────────────────────────
 
 def run_pipeline(text: str) -> dict:
-    """Run the full sentiment explanation pipeline on a given text.
+    """Run the encoder sentiment pipeline on a given text.
 
-    This is the single entry point called by app.py.
-    It runs all steps in order and returns a structured result dict
-    that the UI can render without knowing any shapiq internals.
-
-    Steps:
-        1. Build TextImputer (word-level players, [MASK] strategy)
-        2. Get raw model prediction (label + confidence)
-        3. Compute first-order Shapley Values (KernelSHAP)
-        4. Compute pairwise k-SII interactions (KernelSHAPIQ)
-        5. Extract top interactions
-        6. Generate all three plots
+    Uses TextImputer with DistilBERT (lvwerra/distilbert-imdb).
+    Value function = classification score in [-1, +1].
 
     Args:
         text: The input sentence to explain.
 
     Returns:
-        A dict with keys:
-            - label (str): "POSITIVE" or "NEGATIVE"
-            - score (float): model confidence
-            - words (list[str]): word players
-            - baseline (float): empty coalition score
-            - n_players (int): number of words
-            - sv (InteractionValues): first-order Shapley Values
-            - sii (InteractionValues): k-SII pairwise interactions
-            - top_interactions (list): top-5 (w1, w2, value) tuples
-            - img_sentence (PIL.Image): sentence attribution plot
-            - img_network (PIL.Image): interaction network plot
-            - img_heatmap (PIL.Image): interaction heatmap
+        Result dict with keys: label, score, words, baseline, n_players,
+        sv, sii, top_interactions, img_sentence, img_network, img_heatmap,
+        model_type ('encoder'), model_name.
     """
-    # Step 1 — build imputer
-    imputer = build_imputer(text)
+    # Build TextImputer — uses cached classifier after first call
+    imputer = TextImputer(
+        ENCODER_MODEL,
+        text,
+        segmentation="word",
+        mask_strategy="mask",
+        device="cpu",
+    )
+    imputer._classifier = _get_encoder()
+    imputer._tokenizer  = imputer._classifier.tokenizer
+
     words = imputer.players.tolist()
 
-    # Step 2 — raw prediction
-    label, score = get_prediction(imputer, text)
+    # Raw prediction on full text
+    raw   = imputer._classifier(text)[0]
+    label = raw["label"]
+    score = raw["score"]
 
-    # Step 3 — Shapley Values
-    sv = compute_shapley_values(imputer)
-
-    # Step 4 — k-SII interactions
+    # Shapley Values and interactions
+    sv  = compute_shapley_values(imputer)
     sii = compute_interactions(imputer)
 
-    # Step 5 — top interactions
-    top_interactions = get_top_interactions(sii, words, top_k=5)
+    return {
+        "label":            label,
+        "score":            score,
+        "words":            words,
+        "baseline":         imputer.normalization_value,
+        "n_players":        imputer.n_features,
+        "sv":               sv,
+        "sii":              sii,
+        "top_interactions": get_top_interactions(sii, words),
+        "img_sentence":     make_sentence_plot(sv, words),
+        "img_network":      make_network_plot(sii, words),
+        "img_heatmap":      make_heatmap_plot(sii, words),
+        "model_type":       "encoder",
+        "model_name":       ENCODER_MODEL,
+    }
 
-    # Step 6 — plots
-    img_sentence = make_sentence_plot(sv, words)
-    img_network = make_network_plot(sii, words)
-    img_heatmap = make_heatmap_plot(sii, words)
+
+# ── Pipeline 2: Decoder (Gemma / TinyLlama + SentimentDecoderGame) ───────────
+
+def run_pipeline_decoder(text: str, model_key: str = "gemma") -> dict:
+    """Run the decoder sentiment pipeline on a given text.
+
+    Uses SentimentDecoderGame with a causal LM (Gemma or TinyLlama).
+    Value function = contrastive log-odds:
+        v(S) = mean(log P(positive templates | S))
+             - mean(log P(negative templates | S))
+
+    Positive values = positive sentiment, negative = negative sentiment.
+
+    Args:
+        text: The input sentence to explain.
+        model_key: Either 'gemma' or 'tinyllama'. Defaults to 'gemma'.
+
+    Returns:
+        Result dict with same keys as run_pipeline() plus model_type='decoder'.
+    """
+    from demos.SentimentAnalysis.SentimentDecoderGame import SentimentDecoderGame
+
+    model_name = DECODER_MODELS.get(model_key, DECODER_MODELS["gemma"])
+
+    # Build game — reuses cached HFModelWrapper
+    game = SentimentDecoderGame(
+        model_name=model_name,
+        input_text=text,
+        segmentation="word",
+        mask_strategy="remove",  # removal is more natural for decoder models
+        batch_size=4,
+        hf_model=_get_decoder(model_name),
+    )
+
+    words = game.players.tolist()
+
+    # Raw prediction — score full coalition vs empty coalition
+    import numpy as np
+    full  = np.ones((1, game.n_players), dtype=bool)
+    empty = np.zeros((1, game.n_players), dtype=bool)
+    score_full  = float(game.value_function(full)[0])
+    score_empty = float(game.value_function(empty)[0])
+
+    # Convert contrastive score to label
+    label = "POSITIVE" if score_full > score_empty else "NEGATIVE"
+    # Normalize score to [0,1] range for display
+    score = min(abs(score_full) / 10.0, 1.0)
+
+    # Shapley Values and interactions
+    sv  = compute_shapley_values(game)
+    sii = compute_interactions(game)
 
     return {
-        "label": label,
-        "score": score,
-        "words": words,
-        "baseline": imputer.normalization_value,
-        "n_players": imputer.n_features,
-        "sv": sv,
-        "sii": sii,
-        "top_interactions": top_interactions,
-        "img_sentence": img_sentence,
-        "img_network": img_network,
-        "img_heatmap": img_heatmap,
+        "label":            label,
+        "score":            score,
+        "words":            words,
+        "baseline":         score_empty,
+        "n_players":        game.n_players,
+        "sv":               sv,
+        "sii":              sii,
+        "top_interactions": get_top_interactions(sii, words),
+        "img_sentence":     make_sentence_plot(sv, words),
+        "img_network":      make_network_plot(sii, words),
+        "img_heatmap":      make_heatmap_plot(sii, words),
+        "model_type":       "decoder",
+        "model_name":       model_name,
     }
