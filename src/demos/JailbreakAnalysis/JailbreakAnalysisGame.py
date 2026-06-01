@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import numpy as np
@@ -19,6 +20,7 @@ class JailbreakGame(Game):
         verbose: bool = False,
         batch_size: int = 32,
         hf_model: HFModelWrapper | None = None,
+        embedding_model: HFModelWrapper | None = None,
     ) -> None:
         self.model_name = model_name
         self.input_text = input_text
@@ -33,6 +35,15 @@ class JailbreakGame(Game):
             model_name=model_name,
             device=device,
         )
+        self.embedding_model = embedding_model or HFModelWrapper(
+            model_name=model_name,
+            device=device,
+        )
+
+        if self.segmentation == "semantic" and self.embedding_model is None:
+            raise ValueError(
+                "semantic segmentation requires embedding_model"
+            )
 
         self.tokenizer = self.hf_model.tokenizer
         self.mask_token = self.tokenizer.mask_token
@@ -63,7 +74,12 @@ class JailbreakGame(Game):
             sentences = re.split(r"(?<=[.!?])\s+", self.input_text.strip())
             self.players = np.array([s for s in sentences if s])
             return
-
+        
+        if self.segmentation == "semantic":
+            self.players = np.array(self._semantic_segments())
+            return
+        
+        #token-level segmentation
         encoding = self.tokenizer(
             self.input_text,
             add_special_tokens=False,
@@ -173,3 +189,34 @@ class JailbreakGame(Game):
         prompts = [str(self.coalition_to_prompt(c)) for c in coalitions]
         empty_prompt = str(self.coalition_to_prompt(np.zeros(len(self.players))))
         return self.batched_model_call(prompts, empty_prompt)
+
+    def _semantic_segments(self, threshold=0.4):
+        from sklearn.metrics.pairwise import cosine_similarity
+        import numpy as np
+        
+        words = self.input_text.split()
+
+        if len(words) <= 1:
+            return words
+
+        embeddings = self.embedding_model.encode(words)
+
+        segments = []
+        current_segment = [words[0]]
+
+        for i in range(len(words) - 1):
+
+            sim = cosine_similarity(
+                embeddings[i].reshape(1, -1),
+                embeddings[i + 1].reshape(1, -1),
+            )[0, 0]
+
+            if sim < threshold:
+                segments.append(" ".join(current_segment))
+                current_segment = [words[i + 1]]
+            else:
+                current_segment.append(words[i + 1])
+
+        segments.append(" ".join(current_segment))
+
+        return segments

@@ -10,6 +10,7 @@ import numpy as np
 import torch
 from torch.nn.functional import log_softmax
 from transformers import (
+    AutoModel,
     AutoModelForCausalLM,
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -88,7 +89,7 @@ class HFModelWrapper:
         # =====================================================
 
         if self.is_encoder:
-            self.model = AutoModelForSequenceClassification.from_pretrained(
+            self.model = AutoModel.from_pretrained(
                 model_name,
                 token=hf_token,
             )
@@ -260,3 +261,34 @@ class HFModelWrapper:
         yield from streamer
 
         thread.join()
+
+    @torch.no_grad()
+    def encode(self, texts: list[str]) -> np.ndarray:
+        """
+        Returns one embedding vector per input text.
+
+        Shape:
+            (batch_size, hidden_size)
+        """
+
+        if not self.is_encoder:
+            raise ValueError(
+                f"Model '{self.model_name}' does not support embeddings."
+            )
+
+        inputs = self.tokenizer(
+            texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+        ).to(self.device)
+
+        outputs = self.model(**inputs)
+
+        hidden = outputs.last_hidden_state
+        mask = inputs["attention_mask"].unsqueeze(-1)
+
+        pooled = (hidden * mask).sum(dim=1)
+        pooled = pooled / mask.sum(dim=1).clamp(min=1)
+
+        return pooled.cpu().numpy()
