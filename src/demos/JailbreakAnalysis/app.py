@@ -23,9 +23,10 @@ if TYPE_CHECKING:
 MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
-    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    # "google/gemma-2-2b-it",
-    # "microsoft/phi-2",
+    #"TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "google/gemma-4-E2B-it", #chat
+    "Qwen/Qwen2.5-1.5B-Instruct", #judge
+    "sentence-transformers/all-mpnet-base-v2", #embedding
 ]
 
 
@@ -149,16 +150,25 @@ def build_explanation_html(
 def show_explanation(
     message: str,
     dropdown_model: str,
+    dropdown_judge_model: str,
     dropdown_segmentation: str,
     dropdown_masking: str,
+    text_segmentation_window: str,
+    text_similarity_threshold: str,
 ) -> Iterator[tuple[object, object]]:
     import shapiq
     from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
 
+    semantic_window = int(text_segmentation_window)
+    semantic_threshold = float(text_similarity_threshold)
+
     print(f"[show_explanation] Starting explanation for: '{message[:60]}...'")
     print(f"    - Model: {dropdown_model}")
+    print(f"    - Judge Model: {dropdown_judge_model}")
     print(f"    - Segmentation: {dropdown_segmentation}")
     print(f"    - Masking: {dropdown_masking}")
+    print(f"    - Window Size: {semantic_window}")
+    print(f"    - Similarity Threshold: {semantic_threshold}")
 
     yield (
         gr.update(value="<p><i>⏳ Explanation in progress...</i></p>", visible=True),
@@ -173,6 +183,9 @@ def show_explanation(
         segmentation=dropdown_segmentation,
         device="cuda",
         hf_model=cached_model,
+        judge_model_name=dropdown_judge_model,
+        semantic_window=semantic_window,
+        semantic_threshold=semantic_threshold,
     )
     print(game.players.tolist())
 
@@ -217,8 +230,11 @@ with gr.Blocks() as demo:
 
         config_col = ExplanationConfigColumn()
         dropdown_model = config_col.dropdown_model
+        dropdown_judge_model = config_col.dropdown_judge_model
         dropdown_segmentation = config_col.dropdown_segmentation
         dropdown_masking = config_col.dropdown_masking
+        text_segmentation_window = config_col.text_segmentation_window
+        text_similarity_threshold = config_col.text_similarity_threshold
 
         # ====================================================
         # CHAT
@@ -278,8 +294,11 @@ with gr.Blocks() as demo:
     explanation_inputs = [
         msg_input,
         dropdown_model,
+        dropdown_judge_model,
         dropdown_segmentation,
         dropdown_masking,
+        text_segmentation_window,
+        text_similarity_threshold,
     ]
 
     explanation_outputs = [

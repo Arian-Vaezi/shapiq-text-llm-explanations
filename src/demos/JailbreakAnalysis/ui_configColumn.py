@@ -8,8 +8,11 @@ class ExplanationConfigColumn:
 
     This component wraps a Column containing dropdowns for:
     - Model selection
+    - Judge model selection
     - Segmentation level
     - Masking strategy
+    - Segmentation window size
+    - Similarity threshold
     """
 
     def __init__(self) -> None:
@@ -25,6 +28,15 @@ class ExplanationConfigColumn:
                     # "EleutherAI/gpt-neo-1.3B",
                 ],
                 value="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+                allow_custom_value=False,
+            )
+
+            self.dropdown_judge_model = gr.Dropdown(
+                label="Judge Model",
+                choices=[
+                    "Qwen/Qwen2.5-1.5B-Instruct",
+                ],
+                value="Qwen/Qwen2.5-1.5B-Instruct",
                 allow_custom_value=False,
             )
 
@@ -49,4 +61,14 @@ class ExplanationConfigColumn:
                 ],
                 value="remove",
                 allow_custom_value=False,
+            )
+
+            self.text_segmentation_window = gr.Textbox(
+                label="Segmentation Window Size",
+                value="4",
+            )
+
+            self.text_similarity_threshold = gr.Textbox(
+                label="Similarity Threshold",
+                value="0.50",
             )
