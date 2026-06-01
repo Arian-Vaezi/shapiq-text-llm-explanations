@@ -17,6 +17,7 @@ from transformers import (
     TextIteratorStreamer,
     pipeline,
 )
+from sentence_transformers import SentenceTransformer
 
 
 class HFModelWrapper:
@@ -45,6 +46,7 @@ class HFModelWrapper:
         hf_token: str | None = None,
     ) -> None:
         self.model_name = model_name
+        self._st_model: SentenceTransformer | None = None  # loaded lazily via load_embedding_model()
 
         # =====================================================
         # DEVICE
@@ -262,33 +264,51 @@ class HFModelWrapper:
 
         thread.join()
 
+    # =========================================================
+    # SEMANTIC EMBEDDINGS  (SentenceTransformer, separate from main model)
+    # =========================================================
+
+    def load_embedding_model(
+        self,
+        embedding_model_name: str = "sentence-transformers/all-mpnet-base-v2",
+    ) -> None:
+        """Loads a SentenceTransformer for semantic segmentation.
+
+        Kept separate from the main HF model so causal LMs can still use
+        embedding-based segmentation without conflict.
+
+        Args:
+            embedding_model_name: Any SentenceTransformer-compatible model name.
+                Defaults to all-mpnet-base-v2 (best quality for cosine similarity).
+        """
+        print(f"Loading embedding model: {embedding_model_name}")
+        self._st_model = SentenceTransformer(embedding_model_name, device=self.device)
+        print("Embedding model loaded.")
+
     @torch.no_grad()
     def encode(self, texts: list[str]) -> np.ndarray:
-        """
-        Returns one embedding vector per input text.
+        """Encode texts into normalized embeddings via the SentenceTransformer.
 
-        Shape:
-            (batch_size, hidden_size)
-        """
+        Embeddings are L2-normalized, so dot product == cosine similarity.
 
-        if not self.is_encoder:
-            raise ValueError(
-                f"Model '{self.model_name}' does not support embeddings."
+        Args:
+            texts: List of strings to embed.
+
+        Returns:
+            np.ndarray of shape (len(texts), hidden_dim).
+
+        Raises:
+            RuntimeError: If load_embedding_model() has not been called yet.
+        """
+        if self._st_model is None:
+            raise RuntimeError(
+                "No embedding model loaded. Call load_embedding_model() first."
             )
 
-        inputs = self.tokenizer(
+        return self._st_model.encode(
             texts,
-            return_tensors="pt",
-            padding=True,
-            truncation=True,
-        ).to(self.device)
-
-        outputs = self.model(**inputs)
-
-        hidden = outputs.last_hidden_state
-        mask = inputs["attention_mask"].unsqueeze(-1)
-
-        pooled = (hidden * mask).sum(dim=1)
-        pooled = pooled / mask.sum(dim=1).clamp(min=1)
-
-        return pooled.cpu().numpy()
+            batch_size=32,
+            convert_to_numpy=True,
+            normalize_embeddings=True,  # L2-norm → dot product == cosine sim
+            show_progress_bar=False,
+        )
