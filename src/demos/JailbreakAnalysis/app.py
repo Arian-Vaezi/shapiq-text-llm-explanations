@@ -24,7 +24,7 @@ MODEL_CACHE = {}
 
 PRELOAD_MODELS = [
     #"TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    "google/gemma-4-E2B-it", #chat
+    #"google/gemma-4-E2B-it", #chat
     "Qwen/Qwen2.5-1.5B-Instruct", #judge
     "sentence-transformers/all-mpnet-base-v2", #embedding
 ]
@@ -150,6 +150,7 @@ def build_explanation_html(
 def show_explanation(
     message: str,
     dropdown_model: str,
+    dropdown_scoring_mode: str,
     dropdown_judge_model: str,
     dropdown_segmentation: str,
     dropdown_masking: str,
@@ -164,6 +165,7 @@ def show_explanation(
 
     print(f"[show_explanation] Starting explanation for: '{message[:60]}...'")
     print(f"    - Model: {dropdown_model}")
+    print(f"    - Scoring Mode: {dropdown_scoring_mode}")
     print(f"    - Judge Model: {dropdown_judge_model}")
     print(f"    - Segmentation: {dropdown_segmentation}")
     print(f"    - Masking: {dropdown_masking}")
@@ -179,6 +181,7 @@ def show_explanation(
     game = JailbreakGame(
         model_name=dropdown_model,
         input_text=message,
+        scoring_mode=dropdown_scoring_mode,
         mask_strategy=dropdown_masking,
         segmentation=dropdown_segmentation,
         device="cuda",
@@ -230,6 +233,7 @@ with gr.Blocks() as demo:
 
         config_col = ExplanationConfigColumn()
         dropdown_model = config_col.dropdown_model
+        dropdown_scoring_mode = config_col.dropdown_scoring_mode
         dropdown_judge_model = config_col.dropdown_judge_model
         dropdown_segmentation = config_col.dropdown_segmentation
         dropdown_masking = config_col.dropdown_masking
@@ -294,6 +298,7 @@ with gr.Blocks() as demo:
     explanation_inputs = [
         msg_input,
         dropdown_model,
+        dropdown_scoring_mode,
         dropdown_judge_model,
         dropdown_segmentation,
         dropdown_masking,

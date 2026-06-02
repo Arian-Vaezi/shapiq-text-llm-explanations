@@ -8,11 +8,12 @@ class ExplanationConfigColumn:
 
     This component wraps a Column containing dropdowns for:
     - Model selection
-    - Judge model selection
+    - Judge model selection (visible only when scoring_mode is "llm-as-a-judge")
     - Segmentation level
     - Masking strategy
-    - Segmentation window size
-    - Similarity threshold
+    - Value function / scoring mode
+    - Segmentation window size (visible only when segmentation is "semantic")
+    - Similarity threshold (visible only when segmentation is "semantic")
     """
 
     def __init__(self) -> None:
@@ -31,6 +32,16 @@ class ExplanationConfigColumn:
                 allow_custom_value=False,
             )
 
+            self.dropdown_scoring_mode = gr.Dropdown(
+                label="Value Function",
+                choices=[
+                    "logprob",
+                    "llm-as-a-judge",
+                ],
+                value="llm-as-a-judge",
+                allow_custom_value=False,
+            )
+
             self.dropdown_judge_model = gr.Dropdown(
                 label="Judge Model",
                 choices=[
@@ -38,6 +49,7 @@ class ExplanationConfigColumn:
                 ],
                 value="Qwen/Qwen2.5-1.5B-Instruct",
                 allow_custom_value=False,
+                visible=True,  # visible by default since default scoring mode is llm-as-a-judge
             )
 
             self.dropdown_segmentation = gr.Dropdown(
@@ -46,8 +58,9 @@ class ExplanationConfigColumn:
                     "word",
                     "token",
                     "sentence",
+                    "semantic",
                 ],
-                value="sentence",
+                value="semantic",
                 allow_custom_value=False,
             )
 
@@ -66,9 +79,27 @@ class ExplanationConfigColumn:
             self.text_segmentation_window = gr.Textbox(
                 label="Segmentation Window Size",
                 value="4",
+                visible=True,  # visible by default since default segmentation is "semantic"
             )
 
             self.text_similarity_threshold = gr.Textbox(
                 label="Similarity Threshold",
                 value="0.50",
+                visible=True,  # visible by default since default segmentation is "semantic"
             )
+
+        # Wire up visibility toggles
+        self.dropdown_segmentation.change(
+            fn=lambda seg: (
+                gr.update(visible=seg == "semantic"),
+                gr.update(visible=seg == "semantic"),
+            ),
+            inputs=self.dropdown_segmentation,
+            outputs=[self.text_segmentation_window, self.text_similarity_threshold],
+        )
+
+        self.dropdown_scoring_mode.change(
+            fn=lambda mode: gr.update(visible=mode == "llm-as-a-judge"),
+            inputs=self.dropdown_scoring_mode,
+            outputs=self.dropdown_judge_model,
+        )

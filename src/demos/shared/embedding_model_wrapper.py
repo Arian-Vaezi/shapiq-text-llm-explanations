@@ -20,6 +20,9 @@ class EmbeddingModelWrapper:
         vecs = emb.encode(["hello world", "foo bar"])  # shape (2, 768), L2-normalized
     """
 
+    
+    EMBEDDING_MODELS: list[str] = ("sentence-transformers", "all-mpnet", "all-minilm", "bge-", "e5-")
+
     def __init__(
         self,
         model_name: str = "sentence-transformers/all-mpnet-base-v2",

@@ -31,6 +31,9 @@ def HFModelWrapper(
     if any(x in name for x in EncoderModelWrapper.ENCODER_MODELS):
         return EncoderModelWrapper(model_name, device=device, hf_token=hf_token)
 
+    if any(x in name for x in EmbeddingModelWrapper.EMBEDDING_MODELS):
+        return EmbeddingModelWrapper(model_name, device=device)
+        
     msg = f"Unsupported model type for model: {model_name}"
     raise ValueError(msg)
 
