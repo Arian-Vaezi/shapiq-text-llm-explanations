@@ -1712,14 +1712,13 @@ RAG_PIPELINE_STEPS = [
   "title": "Page 26, chunk 44",
   "text": "...",
   "page_number": 26,
-  "section_title": "South Polar Region",
+  "section_title": "Methods",
   "chunk_type": "body_text",
   "text_length": 180,
   "flags": [],
   "dense_score": 0.684,
   "keyword_score": 0.150,
-  "rerank_score": 0.969,
-  "dominant_aspect": "south_polar_overview"
+  "rerank_score": 0.969
 }""",
         "details": (
             "Each candidate is heuristically typed as body text, reference, caption, table, or "
@@ -1752,12 +1751,12 @@ RAG_PIPELINE_STEPS = [
     {
         "name": "6. Transparent Reranking",
         "purpose": "Select answer-useful context rather than merely semantically nearby text.",
-        "formula": r"R(c)=\alpha \hat{s}_{dense}(c)+\beta \hat{s}_{kw}(c)+\gamma O(q,c)+\Delta_{meta}(c)+\Delta_{aspect}(c)",
+        "formula": r"R(c)=\alpha \hat{s}_{dense}(c)+\beta \hat{s}_{kw}(c)+\gamma O(q,c)+\Delta_{meta}(c)",
         "schema": "",
         "details": (
             "Dense and keyword scores are normalized and combined with query-term overlap, metadata "
-            "quality, and aspect coverage. References and caption-only chunks receive penalties; "
-            "body text and core science aspects receive small bonuses."
+            "quality, and low-value chunk penalties. References and caption-only chunks receive "
+            "penalties unless the query explicitly asks for them."
         ),
     },
     {
@@ -1768,7 +1767,7 @@ RAG_PIPELINE_STEPS = [
         "details": (
             "The selector first classifies the query as narrow factual or broad synthesis. Narrow "
             "queries use high relevance weight; broad queries use lower relevance weight and more "
-            "novelty from new sections, aspects, and low redundancy. Narrow subsections remain "
+            "novelty from new sections, query-term coverage, and low redundancy. Narrow chunks remain "
             "eligible, but they are discouraged from becoming the dominant first context chunk."
         ),
     },
@@ -1779,9 +1778,8 @@ RAG_PIPELINE_STEPS = [
         "schema": "",
         "details": (
             "The prompt instructs the model to synthesize across all selected evidence, avoid "
-            "anchoring on the first chunk, and say when the context is insufficient. Location claims "
-            "are constrained so ejecta near a landing site is not described as the source basin being "
-            "physically at the south pole."
+            "anchoring on the first chunk, say when the context is insufficient, and avoid claims "
+            "not grounded in the retrieved context."
         ),
     },
     {
@@ -1978,9 +1976,9 @@ def render_retrieval_debug(trace: dict[str, object]) -> None:
         if expanded:
             st.caption("Expanded queries")
             st.write(expanded)
-        coverage = debug.get("aspect_coverage", {})
+        coverage = debug.get("coverage_summary", {})
         if coverage:
-            st.caption("Aspect coverage summary")
+            st.caption("Coverage summary")
             st.json(coverage)
         for title, key in [
             ("Raw dense retrieval", "raw_dense_results"),

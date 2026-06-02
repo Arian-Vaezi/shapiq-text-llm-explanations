@@ -24,7 +24,7 @@ class GenerationResult:
 def cached_hf_tokenizer(model_id: str) -> object:
     """Load and cache one Hugging Face tokenizer."""
     try:
-        from transformers import AutoTokenizer  # noqa: PLC0415
+        from transformers import AutoTokenizer
     except ImportError as error:  # pragma: no cover - depends on optional extra
         msg = (
             "Hugging Face scoring requires `transformers`. Install the demo "
@@ -42,8 +42,8 @@ def cached_hf_tokenizer(model_id: str) -> object:
 def cached_hf_model(model_id: str, device_map: str, torch_dtype_name: str) -> object:
     """Load and cache one Hugging Face model."""
     try:
-        import torch  # noqa: PLC0415
-        from transformers import (  # noqa: PLC0415
+        import torch
+        from transformers import (
             AutoConfig,
             AutoModelForCausalLM,
             AutoModelForImageTextToText,
@@ -65,8 +65,7 @@ def cached_hf_model(model_id: str, device_map: str, torch_dtype_name: str) -> ob
     config = AutoConfig.from_pretrained(model_id)
     architectures = getattr(config, "architectures", []) or []
     use_image_text = any(
-        "ForConditionalGeneration" in arch or "ImageTextToText" in arch
-        for arch in architectures
+        "ForConditionalGeneration" in arch or "ImageTextToText" in arch for arch in architectures
     )
     if use_image_text:
         model = AutoModelForImageTextToText.from_pretrained(model_id, **model_kwargs)
@@ -118,12 +117,9 @@ class HuggingFaceCausalLMBackend:
                     "does not contain the answer, say that the provided context is insufficient. "
                     "For broad explanatory questions, synthesize all distinct evidence types in "
                     "the context instead of anchoring on the first or highest-scoring chunk. "
-                    "Mention multiple scientific reasons when the context supports them, and "
-                    "keep narrow subtopics as secondary points unless the question asks for them. "
-                    "Be precise about location: "
-                    "if the context discusses ejecta or materials from basins such as Orientale or "
-                    "Tycho near a landing site, do not claim those basins are physically located at "
-                    "the lunar south pole."
+                    "Mention multiple reasons when the context supports them, keep narrow "
+                    "subtopics as secondary points unless the question asks for them, and do not "
+                    "add claims that are not grounded in the retrieved context."
                 ),
             },
             {
@@ -141,10 +137,9 @@ class HuggingFaceCausalLMBackend:
             "Answer the question using only the retrieved context. If the context does not "
             "contain the answer, say that the provided context is insufficient. For broad "
             "explanatory questions, synthesize all distinct evidence types in the context instead "
-            "of anchoring on the first or highest-scoring chunk. Mention multiple scientific "
-            "reasons when supported, and keep narrow subtopics secondary unless asked. Be precise "
-            "about location: ejecta or material near a site is not the same as the source basin "
-            "being physically located there.\n\n"
+            "of anchoring on the first or highest-scoring chunk. Mention multiple reasons when "
+            "supported, keep narrow subtopics secondary unless asked, and do not add claims that "
+            "are not grounded in the retrieved context.\n\n"
             f"Question:\n{question}\n\n"
             f"Retrieved context:\n{context}\n\n"
             "Answer:"
@@ -152,7 +147,7 @@ class HuggingFaceCausalLMBackend:
 
     def target_log_likelihood(self, prompt: str, target_answer: str) -> float:
         """Return average token log-likelihood of the target answer after the prompt."""
-        import torch  # noqa: PLC0415
+        import torch
 
         if not target_answer.strip():
             return 0.0
@@ -176,7 +171,7 @@ class HuggingFaceCausalLMBackend:
 
     def generate(self, question: str, context: str) -> GenerationResult:
         """Generate an answer from the selected context."""
-        import torch  # noqa: PLC0415
+        import torch
 
         prompt = self.build_chat_prompt(question, context)
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)

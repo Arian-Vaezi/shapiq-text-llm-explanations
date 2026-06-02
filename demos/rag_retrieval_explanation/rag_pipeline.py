@@ -65,16 +65,16 @@ class RetrievalDebugInfo:
     raw_rerank_order: list[dict[str, object]]
     reranked_results: list[dict[str, object]]
     selected_context: list[dict[str, object]]
-    aspect_coverage: dict[str, object]
+    coverage_summary: dict[str, object]
 
 
 def extract_pdf_pages(pdf_bytes: bytes) -> list[PDFPage]:
     """Extract text from uploaded PDF bytes."""
     try:
-        from pypdf import PdfReader  # noqa: PLC0415
+        from pypdf import PdfReader
     except ImportError as error:  # pragma: no cover - depends on optional extra
         try:
-            from PyPDF2 import PdfReader  # type: ignore[no-redef] # noqa: PLC0415
+            from PyPDF2 import PdfReader  # type: ignore[no-redef]
         except ImportError as fallback_error:  # pragma: no cover - depends on optional extra
             msg = (
                 "PDF upload requires `pypdf` or `PyPDF2`. Install the demo requirements "
@@ -235,17 +235,6 @@ def is_broad_explanatory_question(question: str) -> bool:
     return classify_query_intent(question) == "broad_synthesis"
 
 
-def query_asks_for_dust_electrodynamics(question: str) -> bool:
-    """Return True when dust/plasma/electrodynamics is explicitly requested."""
-    return bool(
-        re.search(
-            r"\b(dust|plasma|electrodynamic|electrodynamics|charging|terminator|surface potential|wake|wakes)\b",
-            question,
-            re.IGNORECASE,
-        )
-    )
-
-
 def expand_retrieval_queries(question: str) -> list[str]:
     """Expand broad explanatory questions with recall-oriented search phrasings."""
     q = normalize_whitespace(question)
@@ -281,103 +270,34 @@ def expand_retrieval_queries(question: str) -> list[str]:
     return deduped
 
 
-ASPECT_PRIORITY = {
-    "south_polar_overview": 0,
-    "volatiles_psr": 1,
-    "artemis_objectives": 2,
-    "impact_chronology": 3,
-    "illumination_access": 4,
-    "dust_electrodynamics": 5,
-}
-
-
-def detect_aspects(text: str) -> tuple[str, ...]:
-    """Label science aspects covered by a chunk for diverse context selection."""
-    low = text.lower()
-    tokens = set(_tokenize_for_retrieval(text))
-    aspects: list[str] = []
-
-    south_pole = "south pole" in low or "south polar" in low or "polar region" in low
-    overview_terms = {"region", "site", "sites", "terrain", "environment", "access", "science"}
-    if south_pole and len(tokens & overview_terms) >= 2:
-        aspects.append("south_polar_overview")
-
-    volatile_terms = {
-        "volatile",
-        "volatiles",
-        "water",
-        "ice",
-        "deposit",
-        "deposits",
-        "hydrogen",
-        "oxygen",
-    }
-    psr_phrase = bool(re.search(r"\b(permanently shadowed region|permanently shadowed regions|psr|psrs)\b", low))
-    cold_trap_phrase = bool(re.search(r"\b(cold trap|cold traps)\b", low))
-    volatile_hits = tokens & volatile_terms
-    if cold_trap_phrase or len(volatile_hits) >= 2 or (psr_phrase and volatile_hits):
-        aspects.append("volatiles_psr")
-
-    illumination_phrase = bool(
-        re.search(
-            r"\b(persistent illumination|near[- ]persistent illumination|near permanent illumination|"
-            r"long[- ]duration sunlight|sunlight|solar power|lunar night|low sun angle|"
-            r"illuminated for over 200 days|operational access)\b",
-            low,
-        )
-    )
-    if illumination_phrase and not query_asks_for_dust_electrodynamics(text):
-        aspects.append("illumination_access")
-
-    impact_phrase = bool(
-        re.search(
-            r"\b(impact history|cratering chronology|basin age|basin ages|impact flux|"
-            r"ejecta|sample age|sample ages|south pole-aitken|spa basin|spa|"
-            r"impact basin|impact basins)\b",
-            low,
-        )
-    )
-    if impact_phrase:
-        aspects.append("impact_chronology")
-
-    artemis_terms = {"artemis", "objective", "objectives", "goal", "goals", "science"}
-    core_objective_terms = {"volatiles", "volatile", "sample", "samples", "impact", "history", "origin"}
-    if "artemis" in tokens or (
-        len(tokens & artemis_terms) >= 2 and len(tokens & core_objective_terms) >= 1
-    ):
-        aspects.append("artemis_objectives")
-
-    dust_terms = {
-        "dust",
-        "electrodynamic",
-        "electrodynamics",
-        "plasma",
-        "terminator",
-        "charging",
-        "charged",
-        "wake",
-        "wakes",
-    }
-    if "surface potential" in low or len(tokens & dust_terms) >= 2:
-        aspects.append("dust_electrodynamics")
-
-    aspects = sorted(dict.fromkeys(aspects), key=lambda name: ASPECT_PRIORITY.get(name, 99))
-    return tuple(aspects)
-
-
-def dominant_aspect(text: str) -> str:
-    """Return the primary aspect label used for balanced context selection."""
-    aspects = detect_aspects(text)
-    return aspects[0] if aspects else "general"
-
-
-ASPECT_KEYWORDS = {
-    "south_polar_overview": {"south", "polar", "pole", "region", "site", "terrain"},
-    "volatiles_psr": {"volatile", "volatiles", "water", "ice", "deposit", "deposits", "hydrogen", "oxygen", "cold", "trap", "traps", "psr", "psrs"},
-    "artemis_objectives": {"artemis", "objective", "objectives", "goal", "goals", "science", "sample", "samples"},
-    "impact_chronology": {"impact", "cratering", "chronology", "basin", "basins", "ejecta", "flux", "age", "ages", "sample", "samples", "spa"},
-    "illumination_access": {"illumination", "illuminated", "sunlight", "solar", "power", "access", "persistent", "duration", "night"},
-    "dust_electrodynamics": {"dust", "plasma", "electrodynamic", "electrodynamics", "charging", "charged", "terminator", "potential", "wake", "wakes"},
+QUERY_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "how",
+    "in",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "to",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "why",
+    "with",
 }
 
 BROAD_OVERVIEW_TERMS = {
@@ -405,24 +325,22 @@ BROAD_OVERVIEW_TERMS = {
 }
 
 TECHNICAL_TERMS = {
-    "electrodynamics",
-    "plasma",
-    "terminator",
-    "charging",
-    "charged",
-    "potential",
-    "wakes",
-    "spectrometer",
-    "isotope",
-    "mineralogy",
-    "granulometry",
-    "topography",
-    "photometry",
-    "regolith",
-    "volatile",
-    "volatiles",
-    "chronology",
-    "geochemistry",
+    "algorithm",
+    "appendix",
+    "coefficient",
+    "configuration",
+    "constraint",
+    "equation",
+    "experiment",
+    "formula",
+    "implementation",
+    "parameter",
+    "protocol",
+    "requirement",
+    "specification",
+    "table",
+    "threshold",
+    "variable",
 }
 
 
@@ -492,8 +410,8 @@ def cached_embedding_backend(
 ) -> tuple[object, object, object]:
     """Load and cache a Hugging Face embedding model."""
     try:
-        import torch  # noqa: PLC0415
-        from transformers import AutoModel, AutoTokenizer  # noqa: PLC0415
+        import torch
+        from transformers import AutoModel, AutoTokenizer
     except ImportError as error:  # pragma: no cover - depends on optional extra
         msg = "Dense retrieval requires `torch` and `transformers`."
         raise RuntimeError(msg) from error
@@ -522,7 +440,7 @@ def dense_embed_texts(
     batch_size: int = 16,
 ) -> np.ndarray:
     """Embed texts with mean pooled Transformer hidden states."""
-    import torch  # noqa: PLC0415
+    import torch
 
     tokenizer, model, device = cached_embedding_backend(model_id, device_name)
     embeddings = []
@@ -564,8 +482,8 @@ def _normalize_scores(scores: np.ndarray) -> np.ndarray:
 def _keyword_scores(question: str, chunks: list[CandidateChunk]) -> np.ndarray:
     """Compute sparse keyword scores with expanded queries."""
     try:
-        from sklearn.feature_extraction.text import TfidfVectorizer  # noqa: PLC0415
-        from sklearn.metrics.pairwise import linear_kernel  # noqa: PLC0415
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import linear_kernel
     except ImportError as error:  # pragma: no cover - project dependency
         msg = "PDF retrieval requires scikit-learn, which is part of the project dependencies."
         raise RuntimeError(msg) from error
@@ -604,11 +522,27 @@ def _dense_scores(
 
 def _keyword_overlap_bonus(question: str, chunk: CandidateChunk) -> float:
     """Small interpretable bonus for query/expansion term overlap."""
-    query_tokens = set(_tokenize_for_retrieval(" ".join(expand_retrieval_queries(question))))
+    query_tokens = query_concept_terms(question)
     chunk_tokens = set(_tokenize_for_retrieval(chunk.text))
     if not query_tokens:
         return 0.0
     return min(1.0, len(query_tokens & chunk_tokens) / max(4, len(query_tokens) * 0.22))
+
+
+def query_concept_terms(question: str) -> set[str]:
+    """Return non-trivial query terms used for transparent retrieval diagnostics."""
+    expanded = " ".join(expand_retrieval_queries(question))
+    return {
+        token
+        for token in _tokenize_for_retrieval(expanded)
+        if token not in QUERY_STOPWORDS and len(token) > 2
+    }
+
+
+def chunk_query_hits(question: str, chunk: CandidateChunk) -> tuple[str, ...]:
+    """Return query concept terms found in a chunk."""
+    chunk_tokens = set(_tokenize_for_retrieval(chunk.text))
+    return tuple(sorted(query_concept_terms(question) & chunk_tokens))
 
 
 def _metadata_adjustment(question: str, chunk: CandidateChunk) -> tuple[float, tuple[str, ...]]:
@@ -642,10 +576,6 @@ def _metadata_adjustment(question: str, chunk: CandidateChunk) -> tuple[float, t
         adjustment -= 0.12
         reasons.append("downweighted: citation-heavy")
 
-    aspects = detect_aspects(chunk.text)
-    if aspects:
-        adjustment += 0.04 * min(3, len(aspects))
-        reasons.append("science aspect: " + ", ".join(aspects))
     return adjustment, tuple(dict.fromkeys(reasons))
 
 
@@ -667,8 +597,7 @@ def _raw_result_rows(
                 label: round(float(scores[int(idx)]), 4),
                 "page": chunk.page_number,
                 "type": chunk.chunk_type,
-                "dominant_aspect": dominant_aspect(chunk.text),
-                "aspects": ", ".join(detect_aspects(chunk.text)),
+                "section": chunk.section_title,
                 "flags": ", ".join(chunk.flags),
                 "preview": chunk.text[:220],
             }
@@ -679,24 +608,41 @@ def _raw_result_rows(
 def _selection_reason(question: str, chunk: CandidateChunk) -> str:
     """Explain why a selected chunk survived final context balancing."""
     if classify_query_intent(question) == "broad_synthesis":
-        aspects = detect_aspects(chunk.text)
-        if aspects:
-            return "included for relevance plus new aspect coverage: " + ", ".join(aspects)
+        hits = chunk_query_hits(question, chunk)
+        if hits:
+            return "included for relevance plus query-term coverage: " + ", ".join(hits[:6])
         if is_overview_chunk(chunk):
             return "included as overview/summary-quality context"
     return "included by relevance score"
 
 
-def _aspect_coverage_summary(selected_chunks: list[CandidateChunk]) -> dict[str, object]:
-    """Summarize final context aspect coverage for debug output."""
-    coverage: dict[str, list[str]] = {}
+def _coverage_summary(question: str, selected_chunks: list[CandidateChunk]) -> dict[str, object]:
+    """Summarize final context coverage with generic, domain-independent signals."""
+    query_terms = sorted(query_concept_terms(question))
+    covered_terms = sorted(
+        {term for chunk in selected_chunks for term in chunk_query_hits(question, chunk)}
+    )
+    terms_by_chunk = {
+        chunk.title: list(chunk_query_hits(question, chunk))
+        for chunk in selected_chunks
+        if chunk_query_hits(question, chunk)
+    }
+    sections: dict[str, list[str]] = {}
+    chunk_types: dict[str, int] = {}
     for chunk in selected_chunks:
-        for aspect in detect_aspects(chunk.text):
-            coverage.setdefault(aspect, []).append(chunk.title)
+        section = chunk.section_title or "unknown"
+        sections.setdefault(section, []).append(chunk.title)
+        chunk_types[chunk.chunk_type] = chunk_types.get(chunk.chunk_type, 0) + 1
     return {
-        "covered_aspects": sorted(coverage),
-        "chunks_by_aspect": coverage,
-        "section_titles": sorted({chunk.section_title for chunk in selected_chunks if chunk.section_title}),
+        "query_terms": query_terms,
+        "covered_query_terms": covered_terms,
+        "missing_query_terms": sorted(set(query_terms) - set(covered_terms)),
+        "terms_by_chunk": terms_by_chunk,
+        "section_titles": sorted(
+            {chunk.section_title for chunk in selected_chunks if chunk.section_title}
+        ),
+        "chunks_by_section": sections,
+        "chunk_types": chunk_types,
     }
 
 
@@ -716,15 +662,9 @@ def is_overview_chunk(chunk: CandidateChunk) -> bool:
     return bool((text_tokens | section_tokens) & BROAD_OVERVIEW_TERMS)
 
 
-def _query_mentions_aspect(question: str, aspect: str) -> bool:
-    """Return True when the user explicitly asks for a detected aspect."""
-    query_tokens = set(_tokenize_for_retrieval(question))
-    return bool(query_tokens & ASPECT_KEYWORDS.get(aspect, set()))
-
-
 def _query_concept_coverage(question: str, chunk: CandidateChunk) -> float:
     """Measure how many non-stopword query concepts appear in a chunk."""
-    query_tokens = set(_tokenize_for_retrieval(" ".join(expand_retrieval_queries(question))))
+    query_tokens = query_concept_terms(question)
     chunk_tokens = set(_tokenize_for_retrieval(chunk.text))
     if not query_tokens:
         return 0.0
@@ -766,24 +706,35 @@ def _narrow_subsection_penalty(question: str, chunk: CandidateChunk, intent: str
         penalty += 0.18
     if technical_hits >= 5 and overview_hits <= 1:
         penalty += 0.12
-    dominant = dominant_aspect(chunk.text)
-    if dominant != "general" and not _query_mentions_aspect(question, dominant) and overview_hits == 0:
+    if _query_concept_coverage(question, chunk) < 0.2 and overview_hits == 0:
         penalty += 0.12
     return penalty
 
 
-def _novelty_score(chunk: CandidateChunk, selected_chunks: list[CandidateChunk]) -> float:
-    """Reward new sections/aspects and low redundancy with selected context."""
+def _novelty_score(
+    question: str,
+    chunk: CandidateChunk,
+    selected_chunks: list[CandidateChunk],
+) -> float:
+    """Reward new sections, new query-term coverage, and low redundancy."""
     if not selected_chunks:
         return 1.0
-    selected_sections = {selected.section_title for selected in selected_chunks if selected.section_title}
-    selected_aspects = {aspect for selected in selected_chunks for aspect in detect_aspects(selected.text)}
-    chunk_aspects = set(detect_aspects(chunk.text))
-    section_bonus = 0.25 if chunk.section_title and chunk.section_title not in selected_sections else 0.0
-    aspect_bonus = 0.35 * min(1.0, len(chunk_aspects - selected_aspects) / max(1, len(chunk_aspects)))
-    max_similarity = max(_jaccard_similarity(chunk.text, selected.text) for selected in selected_chunks)
+    selected_sections = {
+        selected.section_title for selected in selected_chunks if selected.section_title
+    }
+    selected_terms = {
+        term for selected in selected_chunks for term in chunk_query_hits(question, selected)
+    }
+    chunk_terms = set(chunk_query_hits(question, chunk))
+    section_bonus = (
+        0.25 if chunk.section_title and chunk.section_title not in selected_sections else 0.0
+    )
+    term_bonus = 0.20 * min(1.0, len(chunk_terms - selected_terms) / max(1, len(chunk_terms)))
+    max_similarity = max(
+        _jaccard_similarity(chunk.text, selected.text) for selected in selected_chunks
+    )
     anti_redundancy = 1.0 - max_similarity
-    return float(max(0.0, min(1.0, 0.40 * anti_redundancy + section_bonus + aspect_bonus)))
+    return float(max(0.0, min(1.0, 0.55 * anti_redundancy + section_bonus + term_bonus)))
 
 
 def _retrieved_chunk_from_candidate(
@@ -845,7 +796,7 @@ def _select_diverse_context(
             if not is_allowed(idx):
                 continue
             relevance = float(relevance_scores[idx])
-            novelty = _novelty_score(chunk, selected_chunks)
+            novelty = _novelty_score(question, chunk, selected_chunks)
             quality = _quality_bonus(chunk)
             penalty = _narrow_subsection_penalty(question, chunk, intent)
             concept_coverage = _query_concept_coverage(question, chunk)
@@ -980,8 +931,8 @@ def retrieve_relevant_chunks_with_debug(
             "dense": round(float(dense_scores[int(idx)]), 4),
             "keyword": round(float(keyword_scores[int(idx)]), 4),
             "rerank": round(float(rerank_scores[int(idx)]), 4),
-            "dominant_aspect": dominant_aspect(chunk.text),
-            "aspects": ", ".join(detect_aspects(chunk.text)),
+            "section": chunk.section_title,
+            "query_hits": ", ".join(chunk_query_hits(question, chunk)),
             "reasons": "; ".join(reasons_by_idx[int(idx)]),
             "preview": chunk.text[:220],
         }
@@ -997,8 +948,8 @@ def retrieve_relevant_chunks_with_debug(
             "dense": round(float(dense_scores[idx]), 4),
             "keyword": round(float(keyword_scores[idx]), 4),
             "rerank": round(float(rerank_scores[idx]), 4),
-            "dominant_aspect": dominant_aspect(chunks[idx].text),
-            "aspects": ", ".join(detect_aspects(chunks[idx].text)),
+            "section": chunks[idx].section_title,
+            "query_hits": ", ".join(chunk_query_hits(question, chunks[idx])),
             "selection_reason": _selection_reason(question, chunks[idx]),
             **selection_components.get(idx, {}),
             "reasons": "; ".join(reasons_by_idx[idx]),
@@ -1016,7 +967,7 @@ def retrieve_relevant_chunks_with_debug(
         raw_rerank_order=raw_rerank_rows,
         reranked_results=reranked_rows,
         selected_context=selected_rows,
-        aspect_coverage=_aspect_coverage_summary(selected_chunks),
+        coverage_summary=_coverage_summary(question, selected_chunks),
     )
     return ranked, debug
 

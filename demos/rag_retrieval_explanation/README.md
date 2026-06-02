@@ -1,18 +1,48 @@
 # RAG Retrieval Explanation Demo
 
-Streamlit framework for **[Demo] RAG-retrieval explanation #4**.
+This Streamlit app is the main research prototype for explaining retrieved RAG
+evidence with Shapley values and Shapley interactions.
 
-This demo treats retrieved RAG chunks as players in a cooperative game. For each
-coalition of chunks, the app builds a prompt, scores how well the selected
-context supports a reference or generated answer, and then uses shapiq to estimate chunk-level
-Shapley values and pairwise interactions.
+The demo treats retrieved chunks as players in a cooperative game. For each
+coalition of chunks, the app scores how well the selected context supports a
+reference or generated answer, then uses shapiq to estimate chunk-level Shapley
+values and pairwise interactions. This makes the central distinction visible:
+retrieval scores measure query relevance, while Shapley values measure answer
+support under the chosen value function.
 
-The app then performs a second, finer drilldown: it splits all retrieved chunks
-into sentence players, runs a sentence-level shapiq game, and displays the
-sentence attribution table and chart.
+The app also performs a finer drilldown by splitting retrieved chunks into
+sentence players, running a sentence-level shapiq game, and displaying
+sentence-level attribution.
 
 The framework is intentionally isolated from the package code. It only adds
 files under `demos/rag_retrieval_explanation/`.
+
+## Research Question
+
+RAG systems usually expose retrieved chunks and retrieval scores, but those
+scores do not explain how each chunk contributes to the final answer. This demo
+asks:
+
+- Which retrieved chunks actually support the answer?
+- Which chunks are distractors despite looking query-relevant?
+- Which chunks are complementary and only useful together?
+- Which chunks are redundant and split credit?
+- Does removing high-attribution evidence reduce answer support?
+
+## Method Overview
+
+The prototype has five conceptual layers:
+
+1. Build or load a RAG trace: question, answer, and retrieved chunks.
+2. Treat chunks as cooperative-game players.
+3. Define a value function `v(S)` that scores answer support from a chunk subset.
+4. Compute Shapley values and pairwise interactions with shapiq.
+5. Validate attribution with insertion/deletion curves and baseline orders.
+
+The recommended thesis framing is:
+
+> Shapley-based attribution explains how retrieved evidence contributes to RAG
+> answers in ways retrieval scores alone cannot.
 
 ## Run
 
@@ -69,7 +99,7 @@ Streamlit run unless the token is removed, revoked, or you switch machines.
   retrieval-score order, and random removal.
 - Retrieval debug traces for uploaded PDFs: query intent, expanded queries, raw
   dense/keyword/rerank order, final prompt order, score components, selected
-  reasons, and aspect coverage.
+  reasons, and generic coverage summaries.
 - Sentence drilldown: all chunks are split into sentence players, then shown as
   sentence-level attribution bars and a compact attribution table.
 - Coalition audit table: selected coalitions and their support scores.
@@ -130,8 +160,7 @@ The app then:
    reasons, major themes, objectives, motivations, and scientific value,
 4. retrieves candidates with dense embedding cosine similarity by default
    (`sentence-transformers/all-MiniLM-L6-v2`) and sparse TF-IDF keyword scores,
-5. reranks candidates with relevance, keyword overlap, metadata quality, and
-   detected aspect labels,
+5. reranks candidates with relevance, keyword overlap, and metadata quality,
 6. selects the final prompt context with an intent-aware policy:
    **narrow factual** questions use high relevance weight, while
    **broad synthesis** questions use a lower relevance weight and stronger
@@ -166,7 +195,7 @@ S(c | C) = lambda * relevance(c)
          - narrow_subsection_penalty(c)
 ```
 
-Novelty rewards new section titles, new detected aspect labels, and low
+Novelty rewards new section titles, new query-term coverage, and low
 similarity to already selected chunks. Quality rewards body-text,
 overview/summary/objective chunks, sufficient length, and low citation density.
 The narrow-subsection penalty discourages highly technical goal/subsection
@@ -189,7 +218,7 @@ For uploaded PDFs, expand **Retrieval debug** on the dashboard to inspect:
 - final prompt order,
 - per-selected-chunk relevance, novelty, concept coverage, quality bonus,
   narrow-subsection penalty, final selection score, and selection reason,
-- aspect coverage and selected section titles.
+- query-term coverage, chunk types, and selected section titles.
 
 ## Value Functions
 
@@ -301,22 +330,23 @@ These synthetic tests cover:
 
 - a broad synthesis query where a narrow technical subsection must not become
   the first context chunk,
-- a narrow dust/electrodynamics query where that same narrow chunk is allowed to
-  rank first,
-- a specific sample-priority query where sample-return evidence should remain
-  highly ranked.
+- a narrow query where the directly requested technical chunk is allowed to rank
+  first,
+- a specific query where directly matching evidence should remain highly ranked.
 
 For a real PDF report, use the standalone retrieval regression helper:
 
 ```bash
-uv run python demos/rag_retrieval_explanation/regression_check.py path/to/report.pdf
+uv run python demos/rag_retrieval_explanation/regression_check.py path/to/report.pdf \
+  --question "What is the main contribution?" \
+  --expected-evidence-term "contribution"
 ```
 
 This script runs PDF parsing, chunking, retrieval, reranking, and final context
 selection without running Gemma generation or Shapley attribution. It prints the
-selected chunks, dominant aspects, flags, and aspect coverage. Optionally pass
-`--answer-file path/to/generated_answer.txt` to check answer-level coverage for
-the lunar south-pole example.
+selected chunks, flags, and coverage summary. Optionally pass
+`--answer-file path/to/generated_answer.txt`, `--expected-answer-term`, and
+`--forbidden-answer-term` to check answer-level smoke expectations.
 
 ## Implementation Notes
 
