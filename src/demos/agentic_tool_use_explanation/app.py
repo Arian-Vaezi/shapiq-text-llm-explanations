@@ -326,6 +326,19 @@ def clean_key(value: str) -> str:
     return value.lower().replace(" ", "_").replace("-", "_").replace("/", "_")
 
 
+def truncate_label(value: str, max_length: int = 72) -> str:
+    """Shorten long selectbox labels without changing their underlying value."""
+    if len(value) <= max_length:
+        return value
+    return value[: max_length - 1].rstrip() + "..."
+
+
+def scenario_prompt_label(trace_name: str) -> str:
+    """Display a sample scenario by its user prompt instead of its internal name."""
+    user_prompt = " ".join(SAMPLE_TRACES[trace_name]["user_segments"])
+    return truncate_label(user_prompt)
+
+
 def build_segments(default_segments: list[str], source: str) -> list[ToolUseSegment]:
     """Create fixed demo segments for a prompt source."""
     return [
@@ -582,12 +595,24 @@ def main() -> None:
         """,
         unsafe_allow_html=True,
     )
+    if "has_run" not in st.session_state:
+        st.session_state.has_run = False
+    if "result" not in st.session_state:
+        st.session_state.result = None
+    if "pending_run" not in st.session_state:
+        st.session_state.pending_run = False
 
     mode = st.sidebar.radio(
         "Input",
         ["Example request", "Custom request"],
         index=0,
     )
+    with st.sidebar.expander("How it works", expanded=False):
+        st.write("Request -> Segmentation -> Remove players -> Tool support score -> Shapley Explanation")
+        st.caption(
+            "The app checks which prompt parts support the selected tool and then shows "
+            "their importance."
+        )
     scorer_backend = st.sidebar.selectbox(
         "Scoring method",
         # Only presentation-ready scoring methods are exposed. Other experimental scorers
@@ -606,21 +631,14 @@ def main() -> None:
     if scorer_backend == "LLM logprob scorer":
         with st.sidebar.expander("Logprob scorer settings", expanded=True):
             logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
-            candidate_template = st.text_input(
-                "candidate template",
-                value=DEFAULT_CANDIDATE_TEMPLATE,
-            )
-            use_descriptive_candidates = st.checkbox(
-                "use descriptive candidate continuations",
-                value=False,
-            )
-            if use_descriptive_candidates:
-                candidate_texts = DESCRIPTIVE_CANDIDATE_TEXTS
-            normalize_by_length = st.checkbox("normalize by length", value=True)
 
     router = LexicalToolRouter()
     if mode == "Example request":
-        trace_name = st.sidebar.selectbox("Scenario", list(SAMPLE_TRACES))
+        trace_name = st.sidebar.selectbox(
+            "Scenario",
+            list(SAMPLE_TRACES),
+            format_func=scenario_prompt_label,
+        )
         trace = SAMPLE_TRACES[trace_name]
         key = clean_key(trace_name)
         default_target = str(trace["target_tool"])
@@ -674,6 +692,23 @@ def main() -> None:
     empty_prompt = build_coalition_prompt([])
     index = DEFAULT_INDEX
     max_order = DEFAULT_MAX_ORDER
+    signature = (
+        mode,
+        trace_name,
+        user_request,
+        target_tool,
+        scorer_backend,
+        logprob_model_id,
+        candidate_template,
+        bool(candidate_texts),
+        normalize_by_length,
+        show_lexical_comparison,
+    )
+    if st.session_state.get("result_signature") != signature:
+        st.session_state.has_run = False
+        st.session_state.result = None
+        st.session_state.pending_run = False
+        st.session_state.result_signature = signature
 
     st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
     st.markdown(
@@ -693,6 +728,14 @@ def main() -> None:
         """,
         unsafe_allow_html=True,
     )
+
+    run = False
+    if not st.session_state.has_run and not st.session_state.pending_run:
+        if st.button("Run explanation", type="primary"):
+            st.session_state.pending_run = True
+            st.rerun()
+        st.info("Enter a prompt and click Run to see the explanation.")
+        return
 
     st.markdown('<div class="section-label">Initial tool suggestion</div>', unsafe_allow_html=True)
     st.caption(
@@ -726,8 +769,10 @@ def main() -> None:
         """
         <div class="setup-line">
             <strong>Value function:</strong>
-            <code>v(S) = score(target tool | prompt built from selected segments S)</code><br>
-            A coalition keeps only selected system/user segments.
+            <code>v(S) = score(target tool | selected prompt parts S)</code><br>
+            S is a subset of prompt parts / players. For each S, the app builds a
+            partial prompt using only those selected parts, and the scorer returns how
+            strongly that partial prompt supports the selected target tool.
         </div>
         """,
         unsafe_allow_html=True,
@@ -735,16 +780,11 @@ def main() -> None:
     with st.expander("Why this is a Shapley game", expanded=False):
         st.markdown(
             """
-            Prompt segments are treated as cooperative-game players. For each coalition, the app
-            rebuilds the prompt using only the selected system and user segments, scores support
-            for the target tool, and asks shapiq to attribute that score back to individual
-            segments and segment pairs.
+            Shapley values compare tool-support scores across different prompt-part
+            combinations to estimate each prompt part's contribution.
 
-            This follows the same idea as SHAP and TokenSHAP: explain a model-facing value
-            function by comparing many subsets of input parts.
-
-            References: [SHAP](https://arxiv.org/abs/1705.07874) and
-            [TokenSHAP](https://aclanthology.org/2024.nlp4science-1.1.pdf).
+            A positive contribution means the prompt part supports the target tool.
+            A negative contribution means it weakens support for the target tool.
             """
         )
 
@@ -771,129 +811,185 @@ def main() -> None:
                     unsafe_allow_html=True,
                 )
 
-    run = st.button("Run explanation", type="primary")
-    if not run:
-        st.info("Choose a scenario and target tool, then run the explanation.")
-        return
+    run = st.session_state.pending_run
+    st.session_state.pending_run = False
 
     try:
-        from tool_game import ToolUseGame
-
         from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
     except Exception as error:  # noqa: BLE001
-        st.error(
-            "The demo controls are ready, but the full shapiq explanation stack "
-            f"could not be imported in this local environment: {error}"
-        )
+        st.error(f"The result exists, but plotting could not be imported: {error}")
         return
 
-    llm_scorer = LLMToolScorer(llm=MockLLM())
-    lexical_scorer = LexicalToolScorer()
-    if scorer_backend == "Keyword baseline":
-        primary_scorer = lexical_scorer
-        primary_label = "Keyword baseline"
-    elif scorer_backend == "LLM logprob scorer":
-        with st.spinner(f"Loading logprob scorer `{logprob_model_id}`..."):
-            try:
-                primary_scorer = load_logprob_scorer(
-                    logprob_model_id,
-                    candidate_template,
-                    candidate_texts,
-                    bool(normalize_by_length),
-                )
-            except Exception as error:  # noqa: BLE001
-                st.error(
-                    "Could not load the logprob-based scorer. "
-                    "Try a smaller causal language model or check your environment. "
-                    f"Details: {error}"
-                )
-                return
-        primary_label = "LLM logprob scorer"
-    else:
-        primary_scorer = llm_scorer
-        primary_label = "Mock model scorer"
+    if run:
+        try:
+            from tool_game import ToolUseGame
+        except Exception as error:  # noqa: BLE001
+            st.error(
+                "The demo controls are ready, but the full shapiq explanation stack "
+                f"could not be imported in this local environment: {error}"
+            )
+            return
 
-    full_score = primary_scorer.score_batch(
-        [full_prompt],
-        target_tool=target_tool,
-        tool_descriptions=TOOLS,
-    )[0]
-    empty_score = primary_scorer.score_batch(
-        [empty_prompt],
-        target_tool=target_tool,
-        tool_descriptions=TOOLS,
-    )[0]
+    if run:
+        llm_scorer = LLMToolScorer(llm=MockLLM())
+        lexical_scorer = LexicalToolScorer()
+        if scorer_backend == "Keyword baseline":
+            primary_scorer = lexical_scorer
+            primary_label = "Keyword baseline"
+        elif scorer_backend == "LLM logprob scorer":
+            with st.spinner(f"Loading logprob scorer `{logprob_model_id}`..."):
+                try:
+                    primary_scorer = load_logprob_scorer(
+                        logprob_model_id,
+                        candidate_template,
+                        candidate_texts,
+                        bool(normalize_by_length),
+                    )
+                except Exception as error:  # noqa: BLE001
+                    st.error(
+                        "Could not load the logprob-based scorer. "
+                        "Try a smaller causal language model or check your environment. "
+                        f"Details: {error}"
+                    )
+                    return
+            primary_label = "LLM logprob scorer"
+        else:
+            primary_scorer = llm_scorer
+            primary_label = "Mock model scorer"
 
-    with st.spinner("Computing tool-use attributions..."):
-        game = ToolUseGame(
+        full_score = primary_scorer.score_batch(
+            [full_prompt],
             target_tool=target_tool,
-            segments=segments,
-            scorer=primary_scorer,
             tool_descriptions=TOOLS,
-        )
-        approximator = make_approximator(index, game.n_players, max_order)
-        explanation = approximator.approximate(budget=budget, game=game)
-        first_order = explanation.get_n_order(order=1)
-        attribution_frame = values_to_frame(first_order, segments)
-        pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
-        pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
-        notes = build_interpretation_notes(
-            attribution_frame,
-            pair_label,
-            pair_value,
-            full_score,
-        )
+        )[0]
+        empty_score = primary_scorer.score_batch(
+            [empty_prompt],
+            target_tool=target_tool,
+            tool_descriptions=TOOLS,
+        )[0]
 
-    top = attribution_frame.iloc[0] if not attribution_frame.empty else None
-    top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
-    top_score = 0.0 if top is None else float(top["attribution"])
-    interpretation_sentence = notes[0] if notes else "No interpretation is available for this run."
-
-    compare_with_lexical = show_lexical_comparison and primary_label != "Keyword baseline"
-    llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
-    lexical_result = None
-    if compare_with_lexical:
-        with st.spinner("Computing lexical baseline comparison..."):
-            lexical_game = ToolUseGame(
+        with st.spinner("Computing tool-use attributions..."):
+            game = ToolUseGame(
                 target_tool=target_tool,
                 segments=segments,
-                scorer=lexical_scorer,
+                scorer=primary_scorer,
                 tool_descriptions=TOOLS,
             )
-            lexical_approximator = make_approximator(index, lexical_game.n_players, max_order)
-            lexical_explanation = lexical_approximator.approximate(
-                budget=budget,
-                game=lexical_game,
+            approximator = make_approximator(index, game.n_players, max_order)
+            explanation = approximator.approximate(budget=budget, game=game)
+            first_order = explanation.get_n_order(order=1)
+            attribution_frame = values_to_frame(first_order, segments)
+            pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
+            pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
+            notes = build_interpretation_notes(
+                attribution_frame,
+                pair_label,
+                pair_value,
+                full_score,
             )
-            lexical_first_order = lexical_explanation.get_n_order(order=1)
-            lexical_frame = values_to_frame(lexical_first_order, segments)
-            lexical_matrix = pairwise_matrix_from_explanation(
-                lexical_explanation,
-                lexical_game.n_players,
-            )
-            lexical_pair_label, lexical_pair_value = strongest_pair(lexical_matrix, labels)
-            lexical_full_score = lexical_scorer.score_batch(
-                [full_prompt],
+
+        top = attribution_frame.iloc[0] if not attribution_frame.empty else None
+        top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
+        top_score = 0.0 if top is None else float(top["attribution"])
+        interpretation_sentence = (
+            notes[0] if notes else "No interpretation is available for this run."
+        )
+
+        compare_with_lexical = show_lexical_comparison and primary_label != "Keyword baseline"
+        llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
+        lexical_result = None
+        if compare_with_lexical:
+            with st.spinner("Computing lexical baseline comparison..."):
+                lexical_game = ToolUseGame(
+                    target_tool=target_tool,
+                    segments=segments,
+                    scorer=lexical_scorer,
+                    tool_descriptions=TOOLS,
+                )
+                lexical_approximator = make_approximator(
+                    index,
+                    lexical_game.n_players,
+                    max_order,
+                )
+                lexical_explanation = lexical_approximator.approximate(
+                    budget=budget,
+                    game=lexical_game,
+                )
+                lexical_first_order = lexical_explanation.get_n_order(order=1)
+                lexical_frame = values_to_frame(lexical_first_order, segments)
+                lexical_matrix = pairwise_matrix_from_explanation(
+                    lexical_explanation,
+                    lexical_game.n_players,
+                )
+                lexical_pair_label, lexical_pair_value = strongest_pair(lexical_matrix, labels)
+                lexical_full_score = lexical_scorer.score_batch(
+                    [full_prompt],
+                    target_tool=target_tool,
+                    tool_descriptions=TOOLS,
+                )[0]
+                lexical_empty_score = lexical_scorer.score_batch(
+                    [empty_prompt],
+                    target_tool=target_tool,
+                    tool_descriptions=TOOLS,
+                )[0]
+                lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
+                lexical_result = {
+                    "label": "Keyword baseline",
+                    "full_score": lexical_full_score,
+                    "empty_score": lexical_empty_score,
+                    "top": "No segment"
+                    if lexical_top is None
+                    else f"{lexical_top['segment']} ({lexical_top['source']})",
+                    "top_value": 0.0
+                    if lexical_top is None
+                    else float(lexical_top["attribution"]),
+                    "pair": lexical_pair_label,
+                    "pair_value": lexical_pair_value,
+                }
+
+        st.session_state.has_run = True
+        st.session_state.result = {
+            "primary_label": primary_label,
+            "full_score": full_score,
+            "empty_score": empty_score,
+            "first_order": first_order,
+            "attribution_frame": attribution_frame,
+            "explanation": explanation,
+            "pair_label": pair_label,
+            "pair_value": pair_value,
+            "top_label": top_label,
+            "top_score": top_score,
+            "interpretation_sentence": interpretation_sentence,
+            "compare_with_lexical": compare_with_lexical,
+            "llm_debug_outputs": llm_debug_outputs,
+            "lexical_result": lexical_result,
+            "scoring_prompt": llm_scorer.build_scoring_prompt(
+                full_prompt,
                 target_tool=target_tool,
                 tool_descriptions=TOOLS,
-            )[0]
-            lexical_empty_score = lexical_scorer.score_batch(
-                [empty_prompt],
-                target_tool=target_tool,
-                tool_descriptions=TOOLS,
-            )[0]
-            lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
-            lexical_result = {
-                "label": "Keyword baseline",
-                "full_score": lexical_full_score,
-                "empty_score": lexical_empty_score,
-                "top": "No segment"
-                if lexical_top is None
-                else f"{lexical_top['segment']} ({lexical_top['source']})",
-                "top_value": 0.0 if lexical_top is None else float(lexical_top["attribution"]),
-                "pair": lexical_pair_label,
-                "pair_value": lexical_pair_value,
-            }
+            ),
+        }
+
+    result = st.session_state.result
+    if result is None:
+        st.error(
+            "No explanation result is available. Click Run explanation to compute one."
+        )
+        return
+    primary_label = result["primary_label"]
+    full_score = result["full_score"]
+    empty_score = result["empty_score"]
+    first_order = result["first_order"]
+    attribution_frame = result["attribution_frame"]
+    explanation = result["explanation"]
+    pair_label = result["pair_label"]
+    pair_value = result["pair_value"]
+    top_label = result["top_label"]
+    top_score = result["top_score"]
+    interpretation_sentence = result["interpretation_sentence"]
+    compare_with_lexical = result["compare_with_lexical"]
+    llm_debug_outputs = result["llm_debug_outputs"]
+    lexical_result = result["lexical_result"]
 
     debug_requested = (
         show_value_function_details
@@ -1000,14 +1096,7 @@ def main() -> None:
                 st.dataframe(comparison_frame, use_container_width=True, hide_index=True)
             if show_scoring_prompt_preview:
                 st.markdown("**Scoring prompt preview**")
-                st.code(
-                    llm_scorer.build_scoring_prompt(
-                        full_prompt,
-                        target_tool=target_tool,
-                        tool_descriptions=TOOLS,
-                    ),
-                    language="text",
-                )
+                st.code(result["scoring_prompt"], language="text")
             if show_value_function_details:
                 st.markdown("**Value function details**")
                 st.write(f"Index: `{index}`")
