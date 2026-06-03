@@ -479,6 +479,21 @@ def main() -> int:
     args = parser.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    (args.output_dir / "plots").mkdir(exist_ok=True)
+    (args.output_dir / "artifacts").mkdir(exist_ok=True)
+    write_manifest(
+        args.output_dir,
+        run_id=args.output_dir.name,
+        config_file=None,
+        cases_file="evals/cases/sample_data.py",
+        extra={
+            "eval_type": "controlled",
+            "value_function": "Lexical grounding",
+            "interaction_index": args.index,
+            "max_order": args.max_order,
+            "n_traces": len(SAMPLE_TRACES),
+        },
+    )
     summaries = [
         run_trace(
             trace_name=name,
@@ -496,9 +511,7 @@ def main() -> int:
         json.dumps(summaries, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    plots_dir = args.output_dir / "plots"
-    plots_dir.mkdir(exist_ok=True)
-    write_summary_plots(summary_frame, plots_dir)
+    write_summary_plots(summary_frame, args.output_dir / "plots")
     write_report(args.output_dir, summary_frame)
     print(f"Wrote controlled eval run to {args.output_dir}")  # noqa: T201
     print(f"Open report: {args.output_dir / 'report.md'}")  # noqa: T201

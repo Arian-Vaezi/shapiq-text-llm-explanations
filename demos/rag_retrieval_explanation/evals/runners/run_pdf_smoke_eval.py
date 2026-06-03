@@ -25,6 +25,7 @@ from core.reporting import (  # noqa: E402
     contains_term,
     markdown_table,
     matplotlib_pyplot,
+    write_manifest,
 )
 from core.rag_pipeline import (  # noqa: E402
     CandidateChunk,
@@ -318,6 +319,21 @@ def main() -> int:
         )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    (args.output_dir / "plots").mkdir(exist_ok=True)
+    (args.output_dir / "artifacts").mkdir(exist_ok=True)
+    write_manifest(
+        args.output_dir,
+        run_id=args.output_dir.name,
+        config_file=None,
+        cases_file=str(args.cases),
+        extra={
+            "eval_type": "pdf_smoke",
+            "methods": methods,
+            "embedding_models": embedding_models,
+            "chunk_grid": [{"words": w, "overlap": o} for w, o in chunk_grid],
+            "n_cases": len(cases),
+        },
+    )
     summary = pd.DataFrame(rows)
     summary.to_csv(args.output_dir / "summary.csv", index=False)
     (args.output_dir / "summary.json").write_text(
