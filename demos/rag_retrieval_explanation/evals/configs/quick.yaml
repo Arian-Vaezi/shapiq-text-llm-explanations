@@ -1,0 +1,31 @@
+# quick.yaml — single config for CI and smoke-testing.
+# Runs in seconds (TF-IDF, no model downloads).
+
+name: quick
+description: >
+  Single default config to verify the eval pipeline end-to-end.
+  Used by `make eval-controlled`.
+
+chunking:
+  - chunk_words: 180
+    overlap: 35
+
+retrieval:
+  - method: tfidf
+
+generation:
+  - backend: extractive
+
+value_functions:
+  - lexical_grounding
+
+shapley:
+  approximator: kernel_shap
+  budget: 256
+  random_seed: 42
+  max_order: 2
+
+output:
+  top_k: 4
+  save_artifacts: true
+  save_plots: true

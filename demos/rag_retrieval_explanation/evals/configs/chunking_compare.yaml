@@ -1,0 +1,37 @@
+# chunking_compare.yaml — compare three chunk sizes with fixed retrieval.
+# Answers: how does chunk granularity affect retrieval hit rate,
+# attribution sharpness, and Shapley rank stability?
+
+name: chunking_compare
+description: >
+  Three chunk-size configurations (120/25, 180/35, 240/50) with TF-IDF
+  retrieval and the lexical grounding value function.
+  Run with: make compare-chunking PDF_CASES=...
+
+chunking:
+  - chunk_words: 120
+    overlap: 25
+  - chunk_words: 180
+    overlap: 35
+  - chunk_words: 240
+    overlap: 50
+
+retrieval:
+  - method: tfidf
+
+generation:
+  - backend: extractive
+
+value_functions:
+  - lexical_grounding
+
+shapley:
+  approximator: kernel_shap
+  budget: 256
+  random_seed: 42
+  max_order: 2
+
+output:
+  top_k: 4
+  save_artifacts: true
+  save_plots: true

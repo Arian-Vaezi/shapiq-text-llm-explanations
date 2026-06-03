@@ -1,0 +1,44 @@
+# full_grid.yaml — complete cross-product for final results.
+# 3 chunking × 3 retrieval × 1 generation × 2 value functions = 18 configs.
+# Warning: dense retrieval configs require model downloads.
+# Warning: hf_likelihood requires a local HF model (see README).
+
+name: full_grid
+description: >
+  Full research grid: 3 chunk sizes × 3 retrieval methods × 2 value
+  functions. Produces the heatmap, rank-stability, and comparison plots
+  for the final project writeup.
+  Run with: make compare-full PDF_CASES=...
+
+chunking:
+  - chunk_words: 120
+    overlap: 25
+  - chunk_words: 180
+    overlap: 35
+  - chunk_words: 240
+    overlap: 50
+
+retrieval:
+  - method: tfidf
+  - method: dense
+    embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  - method: dense
+    embedding_model: BAAI/bge-small-en-v1.5
+
+generation:
+  - backend: extractive
+
+value_functions:
+  - lexical_grounding
+  - sentence_support
+
+shapley:
+  approximator: kernel_shap
+  budget: 512
+  random_seed: 42
+  max_order: 2
+
+output:
+  top_k: 4
+  save_artifacts: true
+  save_plots: true
