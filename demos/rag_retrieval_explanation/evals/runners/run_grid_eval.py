@@ -86,8 +86,9 @@ from core.reporting import (  # noqa: E402
     make_run_id,
     markdown_table,
     matplotlib_pyplot,
-    slug,
     short_label,
+    slug,
+    write_comparison_plots,
     write_config,
     write_manifest,
 )
@@ -432,45 +433,13 @@ def main() -> int:
         encoding="utf-8",
     )
 
-    _write_comparison_plots(summary, output_dir)
+    write_comparison_plots(summary, output_dir)
     write_report(summary, output_dir, config_name=run_name)
 
     passed = int(summary["passed"].sum()) if "passed" in summary.columns else 0
     total = len(summary)
     print(f"Done. {passed}/{total} passed. Report: {output_dir / 'report.md'}")  # noqa: T201
     return 0 if args.allow_failures or passed == total else 1
-
-
-# ---------------------------------------------------------------------------
-# Comparison plots (called by Stage 8 — stubs here, full impl in reporting.py)
-# ---------------------------------------------------------------------------
-
-
-def _write_comparison_plots(summary: pd.DataFrame, output_dir: Path) -> None:
-    """Write grid comparison plots (pass rate bar chart; more added in Stage 8)."""
-    if summary.empty or "passed" not in summary.columns:
-        return
-    plots_dir = output_dir / "plots"
-    plots_dir.mkdir(exist_ok=True)
-    plt = matplotlib_pyplot()
-
-    # Pass rate by config
-    if "config_id" in summary.columns:
-        pass_rates = (
-            summary.groupby("config_id", as_index=False)["passed"]
-            .mean()
-            .sort_values("passed")
-        )
-        labels = [short_label(str(c), 32) for c in pass_rates["config_id"]]
-        fig, ax = plt.subplots(figsize=(10, max(3.5, 0.45 * len(pass_rates))))
-        ax.barh(labels, pass_rates["passed"].astype(float), color="#3572a5")
-        ax.set_xlim(0, 1.02)
-        ax.set_xlabel("Pass rate (evidence hit)")
-        ax.set_title("Grid Eval — Pass Rate by Config")
-        ax.grid(axis="x", alpha=0.25)
-        fig.tight_layout()
-        fig.savefig(plots_dir / "pass_rate_by_config.png", dpi=180)
-        plt.close(fig)
 
 
 if __name__ == "__main__":
