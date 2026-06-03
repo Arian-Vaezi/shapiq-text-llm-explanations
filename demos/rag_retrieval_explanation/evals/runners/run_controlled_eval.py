@@ -27,6 +27,16 @@ DEMO_DIR = Path(__file__).resolve().parents[2]
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
 
+from core.reporting import (  # noqa: E402
+    contains_term,
+    make_run_dir,
+    markdown_table,
+    matplotlib_pyplot,
+    short_label,
+    slug,
+    write_config,
+    write_manifest,
+)
 from core.evaluation import (  # noqa: E402
     deletion_evaluation,
     insertion_evaluation,
@@ -178,55 +188,11 @@ def normalized_auc(values: np.ndarray) -> float:
     return float(np.trapezoid(values, x) / (len(values) - 1))
 
 
-def write_config(path: Path, config: dict[str, object]) -> None:
-    """Write a small YAML-like config without adding a dependency."""
-    lines = []
-    for key, value in config.items():
-        if value is None:
-            rendered = "null"
-        elif isinstance(value, str):
-            rendered = json.dumps(value)
-        else:
-            rendered = str(value)
-        lines.append(f"{key}: {rendered}")
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
-def markdown_table(frame: pd.DataFrame, *, float_digits: int = 3) -> str:
-    """Render a small DataFrame as a GitHub-flavored Markdown table."""
-    if frame.empty:
-        return "_No rows._\n"
-    display = frame.copy()
-    for column in display.columns:
-        if pd.api.types.is_float_dtype(display[column]):
-            display[column] = display[column].map(
-                lambda value: "" if pd.isna(value) else f"{float(value):.{float_digits}f}"
-            )
-        else:
-            display[column] = display[column].map(
-                lambda value: "" if pd.isna(value) else str(value)
-            )
-    header = "| " + " | ".join(display.columns) + " |"
-    separator = "| " + " | ".join("---" for _ in display.columns) + " |"
-    rows = ["| " + " | ".join(str(value) for value in row) + " |" for row in display.to_numpy()]
-    return "\n".join([header, separator, *rows]) + "\n"
-
-
-def _matplotlib_pyplot() -> object:
-    """Import pyplot with a non-interactive backend."""
-    import matplotlib as mpl
-
-    mpl.use("Agg")
-    import matplotlib.pyplot as plt
-
-    return plt
-
-
 def write_attribution_plot(frame: pd.DataFrame, path: Path, *, title: str) -> None:
     """Write a horizontal attribution bar chart."""
     if frame.empty:
         return
-    plt = _matplotlib_pyplot()
+    plt = matplotlib_pyplot()
     chart = frame.sort_values("attribution")
     colors = ["#b94a48" if value < 0 else "#3572a5" for value in chart["attribution"]]
     fig, ax = plt.subplots(figsize=(8, max(3, 0.55 * len(chart))))
@@ -247,7 +213,7 @@ def write_validation_plot(
     title: str,
 ) -> None:
     """Write deletion and insertion curves for one scenario."""
-    plt = _matplotlib_pyplot()
+    plt = matplotlib_pyplot()
     fig, ax = plt.subplots(figsize=(7, 4))
     ax.plot(deletion["step"], deletion["score"], marker="o", label="Deletion")
     ax.plot(insertion["step"], insertion["score"], marker="o", label="Insertion")
@@ -266,8 +232,8 @@ def write_summary_plots(summary: pd.DataFrame, plots_dir: Path) -> None:
     """Write run-level comparison plots."""
     if summary.empty:
         return
-    plt = _matplotlib_pyplot()
-    labels = [_short_label(name) for name in summary["trace_name"]]
+    plt = matplotlib_pyplot()
+    labels = [short_label(name) for name in summary["trace_name"]]
     x = np.arange(len(summary))
 
     fig, ax = plt.subplots(figsize=(10, 4.8))
@@ -341,7 +307,7 @@ def write_report(output_dir: Path, summary: pd.DataFrame) -> None:
         "",
     ]
     for trace_name in summary["trace_name"]:
-        slug = _slug(str(trace_name))
+        slug = slug(str(trace_name))
         lines.extend(
             [
                 f"### {trace_name}",
@@ -436,7 +402,7 @@ def run_trace(
         "missing_evidence_false_positive": bool(missing_false_positive),
     }
 
-    trace_dir = output_dir / _slug(trace_name)
+    trace_dir = output_dir / slug(trace_name)
     trace_dir.mkdir(parents=True, exist_ok=True)
     write_attribution_plot(
         first_order,
@@ -495,17 +461,6 @@ def _pair_value(frame: pd.DataFrame, pair: tuple[str, str]) -> float:
     if match.empty:
         return 0.0
     return float(match.iloc[0]["interaction"])
-
-
-def _slug(text: str) -> str:
-    """Return a filesystem-friendly run name."""
-    slug = "".join(ch.lower() if ch.isalnum() else "_" for ch in text)
-    return "_".join(part for part in slug.split("_") if part)
-
-
-def _short_label(text: str, limit: int = 22) -> str:
-    """Shorten labels for plot axes."""
-    return text if len(text) <= limit else text[: limit - 1] + "..."
 
 
 def main() -> int:

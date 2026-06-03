@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from datetime import UTC, datetime
 from itertools import product
@@ -22,6 +21,11 @@ DEMO_DIR = Path(__file__).resolve().parents[2]
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
 
+from core.reporting import (  # noqa: E402
+    contains_term,
+    markdown_table,
+    matplotlib_pyplot,
+)
 from core.rag_pipeline import (  # noqa: E402
     CandidateChunk,
     PDFPage,
@@ -29,11 +33,6 @@ from core.rag_pipeline import (  # noqa: E402
     extract_pdf_pages,
     retrieve_relevant_chunks_with_debug,
 )
-
-
-def _contains_term(text: str, term: str) -> bool:
-    """Return True when text contains a case-insensitive literal term."""
-    return re.search(re.escape(term), text, re.IGNORECASE) is not None
 
 
 def _parse_csv(value: str | None, default: list[str]) -> list[str]:
@@ -52,36 +51,6 @@ def _parse_chunk_grid(value: str | None) -> list[tuple[int, int]]:
         words, overlap = item.split(":", maxsplit=1)
         grid.append((int(words), int(overlap)))
     return grid
-
-
-def markdown_table(frame: pd.DataFrame, *, float_digits: int = 3) -> str:
-    """Render a small DataFrame as a Markdown table."""
-    if frame.empty:
-        return "_No rows._\n"
-    display = frame.copy()
-    for column in display.columns:
-        if pd.api.types.is_float_dtype(display[column]):
-            display[column] = display[column].map(
-                lambda value: "" if pd.isna(value) else f"{float(value):.{float_digits}f}"
-            )
-        else:
-            display[column] = display[column].map(
-                lambda value: "" if pd.isna(value) else str(value)
-            )
-    header = "| " + " | ".join(display.columns) + " |"
-    separator = "| " + " | ".join("---" for _ in display.columns) + " |"
-    rows = ["| " + " | ".join(str(value) for value in row) + " |" for row in display.to_numpy()]
-    return "\n".join([header, separator, *rows]) + "\n"
-
-
-def _matplotlib_pyplot() -> object:
-    """Import pyplot with a non-interactive backend."""
-    import matplotlib as mpl
-
-    mpl.use("Agg")
-    import matplotlib.pyplot as plt
-
-    return plt
 
 
 def _case_configs(
@@ -198,7 +167,7 @@ def run_case_config(
         embedding_device=str(case.get("embedding_device", "auto")),
     )
     retrieved_text = "\n\n".join(item.chunk.text for item in ranked)
-    found_terms = [term for term in expected_terms if _contains_term(retrieved_text, term)]
+    found_terms = [term for term in expected_terms if contains_term(retrieved_text, term)]
     missing_terms = [term for term in expected_terms if term not in found_terms]
     top = ranked[0] if ranked else None
     return {
@@ -221,7 +190,7 @@ def write_summary_plots(summary: pd.DataFrame, output_dir: Path) -> None:
         return
     plots_dir = output_dir / "plots"
     plots_dir.mkdir(exist_ok=True)
-    plt = _matplotlib_pyplot()
+    plt = matplotlib_pyplot()
 
     config_frame = summary.copy()
     config_frame["config"] = config_frame.apply(
