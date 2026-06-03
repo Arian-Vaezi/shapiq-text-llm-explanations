@@ -8,11 +8,12 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from dataclasses import dataclass
 
 import numpy as np
 
 from shapiq.game import Game
+
+from .schemas import RetrievedChunk
 
 STOPWORDS = {
     "a",
@@ -41,23 +42,6 @@ STOPWORDS = {
     "who",
     "with",
 }
-
-
-@dataclass(frozen=True)
-class RetrievedChunk:
-    """A retrieved context chunk shown to the RAG model."""
-
-    title: str
-    text: str
-    page_number: int | None = None
-    chunk_type: str = "body_text"
-    section_title: str = ""
-    text_length: int = 0
-    retrieval_score: float | None = None
-    dense_score: float | None = None
-    keyword_score: float | None = None
-    rerank_score: float | None = None
-    flags: tuple[str, ...] = ()
 
 
 ScoreCallable = Callable[[str, str, list[RetrievedChunk]], float]

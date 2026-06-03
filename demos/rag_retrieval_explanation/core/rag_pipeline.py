@@ -3,63 +3,19 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
 from functools import lru_cache
 from io import BytesIO
 
 import numpy as np
 
 from .model_backends import HuggingFaceCausalLMBackend
-from .rag_game import RetrievedChunk
-
-
-@dataclass(frozen=True)
-class PDFPage:
-    """Text extracted from one PDF page."""
-
-    page_number: int
-    text: str
-
-
-@dataclass(frozen=True)
-class CandidateChunk:
-    """A chunk before retrieval ranking."""
-
-    title: str
-    text: str
-    page_number: int
-    chunk_number: int
-    section_title: str = ""
-    chunk_type: str = "body_text"
-    text_length: int = 0
-    flags: tuple[str, ...] = ()
-
-
-@dataclass(frozen=True)
-class RankedChunk:
-    """A retrieved chunk with its retrieval score."""
-
-    chunk: RetrievedChunk
-    score: float
-    dense_score: float = 0.0
-    keyword_score: float = 0.0
-    rerank_score: float = 0.0
-    reasons: tuple[str, ...] = ()
-
-
-@dataclass(frozen=True)
-class RetrievalDebugInfo:
-    """Transparent retrieval diagnostics shown in the Streamlit UI."""
-
-    query_intent: str
-    original_query: str
-    expanded_queries: list[str]
-    raw_dense_results: list[dict[str, object]]
-    raw_keyword_results: list[dict[str, object]]
-    raw_rerank_order: list[dict[str, object]]
-    reranked_results: list[dict[str, object]]
-    selected_context: list[dict[str, object]]
-    coverage_summary: dict[str, object]
+from .schemas import (
+    CandidateChunk,
+    PDFPage,
+    RankedChunk,
+    RetrievalDebugInfo,
+    RetrievedChunk,
+)
 
 
 def extract_pdf_pages(pdf_bytes: bytes) -> list[PDFPage]:
