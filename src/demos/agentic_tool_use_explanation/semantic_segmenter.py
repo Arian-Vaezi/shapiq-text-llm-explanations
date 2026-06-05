@@ -32,8 +32,8 @@ class SemanticSegmenter:
     model_id: str = DEFAULT_EMBEDDING_MODEL_ID
     device: str | int | None = "auto"
     threshold: float = 0.5
-    window: int = 2
-    min_segment_words: int = 2
+    window: int = 6
+    min_segment_words: int = 3
 
     def __post_init__(self) -> None:
         from sentence_transformers import SentenceTransformer
@@ -43,9 +43,15 @@ class SemanticSegmenter:
 
     def segment(self, text: str) -> list[str]:
         """Return semantic segments that preserve each whitespace token exactly once."""
+        segments, _ = self.segment_with_debug(text)
+        return segments
+
+    def segment_with_debug(self, text: str) -> tuple[list[str], list[dict[str, object]]]:
+        """Return semantic segments plus adjacent-window boundary diagnostics."""
         words = text.split()
         if len(words) <= 1:
-            return words
+            validate_partition(text, words)
+            return words, []
 
         half_window = self.window // 2
         windows = [
@@ -65,6 +71,16 @@ class SemanticSegmenter:
             float(np.dot(embeddings[index], embeddings[index + 1]))
             for index in range(len(embeddings) - 1)
         ]
+        debug_rows = [
+            {
+                "left_word": words[index],
+                "right_word": words[index + 1],
+                "similarity": similarity,
+                "threshold": self.threshold,
+                "cut_before_merge": similarity < self.threshold,
+            }
+            for index, similarity in enumerate(similarities)
+        ]
 
         blocks: list[str] = []
         current = [words[0]]
@@ -78,29 +94,16 @@ class SemanticSegmenter:
 
         segments = self._merge_short_segments(blocks)
         validate_partition(text, segments)
-        return segments
+        return segments, debug_rows
 
     def _merge_short_segments(self, blocks: list[str]) -> list[str]:
-        """Merge undersized blocks while preserving order."""
+        """Merge undersized later blocks backward while preserving order."""
         merged: list[str] = []
-        leading_short_block: str | None = None
         for block in blocks:
-            if leading_short_block is not None:
-                block = f"{leading_short_block} {block}"
-                leading_short_block = None
-
-            if len(block.split()) >= self.min_segment_words:
-                merged.append(block)
-            elif merged:
+            if merged and len(block.split()) < self.min_segment_words:
                 merged[-1] = f"{merged[-1]} {block}"
             else:
-                leading_short_block = block
-
-        if leading_short_block is not None:
-            if merged:
-                merged[-1] = f"{merged[-1]} {leading_short_block}"
-            else:
-                merged.append(leading_short_block)
+                merged.append(block)
         return merged
 
 

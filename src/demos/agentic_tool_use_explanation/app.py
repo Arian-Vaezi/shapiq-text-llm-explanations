@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import math
-import re
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
@@ -23,6 +22,7 @@ from scorers import (
     MockLLM,
     ToolChoice,
 )
+from semantic_segmenter import SemanticSegmenter
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
@@ -69,6 +69,21 @@ def load_logprob_scorer(
         candidate_template=candidate_template,
         candidate_texts=candidate_texts,
         normalize_by_length=normalize_by_length,
+    )
+
+
+@st.cache_resource
+def load_semantic_segmenter(
+    threshold: float,
+    window: int,
+    min_segment_words: int,
+) -> SemanticSegmenter:
+    """Load and cache the semantic segmenter model."""
+    return SemanticSegmenter(
+        device="auto",
+        threshold=threshold,
+        window=window,
+        min_segment_words=min_segment_words,
     )
 
 
@@ -362,30 +377,12 @@ def build_coalition_prompt(selected_segments: list[ToolUseSegment]) -> str:
     )
 
 
-def split_user_request(user_input: str) -> list[str]:
-    """Split a custom user request into a few stable explanation segments."""
-    cleaned = " ".join(user_input.strip().split())
-    if not cleaned:
-        return []
-
-    parts = [part.strip(" .?!,;:") for part in re.split(r"[,;?.!]+", cleaned) if part.strip()]
-    if len(parts) > 1:
-        return parts[:4]
-
-    words = cleaned.split()
-    if len(words) <= 6:
-        return [cleaned]
-
-    chunk_size = max(2, math.ceil(len(words) / 3))
-    return [" ".join(words[idx : idx + chunk_size]) for idx in range(0, len(words), chunk_size)]
-
-
 def build_mock_trace(user_input: str, choice: ToolChoice) -> dict[str, object]:
     """Create a trace from a mock-router conversation."""
     return {
         "target_tool": choice.tool,
         "system_segments": MOCK_SYSTEM_SEGMENTS,
-        "user_segments": split_user_request(user_input),
+        "user_segments": [" ".join(user_input.strip().split())],
         "takeaway": (
             "The mock LLM router only chooses a tool. It does not call external APIs or run "
             "the selected tool; shapiq explains the text evidence behind the chosen route."
@@ -632,6 +629,29 @@ def main() -> None:
         with st.sidebar.expander("Logprob scorer settings", expanded=True):
             logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
 
+    with st.sidebar.expander("Segmentation settings", expanded=False):
+        segment_threshold = st.slider(
+            "semantic threshold",
+            min_value=0.0,
+            max_value=1.0,
+            value=0.72,
+            step=0.01,
+        )
+        segment_window = st.slider(
+            "context window",
+            min_value=1,
+            max_value=10,
+            value=3,
+            step=1,
+        )
+        min_segment_words = st.slider(
+            "min words per segment",
+            min_value=1,
+            max_value=8,
+            value=1,
+            step=1,
+        )
+
     router = LexicalToolRouter()
     if mode == "Example request":
         trace_name = st.sidebar.selectbox(
@@ -642,6 +662,7 @@ def main() -> None:
         trace = SAMPLE_TRACES[trace_name]
         key = clean_key(trace_name)
         default_target = str(trace["target_tool"])
+        request_text = " ".join(trace["user_segments"])
         mock_choice = None
     else:
         st.markdown('<div class="section-label">Request</div>', unsafe_allow_html=True)
@@ -659,6 +680,7 @@ def main() -> None:
         trace = build_mock_trace(mock_input, mock_choice)
         key = "mock_llm_router"
         default_target = mock_choice.tool
+        request_text = mock_input
 
     target_tool = st.sidebar.selectbox(
         "Tool to explain",
@@ -668,7 +690,17 @@ def main() -> None:
     )
 
     system_segments = build_segments(trace["system_segments"], "system")
-    user_segments = build_segments(trace["user_segments"], "user")
+    try:
+        segmenter = load_semantic_segmenter(
+            segment_threshold,
+            segment_window,
+            min_segment_words,
+        )
+        semantic_user_texts, segment_debug_rows = segmenter.segment_with_debug(request_text)
+    except Exception as error:  # noqa: BLE001
+        st.error(f"Could not segment the user request with MPNet: {error}")
+        return
+    user_segments = build_segments(semantic_user_texts, "user")
     segments = system_segments + user_segments
     labels = [segment.label for segment in segments]
     budget = budget_for_demo(len(segments))
@@ -686,7 +718,7 @@ def main() -> None:
         st.warning("Add at least two prompt segments.")
         return
 
-    user_request = " ".join(trace["user_segments"])
+    user_request = request_text
     players_text = f"{len(system_segments)} system segments + {len(user_segments)} user segments"
     full_prompt = build_coalition_prompt(segments)
     empty_prompt = build_coalition_prompt([])
@@ -703,6 +735,10 @@ def main() -> None:
         bool(candidate_texts),
         normalize_by_length,
         show_lexical_comparison,
+        segment_threshold,
+        segment_window,
+        min_segment_words,
+        tuple(semantic_user_texts),
     )
     if st.session_state.get("result_signature") != signature:
         st.session_state.has_run = False
@@ -802,6 +838,11 @@ def main() -> None:
                 )
         with segment_right:
             st.markdown("**User request segments**")
+            st.caption(
+                f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
+                f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
+                f"window={segmenter.window}, min words={segmenter.min_segment_words}."
+            )
             for segment in user_segments:
                 st.markdown(
                     (
@@ -809,6 +850,13 @@ def main() -> None:
                         f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
                     ),
                     unsafe_allow_html=True,
+                )
+            if segment_debug_rows:
+                st.markdown("**Semantic boundary diagnostics**")
+                st.dataframe(
+                    pd.DataFrame(segment_debug_rows),
+                    use_container_width=True,
+                    hide_index=True,
                 )
 
     run = st.session_state.pending_run

@@ -404,7 +404,12 @@ class LogProbToolScorer:
 
         self._torch = torch
         if self.device is None or self.device == "auto":
-            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            if torch.cuda.is_available():
+                self.device = "cuda"
+            elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                self.device = "mps"
+            else:
+                self.device = "cpu"
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
         if self.tokenizer.pad_token is None:
