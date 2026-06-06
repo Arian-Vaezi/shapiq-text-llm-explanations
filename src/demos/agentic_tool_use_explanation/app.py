@@ -34,6 +34,7 @@ SegmentSource = Literal["system", "user"]
 
 DEFAULT_INDEX = "k-SII"
 DEFAULT_MAX_ORDER = 2
+DELTA_STATUS_THRESHOLD = 0.01
 DEFAULT_MOCK_QUERY = "Will it rain in Berlin tomorrow morning?"
 MOCK_SYSTEM_SEGMENTS = [
     "Use weather_tool for weather, rain, temperature, forecast, or city-date questions.",
@@ -354,6 +355,50 @@ def scenario_prompt_label(trace_name: str) -> str:
     return truncate_label(user_prompt)
 
 
+def format_attribution(value: float, digits: int = 3) -> str:
+    """Format signed attribution values for display."""
+    if not math.isfinite(value):
+        return ""
+    threshold = 0.5 * 10 ** (-digits)
+    if 0 < abs(value) < threshold:
+        return f"{'+' if value > 0 else '-'}<0.001"
+    return f"{value:.{digits}f}"
+
+
+def attribution_ranking_frame(
+    attribution_frame: pd.DataFrame,
+    *,
+    supporting: bool,
+    limit: int | None = None,
+) -> pd.DataFrame:
+    """Build a compact positive or negative attribution ranking."""
+    columns = ["segment", "source", "attribution", "preview"]
+    if attribution_frame.empty:
+        return pd.DataFrame(columns=columns)
+
+    if supporting:
+        frame = attribution_frame[attribution_frame["attribution"] > 0].sort_values(
+            "attribution",
+            ascending=False,
+        )
+    else:
+        frame = attribution_frame[attribution_frame["attribution"] < 0].sort_values(
+            "attribution",
+            ascending=True,
+        )
+    if limit is not None:
+        frame = frame.head(limit)
+    if frame.empty:
+        return pd.DataFrame(columns=columns)
+
+    display_frame = frame.copy()
+    display_frame["preview"] = display_frame["text"].map(
+        lambda text: truncate_label(str(text), max_length=96)
+    )
+    display_frame["attribution"] = display_frame["attribution"].map(format_attribution)
+    return display_frame[columns]
+
+
 def build_segments(default_segments: list[str], source: str) -> list[ToolUseSegment]:
     """Create fixed demo segments for a prompt source."""
     return [
@@ -406,6 +451,11 @@ def values_to_frame(
                 "source": segment.source,
                 "text": segment.text,
                 "attribution": float(score),
+                "direction": "positive"
+                if float(score) > 0
+                else "negative"
+                if float(score) < 0
+                else "neutral",
                 "abs_attribution": abs(float(score)),
             }
         )
@@ -1038,6 +1088,24 @@ def main() -> None:
     compare_with_lexical = result["compare_with_lexical"]
     llm_debug_outputs = result["llm_debug_outputs"]
     lexical_result = result["lexical_result"]
+    delta_support = float(full_score) - float(empty_score)
+    if delta_support > DELTA_STATUS_THRESHOLD:
+        support_status = "Supported by the prompt"
+        support_interpretation = (
+            "The complete prompt increases support for the target tool compared with the baseline."
+        )
+    elif delta_support < -DELTA_STATUS_THRESHOLD:
+        support_status = "Reduced by the prompt"
+        support_interpretation = (
+            "The complete prompt reduces support for the target tool compared with the baseline."
+        )
+    else:
+        support_status = "Neutral / weak evidence"
+        support_interpretation = (
+            "The complete prompt does not change support much compared with the baseline."
+        )
+    supporting_frame = attribution_ranking_frame(attribution_frame, supporting=True)
+    reducing_frame = attribution_ranking_frame(attribution_frame, supporting=False)
 
     debug_requested = (
         show_value_function_details
@@ -1052,23 +1120,21 @@ def main() -> None:
 
     with tabs[0]:
         st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
+        st.markdown("**Tool support overview**")
         st.markdown(
             f"""
             <div class="metric-strip">
-                <div class="metric-card"><span>Tool to explain</span><strong>{escape(target_tool)}</strong></div>
-                <div class="metric-card"><span>Full Support Score</span><strong>{full_score:.3f}</strong></div>
-                <div class="metric-card"><span>Empty-Prompt Score</span><strong>{empty_score:.3f}</strong></div>
-                <div class="metric-card"><span>Scoring method</span><strong>{escape(primary_label)}</strong></div>
+                <div class="metric-card"><span>Target tool</span><strong>{escape(target_tool)}</strong></div>
+                <div class="metric-card"><span>Full support score = v(all segments)</span><strong>{full_score:.3f}</strong></div>
+                <div class="metric-card"><span>Baseline / empty-prompt score = v(empty)</span><strong>{empty_score:.3f}</strong></div>
+                <div class="metric-card"><span>Delta support</span><strong>{delta_support:.3f}</strong></div>
             </div>
             """,
             unsafe_allow_html=True,
         )
-        summary_left, summary_right = st.columns(2)
-        with summary_left:
-            st.metric("Top contributing segment", top_label, f"{top_score:.3f}")
-        with summary_right:
-            st.metric("Strongest pairwise interaction", pair_label, f"{pair_value:.3f}")
-        st.info(interpretation_sentence)
+        st.info(f"**{support_status}.** {support_interpretation}")
+
+        st.caption("See the Attribution tab for the full first-order segment ranking.")
 
     with tabs[1]:
         st.markdown("**First-order attribution ranking**")
