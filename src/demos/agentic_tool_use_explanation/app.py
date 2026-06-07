@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import importlib.util
+import itertools
 import math
+import sys
+import types
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
@@ -10,6 +14,7 @@ from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 import streamlit as st
+import numpy as np
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
@@ -48,6 +53,7 @@ DESCRIPTIVE_CANDIDATE_TEXTS = {
     "web_search_tool": "The assistant should use the web search tool.",
     "no_tool": "The assistant should answer directly without using an external tool.",
 }
+TEXT_PLOT_PACKAGE = "_agentic_text_plot"
 
 
 st.set_page_config(
@@ -440,7 +446,8 @@ def values_to_frame(
 ) -> pd.DataFrame:
     """Convert first-order values to a display frame."""
     rows = []
-    for interaction, score in values.dict_values.items():
+    value_items = getattr(values, "dict_values", {}).items()
+    for interaction, score in value_items:
         if len(interaction) != 1:
             continue
         idx = interaction[0]
@@ -465,17 +472,135 @@ def values_to_frame(
     return frame.sort_values("abs_attribution", ascending=False).drop(columns=["abs_attribution"])
 
 
+@dataclass
+class DemoInteractionValues:
+    """Minimal interaction-values object for the local fallback path."""
+
+    first_order: list[float]
+    second_order: pd.DataFrame
+    index: str = "SV"
+
+    @property
+    def max_order(self) -> int:
+        return 2
+
+    @property
+    def n_players(self) -> int:
+        return len(self.first_order)
+
+    @property
+    def dict_values(self) -> dict[tuple[int, ...], float]:
+        values = {(idx,): value for idx, value in enumerate(self.first_order)}
+        for left in range(self.n_players):
+            for right in range(left + 1, self.n_players):
+                values[(left, right)] = float(self.second_order.iloc[left, right])
+        return values
+
+    def __getitem__(self, interaction: tuple[int, ...]) -> float:
+        return self.dict_values.get(tuple(sorted(interaction)), 0.0)
+
+    def get_n_order(self, order: int) -> DemoInteractionValues:
+        if order == 1:
+            empty_matrix = pd.DataFrame(
+                [[0.0] * self.n_players for _ in range(self.n_players)]
+            )
+            return DemoInteractionValues(self.first_order, empty_matrix, self.index)
+        if order == 2:
+            return DemoInteractionValues([0.0] * self.n_players, self.second_order, self.index)
+        empty_matrix = pd.DataFrame([[0.0] * self.n_players for _ in range(self.n_players)])
+        return DemoInteractionValues([0.0] * self.n_players, empty_matrix, self.index)
+
+    def get_n_order_values(self, order: int) -> np.ndarray:
+        if order == 1:
+            return np.asarray(self.first_order, dtype=float)
+        if order == 2:
+            return self.second_order.to_numpy(dtype=float)
+        return np.zeros(tuple([self.n_players] * order), dtype=float)
+
+
+class ExactFallbackApproximator:
+    """Exact local Shapley fallback used when shapiq cannot import optional C extensions."""
+
+    def __init__(self, *, n: int, index: str, max_order: int) -> None:
+        self.n = n
+        self.index = index
+        self.max_order = max_order
+
+    def approximate(self, *, budget: int, game: object) -> DemoInteractionValues:
+        del budget
+        values = self._evaluate_all_coalitions(game)
+        first_order = [self._shapley_value(player, values) for player in range(self.n)]
+        second_order = self._pairwise_synergy(values)
+        return DemoInteractionValues(first_order, pd.DataFrame(second_order), self.index)
+
+    def _evaluate_all_coalitions(self, game: object) -> dict[int, float]:
+        coalitions = []
+        masks = []
+        for mask in range(1 << self.n):
+            masks.append(mask)
+            coalitions.append([(mask >> player) & 1 == 1 for player in range(self.n)])
+        scores = game.value_function(np.asarray(coalitions, dtype=bool))
+        return {mask: float(score) for mask, score in zip(masks, scores, strict=True)}
+
+    def _shapley_value(self, player: int, values: dict[int, float]) -> float:
+        other_players = [idx for idx in range(self.n) if idx != player]
+        score = 0.0
+        for size in range(self.n):
+            weight = (
+                math.factorial(size)
+                * math.factorial(self.n - size - 1)
+                / math.factorial(self.n)
+            )
+            for subset in itertools.combinations(other_players, size):
+                mask = sum(1 << idx for idx in subset)
+                score += weight * (values[mask | (1 << player)] - values[mask])
+        return score
+
+    def _pairwise_synergy(self, values: dict[int, float]) -> list[list[float]]:
+        full_mask = (1 << self.n) - 1
+        matrix = [[0.0] * self.n for _ in range(self.n)]
+        for left in range(self.n):
+            for right in range(left + 1, self.n):
+                without_pair = full_mask & ~(1 << left) & ~(1 << right)
+                without_left = full_mask & ~(1 << left)
+                without_right = full_mask & ~(1 << right)
+                synergy = (
+                    values[full_mask]
+                    - values[without_left]
+                    - values[without_right]
+                    + values[without_pair]
+                )
+                matrix[left][right] = synergy
+                matrix[right][left] = synergy
+        return matrix
+
+
 def make_approximator(index: str, n_players: int, max_order: int) -> object:
     """Create a shapiq approximator for the selected index."""
-    import shapiq
+    try:
+        import shapiq
+    except Exception:  # noqa: BLE001
+        return ExactFallbackApproximator(n=n_players, index=index, max_order=max_order)
 
-    if index == "SV":
-        return shapiq.KernelSHAP(n=n_players, random_state=42)
-    if index == "STII":
-        return shapiq.PermutationSamplingSTII(n=n_players, max_order=max_order, random_state=42)
-    if index == "FSII":
-        return shapiq.RegressionFSII(n=n_players, max_order=max_order, random_state=42)
-    return shapiq.KernelSHAPIQ(n=n_players, index=index, max_order=max_order, random_state=42)
+    try:
+        if index == "SV":
+            return shapiq.KernelSHAP(n=n_players, random_state=42)
+        if index == "STII":
+            return shapiq.PermutationSamplingSTII(
+                n=n_players,
+                max_order=max_order,
+                random_state=42,
+            )
+        if index == "FSII":
+            return shapiq.RegressionFSII(n=n_players, max_order=max_order, random_state=42)
+        return shapiq.KernelSHAPIQ(
+            n=n_players,
+            index=index,
+            max_order=max_order,
+            random_state=42,
+        )
+    except Exception:  # noqa: BLE001
+        return ExactFallbackApproximator(n=n_players, index=index, max_order=max_order)
 
 
 def pairwise_matrix_from_explanation(
@@ -629,6 +754,86 @@ def polish_heatmap(
     )
     fig.tight_layout()
     return fig
+
+
+def load_text_plotters() -> tuple[object | None, object | None, str | None]:
+    """Load text plotting helpers without importing the full shapiq plotting package."""
+    try:
+        module = load_sentence_plot_module()
+    except Exception as error:  # noqa: BLE001
+        return None, None, str(error)
+    return (
+        getattr(module, "token_attribution_bar_plot"),
+        getattr(module, "sentence_interaction_heatmap"),
+        None,
+    )
+
+
+def load_sentence_plot_module() -> types.ModuleType:
+    """Load shapiq.plot.sentence directly to avoid optional tree C extensions."""
+    plot_dir = Path(__file__).resolve().parents[2] / "shapiq" / "plot"
+    package = sys.modules.get(TEXT_PLOT_PACKAGE)
+    if package is None:
+        package = types.ModuleType(TEXT_PLOT_PACKAGE)
+        package.__path__ = [str(plot_dir)]  # type: ignore[attr-defined]
+        sys.modules[TEXT_PLOT_PACKAGE] = package
+
+    config_name = f"{TEXT_PLOT_PACKAGE}._config"
+    if config_name not in sys.modules:
+        config_spec = importlib.util.spec_from_file_location(
+            config_name,
+            plot_dir / "_config.py",
+        )
+        if config_spec is None or config_spec.loader is None:
+            msg = "Could not load shapiq sentence plot color configuration."
+            raise ImportError(msg)
+        config_module = importlib.util.module_from_spec(config_spec)
+        sys.modules[config_name] = config_module
+        config_spec.loader.exec_module(config_module)
+
+    sentence_name = f"{TEXT_PLOT_PACKAGE}.sentence"
+    sentence_module = sys.modules.get(sentence_name)
+    if sentence_module is not None:
+        return sentence_module
+
+    sentence_spec = importlib.util.spec_from_file_location(
+        sentence_name,
+        plot_dir / "sentence.py",
+    )
+    if sentence_spec is None or sentence_spec.loader is None:
+        msg = "Could not load shapiq sentence plotting helpers."
+        raise ImportError(msg)
+    sentence_module = importlib.util.module_from_spec(sentence_spec)
+    sys.modules[sentence_name] = sentence_module
+    sentence_spec.loader.exec_module(sentence_module)
+    return sentence_module
+
+
+def show_fallback_attribution_chart(attribution_frame: pd.DataFrame) -> None:
+    """Render a small Streamlit-native attribution chart when matplotlib plots are unavailable."""
+    if attribution_frame.empty:
+        st.info("No first-order attributions are available to plot.")
+        return
+    chart_frame = attribution_frame[["segment", "attribution"]].copy()
+    chart_frame = chart_frame.sort_values("attribution").set_index("segment")
+    st.bar_chart(chart_frame, use_container_width=True)
+
+
+def show_fallback_interaction_table(pairwise_matrix: pd.DataFrame, labels: list[str]) -> None:
+    """Render pairwise interactions as a table when the heatmap helper is unavailable."""
+    fallback_matrix = pairwise_matrix.copy()
+    fallback_matrix.index = labels
+    fallback_matrix.columns = labels
+    st.dataframe(fallback_matrix, use_container_width=True)
+
+
+def display_demo_path() -> str:
+    """Return a stable demo path caption for Streamlit and test runners."""
+    demo_path = Path(__file__).resolve().parent
+    try:
+        return str(demo_path.relative_to(Path.cwd()))
+    except ValueError:
+        return str(demo_path)
 
 
 def main() -> None:
@@ -912,12 +1117,6 @@ def main() -> None:
     run = st.session_state.pending_run
     st.session_state.pending_run = False
 
-    try:
-        from shapiq.plot import sentence_interaction_heatmap, token_attribution_bar_plot
-    except Exception as error:  # noqa: BLE001
-        st.error(f"The result exists, but plotting could not be imported: {error}")
-        return
-
     if run:
         try:
             from tool_game import ToolUseGame
@@ -1106,6 +1305,9 @@ def main() -> None:
         )
     supporting_frame = attribution_ranking_frame(attribution_frame, supporting=True)
     reducing_frame = attribution_ranking_frame(attribution_frame, supporting=False)
+    token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
+        load_text_plotters()
+    )
 
     debug_requested = (
         show_value_function_details
@@ -1139,17 +1341,47 @@ def main() -> None:
     with tabs[1]:
         st.markdown("**First-order attribution ranking**")
         st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
-        fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
-        if fig_ax is not None:
-            fig, ax = fig_ax
-            st.pyplot(polish_bar(fig, ax), clear_figure=True)
+        if token_attribution_bar_plot is None:
+            st.warning(
+                "The shapiq text attribution plot is unavailable in this environment. "
+                f"Showing a simple fallback chart instead. Details: {plot_import_error}"
+            )
+            show_fallback_attribution_chart(attribution_frame)
+        else:
+            try:
+                fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
+            except Exception as error:  # noqa: BLE001
+                st.warning(
+                    "The shapiq text attribution plot failed. "
+                    f"Showing a simple fallback chart instead. Details: {error}"
+                )
+                show_fallback_attribution_chart(attribution_frame)
+            else:
+                if fig_ax is not None:
+                    fig, ax = fig_ax
+                    st.pyplot(polish_bar(fig, ax), clear_figure=True)
 
     with tabs[2]:
         st.markdown("**Pairwise interaction heatmap**")
-        fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
-        if fig_ax is not None:
-            fig, ax = fig_ax
-            st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
+        if sentence_interaction_heatmap is None:
+            st.warning(
+                "The shapiq text interaction heatmap is unavailable in this environment. "
+                f"Showing a fallback interaction table instead. Details: {plot_import_error}"
+            )
+            show_fallback_interaction_table(pairwise_matrix, labels)
+        else:
+            try:
+                fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
+            except Exception as error:  # noqa: BLE001
+                st.warning(
+                    "The shapiq text interaction heatmap failed. "
+                    f"Showing a fallback interaction table instead. Details: {error}"
+                )
+                show_fallback_interaction_table(pairwise_matrix, labels)
+            else:
+                if fig_ax is not None:
+                    fig, ax = fig_ax
+                    st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
         st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
 
     if debug_requested:
@@ -1221,7 +1453,7 @@ def main() -> None:
                 st.write("Empty coalition prompt:")
                 st.code(empty_prompt, language="text")
 
-    st.caption(f"Demo path: `{Path(__file__).parent.relative_to(Path.cwd())}`")
+    st.caption(f"Demo path: `{display_demo_path()}`")
 
 
 if __name__ == "__main__":

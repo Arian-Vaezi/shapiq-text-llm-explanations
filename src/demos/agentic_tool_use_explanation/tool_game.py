@@ -8,7 +8,27 @@ from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 
-from shapiq.game import Game
+try:
+    from shapiq.game import Game
+except Exception:  # noqa: BLE001
+
+    class Game:  # type: ignore[no-redef]
+        """Small fallback base when optional shapiq C extensions are unavailable."""
+
+        def __init__(
+            self,
+            *,
+            n_players: int,
+            normalize: bool = True,
+            normalization_value: float = 0.0,
+            verbose: bool = False,
+            player_names: list[str] | None = None,
+        ) -> None:
+            self.n_players = n_players
+            self.normalize = normalize
+            self.normalization_value = normalization_value
+            self.verbose = verbose
+            self.player_names = player_names or [str(idx) for idx in range(n_players)]
 
 if TYPE_CHECKING:
     from scorers import ToolScorerProtocol
