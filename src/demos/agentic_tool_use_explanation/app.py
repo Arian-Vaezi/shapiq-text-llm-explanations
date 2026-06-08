@@ -20,7 +20,6 @@ from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
     DEFAULT_LOGPROB_MODEL_ID,
-    LexicalToolRouter,
     LexicalToolScorer,
     LLMToolScorer,
     LogProbToolScorer,
@@ -428,15 +427,41 @@ def build_coalition_prompt(selected_segments: list[ToolUseSegment]) -> str:
     )
 
 
-def build_mock_trace(user_input: str, choice: ToolChoice) -> dict[str, object]:
+def choose_tool_with_scorer(
+    scorer: object,
+    prompt: str,
+    *,
+    tool_descriptions: dict[str, str],
+) -> ToolChoice:
+    """Choose the highest-scoring candidate tool with the selected scorer."""
+    scores = {
+        tool_name: float(
+            scorer.score_batch(
+                [prompt],
+                target_tool=tool_name,
+                tool_descriptions=tool_descriptions,
+            )[0]
+        )
+        for tool_name in tool_descriptions
+    }
+    selected_tool = max(scores, key=scores.get)
+    return ToolChoice(
+        tool=selected_tool,
+        score=scores[selected_tool],
+        reason="Highest preview score from the selected scoring method.",
+        scores=scores,
+    )
+
+
+def build_mock_trace(user_input: str, target_tool: str) -> dict[str, object]:
     """Create a trace from a mock-router conversation."""
     return {
-        "target_tool": choice.tool,
+        "target_tool": target_tool,
         "system_segments": MOCK_SYSTEM_SEGMENTS,
         "user_segments": [" ".join(user_input.strip().split())],
         "takeaway": (
-            "The mock LLM router only chooses a tool. It does not call external APIs or run "
-            "the selected tool; shapiq explains the text evidence behind the chosen route."
+            "This setup preview only chooses a tool. It does not call external APIs or run "
+            "the selected tool; shapiq explains the text evidence behind the selected route."
         ),
     }
 
@@ -907,7 +932,6 @@ def main() -> None:
             step=1,
         )
 
-    router = LexicalToolRouter()
     if mode == "Example request":
         trace_name = st.sidebar.selectbox(
             "Scenario",
@@ -918,7 +942,6 @@ def main() -> None:
         key = clean_key(trace_name)
         default_target = str(trace["target_tool"])
         request_text = " ".join(trace["user_segments"])
-        mock_choice = None
     else:
         st.markdown('<div class="section-label">Request</div>', unsafe_allow_html=True)
         mock_input = st.text_area(
@@ -926,16 +949,42 @@ def main() -> None:
             value=DEFAULT_MOCK_QUERY,
             height=86,
             help=(
-                "This local mock router chooses a tool only. It does not call a real model "
-                "or any tool."
+                "This preview chooses a tool only. It does not call the selected tool."
             ),
         )
-        mock_choice = router.choose_tool(mock_input, TOOLS)
         trace_name = "Custom request"
-        trace = build_mock_trace(mock_input, mock_choice)
         key = "mock_llm_router"
-        default_target = mock_choice.tool
         request_text = mock_input
+
+    if scorer_backend == "Keyword baseline":
+        preview_scorer = LexicalToolScorer()
+    elif scorer_backend == "LLM logprob scorer":
+        with st.spinner(f"Loading logprob scorer `{logprob_model_id}` for preview..."):
+            try:
+                preview_scorer = load_logprob_scorer(
+                    logprob_model_id,
+                    candidate_template,
+                    candidate_texts,
+                    bool(normalize_by_length),
+                )
+            except Exception as error:  # noqa: BLE001
+                st.error(
+                    "Could not load the logprob-based scorer for the setup preview. "
+                    "Try a smaller causal language model or check your environment. "
+                    f"Details: {error}"
+                )
+                return
+    else:
+        preview_scorer = LLMToolScorer(llm=MockLLM())
+
+    preview_choice = choose_tool_with_scorer(
+        preview_scorer,
+        request_text,
+        tool_descriptions=TOOLS,
+    )
+    if mode == "Custom request":
+        trace = build_mock_trace(mock_input, preview_choice.tool)
+        default_target = preview_choice.tool
 
     target_tool = st.sidebar.selectbox(
         "Tool to explain",
@@ -1032,25 +1081,22 @@ def main() -> None:
     st.caption(
         "This is only a setup preview. Click Run explanation to compute segment attributions."
     )
-    if mock_choice is None:
-        st.info(f"Example target: `{trace['target_tool']}`. {trace['takeaway']}")
-    else:
-        router_left, router_right = st.columns([0.85, 1.15])
-        with router_left:
-            st.metric("Suggested tool", mock_choice.tool, f"{mock_choice.score:.3f}")
-            st.caption(mock_choice.reason)
-        with router_right:
-            score_frame = pd.DataFrame(
-                [
-                    {"tool": tool, "score": score}
-                    for tool, score in sorted(
-                        mock_choice.scores.items(),
-                        key=lambda item: item[1],
-                        reverse=True,
-                    )
-                ]
-            )
-            st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
+    router_left, router_right = st.columns([0.85, 1.15])
+    with router_left:
+        st.metric("Suggested tool", preview_choice.tool, f"{preview_choice.score:.3f}")
+        st.caption(preview_choice.reason)
+    with router_right:
+        score_frame = pd.DataFrame(
+            [
+                {"tool": tool, "score": score}
+                for tool, score in sorted(
+                    preview_choice.scores.items(),
+                    key=lambda item: item[1],
+                    reverse=True,
+                )
+            ]
+        )
+        st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
 
     st.markdown(
         '<div class="section-label">How the explanation is computed</div>',
