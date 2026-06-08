@@ -1098,33 +1098,6 @@ def main() -> None:
         )
         st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
 
-    st.markdown(
-        '<div class="section-label">How the explanation is computed</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
-        <div class="setup-line">
-            <strong>Value function:</strong>
-            <code>v(S) = score(target tool | selected prompt parts S)</code><br>
-            S is a subset of prompt parts / players. For each S, the app builds a
-            partial prompt using only those selected parts, and the scorer returns how
-            strongly that partial prompt supports the selected target tool.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    with st.expander("Why this is a Shapley game", expanded=False):
-        st.markdown(
-            """
-            Shapley values compare tool-support scores across different prompt-part
-            combinations to estimate each prompt part's contribution.
-
-            A positive contribution means the prompt part supports the target tool.
-            A negative contribution means it weakens support for the target tool.
-            """
-        )
-
     with st.expander("Show prompt segments / players", expanded=show_prompt_segments):
         segment_left, segment_right = st.columns(2)
         with segment_left:
@@ -1498,6 +1471,33 @@ def main() -> None:
                 st.code(full_prompt, language="text")
                 st.write("Empty coalition prompt:")
                 st.code(empty_prompt, language="text")
+
+    st.markdown(
+        '<div class="section-label">How the explanation is computed</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <div class="setup-line">
+            <strong>Value function:</strong>
+            <code>v(S) = score(target tool | selected prompt parts S)</code><br>
+            S is a subset of prompt parts / players. For each S, the app builds a
+            partial prompt using only those selected parts, and the scorer returns how
+            strongly that partial prompt supports the selected target tool.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    with st.expander("Why this is a Shapley game", expanded=False):
+        st.markdown(
+            """
+            Shapley values compare tool-support scores across different prompt-part
+            combinations to estimate each prompt part's contribution.
+
+            A positive contribution means the prompt part supports the target tool.
+            A negative contribution means it weakens support for the target tool.
+            """
+        )
 
     st.caption(f"Demo path: `{display_demo_path()}`")
 
