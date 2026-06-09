@@ -413,18 +413,40 @@ def build_segments(default_segments: list[str], source: str) -> list[ToolUseSegm
     ]
 
 
-def build_coalition_prompt(selected_segments: list[ToolUseSegment]) -> str:
-    """Build a coalition prompt without importing the full shapiq game stack."""
-    system_lines = [
-        f"- {segment.text}" for segment in selected_segments if segment.source == "system"
-    ]
-    user_lines = [f"- {segment.text}" for segment in selected_segments if segment.source == "user"]
-    return (
-        "System rules:\n"
-        + ("\n".join(system_lines) if system_lines else "(none)")
-        + "\n\nUser request:\n"
-        + ("\n".join(user_lines) if user_lines else "(none)")
+def format_tool_context(tool_descriptions: dict[str, str]) -> str:
+    """Render tool definitions as fixed prompt context."""
+    return "\n".join(
+        f"- {tool_name}: {description}" for tool_name, description in tool_descriptions.items()
     )
+
+
+def build_system_prompt(system_segments: list[ToolUseSegment]) -> str:
+    """Render system prompt segments as fixed prompt context."""
+    return "\n".join(f"- {segment.text}" for segment in system_segments)
+
+
+def build_coalition_prompt(
+    selected_user_segments: list[ToolUseSegment],
+    *,
+    system_prompt: str,
+    tool_context: str,
+) -> str:
+    """Build a coalition prompt with fixed context and selected user-request segments."""
+    user_request = " ".join(segment.text.strip() for segment in selected_user_segments)
+    return (
+        f"{system_prompt.strip()}\n\n"
+        f"Available tools:\n{tool_context.strip()}\n\n"
+        f"User request:\n{user_request}\n\n"
+        "Assistant:"
+    )
+
+
+def segment_user_request(
+    segmenter: SemanticSegmenter,
+    user_request: str,
+) -> tuple[list[str], list[dict[str, object]]]:
+    """Segment only the user request; fixed context is not a Shapley player."""
+    return segmenter.segment_with_debug(user_request)
 
 
 def choose_tool_with_scorer(
@@ -666,21 +688,22 @@ def build_interpretation_notes(
     top = attribution_frame.iloc[0]
     notes = [
         (
-            f"Start with segment `{top['segment']}` from the {top['source']} prompt. "
-            f"It has the largest individual attribution ({top['attribution']:.3f}) for the target tool."
+            f"Start with user segment `{top['segment']}`. "
+            "It has the largest individual attribution "
+            f"({top['attribution']:.3f}) for the target tool."
         )
     ]
 
-    source_split = attribution_frame.groupby("source")["attribution"].sum().to_dict()
+    total_user_attribution = float(attribution_frame["attribution"].sum())
     notes.append(
-        f"System-rule contribution sums to {source_split.get('system', 0.0):.3f}; "
-        f"user-request contribution sums to {source_split.get('user', 0.0):.3f}. "
-        "This separates policy pressure from request-trigger pressure."
+        f"User-request contribution sums to {total_user_attribution:.3f}. "
+        "The system prompt and tool definitions remain fixed context for every coalition."
     )
 
     if abs(pair_value) < 0.03:
         notes.append(
-            "Second-order effects are weak; the decision is mostly explained by individual segments."
+            "Second-order effects are weak; the decision is mostly explained by "
+            "individual segments."
         )
     elif pair_value > 0:
         notes.append(
@@ -705,7 +728,7 @@ def polish_bar(fig: plt.Figure, ax: plt.Axes) -> plt.Figure:
     """Make package bar plot fit the Streamlit layout."""
     fig.set_size_inches(6.2, 3.7)
     ax.set_title("", loc="center")
-    ax.set_title("Prompt Segment Attribution", loc="left", fontsize=12, pad=8)
+    ax.set_title("User Request Segment Attribution", loc="left", fontsize=12, pad=8)
     ax.set_xlabel("Target-tool attribution")
     ax.grid(axis="x", color="#d7dfdf", alpha=0.65, linewidth=0.8)
     ax.set_axisbelow(True)
@@ -740,43 +763,21 @@ def polish_heatmap(
     """Make package heatmap fit the Streamlit layout."""
     fig.set_size_inches(6.0, 4.7)
     ax.set_title("", loc="center")
-    ax.set_title("Prompt Segment Interaction Heatmap", loc="left", fontsize=12, pad=8)
+    ax.set_title("User Request Segment Interaction Heatmap", loc="left", fontsize=12, pad=8)
     ax.tick_params(axis="x", labelrotation=30)
 
-    group_ranges = []
-    start = 0
-    while start < len(segments):
-        source = segments[start].source
-        end = start
-        while end + 1 < len(segments) and segments[end + 1].source == source:
-            end += 1
-        group_ranges.append((source, start, end))
-        start = end + 1
-
-    colors = {"system": "#1f554c", "user": "#b15d3b"}
-    for source, start, end in group_ranges:
-        size = end - start + 1
+    if segments:
         ax.add_patch(
             Rectangle(
-                (start - 0.5, start - 0.5),
-                size,
-                size,
+                (-0.5, -0.5),
+                len(segments),
+                len(segments),
                 fill=False,
-                edgecolor=colors.get(source, "#1f554c"),
+                edgecolor="#b15d3b",
                 linewidth=2.2,
                 zorder=5,
             )
         )
-
-    ax.text(
-        0,
-        -0.2,
-        "Outlined blocks group system-rule segments and user-request segments.",
-        transform=ax.transAxes,
-        fontsize=8,
-        color="#5f584b",
-        va="top",
-    )
     fig.tight_layout()
     return fig
 
@@ -867,7 +868,7 @@ def main() -> None:
         """
         <div class="tool-title">
             <h1>Explaining tool selection</h1>
-            <p>Inspect which prompt parts support a tool choice.</p>
+            <p>Inspect which user-request parts support a tool choice.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -885,10 +886,13 @@ def main() -> None:
         index=0,
     )
     with st.sidebar.expander("How it works", expanded=False):
-        st.write("Request -> Segmentation -> Remove players -> Tool support score -> Shapley Explanation")
+        st.write(
+            "Request -> Segmentation -> Remove players -> Tool support score -> "
+            "Shapley Explanation"
+        )
         st.caption(
-            "The app checks which prompt parts support the selected tool and then shows "
-            "their importance."
+            "The app keeps system/tool context fixed, removes user-request players, "
+            "and then shows their importance."
         )
     scorer_backend = st.sidebar.selectbox(
         "Scoring method",
@@ -1000,14 +1004,13 @@ def main() -> None:
             segment_window,
             min_segment_words,
         )
-        semantic_user_texts, segment_debug_rows = segmenter.segment_with_debug(request_text)
+        semantic_user_texts, segment_debug_rows = segment_user_request(segmenter, request_text)
     except Exception as error:  # noqa: BLE001
         st.error(f"Could not segment the user request with MPNet: {error}")
         return
     user_segments = build_segments(semantic_user_texts, "user")
-    segments = system_segments + user_segments
-    labels = [segment.label for segment in segments]
-    budget = budget_for_demo(len(segments))
+    labels = [segment.label for segment in user_segments]
+    budget = budget_for_demo(len(user_segments))
 
     with st.sidebar.expander("More options", expanded=False):
         st.caption(f"index: fixed `{DEFAULT_INDEX}`")
@@ -1018,14 +1021,27 @@ def main() -> None:
         show_scoring_prompt_preview = st.checkbox("show scoring prompt preview", value=False)
         show_lexical_comparison = st.checkbox("show keyword comparison", value=False)
 
-    if len(segments) < 2:
-        st.warning("Add at least two prompt segments.")
+    if len(user_segments) < 1:
+        st.warning("Add a user request with at least one segment.")
         return
 
     user_request = request_text
-    players_text = f"{len(system_segments)} system segments + {len(user_segments)} user segments"
-    full_prompt = build_coalition_prompt(segments)
-    empty_prompt = build_coalition_prompt([])
+    system_prompt = build_system_prompt(system_segments)
+    tool_context = format_tool_context(TOOLS)
+    players_text = (
+        f"{len(user_segments)} user request segment"
+        f"{'' if len(user_segments) == 1 else 's'}"
+    )
+    full_prompt = build_coalition_prompt(
+        user_segments,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+    )
+    empty_prompt = build_coalition_prompt(
+        [],
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+    )
     index = DEFAULT_INDEX
     max_order = DEFAULT_MAX_ORDER
     signature = (
@@ -1062,7 +1078,8 @@ def main() -> None:
             <div class="scenario-hint">
                 <strong>Tool to explain:</strong> {escape(target_tool)}<br>
                 <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
-                <strong>Players:</strong> {escape(players_text)}
+                <strong>Shapley players:</strong> {escape(players_text)}<br>
+                <strong>Fixed context:</strong> system prompt + tool definitions
             </div>
         </div>
         """,
@@ -1098,10 +1115,11 @@ def main() -> None:
         )
         st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
 
-    with st.expander("Show prompt segments / players", expanded=show_prompt_segments):
+    with st.expander("Show fixed context and Shapley players", expanded=show_prompt_segments):
         segment_left, segment_right = st.columns(2)
         with segment_left:
-            st.markdown("**System prompt segments**")
+            st.markdown("**Fixed context, not explained**")
+            st.caption("System prompt")
             for segment in system_segments:
                 st.markdown(
                     (
@@ -1110,8 +1128,17 @@ def main() -> None:
                     ),
                     unsafe_allow_html=True,
                 )
+            st.caption("Tool definitions")
+            for tool_name, description in TOOLS.items():
+                st.markdown(
+                    (
+                        "<div class='segment-box'>"
+                        f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
+                    ),
+                    unsafe_allow_html=True,
+                )
         with segment_right:
-            st.markdown("**User request segments**")
+            st.markdown("**Shapley players: user request segments**")
             st.caption(
                 f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
                 f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
@@ -1187,14 +1214,16 @@ def main() -> None:
         with st.spinner("Computing tool-use attributions..."):
             game = ToolUseGame(
                 target_tool=target_tool,
-                segments=segments,
+                user_segments=user_segments,
+                system_prompt=system_prompt,
+                tool_context=tool_context,
                 scorer=primary_scorer,
                 tool_descriptions=TOOLS,
             )
             approximator = make_approximator(index, game.n_players, max_order)
             explanation = approximator.approximate(budget=budget, game=game)
             first_order = explanation.get_n_order(order=1)
-            attribution_frame = values_to_frame(first_order, segments)
+            attribution_frame = values_to_frame(first_order, user_segments)
             pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
             pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
             notes = build_interpretation_notes(
@@ -1218,7 +1247,9 @@ def main() -> None:
             with st.spinner("Computing lexical baseline comparison..."):
                 lexical_game = ToolUseGame(
                     target_tool=target_tool,
-                    segments=segments,
+                    user_segments=user_segments,
+                    system_prompt=system_prompt,
+                    tool_context=tool_context,
                     scorer=lexical_scorer,
                     tool_descriptions=TOOLS,
                 )
@@ -1232,7 +1263,7 @@ def main() -> None:
                     game=lexical_game,
                 )
                 lexical_first_order = lexical_explanation.get_n_order(order=1)
-                lexical_frame = values_to_frame(lexical_first_order, segments)
+                lexical_frame = values_to_frame(lexical_first_order, user_segments)
                 lexical_matrix = pairwise_matrix_from_explanation(
                     lexical_explanation,
                     lexical_game.n_players,
@@ -1345,10 +1376,20 @@ def main() -> None:
         st.markdown(
             f"""
             <div class="metric-strip">
-                <div class="metric-card"><span>Target tool</span><strong>{escape(target_tool)}</strong></div>
-                <div class="metric-card"><span>Full support score = v(all segments)</span><strong>{full_score:.3f}</strong></div>
-                <div class="metric-card"><span>Baseline / empty-prompt score = v(empty)</span><strong>{empty_score:.3f}</strong></div>
-                <div class="metric-card"><span>Delta support</span><strong>{delta_support:.3f}</strong></div>
+                <div class="metric-card">
+                    <span>Target tool</span><strong>{escape(target_tool)}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>Full support score = v(all user segments)</span>
+                    <strong>{full_score:.3f}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>Baseline = fixed context + empty user request</span>
+                    <strong>{empty_score:.3f}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>Delta support</span><strong>{delta_support:.3f}</strong>
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -1400,7 +1441,7 @@ def main() -> None:
             else:
                 if fig_ax is not None:
                     fig, ax = fig_ax
-                    st.pyplot(polish_heatmap(fig, ax, segments), clear_figure=True)
+                    st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
         st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
 
     if debug_requested:
@@ -1480,10 +1521,9 @@ def main() -> None:
         """
         <div class="setup-line">
             <strong>Value function:</strong>
-            <code>v(S) = score(target tool | selected prompt parts S)</code><br>
-            S is a subset of prompt parts / players. For each S, the app builds a
-            partial prompt using only those selected parts, and the scorer returns how
-            strongly that partial prompt supports the selected target tool.
+            <code>v(S) = score(target tool | fixed context + selected user segments S)</code><br>
+            S is a subset of user-request segment players. The system prompt and tool
+            definitions are included unchanged for every coalition.
         </div>
         """,
         unsafe_allow_html=True,
@@ -1491,10 +1531,10 @@ def main() -> None:
     with st.expander("Why this is a Shapley game", expanded=False):
         st.markdown(
             """
-            Shapley values compare tool-support scores across different prompt-part
-            combinations to estimate each prompt part's contribution.
+            Shapley values compare tool-support scores across different user-segment
+            combinations to estimate each user segment's contribution.
 
-            A positive contribution means the prompt part supports the target tool.
+            A positive contribution means the user segment supports the target tool.
             A negative contribution means it weakens support for the target tool.
             """
         )

@@ -342,32 +342,31 @@ def test_lexical_tool_router_returns_mock_llm_choice() -> None:
 def test_tool_use_game_accepts_llm_scorer() -> None:
     game = ToolUseGame(
         target_tool="weather_tool",
-        segments=[
-            ToolUseSegment("system", "S1", "Use weather_tool for forecasts."),
-            ToolUseSegment("user", "U1", "Will it rain tomorrow?"),
-        ],
+        user_segments=["Will it rain tomorrow?"],
+        system_prompt="Use weather_tool for forecasts.",
         scorer=LLMToolScorer(llm=MockLLM("0.75")),
         tool_descriptions=TOOL_DESCRIPTIONS,
         normalize=False,
     )
-    coalitions = np.array([[False, False], [True, False], [True, True]])
+    coalitions = np.array([[False], [True]])
 
     scores = game.value_function(coalitions)
 
-    assert scores.tolist() == [0.75, 0.75, 0.75]
+    assert scores.tolist() == [0.75, 0.75]
 
 
 def test_tool_use_game_builds_coalition_prompt() -> None:
     game = ToolUseGame(
         target_tool="weather_tool",
-        segments=[
-            ToolUseSegment("system", "S1", "Use weather_tool for forecasts."),
-            ToolUseSegment("user", "U1", "Will it rain tomorrow?"),
-        ],
+        user_segments=[ToolUseSegment("user", "U1", "Will it rain tomorrow?")],
+        system_prompt="Use weather_tool for forecasts.",
+        tool_descriptions=TOOL_DESCRIPTIONS,
         normalize=False,
     )
 
-    prompt = game.build_prompt([game.segments[0]])
+    prompt = game.build_prompt([])
 
     assert "Use weather_tool for forecasts." in prompt
-    assert "User request:\n(none)" in prompt
+    assert "Available tools:" in prompt
+    assert "Will it rain tomorrow?" not in prompt
+    assert "User request:\n\nAssistant:" in prompt

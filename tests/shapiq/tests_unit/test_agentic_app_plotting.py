@@ -89,3 +89,45 @@ def test_values_to_frame_accepts_demo_interaction_values() -> None:
 
     assert list(frame["segment"]) == ["S1", "U1"]
     assert list(frame["direction"]) == ["positive", "negative"]
+
+
+def test_app_build_coalition_prompt_keeps_fixed_context_and_masks_user_segments() -> None:
+    user_segments = [
+        app.ToolUseSegment(source="user", label="U1", text="What is the weather"),
+        app.ToolUseSegment(source="user", label="U2", text="in Berlin tomorrow?"),
+    ]
+
+    empty_prompt = app.build_coalition_prompt(
+        [],
+        system_prompt="You are a tool router.",
+        tool_context="- weather_tool: Forecasts",
+    )
+    full_prompt = app.build_coalition_prompt(
+        user_segments,
+        system_prompt="You are a tool router.",
+        tool_context="- weather_tool: Forecasts",
+    )
+
+    assert "You are a tool router." in empty_prompt
+    assert "weather_tool: Forecasts" in empty_prompt
+    assert "What is the weather" not in empty_prompt
+    assert "in Berlin tomorrow?" not in empty_prompt
+    assert "What is the weather in Berlin tomorrow?" in full_prompt
+
+
+def test_segment_user_request_passes_only_user_request_to_segmenter() -> None:
+    class FakeSegmenter:
+        def __init__(self) -> None:
+            self.seen_text = None
+
+        def segment_with_debug(self, text: str):
+            self.seen_text = text
+            return ["weather in Berlin"], []
+
+    segmenter = FakeSegmenter()
+
+    segments, debug_rows = app.segment_user_request(segmenter, "weather in Berlin")
+
+    assert segmenter.seen_text == "weather in Berlin"
+    assert segments == ["weather in Berlin"]
+    assert debug_rows == []

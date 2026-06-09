@@ -38,7 +38,7 @@ SegmentSource = Literal["system", "user"]
 
 @dataclass(frozen=True)
 class ToolUseSegment:
-    """A system or user text segment used as one player in the tool-use game."""
+    """A labeled text segment used by the demo UI and tests."""
 
     source: SegmentSource
     label: str
@@ -46,23 +46,43 @@ class ToolUseSegment:
 
 
 class ToolUseGame(Game):
-    """Game where players are system/user prompt segments and value is target-tool support."""
+    """Game where players are user-request segments and fixed context is always present."""
 
     def __init__(
         self,
         *,
         target_tool: str,
-        segments: list[ToolUseSegment],
+        user_segments: list[str | ToolUseSegment] | None = None,
+        system_prompt: str = "",
+        tool_context: str | None = None,
+        segments: list[ToolUseSegment] | None = None,
         scorer: ToolScorerProtocol | None = None,
         tool_descriptions: dict[str, str] | None = None,
         normalize: bool = True,
         verbose: bool = False,
     ) -> None:
-        if not segments:
-            msg = "ToolUseGame requires at least one segment."
-            raise ValueError(msg)
         self.target_tool = target_tool
-        self.segments = segments
+        self.tool_descriptions = tool_descriptions or {}
+        if user_segments is None:
+            if segments is None:
+                msg = "ToolUseGame requires at least one user segment."
+                raise ValueError(msg)
+            user_segments = [segment for segment in segments if segment.source == "user"]
+            if not system_prompt:
+                system_prompt = "\n".join(
+                    f"- {segment.text}" for segment in segments if segment.source == "system"
+                )
+        self.segments = self._coerce_user_segments(user_segments)
+        if not self.segments:
+            msg = "ToolUseGame requires at least one user segment."
+            raise ValueError(msg)
+        self.user_segments = [segment.text for segment in self.segments]
+        self.system_prompt = system_prompt.strip()
+        self.tool_context = (
+            self._format_tool_context(self.tool_descriptions)
+            if tool_context is None
+            else tool_context.strip()
+        )
         if scorer is not None:
             self.scorer = scorer
         else:
@@ -73,23 +93,47 @@ class ToolUseGame(Game):
                 from scorers import LexicalToolScorer
 
             self.scorer = LexicalToolScorer()
-        self.tool_descriptions = tool_descriptions or {}
         empty_score = self.score_segments([])
         super().__init__(
-            n_players=len(segments),
+            n_players=len(self.segments),
             normalize=normalize,
             normalization_value=empty_score,
             verbose=verbose,
-            player_names=[segment.label for segment in segments],
+            player_names=[segment.label for segment in self.segments],
         )
 
+    @staticmethod
+    def _format_tool_context(tool_descriptions: dict[str, str]) -> str:
+        """Render tool definitions as fixed prompt context."""
+        return "\n".join(
+            f"- {tool_name}: {description}"
+            for tool_name, description in tool_descriptions.items()
+        )
+
+    @staticmethod
+    def _coerce_user_segments(user_segments: list[str | ToolUseSegment]) -> list[ToolUseSegment]:
+        """Return labeled user segments regardless of caller input shape."""
+        segments: list[ToolUseSegment] = []
+        for idx, segment in enumerate(user_segments):
+            if hasattr(segment, "text"):
+                if getattr(segment, "source", "user") != "user":
+                    continue
+                text = str(getattr(segment, "text")).strip()
+                label = str(getattr(segment, "label", f"U{idx + 1}"))
+            else:
+                text = str(segment).strip()
+                label = f"U{idx + 1}"
+            if text:
+                segments.append(ToolUseSegment(source="user", label=label, text=text))
+        return segments
+
     def selected_segments(self, coalition: np.ndarray) -> list[ToolUseSegment]:
-        """Return prompt segments selected by a boolean coalition."""
+        """Return user-request segments selected by a boolean coalition."""
         coalition = np.asarray(coalition, dtype=bool)
         return [segment for keep, segment in zip(coalition, self.segments, strict=True) if keep]
 
     def score_segments(self, selected_segments: list[ToolUseSegment]) -> float:
-        """Score support for the target tool from selected prompt segments."""
+        """Score support for the target tool from selected user-request segments."""
         prompt = self.build_prompt(selected_segments)
         scores = self.scorer.score_batch(
             [prompt],
@@ -105,23 +149,26 @@ class ToolUseGame(Game):
             raise ValueError(msg)
         return score
 
-    def build_prompt(self, selected_segments: list[ToolUseSegment]) -> str:
-        """Build the coalition prompt from selected system/user segments."""
-        system_lines = [
-            f"- {segment.text}" for segment in selected_segments if segment.source == "system"
-        ]
-        user_lines = [
-            f"- {segment.text}" for segment in selected_segments if segment.source == "user"
-        ]
+    def build_prompt(self, selected_segments: list[str | ToolUseSegment]) -> str:
+        """Build a coalition prompt with fixed system/tool context and selected user text."""
+        selected_texts = []
+        for segment in selected_segments:
+            if hasattr(segment, "text"):
+                text = str(getattr(segment, "text")).strip()
+            else:
+                text = str(segment).strip()
+            if text:
+                selected_texts.append(text)
+        user_request = " ".join(selected_texts)
         return (
-            "System rules:\n"
-            + ("\n".join(system_lines) if system_lines else "(none)")
-            + "\n\nUser request:\n"
-            + ("\n".join(user_lines) if user_lines else "(none)")
+            f"{self.system_prompt}\n\n"
+            f"Available tools:\n{self.tool_context}\n\n"
+            f"User request:\n{user_request}\n\n"
+            "Assistant:"
         )
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
-        """Evaluate support for each coalition of prompt segments."""
+        """Evaluate support for each coalition of user-request segments."""
         prompts = [self.build_prompt(self.selected_segments(coalition)) for coalition in coalitions]
         scores = self.scorer.score_batch(
             prompts,
