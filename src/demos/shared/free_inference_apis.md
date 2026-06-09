@@ -6,7 +6,7 @@
 - Step 2: Dependencies: `pip install groq google-genai` or `uv add groq google-genai`.
 - Step 3: Access the api keys in the pythonscript/notebook. One suggested approach: using `python-dotenv`
     - `pip install python-dotenv` or `uv add python-dotenv`.
-    - add a file named `.env` at project root and add: 
+    - add a file named `.env` at project root and add:
   ```
   GROQ_API_KEY=your_groq_api_key_here
   GEMINI_API_KEY=your_gemini_api_key_here
@@ -57,5 +57,5 @@ response = gemini_client.models.generate_content(
 
 print(response.text)
 ```
-  
-        
+
+
