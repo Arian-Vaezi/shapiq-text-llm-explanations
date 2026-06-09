@@ -10,7 +10,7 @@ Reference: (https://docs.langchain.com/oss/python/langchain/agents)
 
 ## Visualize LLM reasoning steps
 It might be interesting to see how the LLM makes the decision: whether to call a tool, what tool to call? which params to pass? etc.
-Two possible ways of visualization 
+Two possible ways of visualization
 - Custom Middleware that logs it. Reference: https://docs.langchain.com/oss/python/langchain/middleware/overview
 - via `print(response["messages"][-1].additional_kwargs.get("reasoning_content"))`. Note: not all LLMs have (expose) this.
 
@@ -22,12 +22,12 @@ Langchain provides a built-in evaluator library `agentevals`. This could be a wa
 <img src="docs/agentEval.png" width="50%">
 
 - Trajectory matching:
-  
+
 Does the agent produce the same trajectory as the baseline? Modes: Strict, unordered, subset, superset
 A trajectory is a sequence of AI/HumanMessages.
 
 - LLM-as-Judge
-  
+
 Uses a second LLM call to qualitatively assess whether the reasoning trajectory was accurate and efficient. Returns a `score` + a natural-language `comment` explaining the verdict.
 
 
@@ -42,4 +42,4 @@ Candidates worth exploring for the demo:
 - model/tool call limit
 - file search
 - subagent
-- custom 
+- custom
