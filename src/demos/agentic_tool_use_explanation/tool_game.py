@@ -157,10 +157,12 @@ class ToolUseGame(Game):
             if text:
                 selected_texts.append(text)
         user_request = " ".join(selected_texts)
+        user_request_block = f"User request:\n{user_request}" if user_request else "User request:"
+
         return (
             f"{self.system_prompt}\n\n"
             f"Available tools:\n{self.tool_context}\n\n"
-            f"User request:\n{user_request}\n\n"
+            f"{user_request_block}\n\n"
             "Assistant:"
         )
 
