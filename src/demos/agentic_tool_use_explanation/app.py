@@ -67,6 +67,7 @@ def load_logprob_scorer(
     model_id: str,
     candidate_template: str,
     candidate_texts: dict[str, str] | None,
+    *,  # future-proof: make scoring-related args keyword-only
     normalize_by_length: bool,
 ) -> LogProbToolScorer:
     """Load and cache the optional local HuggingFace logprob scorer."""
@@ -1341,8 +1342,6 @@ def main() -> None:
         support_interpretation = (
             "The complete prompt does not change support much compared with the baseline."
         )
-    supporting_frame = attribution_ranking_frame(attribution_frame, supporting=True)
-    reducing_frame = attribution_ranking_frame(attribution_frame, supporting=False)
     token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
         load_text_plotters()
     )

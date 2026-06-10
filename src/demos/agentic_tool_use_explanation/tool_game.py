@@ -153,10 +153,7 @@ class ToolUseGame(Game):
         """Build a coalition prompt with fixed system/tool context and selected user text."""
         selected_texts = []
         for segment in selected_segments:
-            if hasattr(segment, "text"):
-                text = str(segment.text).strip()
-            else:
-                text = str(segment).strip()
+            text = str(segment.text).strip() if hasattr(segment, "text") else str(segment).strip()
             if text:
                 selected_texts.append(text)
         user_request = " ".join(selected_texts)

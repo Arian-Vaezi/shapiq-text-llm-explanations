@@ -389,6 +389,7 @@ class LogProbToolScorer:
         candidate_texts: dict[str, str] | None = None,
         device: str | None = None,
         dtype: str = "auto",
+        *,  # future-proof: force all following args to be keyword-only
         normalize_by_length: bool = True,
     ) -> None:
         self.model_id = model_id
