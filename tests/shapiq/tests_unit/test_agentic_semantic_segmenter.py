@@ -113,9 +113,10 @@ def test_segment_returns_same_segments_as_segment_with_debug_without_model_load(
     segmenter = make_uninitialized_segmenter(min_segment_words=1)
     segmenter.model = FakeEmbeddingModel()
 
-    assert segmenter.segment("alpha beta gamma delta") == segmenter.segment_with_debug(
-        "alpha beta gamma delta"
-    )[0]
+    assert (
+        segmenter.segment("alpha beta gamma delta")
+        == segmenter.segment_with_debug("alpha beta gamma delta")[0]
+    )
 
 
 def test_validate_partition_accepts_correct_ordered_partition() -> None:

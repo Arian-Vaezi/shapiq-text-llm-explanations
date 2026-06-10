@@ -30,6 +30,7 @@ except Exception:  # noqa: BLE001
             self.verbose = verbose
             self.player_names = player_names or [str(idx) for idx in range(n_players)]
 
+
 if TYPE_CHECKING:
     from scorers import ToolScorerProtocol
 
@@ -106,8 +107,7 @@ class ToolUseGame(Game):
     def _format_tool_context(tool_descriptions: dict[str, str]) -> str:
         """Render tool definitions as fixed prompt context."""
         return "\n".join(
-            f"- {tool_name}: {description}"
-            for tool_name, description in tool_descriptions.items()
+            f"- {tool_name}: {description}" for tool_name, description in tool_descriptions.items()
         )
 
     @staticmethod
@@ -118,7 +118,7 @@ class ToolUseGame(Game):
             if hasattr(segment, "text"):
                 if getattr(segment, "source", "user") != "user":
                     continue
-                text = str(getattr(segment, "text")).strip()
+                text = str(segment.text).strip()
                 label = str(getattr(segment, "label", f"U{idx + 1}"))
             else:
                 text = str(segment).strip()
@@ -154,7 +154,7 @@ class ToolUseGame(Game):
         selected_texts = []
         for segment in selected_segments:
             if hasattr(segment, "text"):
-                text = str(getattr(segment, "text")).strip()
+                text = str(segment.text).strip()
             else:
                 text = str(segment).strip()
             if text:
