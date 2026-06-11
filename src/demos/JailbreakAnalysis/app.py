@@ -91,7 +91,8 @@ def respond(
         chat_history[-1]["content"] += token
         yield (
             chat_history,
-            "",
+            # keep the prompt in the box so "Explain" (which reads msg_input) can use it
+            message,
             gr.update(visible=True),
             gr.update(open=False, visible=False),
         )
@@ -204,13 +205,17 @@ def show_explanation(
     print("[show_explanation] running approximation")
     result = approx.approximate(budget=10, game=game)
 
+    # result.values also holds the empty-coalition baseline at index 0, so reading it
+    # positionally misaligns players with their scores. Index by coalition (i,) instead.
+    player_values = np.array([float(result[(i,)]) for i in range(game.n_players)])
+
     print("[show_explanation] building html")
     html = build_explanation_html(
         message=message,
         dropdown_model=dropdown_model,
         compliance_score=compliance_score,
         players=game.players.tolist(),
-        sv_values=result.values,
+        sv_values=player_values,
     )
 
     yield (
@@ -223,8 +228,24 @@ def show_explanation(
 # UI
 # ============================================================
 
-with gr.Blocks() as demo:
-    gr.Markdown("# Shapiq Jailbreak Explainability Demo")
+_CSS = """
+/* dropdowns: pointer cursor (not text I-beam), and keep the selected value
+   from overlapping the arrow icon on narrow screens */
+.jb-dropdown * { cursor: pointer; }
+.jb-dropdown input {
+    cursor: pointer;
+    padding-right: 2.2rem;
+    text-overflow: ellipsis;
+}
+"""
+
+with gr.Blocks(title="Shapiq Jailbreak Explainability") as demo:
+    gr.Markdown(
+        "# 🔍 Shapiq Jailbreak Explainability Demo\n"
+        "Type a prompt and press **Send** to chat with the model, then click "
+        "**Explain with shapiq** to see which parts of the prompt drive the model "
+        "toward compliance or refusal."
+    )
 
     with gr.Row():
         # ====================================================
@@ -255,6 +276,7 @@ with gr.Blocks() as demo:
                     placeholder="Enter prompt...",
                     show_label=False,
                     container=False,
+                    lines=3,
                     scale=8,
                 )
 
@@ -322,4 +344,4 @@ with gr.Blocks() as demo:
 
 if __name__ == "__main__":
     preload_models()
-    demo.launch()
+    demo.launch(theme=gr.themes.Soft(), css=_CSS)

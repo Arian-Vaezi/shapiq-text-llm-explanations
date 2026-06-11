@@ -17,15 +17,17 @@ class ExplanationConfigColumn:
     """
 
     def __init__(self) -> None:
-        with gr.Column(scale=1, min_width=100):
+        with gr.Column(scale=1, min_width=220):
             gr.Markdown("## Explanation Config")
 
             self.dropdown_model = gr.Dropdown(
-                label="Model for Explanation",
+                label="Model",
+                info="Language model whose compliance is explained.",
+                elem_classes="jb-dropdown",
                 choices=[
-                    "google/gemma-2-2b-it",
-                    "microsoft/phi-2",
                     "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+                    "microsoft/phi-2",
+                    "google/gemma-2-2b-it",
                     # "EleutherAI/gpt-neo-1.3B",
                 ],
                 value="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
@@ -54,23 +56,28 @@ class ExplanationConfigColumn:
 
             self.dropdown_segmentation = gr.Dropdown(
                 label="Segmentation level",
+                info="How the prompt is split into players for attribution.",
+                elem_classes="jb-dropdown",
                 choices=[
-                    "word",
-                    "token",
                     "sentence",
                     "semantic",
+                    "word",
+                    "token",
                 ],
                 value="semantic",
                 allow_custom_value=False,
             )
 
             self.dropdown_masking = gr.Dropdown(
-                label="Masking Strategy",
+                label="Masking strategy",
+                info="How removed players are represented in the prompt.",
+                elem_classes="jb-dropdown",
+                # (display label, value) — value must match JailbreakGame.coalition_to_prompt
                 choices=[
-                    "remove",
-                    "mask",
-                    "distributional sampling",
-                    "generative infilling",
+                    ("Remove", "remove"),
+                    ("Mask token", "mask"),
+                    ("Distributional", "distributional"),
+                    ("Generative", "generative"),
                 ],
                 value="remove",
                 allow_custom_value=False,
