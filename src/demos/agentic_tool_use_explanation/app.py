@@ -12,9 +12,9 @@ from html import escape
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
+import numpy as np
 import pandas as pd
 import streamlit as st
-import numpy as np
 from matplotlib.patches import Rectangle
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
@@ -67,6 +67,7 @@ def load_logprob_scorer(
     model_id: str,
     candidate_template: str,
     candidate_texts: dict[str, str] | None,
+    *,  # future-proof: make scoring-related args keyword-only
     normalize_by_length: bool,
 ) -> LogProbToolScorer:
     """Load and cache the optional local HuggingFace logprob scorer."""
@@ -548,9 +549,7 @@ class DemoInteractionValues:
 
     def get_n_order(self, order: int) -> DemoInteractionValues:
         if order == 1:
-            empty_matrix = pd.DataFrame(
-                [[0.0] * self.n_players for _ in range(self.n_players)]
-            )
+            empty_matrix = pd.DataFrame([[0.0] * self.n_players for _ in range(self.n_players)])
             return DemoInteractionValues(self.first_order, empty_matrix, self.index)
         if order == 2:
             return DemoInteractionValues([0.0] * self.n_players, self.second_order, self.index)
@@ -594,9 +593,7 @@ class ExactFallbackApproximator:
         score = 0.0
         for size in range(self.n):
             weight = (
-                math.factorial(size)
-                * math.factorial(self.n - size - 1)
-                / math.factorial(self.n)
+                math.factorial(size) * math.factorial(self.n - size - 1) / math.factorial(self.n)
             )
             for subset in itertools.combinations(other_players, size):
                 mask = sum(1 << idx for idx in subset)
@@ -789,8 +786,8 @@ def load_text_plotters() -> tuple[object | None, object | None, str | None]:
     except Exception as error:  # noqa: BLE001
         return None, None, str(error)
     return (
-        getattr(module, "token_attribution_bar_plot"),
-        getattr(module, "sentence_interaction_heatmap"),
+        module.token_attribution_bar_plot,
+        module.sentence_interaction_heatmap,
         None,
     )
 
@@ -887,8 +884,7 @@ def main() -> None:
     )
     with st.sidebar.expander("How it works", expanded=False):
         st.write(
-            "Request -> Segmentation -> Remove players -> Tool support score -> "
-            "Shapley Explanation"
+            "Request -> Segmentation -> Remove players -> Tool support score -> Shapley Explanation"
         )
         st.caption(
             "The app keeps system/tool context fixed, removes user-request players, "
@@ -952,9 +948,7 @@ def main() -> None:
             "Request text",
             value=DEFAULT_MOCK_QUERY,
             height=86,
-            help=(
-                "This preview chooses a tool only. It does not call the selected tool."
-            ),
+            help=("This preview chooses a tool only. It does not call the selected tool."),
         )
         trace_name = "Custom request"
         key = "mock_llm_router"
@@ -1029,8 +1023,7 @@ def main() -> None:
     system_prompt = build_system_prompt(system_segments)
     tool_context = format_tool_context(TOOLS)
     players_text = (
-        f"{len(user_segments)} user request segment"
-        f"{'' if len(user_segments) == 1 else 's'}"
+        f"{len(user_segments)} user request segment{'' if len(user_segments) == 1 else 's'}"
     )
     full_prompt = build_coalition_prompt(
         user_segments,
@@ -1287,9 +1280,7 @@ def main() -> None:
                     "top": "No segment"
                     if lexical_top is None
                     else f"{lexical_top['segment']} ({lexical_top['source']})",
-                    "top_value": 0.0
-                    if lexical_top is None
-                    else float(lexical_top["attribution"]),
+                    "top_value": 0.0 if lexical_top is None else float(lexical_top["attribution"]),
                     "pair": lexical_pair_label,
                     "pair_value": lexical_pair_value,
                 }
@@ -1319,9 +1310,7 @@ def main() -> None:
 
     result = st.session_state.result
     if result is None:
-        st.error(
-            "No explanation result is available. Click Run explanation to compute one."
-        )
+        st.error("No explanation result is available. Click Run explanation to compute one.")
         return
     primary_label = result["primary_label"]
     full_score = result["full_score"]
@@ -1353,8 +1342,6 @@ def main() -> None:
         support_interpretation = (
             "The complete prompt does not change support much compared with the baseline."
         )
-    supporting_frame = attribution_ranking_frame(attribution_frame, supporting=True)
-    reducing_frame = attribution_ranking_frame(attribution_frame, supporting=False)
     token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
         load_text_plotters()
     )
