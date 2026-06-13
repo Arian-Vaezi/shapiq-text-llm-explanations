@@ -30,6 +30,7 @@ except Exception:  # noqa: BLE001
             self.verbose = verbose
             self.player_names = player_names or [str(idx) for idx in range(n_players)]
 
+
 if TYPE_CHECKING:
     from scorers import ToolScorerProtocol
 
@@ -110,8 +111,7 @@ class ToolUseGame(Game):
     def _format_tool_context(tool_descriptions: dict[str, str]) -> str:
         """Render tool definitions as fixed prompt context."""
         return "\n".join(
-            f"- {tool_name}: {description}"
-            for tool_name, description in tool_descriptions.items()
+            f"- {tool_name}: {description}" for tool_name, description in tool_descriptions.items()
         )
 
     @staticmethod
@@ -122,7 +122,7 @@ class ToolUseGame(Game):
             if hasattr(segment, "text"):
                 if getattr(segment, "source", "user") != "user":
                     continue
-                text = str(getattr(segment, "text")).strip()
+                text = str(segment.text).strip()
                 label = str(getattr(segment, "label", f"U{idx + 1}"))
             else:
                 text = str(segment).strip()
@@ -157,17 +157,16 @@ class ToolUseGame(Game):
         """Build a coalition prompt with fixed system/tool context and selected user text."""
         selected_texts = []
         for segment in selected_segments:
-            if hasattr(segment, "text"):
-                text = str(getattr(segment, "text")).strip()
-            else:
-                text = str(segment).strip()
+            text = str(segment.text).strip() if hasattr(segment, "text") else str(segment).strip()
             if text:
                 selected_texts.append(text)
         user_request = " ".join(selected_texts)
+        user_request_block = f"User request:\n{user_request}" if user_request else "User request:"
+
         return (
             f"{self.system_prompt}\n\n"
             f"Available tools:\n{self.tool_context}\n\n"
-            f"User request:\n{user_request}\n\n"
+            f"{user_request_block}\n\n"
             "Assistant:"
         )
 

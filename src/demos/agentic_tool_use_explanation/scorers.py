@@ -484,6 +484,7 @@ class LogProbToolScorer:
         candidate_texts: dict[str, str] | None = None,
         device: str | None = None,
         dtype: str = "auto",
+        *,  # future-proof: force all following args to be keyword-only
         normalize_by_length: bool = True,
         max_pairs_per_batch: int | None = 32,
         tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,

@@ -72,7 +72,7 @@ TOOL_DESCRIPTIONS = {
 }
 
 
-def make_game(module, scorer=None, normalize=False):
+def make_game(module, scorer=None, *, normalize=False):
     return module.ToolUseGame(
         target_tool="weather_tool",
         user_segments=[
