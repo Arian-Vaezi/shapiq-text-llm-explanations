@@ -13,7 +13,9 @@ DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_expla
 sys.path.insert(0, str(DEMO_DIR))
 
 import app  # noqa: E402
+import sample_data  # noqa: E402
 from tool_game import ToolUseSegment  # noqa: E402
+from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
 
 
 def test_load_text_plotters_handles_import_error(monkeypatch) -> None:
@@ -131,3 +133,10 @@ def test_segment_user_request_passes_only_user_request_to_segmenter() -> None:
     assert segmenter.seen_text == "weather in Berlin"
     assert segments == ["weather in Berlin"]
     assert debug_rows == []
+
+
+def test_sample_data_uses_derived_tool_descriptions() -> None:
+    assert sample_data.TOOLS == TOOL_DESCRIPTIONS
+    assert app.TOOLS == TOOL_DESCRIPTIONS
+    for trace in sample_data.SAMPLE_TRACES.values():
+        assert trace["target_tool"] in app.TOOLS

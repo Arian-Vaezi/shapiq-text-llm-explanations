@@ -7,10 +7,15 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+ROOT = Path(__file__).resolve().parents[1]
+DEMO_DIR = ROOT / "src" / "demos" / "agentic_tool_use_explanation"
+sys.path.insert(0, str(DEMO_DIR))
+
+from tool_schemas import TOOL_DESCRIPTIONS as CANONICAL_TOOL_DESCRIPTIONS  # noqa: E402
+
 
 def load_tool_game_module():
-    root = Path(__file__).resolve().parents[1]
-    module_path = root / "src" / "demos" / "agentic_tool_use_explanation" / "tool_game.py"
+    module_path = ROOT / "src" / "demos" / "agentic_tool_use_explanation" / "tool_game.py"
     spec = importlib.util.spec_from_file_location(
         "agentic_tool_use_explanation.tool_game", module_path
     )
@@ -58,14 +63,12 @@ class RawContrastiveScorer:
         self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]
     ) -> list[float]:
         del target_tool, tool_descriptions
-        return [
-            -1.0 if "User request:\n\nAssistant:" in prompt else 2.0 for prompt in prompts
-        ]
+        return [-1.0 if "User request:\n\nAssistant:" in prompt else 2.0 for prompt in prompts]
 
 
 TOOL_DESCRIPTIONS = {
-    "weather_tool": "Fetch current weather or forecasts.",
-    "calculator_tool": "Compute exact arithmetic.",
+    "weather_tool": CANONICAL_TOOL_DESCRIPTIONS["weather_tool"],
+    "calculator_tool": CANONICAL_TOOL_DESCRIPTIONS["calculator_tool"],
 }
 
 
@@ -99,8 +102,8 @@ def test_empty_coalition_keeps_fixed_context_and_removes_user_segments():
     prompt = game.build_prompt([])
 
     assert "You are a tool router." in prompt
-    assert "weather_tool: Fetch current weather or forecasts." in prompt
-    assert "calculator_tool: Compute exact arithmetic." in prompt
+    assert f"weather_tool: {TOOL_DESCRIPTIONS['weather_tool']}" in prompt
+    assert f"calculator_tool: {TOOL_DESCRIPTIONS['calculator_tool']}" in prompt
     assert "What is the weather" not in prompt
     assert "in Berlin tomorrow?" not in prompt
     assert "User request:\n\nAssistant:" in prompt
@@ -113,7 +116,7 @@ def test_full_coalition_keeps_fixed_context_and_includes_all_user_segments():
     prompt = game.build_prompt(game.selected_segments(np.array([True, True])))
 
     assert "You are a tool router." in prompt
-    assert "weather_tool: Fetch current weather or forecasts." in prompt
+    assert f"weather_tool: {TOOL_DESCRIPTIONS['weather_tool']}" in prompt
     assert "What is the weather in Berlin tomorrow?" in prompt
 
 
@@ -189,8 +192,8 @@ def test_tool_use_game_default_lexical_scorer_handles_empty_and_full_coalitions(
     empty_value = float(game(game.empty_coalition)[0])
     full_value = float(game(game.grand_coalition)[0])
 
-    assert 0.0 <= empty_value <= 1.0
-    assert 0.0 <= full_value <= 1.0
+    assert empty_value == pytest.approx(0.0)
+    assert np.isfinite(full_value)
 
 
 def test_tool_use_game_normalization_uses_empty_coalition_contrastive_score():

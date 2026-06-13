@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-TOOLS = {
-    "weather_tool": "Fetch current weather or forecasts for a place and date.",
-    "calculator_tool": "Compute exact arithmetic and numeric expressions.",
-    "web_search_tool": "Search the web for current, recent, or external facts.",
-    "no_tool": "Answer directly without calling an external tool.",
-}
+try:
+    from demos.agentic_tool_use_explanation.tool_schemas import TOOL_DESCRIPTIONS
+except ModuleNotFoundError:
+    from tool_schemas import TOOL_DESCRIPTIONS
+
+TOOLS = TOOL_DESCRIPTIONS
 
 
 SAMPLE_TRACES = {

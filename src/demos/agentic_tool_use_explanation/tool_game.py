@@ -62,7 +62,11 @@ class ToolUseGame(Game):
         verbose: bool = False,
     ) -> None:
         self.target_tool = target_tool
-        self.tool_descriptions = tool_descriptions or {}
+        self.tool_descriptions = (
+            dict(tool_descriptions)
+            if tool_descriptions is not None
+            else _default_tool_descriptions()
+        )
         if user_segments is None:
             if segments is None:
                 msg = "ToolUseGame requires at least one user segment."
@@ -191,3 +195,13 @@ class ToolUseGame(Game):
 def budget_for_demo(n_players: int) -> int:
     """Small interactive default budget."""
     return int(min(2**n_players, max(48, 8 * n_players * np.log2(n_players + 1))))
+
+
+def _default_tool_descriptions() -> dict[str, str]:
+    """Return derived tool descriptions from the canonical schema module."""
+    try:
+        from demos.agentic_tool_use_explanation.tool_schemas import TOOL_DESCRIPTIONS
+    except ModuleNotFoundError:
+        from tool_schemas import TOOL_DESCRIPTIONS
+
+    return dict(TOOL_DESCRIPTIONS)

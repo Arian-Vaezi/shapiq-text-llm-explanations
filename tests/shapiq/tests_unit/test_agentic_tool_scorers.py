@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from copy import deepcopy
 from pathlib import Path
 
 import numpy as np
@@ -17,15 +18,18 @@ from scorers import (  # noqa: E402
     LLMToolScorer,
     LogProbToolScorer,
     MockLLM,
+    build_tool_calling_prompt,
+    split_coalition_prompt,
 )
 from tool_game import ToolUseGame, ToolUseSegment  # noqa: E402
-
-TOOL_DESCRIPTIONS = {
-    "weather_tool": "Fetch current weather or forecasts for a place and date.",
-    "calculator_tool": "Compute exact arithmetic and numeric expressions.",
-    "web_search_tool": "Search the web for current, recent, or external facts.",
-    "no_tool": "Answer directly without calling an external tool.",
-}
+from tool_schemas import (  # noqa: E402
+    DECISION_NAMES,
+    EXECUTABLE_TOOL_SCHEMAS,
+    NO_TOOL_NAME,
+    TOOL_DESCRIPTIONS,
+    get_executable_tool_schemas,
+    validate_tool_configuration,
+)
 
 
 def make_fake_logprob_scorer(
@@ -60,6 +64,212 @@ class FakeGenerator:
     def generate(self, prompt: str) -> str:
         del prompt
         return self.response
+
+
+class RecordingTokenizer:
+    """Fake tokenizer that records chat-template calls."""
+
+    def __init__(self) -> None:
+        self.calls = []
+
+    def apply_chat_template(
+        self,
+        messages: list[dict[str, str]],
+        *,
+        tools: tuple[dict[str, object], ...],
+        tokenize: bool,
+        add_generation_prompt: bool,
+    ) -> str:
+        self.calls.append(
+            {
+                "messages": messages,
+                "tools": tools,
+                "tokenize": tokenize,
+                "add_generation_prompt": add_generation_prompt,
+            }
+        )
+        return "native chat prompt"
+
+
+class RejectingToolsTokenizer:
+    """Fake tokenizer without tools= support."""
+
+    def apply_chat_template(self, *args, **kwargs) -> str:
+        del args, kwargs
+        msg = "apply_chat_template() got an unexpected keyword argument 'tools'"
+        raise TypeError(msg)
+
+
+class BrokenTokenizer:
+    """Fake tokenizer that raises an unrelated error."""
+
+    def apply_chat_template(self, *args, **kwargs) -> str:
+        del args, kwargs
+        msg = "tokenizer exploded"
+        raise RuntimeError(msg)
+
+
+def test_canonical_tool_schema_contents() -> None:
+    validate_tool_configuration()
+    schema_by_name = {schema["function"]["name"]: schema for schema in EXECUTABLE_TOOL_SCHEMAS}
+
+    assert set(schema_by_name) == {
+        "weather_tool",
+        "calculator_tool",
+        "web_search_tool",
+    }
+    assert NO_TOOL_NAME not in schema_by_name
+    assert NO_TOOL_NAME in DECISION_NAMES
+    assert len(DECISION_NAMES) == len(set(DECISION_NAMES))
+    assert schema_by_name["weather_tool"]["function"]["parameters"]["required"] == ["location"]
+    assert schema_by_name["calculator_tool"]["function"]["parameters"]["required"] == ["expression"]
+    assert schema_by_name["web_search_tool"]["function"]["parameters"]["required"] == ["query"]
+
+
+def test_derived_tool_descriptions_include_no_tool() -> None:
+    descriptions_by_name = {
+        schema["function"]["name"]: schema["function"]["description"]
+        for schema in EXECUTABLE_TOOL_SCHEMAS
+    }
+
+    for tool_name, description in descriptions_by_name.items():
+        assert TOOL_DESCRIPTIONS[tool_name] == description
+    assert TOOL_DESCRIPTIONS[NO_TOOL_NAME] == "Answer directly without calling an external tool."
+
+
+def test_build_tool_calling_prompt_uses_native_chat_template_tools() -> None:
+    tokenizer = RecordingTokenizer()
+
+    prompt = build_tool_calling_prompt(
+        tokenizer,
+        system_prompt="You are a tool router.",
+        user_request="Will it rain in Berlin tomorrow?",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+    )
+
+    assert prompt == "native chat prompt"
+    assert len(tokenizer.calls) == 1
+    call = tokenizer.calls[0]
+    assert call["messages"] == [
+        {"role": "system", "content": "You are a tool router."},
+        {"role": "user", "content": "Will it rain in Berlin tomorrow?"},
+    ]
+    assert call["tools"] == get_executable_tool_schemas()
+    assert call["tokenize"] is False
+    assert call["add_generation_prompt"] is True
+
+
+def test_build_tool_calling_prompt_keeps_empty_user_message() -> None:
+    tokenizer = RecordingTokenizer()
+
+    build_tool_calling_prompt(
+        tokenizer,
+        system_prompt="You are a tool router.",
+        user_request="",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+    )
+
+    call = tokenizer.calls[0]
+    assert call["messages"][0] == {"role": "system", "content": "You are a tool router."}
+    assert call["messages"][1] == {"role": "user", "content": ""}
+    assert call["tools"] == get_executable_tool_schemas()
+
+
+def test_split_coalition_prompt_preserves_empty_user_request() -> None:
+    system_prompt, user_request = split_coalition_prompt(
+        "You are a tool router.\n\n"
+        "Available tools:\n- weather_tool: Forecasts\n\n"
+        "User request:\n\n"
+        "Assistant:"
+    )
+
+    assert system_prompt == "You are a tool router."
+    assert user_request == ""
+
+
+def test_build_tool_calling_prompt_fallback_renders_canonical_schemas() -> None:
+    prompt = build_tool_calling_prompt(
+        RejectingToolsTokenizer(),
+        system_prompt="You are a tool router.",
+        user_request="Will it rain?",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+    )
+
+    assert "System:\nYou are a tool router." in prompt
+    assert "User:\nWill it rain?" in prompt
+    for schema in EXECUTABLE_TOOL_SCHEMAS:
+        function = schema["function"]
+        assert function["name"] in prompt
+        assert function["description"] in prompt
+    assert '"required": [' in prompt
+    assert '"location"' in prompt
+    assert '"expression"' in prompt
+    assert '"query"' in prompt
+    assert NO_TOOL_NAME not in prompt
+
+
+def test_build_tool_calling_prompt_does_not_swallow_unexpected_errors() -> None:
+    with pytest.raises(RuntimeError, match="tokenizer exploded"):
+        build_tool_calling_prompt(
+            BrokenTokenizer(),
+            system_prompt="You are a tool router.",
+            user_request="Will it rain?",
+            tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+        )
+
+
+def test_build_tool_calling_prompt_does_not_mutate_shared_schemas() -> None:
+    before = deepcopy(EXECUTABLE_TOOL_SCHEMAS)
+
+    build_tool_calling_prompt(
+        RecordingTokenizer(),
+        system_prompt="You are a tool router.",
+        user_request="Will it rain?",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+    )
+
+    assert before == EXECUTABLE_TOOL_SCHEMAS
+
+
+def test_logprob_tool_scorer_builds_model_prompt_with_structured_schemas() -> None:
+    scorer = LogProbToolScorer.__new__(LogProbToolScorer)
+    scorer.candidate_template = "The correct tool is {tool_name}."
+    scorer.candidate_texts = {}
+    scorer.normalize_by_length = True
+    scorer.last_debug_outputs = []
+    scorer.tool_schemas = get_executable_tool_schemas()
+    scorer.tokenizer = RecordingTokenizer()
+    captured = {}
+
+    def fake_sequence_logprobs_batched(
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        captured["prompts"] = prompts
+        captured["continuations"] = continuations
+        return [-1.0 for _ in prompts]
+
+    scorer._sequence_logprobs_batched = fake_sequence_logprobs_batched
+
+    scorer.score_batch(
+        [
+            "You are a tool router.\n\n"
+            "Available tools:\n- weather_tool: old text\n\n"
+            "User request:\nWill it rain?\n\n"
+            "Assistant:"
+        ],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    call = scorer.tokenizer.calls[0]
+    assert call["messages"] == [
+        {"role": "system", "content": "You are a tool router."},
+        {"role": "user", "content": "Will it rain?"},
+    ]
+    assert call["tools"] == get_executable_tool_schemas()
+    assert captured["prompts"] == ["native chat prompt"] * len(TOOL_DESCRIPTIONS)
+    assert len(captured["continuations"]) == len(TOOL_DESCRIPTIONS)
 
 
 def test_llm_tool_scorer_parse_score_accepts_plain_number() -> None:

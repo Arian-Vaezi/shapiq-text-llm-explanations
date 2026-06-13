@@ -5,9 +5,25 @@ from __future__ import annotations
 import math
 import re
 import sys
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
+
+try:
+    from demos.agentic_tool_use_explanation.tool_schemas import (
+        EXECUTABLE_TOOL_SCHEMAS,
+        NO_TOOL_NAME,
+        get_executable_tool_schemas,
+        render_tool_schemas_text,
+    )
+except ModuleNotFoundError:
+    from tool_schemas import (
+        EXECUTABLE_TOOL_SCHEMAS,
+        NO_TOOL_NAME,
+        get_executable_tool_schemas,
+        render_tool_schemas_text,
+    )
 
 DEFAULT_HF_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 DEFAULT_LOGPROB_MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
@@ -139,6 +155,88 @@ def clamp_score(score: float) -> float:
         msg = "Score must be finite."
         raise ValueError(msg)
     return float(min(1.0, max(0.0, score)))
+
+
+def build_tool_calling_prompt(
+    tokenizer: object,
+    *,
+    system_prompt: str,
+    user_request: str,
+    tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+) -> str:
+    """Build model input with native structured tools when available.
+
+    The input context uses structured tool schemas through ``tools=`` whenever
+    the tokenizer supports it. Candidate outputs are still scored as
+    standardized textual decision continuations; native structured tool-call
+    continuation scoring is future work.
+    """
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_request},
+    ]
+    schemas = get_executable_tool_schemas()
+    if tool_schemas is not EXECUTABLE_TOOL_SCHEMAS:
+        schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
+    try:
+        return tokenizer.apply_chat_template(
+            messages,
+            tools=schemas,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+    except TypeError as error:
+        if not _is_unsupported_tools_argument_error(error):
+            raise
+    return _build_tool_calling_prompt_fallback(
+        system_prompt=system_prompt,
+        user_request=user_request,
+        tool_schemas=schemas,
+    )
+
+
+def _build_tool_calling_prompt_fallback(
+    *,
+    system_prompt: str,
+    user_request: str,
+    tool_schemas: Sequence[Mapping[str, object]],
+) -> str:
+    """Build a deterministic text fallback from canonical tool schemas."""
+    return (
+        f"System:\n{system_prompt}\n\n"
+        f"Available tools:\n{render_tool_schemas_text(tool_schemas)}\n\n"
+        f"User:\n{user_request}\n\n"
+        "Assistant:"
+    )
+
+
+def _copy_schema(schema: Mapping[str, object]) -> dict[str, object]:
+    import copy
+
+    return copy.deepcopy(dict(schema))
+
+
+def _is_unsupported_tools_argument_error(error: TypeError) -> bool:
+    message = str(error)
+    return "tools" in message and (
+        "unexpected keyword" in message
+        or "unsupported" in message.lower()
+        or "not supported" in message.lower()
+    )
+
+
+def split_coalition_prompt(prompt: str) -> tuple[str, str]:
+    """Extract fixed system prompt and coalition user request from demo prompts."""
+    system_prompt, separator, after_system = prompt.partition("\n\nAvailable tools:\n")
+    if not separator:
+        return "", prompt
+    _, user_separator, after_tools = after_system.partition("\n\nUser request:\n")
+    if not user_separator:
+        return system_prompt.strip(), prompt
+    if after_tools.startswith("\nAssistant:"):
+        return system_prompt.strip(), ""
+    user_request, _, _ = after_tools.partition("\n\nAssistant:")
+    return system_prompt.strip(), user_request.strip()
 
 
 @dataclass
@@ -388,6 +486,7 @@ class LogProbToolScorer:
         dtype: str = "auto",
         normalize_by_length: bool = True,
         max_pairs_per_batch: int | None = 32,
+        tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
     ) -> None:
         self.model_id = model_id
         self.candidate_template = candidate_template
@@ -396,6 +495,7 @@ class LogProbToolScorer:
         self.dtype = dtype
         self.normalize_by_length = normalize_by_length
         self.max_pairs_per_batch = max_pairs_per_batch
+        self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
         self.last_debug_outputs: list[dict[str, object]] = []
         if max_pairs_per_batch is not None and max_pairs_per_batch < 1:
             msg = "max_pairs_per_batch must be positive or None."
@@ -503,7 +603,7 @@ class LogProbToolScorer:
         if target_tool not in candidate_tools:
             msg = f"Target tool {target_tool!r} is not available."
             raise ValueError(msg)
-        if "no_tool" not in candidate_tools:
+        if NO_TOOL_NAME not in candidate_tools:
             msg = "LogProbToolScorer requires a 'no_tool' decision candidate."
             raise ValueError(msg)
         return candidate_tools
@@ -514,10 +614,11 @@ class LogProbToolScorer:
         candidate_tools: list[str],
     ) -> list[dict[str, float]]:
         """Score all prompt/candidate continuations in batched model calls."""
+        model_prompts = [self._model_prompt(prompt) for prompt in prompts]
         pair_prompts = []
         pair_continuations = []
         pair_tools = []
-        for prompt in prompts:
+        for prompt in model_prompts:
             for tool_name in candidate_tools:
                 pair_prompts.append(prompt)
                 pair_continuations.append(self._candidate_continuation(tool_name))
@@ -533,6 +634,16 @@ class LogProbToolScorer:
             prompt_index = pair_index // len(candidate_tools)
             rows[prompt_index][tool_name] = self._validate_log_score(tool_name, score)
         return rows
+
+    def _model_prompt(self, prompt: str) -> str:
+        """Build model-native fixed-context input for one coalition prompt."""
+        system_prompt, user_request = split_coalition_prompt(prompt)
+        return build_tool_calling_prompt(
+            self.tokenizer,
+            system_prompt=system_prompt,
+            user_request=user_request,
+            tool_schemas=self.tool_schemas,
+        )
 
     def _contrastive_score(
         self,
@@ -560,9 +671,9 @@ class LogProbToolScorer:
     ) -> str:
         """Choose the reference candidate for the contrastive score."""
         self._validate_score_dict(candidate_log_scores, candidate_tools)
-        if target_tool != "no_tool":
-            return "no_tool"
-        alternatives = [tool_name for tool_name in candidate_tools if tool_name != "no_tool"]
+        if target_tool != NO_TOOL_NAME:
+            return NO_TOOL_NAME
+        alternatives = [tool_name for tool_name in candidate_tools if tool_name != NO_TOOL_NAME]
         if not alternatives:
             msg = "no_tool contrastive scoring requires a non-no-tool reference candidate."
             raise ValueError(msg)
