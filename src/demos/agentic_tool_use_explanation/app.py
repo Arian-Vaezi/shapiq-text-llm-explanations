@@ -940,7 +940,6 @@ def main() -> None:
         )
         trace = SAMPLE_TRACES[trace_name]
         key = clean_key(trace_name)
-        default_target = str(trace["target_tool"])
         request_text = " ".join(trace["user_segments"])
     else:
         st.markdown('<div class="section-label">Request</div>', unsafe_allow_html=True)
@@ -982,14 +981,11 @@ def main() -> None:
     )
     if mode == "Custom request":
         trace = build_mock_trace(mock_input, preview_choice.tool)
-        default_target = preview_choice.tool
 
-    target_tool = st.sidebar.selectbox(
-        "Tool to explain",
-        list(TOOLS),
-        index=list(TOOLS).index(default_target),
-        key=f"{key}_target_tool",
-    )
+    target_tool = preview_choice.tool
+
+    st.sidebar.markdown("**Explaining selected tool**")
+    st.sidebar.info(target_tool)
 
     system_segments = build_segments(trace["system_segments"], "system")
     try:
@@ -1069,7 +1065,7 @@ def main() -> None:
                 <p>{escape(user_request)}</p>
             </div>
             <div class="scenario-hint">
-                <strong>Tool to explain:</strong> {escape(target_tool)}<br>
+                <strong>Explaining why agent selected:</strong> {escape(target_tool)}<br>
                 <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
                 <strong>Shapley players:</strong> {escape(players_text)}<br>
                 <strong>Fixed context:</strong> system prompt + tool definitions
