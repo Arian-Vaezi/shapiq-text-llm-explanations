@@ -29,7 +29,7 @@ TOOL_DESCRIPTIONS = {
 
 
 def make_fake_logprob_scorer(
-    logprobs: dict[str, float],
+    log_scores: dict[str, float] | list[dict[str, float]],
     candidate_texts: dict[str, str] | None = None,
 ) -> LogProbToolScorer:
     scorer = LogProbToolScorer.__new__(LogProbToolScorer)
@@ -38,14 +38,16 @@ def make_fake_logprob_scorer(
     scorer.normalize_by_length = True
     scorer.last_debug_outputs = []
 
-    def fake_sequence_logprob(prompt: str, continuation: str) -> float:
-        del prompt
-        for tool_name, score in logprobs.items():
-            if tool_name in continuation:
-                return score
-        return -10.0
+    def fake_candidate_log_scores(
+        prompts: list[str],
+        candidate_tools: list[str],
+    ) -> list[dict[str, float]]:
+        del candidate_tools
+        if isinstance(log_scores, list):
+            return log_scores
+        return [log_scores.copy() for _ in prompts]
 
-    scorer._sequence_logprob = fake_sequence_logprob
+    scorer._candidate_log_scores = fake_candidate_log_scores
     return scorer
 
 
@@ -183,7 +185,7 @@ def test_llm_tool_scorer_falls_back_on_invalid_output() -> None:
     assert debug_output["final_score"] == scores[0]
 
 
-def test_logprob_tool_scorer_returns_array_for_prompts() -> None:
+def test_logprob_tool_scorer_returns_one_float_per_prompt() -> None:
     scorer = make_fake_logprob_scorer(
         {
             "weather_tool": 2.0,
@@ -199,18 +201,19 @@ def test_logprob_tool_scorer_returns_array_for_prompts() -> None:
         tool_descriptions=TOOL_DESCRIPTIONS,
     )
 
-    assert isinstance(scores, np.ndarray)
-    assert scores.shape == (2,)
+    assert isinstance(scores, list)
+    assert len(scores) == 2
+    assert all(isinstance(score, float) for score in scores)
     assert len(scorer.last_debug_outputs) == 2
 
 
-def test_logprob_tool_scorer_prefers_highest_target_logprob() -> None:
+def test_logprob_tool_scorer_returns_target_vs_no_tool_difference() -> None:
     scorer = make_fake_logprob_scorer(
         {
-            "weather_tool": 4.0,
-            "calculator_tool": 0.0,
-            "web_search_tool": -1.0,
-            "no_tool": -2.0,
+            "weather_tool": -0.4,
+            "calculator_tool": -2.2,
+            "web_search_tool": -1.6,
+            "no_tool": -1.9,
         }
     )
 
@@ -220,10 +223,77 @@ def test_logprob_tool_scorer_prefers_highest_target_logprob() -> None:
         tool_descriptions=TOOL_DESCRIPTIONS,
     )
 
-    assert scores[0] > 0.5
+    assert scores == pytest.approx([1.5])
 
 
-def test_logprob_tool_scorer_debug_probabilities_sum_to_one() -> None:
+def test_logprob_tool_scorer_returns_negative_contrastive_value() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": -2.5,
+            "no_tool": -0.5,
+        }
+    )
+    tool_descriptions = {
+        "weather_tool": TOOL_DESCRIPTIONS["weather_tool"],
+        "no_tool": TOOL_DESCRIPTIONS["no_tool"],
+    }
+
+    scores = scorer.score_batch(
+        ["Will it rain tomorrow?"],
+        target_tool="weather_tool",
+        tool_descriptions=tool_descriptions,
+    )
+
+    assert scores == pytest.approx([-2.0])
+
+
+def test_logprob_tool_scorer_handles_no_tool_as_target() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "no_tool": -0.3,
+            "weather_tool": -1.0,
+            "calculator_tool": -2.0,
+            "web_search_tool": -1.5,
+        }
+    )
+
+    scores = scorer.score_batch(
+        ["Explain photosynthesis."],
+        target_tool="no_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([0.7])
+
+
+def test_logprob_tool_scorer_preserves_batch_order() -> None:
+    scorer = make_fake_logprob_scorer(
+        [
+            {
+                "weather_tool": -0.4,
+                "calculator_tool": -2.2,
+                "web_search_tool": -1.6,
+                "no_tool": -1.9,
+            },
+            {
+                "weather_tool": -2.5,
+                "calculator_tool": -1.5,
+                "web_search_tool": -1.2,
+                "no_tool": -0.5,
+            },
+        ]
+    )
+
+    scores = scorer.score_batch(
+        ["Will it rain tomorrow?", "Explain the water cycle."],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.5, -2.0])
+
+
+def test_logprob_tool_scorer_debug_contains_contrastive_scores() -> None:
     scorer = make_fake_logprob_scorer(
         {
             "weather_tool": 1.5,
@@ -241,15 +311,21 @@ def test_logprob_tool_scorer_debug_probabilities_sum_to_one() -> None:
 
     debug_output = scorer.last_debug_outputs[0]
     assert debug_output["target_tool"] == "weather_tool"
+    assert debug_output["reference_tool"] == "no_tool"
     assert set(debug_output["candidate_tools"]) == set(TOOL_DESCRIPTIONS)
-    assert np.isclose(sum(debug_output["candidate_probs"]), 1.0)
-    assert 0.0 <= debug_output["final_score"] <= 1.0
+    assert debug_output["candidate_log_scores"] == [1.5, 0.5, -0.5, -1.5]
+    assert debug_output["final_score"] == pytest.approx(3.0)
 
 
 def test_logprob_tool_scorer_uses_candidate_text_override_for_no_tool() -> None:
     no_tool_text = "The assistant should answer directly without using an external tool."
     scorer = make_fake_logprob_scorer(
-        {"weather_tool": 1.0, "no_tool": 0.5},
+        {
+            "weather_tool": 1.0,
+            "calculator_tool": -1.0,
+            "web_search_tool": -2.0,
+            "no_tool": 0.5,
+        },
         candidate_texts={"no_tool": no_tool_text},
     )
 
@@ -266,7 +342,12 @@ def test_logprob_tool_scorer_uses_candidate_text_override_for_no_tool() -> None:
 
 def test_logprob_tool_scorer_falls_back_to_template_for_missing_candidate_text() -> None:
     scorer = make_fake_logprob_scorer(
-        {"weather_tool": 1.0, "no_tool": 0.5},
+        {
+            "weather_tool": 1.0,
+            "calculator_tool": -1.0,
+            "web_search_tool": -2.0,
+            "no_tool": 0.5,
+        },
         candidate_texts={"no_tool": "Answer directly."},
     )
 
@@ -285,7 +366,14 @@ def test_logprob_tool_scorer_falls_back_to_template_for_missing_candidate_text()
 
 
 def test_logprob_tool_scorer_debug_contains_candidate_continuations() -> None:
-    scorer = make_fake_logprob_scorer({"weather_tool": 1.0})
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": 1.0,
+            "calculator_tool": -1.0,
+            "web_search_tool": -2.0,
+            "no_tool": 0.5,
+        }
+    )
 
     scorer.score_batch(
         ["Will it rain tomorrow?"],
@@ -306,6 +394,86 @@ def test_logprob_tool_scorer_requires_candidate_tools() -> None:
             ["Will it rain tomorrow?"],
             target_tool="weather_tool",
             tool_descriptions={},
+        )
+
+
+def test_logprob_tool_scorer_requires_no_tool_candidate() -> None:
+    scorer = make_fake_logprob_scorer({"weather_tool": 1.0, "calculator_tool": 0.0})
+
+    with pytest.raises(ValueError, match="no_tool"):
+        scorer.score_batch(
+            ["Will it rain tomorrow?"],
+            target_tool="weather_tool",
+            tool_descriptions={
+                "weather_tool": TOOL_DESCRIPTIONS["weather_tool"],
+                "calculator_tool": TOOL_DESCRIPTIONS["calculator_tool"],
+            },
+        )
+
+
+def test_logprob_tool_scorer_rejects_unknown_target_tool() -> None:
+    scorer = make_fake_logprob_scorer({"weather_tool": 1.0, "no_tool": 0.0})
+
+    with pytest.raises(ValueError, match="not available"):
+        scorer.score_batch(
+            ["Will it rain tomorrow?"],
+            target_tool="calendar_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_logprob_tool_scorer_rejects_non_finite_candidate_score() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": float("nan"),
+            "calculator_tool": -2.2,
+            "web_search_tool": -1.6,
+            "no_tool": -1.9,
+        }
+    )
+
+    with pytest.raises(ValueError, match="finite"):
+        scorer.score_batch(
+            ["Will it rain tomorrow?"],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_logprob_tool_scorer_rejects_missing_candidate_score() -> None:
+    scorer = make_fake_logprob_scorer(
+        {
+            "weather_tool": -0.4,
+            "calculator_tool": -2.2,
+            "no_tool": -1.9,
+        }
+    )
+
+    with pytest.raises(ValueError, match="web_search_tool"):
+        scorer.score_batch(
+            ["Will it rain tomorrow?"],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_logprob_tool_scorer_rejects_candidate_result_count_mismatch() -> None:
+    scorer = make_fake_logprob_scorer(
+        [
+            {
+                "weather_tool": -0.4,
+                "calculator_tool": -2.2,
+                "web_search_tool": -1.6,
+                "no_tool": -1.9,
+            }
+        ]
+    )
+
+    with pytest.raises(ValueError, match="one score dictionary per prompt"):
+        scorer.score_batch(
+            ["Prompt one", "Prompt two"],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
         )
 
 

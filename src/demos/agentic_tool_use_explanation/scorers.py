@@ -7,10 +7,7 @@ import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Protocol
-
-if TYPE_CHECKING:
-    import numpy as np
+from typing import Any, Protocol
 
 DEFAULT_HF_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 DEFAULT_LOGPROB_MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
@@ -380,7 +377,7 @@ class LLMToolScorer:
 
 
 class LogProbToolScorer:
-    """Score target-tool support from local LM continuation likelihoods."""
+    """Score tool decisions from local LM continuation likelihoods."""
 
     def __init__(
         self,
@@ -390,6 +387,7 @@ class LogProbToolScorer:
         device: str | None = None,
         dtype: str = "auto",
         normalize_by_length: bool = True,
+        max_pairs_per_batch: int | None = 32,
     ) -> None:
         self.model_id = model_id
         self.candidate_template = candidate_template
@@ -397,7 +395,11 @@ class LogProbToolScorer:
         self.device = device
         self.dtype = dtype
         self.normalize_by_length = normalize_by_length
+        self.max_pairs_per_batch = max_pairs_per_batch
         self.last_debug_outputs: list[dict[str, object]] = []
+        if max_pairs_per_batch is not None and max_pairs_per_batch < 1:
+            msg = "max_pairs_per_batch must be positive or None."
+            raise ValueError(msg)
 
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -414,6 +416,7 @@ class LogProbToolScorer:
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
+        self.tokenizer.padding_side = "right"
 
         model_kwargs: dict[str, Any] = {}
         if dtype != "auto":
@@ -437,48 +440,240 @@ class LogProbToolScorer:
         *,
         target_tool: str,
         tool_descriptions: dict[str, str],
-    ) -> np.ndarray:
-        """Return target-tool probabilities from candidate continuation logprobs."""
-        import numpy as np
+    ) -> list[float]:
+        """Return a contrastive tool-decision score for each coalition prompt.
 
-        candidate_tools = list(tool_descriptions)
-        if not candidate_tools:
-            msg = "LogProbToolScorer requires tool_descriptions with candidate tools."
-            raise ValueError(msg)
-        if target_tool not in candidate_tools:
-            candidate_tools.append(target_tool)
-
+        For ordinary tools this is the target-vs-reference log-score difference
+        ``log P(target_tool) - log P(no_tool)`` using the scorer's candidate
+        continuation log scores directly. When ``target_tool == "no_tool"``,
+        the reference is the strongest available non-no-tool candidate.
+        """
+        candidate_tools = self._validate_candidate_tools(target_tool, tool_descriptions)
         self.last_debug_outputs = []
-        target_index = candidate_tools.index(target_tool)
+        candidate_score_rows = self._candidate_log_scores(prompts, candidate_tools)
+        if len(candidate_score_rows) != len(prompts):
+            msg = "Candidate scoring must return one score dictionary per prompt."
+            raise ValueError(msg)
+
         scores = []
-        for prompt in prompts:
-            candidate_continuations = [
-                self._candidate_continuation(tool_name) for tool_name in candidate_tools
-            ]
-            candidate_logprobs = np.asarray(
-                [
-                    self._sequence_logprob(prompt, continuation)
-                    for continuation in candidate_continuations
-                ],
-                dtype=float,
+        candidate_continuations = {
+            tool_name: self._candidate_continuation(tool_name) for tool_name in candidate_tools
+        }
+        for prompt, candidate_log_scores in zip(prompts, candidate_score_rows, strict=True):
+            final_score = self._contrastive_score(
+                candidate_log_scores,
+                target_tool=target_tool,
+                candidate_tools=candidate_tools,
             )
-            shifted = candidate_logprobs - np.max(candidate_logprobs)
-            candidate_probs = np.exp(shifted)
-            candidate_probs = candidate_probs / candidate_probs.sum()
-            final_score = float(candidate_probs[target_index])
             scores.append(final_score)
             self.last_debug_outputs.append(
                 {
                     "target_tool": target_tool,
                     "candidate_tools": candidate_tools.copy(),
-                    "candidate_continuations": candidate_continuations,
-                    "candidate_logprobs": candidate_logprobs.tolist(),
-                    "candidate_probs": candidate_probs.tolist(),
+                    "candidate_continuations": [
+                        candidate_continuations[tool_name] for tool_name in candidate_tools
+                    ],
+                    "candidate_log_scores": [
+                        candidate_log_scores[tool_name] for tool_name in candidate_tools
+                    ],
+                    "candidate_logprobs": [
+                        candidate_log_scores[tool_name] for tool_name in candidate_tools
+                    ],
+                    "reference_tool": self._reference_tool(
+                        candidate_log_scores,
+                        target_tool=target_tool,
+                        candidate_tools=candidate_tools,
+                    ),
                     "final_score": final_score,
                     "prompt_preview": prompt[:240],
                 }
             )
-        return np.asarray(scores, dtype=float)
+        return scores
+
+    def _validate_candidate_tools(
+        self,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> list[str]:
+        """Return available decision candidates after validating required tools."""
+        candidate_tools = list(tool_descriptions)
+        if len(candidate_tools) < 2:
+            msg = "LogProbToolScorer requires at least two decision candidates."
+            raise ValueError(msg)
+        if target_tool not in candidate_tools:
+            msg = f"Target tool {target_tool!r} is not available."
+            raise ValueError(msg)
+        if "no_tool" not in candidate_tools:
+            msg = "LogProbToolScorer requires a 'no_tool' decision candidate."
+            raise ValueError(msg)
+        return candidate_tools
+
+    def _candidate_log_scores(
+        self,
+        prompts: list[str],
+        candidate_tools: list[str],
+    ) -> list[dict[str, float]]:
+        """Score all prompt/candidate continuations in batched model calls."""
+        pair_prompts = []
+        pair_continuations = []
+        pair_tools = []
+        for prompt in prompts:
+            for tool_name in candidate_tools:
+                pair_prompts.append(prompt)
+                pair_continuations.append(self._candidate_continuation(tool_name))
+                pair_tools.append(tool_name)
+
+        pair_scores = self._sequence_logprobs_batched(pair_prompts, pair_continuations)
+        if len(pair_scores) != len(pair_tools):
+            msg = "Candidate scoring must return one log score per prompt/candidate pair."
+            raise ValueError(msg)
+
+        rows = [{tool_name: math.nan for tool_name in candidate_tools} for _ in prompts]
+        for pair_index, (tool_name, score) in enumerate(zip(pair_tools, pair_scores, strict=True)):
+            prompt_index = pair_index // len(candidate_tools)
+            rows[prompt_index][tool_name] = self._validate_log_score(tool_name, score)
+        return rows
+
+    def _contrastive_score(
+        self,
+        candidate_log_scores: dict[str, float],
+        *,
+        target_tool: str,
+        candidate_tools: list[str],
+    ) -> float:
+        """Return the target-vs-reference log-score difference."""
+        reference_tool = self._reference_tool(
+            candidate_log_scores,
+            target_tool=target_tool,
+            candidate_tools=candidate_tools,
+        )
+        target_score = self._require_candidate_score(candidate_log_scores, target_tool)
+        reference_score = self._require_candidate_score(candidate_log_scores, reference_tool)
+        return target_score - reference_score
+
+    def _reference_tool(
+        self,
+        candidate_log_scores: dict[str, float],
+        *,
+        target_tool: str,
+        candidate_tools: list[str],
+    ) -> str:
+        """Choose the reference candidate for the contrastive score."""
+        self._validate_score_dict(candidate_log_scores, candidate_tools)
+        if target_tool != "no_tool":
+            return "no_tool"
+        alternatives = [tool_name for tool_name in candidate_tools if tool_name != "no_tool"]
+        if not alternatives:
+            msg = "no_tool contrastive scoring requires a non-no-tool reference candidate."
+            raise ValueError(msg)
+        return max(alternatives, key=lambda tool_name: candidate_log_scores[tool_name])
+
+    def _validate_score_dict(
+        self,
+        candidate_log_scores: dict[str, float],
+        candidate_tools: list[str],
+    ) -> None:
+        """Validate candidate score coverage and finiteness."""
+        for tool_name in candidate_tools:
+            self._require_candidate_score(candidate_log_scores, tool_name)
+
+    def _require_candidate_score(
+        self,
+        candidate_log_scores: dict[str, float],
+        tool_name: str,
+    ) -> float:
+        """Return one finite candidate score or raise a clear validation error."""
+        if tool_name not in candidate_log_scores:
+            msg = f"Candidate scoring did not return a score for {tool_name!r}."
+            raise ValueError(msg)
+        return self._validate_log_score(tool_name, candidate_log_scores[tool_name])
+
+    def _validate_log_score(self, tool_name: str, score: float) -> float:
+        """Return a finite log score as float."""
+        score = float(score)
+        if not math.isfinite(score):
+            msg = f"Candidate score for {tool_name!r} must be finite."
+            raise ValueError(msg)
+        return score
+
+    def _sequence_logprobs_batched(
+        self,
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        """Score continuation likelihoods for prompt/candidate pairs in batches."""
+        if len(prompts) != len(continuations):
+            msg = "Prompts and continuations must have the same length."
+            raise ValueError(msg)
+        if not prompts:
+            return []
+
+        max_pairs_per_batch = getattr(self, "max_pairs_per_batch", None)
+        if max_pairs_per_batch is None:
+            return self._sequence_logprobs_batch(prompts, continuations)
+
+        scores: list[float] = []
+        for start in range(0, len(prompts), max_pairs_per_batch):
+            stop = start + max_pairs_per_batch
+            scores.extend(
+                self._sequence_logprobs_batch(
+                    prompts[start:stop],
+                    continuations[start:stop],
+                )
+            )
+        return scores
+
+    def _sequence_logprobs_batch(
+        self,
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        """Score continuation token likelihood under a causal LM in one batch."""
+        torch = self._torch
+        prompt_inputs = self.tokenizer(
+            prompts,
+            return_tensors="pt",
+            add_special_tokens=False,
+            padding=True,
+        )
+        full_inputs = self.tokenizer(
+            [
+                prompt + continuation
+                for prompt, continuation in zip(prompts, continuations, strict=True)
+            ],
+            return_tensors="pt",
+            add_special_tokens=False,
+            padding=True,
+        )
+        prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
+        full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
+        continuation_lengths = [
+            int(full_len - prompt_len)
+            for prompt_len, full_len in zip(prompt_lengths, full_lengths, strict=True)
+        ]
+        if any(length <= 0 for length in continuation_lengths):
+            msg = "Continuation must add at least one token."
+            raise ValueError(msg)
+
+        input_ids = full_inputs["input_ids"].to(self.device)
+        attention_mask = full_inputs["attention_mask"].to(self.device)
+        with torch.inference_mode():
+            logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
+            log_probs = torch.log_softmax(logits[:, :-1, :], dim=-1)
+            target_ids = input_ids[:, 1:]
+            token_log_probs = log_probs.gather(-1, target_ids.unsqueeze(-1)).squeeze(-1)
+
+        scores = []
+        for row_index, (prompt_len, continuation_len) in enumerate(
+            zip(prompt_lengths, continuation_lengths, strict=True)
+        ):
+            start = int(prompt_len - 1)
+            stop = start + int(continuation_len)
+            score = float(token_log_probs[row_index, start:stop].sum().item())
+            if self.normalize_by_length:
+                score /= int(continuation_len)
+            scores.append(score)
+        return scores
 
     def _sequence_logprob(self, prompt: str, continuation: str) -> float:
         """Score continuation token likelihood under a causal LM."""

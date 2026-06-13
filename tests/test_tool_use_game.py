@@ -53,6 +53,16 @@ class NonFiniteScorer:
         return [float("nan") for _ in prompts]
 
 
+class RawContrastiveScorer:
+    def score_batch(
+        self, prompts: list[str], *, target_tool: str, tool_descriptions: dict[str, str]
+    ) -> list[float]:
+        del target_tool, tool_descriptions
+        return [
+            -1.0 if "User request:\n\nAssistant:" in prompt else 2.0 for prompt in prompts
+        ]
+
+
 TOOL_DESCRIPTIONS = {
     "weather_tool": "Fetch current weather or forecasts.",
     "calculator_tool": "Compute exact arithmetic.",
@@ -181,6 +191,23 @@ def test_tool_use_game_default_lexical_scorer_handles_empty_and_full_coalitions(
 
     assert 0.0 <= empty_value <= 1.0
     assert 0.0 <= full_value <= 1.0
+
+
+def test_tool_use_game_normalization_uses_empty_coalition_contrastive_score():
+    module = load_tool_game_module()
+    game = module.ToolUseGame(
+        target_tool="weather_tool",
+        user_segments=["What is the forecast?"],
+        system_prompt="You are a tool router.",
+        scorer=RawContrastiveScorer(),
+        tool_descriptions=TOOL_DESCRIPTIONS,
+        normalize=True,
+    )
+
+    normalized_full_value = float(game(game.grand_coalition)[0])
+
+    assert game.normalization_value == -1.0
+    assert normalized_full_value == 3.0
 
 
 def test_tool_use_game_rejects_score_length_mismatch():
