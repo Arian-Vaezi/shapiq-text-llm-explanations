@@ -963,7 +963,7 @@ def main() -> None:
                     logprob_model_id,
                     candidate_template,
                     candidate_texts,
-                    bool(normalize_by_length),
+                    normalize_by_length=bool(normalize_by_length),
                 )
             except Exception as error:  # noqa: BLE001
                 st.error(
@@ -1179,7 +1179,7 @@ def main() -> None:
                         logprob_model_id,
                         candidate_template,
                         candidate_texts,
-                        bool(normalize_by_length),
+                        normalize_by_length=bool(normalize_by_length),
                     )
                 except Exception as error:  # noqa: BLE001
                     st.error(
