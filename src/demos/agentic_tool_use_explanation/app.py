@@ -343,11 +343,6 @@ def budget_for_demo(n_players: int) -> int:
     return int(min(2**n_players, max(48, 8 * n_players * math.log2(n_players + 1))))
 
 
-def clean_key(value: str) -> str:
-    """Create a stable Streamlit key fragment."""
-    return value.lower().replace(" ", "_").replace("-", "_").replace("/", "_")
-
-
 def truncate_label(value: str, max_length: int = 72) -> str:
     """Shorten long selectbox labels without changing their underlying value."""
     if len(value) <= max_length:
@@ -939,7 +934,6 @@ def main() -> None:
             format_func=scenario_prompt_label,
         )
         trace = SAMPLE_TRACES[trace_name]
-        key = clean_key(trace_name)
         request_text = " ".join(trace["user_segments"])
     else:
         st.markdown('<div class="section-label">Request</div>', unsafe_allow_html=True)
@@ -950,7 +944,6 @@ def main() -> None:
             help=("This preview chooses a tool only. It does not call the selected tool."),
         )
         trace_name = "Custom request"
-        key = "mock_llm_router"
         request_text = mock_input
 
     if scorer_backend == "Keyword baseline":
@@ -983,9 +976,6 @@ def main() -> None:
         trace = build_mock_trace(mock_input, preview_choice.tool)
 
     target_tool = preview_choice.tool
-
-    st.sidebar.markdown("**Explaining selected tool**")
-    st.sidebar.info(target_tool)
 
     system_segments = build_segments(trace["system_segments"], "system")
     try:
