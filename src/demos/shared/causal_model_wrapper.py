@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from threading import Thread
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -28,7 +28,7 @@ class CausalModelWrapper:
     - Streaming text generation
     """
 
-    CAUSAL_MODELS: list[str] = [
+    CAUSAL_MODELS: ClassVar[list[str]] = [
         "mistral",
         "llama",
         "gemma",
@@ -159,10 +159,7 @@ class CausalModelWrapper:
         if do_sample:
             kwargs["temperature"] = temp
 
-        result = self.pipe(
-            prompt,
-            **kwargs
-        )
+        result = self.pipe(prompt, **kwargs)
         return result[0]["generated_text"].strip()
 
     def generate_text_stream(

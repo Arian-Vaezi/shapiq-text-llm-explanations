@@ -3,6 +3,7 @@
 Importing HFModelWrapper from this module still works exactly as before.
 Internally it delegates to the focused wrapper classes.
 """
+
 from __future__ import annotations
 
 from .api_model_wrapper import APIModelWrapper
@@ -49,7 +50,9 @@ def HFModelWrapper(
         return APIModelWrapper(model_name, device=device, temperature=temperature)
 
     if any(x in name for x in CausalModelWrapper.CAUSAL_MODELS):
-        return CausalModelWrapper(model_name, device=device, hf_token=hf_token, temperature=temperature)
+        return CausalModelWrapper(
+            model_name, device=device, hf_token=hf_token, temperature=temperature
+        )
 
     if any(x in name for x in EncoderModelWrapper.ENCODER_MODELS):
         return EncoderModelWrapper(model_name, device=device, hf_token=hf_token)

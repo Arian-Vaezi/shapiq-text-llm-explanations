@@ -33,13 +33,13 @@ class APIModelWrapper:
 
         print(f"[APIModelWrapper] Initializing {self.provider} API model '{model_name}'")
 
-        from dotenv import load_dotenv  # noqa: PLC0415
+        from dotenv import load_dotenv
 
         load_dotenv()
 
         if self.provider == "gemini":
             try:
-                from google import genai  # noqa: PLC0415
+                from google import genai
             except ImportError as err:
                 msg = "Please install google-genai to use Gemini models."
                 raise ImportError(msg) from err
@@ -51,14 +51,16 @@ class APIModelWrapper:
             self.client = genai.Client(api_key=api_key)
         else:
             try:
-                from groq import Groq  # noqa: PLC0415
+                from groq import Groq
             except ImportError as err:
                 msg = "Please install groq to use Groq models."
                 raise ImportError(msg) from err
 
             api_key = os.getenv("GROQ_API_KEY")
             if not api_key:
-                msg = "GROQ_API_KEY environment variable not found. Please add it to your .env file."
+                msg = (
+                    "GROQ_API_KEY environment variable not found. Please add it to your .env file."
+                )
                 raise ValueError(msg)
             self.client = Groq(api_key=api_key)
 
@@ -89,7 +91,7 @@ class APIModelWrapper:
         temp = temperature if temperature is not None else self.temperature
 
         if self.provider == "gemini":
-            from google.genai import types  # noqa: PLC0415
+            from google.genai import types
 
             response = self.client.models.generate_content(
                 model=self.model_name,
@@ -121,7 +123,7 @@ class APIModelWrapper:
         temp = temperature if temperature is not None else self.temperature
 
         if self.provider == "gemini":
-            from google.genai import types  # noqa: PLC0415
+            from google.genai import types
 
             response_stream = self.client.models.generate_content_stream(
                 model=self.model_name,

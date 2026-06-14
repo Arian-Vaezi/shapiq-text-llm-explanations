@@ -13,10 +13,12 @@ st.set_page_config(
     layout="wide",
 )
 
+
 # --- Caching & State ---
 @st.cache_resource
 def get_model(model_name: str, temperature: float = 0.0) -> object:
     return HFModelWrapper(model_name=model_name, device="cuda", temperature=temperature)
+
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
@@ -49,7 +51,9 @@ tab_inference, tab_explanation = st.tabs(["💬 Inference", "🔍 Explanation"])
 # --- Inference Tab ---
 with tab_inference:
     st.markdown("## Chat with the Model")
-    st.markdown(f"**Current Model:** `{st.session_state.selected_model}` | **Temperature:** `{temperature}`")
+    st.markdown(
+        f"**Current Model:** `{st.session_state.selected_model}` | **Temperature:** `{temperature}`"
+    )
 
     # Display chat
     for msg in st.session_state.chat_history:
@@ -64,7 +68,9 @@ with tab_inference:
             try:
                 model = get_model(st.session_state.selected_model, temperature=temperature)
                 # Note: caching the model uses the previous temp, so we explicitly pass it below.
-                stream = model.generate_text_stream(prompt=prompt, chat=True, temperature=temperature)
+                stream = model.generate_text_stream(
+                    prompt=prompt, chat=True, temperature=temperature
+                )
                 response = st.write_stream(stream)
                 st.session_state.chat_history.append({"role": "assistant", "content": response})
             except Exception as e:  # noqa: BLE001
@@ -73,7 +79,9 @@ with tab_inference:
 # --- Explanation Tab ---
 with tab_explanation:
     st.markdown("## Explanation with shapiq")
-    st.markdown("Analyze the compliance of the model based on Shapley values. This evaluates how individual parts of your prompt influence the model's output compliance.")
+    st.markdown(
+        "Analyze the compliance of the model based on Shapley values. This evaluates how individual parts of your prompt influence the model's output compliance."
+    )
 
     # Explanation config
     with st.expander("Explanation Settings", expanded=True):
@@ -91,16 +99,22 @@ with tab_explanation:
                 )
                 judge_model = st.selectbox("Judge Model", model_choices, index=default_judge_index)
 
-            masking_strategy = st.selectbox("Masking Strategy", ["remove", "mask", "distributional", "generative"], index=0)
+            masking_strategy = st.selectbox(
+                "Masking Strategy", ["remove", "mask", "distributional", "generative"], index=0
+            )
 
         with col2:
-            segmentation = st.selectbox("Segmentation Level", ["semantic", "sentence", "word", "token"], index=0)
+            segmentation = st.selectbox(
+                "Segmentation Level", ["semantic", "sentence", "word", "token"], index=0
+            )
 
             semantic_window = 4
             semantic_threshold = 0.50
             if segmentation == "semantic":
                 semantic_window = st.number_input("Segmentation Window Size", value=4, min_value=1)
-                semantic_threshold = st.number_input("Similarity Threshold", value=0.50, min_value=0.0, max_value=1.0, step=0.05)
+                semantic_threshold = st.number_input(
+                    "Similarity Threshold", value=0.50, min_value=0.0, max_value=1.0, step=0.05
+                )
 
     # Input for explanation
     explain_prompt = st.text_area("Prompt to explain", height=100)
@@ -147,7 +161,9 @@ with tab_explanation:
                     status.update(label="Explanation complete!", state="complete", expanded=False)
 
                     # Rendering results
-                    st.success(f"**Model:** {st.session_state.selected_model}  |  **Compliance Score:** `{compliance_score:+.4f}`")
+                    st.success(
+                        f"**Model:** {st.session_state.selected_model}  |  **Compliance Score:** `{compliance_score:+.4f}`"
+                    )
 
                     st.markdown("### Shapley Values")
 
@@ -157,7 +173,9 @@ with tab_explanation:
                         bar_len = min(int(abs(val) * 15), 10)
                         bar_color = "#10b981" if val >= 0 else "#ef4444"
                         bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
-                        html += f"<tr><td><code>{p}</code></td><td>{val:+.4f}</td><td>{bar}</td></tr>"
+                        html += (
+                            f"<tr><td><code>{p}</code></td><td>{val:+.4f}</td><td>{bar}</td></tr>"
+                        )
                     html += "</tbody></table>"
 
                     st.html(html)
