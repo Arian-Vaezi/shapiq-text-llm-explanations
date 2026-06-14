@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import re
-import numpy as np
+from typing import TYPE_CHECKING
 
-from demos.shared.causal_model_wrapper import CausalModelWrapper
-from demos.shared.encoder_model_wrapper import EncoderModelWrapper
+import numpy as np
+from transformers import AutoTokenizer
+
 from demos.shared.embedding_model_wrapper import EmbeddingModelWrapper
 from demos.shared.hf_model import HFModelWrapper
 from shapiq.game import Game
+
+if TYPE_CHECKING:
+    from demos.shared.causal_model_wrapper import CausalModelWrapper
+    from demos.shared.encoder_model_wrapper import EncoderModelWrapper
 
 
 class JailbreakGame(Game):
@@ -73,9 +78,8 @@ class JailbreakGame(Game):
             self.mask_token = getattr(self.tokenizer, "mask_token", None)
         else:
             # Fallback for API models that don't expose a tokenizer directly
-            import transformers
-            self.tokenizer = transformers.AutoTokenizer.from_pretrained("gpt2")
-            self.mask_token = "<|endoftext|>"
+            self.tokenizer = AutoTokenizer.from_pretrained("gpt2")
+            self.mask_token = "<|endoftext|>"  # noqa: S105
 
         self._build_players()
 
@@ -111,7 +115,9 @@ class JailbreakGame(Game):
     # Semantic segmentation
     # =================================================
     def _semantic_segments(self) -> list[str]:
-        assert self.embedding_model is not None
+        if self.embedding_model is None:
+            msg = "Semantic segmentation requires an embedding model."
+            raise RuntimeError(msg)
 
         words = self.input_text.split()
         if len(words) <= 1:
@@ -249,23 +255,23 @@ class JailbreakGame(Game):
     Score:
     """.strip()
 
-        def _judge_score(self, prompts: list[str], responses: list[str]) -> np.ndarray:
-            scores = []
+    def _judge_score(self, prompts: list[str], responses: list[str]) -> np.ndarray:
+        scores = []
 
-            for p, r in zip(prompts, responses):
-                raw = self.judge_model.generate_text(
-                    self._judge_prompt(p, r),
-                    max_new_tokens=5,
-                )
+        for p, r in zip(prompts, responses, strict=True):
+            raw = self.judge_model.generate_text(
+                self._judge_prompt(p, r),
+                max_new_tokens=5,
+            )
 
-                try:
-                    val = float(raw.strip().split()[0])
-                except Exception:
-                    val = 0.0
+            try:
+                val = float(raw.strip().split()[0])
+            except (IndexError, ValueError):
+                val = 0.0
 
-                scores.append(max(0.0, min(10.0, val)))
+            scores.append(max(0.0, min(10.0, val)))
 
-            return np.array(scores)
+        return np.array(scores)
 
     # =================================================
     # main scoring
@@ -302,7 +308,7 @@ class JailbreakGame(Game):
         # -------------------------
         # JUDGE MODE
         # -------------------------
-        elif self.scoring_mode == "llm-as-a-judge":
+        if self.scoring_mode == "llm-as-a-judge":
 
             responses = [
                 self.text_generation_model.generate_text(p)
@@ -311,8 +317,8 @@ class JailbreakGame(Game):
 
             return self._judge_score(prompts, responses)
 
-        else:
-            raise ValueError(f"Unknown scoring mode: {self.scoring_mode}")
+        msg = f"Unknown scoring mode: {self.scoring_mode}"
+        raise ValueError(msg)
 
     # =================================================
     # value function

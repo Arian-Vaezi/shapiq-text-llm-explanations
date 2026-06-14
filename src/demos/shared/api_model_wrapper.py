@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import os
 from typing import TYPE_CHECKING
-import numpy as np
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+
+    import numpy as np
 
 
 class APIModelWrapper:
@@ -19,7 +20,7 @@ class APIModelWrapper:
     ) -> None:
         self.model_name = model_name
         self.device = device
-        self.is_causal = False
+        self.is_causal = True
         self.is_encoder = False
         self.temperature = temperature
 
@@ -32,27 +33,33 @@ class APIModelWrapper:
 
         print(f"[APIModelWrapper] Initializing {self.provider} API model '{model_name}'")
 
-        from dotenv import load_dotenv
+        from dotenv import load_dotenv  # noqa: PLC0415
 
         load_dotenv()
 
         if self.provider == "gemini":
             try:
-                from google import genai
-            except ImportError:
-                raise ImportError("Please install google-genai to use Gemini models.")
+                from google import genai  # noqa: PLC0415
+            except ImportError as err:
+                msg = "Please install google-genai to use Gemini models."
+                raise ImportError(msg) from err
+
             api_key = os.getenv("GEMINI_API_KEY")
             if not api_key:
-                raise ValueError("GEMINI_API_KEY environment variable not found. Please add it to your .env file.")
+                msg = "GEMINI_API_KEY environment variable not found. Please add it to your .env file."
+                raise ValueError(msg)
             self.client = genai.Client(api_key=api_key)
         else:
             try:
-                from groq import Groq
-            except ImportError:
-                raise ImportError("Please install groq to use Groq models.")
+                from groq import Groq  # noqa: PLC0415
+            except ImportError as err:
+                msg = "Please install groq to use Groq models."
+                raise ImportError(msg) from err
+
             api_key = os.getenv("GROQ_API_KEY")
             if not api_key:
-                raise ValueError("GROQ_API_KEY environment variable not found. Please add it to your .env file.")
+                msg = "GROQ_API_KEY environment variable not found. Please add it to your .env file."
+                raise ValueError(msg)
             self.client = Groq(api_key=api_key)
 
     # =========================================================
@@ -60,10 +67,11 @@ class APIModelWrapper:
     # =========================================================
 
     def score_next_token(self, prompts: list[str], target_text: str) -> np.ndarray:
-        raise NotImplementedError(
+        msg = (
             "Logprob scoring is not supported for API models. "
             "Please use 'llm-as-a-judge' value function instead."
         )
+        raise NotImplementedError(msg)
 
     # =========================================================
     # GENERATION
@@ -77,10 +85,11 @@ class APIModelWrapper:
         chat: bool = False,
         temperature: float | None = None,
     ) -> str:
+        del chat
         temp = temperature if temperature is not None else self.temperature
 
         if self.provider == "gemini":
-            from google.genai import types
+            from google.genai import types  # noqa: PLC0415
 
             response = self.client.models.generate_content(
                 model=self.model_name,
@@ -91,15 +100,14 @@ class APIModelWrapper:
                 ),
             )
             return response.text or ""
-        else:
-            messages = [{"role": "user", "content": prompt}]
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                temperature=temp,
-                max_tokens=max_new_tokens,
-            )
-            return response.choices[0].message.content or ""
+        messages = [{"role": "user", "content": prompt}]
+        response = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=messages,
+            temperature=temp,
+            max_tokens=max_new_tokens,
+        )
+        return response.choices[0].message.content or ""
 
     def generate_text_stream(
         self,
@@ -109,10 +117,11 @@ class APIModelWrapper:
         chat: bool = False,
         temperature: float | None = None,
     ) -> Iterator[str]:
+        del chat
         temp = temperature if temperature is not None else self.temperature
 
         if self.provider == "gemini":
-            from google.genai import types
+            from google.genai import types  # noqa: PLC0415
 
             response_stream = self.client.models.generate_content_stream(
                 model=self.model_name,

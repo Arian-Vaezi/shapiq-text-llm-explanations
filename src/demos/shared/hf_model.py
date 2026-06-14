@@ -5,10 +5,26 @@ Internally it delegates to the focused wrapper classes.
 """
 from __future__ import annotations
 
-from .causal_model_wrapper import CausalModelWrapper
-from .encoder_model_wrapper import EncoderModelWrapper
-from .embedding_model_wrapper import EmbeddingModelWrapper
 from .api_model_wrapper import APIModelWrapper
+from .causal_model_wrapper import CausalModelWrapper
+from .embedding_model_wrapper import EmbeddingModelWrapper
+from .encoder_model_wrapper import EncoderModelWrapper
+
+API_MODEL_NAMES = (
+    "llama-3.3-70b-versatile",
+    "openai/gpt-oss-120b",
+    "meta-llama/llama-4-scout-17b-16e-instruct",
+    "openai/gpt-oss-safeguard-20b",
+    "qwen/qwen3-32b",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+)
+
+
+def is_api_model_name(model_name: str) -> bool:
+    """Return whether a model name should be routed to an API provider."""
+    name = model_name.lower()
+    return name in API_MODEL_NAMES or name.startswith("gemini-")
 
 
 def HFModelWrapper(
@@ -28,17 +44,7 @@ def HFModelWrapper(
     """
     name = model_name.lower()
 
-    # API Models list from user
-    api_models = [
-        "llama-3.3-70b-versatile",
-        "openai/gpt-oss-120b",
-        "meta-llama/llama-4-scout-17b-16e-instruct",
-        "openai/gpt-oss-safeguard-20b",
-        "qwen/qwen3-32b",
-        "gemini"
-    ]
-    
-    if any(x in name for x in api_models) or "/" in model_name and "llama" in name:
+    if is_api_model_name(model_name):
         # Route to API wrapper for known API models
         return APIModelWrapper(model_name, device=device, temperature=temperature)
 
@@ -50,15 +56,17 @@ def HFModelWrapper(
 
     if any(x in name for x in EmbeddingModelWrapper.EMBEDDING_MODELS):
         return EmbeddingModelWrapper(model_name, device=device)
-        
+
     msg = f"Unsupported model type for model: {model_name}"
     raise ValueError(msg)
 
 
 __all__ = [
-    "HFModelWrapper",
-    "CausalModelWrapper",
-    "EncoderModelWrapper",
-    "EmbeddingModelWrapper",
+    "API_MODEL_NAMES",
     "APIModelWrapper",
+    "CausalModelWrapper",
+    "EmbeddingModelWrapper",
+    "EncoderModelWrapper",
+    "HFModelWrapper",
+    "is_api_model_name",
 ]
