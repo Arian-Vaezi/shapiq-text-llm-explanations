@@ -1,347 +1,154 @@
-"""Gradio web application for the Jailbreak Analysis demo.
-
-This file contains the UI layout and interaction handlers.
-"""
-
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
-import gradio as gr
+import streamlit as st
 import numpy as np
-
-from demos.JailbreakAnalysis.ui_configColumn import ExplanationConfigColumn
+import shapiq
 from demos.shared.hf_model import HFModelWrapper
+from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
 
-if TYPE_CHECKING:
-    from collections.abc import Iterator
+st.set_page_config(
+    page_title="Shapiq Jailbreak Explainability",
+    page_icon="🔍",
+    layout="wide",
+)
 
-# ============================================================
-# MODEL CACHE
-# ============================================================
+# --- Caching & State ---
+@st.cache_resource
+def get_model(model_name: str, temperature: float = 0.0):
+    return HFModelWrapper(model_name=model_name, device="cuda", temperature=temperature)
 
-MODEL_CACHE = {}
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-PRELOAD_MODELS = [
-    #"TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    #"google/gemma-4-E2B-it", #chat
-    "Qwen/Qwen2.5-1.5B-Instruct", #judge
-    "sentence-transformers/all-mpnet-base-v2", #embedding
+if "selected_model" not in st.session_state:
+    st.session_state.selected_model = "llama-3.3-70b-versatile"
+
+# --- Sidebar Config ---
+st.sidebar.title("Configuration")
+
+model_choices = [
+    "llama-3.3-70b-versatile",
+    "openai/gpt-oss-120b",
+    "meta-llama/llama-4-scout-17b-16e-instruct",
+    "openai/gpt-oss-safeguard-20b",
+    "qwen/qwen3-32b",
+    "gemini-2.5-flash",
+    "Qwen/Qwen2.5-1.5B-Instruct",
+    "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
 ]
 
+selected_model = st.sidebar.selectbox("Model", model_choices, index=0)
+st.session_state.selected_model = selected_model
 
-# ============================================================
-# PRELOAD MODELS
-# ============================================================
+temperature = st.sidebar.slider("Temperature", min_value=0.0, max_value=2.0, value=0.7, step=0.1)
 
+# --- Navigation ---
+tab_inference, tab_explanation = st.tabs(["💬 Inference", "🔍 Explanation"])
 
-def preload_models() -> None:
-    """Preloads the configured models in PRELOAD_MODELS into the MODEL_CACHE."""
-    print("Preloading models...")
+# --- Inference Tab ---
+with tab_inference:
+    st.markdown("## Chat with the Model")
+    st.markdown(f"**Current Model:** `{st.session_state.selected_model}` | **Temperature:** `{temperature}`")
+    
+    # Display chat
+    for msg in st.session_state.chat_history:
+        st.chat_message(msg["role"]).write(msg["content"])
+        
+    prompt = st.chat_input("Enter your prompt...")
+    if prompt:
+        st.session_state.chat_history.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+        
+        with st.chat_message("assistant"):
+            try:
+                model = get_model(st.session_state.selected_model, temperature=temperature)
+                # Note: caching the model uses the previous temp, so we explicitly pass it below.
+                stream = model.generate_text_stream(prompt=prompt, chat=True, temperature=temperature)
+                response = st.write_stream(stream)
+                st.session_state.chat_history.append({"role": "assistant", "content": response})
+            except Exception as e:
+                st.error(f"Error during inference: {e}")
 
-    for model_name in PRELOAD_MODELS:
-        if model_name in MODEL_CACHE:
-            continue
-        MODEL_CACHE[model_name] = HFModelWrapper(
-            model_name=model_name,
-            device="cuda",
-        )
-
-    print("Finished preloading.")
-
-
-# ============================================================
-# GET MODEL
-# ============================================================
-
-
-def get_model(model_name: str) -> HFModelWrapper:
-    """Retrieves a model from the cache, lazy-loading it if not present."""
-    if model_name in MODEL_CACHE:
-        return MODEL_CACHE[model_name]
-
-    print(f"Lazily loading {model_name}")
-
-    MODEL_CACHE[model_name] = HFModelWrapper(
-        model_name=model_name,
-        device="cuda",
-    )
-
-    return MODEL_CACHE[model_name]
-
-
-# ============================================================
-# CHAT RESPONSE
-# ============================================================
-
-
-def respond(
-    message: str,
-    chat_history: list[tuple[str, str]],
-    dropdown_model: str,
-) -> Iterator[tuple[object, object, object, object]]:
-    print("[respond] Streaming response.")
-
-    model = get_model(dropdown_model)
-
-    chat_history.append({"role": "user", "content": message})
-    chat_history.append({"role": "assistant", "content": ""})
-
-    for token in model.generate_text_stream(prompt=message, max_new_tokens=128, chat=True):
-        chat_history[-1]["content"] += token
-        yield (
-            chat_history,
-            # keep the prompt in the box so "Explain" (which reads msg_input) can use it
-            message,
-            gr.update(visible=True),
-            gr.update(open=False, visible=False),
-        )
-
-    print("[respond] Done.")
-
-
-# ============================================================
-# BUILD EXPLANATION HTML
-# ============================================================
-
-
-def build_explanation_html(
-    message: str,
-    dropdown_model: str,
-    compliance_score: float,
-    players: list[str],
-    sv_values: np.ndarray,
-) -> str:
-    sv_rows = ""
-
-    for player, val in zip(players, sv_values, strict=False):
-        bar_len = min(int(abs(val) * 15), 10)
-        bar_color = "#10b981" if val >= 0 else "#ef4444"
-        bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
-
-        sv_rows += f"<tr><td>{player}</td><td>{val:+.4f}</td><td>{bar}</td></tr>\n"
-
-    return f"""
-<h2>Shapiq Explanation</h2>
-<p><b>Model:</b> {dropdown_model}</p>
-<p><b>Input:</b> {message}</p>
-<p><b>Compliance Score:</b> {compliance_score:+.4f}</p>
-
-<h3>Shapley Values</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Players</th>
-      <th>Shapley Value</th>
-      <th>Contribution</th>
-    </tr>
-  </thead>
-  <tbody>
-    {sv_rows}
-  </tbody>
-</table>
-"""
-
-
-# ============================================================
-# SHOW EXPLANATION
-# ============================================================
-
-
-def show_explanation(
-    message: str,
-    dropdown_model: str,
-    dropdown_scoring_mode: str,
-    dropdown_judge_model: str,
-    dropdown_segmentation: str,
-    dropdown_masking: str,
-    text_segmentation_window: str,
-    text_similarity_threshold: str,
-) -> Iterator[tuple[object, object]]:
-    import shapiq
-    from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
-
-    semantic_window = int(text_segmentation_window)
-    semantic_threshold = float(text_similarity_threshold)
-
-    print(f"[show_explanation] Starting explanation for: '{message[:60]}...'")
-    print(f"    - Model: {dropdown_model}")
-    print(f"    - Scoring Mode: {dropdown_scoring_mode}")
-    print(f"    - Judge Model: {dropdown_judge_model}")
-    print(f"    - Segmentation: {dropdown_segmentation}")
-    print(f"    - Masking: {dropdown_masking}")
-    print(f"    - Window Size: {semantic_window}")
-    print(f"    - Similarity Threshold: {semantic_threshold}")
-
-    yield (
-        gr.update(value="<p><i>⏳ Explanation in progress...</i></p>", visible=True),
-        gr.update(visible=True, open=True),
-    )
-    cached_model = MODEL_CACHE.get(dropdown_model)
-    print("[show_explanation] creating game instance")
-    game = JailbreakGame(
-        model_name=dropdown_model,
-        input_text=message,
-        scoring_mode=dropdown_scoring_mode,
-        mask_strategy=dropdown_masking,
-        segmentation=dropdown_segmentation,
-        device="cuda",
-        hf_model=cached_model,
-        judge_model_name=dropdown_judge_model,
-        semantic_window=semantic_window,
-        semantic_threshold=semantic_threshold,
-    )
-    print(game.players.tolist())
-
-    # Compliance score: value of the full coalition (all tokens present)
-    full_coalition = np.ones((1, game.n_players))
-    compliance_score = float(game.value_function(full_coalition)[0])
-    print(f"[show_explanation] calculating compliance score: {compliance_score}")
-
-    approx = shapiq.KernelSHAP(
-        n=game.n_players,
-        random_state=42,
-    )
-    print("[show_explanation] running approximation")
-    result = approx.approximate(budget=10, game=game)
-
-    # result.values also holds the empty-coalition baseline at index 0, so reading it
-    # positionally misaligns players with their scores. Index by coalition (i,) instead.
-    player_values = np.array([float(result[(i,)]) for i in range(game.n_players)])
-
-    print("[show_explanation] building html")
-    html = build_explanation_html(
-        message=message,
-        dropdown_model=dropdown_model,
-        compliance_score=compliance_score,
-        players=game.players.tolist(),
-        sv_values=player_values,
-    )
-
-    yield (
-        gr.update(value=html, visible=True),  # explanation_html
-        gr.update(visible=True, open=True),  # explanation_accordion
-    )
-
-
-# ============================================================
-# UI
-# ============================================================
-
-_CSS = """
-/* dropdowns: pointer cursor (not text I-beam), and keep the selected value
-   from overlapping the arrow icon on narrow screens */
-.jb-dropdown * { cursor: pointer; }
-.jb-dropdown input {
-    cursor: pointer;
-    padding-right: 2.2rem;
-    text-overflow: ellipsis;
-}
-"""
-
-with gr.Blocks(title="Shapiq Jailbreak Explainability") as demo:
-    gr.Markdown(
-        "# 🔍 Shapiq Jailbreak Explainability Demo\n"
-        "Type a prompt and press **Send** to chat with the model, then click "
-        "**Explain with shapiq** to see which parts of the prompt drive the model "
-        "toward compliance or refusal."
-    )
-
-    with gr.Row():
-        # ====================================================
-        # CONFIG
-        # ====================================================
-
-        config_col = ExplanationConfigColumn()
-        dropdown_model = config_col.dropdown_model
-        dropdown_scoring_mode = config_col.dropdown_scoring_mode
-        dropdown_judge_model = config_col.dropdown_judge_model
-        dropdown_segmentation = config_col.dropdown_segmentation
-        dropdown_masking = config_col.dropdown_masking
-        text_segmentation_window = config_col.text_segmentation_window
-        text_similarity_threshold = config_col.text_similarity_threshold
-
-        # ====================================================
-        # CHAT
-        # ====================================================
-
-        with gr.Column(scale=3):
-            chatbot = gr.Chatbot(
-                label="Chat History",
-                height=500,
-            )
-
-            with gr.Row():
-                msg_input = gr.Textbox(
-                    placeholder="Enter prompt...",
-                    show_label=False,
-                    container=False,
-                    lines=3,
-                    scale=8,
-                )
-
-                send_btn = gr.Button(
-                    "Send",
-                    variant="primary",
-                    scale=1,
-                )
-
-            explain_btn = gr.Button(
-                "Explain with shapiq",
-                visible=True,
-                variant="secondary",
-            )
-
-            with gr.Accordion(
-                "Explanation and Analysis",
-                open=False,
-                visible=True,
-            ) as explanation_accordion:
-                explanation_html = gr.HTML(visible=False)
-
-    # ========================================================
-    # EVENTS
-    # ========================================================
-
-    respond_inputs = [
-        msg_input,
-        chatbot,
-        dropdown_model,
-    ]
-
-    respond_outputs = [
-        chatbot,
-        msg_input,
-        explain_btn,
-        explanation_accordion,
-    ]
-
-    # explain reads directly from msg_input — independent of chat
-    explanation_inputs = [
-        msg_input,
-        dropdown_model,
-        dropdown_scoring_mode,
-        dropdown_judge_model,
-        dropdown_segmentation,
-        dropdown_masking,
-        text_segmentation_window,
-        text_similarity_threshold,
-    ]
-
-    explanation_outputs = [
-        explanation_html,
-        explanation_accordion,
-    ]
-
-    msg_input.submit(respond, respond_inputs, respond_outputs)
-    send_btn.click(respond, respond_inputs, respond_outputs)
-    explain_btn.click(show_explanation, explanation_inputs, explanation_outputs)
-
-
-# ============================================================
-# MAIN
-# ============================================================
-
-if __name__ == "__main__":
-    preload_models()
-    demo.launch(theme=gr.themes.Soft(), css=_CSS)
+# --- Explanation Tab ---
+with tab_explanation:
+    st.markdown("## Explanation with shapiq")
+    st.markdown("Analyze the compliance of the model based on Shapley values. This evaluates how individual parts of your prompt influence the model's output compliance.")
+    
+    # Explanation config
+    with st.expander("Explanation Settings", expanded=True):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            scoring_mode = st.selectbox("Value Function", ["llm-as-a-judge", "logprob"], index=0)
+            
+            judge_model = None
+            if scoring_mode == "llm-as-a-judge":
+                judge_model = st.selectbox("Judge Model", model_choices, index=model_choices.index("Qwen/Qwen2.5-1.5B-Instruct"))
+                
+            masking_strategy = st.selectbox("Masking Strategy", ["remove", "mask", "distributional", "generative"], index=0)
+            
+        with col2:
+            segmentation = st.selectbox("Segmentation Level", ["semantic", "sentence", "word", "token"], index=0)
+            
+            semantic_window = 4
+            semantic_threshold = 0.50
+            if segmentation == "semantic":
+                semantic_window = st.number_input("Segmentation Window Size", value=4, min_value=1)
+                semantic_threshold = st.number_input("Similarity Threshold", value=0.50, min_value=0.0, max_value=1.0, step=0.05)
+                
+    # Input for explanation
+    explain_prompt = st.text_area("Prompt to explain", height=100)
+    
+    if st.button("Explain with shapiq", type="primary"):
+        if not explain_prompt:
+            st.warning("Please enter a prompt to explain.")
+        else:
+            with st.status("Running explanation...") as status:
+                try:
+                    st.write("Loading model...")
+                    # We pass temperature=0.0 for deterministic explanations
+                    model = get_model(st.session_state.selected_model, temperature=0.0)
+                    
+                    st.write("Initializing Jailbreak Game...")
+                    game = JailbreakGame(
+                        model_name=st.session_state.selected_model,
+                        input_text=explain_prompt,
+                        scoring_mode=scoring_mode,
+                        mask_strategy=masking_strategy,
+                        segmentation=segmentation,
+                        device="cuda",
+                        hf_model=model,
+                        judge_model_name=judge_model if judge_model else "Qwen/Qwen2.5-1.5B-Instruct",
+                        semantic_window=int(semantic_window),
+                        semantic_threshold=float(semantic_threshold),
+                    )
+                    
+                    st.write("Calculating compliance score...")
+                    full_coalition = np.ones((1, game.n_players))
+                    compliance_score = float(game.value_function(full_coalition)[0])
+                    
+                    st.write("Running Shapiq approximation...")
+                    approx = shapiq.KernelSHAP(n=game.n_players, random_state=42)
+                    result = approx.approximate(budget=10, game=game)
+                    
+                    player_values = np.array([float(result[(i,)]) for i in range(game.n_players)])
+                    
+                    status.update(label="Explanation complete!", state="complete", expanded=False)
+                    
+                    # Rendering results
+                    st.success(f"**Model:** {st.session_state.selected_model}  |  **Compliance Score:** `{compliance_score:+.4f}`")
+                    
+                    st.markdown("### Shapley Values")
+                    
+                    # Custom HTML for colorized bars
+                    html = "<table><thead><tr><th>Player</th><th>Shapley Value</th><th>Contribution</th></tr></thead><tbody>"
+                    for p, val in zip(game.players, player_values, strict=False):
+                        bar_len = min(int(abs(val) * 15), 10)
+                        bar_color = "#10b981" if val >= 0 else "#ef4444"
+                        bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
+                        html += f"<tr><td><code>{p}</code></td><td>{val:+.4f}</td><td>{bar}</td></tr>"
+                    html += "</tbody></table>"
+                    
+                    st.html(html)
+                    
+                except Exception as e:
+                    status.update(label="Error during explanation.", state="error")
+                    st.error(f"Error during explanation: {e}")

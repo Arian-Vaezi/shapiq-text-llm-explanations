@@ -45,11 +45,13 @@ class CausalModelWrapper:
         model_name: str,
         device: str | int = "cuda",
         hf_token: str | None = None,
+        temperature: float = 0.0,
     ) -> None:
         self.model_name = model_name
         self.device = resolve_device(device)
         self.is_causal = True
         self.is_encoder = False
+        self.temperature = temperature
 
         print(f"[CausalModelWrapper] Loading '{model_name}' on {self.device}")
 
@@ -127,6 +129,7 @@ class CausalModelWrapper:
         max_new_tokens: int = 32,
         *,
         chat: bool = False,
+        temperature: float | None = None,
     ) -> str:
         """Generate text from a prompt.
 
@@ -145,11 +148,20 @@ class CausalModelWrapper:
                 add_generation_prompt=True,
             )
 
+        temp = temperature if temperature is not None else self.temperature
+        do_sample = temp > 0.0
+
+        kwargs = {
+            "max_new_tokens": max_new_tokens,
+            "do_sample": do_sample,
+            "return_full_text": False,
+        }
+        if do_sample:
+            kwargs["temperature"] = temp
+
         result = self.pipe(
             prompt,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-            return_full_text=False,
+            **kwargs
         )
         return result[0]["generated_text"].strip()
 
@@ -159,6 +171,7 @@ class CausalModelWrapper:
         max_new_tokens: int = 32,
         *,
         chat: bool = False,
+        temperature: float | None = None,
     ) -> Iterator[str]:
         """Same as generate_text but yields tokens as they are produced."""
         if chat:
@@ -175,9 +188,21 @@ class CausalModelWrapper:
             skip_special_tokens=True,
         )
 
+        temp = temperature if temperature is not None else self.temperature
+        do_sample = temp > 0.0
+
+        gen_kwargs = dict(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            streamer=streamer,
+        )
+        if do_sample:
+            gen_kwargs["temperature"] = temp
+
         thread = Thread(
             target=self.model.generate,
-            kwargs=dict(**inputs, max_new_tokens=max_new_tokens, do_sample=False, streamer=streamer),
+            kwargs=gen_kwargs,
         )
         thread.start()
         yield from streamer

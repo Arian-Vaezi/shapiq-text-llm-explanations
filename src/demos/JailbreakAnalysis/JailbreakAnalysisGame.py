@@ -68,8 +68,14 @@ class JailbreakGame(Game):
                 device=device or "cuda",
             )
 
-        self.tokenizer = self.text_generation_model.tokenizer
-        self.mask_token = self.tokenizer.mask_token
+        if hasattr(self.text_generation_model, "tokenizer"):
+            self.tokenizer = self.text_generation_model.tokenizer
+            self.mask_token = getattr(self.tokenizer, "mask_token", None)
+        else:
+            # Fallback for API models that don't expose a tokenizer directly
+            import transformers
+            self.tokenizer = transformers.AutoTokenizer.from_pretrained("gpt2")
+            self.mask_token = "<|endoftext|>"
 
         self._build_players()
 
