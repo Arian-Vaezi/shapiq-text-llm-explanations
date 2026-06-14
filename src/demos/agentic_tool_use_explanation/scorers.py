@@ -486,7 +486,7 @@ class LogProbToolScorer:
         dtype: str = "auto",
         *,  # future-proof: force all following args to be keyword-only
         normalize_by_length: bool = True,
-        max_pairs_per_batch: int | None = 32,
+        max_pairs_per_batch: int | None = 4,
         tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
     ) -> None:
         self.model_id = model_id
@@ -646,6 +646,17 @@ class LogProbToolScorer:
             tool_schemas=self.tool_schemas,
         )
 
+    def build_scoring_prompt(
+        self,
+        prompt: str,
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> str:
+        """Return the model-formatted prompt used for log-probability scoring."""
+        del target_tool, tool_descriptions
+        return self._model_prompt(prompt)
+
     def _contrastive_score(
         self,
         candidate_log_scores: dict[str, float],
@@ -708,6 +719,17 @@ class LogProbToolScorer:
             raise ValueError(msg)
         return score
 
+    @staticmethod
+    def _next_token_log_probs(logits: object, token_ids: object) -> object:
+        """Return log probabilities for the observed next-token labels only."""
+        shifted_logits = logits[:, :-1, :]
+        shifted_token_ids = token_ids[:, 1:]
+        target_logits = shifted_logits.gather(
+            dim=-1,
+            index=shifted_token_ids.unsqueeze(-1),
+        ).squeeze(-1)
+        return target_logits - shifted_logits.logsumexp(dim=-1)
+
     def _sequence_logprobs_batched(
         self,
         prompts: list[str],
@@ -769,11 +791,10 @@ class LogProbToolScorer:
 
         input_ids = full_inputs["input_ids"].to(self.device)
         attention_mask = full_inputs["attention_mask"].to(self.device)
+        self.model.eval()
         with torch.inference_mode():
             logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
-            log_probs = torch.log_softmax(logits[:, :-1, :], dim=-1)
-            target_ids = input_ids[:, 1:]
-            token_log_probs = log_probs.gather(-1, target_ids.unsqueeze(-1)).squeeze(-1)
+            token_log_probs = self._next_token_log_probs(logits, input_ids)
 
         scores = []
         for row_index, (prompt_len, continuation_len) in enumerate(
@@ -803,11 +824,10 @@ class LogProbToolScorer:
             msg = "Continuation must add at least one token."
             raise ValueError(msg)
 
+        self.model.eval()
         with torch.inference_mode():
             logits = self.model(input_ids=input_ids).logits
-            log_probs = torch.log_softmax(logits[:, :-1, :], dim=-1)
-            target_ids = input_ids[:, 1:]
-            token_log_probs = log_probs.gather(-1, target_ids.unsqueeze(-1)).squeeze(-1)
+            token_log_probs = self._next_token_log_probs(logits, input_ids)
             continuation_log_probs = token_log_probs[:, prompt_len - 1 :]
             score = float(continuation_log_probs.sum().item())
         if self.normalize_by_length:

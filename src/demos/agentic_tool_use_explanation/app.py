@@ -471,15 +471,33 @@ def choose_tool_with_scorer(
     )
 
 
-def build_mock_trace(user_input: str, target_tool: str) -> dict[str, object]:
-    """Create a trace from a mock-router conversation."""
+def build_scoring_prompt_preview(
+    scorer: object,
+    prompt: str,
+    *,
+    target_tool: str,
+    tool_descriptions: dict[str, str],
+) -> str | None:
+    """Return the actual scorer's debug prompt preview when available."""
+    build_scoring_prompt = getattr(scorer, "build_scoring_prompt", None)
+    if not callable(build_scoring_prompt):
+        return None
+    return build_scoring_prompt(
+        prompt,
+        target_tool=target_tool,
+        tool_descriptions=tool_descriptions,
+    )
+
+
+def build_mock_trace(user_input: str) -> dict[str, object]:
+    """Create a trace for a custom request before target-tool selection."""
     return {
-        "target_tool": target_tool,
         "system_segments": MOCK_SYSTEM_SEGMENTS,
         "user_segments": [" ".join(user_input.strip().split())],
         "takeaway": (
-            "This setup preview only chooses a tool. It does not call external APIs or run "
-            "the selected tool; shapiq explains the text evidence behind the selected route."
+            "The setup preview chooses a tool from the full fixed context and request. It does "
+            "not call external APIs or run the selected tool; shapiq explains the text evidence "
+            "behind the selected route."
         ),
     }
 
@@ -879,7 +897,8 @@ def main() -> None:
     )
     with st.sidebar.expander("How it works", expanded=False):
         st.write(
-            "Request -> Segmentation -> Remove players -> Tool support score -> Shapley Explanation"
+            "Request -> Segmentation -> Remove players -> Tool support score "
+            "-> Shapley Explanation"
         )
         st.caption(
             "The app keeps system/tool context fixed, removes user-request players, "
@@ -941,41 +960,14 @@ def main() -> None:
             "Request text",
             value=DEFAULT_MOCK_QUERY,
             height=86,
-            help=("This preview chooses a tool only. It does not call the selected tool."),
+            help=(
+                "This preview chooses a tool from the fixed context and request. "
+                "It does not call the selected tool."
+            ),
         )
         trace_name = "Custom request"
         request_text = mock_input
-
-    if scorer_backend == "Keyword baseline":
-        preview_scorer = LexicalToolScorer()
-    elif scorer_backend == "LLM logprob scorer":
-        with st.spinner(f"Loading logprob scorer `{logprob_model_id}` for preview..."):
-            try:
-                preview_scorer = load_logprob_scorer(
-                    logprob_model_id,
-                    candidate_template,
-                    candidate_texts,
-                    normalize_by_length=bool(normalize_by_length),
-                )
-            except Exception as error:  # noqa: BLE001
-                st.error(
-                    "Could not load the logprob-based scorer for the setup preview. "
-                    "Try a smaller causal language model or check your environment. "
-                    f"Details: {error}"
-                )
-                return
-    else:
-        preview_scorer = LLMToolScorer(llm=MockLLM())
-
-    preview_choice = choose_tool_with_scorer(
-        preview_scorer,
-        request_text,
-        tool_descriptions=TOOLS,
-    )
-    if mode == "Custom request":
-        trace = build_mock_trace(mock_input, preview_choice.tool)
-
-    target_tool = preview_choice.tool
+        trace = build_mock_trace(mock_input)
 
     system_segments = build_segments(trace["system_segments"], "system")
     try:
@@ -1021,6 +1013,35 @@ def main() -> None:
         system_prompt=system_prompt,
         tool_context=tool_context,
     )
+
+    if scorer_backend == "Keyword baseline":
+        preview_scorer = LexicalToolScorer()
+    elif scorer_backend == "LLM logprob scorer":
+        with st.spinner(f"Loading logprob scorer `{logprob_model_id}` for preview..."):
+            try:
+                preview_scorer = load_logprob_scorer(
+                    logprob_model_id,
+                    candidate_template,
+                    candidate_texts,
+                    normalize_by_length=bool(normalize_by_length),
+                )
+            except Exception as error:  # noqa: BLE001
+                st.error(
+                    "Could not load the logprob-based scorer for the setup preview. "
+                    "Try a smaller causal language model or check your environment. "
+                    f"Details: {error}"
+                )
+                return
+    else:
+        preview_scorer = LLMToolScorer(llm=MockLLM())
+
+    preview_choice = choose_tool_with_scorer(
+        preview_scorer,
+        full_prompt,
+        tool_descriptions=TOOLS,
+    )
+    target_tool = preview_choice.tool
+
     index = DEFAULT_INDEX
     max_order = DEFAULT_MAX_ORDER
     signature = (
@@ -1075,7 +1096,7 @@ def main() -> None:
 
     st.markdown('<div class="section-label">Initial tool suggestion</div>', unsafe_allow_html=True)
     st.caption(
-        "This is only a setup preview. Click Run explanation to compute segment attributions."
+        "This setup preview uses the same fixed context and full request as the explanation."
     )
     router_left, router_right = st.columns([0.85, 1.15])
     with router_left:
@@ -1153,30 +1174,13 @@ def main() -> None:
             return
 
     if run:
-        llm_scorer = LLMToolScorer(llm=MockLLM())
         lexical_scorer = LexicalToolScorer()
+        primary_scorer = preview_scorer
         if scorer_backend == "Keyword baseline":
-            primary_scorer = lexical_scorer
             primary_label = "Keyword baseline"
         elif scorer_backend == "LLM logprob scorer":
-            with st.spinner(f"Loading logprob scorer `{logprob_model_id}`..."):
-                try:
-                    primary_scorer = load_logprob_scorer(
-                        logprob_model_id,
-                        candidate_template,
-                        candidate_texts,
-                        normalize_by_length=bool(normalize_by_length),
-                    )
-                except Exception as error:  # noqa: BLE001
-                    st.error(
-                        "Could not load the logprob-based scorer. "
-                        "Try a smaller causal language model or check your environment. "
-                        f"Details: {error}"
-                    )
-                    return
             primary_label = "LLM logprob scorer"
         else:
-            primary_scorer = llm_scorer
             primary_label = "Mock model scorer"
 
         full_score = primary_scorer.score_batch(
@@ -1271,6 +1275,12 @@ def main() -> None:
                     "pair_value": lexical_pair_value,
                 }
 
+        scoring_prompt_preview = build_scoring_prompt_preview(
+            primary_scorer,
+            full_prompt,
+            target_tool=target_tool,
+            tool_descriptions=TOOLS,
+        )
         st.session_state.has_run = True
         st.session_state.result = {
             "primary_label": primary_label,
@@ -1287,11 +1297,7 @@ def main() -> None:
             "compare_with_lexical": compare_with_lexical,
             "llm_debug_outputs": llm_debug_outputs,
             "lexical_result": lexical_result,
-            "scoring_prompt": llm_scorer.build_scoring_prompt(
-                full_prompt,
-                target_tool=target_tool,
-                tool_descriptions=TOOLS,
-            ),
+            "scoring_prompt": scoring_prompt_preview,
         }
 
     result = st.session_state.result
@@ -1475,7 +1481,14 @@ def main() -> None:
                 st.dataframe(comparison_frame, use_container_width=True, hide_index=True)
             if show_scoring_prompt_preview:
                 st.markdown("**Scoring prompt preview**")
-                st.code(result["scoring_prompt"], language="text")
+                scoring_prompt = result.get("scoring_prompt")
+                if scoring_prompt:
+                    st.code(scoring_prompt, language="text")
+                else:
+                    st.caption(
+                        "A separate scoring-prompt preview is not available for this scoring "
+                        "backend."
+                    )
             if show_value_function_details:
                 st.markdown("**Value function details**")
                 st.write(f"Index: `{index}`")

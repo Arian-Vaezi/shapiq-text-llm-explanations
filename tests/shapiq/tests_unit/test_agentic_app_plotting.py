@@ -14,7 +14,7 @@ sys.path.insert(0, str(DEMO_DIR))
 
 import app  # noqa: E402
 import sample_data  # noqa: E402
-from tool_game import ToolUseSegment  # noqa: E402
+from tool_game import ToolUseGame, ToolUseSegment  # noqa: E402
 from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
 
 
@@ -61,6 +61,35 @@ class FakeGame:
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
         return np.asarray([0.2 + 0.3 * row[0] + 0.5 * row[1] for row in coalitions])
+
+
+class RecordingScorer:
+    """Small scorer that records every batch it receives."""
+
+    def __init__(self) -> None:
+        self.calls = []
+
+    def score_batch(
+        self,
+        prompts: list[str],
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> list[float]:
+        self.calls.append(
+            {
+                "prompts": prompts,
+                "target_tool": target_tool,
+                "tool_descriptions": tool_descriptions,
+            }
+        )
+        if target_tool == "calculator_tool":
+            score = 2.0
+        elif target_tool == "no_tool":
+            score = -1.0
+        else:
+            score = 0.0
+        return [score for _ in prompts]
 
 
 def test_exact_fallback_approximator_returns_demo_interaction_values() -> None:
@@ -115,6 +144,145 @@ def test_app_build_coalition_prompt_keeps_fixed_context_and_masks_user_segments(
     assert "What is the weather" not in empty_prompt
     assert "in Berlin tomorrow?" not in empty_prompt
     assert "What is the weather in Berlin tomorrow?" in full_prompt
+
+
+def test_router_prompt_matches_game_grand_coalition() -> None:
+    user_segments = [
+        app.ToolUseSegment(source="user", label="U1", text="Calculate"),
+        app.ToolUseSegment(source="user", label="U2", text="238 times 47"),
+    ]
+    system_prompt = "Use calculator_tool for arithmetic."
+    tool_context = app.format_tool_context(app.TOOLS)
+
+    router_prompt = app.build_coalition_prompt(
+        user_segments,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+    )
+    game = ToolUseGame(
+        target_tool="calculator_tool",
+        user_segments=user_segments,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+        scorer=RecordingScorer(),
+        tool_descriptions=app.TOOLS,
+        normalize=False,
+    )
+
+    assert router_prompt == game.build_prompt(game.segments)
+
+
+def test_target_selection_receives_fixed_context_prompt() -> None:
+    user_segments = [
+        app.ToolUseSegment(source="user", label="U1", text="Calculate"),
+        app.ToolUseSegment(source="user", label="U2", text="238 times 47"),
+    ]
+    prompt = app.build_coalition_prompt(
+        user_segments,
+        system_prompt="Use calculator_tool for arithmetic.",
+        tool_context=app.format_tool_context(app.TOOLS),
+    )
+    scorer = RecordingScorer()
+
+    choice = app.choose_tool_with_scorer(
+        scorer,
+        prompt,
+        tool_descriptions=app.TOOLS,
+    )
+
+    assert choice.tool == "calculator_tool"
+    assert len(scorer.calls) == len(app.TOOLS)
+    for call in scorer.calls:
+        seen_prompt = call["prompts"][0]
+        assert "Use calculator_tool for arithmetic." in seen_prompt
+        assert "Available tools:" in seen_prompt
+        assert "User request:" in seen_prompt
+        assert "Calculate 238 times 47" in seen_prompt
+        assert "Assistant:" in seen_prompt
+
+
+def test_scoring_prompt_preview_returns_none_for_lexical_backend() -> None:
+    preview = app.build_scoring_prompt_preview(
+        app.LexicalToolScorer(),
+        "Use calculator_tool for arithmetic.",
+        target_tool="calculator_tool",
+        tool_descriptions=app.TOOLS,
+    )
+
+    assert preview is None
+
+
+def test_scoring_prompt_preview_uses_actual_prompt_builder() -> None:
+    scorer = app.LLMToolScorer(llm=app.MockLLM())
+
+    preview = app.build_scoring_prompt_preview(
+        scorer,
+        "Use calculator_tool for arithmetic.",
+        target_tool="calculator_tool",
+        tool_descriptions=app.TOOLS,
+    )
+
+    assert preview is not None
+    assert "Target tool:" in preview
+    assert "calculator_tool" in preview
+
+
+def test_app_main_no_longer_references_stale_llm_scorer_name() -> None:
+    assert "llm_scorer" not in app.main.__code__.co_names
+
+
+def test_same_scorer_selects_and_explains_full_prompt() -> None:
+    user_segments = [
+        app.ToolUseSegment(source="user", label="U1", text="Calculate"),
+        app.ToolUseSegment(source="user", label="U2", text="238 times 47"),
+    ]
+    system_prompt = "Use calculator_tool for arithmetic."
+    tool_context = app.format_tool_context(app.TOOLS)
+    full_prompt = app.build_coalition_prompt(
+        user_segments,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+    )
+    scorer = RecordingScorer()
+
+    choice = app.choose_tool_with_scorer(
+        scorer,
+        full_prompt,
+        tool_descriptions=app.TOOLS,
+    )
+    game = ToolUseGame(
+        target_tool=choice.tool,
+        user_segments=user_segments,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+        scorer=scorer,
+        tool_descriptions=app.TOOLS,
+        normalize=False,
+    )
+
+    assert game.scorer is scorer
+    assert choice.tool == "calculator_tool"
+    assert scorer.calls[0]["prompts"] == [game.build_prompt(game.segments)]
+    scorer.calls.clear()
+
+    values = game.value_function(np.asarray([[True, True]], dtype=bool))
+
+    assert values.shape == (1,)
+    assert scorer.calls == [
+        {
+            "prompts": [game.build_prompt(game.segments)],
+            "target_tool": "calculator_tool",
+            "tool_descriptions": app.TOOLS,
+        }
+    ]
+
+
+def test_build_mock_trace_does_not_require_selected_tool() -> None:
+    trace = app.build_mock_trace("Explain photosynthesis")
+
+    assert "target_tool" not in trace
+    assert trace["system_segments"] == app.MOCK_SYSTEM_SEGMENTS
+    assert trace["user_segments"] == ["Explain photosynthesis"]
 
 
 def test_segment_user_request_passes_only_user_request_to_segmenter() -> None:

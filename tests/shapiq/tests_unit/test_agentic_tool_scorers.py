@@ -122,7 +122,9 @@ def test_canonical_tool_schema_contents() -> None:
     assert NO_TOOL_NAME in DECISION_NAMES
     assert len(DECISION_NAMES) == len(set(DECISION_NAMES))
     assert schema_by_name["weather_tool"]["function"]["parameters"]["required"] == ["location"]
-    assert schema_by_name["calculator_tool"]["function"]["parameters"]["required"] == ["expression"]
+    assert schema_by_name["calculator_tool"]["function"]["parameters"]["required"] == [
+        "expression"
+    ]
     assert schema_by_name["web_search_tool"]["function"]["parameters"]["required"] == ["query"]
 
 
@@ -270,6 +272,81 @@ def test_logprob_tool_scorer_builds_model_prompt_with_structured_schemas() -> No
     assert call["tools"] == get_executable_tool_schemas()
     assert captured["prompts"] == ["native chat prompt"] * len(TOOL_DESCRIPTIONS)
     assert len(captured["continuations"]) == len(TOOL_DESCRIPTIONS)
+
+
+def test_llm_tool_scorer_build_scoring_prompt_preview() -> None:
+    scorer = LLMToolScorer(llm=MockLLM())
+
+    preview = scorer.build_scoring_prompt(
+        "System\n\nUser request:\nCalculate 238 times 47\n\nAssistant:",
+        target_tool="calculator_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert "Target tool:" in preview
+    assert "calculator_tool" in preview
+    assert "Prompt:" in preview
+
+
+def test_logprob_tool_scorer_build_scoring_prompt_preview_uses_model_prompt() -> None:
+    scorer = LogProbToolScorer.__new__(LogProbToolScorer)
+    scorer.tool_schemas = get_executable_tool_schemas()
+    scorer.tokenizer = RecordingTokenizer()
+    full_prompt = (
+        "Use calculator_tool for arithmetic.\n\n"
+        "Available tools:\n- calculator_tool: Calculator\n\n"
+        "User request:\nCalculate 238 times 47\n\n"
+        "Assistant:"
+    )
+
+    preview = scorer.build_scoring_prompt(
+        full_prompt,
+        target_tool="calculator_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert preview == scorer._model_prompt(full_prompt)
+    assert preview == "native chat prompt"
+    assert scorer.tokenizer.calls[0]["messages"] == [
+        {"role": "system", "content": "Use calculator_tool for arithmetic."},
+        {"role": "user", "content": "Calculate 238 times 47"},
+    ]
+
+
+def test_logprob_next_token_log_probs_match_full_log_softmax_gather() -> None:
+    torch = pytest.importorskip("torch")
+    logits = torch.tensor(
+        [
+            [
+                [0.2, -0.1, 1.4, 0.0, -0.7],
+                [1.1, 0.3, -0.5, 0.8, -1.2],
+                [-0.4, 1.7, 0.2, -0.9, 0.5],
+                [0.6, -1.1, 0.4, 1.3, -0.2],
+            ],
+            [
+                [-0.3, 0.9, 0.1, -0.6, 1.2],
+                [0.7, -0.8, 1.5, 0.0, -0.4],
+                [1.4, 0.2, -1.0, 0.5, -0.2],
+                [-0.5, 0.4, 0.8, -0.1, 1.0],
+            ],
+        ],
+        dtype=torch.float32,
+    )
+    token_ids = torch.tensor(
+        [
+            [0, 2, 3, 1],
+            [4, 0, 2, 3],
+        ],
+        dtype=torch.long,
+    )
+
+    expected = torch.log_softmax(logits[:, :-1, :], dim=-1).gather(
+        dim=-1,
+        index=token_ids[:, 1:].unsqueeze(-1),
+    ).squeeze(-1)
+    actual = LogProbToolScorer._next_token_log_probs(logits, token_ids)
+
+    assert torch.allclose(actual, expected, rtol=1e-6, atol=1e-6)
 
 
 def test_llm_tool_scorer_parse_score_accepts_plain_number() -> None:

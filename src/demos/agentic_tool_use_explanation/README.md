@@ -108,12 +108,21 @@ exposes the presentation-ready methods listed above:
 - `LLMToolScorer` is a generation-based numeric judge. It remains in code for
   experiments, but is hidden from the Streamlit scoring-method dropdown.
 - `LogProbToolScorer` avoids numeric parsing by scoring candidate tool
-  completions with model likelihood and normalizing those scores over tools.
+  completions with model likelihood and subtracting reference candidate scores.
 
-The custom-request router does not call a real LLM and does not execute any
-tools. It only selects which tool the agent should use for the user request.
+The selected scorer first evaluates the full fixed context and full user request
+for every candidate decision. The highest-scoring candidate becomes the tool to
+explain, and the same scorer then evaluates masked user-segment coalitions:
 
-The router returns the handoff shape expected by a future local Gemma backend:
+```text
+full fixed context + full user request
+-> selected scorer evaluates all candidate tools
+-> highest-scoring candidate becomes the explanation target
+-> the same scorer evaluates masked coalitions
+```
+
+The setup preview does not execute any tools. It only selects which tool the
+agent should use for the current full prompt. The preview returns:
 
 ```python
 {
@@ -137,21 +146,23 @@ The default scoring method is the **Mock model scorer** so the demo stays fast a
 usable on a clean local machine. The optional **LLM logprob scorer** uses a
 local Hugging Face causal language model.
 
-For each coalition, the LLM receives the coalition prompt, the target tool, and
-the available tool names and descriptions. It scores candidate tool
-continuations with model likelihood, then softmax-normalizes those candidate
-scores into a target-tool probability. shapiq then uses these coalition scores
-to compute segment attributions and pairwise interactions.
+For each coalition, the LLM receives the fixed system prompt, structured tool
+schemas when the tokenizer supports them, and the coalition user request. It
+scores standardized textual candidate continuations with model likelihood and
+uses a contrastive target-vs-reference log-score difference. shapiq then uses
+these coalition scores to compute segment attributions and pairwise
+interactions.
 
 In Colab, TinyLlama can load successfully but still fail as a generation-based
 numeric judge by returning text such as `Assistant:\nSure` or
 `Target tool:\nweather`. When every generated output is non-numeric,
 `LLMToolScorer` correctly falls back to the keyword baseline. The
 `LogProbToolScorer` was added for this case: it scores continuations such as
-`The correct tool is weather_tool.` directly with log probabilities, then
-softmax-normalizes those candidate scores into a target-tool probability. This
-is inspired by the same general idea as the jailbreak demo: use continuation
-likelihoods as coalition values rather than free-form generated scores.
+`The correct tool is weather_tool.` directly with log scores, then subtracts the
+`no_tool` score for external tool targets. For `no_tool`, it subtracts the
+strongest executable-tool candidate. This is inspired by the same general idea
+as the jailbreak demo: use continuation likelihoods as coalition values rather
+than free-form generated scores.
 
 The logprob scorer can also use per-tool candidate continuations instead of one
 uniform template. This can improve calibration when tool names have overlapping
