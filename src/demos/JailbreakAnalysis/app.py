@@ -426,6 +426,15 @@ with st.sidebar.expander("📓 Example Prompts", expanded=False):
             st.session_state["inference_prefill"] = example
             st.rerun()
 
+with st.sidebar.expander("**Pipeline**", expanded=False):
+    st.markdown("""
+1. **Segmentation** — Create players (token - word - sentence - sematic)
+2. **Coalition Sampling** — KernelSHAP / KernelSHAPIQ samples coalitions
+3. **Masking** — convert each coalition into a modified prompt given a mask strategy (mask, remove)
+4. **Value Function** — score each coalited prompt via LogProb or LLM-as-a-Judge
+5. **Shapley Approximation** — estimate Shapley values and k-SII interactions
+""")
+
 
 # --- Navigation ---
 tab_inference, tab_explanation = st.tabs(["💬 Inference", "🔍 Explanation"])
