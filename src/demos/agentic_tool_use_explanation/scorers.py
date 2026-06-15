@@ -486,7 +486,7 @@ class LogProbToolScorer:
         dtype: str = "auto",
         *,  # future-proof: force all following args to be keyword-only
         normalize_by_length: bool = True,
-        max_pairs_per_batch: int | None = 4,
+        max_pairs_per_batch: int | None = None,
         tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
     ) -> None:
         self.model_id = model_id
@@ -495,7 +495,6 @@ class LogProbToolScorer:
         self.device = device
         self.dtype = dtype
         self.normalize_by_length = normalize_by_length
-        self.max_pairs_per_batch = max_pairs_per_batch
         self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
         self.last_debug_outputs: list[dict[str, object]] = []
         if max_pairs_per_batch is not None and max_pairs_per_batch < 1:
@@ -513,6 +512,9 @@ class LogProbToolScorer:
                 self.device = "mps"
             else:
                 self.device = "cpu"
+        if max_pairs_per_batch is None:
+            max_pairs_per_batch = 1 if self.device in {"cuda", "mps"} else 4
+        self.max_pairs_per_batch = max_pairs_per_batch
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
         if self.tokenizer.pad_token is None:
@@ -755,6 +757,7 @@ class LogProbToolScorer:
                     continuations[start:stop],
                 )
             )
+            self._release_device_cache()
         return scores
 
     def _sequence_logprobs_batch(
@@ -792,21 +795,29 @@ class LogProbToolScorer:
         input_ids = full_inputs["input_ids"].to(self.device)
         attention_mask = full_inputs["attention_mask"].to(self.device)
         self.model.eval()
-        with torch.inference_mode():
-            logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
-            token_log_probs = self._next_token_log_probs(logits, input_ids)
+        try:
+            with torch.inference_mode():
+                logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
+                token_log_probs = self._next_token_log_probs(logits, input_ids)
 
-        scores = []
-        for row_index, (prompt_len, continuation_len) in enumerate(
-            zip(prompt_lengths, continuation_lengths, strict=True)
-        ):
-            start = int(prompt_len - 1)
-            stop = start + int(continuation_len)
-            score = float(token_log_probs[row_index, start:stop].sum().item())
-            if self.normalize_by_length:
-                score /= int(continuation_len)
-            scores.append(score)
-        return scores
+                scores = []
+                for row_index, (prompt_len, continuation_len) in enumerate(
+                    zip(prompt_lengths, continuation_lengths, strict=True)
+                ):
+                    start = int(prompt_len - 1)
+                    stop = start + int(continuation_len)
+                    score = float(token_log_probs[row_index, start:stop].sum().item())
+                    if self.normalize_by_length:
+                        score /= int(continuation_len)
+                    scores.append(score)
+                return scores
+        finally:
+            del input_ids, attention_mask, full_inputs, prompt_inputs
+            if "logits" in locals():
+                del logits
+            if "token_log_probs" in locals():
+                del token_log_probs
+            self._release_device_cache()
 
     def _sequence_logprob(self, prompt: str, continuation: str) -> float:
         """Score continuation token likelihood under a causal LM."""
@@ -833,3 +844,11 @@ class LogProbToolScorer:
         if self.normalize_by_length:
             score /= continuation_len
         return score
+
+    def _release_device_cache(self) -> None:
+        """Release cached accelerator memory between HF micro-batches."""
+        torch = self._torch
+        if self.device == "cuda" and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        elif self.device == "mps" and hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
+            torch.mps.empty_cache()

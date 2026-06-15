@@ -69,6 +69,7 @@ def load_logprob_scorer(
     candidate_texts: dict[str, str] | None,
     *,  # future-proof: make scoring-related args keyword-only
     normalize_by_length: bool,
+    max_pairs_per_batch: int,
 ) -> LogProbToolScorer:
     """Load and cache the optional local HuggingFace logprob scorer."""
     return LogProbToolScorer(
@@ -76,6 +77,7 @@ def load_logprob_scorer(
         candidate_template=candidate_template,
         candidate_texts=candidate_texts,
         normalize_by_length=normalize_by_length,
+        max_pairs_per_batch=max_pairs_per_batch,
     )
 
 
@@ -919,9 +921,21 @@ def main() -> None:
     candidate_template = DEFAULT_CANDIDATE_TEMPLATE
     candidate_texts = None
     normalize_by_length = True
+    max_pairs_per_batch = 1
     if scorer_backend == "LLM logprob scorer":
         with st.sidebar.expander("Logprob scorer settings", expanded=True):
             logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
+            max_pairs_per_batch = st.number_input(
+                "HF pair batch size",
+                min_value=1,
+                max_value=16,
+                value=1,
+                step=1,
+                help=(
+                    "Number of prompt/candidate pairs scored per local-model forward pass. "
+                    "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
+                ),
+            )
 
     with st.sidebar.expander("Segmentation settings", expanded=False):
         segment_threshold = st.slider(
@@ -1024,6 +1038,7 @@ def main() -> None:
                     candidate_template,
                     candidate_texts,
                     normalize_by_length=bool(normalize_by_length),
+                    max_pairs_per_batch=int(max_pairs_per_batch),
                 )
             except Exception as error:  # noqa: BLE001
                 st.error(
@@ -1054,6 +1069,7 @@ def main() -> None:
         candidate_template,
         bool(candidate_texts),
         normalize_by_length,
+        int(max_pairs_per_batch),
         show_lexical_comparison,
         segment_threshold,
         segment_window,

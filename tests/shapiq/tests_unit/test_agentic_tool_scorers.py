@@ -274,6 +274,36 @@ def test_logprob_tool_scorer_builds_model_prompt_with_structured_schemas() -> No
     assert len(captured["continuations"]) == len(TOOL_DESCRIPTIONS)
 
 
+def test_logprob_sequence_logprobs_batched_chunks_and_preserves_order() -> None:
+    scorer = LogProbToolScorer.__new__(LogProbToolScorer)
+    scorer.max_pairs_per_batch = 2
+    calls = []
+    cache_releases = []
+
+    def fake_sequence_logprobs_batch(
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        calls.append((prompts.copy(), continuations.copy()))
+        return [float(prompt.removeprefix("prompt-")) for prompt in prompts]
+
+    scorer._sequence_logprobs_batch = fake_sequence_logprobs_batch
+    scorer._release_device_cache = lambda: cache_releases.append(True)
+
+    scores = scorer._sequence_logprobs_batched(
+        ["prompt-0", "prompt-1", "prompt-2", "prompt-3", "prompt-4"],
+        ["cont-0", "cont-1", "cont-2", "cont-3", "cont-4"],
+    )
+
+    assert scores == [0.0, 1.0, 2.0, 3.0, 4.0]
+    assert calls == [
+        (["prompt-0", "prompt-1"], ["cont-0", "cont-1"]),
+        (["prompt-2", "prompt-3"], ["cont-2", "cont-3"]),
+        (["prompt-4"], ["cont-4"]),
+    ]
+    assert len(cache_releases) == len(calls)
+
+
 def test_llm_tool_scorer_build_scoring_prompt_preview() -> None:
     scorer = LLMToolScorer(llm=MockLLM())
 
