@@ -1,11 +1,21 @@
 from __future__ import annotations
 
+import matplotlib as mpl
+
+mpl.use("Agg")  # non-interactive backend — required for server-side rendering
+import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 
 import shapiq
 from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
 from demos.shared.hf_model import HFModelWrapper, is_api_model_name
+from shapiq.plot import sentence_interaction_heatmap
+
+# Above this many players, second-order interactions become slow to approximate
+# (quadratic number of pairs) and the plots get unreadable. We still allow it,
+# but warn the user first.
+SECOND_ORDER_PLAYER_WARN = 12
 
 st.set_page_config(
     page_title="Shapiq Jailbreak Explainability",
@@ -18,6 +28,44 @@ st.set_page_config(
 @st.cache_resource
 def get_model(model_name: str, temperature: float = 0.0) -> object:
     return HFModelWrapper(model_name=model_name, device="cuda", temperature=temperature)
+
+
+def top_interaction_pairs(
+    result: shapiq.InteractionValues,
+    players: np.ndarray,
+    top_k: int = 8,
+) -> list[tuple[str, str, float]]:
+    """Return the strongest order-2 k-SII interactions sorted by absolute value.
+
+    Each tuple is ``(player_i, player_j, interaction_value)``. Positive values are
+    synergies (the pair matters more together), negative values are redundancies.
+    """
+    order2 = {k: v for k, v in result.interaction_lookup.items() if len(k) == 2}
+    ranked = sorted(order2.items(), key=lambda kv: abs(result.values[kv[1]]), reverse=True)[:top_k]
+    return [
+        (str(players[idx[0]]), str(players[idx[1]]), float(result.values[pos]))
+        for idx, pos in ranked
+    ]
+
+
+# Multipliers applied to the recommended budget by the "Approximation quality" control.
+QUALITY_MULTIPLIERS = {"Fast": 0.5, "Auto (recommended)": 1.0, "Thorough": 2.0}
+
+
+def recommended_budget(n_players: int, *, second_order: bool, multiplier: float = 1.0) -> int:
+    """Pick a coalition budget that scales with players and interaction order.
+
+    The regression estimates one coefficient per attribution: ``n`` for first-order,
+    ``n + n(n-1)/2`` for order-2 (k-SII). We oversample ~4x for stability, keep the
+    system identifiable, and never exceed the exact number of coalitions (2**n), beyond
+    which KernelSHAP's border-trick makes extra budget pointless.
+    """
+    n_coeff = n_players + n_players * (n_players - 1) // 2 if second_order else n_players
+    budget = int((4 * n_coeff + 2) * multiplier)
+    budget = max(budget, n_coeff + 2)  # keep the regression identifiable
+    if n_players <= 20:  # for small games, exact is cheap — don't waste calls past 2**n
+        budget = min(budget, 2**n_players)
+    return budget
 
 
 if "chat_history" not in st.session_state:
@@ -108,6 +156,28 @@ with tab_explanation:
                 "Segmentation Level", ["semantic", "sentence", "word", "token"], index=0
             )
 
+            explanation_order = st.radio(
+                "Explanation Order",
+                ["First-order only", "Second-order (k-SII)"],
+                index=0,
+                help=(
+                    "First-order shows each segment's individual Shapley value. "
+                    "Second-order additionally estimates pairwise k-SII interactions "
+                    "(synergy/redundancy between segments) and plots them."
+                ),
+            )
+
+            approx_quality = st.selectbox(
+                "Approximation Quality",
+                list(QUALITY_MULTIPLIERS),
+                index=list(QUALITY_MULTIPLIERS).index("Auto (recommended)"),
+                help=(
+                    "Coalition budget scales automatically with the number of segments "
+                    "and the interaction order. Each coalition is one (or two) LLM calls, "
+                    "so 'Thorough' is more accurate but slower; 'Fast' is cheaper."
+                ),
+            )
+
             semantic_window = 4
             semantic_threshold = 0.50
             if segmentation == "semantic":
@@ -152,9 +222,36 @@ with tab_explanation:
                     full_coalition = np.ones((1, game.n_players))
                     compliance_score = float(game.value_function(full_coalition)[0])
 
-                    st.write("Running Shapiq approximation...")
-                    approx = shapiq.KernelSHAP(n=game.n_players, random_state=42)
-                    result = approx.approximate(budget=100, game=game)
+                    second_order = explanation_order.startswith("Second-order")
+                    if second_order and game.n_players > SECOND_ORDER_PLAYER_WARN:
+                        st.warning(
+                            f"Second-order analysis on {game.n_players} players means "
+                            f"{game.n_players * (game.n_players - 1) // 2} pairs. The budget "
+                            "(and so the number of LLM calls) grows quadratically, making this "
+                            "slow, and the plots get crowded. Consider a coarser segmentation "
+                            "(e.g. sentence) or a shorter prompt."
+                        )
+
+                    budget = recommended_budget(
+                        game.n_players,
+                        second_order=second_order,
+                        multiplier=QUALITY_MULTIPLIERS[approx_quality],
+                    )
+
+                    if second_order:
+                        st.write(
+                            f"Running Shapiq approximation (k-SII, order 2, budget={budget})..."
+                        )
+                        approx = shapiq.KernelSHAPIQ(
+                            n=game.n_players,
+                            index="k-SII",
+                            max_order=2,
+                            random_state=42,
+                        )
+                    else:
+                        st.write(f"Running Shapiq approximation (budget={budget})...")
+                        approx = shapiq.KernelSHAP(n=game.n_players, random_state=42)
+                    result = approx.approximate(budget=budget, game=game)
 
                     player_values = np.array([float(result[(i,)]) for i in range(game.n_players)])
 
@@ -179,6 +276,54 @@ with tab_explanation:
                     html += "</tbody></table>"
 
                     st.html(html)
+
+                    # --- Second-order interactions ---
+                    if second_order:
+                        st.markdown("### Top Interaction Pairs (k-SII)")
+                        pairs = top_interaction_pairs(result, game.players, top_k=8)
+                        if not pairs:
+                            st.info("No pairwise interactions to display.")
+                        else:
+                            int_html = (
+                                "<table><thead><tr><th>Pair</th><th>k-SII</th>"
+                                "<th>Type</th></tr></thead><tbody>"
+                            )
+                            for p1, p2, val in pairs:
+                                kind = "🟢 synergy" if val >= 0 else "🔵 redundancy"
+                                int_html += (
+                                    f"<tr><td><code>{p1}</code> + <code>{p2}</code></td>"
+                                    f"<td>{val:+.4f}</td><td>{kind}</td></tr>"
+                                )
+                            int_html += "</tbody></table>"
+                            st.html(int_html)
+                            st.caption(
+                                "Synergy: the pair influences compliance more together than "
+                                "individually. Redundancy: the segments overlap/compete."
+                            )
+
+                        players = list(game.players)
+
+                        col_hm, col_net = st.columns(2)
+                        with col_hm:
+                            st.markdown("#### Interaction Heatmap")
+                            try:
+                                fig, _ = sentence_interaction_heatmap(result, players, show=False)
+                                st.pyplot(fig)
+                                plt.close(fig)
+                            except Exception as e:  # noqa: BLE001
+                                st.info(f"Heatmap unavailable: {e}")
+                        with col_net:
+                            st.markdown("#### Interaction Network")
+                            try:
+                                net = result.plot_network(feature_names=players, show=False)
+                                if net is None:
+                                    st.info("Network plot unavailable.")
+                                else:
+                                    fig = net[0] if isinstance(net, tuple) else net
+                                    st.pyplot(fig)
+                                    plt.close(fig)
+                            except Exception as e:  # noqa: BLE001
+                                st.info(f"Network plot unavailable: {e}")
 
                 except Exception as e:  # noqa: BLE001
                     status.update(label="Error during explanation.", state="error")
