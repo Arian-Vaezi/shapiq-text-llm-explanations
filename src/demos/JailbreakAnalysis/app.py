@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import html
+import io
+from typing import TYPE_CHECKING
+
 import matplotlib as mpl
 
 mpl.use("Agg")  # non-interactive backend — required for server-side rendering
@@ -11,6 +15,9 @@ import shapiq
 from demos.JailbreakAnalysis.JailbreakAnalysisGame import JailbreakGame
 from demos.shared.hf_model import HFModelWrapper, is_api_model_name
 from shapiq.plot import sentence_interaction_heatmap
+
+if TYPE_CHECKING:
+    from matplotlib.figure import Figure
 
 # Above this many players, second-order interactions become slow to approximate
 # (quadratic number of pairs) and the plots get unreadable. We still allow it,
@@ -129,6 +136,196 @@ def recommended_budget(n_players: int, *, second_order: bool, multiplier: float 
     return budget
 
 
+# =====================================================================================
+# Shared, theme-aware UI layer for the explanation outputs.
+#
+# Goal: the Shapley table, the interaction table and the plots read as one visual
+# system in BOTH the light and dark Streamlit themes. We avoid hardcoded light/dark
+# backgrounds; instead text inherits Streamlit's themed colour, surfaces use
+# translucent grey (legible on either background), and only the semantic accents are
+# fixed: green = positive/synergy, red = negative, blue = redundancy.
+# =====================================================================================
+EXPLANATION_STYLES = """
+<style>
+.shapiq-table {
+    width: 100%;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0.25rem 0 0.75rem;
+}
+.shapiq-table .sq-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+}
+.shapiq-table .sq-row:last-child { border-bottom: none; }
+.shapiq-table .sq-head {
+    background: rgba(128, 128, 128, 0.12);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+.shapiq-seg { flex: 2; min-width: 0; word-break: break-word; }
+.shapiq-seg code { font-size: 0.82rem; }
+.shapiq-val {
+    flex: 1;
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.shapiq-bar { flex: 3; }
+.shapiq-track {
+    position: relative;
+    height: 16px;
+    border-radius: 8px;
+    background: rgba(128, 128, 128, 0.15);
+}
+.shapiq-center {
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 2px; background: rgba(128, 128, 128, 0.45);
+}
+.shapiq-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 4px; }
+.shapiq-fill.sq-fill-pos { background: #10b981; }
+.shapiq-fill.sq-fill-neg { background: #ef4444; }
+.sq-pos { color: #10b981; }
+.sq-neg { color: #ef4444; }
+.sq-syn { color: #10b981; }
+.sq-red { color: #3b82f6; }
+.sq-tag {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 2px 10px; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 600;
+    border: 1px solid currentColor;
+}
+.shapiq-grid {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.85rem;
+}
+.shapiq-grid th {
+    text-align: left;
+    background: rgba(128, 128, 128, 0.12);
+    padding: 8px 12px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.shapiq-grid td { padding: 8px 12px; border-top: 1px solid rgba(128, 128, 128, 0.15); }
+</style>
+"""
+
+
+def inject_explanation_styles() -> None:
+    """Inject the shared explanation stylesheet (idempotent; safe to call each rerun)."""
+    st.markdown(EXPLANATION_STYLES, unsafe_allow_html=True)
+
+
+def attribution_table(labels: np.ndarray, values: np.ndarray) -> str:
+    """Build the first-order Shapley-value bar table as theme-aware HTML.
+
+    A diverging bar per player: green to the right for positive contributions, red to
+    the left for negative, scaled to the largest absolute value.
+    """
+    max_abs = max(float(np.max(np.abs(values))) if len(values) else 0.0, 1e-9)
+    parts = [
+        '<div class="shapiq-table">',
+        '<div class="sq-row sq-head">'
+        '<div class="shapiq-seg">Player (segment)</div>'
+        '<div class="shapiq-val">Shapley value</div>'
+        '<div class="shapiq-bar">Contribution</div>'
+        "</div>",
+    ]
+    for label, val in zip(labels, values, strict=False):
+        pct = min(abs(val) / max_abs * 100, 100)
+        sign = "pos" if val >= 0 else "neg"
+        geom = (
+            f"left:50%;width:{pct / 2:.2f}%;"
+            if val >= 0
+            else f"left:{50 - pct / 2:.2f}%;width:{pct / 2:.2f}%;"
+        )
+        parts.append(
+            '<div class="sq-row">'
+            f'<div class="shapiq-seg"><code>{html.escape(str(label))}</code></div>'
+            f'<div class="shapiq-val sq-{sign}">{val:+.4f}</div>'
+            '<div class="shapiq-bar"><div class="shapiq-track">'
+            '<div class="shapiq-center"></div>'
+            f'<div class="shapiq-fill sq-fill-{sign}" style="{geom}"></div>'
+            "</div></div></div>"
+        )
+    parts.append("</div>")
+    return "".join(parts)
+
+
+def interaction_table(pairs: list[tuple[str, str, float]]) -> str:
+    """Build the top pairwise k-SII table as theme-aware HTML (matches the SV table)."""
+    parts = [
+        '<div class="shapiq-table">',
+        '<div class="sq-row sq-head">'
+        '<div class="shapiq-seg">Pair</div>'
+        '<div class="shapiq-val">k-SII</div>'
+        '<div class="shapiq-bar">Type</div>'
+        "</div>",
+    ]
+    for p1, p2, val in pairs:
+        cls, tag = ("syn", "🟢 synergy") if val >= 0 else ("red", "🔵 redundancy")
+        parts.append(
+            '<div class="sq-row">'
+            f'<div class="shapiq-seg"><code>{html.escape(p1)}</code> + '
+            f"<code>{html.escape(p2)}</code></div>"
+            f'<div class="shapiq-val sq-{cls}">{val:+.4f}</div>'
+            f'<div class="shapiq-bar"><span class="sq-tag sq-{cls}">{tag}</span></div>'
+            "</div>"
+        )
+    parts.append("</div>")
+    return "".join(parts)
+
+
+def _matplotlib_fg() -> str:
+    """Foreground colour for plot frame text, matched to the active Streamlit theme."""
+    theme_type = None
+    try:
+        theme_type = st.context.theme.type
+    except Exception:  # noqa: BLE001  # older runtime / bare mode
+        theme_type = None
+    theme_type = theme_type or st.get_option("theme.base") or "light"
+    return "#fafafa" if theme_type == "dark" else "#262730"
+
+
+def show_figure(fig: Figure) -> None:
+    """Render a matplotlib figure transparently and theme-aware, then free it.
+
+    The figure background is made transparent so it blends with the Streamlit theme,
+    and frame-level text (ticks, tick labels, axis labels, title, spines) is recoloured
+    to match. In-cell content (heatmap value annotations, network node labels) is left
+    untouched so the underlying plot keeps its own contrast choices.
+    """
+    fg = _matplotlib_fg()
+    fig.patch.set_alpha(0.0)
+    for ax in fig.get_axes():
+        ax.set_facecolor("none")
+        ax.tick_params(colors=fg)
+        for spine in ax.spines.values():
+            spine.set_edgecolor(fg)
+        ax.xaxis.label.set_color(fg)
+        ax.yaxis.label.set_color(fg)
+        ax.title.set_color(fg)
+        for lbl in (*ax.get_xticklabels(), *ax.get_yticklabels()):
+            lbl.set_color(fg)
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight", transparent=True)
+    plt.close(fig)
+    buf.seek(0)
+    st.image(buf, use_container_width=True)
+
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -218,6 +415,10 @@ with st.sidebar.expander("📓 Example Prompts", expanded=False):
         "request (e.g., 'how to build a bomb') by disguising it as a harmless purpose (e.g., education/work).\n\n"
         "**Click to load into both the inference and explanation pipelines.**"
     )
+    st.caption(
+        "⚠️ These are intentionally adversarial prompts, included for safety "
+        "evaluation / red-teaming of the model's refusal behaviour — not instructions to act on."
+    )
     for i, example in enumerate(DEMO_EXAMPLES):
         label = example[:45] + "…" if len(example) > 45 else example
         if st.button(label, key=f"example_{i}", use_container_width=True):
@@ -268,6 +469,7 @@ with tab_inference:
 
 # --- Explanation Tab ---
 with tab_explanation:
+    inject_explanation_styles()
     st.markdown("## Explanation with shapiq")
     st.markdown(
         "Analyze the compliance of the model based on Shapley values. This evaluates how individual parts of your prompt influence the model's output compliance."
@@ -394,29 +596,36 @@ with tab_explanation:
                     semantic_threshold=float(semantic_threshold),
                 )
 
-            st.markdown(f"**{len(players)} players found** for segmentation=`{segmentation}`")
-            for i, p in enumerate(players):
-                st.info(f"**[{i}]** {p}")
-
-            if segmentation == "semantic" and similarities:
-                st.markdown("#### Semantic Similarities (window pairs)")
-                sim_html = (
-                    "<table><thead><tr>"
-                    "<th>Index</th><th>Chunk 1</th><th>Chunk 2</th><th>Similarity</th>"
-                    "</tr></thead><tbody>"
+            if segmentation == "token":
+                # build_players can't tokenise without the model, so it returns the whole
+                # text as one segment. Don't show that misleading single-player preview.
+                st.info(
+                    "Token-level players can't be previewed here — tokenisation needs the "
+                    "model's tokenizer, which is only loaded during a full explanation. "
+                    "Run **Explain with shapiq** below to compute the actual token players."
                 )
-                for i, sim in enumerate(similarities):
-                    color = "#10b981" if sim >= semantic_threshold else "#ef4444"
-                    sim_html += (
-                        f"<tr>"
-                        f"<td>{i}</td>"
-                        f"<td>{windows[i]}</td>"
-                        f"<td>{windows[i + 1]}</td>"
-                        f"<td style='color:{color}'>{sim:.4f}</td>"
-                        f"</tr>"
+            else:
+                st.markdown(f"**{len(players)} players found** for segmentation=`{segmentation}`")
+                for i, p in enumerate(players):
+                    st.info(f"**[{i}]** {p}")
+
+                if segmentation == "semantic" and similarities:
+                    st.markdown("#### Semantic Similarities (window pairs)")
+                    sim_html = (
+                        '<table class="shapiq-grid"><thead><tr>'
+                        "<th>Index</th><th>Chunk 1</th><th>Chunk 2</th><th>Similarity</th>"
+                        "</tr></thead><tbody>"
                     )
-                sim_html += "</tbody></table>"
-                st.html(sim_html)
+                    for i, sim in enumerate(similarities):
+                        cls = "sq-pos" if sim >= semantic_threshold else "sq-neg"
+                        sim_html += (
+                            f"<tr><td>{i}</td>"
+                            f"<td>{html.escape(windows[i])}</td>"
+                            f"<td>{html.escape(windows[i + 1])}</td>"
+                            f'<td class="{cls}">{sim:.4f}</td></tr>'
+                        )
+                    sim_html += "</tbody></table>"
+                    st.html(sim_html)
 
     # 6. Interaction Analysis Expander
     with st.expander("Interaction Analysis", expanded=False):
@@ -549,39 +758,7 @@ with tab_explanation:
                     )
 
                     st.markdown("### Shapley Values")
-
-                    # Beautiful dynamic inline flex-bars charting component
-                    chart_html = """
-                    <div style='font-family: sans-serif; width: 100%; border: 1px solid #374151; border-radius: 8px; overflow: hidden;'>
-                        <div style='display: flex; background-color: #1F2937; font-weight: bold; padding: 12px; border-bottom: 2px solid #374151;'>
-                            <div style='flex: 2;'>Player (Segment)</div>
-                            <div style='flex: 1; text-align: right; padding-right: 20px;'>Shapley Value</div>
-                            <div style='flex: 3;'>Contribution Direction</div>
-                        </div>
-                    """
-                    max_val = max(np.max(np.abs(player_values)), 1e-5)
-
-                    for p, val in zip(game.players, player_values, strict=False):
-                        percentage = min((abs(val) / max_val) * 100, 100)
-                        bar_color = "#10b981" if val >= 0 else "#ef4444"
-                        align_side = (
-                            f"margin-left: 50%; width: {percentage / 2}%;"
-                            if val >= 0
-                            else f"margin-left: {50 - percentage / 2}%; width: {percentage / 2}%;"
-                        )
-
-                        chart_html += f"""
-                        <div style='display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #374151; background-color: #111827;'>
-                            <div style='flex: 2; font-family: monospace; font-size:13px; color:#E5E7EB;'><code>{p}</code></div>
-                            <div style='flex: 1; text-align: right; padding-right: 20px; font-weight: bold; color: {bar_color};'>{val:+.4f}</div>
-                            <div style='flex: 3; background-color: #1F2937; height: 16px; border-radius: 8px; position: relative;'>
-                                <div style='position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background-color: #6B7280;'></div>
-                                <div style='position: absolute; top: 0; bottom: 0; background-color: {bar_color}; border-radius: 4px; {align_side}'></div>
-                            </div>
-                        </div>
-                        """
-                    chart_html += "</div>"
-                    st.html(chart_html)
+                    st.html(attribution_table(game.players, player_values))
 
                     # --- Second-order interactions ---
                     if second_order:
@@ -590,18 +767,7 @@ with tab_explanation:
                         if not pairs:
                             st.info("No pairwise interactions to display.")
                         else:
-                            int_html = (
-                                "<table><thead><tr><th>Pair</th><th>k-SII</th>"
-                                "<th>Type</th></tr></thead><tbody>"
-                            )
-                            for p1, p2, val in pairs:
-                                kind = "🟢 synergy" if val >= 0 else "🔵 redundancy"
-                                int_html += (
-                                    f"<tr><td><code>{p1}</code> + <code>{p2}</code></td>"
-                                    f"<td>{val:+.4f}</td><td>{kind}</td></tr>"
-                                )
-                            int_html += "</tbody></table>"
-                            st.html(int_html)
+                            st.html(interaction_table(pairs))
                             st.caption(
                                 "Synergy: the pair influences compliance more together than "
                                 "individually. Redundancy: the segments overlap/compete."
@@ -614,8 +780,7 @@ with tab_explanation:
                             st.markdown("#### Interaction Heatmap")
                             try:
                                 fig, _ = sentence_interaction_heatmap(result, players, show=False)
-                                st.pyplot(fig)
-                                plt.close(fig)
+                                show_figure(fig)
                             except Exception as e:  # noqa: BLE001
                                 st.info(f"Heatmap unavailable: {e}")
                         with col_net:
@@ -626,8 +791,7 @@ with tab_explanation:
                                     st.info("Network plot unavailable.")
                                 else:
                                     fig = net[0] if isinstance(net, tuple) else net
-                                    st.pyplot(fig)
-                                    plt.close(fig)
+                                    show_figure(fig)
                             except Exception as e:  # noqa: BLE001
                                 st.info(f"Network plot unavailable: {e}")
 
