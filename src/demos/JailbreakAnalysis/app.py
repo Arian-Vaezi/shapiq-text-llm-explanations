@@ -21,6 +21,66 @@ def get_model(model_name: str, temperature: float = 0.0) -> object:
     return HFModelWrapper(model_name=model_name, device="cuda", temperature=temperature)
 
 
+@st.cache_resource
+def get_embedding_model(model_name: str) -> object:
+    """Cache the embedding model independently from the heavy LLM."""
+    from demos.shared.embedding_model_wrapper import EmbeddingModelWrapper
+
+    return EmbeddingModelWrapper(model_name=model_name, device="cuda")
+
+
+def build_players(
+    input_text: str,
+    segmentation: str,
+    embedding_model_name: str,
+    semantic_window: int,
+    semantic_threshold: float,
+) -> tuple[list[str], list[float], list[str]]:
+    """Fast player construction without loading any LLM.
+
+    Returns:
+        players: list of segment strings
+        similarities: pairwise cosine sims (empty for non-semantic)
+        windows: context windows used for similarity (empty for non-semantic)
+    """
+    import re
+
+    if segmentation == "word":
+        return input_text.split(), [], []
+
+    if segmentation == "sentence":
+        segs = re.split(r"(?<=[.!?])\s+", input_text.strip())
+        return [s for s in segs if s], [], []
+
+    if segmentation == "semantic":
+        emb_model = get_embedding_model(embedding_model_name)
+        words = input_text.split()
+        if len(words) <= 1:
+            return words, [], []
+
+        half = semantic_window // 2
+        windows = [" ".join(words[max(0, i - half) : i + half + 1]) for i in range(len(words))]
+        embeddings = emb_model.encode(windows)
+        similarities = [
+            float(np.dot(embeddings[i], embeddings[i + 1])) for i in range(len(embeddings) - 1)
+        ]
+
+        # reconstruct segments
+        blocks, current = [], [words[0]]
+        for i, sim in enumerate(similarities):
+            if sim < semantic_threshold:
+                blocks.append(" ".join(current))
+                current = [words[i + 1]]
+            else:
+                current.append(words[i + 1])
+        blocks.append(" ".join(current))
+
+        return blocks, similarities, windows
+
+    # token — return whole text as one segment (tokenization needs the LLM)
+    return [input_text], [], []
+
+
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
@@ -265,6 +325,51 @@ with tab_explanation:
                 "Similarity Threshold", min_value=0.0, max_value=1.0, value=0.50, step=0.05
             )
 
+        # --- Show Players button (inside expander, no LLM needed) ---
+        st.divider()
+        show_players_clicked = st.button(
+            "🧩 Show Players", use_container_width=True, key="show_players_btn"
+        )
+
+    # ---- Show Players result (rendered outside expander so it isn't clipped) ----
+    if show_players_clicked:
+        explain_prompt_preview = st.session_state.get("explain_prompt", "")
+        if not explain_prompt_preview:
+            st.warning("Please enter a prompt in the Input Workspace below before showing players.")
+        else:
+            with st.spinner("Building players (no LLM needed)..."):
+                players, similarities, windows = build_players(
+                    input_text=explain_prompt_preview,
+                    segmentation=segmentation,
+                    embedding_model_name=embedding_model_name,
+                    semantic_window=int(semantic_window),
+                    semantic_threshold=float(semantic_threshold),
+                )
+
+            st.markdown(f"**{len(players)} players found** for segmentation=`{segmentation}`")
+            for i, p in enumerate(players):
+                st.info(f"**[{i}]** {p}")
+
+            if segmentation == "semantic" and similarities:
+                st.markdown("#### Semantic Similarities (window pairs)")
+                sim_html = (
+                    "<table><thead><tr>"
+                    "<th>Index</th><th>Chunk 1</th><th>Chunk 2</th><th>Similarity</th>"
+                    "</tr></thead><tbody>"
+                )
+                for i, sim in enumerate(similarities):
+                    color = "#10b981" if sim >= semantic_threshold else "#ef4444"
+                    sim_html += (
+                        f"<tr>"
+                        f"<td>{i}</td>"
+                        f"<td>{windows[i]}</td>"
+                        f"<td>{windows[i + 1]}</td>"
+                        f"<td style='color:{color}'>{sim:.4f}</td>"
+                        f"</tr>"
+                    )
+                sim_html += "</tbody></table>"
+                st.html(sim_html)
+
     # Source Text Evaluation Input Block
     st.markdown("#### Input Workspace")
     col_inp1, col_inp2 = st.columns(2)
@@ -293,68 +398,8 @@ with tab_explanation:
             placeholder="Type the model's response here, or chat with the model in the Inference tab to auto-fill it...",
         )
 
-    # Action Row Configuration
-    col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 1])
-    with col_btn1:
-        explain_clicked = st.button("Explain with shapiq", type="primary", use_container_width=True)
-    with col_btn2:
-        show_players_clicked = st.button("Show Players", use_container_width=True)
-    with col_btn3:
-        if segmentation == "semantic":
-            show_sim_clicked = st.button("Show Similarity", use_container_width=True)
-        else:
-            show_sim_clicked = False
-
-    # Interactive Previews
-    if show_players_clicked or show_sim_clicked:
-        if not explain_prompt:
-            st.warning("Please enter a prompt.")
-        else:
-            with st.spinner("Initializing game representation..."):
-                model = get_model(st.session_state.selected_model, temperature=0.0)
-                game = JailbreakGame(
-                    model_name=st.session_state.selected_model,
-                    input_text=explain_prompt,
-                    scoring_mode="logprob",  # Fast baseline for pre-computation maps
-                    mask_strategy=masking_strategy,
-                    segmentation=segmentation,
-                    device="cuda",
-                    hf_model=model,
-                    embedding_model_name=embedding_model_name
-                    if segmentation == "semantic"
-                    else None,
-                    semantic_window=int(semantic_window),
-                    semantic_threshold=float(semantic_threshold),
-                    model_response=explain_response if explain_response else None,
-                )
-
-            if show_players_clicked:
-                st.markdown("### Players (Segments)")
-                for i, p in enumerate(game.players):
-                    st.info(f"**[{i}]** {p}")
-
-            if show_sim_clicked and segmentation == "semantic":
-                st.markdown("### Semantic Similarities")
-                words = game.input_text.split()
-                if len(words) <= 1:
-                    st.info("Not enough words to compare.")
-                else:
-                    half = game.semantic_window // 2
-                    windows = [
-                        " ".join(words[max(0, i - half) : i + half + 1]) for i in range(len(words))
-                    ]
-                    embeddings = game.embedding_model.encode(windows)
-                    similarities = [
-                        float(np.dot(embeddings[i], embeddings[i + 1]))
-                        for i in range(len(embeddings) - 1)
-                    ]
-
-                    sim_html = "<table style='width:100%; border-collapse: collapse;'><thead><tr style='border-bottom: 2px solid #555; text-align:left;'><th>Index</th><th>Chunk 1</th><th>Chunk 2</th><th>Similarity Score</th></tr></thead><tbody>"
-                    for i, sim in enumerate(similarities):
-                        color = "#10b981" if sim >= game.semantic_threshold else "#ef4444"
-                        sim_html += f"<tr style='border-bottom: 1px solid #444;'><td style='padding:8px;'><b>{i}</b></td><td style='padding:8px; color:#aaa;'>{windows[i]}</td><td style='padding:8px; color:#aaa;'>{windows[i + 1]}</td><td style='padding:8px; color:{color}; font-weight:bold;'>{sim:.4f}</td></tr>"
-                    sim_html += "</tbody></table>"
-                    st.html(sim_html)
+    # Action Row Configuration (Explain only)
+    explain_clicked = st.button("Explain with shapiq", type="primary", use_container_width=True)
 
     # Core Calculation Loop Trigger
     if explain_clicked:
@@ -381,6 +426,7 @@ with tab_explanation:
                         device="cuda",
                         hf_model=model,
                         judge_model_name=judge_model or "Qwen/Qwen2.5-1.5B-Instruct",
+                        embedding_model_name=embedding_model_name,
                         semantic_window=int(semantic_window),
                         semantic_threshold=float(semantic_threshold),
                         model_response=explain_response if explain_response else None,
