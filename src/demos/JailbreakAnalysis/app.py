@@ -34,8 +34,10 @@ st.set_page_config(
 
 # --- Caching & State Management ---
 @st.cache_resource
-def get_model(model_name: str, temperature: float = 0.0) -> object:
-    return HFModelWrapper(model_name=model_name, device="cuda", temperature=temperature)
+def get_model(model_name: str) -> object:
+    # Temperature is a generation-time parameter — excluded from the cache key
+    # so the same model instance is reused regardless of the sidebar slider value.
+    return HFModelWrapper(model_name=model_name, device="cuda")
 
 
 @st.cache_resource
@@ -466,7 +468,7 @@ with tab_inference:
 
         with chat_container, st.chat_message("assistant"):
             try:
-                model = get_model(st.session_state.selected_model, temperature=temperature)
+                model = get_model(st.session_state.selected_model)
                 stream = model.generate_text_stream(
                     prompt=prompt, chat=True, temperature=temperature, max_new_tokens=128
                 )
@@ -730,7 +732,7 @@ with tab_explanation:
                     # --- end config summary ---
 
                     status.write("Loading model...")
-                    model = get_model(st.session_state.selected_model, temperature=0.0)
+                    model = get_model(st.session_state.selected_model)
 
                     status.write("Initializing Jailbreak Game...")
                     game = JailbreakGame(
