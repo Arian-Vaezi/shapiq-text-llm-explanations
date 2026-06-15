@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import itertools
 import math
+import os
 import sys
 import types
 from dataclasses import dataclass
@@ -16,6 +17,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
+from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
@@ -27,6 +29,7 @@ from scorers import (
     ToolChoice,
 )
 from semantic_segmenter import SemanticSegmenter
+from tool_schemas import get_executable_tool_schemas
 
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
@@ -891,6 +894,10 @@ def main() -> None:
         st.session_state.result = None
     if "pending_run" not in st.session_state:
         st.session_state.pending_run = False
+    if "agentic_inferred_tool" not in st.session_state:
+        st.session_state["agentic_inferred_tool"] = None
+    if "agentic_inference_result" not in st.session_state:
+        st.session_state["agentic_inference_result"] = None
 
     mode = st.sidebar.radio(
         "Input",
@@ -1055,70 +1062,134 @@ def main() -> None:
         full_prompt,
         tool_descriptions=TOOLS,
     )
-    target_tool = preview_choice.tool
+    inferred_tool = st.session_state.get("agentic_inferred_tool")
+    using_inferred_tool = inferred_tool in TOOLS
+    target_tool = inferred_tool if using_inferred_tool else preview_choice.tool
+    target_source = "Gemini inference" if using_inferred_tool else "Preview scorer fallback"
 
-    index = DEFAULT_INDEX
-    max_order = DEFAULT_MAX_ORDER
-    signature = (
-        mode,
-        trace_name,
-        user_request,
-        target_tool,
-        scorer_backend,
-        logprob_model_id,
-        candidate_template,
-        bool(candidate_texts),
-        normalize_by_length,
-        int(max_pairs_per_batch),
-        show_lexical_comparison,
-        segment_threshold,
-        segment_window,
-        min_segment_words,
-        tuple(semantic_user_texts),
-    )
-    if st.session_state.get("result_signature") != signature:
-        st.session_state.has_run = False
-        st.session_state.result = None
-        st.session_state.pending_run = False
-        st.session_state.result_signature = signature
+    inference_tab, explanation_tab = st.tabs(["Inference", "Explanation"])
 
-    st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
-    st.markdown(
-        f"""
-        <div class="scenario-panel">
-            <div>
-                <span class="scenario-tag">Tool selection</span>
-                <h3>{escape(trace_name)}</h3>
-                <p>{escape(user_request)}</p>
+    with inference_tab:
+        st.markdown('<div class="section-label">Inference</div>', unsafe_allow_html=True)
+        st.write(user_request)
+        gemini_model_name = st.text_input(
+            "Gemini model",
+            value="gemini-2.5-flash",
+        )
+        with st.expander("Check available Gemini models", expanded=False):
+            if st.button("Check available Gemini models", key="check_gemini_models"):
+                st.session_state["agentic_available_gemini_models"] = (
+                    list_available_gemini_models()
+                )
+            available_models = st.session_state.get("agentic_available_gemini_models")
+            if available_models is None:
+                st.caption("Model listing is optional and may fail under quota or SDK differences.")
+            elif available_models:
+                st.write(available_models)
+            else:
+                st.warning("No available Gemini models were returned.")
+        if not os.getenv("GEMINI_API_KEY"):
+            st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
+        if st.button("Run inference", type="primary", key="run_gemini_inference"):
+            with st.spinner("Running Gemini tool inference..."):
+                inference_result = run_gemini_tool_inference(
+                    user_request,
+                    get_executable_tool_schemas(),
+                    gemini_model_name,
+                )
+            st.session_state["agentic_inference_result"] = inference_result
+            if inference_result.selected_tool in TOOLS:
+                st.session_state["agentic_inferred_tool"] = inference_result.selected_tool
+                st.session_state.has_run = False
+                st.session_state.result = None
+                st.rerun()
+
+        inference_result = st.session_state.get("agentic_inference_result")
+        if inference_result is None:
+            st.info("Run inference to select a tool before explaining it.")
+        else:
+            if inference_result.error:
+                st.warning(inference_result.error)
+            st.metric("Inferred tool", inference_result.selected_tool or "No tool selected")
+            st.markdown("**Tool arguments**")
+            st.json(inference_result.tool_arguments)
+            st.markdown("**Final answer**")
+            st.write(inference_result.final_answer or "(none)")
+            with st.expander("Debug trace", expanded=False):
+                st.json(inference_result.raw_trace)
+
+    with explanation_tab:
+        if not using_inferred_tool:
+            st.warning(
+                "Run inference first to explain the Gemini-selected tool. "
+                "The current target is from the preview scorer fallback."
+            )
+
+        index = DEFAULT_INDEX
+        max_order = DEFAULT_MAX_ORDER
+        signature = (
+            mode,
+            trace_name,
+            user_request,
+            target_tool,
+            scorer_backend,
+            logprob_model_id,
+            candidate_template,
+            bool(candidate_texts),
+            normalize_by_length,
+            int(max_pairs_per_batch),
+            show_lexical_comparison,
+            segment_threshold,
+            segment_window,
+            min_segment_words,
+            tuple(semantic_user_texts),
+        )
+        if st.session_state.get("result_signature") != signature:
+            st.session_state.has_run = False
+            st.session_state.result = None
+            st.session_state.pending_run = False
+            st.session_state.result_signature = signature
+    
+        st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div class="scenario-panel">
+                <div>
+                    <span class="scenario-tag">Tool selection</span>
+                    <h3>{escape(trace_name)}</h3>
+                    <p>{escape(user_request)}</p>
+                </div>
+                <div class="scenario-hint">
+                    <strong>Explaining why agent selected:</strong> {escape(target_tool)}<br>
+                    <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
+                    <strong>Shapley players:</strong> {escape(players_text)}<br>
+                    <strong>Fixed context:</strong> system prompt + tool definitions
+                </div>
             </div>
-            <div class="scenario-hint">
-                <strong>Explaining why agent selected:</strong> {escape(target_tool)}<br>
-                <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
-                <strong>Shapley players:</strong> {escape(players_text)}<br>
-                <strong>Fixed context:</strong> system prompt + tool definitions
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
+    
+        run = False
+        if not st.session_state.has_run and not st.session_state.pending_run:
+            if st.button("Run explanation", type="primary"):
+                st.session_state.pending_run = True
+                st.rerun()
+            st.info("Enter a prompt and click Run to see the explanation.")
+            return
+    
+        st.markdown('<div class="section-label">Explanation target</div>', unsafe_allow_html=True)
+        target_left, target_right = st.columns([0.85, 1.15])
+        with target_left:
+            st.metric("Explanation target tool", target_tool)
+        with target_right:
+            st.metric("Target source", target_source)
 
-    run = False
-    if not st.session_state.has_run and not st.session_state.pending_run:
-        if st.button("Run explanation", type="primary"):
-            st.session_state.pending_run = True
-            st.rerun()
-        st.info("Enter a prompt and click Run to see the explanation.")
-        return
-
-    st.markdown('<div class="section-label">Initial tool suggestion</div>', unsafe_allow_html=True)
-    st.caption(
-        "This setup preview uses the same fixed context and full request as the explanation."
-    )
-    router_left, router_right = st.columns([0.85, 1.15])
-    with router_left:
-        st.metric("Suggested tool", preview_choice.tool, f"{preview_choice.score:.3f}")
-        st.caption(preview_choice.reason)
-    with router_right:
+        st.markdown("**Preview scorer fallback diagnostic**")
+        st.caption(
+            "These scores are from the selected preview scorer. They are diagnostic only "
+            "when Gemini inference selected the explanation target."
+        )
         score_frame = pd.DataFrame(
             [
                 {"tool": tool, "score": score}
@@ -1130,418 +1201,418 @@ def main() -> None:
             ]
         )
         st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
-
-    with st.expander("Show fixed context and Shapley players", expanded=show_prompt_segments):
-        segment_left, segment_right = st.columns(2)
-        with segment_left:
-            st.markdown("**Fixed context, not explained**")
-            st.caption("System prompt")
-            for segment in system_segments:
-                st.markdown(
-                    (
-                        "<div class='segment-box'>"
-                        f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
-                    ),
-                    unsafe_allow_html=True,
+    
+        with st.expander("Show fixed context and Shapley players", expanded=show_prompt_segments):
+            segment_left, segment_right = st.columns(2)
+            with segment_left:
+                st.markdown("**Fixed context, not explained**")
+                st.caption("System prompt")
+                for segment in system_segments:
+                    st.markdown(
+                        (
+                            "<div class='segment-box'>"
+                            f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
+                        ),
+                        unsafe_allow_html=True,
+                    )
+                st.caption("Tool definitions")
+                for tool_name, description in TOOLS.items():
+                    st.markdown(
+                        (
+                            "<div class='segment-box'>"
+                            f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
+                        ),
+                        unsafe_allow_html=True,
+                    )
+            with segment_right:
+                st.markdown("**Shapley players: user request segments**")
+                st.caption(
+                    f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
+                    f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
+                    f"window={segmenter.window}, min words={segmenter.min_segment_words}."
                 )
-            st.caption("Tool definitions")
-            for tool_name, description in TOOLS.items():
-                st.markdown(
-                    (
-                        "<div class='segment-box'>"
-                        f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
-                    ),
-                    unsafe_allow_html=True,
+                for segment in user_segments:
+                    st.markdown(
+                        (
+                            "<div class='segment-box user'>"
+                            f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
+                        ),
+                        unsafe_allow_html=True,
+                    )
+                if segment_debug_rows:
+                    st.markdown("**Semantic boundary diagnostics**")
+                    st.dataframe(
+                        pd.DataFrame(segment_debug_rows),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+    
+        run = st.session_state.pending_run
+        st.session_state.pending_run = False
+    
+        if run:
+            try:
+                from tool_game import ToolUseGame
+            except Exception as error:  # noqa: BLE001
+                st.error(
+                    "The demo controls are ready, but the full shapiq explanation stack "
+                    f"could not be imported in this local environment: {error}"
                 )
-        with segment_right:
-            st.markdown("**Shapley players: user request segments**")
-            st.caption(
-                f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
-                f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
-                f"window={segmenter.window}, min words={segmenter.min_segment_words}."
-            )
-            for segment in user_segments:
-                st.markdown(
-                    (
-                        "<div class='segment-box user'>"
-                        f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
-                    ),
-                    unsafe_allow_html=True,
-                )
-            if segment_debug_rows:
-                st.markdown("**Semantic boundary diagnostics**")
-                st.dataframe(
-                    pd.DataFrame(segment_debug_rows),
-                    use_container_width=True,
-                    hide_index=True,
-                )
-
-    run = st.session_state.pending_run
-    st.session_state.pending_run = False
-
-    if run:
-        try:
-            from tool_game import ToolUseGame
-        except Exception as error:  # noqa: BLE001
-            st.error(
-                "The demo controls are ready, but the full shapiq explanation stack "
-                f"could not be imported in this local environment: {error}"
-            )
-            return
-
-    if run:
-        lexical_scorer = LexicalToolScorer()
-        primary_scorer = preview_scorer
-        if scorer_backend == "Keyword baseline":
-            primary_label = "Keyword baseline"
-        elif scorer_backend == "LLM logprob scorer":
-            primary_label = "LLM logprob scorer"
-        else:
-            primary_label = "Mock model scorer"
-
-        full_score = primary_scorer.score_batch(
-            [full_prompt],
-            target_tool=target_tool,
-            tool_descriptions=TOOLS,
-        )[0]
-        empty_score = primary_scorer.score_batch(
-            [empty_prompt],
-            target_tool=target_tool,
-            tool_descriptions=TOOLS,
-        )[0]
-
-        with st.spinner("Computing tool-use attributions..."):
-            game = ToolUseGame(
+                return
+    
+        if run:
+            lexical_scorer = LexicalToolScorer()
+            primary_scorer = preview_scorer
+            if scorer_backend == "Keyword baseline":
+                primary_label = "Keyword baseline"
+            elif scorer_backend == "LLM logprob scorer":
+                primary_label = "LLM logprob scorer"
+            else:
+                primary_label = "Mock model scorer"
+    
+            full_score = primary_scorer.score_batch(
+                [full_prompt],
                 target_tool=target_tool,
-                user_segments=user_segments,
-                system_prompt=system_prompt,
-                tool_context=tool_context,
-                scorer=primary_scorer,
                 tool_descriptions=TOOLS,
-            )
-            approximator = make_approximator(index, game.n_players, max_order)
-            explanation = approximator.approximate(budget=budget, game=game)
-            first_order = explanation.get_n_order(order=1)
-            attribution_frame = values_to_frame(first_order, user_segments)
-            pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
-            pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
-            notes = build_interpretation_notes(
-                attribution_frame,
-                pair_label,
-                pair_value,
-                full_score,
-            )
-
-        top = attribution_frame.iloc[0] if not attribution_frame.empty else None
-        top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
-        top_score = 0.0 if top is None else float(top["attribution"])
-        interpretation_sentence = (
-            notes[0] if notes else "No interpretation is available for this run."
-        )
-
-        compare_with_lexical = show_lexical_comparison and primary_label != "Keyword baseline"
-        llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
-        lexical_result = None
-        if compare_with_lexical:
-            with st.spinner("Computing lexical baseline comparison..."):
-                lexical_game = ToolUseGame(
+            )[0]
+            empty_score = primary_scorer.score_batch(
+                [empty_prompt],
+                target_tool=target_tool,
+                tool_descriptions=TOOLS,
+            )[0]
+    
+            with st.spinner("Computing tool-use attributions..."):
+                game = ToolUseGame(
                     target_tool=target_tool,
                     user_segments=user_segments,
                     system_prompt=system_prompt,
                     tool_context=tool_context,
-                    scorer=lexical_scorer,
+                    scorer=primary_scorer,
                     tool_descriptions=TOOLS,
                 )
-                lexical_approximator = make_approximator(
-                    index,
-                    lexical_game.n_players,
-                    max_order,
+                approximator = make_approximator(index, game.n_players, max_order)
+                explanation = approximator.approximate(budget=budget, game=game)
+                first_order = explanation.get_n_order(order=1)
+                attribution_frame = values_to_frame(first_order, user_segments)
+                pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
+                pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
+                notes = build_interpretation_notes(
+                    attribution_frame,
+                    pair_label,
+                    pair_value,
+                    full_score,
                 )
-                lexical_explanation = lexical_approximator.approximate(
-                    budget=budget,
-                    game=lexical_game,
+    
+            top = attribution_frame.iloc[0] if not attribution_frame.empty else None
+            top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
+            top_score = 0.0 if top is None else float(top["attribution"])
+            interpretation_sentence = (
+                notes[0] if notes else "No interpretation is available for this run."
+            )
+    
+            compare_with_lexical = show_lexical_comparison and primary_label != "Keyword baseline"
+            llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
+            lexical_result = None
+            if compare_with_lexical:
+                with st.spinner("Computing lexical baseline comparison..."):
+                    lexical_game = ToolUseGame(
+                        target_tool=target_tool,
+                        user_segments=user_segments,
+                        system_prompt=system_prompt,
+                        tool_context=tool_context,
+                        scorer=lexical_scorer,
+                        tool_descriptions=TOOLS,
+                    )
+                    lexical_approximator = make_approximator(
+                        index,
+                        lexical_game.n_players,
+                        max_order,
+                    )
+                    lexical_explanation = lexical_approximator.approximate(
+                        budget=budget,
+                        game=lexical_game,
+                    )
+                    lexical_first_order = lexical_explanation.get_n_order(order=1)
+                    lexical_frame = values_to_frame(lexical_first_order, user_segments)
+                    lexical_matrix = pairwise_matrix_from_explanation(
+                        lexical_explanation,
+                        lexical_game.n_players,
+                    )
+                    lexical_pair_label, lexical_pair_value = strongest_pair(lexical_matrix, labels)
+                    lexical_full_score = lexical_scorer.score_batch(
+                        [full_prompt],
+                        target_tool=target_tool,
+                        tool_descriptions=TOOLS,
+                    )[0]
+                    lexical_empty_score = lexical_scorer.score_batch(
+                        [empty_prompt],
+                        target_tool=target_tool,
+                        tool_descriptions=TOOLS,
+                    )[0]
+                    lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
+                    lexical_result = {
+                        "label": "Keyword baseline",
+                        "full_score": lexical_full_score,
+                        "empty_score": lexical_empty_score,
+                        "top": "No segment"
+                        if lexical_top is None
+                        else f"{lexical_top['segment']} ({lexical_top['source']})",
+                        "top_value": 0.0 if lexical_top is None else float(lexical_top["attribution"]),
+                        "pair": lexical_pair_label,
+                        "pair_value": lexical_pair_value,
+                    }
+    
+            scoring_prompt_preview = build_scoring_prompt_preview(
+                primary_scorer,
+                full_prompt,
+                target_tool=target_tool,
+                tool_descriptions=TOOLS,
+            )
+            st.session_state.has_run = True
+            st.session_state.result = {
+                "primary_label": primary_label,
+                "full_score": full_score,
+                "empty_score": empty_score,
+                "first_order": first_order,
+                "attribution_frame": attribution_frame,
+                "explanation": explanation,
+                "pair_label": pair_label,
+                "pair_value": pair_value,
+                "top_label": top_label,
+                "top_score": top_score,
+                "interpretation_sentence": interpretation_sentence,
+                "compare_with_lexical": compare_with_lexical,
+                "llm_debug_outputs": llm_debug_outputs,
+                "lexical_result": lexical_result,
+                "scoring_prompt": scoring_prompt_preview,
+            }
+    
+        result = st.session_state.result
+        if result is None:
+            st.error("No explanation result is available. Click Run explanation to compute one.")
+            return
+        primary_label = result["primary_label"]
+        full_score = result["full_score"]
+        empty_score = result["empty_score"]
+        first_order = result["first_order"]
+        attribution_frame = result["attribution_frame"]
+        explanation = result["explanation"]
+        pair_label = result["pair_label"]
+        pair_value = result["pair_value"]
+        top_label = result["top_label"]
+        top_score = result["top_score"]
+        interpretation_sentence = result["interpretation_sentence"]
+        compare_with_lexical = result["compare_with_lexical"]
+        llm_debug_outputs = result["llm_debug_outputs"]
+        lexical_result = result["lexical_result"]
+        delta_support = float(full_score) - float(empty_score)
+        if delta_support > DELTA_STATUS_THRESHOLD:
+            support_status = "Supported by the prompt"
+            support_interpretation = (
+                "The complete prompt increases support for the target tool compared with the baseline."
+            )
+        elif delta_support < -DELTA_STATUS_THRESHOLD:
+            support_status = "Reduced by the prompt"
+            support_interpretation = (
+                "The complete prompt reduces support for the target tool compared with the baseline."
+            )
+        else:
+            support_status = "Neutral / weak evidence"
+            support_interpretation = (
+                "The complete prompt does not change support much compared with the baseline."
+            )
+        token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
+            load_text_plotters()
+        )
+    
+        debug_requested = (
+            show_value_function_details
+            or show_scoring_prompt_preview
+            or compare_with_lexical
+            or bool(llm_debug_outputs)
+        )
+        tab_names = ["Summary", "Attribution", "Interactions"]
+        if debug_requested:
+            tab_names.append("Debug")
+        tabs = st.tabs(tab_names)
+    
+        with tabs[0]:
+            st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
+            st.markdown("**Tool support overview**")
+            st.markdown(
+                f"""
+                <div class="metric-strip">
+                    <div class="metric-card">
+                        <span>Target tool</span><strong>{escape(target_tool)}</strong>
+                    </div>
+                    <div class="metric-card">
+                        <span>Full support score = v(all user segments)</span>
+                        <strong>{full_score:.3f}</strong>
+                    </div>
+                    <div class="metric-card">
+                        <span>Baseline = fixed context + empty user request</span>
+                        <strong>{empty_score:.3f}</strong>
+                    </div>
+                    <div class="metric-card">
+                        <span>Delta support</span><strong>{delta_support:.3f}</strong>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.info(f"**{support_status}.** {support_interpretation}")
+    
+            st.caption("See the Attribution tab for the full first-order segment ranking.")
+    
+        with tabs[1]:
+            st.markdown("**First-order attribution ranking**")
+            st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
+            if token_attribution_bar_plot is None:
+                st.warning(
+                    "The shapiq text attribution plot is unavailable in this environment. "
+                    f"Showing a simple fallback chart instead. Details: {plot_import_error}"
                 )
-                lexical_first_order = lexical_explanation.get_n_order(order=1)
-                lexical_frame = values_to_frame(lexical_first_order, user_segments)
-                lexical_matrix = pairwise_matrix_from_explanation(
-                    lexical_explanation,
-                    lexical_game.n_players,
+                show_fallback_attribution_chart(attribution_frame)
+            else:
+                try:
+                    fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
+                except Exception as error:  # noqa: BLE001
+                    st.warning(
+                        "The shapiq text attribution plot failed. "
+                        f"Showing a simple fallback chart instead. Details: {error}"
+                    )
+                    show_fallback_attribution_chart(attribution_frame)
+                else:
+                    if fig_ax is not None:
+                        fig, ax = fig_ax
+                        st.pyplot(polish_bar(fig, ax), clear_figure=True)
+    
+        with tabs[2]:
+            st.markdown("**Pairwise interaction heatmap**")
+            if sentence_interaction_heatmap is None:
+                st.warning(
+                    "The shapiq text interaction heatmap is unavailable in this environment. "
+                    f"Showing a fallback interaction table instead. Details: {plot_import_error}"
                 )
-                lexical_pair_label, lexical_pair_value = strongest_pair(lexical_matrix, labels)
-                lexical_full_score = lexical_scorer.score_batch(
-                    [full_prompt],
-                    target_tool=target_tool,
-                    tool_descriptions=TOOLS,
-                )[0]
-                lexical_empty_score = lexical_scorer.score_batch(
-                    [empty_prompt],
-                    target_tool=target_tool,
-                    tool_descriptions=TOOLS,
-                )[0]
-                lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
-                lexical_result = {
-                    "label": "Keyword baseline",
-                    "full_score": lexical_full_score,
-                    "empty_score": lexical_empty_score,
-                    "top": "No segment"
-                    if lexical_top is None
-                    else f"{lexical_top['segment']} ({lexical_top['source']})",
-                    "top_value": 0.0 if lexical_top is None else float(lexical_top["attribution"]),
-                    "pair": lexical_pair_label,
-                    "pair_value": lexical_pair_value,
-                }
-
-        scoring_prompt_preview = build_scoring_prompt_preview(
-            primary_scorer,
-            full_prompt,
-            target_tool=target_tool,
-            tool_descriptions=TOOLS,
-        )
-        st.session_state.has_run = True
-        st.session_state.result = {
-            "primary_label": primary_label,
-            "full_score": full_score,
-            "empty_score": empty_score,
-            "first_order": first_order,
-            "attribution_frame": attribution_frame,
-            "explanation": explanation,
-            "pair_label": pair_label,
-            "pair_value": pair_value,
-            "top_label": top_label,
-            "top_score": top_score,
-            "interpretation_sentence": interpretation_sentence,
-            "compare_with_lexical": compare_with_lexical,
-            "llm_debug_outputs": llm_debug_outputs,
-            "lexical_result": lexical_result,
-            "scoring_prompt": scoring_prompt_preview,
-        }
-
-    result = st.session_state.result
-    if result is None:
-        st.error("No explanation result is available. Click Run explanation to compute one.")
-        return
-    primary_label = result["primary_label"]
-    full_score = result["full_score"]
-    empty_score = result["empty_score"]
-    first_order = result["first_order"]
-    attribution_frame = result["attribution_frame"]
-    explanation = result["explanation"]
-    pair_label = result["pair_label"]
-    pair_value = result["pair_value"]
-    top_label = result["top_label"]
-    top_score = result["top_score"]
-    interpretation_sentence = result["interpretation_sentence"]
-    compare_with_lexical = result["compare_with_lexical"]
-    llm_debug_outputs = result["llm_debug_outputs"]
-    lexical_result = result["lexical_result"]
-    delta_support = float(full_score) - float(empty_score)
-    if delta_support > DELTA_STATUS_THRESHOLD:
-        support_status = "Supported by the prompt"
-        support_interpretation = (
-            "The complete prompt increases support for the target tool compared with the baseline."
-        )
-    elif delta_support < -DELTA_STATUS_THRESHOLD:
-        support_status = "Reduced by the prompt"
-        support_interpretation = (
-            "The complete prompt reduces support for the target tool compared with the baseline."
-        )
-    else:
-        support_status = "Neutral / weak evidence"
-        support_interpretation = (
-            "The complete prompt does not change support much compared with the baseline."
-        )
-    token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
-        load_text_plotters()
-    )
-
-    debug_requested = (
-        show_value_function_details
-        or show_scoring_prompt_preview
-        or compare_with_lexical
-        or bool(llm_debug_outputs)
-    )
-    tab_names = ["Summary", "Attribution", "Interactions"]
-    if debug_requested:
-        tab_names.append("Debug")
-    tabs = st.tabs(tab_names)
-
-    with tabs[0]:
-        st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
-        st.markdown("**Tool support overview**")
+                show_fallback_interaction_table(pairwise_matrix, labels)
+            else:
+                try:
+                    fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
+                except Exception as error:  # noqa: BLE001
+                    st.warning(
+                        "The shapiq text interaction heatmap failed. "
+                        f"Showing a fallback interaction table instead. Details: {error}"
+                    )
+                    show_fallback_interaction_table(pairwise_matrix, labels)
+                else:
+                    if fig_ax is not None:
+                        fig, ax = fig_ax
+                        st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
+            st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
+    
+        if debug_requested:
+            with tabs[3]:
+                if llm_debug_outputs:
+                    with st.expander("Model output diagnostics", expanded=False):
+                        displayed_debug_outputs = llm_debug_outputs[:10]
+                        if (
+                            primary_label == "LLM logprob scorer"
+                            and displayed_debug_outputs
+                            and all(row.get("used_fallback") for row in displayed_debug_outputs)
+                        ):
+                            st.warning(
+                                "The local model did not return numeric scores for this run, "
+                                "so the keyword baseline was used as fallback."
+                            )
+                        debug_frame = pd.DataFrame(displayed_debug_outputs)
+                        debug_columns = [
+                            "raw_output",
+                            "parsed_score",
+                            "used_fallback",
+                            "fallback_score",
+                            "candidate_tools",
+                            "candidate_continuations",
+                            "candidate_logprobs",
+                            "candidate_probs",
+                            "final_score",
+                            "prompt_preview",
+                        ]
+                        st.dataframe(
+                            debug_frame[[column for column in debug_columns if column in debug_frame]],
+                            use_container_width=True,
+                            hide_index=True,
+                        )
+                if lexical_result is not None:
+                    st.markdown("**Scorer comparison**")
+                    comparison_rows = [
+                        {
+                            "scorer": primary_label,
+                            "full_score": full_score,
+                            "empty_score": empty_score,
+                            "top_segment": top_label,
+                            "top_attribution": top_score,
+                            "strongest_pair": pair_label,
+                            "pair_value": pair_value,
+                        },
+                        {
+                            "scorer": lexical_result["label"],
+                            "full_score": lexical_result["full_score"],
+                            "empty_score": lexical_result["empty_score"],
+                            "top_segment": lexical_result["top"],
+                            "top_attribution": lexical_result["top_value"],
+                            "strongest_pair": lexical_result["pair"],
+                            "pair_value": lexical_result["pair_value"],
+                        },
+                    ]
+                    comparison_frame = pd.DataFrame(comparison_rows)
+                    st.dataframe(comparison_frame, use_container_width=True, hide_index=True)
+                if show_scoring_prompt_preview:
+                    st.markdown("**Scoring prompt preview**")
+                    scoring_prompt = result.get("scoring_prompt")
+                    if scoring_prompt:
+                        st.code(scoring_prompt, language="text")
+                    else:
+                        st.caption(
+                            "A separate scoring-prompt preview is not available for this scoring "
+                            "backend."
+                        )
+                if show_value_function_details:
+                    st.markdown("**Value function details**")
+                    st.write(f"Index: `{index}`")
+                    st.write(f"Max order: `{max_order}`")
+                    st.write(f"Budget: `{budget}`")
+                    st.write("Full coalition prompt:")
+                    st.code(full_prompt, language="text")
+                    st.write("Empty coalition prompt:")
+                    st.code(empty_prompt, language="text")
+    
         st.markdown(
-            f"""
-            <div class="metric-strip">
-                <div class="metric-card">
-                    <span>Target tool</span><strong>{escape(target_tool)}</strong>
-                </div>
-                <div class="metric-card">
-                    <span>Full support score = v(all user segments)</span>
-                    <strong>{full_score:.3f}</strong>
-                </div>
-                <div class="metric-card">
-                    <span>Baseline = fixed context + empty user request</span>
-                    <strong>{empty_score:.3f}</strong>
-                </div>
-                <div class="metric-card">
-                    <span>Delta support</span><strong>{delta_support:.3f}</strong>
-                </div>
+            '<div class="section-label">How the explanation is computed</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div class="setup-line">
+                <strong>Value function:</strong>
+                <code>v(S) = score(target tool | fixed context + selected user segments S)</code><br>
+                S is a subset of user-request segment players. The system prompt and tool
+                definitions are included unchanged for every coalition.
             </div>
             """,
             unsafe_allow_html=True,
         )
-        st.info(f"**{support_status}.** {support_interpretation}")
-
-        st.caption("See the Attribution tab for the full first-order segment ranking.")
-
-    with tabs[1]:
-        st.markdown("**First-order attribution ranking**")
-        st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
-        if token_attribution_bar_plot is None:
-            st.warning(
-                "The shapiq text attribution plot is unavailable in this environment. "
-                f"Showing a simple fallback chart instead. Details: {plot_import_error}"
+        with st.expander("Why this is a Shapley game", expanded=False):
+            st.markdown(
+                """
+                Shapley values compare tool-support scores across different user-segment
+                combinations to estimate each user segment's contribution.
+    
+                A positive contribution means the user segment supports the target tool.
+                A negative contribution means it weakens support for the target tool.
+                """
             )
-            show_fallback_attribution_chart(attribution_frame)
-        else:
-            try:
-                fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
-            except Exception as error:  # noqa: BLE001
-                st.warning(
-                    "The shapiq text attribution plot failed. "
-                    f"Showing a simple fallback chart instead. Details: {error}"
-                )
-                show_fallback_attribution_chart(attribution_frame)
-            else:
-                if fig_ax is not None:
-                    fig, ax = fig_ax
-                    st.pyplot(polish_bar(fig, ax), clear_figure=True)
-
-    with tabs[2]:
-        st.markdown("**Pairwise interaction heatmap**")
-        if sentence_interaction_heatmap is None:
-            st.warning(
-                "The shapiq text interaction heatmap is unavailable in this environment. "
-                f"Showing a fallback interaction table instead. Details: {plot_import_error}"
-            )
-            show_fallback_interaction_table(pairwise_matrix, labels)
-        else:
-            try:
-                fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
-            except Exception as error:  # noqa: BLE001
-                st.warning(
-                    "The shapiq text interaction heatmap failed. "
-                    f"Showing a fallback interaction table instead. Details: {error}"
-                )
-                show_fallback_interaction_table(pairwise_matrix, labels)
-            else:
-                if fig_ax is not None:
-                    fig, ax = fig_ax
-                    st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
-        st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
-
-    if debug_requested:
-        with tabs[3]:
-            if llm_debug_outputs:
-                with st.expander("Model output diagnostics", expanded=False):
-                    displayed_debug_outputs = llm_debug_outputs[:10]
-                    if (
-                        primary_label == "LLM logprob scorer"
-                        and displayed_debug_outputs
-                        and all(row.get("used_fallback") for row in displayed_debug_outputs)
-                    ):
-                        st.warning(
-                            "The local model did not return numeric scores for this run, "
-                            "so the keyword baseline was used as fallback."
-                        )
-                    debug_frame = pd.DataFrame(displayed_debug_outputs)
-                    debug_columns = [
-                        "raw_output",
-                        "parsed_score",
-                        "used_fallback",
-                        "fallback_score",
-                        "candidate_tools",
-                        "candidate_continuations",
-                        "candidate_logprobs",
-                        "candidate_probs",
-                        "final_score",
-                        "prompt_preview",
-                    ]
-                    st.dataframe(
-                        debug_frame[[column for column in debug_columns if column in debug_frame]],
-                        use_container_width=True,
-                        hide_index=True,
-                    )
-            if lexical_result is not None:
-                st.markdown("**Scorer comparison**")
-                comparison_rows = [
-                    {
-                        "scorer": primary_label,
-                        "full_score": full_score,
-                        "empty_score": empty_score,
-                        "top_segment": top_label,
-                        "top_attribution": top_score,
-                        "strongest_pair": pair_label,
-                        "pair_value": pair_value,
-                    },
-                    {
-                        "scorer": lexical_result["label"],
-                        "full_score": lexical_result["full_score"],
-                        "empty_score": lexical_result["empty_score"],
-                        "top_segment": lexical_result["top"],
-                        "top_attribution": lexical_result["top_value"],
-                        "strongest_pair": lexical_result["pair"],
-                        "pair_value": lexical_result["pair_value"],
-                    },
-                ]
-                comparison_frame = pd.DataFrame(comparison_rows)
-                st.dataframe(comparison_frame, use_container_width=True, hide_index=True)
-            if show_scoring_prompt_preview:
-                st.markdown("**Scoring prompt preview**")
-                scoring_prompt = result.get("scoring_prompt")
-                if scoring_prompt:
-                    st.code(scoring_prompt, language="text")
-                else:
-                    st.caption(
-                        "A separate scoring-prompt preview is not available for this scoring "
-                        "backend."
-                    )
-            if show_value_function_details:
-                st.markdown("**Value function details**")
-                st.write(f"Index: `{index}`")
-                st.write(f"Max order: `{max_order}`")
-                st.write(f"Budget: `{budget}`")
-                st.write("Full coalition prompt:")
-                st.code(full_prompt, language="text")
-                st.write("Empty coalition prompt:")
-                st.code(empty_prompt, language="text")
-
-    st.markdown(
-        '<div class="section-label">How the explanation is computed</div>',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        """
-        <div class="setup-line">
-            <strong>Value function:</strong>
-            <code>v(S) = score(target tool | fixed context + selected user segments S)</code><br>
-            S is a subset of user-request segment players. The system prompt and tool
-            definitions are included unchanged for every coalition.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    with st.expander("Why this is a Shapley game", expanded=False):
-        st.markdown(
-            """
-            Shapley values compare tool-support scores across different user-segment
-            combinations to estimate each user segment's contribution.
-
-            A positive contribution means the user segment supports the target tool.
-            A negative contribution means it weakens support for the target tool.
-            """
-        )
-
-    st.caption(f"Demo path: `{display_demo_path()}`")
+    
+        st.caption(f"Demo path: `{display_demo_path()}`")
 
 
 if __name__ == "__main__":
