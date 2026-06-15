@@ -219,6 +219,30 @@ EXPLANATION_STYLES = """
     letter-spacing: 0.04em;
 }
 .shapiq-grid td { padding: 8px 12px; border-top: 1px solid rgba(128, 128, 128, 0.15); }
+.sq-pipe { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; margin: 0.25rem 0 0.75rem; }
+.sq-pipe .sq-arrow { display: flex; align-items: center; color: rgba(128, 128, 128, 0.55); font-size: 16px; }
+.sq-step {
+    flex: 1;
+    min-width: 132px;
+    border: 1px solid rgba(128, 128, 128, 0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: rgba(128, 128, 128, 0.06);
+    transition: opacity 0.2s, border-color 0.2s, background 0.2s;
+}
+.sq-step .sq-step-head { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.sq-step .sq-step-title { font-size: 0.85rem; font-weight: 600; }
+.sq-step .sq-step-sub { font-size: 0.76rem; opacity: 0.7; line-height: 1.4; }
+.sq-step .sq-badge {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700;
+    background: rgba(128, 128, 128, 0.2);
+}
+.sq-step.pending { opacity: 0.45; }
+.sq-step.active { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+.sq-step.active .sq-badge { background: #3b82f6; color: #fff; }
+.sq-step.done .sq-badge { background: #10b981; color: #fff; }
 </style>
 """
 
@@ -286,6 +310,52 @@ def interaction_table(pairs: list[tuple[str, str, float]]) -> str:
         )
     parts.append("</div>")
     return "".join(parts)
+
+
+PIPELINE_STEP_TITLES = ("Segment", "Mask", "Score", "Aggregate", "Visualize")
+
+
+def pipeline_strip(
+    *,
+    segmentation: str,
+    masking: str,
+    scoring: str,
+    second_order: bool,
+    n_players: int | None = None,
+    budget: int | None = None,
+    states: list[str] | None = None,
+) -> str:
+    """Build the settings-aware pipeline strip (HTML).
+
+    The subtitles reflect the user's current choices (and, once known, the player
+    count and budget). ``states`` is one entry per step — ``"idle" | "pending" |
+    "active" | "done"`` — which drives the live highlight as a run progresses.
+    """
+    order_label = "k-SII · order 2" if second_order else "Shapley · order 1"
+    seg_sub = segmentation if n_players is None else f"{segmentation} · {n_players} players"
+    agg_sub = order_label if budget is None else f"{order_label} · budget {budget}"
+    subs = [
+        seg_sub,
+        f"{masking} absent segments",
+        f"{scoring} → compliance",
+        agg_sub,
+        "table · heatmap · network" if second_order else "Shapley table",
+    ]
+    states = states or ["idle"] * len(PIPELINE_STEP_TITLES)
+    cells = []
+    for i, (title, sub, state) in enumerate(
+        zip(PIPELINE_STEP_TITLES, subs, states, strict=True), start=1
+    ):
+        modifier = "" if state == "idle" else f" {state}"
+        badge = "✓" if state == "done" else str(i)
+        cells.append(
+            f'<div class="sq-step{modifier}">'
+            f'<div class="sq-step-head"><span class="sq-badge">{badge}</span>'
+            f'<span class="sq-step-title">{title}</span></div>'
+            f'<div class="sq-step-sub">{html.escape(sub)}</div>'
+            "</div>"
+        )
+    return '<div class="sq-pipe">' + '<div class="sq-arrow">→</div>'.join(cells) + "</div>"
 
 
 def _matplotlib_fg() -> str:
@@ -651,6 +721,8 @@ with tab_explanation:
             ),
         )
 
+    second_order = explanation_order.startswith("Second-order")
+
     # Source Text Evaluation Input Block
     st.markdown("#### Input Workspace")
     col_inp1, col_inp2 = st.columns(2)
@@ -681,6 +753,27 @@ with tab_explanation:
 
     # Action Row Configuration (Explain only)
     explain_clicked = st.button("Explain with shapiq", type="primary", use_container_width=True)
+
+    # Live pipeline strip: summarises the current settings and lights up step-by-step
+    # as a run progresses. Rendered into a placeholder so the run loop can update it.
+    pipeline_ph = st.empty()
+
+    def render_pipeline(
+        states: list[str], *, n_players: int | None = None, budget: int | None = None
+    ) -> None:
+        pipeline_ph.html(
+            pipeline_strip(
+                segmentation=segmentation,
+                masking=masking_strategy,
+                scoring=scoring_mode,
+                second_order=second_order,
+                n_players=n_players,
+                budget=budget,
+                states=states,
+            )
+        )
+
+    render_pipeline(["idle"] * 5)
 
     # Core Calculation Loop Trigger
     if explain_clicked:
@@ -713,11 +806,19 @@ with tab_explanation:
                         model_response=explain_response if explain_response else None,
                     )
 
-                    status.write("Calculating compliance score...")
-                    full_coalition = np.ones((1, game.n_players))
-                    compliance_score = float(game.value_function(full_coalition)[0])
+                    budget = recommended_budget(
+                        game.n_players,
+                        second_order=second_order,
+                        multiplier=QUALITY_MULTIPLIERS[approx_quality],
+                    )
+                    # Players are known and the budget is set: segment done, the
+                    # mask/score/aggregate steps now run together inside approximate().
+                    render_pipeline(
+                        ["done", "active", "active", "active", "pending"],
+                        n_players=game.n_players,
+                        budget=budget,
+                    )
 
-                    second_order = explanation_order.startswith("Second-order")
                     if second_order and game.n_players > SECOND_ORDER_PLAYER_WARN:
                         st.warning(
                             f"Second-order analysis on {game.n_players} players means "
@@ -727,11 +828,9 @@ with tab_explanation:
                             "(e.g. sentence) or a shorter prompt."
                         )
 
-                    budget = recommended_budget(
-                        game.n_players,
-                        second_order=second_order,
-                        multiplier=QUALITY_MULTIPLIERS[approx_quality],
-                    )
+                    status.write("Calculating compliance score...")
+                    full_coalition = np.ones((1, game.n_players))
+                    compliance_score = float(game.value_function(full_coalition)[0])
 
                     if second_order:
                         status.write(
@@ -749,6 +848,13 @@ with tab_explanation:
                     result = approx.approximate(budget=budget, game=game)
 
                     player_values = np.array([float(result[(i,)]) for i in range(game.n_players)])
+
+                    # Computation finished; the visualisation step renders below.
+                    render_pipeline(
+                        ["done", "done", "done", "done", "active"],
+                        n_players=game.n_players,
+                        budget=budget,
+                    )
 
                     status.update(label="Explanation complete!", state="complete", expanded=False)
 
@@ -794,6 +900,8 @@ with tab_explanation:
                                     show_figure(fig)
                             except Exception as e:  # noqa: BLE001
                                 st.info(f"Network plot unavailable: {e}")
+
+                    render_pipeline(["done"] * 5, n_players=game.n_players, budget=budget)
 
                 except Exception as e:  # noqa: BLE001
                     status.update(label="Error during explanation.", state="error")
