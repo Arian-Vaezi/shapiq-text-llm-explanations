@@ -1151,9 +1151,10 @@ def main() -> None:
     with explanation_tab:
         if not using_inferred_tool:
             st.warning(
-                "Run inference first to explain the Gemini-selected tool. "
-                "The current target is from the preview scorer fallback."
+                "Fallback target selection: no Groq/Gemini inference result is available, "
+                "so the selected explanation scorer is used to choose the target tool."
             )
+            st.caption(f"Current fallback scorer: {scorer_backend}.")
 
         index = DEFAULT_INDEX
         max_order = DEFAULT_MAX_ORDER
@@ -1215,22 +1216,24 @@ def main() -> None:
         with target_right:
             st.metric("Target source", target_source)
 
-        st.markdown("**Preview scorer fallback diagnostic**")
-        st.caption(
-            "These scores are from the selected preview scorer. They are diagnostic only "
-            "when Gemini inference selected the explanation target."
-        )
-        score_frame = pd.DataFrame(
-            [
-                {"tool": tool, "score": score}
-                for tool, score in sorted(
-                    preview_choice.scores.items(),
-                    key=lambda item: item[1],
-                    reverse=True,
-                )
-            ]
-        )
-        st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
+        if not using_inferred_tool:
+            st.markdown("**Fallback scorer diagnostic**")
+            st.caption(
+                "These scores are not from Groq or Gemini. They come from the selected "
+                "explanation scorer and are only used when no inference backend result is "
+                "available."
+            )
+            score_frame = pd.DataFrame(
+                [
+                    {"tool": tool, "score": score}
+                    for tool, score in sorted(
+                        preview_choice.scores.items(),
+                        key=lambda item: item[1],
+                        reverse=True,
+                    )
+                ]
+            )
+            st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
     
         with st.expander("Show fixed context and Shapley players", expanded=show_prompt_segments):
             segment_left, segment_right = st.columns(2)
