@@ -63,7 +63,7 @@ class CausalModelWrapper:
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        dtype = torch.float16 if self.device in ("cuda", "mps") else torch.float32
+        dtype = torch.float16 if self.device == "cuda" else torch.float32
 
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,

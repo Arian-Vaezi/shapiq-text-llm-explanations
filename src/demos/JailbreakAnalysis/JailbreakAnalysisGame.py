@@ -34,6 +34,7 @@ class JailbreakGame(Game):
         semantic_threshold: float = 0.5,
         semantic_window: int = 6,
         semantic_min_segment_words: int = 3,
+        model_response: str | None = None,
     ) -> None:
         self.model_name = model_name
         self.input_text = input_text
@@ -41,6 +42,7 @@ class JailbreakGame(Game):
         self.mask_strategy = mask_strategy
         self.segmentation = segmentation
         self.batch_size = batch_size
+        self.model_response = model_response
 
         self.semantic_threshold = semantic_threshold
         self.semantic_window = semantic_window
@@ -298,7 +300,10 @@ class JailbreakGame(Game):
         # JUDGE MODE
         # -------------------------
         if self.scoring_mode == "llm-as-a-judge":
-            responses = [self.text_generation_model.generate_text(p) for p in prompts]
+            if self.model_response is not None:
+                responses = [self.model_response] * len(prompts)
+            else:
+                responses = [self.text_generation_model.generate_text(p) for p in prompts]
 
             return self._judge_score(prompts, responses)
 
