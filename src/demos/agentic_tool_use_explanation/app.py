@@ -18,6 +18,7 @@ import pandas as pd
 import streamlit as st
 from matplotlib.patches import Rectangle
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
+from groq_agent import run_groq_tool_inference
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
@@ -1065,38 +1066,65 @@ def main() -> None:
     inferred_tool = st.session_state.get("agentic_inferred_tool")
     using_inferred_tool = inferred_tool in TOOLS
     target_tool = inferred_tool if using_inferred_tool else preview_choice.tool
-    target_source = "Gemini inference" if using_inferred_tool else "Preview scorer fallback"
+    inference_source = st.session_state.get("agentic_inference_backend")
+    target_source = (
+        f"{inference_source} inference"
+        if using_inferred_tool and inference_source
+        else "Inference"
+        if using_inferred_tool
+        else "Preview scorer fallback"
+    )
 
     inference_tab, explanation_tab = st.tabs(["Inference", "Explanation"])
 
     with inference_tab:
         st.markdown('<div class="section-label">Inference</div>', unsafe_allow_html=True)
         st.write(user_request)
-        gemini_model_name = st.text_input(
-            "Gemini model",
-            value="gemini-2.5-flash",
-        )
-        with st.expander("Check available Gemini models", expanded=False):
-            if st.button("Check available Gemini models", key="check_gemini_models"):
-                st.session_state["agentic_available_gemini_models"] = (
-                    list_available_gemini_models()
-                )
-            available_models = st.session_state.get("agentic_available_gemini_models")
-            if available_models is None:
-                st.caption("Model listing is optional and may fail under quota or SDK differences.")
-            elif available_models:
-                st.write(available_models)
-            else:
-                st.warning("No available Gemini models were returned.")
-        if not os.getenv("GEMINI_API_KEY"):
-            st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
-        if st.button("Run inference", type="primary", key="run_gemini_inference"):
-            with st.spinner("Running Gemini tool inference..."):
-                inference_result = run_gemini_tool_inference(
-                    user_request,
-                    get_executable_tool_schemas(),
-                    gemini_model_name,
-                )
+        inference_backend = st.selectbox("Inference backend", ["Groq", "Gemini"], index=0)
+        if inference_backend == "Groq":
+            inference_model_name = st.text_input(
+                "Groq model",
+                value="llama-3.1-8b-instant",
+            )
+            if not os.getenv("GROQ_API_KEY"):
+                st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
+        else:
+            inference_model_name = st.text_input(
+                "Gemini model",
+                value="gemini-2.5-flash",
+            )
+            with st.expander("Check available Gemini models", expanded=False):
+                if st.button("Check available Gemini models", key="check_gemini_models"):
+                    st.session_state["agentic_available_gemini_models"] = (
+                        list_available_gemini_models()
+                    )
+                available_models = st.session_state.get("agentic_available_gemini_models")
+                if available_models is None:
+                    st.caption(
+                        "Model listing is optional and may fail under quota or SDK differences."
+                    )
+                elif available_models:
+                    st.write(available_models)
+                else:
+                    st.warning("No available Gemini models were returned.")
+            if not os.getenv("GEMINI_API_KEY"):
+                st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
+        if st.button("Run inference", type="primary", key="run_inference"):
+            with st.spinner(f"Running {inference_backend} tool inference..."):
+                if inference_backend == "Groq":
+                    inference_result = run_groq_tool_inference(
+                        user_request,
+                        get_executable_tool_schemas(),
+                        inference_model_name,
+                    )
+                else:
+                    inference_result = run_gemini_tool_inference(
+                        user_request,
+                        get_executable_tool_schemas(),
+                        inference_model_name,
+                    )
+            st.session_state["agentic_inference_backend"] = inference_backend
+            st.session_state["agentic_inference_model"] = inference_model_name
             st.session_state["agentic_inference_result"] = inference_result
             if inference_result.selected_tool in TOOLS:
                 st.session_state["agentic_inferred_tool"] = inference_result.selected_tool
@@ -1110,6 +1138,8 @@ def main() -> None:
         else:
             if inference_result.error:
                 st.warning(inference_result.error)
+            st.write(f"Backend: `{st.session_state.get('agentic_inference_backend', inference_backend)}`")
+            st.write(f"Model: `{st.session_state.get('agentic_inference_model', inference_model_name)}`")
             st.metric("Inferred tool", inference_result.selected_tool or "No tool selected")
             st.markdown("**Tool arguments**")
             st.json(inference_result.tool_arguments)
