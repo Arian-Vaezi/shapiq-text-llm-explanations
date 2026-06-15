@@ -303,7 +303,7 @@ class JailbreakGame(Game):
             if self.model_response is not None:
                 responses = [self.model_response] * len(prompts)
             else:
-                responses = [self.text_generation_model.generate_text(p) for p in prompts]
+                responses = [self.text_generation_model.generate_text(p, max_tokens=16) for p in prompts]
 
             return self._judge_score(prompts, responses)
 

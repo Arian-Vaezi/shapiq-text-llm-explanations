@@ -459,7 +459,7 @@ with tab_inference:
             try:
                 model = get_model(st.session_state.selected_model, temperature=temperature)
                 stream = model.generate_text_stream(
-                    prompt=prompt, chat=True, temperature=temperature
+                    prompt=prompt, chat=True, temperature=temperature, max_new_tokens=128
                 )
                 response = st.write_stream(stream)
                 st.session_state.chat_history.append({"role": "assistant", "content": response})
