@@ -16,6 +16,7 @@ class GeminiInferenceResult:
 
     selected_tool: str | None = None
     tool_arguments: dict[str, object] = field(default_factory=dict)
+    assistant_answer: str = ""
     final_answer: str = ""
     raw_trace: dict[str, object] = field(default_factory=dict)
     error: str | None = None
@@ -59,33 +60,40 @@ def run_gemini_tool_inference(
         )
 
     selected_tool, tool_arguments = _extract_tool_call(response)
+    assistant_answer = ""
     raw_text = str(getattr(response, "text", "") or "")
     if selected_tool is None:
-        selected_tool, tool_arguments = _parse_text_selection(raw_text)
+        selected_tool, tool_arguments, assistant_answer = _parse_text_selection(raw_text)
 
     if selected_tool is None:
         return GeminiInferenceResult(
             selected_tool=None,
+            assistant_answer=raw_text,
             final_answer=raw_text,
             raw_trace={"prompt": prompt, "response_text": raw_text},
             error="Gemini did not return a recognizable tool selection.",
         )
+    if selected_tool in {"weather_tool", "web_search_tool"}:
+        assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
+    elif not assistant_answer.strip():
+        assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
 
     known_tool_names = _tool_names(tool_schemas)
     if selected_tool not in known_tool_names:
         return GeminiInferenceResult(
             selected_tool=selected_tool,
             tool_arguments=tool_arguments,
+            assistant_answer=assistant_answer,
             raw_trace={"prompt": prompt, "response_text": raw_text},
             error=f"Gemini selected unknown tool: {selected_tool}",
         )
 
     tool_output = _run_demo_tool(selected_tool, tool_arguments)
-    final_answer = _format_final_answer(selected_tool, tool_output)
     return GeminiInferenceResult(
         selected_tool=selected_tool,
         tool_arguments=tool_arguments,
-        final_answer=final_answer,
+        assistant_answer=assistant_answer,
+        final_answer=assistant_answer,
         raw_trace={
             "prompt": prompt,
             "response_text": raw_text,
@@ -151,7 +159,9 @@ def _build_inference_prompt(
     return (
         "Select the single best tool for the user request. "
         "Return a tool call if tool calling is available. Otherwise return JSON with "
-        "selected_tool and tool_arguments.\n\n"
+        "selected_tool, tool_arguments, and assistant_answer. assistant_answer must be a "
+        "concise natural-language response. For weather_tool or web_search_tool, do not "
+        "invent live facts; say the agent would use that tool to retrieve the information.\n\n"
         f"Available tools:\n{chr(10).join(tool_names)}\n\n"
         f"User request:\n{user_request}"
     )
@@ -241,21 +251,24 @@ def _coerce_function_call(function_call: object) -> tuple[str | None, dict[str, 
     return name, {}
 
 
-def _parse_text_selection(text: str) -> tuple[str | None, dict[str, object]]:
+def _parse_text_selection(text: str) -> tuple[str | None, dict[str, object], str]:
     match = re.search(r"\{.*\}", text, flags=re.DOTALL)
     if match is None:
-        return None, {}
+        return None, {}, ""
     try:
         payload = json.loads(match.group(0))
     except json.JSONDecodeError:
-        return None, {}
+        return None, {}, ""
     selected_tool = payload.get("selected_tool")
     tool_arguments = payload.get("tool_arguments", {})
+    assistant_answer = payload.get("assistant_answer", "")
     if not isinstance(selected_tool, str):
-        return None, {}
+        return None, {}, ""
     if not isinstance(tool_arguments, Mapping):
         tool_arguments = {}
-    return selected_tool, dict(tool_arguments)
+    if not isinstance(assistant_answer, str):
+        assistant_answer = ""
+    return selected_tool, dict(tool_arguments), assistant_answer
 
 
 def _run_demo_tool(tool_name: str, arguments: Mapping[str, object]) -> str:
@@ -270,6 +283,32 @@ def _run_demo_tool(tool_name: str, arguments: Mapping[str, object]) -> str:
         query = str(arguments.get("query", "the request"))
         return f"Demo search result for {query!r}: representative current-looking result."
     return "Demo direct answer: no external tool was called."
+
+
+def _build_assistant_answer(
+    user_request: str,
+    tool_name: str,
+    arguments: Mapping[str, object],
+) -> str:
+    if tool_name == "calculator_tool":
+        expression = str(arguments.get("expression", ""))
+        result = _safe_eval_arithmetic(expression)
+        if result != "unable to evaluate demo expression":
+            return f"The result is {result}."
+        return "I would use the calculator tool to evaluate that expression."
+    if tool_name == "weather_tool":
+        location = str(arguments.get("location", "the requested location"))
+        date_or_time = arguments.get("date_or_time", arguments.get("date", "the requested time"))
+        return (
+            f"I would use the weather tool to retrieve the forecast for {location} "
+            f"at {date_or_time}."
+        )
+    if tool_name == "web_search_tool":
+        query = str(arguments.get("query", user_request))
+        return f"I would use web search to retrieve current information for: {query}."
+    if tool_name == "no_tool":
+        return f"I can answer directly: {user_request}"
+    return user_request
 
 
 def _safe_eval_arithmetic(expression: str) -> str:
@@ -298,7 +337,3 @@ def _eval_numeric_node(node: ast.AST) -> float:
             return left / right
     msg = "unsupported expression"
     raise ValueError(msg)
-
-
-def _format_final_answer(tool_name: str, tool_output: str) -> str:
-    return f"Gemini selected `{tool_name}`. {tool_output}"

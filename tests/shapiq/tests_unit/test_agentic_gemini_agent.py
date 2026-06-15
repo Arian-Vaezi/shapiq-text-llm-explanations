@@ -66,7 +66,8 @@ def test_gemini_inference_fake_client_returns_tool_and_answer(monkeypatch) -> No
     assert result.available is True
     assert result.selected_tool == "weather_tool"
     assert result.tool_arguments == {"location": "Berlin", "date": "tomorrow"}
-    assert "Gemini selected `weather_tool`" in result.final_answer
+    assert "would use the weather tool" in result.assistant_answer
+    assert "would use the weather tool" in result.final_answer
     assert "Demo weather" in result.raw_trace["tool_output"]
 
 
@@ -85,6 +86,7 @@ def test_gemini_weather_tool_accepts_date_or_time(monkeypatch) -> None:
 
     assert result.error is None
     assert result.tool_arguments == {"location": "Berlin", "date_or_time": "tomorrow morning"}
+    assert "would use the weather tool" in result.assistant_answer
     assert "tomorrow morning" in result.final_answer
     assert "tomorrow morning" in result.raw_trace["tool_output"]
 

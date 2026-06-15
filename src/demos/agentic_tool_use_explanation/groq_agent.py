@@ -15,6 +15,7 @@ class GroqInferenceResult:
 
     selected_tool: str | None = None
     tool_arguments: dict[str, object] = field(default_factory=dict)
+    assistant_answer: str = ""
     final_answer: str = ""
     raw_trace: dict[str, object] = field(default_factory=dict)
     error: str | None = None
@@ -66,6 +67,7 @@ def run_groq_tool_inference(
 
     selected_tool = payload.get("selected_tool")
     tool_arguments = payload.get("tool_arguments", {})
+    assistant_answer = payload.get("assistant_answer", "")
     if not isinstance(selected_tool, str):
         return GroqInferenceResult(
             raw_trace={"prompt": prompt, "response_text": response_text},
@@ -74,11 +76,16 @@ def run_groq_tool_inference(
     if not isinstance(tool_arguments, Mapping):
         tool_arguments = {}
     tool_arguments = dict(tool_arguments)
+    if selected_tool in {"weather_tool", "web_search_tool"}:
+        assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
+    elif not isinstance(assistant_answer, str) or not assistant_answer.strip():
+        assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
 
     if selected_tool not in _tool_names(tool_schemas):
         return GroqInferenceResult(
             selected_tool=selected_tool,
             tool_arguments=tool_arguments,
+            assistant_answer=assistant_answer,
             raw_trace={"prompt": prompt, "response_text": response_text},
             error=f"Groq selected unknown tool: {selected_tool}",
         )
@@ -87,7 +94,8 @@ def run_groq_tool_inference(
     return GroqInferenceResult(
         selected_tool=selected_tool,
         tool_arguments=tool_arguments,
-        final_answer=_format_final_answer(selected_tool, tool_output),
+        assistant_answer=assistant_answer,
+        final_answer=assistant_answer,
         raw_trace={
             "prompt": prompt,
             "response_text": response_text,
@@ -120,7 +128,11 @@ def _build_inference_prompt(
 ) -> str:
     return (
         "Select the single best tool for the user request. Return JSON only with this shape:\n"
-        '{"selected_tool":"...","tool_arguments":{...}}\n\n'
+        '{"selected_tool":"...","tool_arguments":{...},"assistant_answer":"..."}\n\n'
+        "assistant_answer must be a concise natural-language response to the user. "
+        "For calculator_tool, include the computed result if clear. For weather_tool or "
+        "web_search_tool, do not invent live facts; say the agent would use that tool to "
+        "retrieve the needed information. If no external data is needed, answer directly.\n\n"
         f"Valid selected_tool values: {', '.join(sorted(_tool_names(tool_schemas)))}\n\n"
         f"User request:\n{user_request}"
     )
@@ -165,6 +177,32 @@ def _run_demo_tool(tool_name: str, arguments: Mapping[str, object]) -> str:
     return "Demo direct answer: no external tool was called."
 
 
+def _build_assistant_answer(
+    user_request: str,
+    tool_name: str,
+    arguments: Mapping[str, object],
+) -> str:
+    if tool_name == "calculator_tool":
+        expression = str(arguments.get("expression", ""))
+        result = _safe_eval_arithmetic(expression)
+        if result != "unable to evaluate demo expression":
+            return f"The result is {result}."
+        return "I would use the calculator tool to evaluate that expression."
+    if tool_name == "weather_tool":
+        location = str(arguments.get("location", "the requested location"))
+        date_or_time = arguments.get("date_or_time", arguments.get("date", "the requested time"))
+        return (
+            f"I would use the weather tool to retrieve the forecast for {location} "
+            f"at {date_or_time}."
+        )
+    if tool_name == "web_search_tool":
+        query = str(arguments.get("query", user_request))
+        return f"I would use web search to retrieve current information for: {query}."
+    if tool_name == "no_tool":
+        return f"I can answer directly: {user_request}"
+    return user_request
+
+
 def _safe_eval_arithmetic(expression: str) -> str:
     try:
         node = ast.parse(expression, mode="eval")
@@ -191,7 +229,3 @@ def _eval_numeric_node(node: ast.AST) -> float:
             return left / right
     msg = "unsupported expression"
     raise ValueError(msg)
-
-
-def _format_final_answer(tool_name: str, tool_output: str) -> str:
-    return f"Groq selected `{tool_name}`. {tool_output}"

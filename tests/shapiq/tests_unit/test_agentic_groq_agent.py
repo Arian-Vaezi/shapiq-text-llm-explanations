@@ -59,14 +59,16 @@ def test_groq_fake_client_returns_calculator_tool(monkeypatch) -> None:
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
         client_factory=fake_client_factory(
-            '{"selected_tool":"calculator_tool","tool_arguments":{"expression":"2 + 3"}}',
+            '{"selected_tool":"calculator_tool","tool_arguments":{"expression":"2 + 3"},'
+            '"assistant_answer":"2 + 3 is 5."}',
         ),
     )
 
     assert result.error is None
     assert result.selected_tool == "calculator_tool"
     assert result.tool_arguments == {"expression": "2 + 3"}
-    assert "5.0" in result.final_answer
+    assert result.assistant_answer == "2 + 3 is 5."
+    assert result.final_answer == "2 + 3 is 5."
 
 
 def test_groq_unknown_tool_returns_error(monkeypatch) -> None:
@@ -141,5 +143,6 @@ def test_groq_weather_tool_accepts_date_or_time(monkeypatch) -> None:
 
     assert result.error is None
     assert result.tool_arguments == {"location": "Berlin", "date_or_time": "tomorrow morning"}
+    assert "would use the weather tool" in result.assistant_answer
     assert "tomorrow morning" in result.final_answer
     assert "tomorrow morning" in result.raw_trace["tool_output"]

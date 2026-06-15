@@ -1138,13 +1138,22 @@ def main() -> None:
         else:
             if inference_result.error:
                 st.warning(inference_result.error)
-            st.write(f"Backend: `{st.session_state.get('agentic_inference_backend', inference_backend)}`")
-            st.write(f"Model: `{st.session_state.get('agentic_inference_model', inference_model_name)}`")
-            st.metric("Inferred tool", inference_result.selected_tool or "No tool selected")
+            st.markdown("**Agent response**")
+            st.write(
+                getattr(inference_result, "assistant_answer", "")
+                or inference_result.final_answer
+                or "(none)"
+            )
+            st.markdown("**Inference details**")
+            st.write(
+                f"Backend: `{st.session_state.get('agentic_inference_backend', inference_backend)}`"
+            )
+            st.write(
+                f"Model: `{st.session_state.get('agentic_inference_model', inference_model_name)}`"
+            )
+            st.metric("Selected tool", inference_result.selected_tool or "No tool selected")
             st.markdown("**Tool arguments**")
             st.json(inference_result.tool_arguments)
-            st.markdown("**Final answer**")
-            st.write(inference_result.final_answer or "(none)")
             with st.expander("Debug trace", expanded=False):
                 st.json(inference_result.raw_trace)
 
@@ -1212,7 +1221,7 @@ def main() -> None:
         st.markdown('<div class="section-label">Explanation target</div>', unsafe_allow_html=True)
         target_left, target_right = st.columns([0.85, 1.15])
         with target_left:
-            st.metric("Explanation target tool", target_tool)
+            st.markdown(f"### `{target_tool}`")
         with target_right:
             st.metric("Target source", target_source)
 
