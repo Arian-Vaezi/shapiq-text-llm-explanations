@@ -11,7 +11,12 @@ import pytest
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
-from router_scorers import GroqDeterministicRouterScorer, GroqSoftVoteToolScorer  # noqa: E402
+from router_scorers import (  # noqa: E402
+    GroqDeterministicRouterScorer,
+    GroqSoftVoteToolScorer,
+    ToolTrajectory,
+    TrajectoryArgumentMatchScorer,
+)
 from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
 
 FIXED_PROMPT = (
@@ -395,3 +400,309 @@ def test_soft_vote_invalid_outputs_fall_back_to_no_match(monkeypatch) -> None:
     assert scores == [0.0]
     assert scorer.last_debug_outputs[0]["selected_tools"] == [None]
     assert len(calls) == 2
+
+
+def make_recording_provider(trajectories_by_prompt: dict[str, ToolTrajectory]):
+    """Build a fake trajectory_provider that records each prompt it is asked about."""
+    calls: list[str] = []
+
+    def provider(prompt: str) -> ToolTrajectory:
+        calls.append(prompt)
+        return trajectories_by_prompt[prompt]
+
+    return provider, calls
+
+
+def test_trajectory_score_returns_zero_for_different_selected_tool() -> None:
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"location": "Berlin"})
+    provider, _calls = make_recording_provider(
+        {FIXED_PROMPT: ToolTrajectory(selected_tool="calculator_tool", tool_arguments={})},
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == [0.0]
+
+
+def test_trajectory_score_returns_one_when_tool_matches_and_reference_has_no_arguments() -> None:
+    reference = ToolTrajectory(selected_tool="no_tool", tool_arguments={})
+    provider, _calls = make_recording_provider(
+        {FIXED_PROMPT: ToolTrajectory(selected_tool="no_tool", tool_arguments={})},
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="no_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == [1.0]
+
+
+def test_trajectory_score_full_argument_match_uses_both_weights() -> None:
+    reference = ToolTrajectory(
+        selected_tool="weather_tool",
+        tool_arguments={"location": "Berlin", "date": "tomorrow"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="weather_tool",
+                tool_arguments={"location": "Berlin", "date": "tomorrow"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+        tool_match_weight=0.5,
+        arg_match_weight=0.5,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_partial_argument_match_ratio() -> None:
+    reference = ToolTrajectory(
+        selected_tool="weather_tool",
+        tool_arguments={"location": "Berlin", "date": "tomorrow"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="weather_tool",
+                tool_arguments={"location": "Berlin"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+        tool_match_weight=0.5,
+        arg_match_weight=0.5,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([0.5 + 0.5 * 0.5])
+    assert scorer.last_debug_outputs[0]["argument_match_ratio"] == pytest.approx(0.5)
+
+
+def test_trajectory_score_normalizes_alias_keys() -> None:
+    reference = ToolTrajectory(
+        selected_tool="weather_tool",
+        tool_arguments={"location": "Berlin", "date": "tomorrow"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="weather_tool",
+                # uses aliases instead of the canonical "location"/"date" keys
+                tool_arguments={"city": "Berlin", "date_or_time": "tomorrow"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_value_normalization_ignores_case_and_punctuation() -> None:
+    reference = ToolTrajectory(selected_tool="web_search_tool", tool_arguments={"query": "Apple's newest product"})
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="web_search_tool",
+                tool_arguments={"query": "  APPLES NEWEST PRODUCT!! "},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="web_search_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_substring_match_for_partial_extracted_text() -> None:
+    reference = ToolTrajectory(selected_tool="web_search_tool", tool_arguments={"query": "Berlin"})
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="web_search_tool",
+                tool_arguments={"query": "weather in Berlin tomorrow"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="web_search_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_calculator_expression_arithmetic_normalization() -> None:
+    reference = ToolTrajectory(
+        selected_tool="calculator_tool",
+        tool_arguments={"expression": "238 * 47"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="calculator_tool",
+                tool_arguments={"expression": "238*47"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="calculator_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_calculator_expression_mismatch_scores_zero_ratio() -> None:
+    reference = ToolTrajectory(
+        selected_tool="calculator_tool",
+        tool_arguments={"expression": "238 * 47"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="calculator_tool",
+                tool_arguments={"expression": "1 + 1"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="calculator_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([0.5])
+
+
+def test_trajectory_score_rejects_target_tool_not_matching_reference() -> None:
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    provider, _calls = make_recording_provider({})
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    with pytest.raises(ValueError, match="does not match the reference trajectory"):
+        scorer.score_batch(
+            [FIXED_PROMPT],
+            target_tool="calculator_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_trajectory_score_rejects_unknown_target_tool() -> None:
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    provider, _calls = make_recording_provider({})
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    with pytest.raises(ValueError, match="not a known decision candidate"):
+        scorer.score_batch(
+            [FIXED_PROMPT],
+            target_tool="calendar_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_trajectory_score_caches_provider_calls_per_prompt() -> None:
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    provider, calls = make_recording_provider(
+        {FIXED_PROMPT: ToolTrajectory(selected_tool="weather_tool", tool_arguments={})},
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+    scorer.score_batch(
+        [FIXED_PROMPT, FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert calls == [FIXED_PROMPT]
+
+
+def test_trajectory_score_rejects_negative_weights() -> None:
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    provider, _calls = make_recording_provider({})
+
+    with pytest.raises(ValueError, match="non-negative"):
+        TrajectoryArgumentMatchScorer(
+            reference_trajectory=reference,
+            trajectory_provider=provider,
+            tool_match_weight=-0.1,
+        )

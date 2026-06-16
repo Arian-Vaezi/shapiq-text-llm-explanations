@@ -27,6 +27,9 @@ from router_scorers import (
     DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE,
     GroqDeterministicRouterScorer,
     GroqSoftVoteToolScorer,
+    ToolTrajectory,
+    TrajectoryArgumentMatchScorer,
+    build_groq_inference_trajectory_provider,
 )
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
@@ -1149,6 +1152,17 @@ def main() -> None:
             latest_inference_backend == "Groq"
             and st.session_state.get("agentic_inference_result") is not None
         )
+        groq_reference_result = (
+            st.session_state.get("agentic_inference_result") if has_groq_inference_result else None
+        )
+        # Only offer trajectory matching when a real Groq inference result selected a
+        # known tool AND that tool was actually called with non-empty arguments --
+        # otherwise the argument-match part of the score would be meaningless.
+        trajectory_match_available = (
+            groq_reference_result is not None
+            and st.session_state.get("agentic_inferred_tool") in TOOLS
+            and bool(getattr(groq_reference_result, "tool_arguments", None))
+        )
         show_developer_scorers = st.checkbox(
             "Show developer scoring methods",
             value=False,
@@ -1158,23 +1172,27 @@ def main() -> None:
         if current_inference_backend == "Groq" or has_groq_inference_result:
             scorer_options.append("Groq soft-vote scorer")
             scorer_options.append("Groq deterministic router")
+        if trajectory_match_available:
+            scorer_options.append("Trajectory match: tool + normalized args")
         if show_developer_scorers:
             st.caption(
                 "Developer scorers are intended for debugging and should not be used for "
                 "final demo results."
             )
             scorer_options.extend(["Keyword scorer", "Mock model scorer"])
-        if has_groq_inference_result:
-            st.session_state["agentic_explanation_scorer_backend"] = (
-                "Groq soft-vote scorer"
-            )
-        if st.session_state.get("agentic_explanation_scorer_backend") not in scorer_options:
-            st.session_state["agentic_explanation_scorer_backend"] = scorer_options[0]
+        scorer_backend_key = "agentic_explanation_scorer_backend"
+        default_scorer = "Groq soft-vote scorer" if has_groq_inference_result else scorer_options[0]
+        if scorer_backend_key not in st.session_state:
+            st.session_state[scorer_backend_key] = default_scorer
+        # Only reset the stored selection when it is no longer a valid option -- never
+        # overwrite a still-valid manual selection on every rerun (that previously made
+        # selecting any scorer impossible whenever a Groq inference result was present).
+        if st.session_state[scorer_backend_key] not in scorer_options:
+            st.session_state[scorer_backend_key] = default_scorer
         scorer_backend = st.selectbox(
             "Scoring method",
             scorer_options,
-            index=0,
-            key="agentic_explanation_scorer_backend",
+            key=scorer_backend_key,
         )
         logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
         candidate_template = DEFAULT_CANDIDATE_TEMPLATE
@@ -1274,6 +1292,24 @@ def main() -> None:
                 )
                 if not os.getenv("GROQ_API_KEY"):
                     st.warning("GROQ_API_KEY is not set. Add it to use the Groq soft-vote scorer.")
+        elif scorer_backend == "Trajectory match: tool + normalized args":
+            with st.expander("Trajectory match scorer settings", expanded=True):
+                st.warning(
+                    "This scorer re-runs the real Groq agent once per distinct coalition "
+                    "prompt to get an actual tool call (name + arguments), not just a routing "
+                    "decision, then compares it against the recorded inference result. This "
+                    "can be slow and costly: expect one real Groq API call per coalition "
+                    "shapiq samples."
+                )
+                if groq_reference_result is not None:
+                    st.caption(
+                        f"Reference tool: `{groq_reference_result.selected_tool}` with "
+                        f"arguments {dict(groq_reference_result.tool_arguments)}."
+                    )
+                if not os.getenv("GROQ_API_KEY"):
+                    st.warning(
+                        "GROQ_API_KEY is not set. Add it to use the trajectory match scorer."
+                    )
 
         with st.expander("Segmentation settings", expanded=False):
             segment_threshold = st.slider(
@@ -1405,6 +1441,12 @@ def main() -> None:
         index = DEFAULT_INDEX
         max_order = DEFAULT_MAX_ORDER
         signature_target = target_tool if target_tool is not None else "__pending_target__"
+        trajectory_reference_signature = (
+            tuple(sorted(groq_reference_result.tool_arguments.items()))
+            if scorer_backend == "Trajectory match: tool + normalized args"
+            and groq_reference_result is not None
+            else None
+        )
         signature = (
             mode,
             trace_name,
@@ -1422,6 +1464,7 @@ def main() -> None:
             float(soft_vote_temperature),
             int(soft_vote_max_retries),
             soft_vote_seed,
+            trajectory_reference_signature,
             bool(enable_fallback_target_selection),
             show_lexical_comparison,
             segment_threshold,
@@ -1455,6 +1498,7 @@ def main() -> None:
                     float(soft_vote_temperature),
                     int(soft_vote_max_retries),
                     soft_vote_seed,
+                    trajectory_reference_signature,
                     bool(enable_fallback_target_selection),
                     show_lexical_comparison,
                     segment_threshold,
@@ -1647,6 +1691,33 @@ def main() -> None:
                     seed=soft_vote_seed,
                 )
                 primary_label = "Groq soft-vote scorer"
+            elif scorer_backend == "Trajectory match: tool + normalized args":
+                if not os.getenv("GROQ_API_KEY"):
+                    st.error(
+                        "GROQ_API_KEY is not set. Add it to the environment to use the "
+                        "trajectory match scorer."
+                    )
+                    return
+                if groq_reference_result is None or not groq_reference_result.tool_arguments:
+                    st.error(
+                        "No real Groq inference result with tool arguments is available. "
+                        "Run Groq inference first."
+                    )
+                    return
+                reference_trajectory = ToolTrajectory(
+                    selected_tool=groq_reference_result.selected_tool,
+                    tool_arguments=dict(groq_reference_result.tool_arguments),
+                )
+                trajectory_provider = build_groq_inference_trajectory_provider(
+                    getattr(groq_reference_result, "model", DEFAULT_GROQ_ROUTER_MODEL_ID),
+                    get_executable_tool_schemas(),
+                    tool_context=tool_context,
+                )
+                primary_scorer = TrajectoryArgumentMatchScorer(
+                    reference_trajectory=reference_trajectory,
+                    trajectory_provider=trajectory_provider,
+                )
+                primary_label = "Trajectory match: tool + normalized args"
             else:
                 primary_scorer = LLMToolScorer(llm=MockLLM())
                 primary_label = "Mock model scorer"
@@ -1784,6 +1855,7 @@ def main() -> None:
                 float(soft_vote_temperature),
                 int(soft_vote_max_retries),
                 soft_vote_seed,
+                trajectory_reference_signature,
                 bool(enable_fallback_target_selection),
                 show_lexical_comparison,
                 segment_threshold,

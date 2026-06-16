@@ -9,10 +9,18 @@ draft final answers.
 
 from __future__ import annotations
 
+import ast
 import json
+import math
 import os
-from collections.abc import Callable, Mapping
+import re
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
+
+try:
+    from demos.agentic_tool_use_explanation.groq_agent import run_groq_tool_inference
+except ModuleNotFoundError:
+    from groq_agent import run_groq_tool_inference
 
 try:
     from demos.agentic_tool_use_explanation.scorers import split_coalition_prompt
@@ -23,6 +31,33 @@ DEFAULT_GROQ_ROUTER_MODEL_ID = "llama-3.1-8b-instant"
 DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES = 5
 DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE = 0.3
 DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES = 2
+DEFAULT_TOOL_MATCH_WEIGHT = 0.5
+DEFAULT_ARG_MATCH_WEIGHT = 0.5
+
+# Canonical argument keys follow tool_schemas.EXECUTABLE_TOOL_SCHEMAS. Different
+# real agent backends (Groq, Gemini, local HF routers) have been observed to use
+# slightly different argument names for the same value -- e.g. groq_agent.py and
+# gemini_agent.py both already read either "date_or_time" or "date" for weather_tool.
+DEFAULT_ARGUMENT_ALIASES: dict[str, dict[str, str]] = {
+    "weather_tool": {
+        "date_or_time": "date",
+        "time": "date",
+        "when": "date",
+        "place": "location",
+        "city": "location",
+    },
+    "calculator_tool": {
+        "expr": "expression",
+        "equation": "expression",
+        "calculation": "expression",
+    },
+    "web_search_tool": {
+        "search_query": "query",
+        "q": "query",
+        "search": "query",
+    },
+    "no_tool": {},
+}
 
 
 @dataclass
@@ -351,3 +386,257 @@ class GroqSoftVoteToolScorer:
         factory = self.client_factory or _default_client_factory
         self._client = factory(api_key)
         return self._client
+
+
+@dataclass(frozen=True)
+class ToolTrajectory:
+    """A real agent decision: the selected tool plus the arguments it called with.
+
+    This is the shape an actual tool-calling agent (Groq/Gemini native function
+    calling, a LangChain ``AgentExecutor`` step, or ``hf_router.RouterDecision``)
+    produces -- unlike the router-prompt scorers above, which only ever ask for
+    a bare ``selected_tool`` string with no arguments.
+    """
+
+    selected_tool: str
+    tool_arguments: Mapping[str, object] = field(default_factory=dict)
+
+
+@dataclass
+class TrajectoryArgumentMatchScorer:
+    """Coalition value function that compares real agent trajectories.
+
+    Unlike the router-prompt scorers in this module, this scorer never asks an
+    LLM for a bare routing decision. It assumes ``trajectory_provider`` already
+    derives an actual agent trajectory (selected tool + call arguments) for a
+    coalition prompt -- e.g. by invoking a real LangChain/Groq tool-calling
+    agent on the masked request -- and scores how closely that trajectory
+    matches a fixed ``reference_trajectory`` recorded from the full prompt.
+
+    Score for one coalition prompt:
+        - ``0.0`` if the coalition's selected tool does not match the
+          reference's selected tool.
+        - ``1.0`` if the tools match and the reference call has no arguments.
+        - ``tool_match_weight + arg_match_weight * argument_match_ratio`` if
+          the tools match and the reference call has arguments.
+    """
+
+    reference_trajectory: ToolTrajectory
+    trajectory_provider: Callable[[str], ToolTrajectory]
+    tool_match_weight: float = DEFAULT_TOOL_MATCH_WEIGHT
+    arg_match_weight: float = DEFAULT_ARG_MATCH_WEIGHT
+    argument_aliases: Mapping[str, Mapping[str, str]] = field(
+        default_factory=lambda: DEFAULT_ARGUMENT_ALIASES
+    )
+    last_debug_outputs: list[dict[str, object]] = field(default_factory=list, init=False)
+    _trajectory_cache: dict[str, ToolTrajectory] = field(
+        default_factory=dict,
+        init=False,
+        repr=False,
+    )
+
+    def __post_init__(self) -> None:
+        if self.tool_match_weight < 0:
+            msg = "tool_match_weight must be non-negative."
+            raise ValueError(msg)
+        if self.arg_match_weight < 0:
+            msg = "arg_match_weight must be non-negative."
+            raise ValueError(msg)
+
+    def score_batch(
+        self,
+        prompts: list[str],
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> list[float]:
+        """Return one trajectory-match score per coalition prompt."""
+        if target_tool not in tool_descriptions:
+            msg = f"Target tool {target_tool!r} is not a known decision candidate."
+            raise ValueError(msg)
+        if target_tool != self.reference_trajectory.selected_tool:
+            msg = (
+                f"target_tool {target_tool!r} does not match the reference trajectory's "
+                f"selected tool {self.reference_trajectory.selected_tool!r}."
+            )
+            raise ValueError(msg)
+
+        self.last_debug_outputs = []
+        scores = []
+        for prompt in prompts:
+            coalition_trajectory = self._get_trajectory(prompt)
+            score, argument_match_ratio = self._score_trajectory(coalition_trajectory)
+            scores.append(score)
+            self.last_debug_outputs.append(
+                {
+                    "target_tool": target_tool,
+                    "selected_tool": coalition_trajectory.selected_tool,
+                    "coalition_arguments": dict(coalition_trajectory.tool_arguments),
+                    "reference_arguments": dict(self.reference_trajectory.tool_arguments),
+                    "argument_match_ratio": argument_match_ratio,
+                    "final_score": score,
+                    "prompt_preview": prompt[:240],
+                }
+            )
+        return scores
+
+    def _get_trajectory(self, prompt: str) -> ToolTrajectory:
+        """Return the cached or freshly-provided trajectory for one coalition prompt."""
+        if prompt not in self._trajectory_cache:
+            self._trajectory_cache[prompt] = self.trajectory_provider(prompt)
+        return self._trajectory_cache[prompt]
+
+    def _score_trajectory(
+        self,
+        coalition_trajectory: ToolTrajectory,
+    ) -> tuple[float, float | None]:
+        """Return (score, argument_match_ratio) for one coalition trajectory."""
+        if coalition_trajectory.selected_tool != self.reference_trajectory.selected_tool:
+            return 0.0, None
+        reference_arguments = self.reference_trajectory.tool_arguments
+        if not reference_arguments:
+            return 1.0, None
+        argument_match_ratio = self._argument_match_ratio(coalition_trajectory)
+        score = self.tool_match_weight + self.arg_match_weight * argument_match_ratio
+        return score, argument_match_ratio
+
+    def _argument_match_ratio(self, coalition_trajectory: ToolTrajectory) -> float:
+        """Return the fraction of canonical reference argument keys that are matched."""
+        tool_name = self.reference_trajectory.selected_tool
+        normalized_coalition_arguments = self._normalize_keys(
+            tool_name,
+            coalition_trajectory.tool_arguments,
+        )
+        reference_arguments = self.reference_trajectory.tool_arguments
+        matched = sum(
+            1
+            for canonical_key, reference_value in reference_arguments.items()
+            if canonical_key in normalized_coalition_arguments
+            and self._values_match(
+                tool_name,
+                reference_value,
+                normalized_coalition_arguments[canonical_key],
+            )
+        )
+        return matched / len(reference_arguments)
+
+    def _normalize_keys(
+        self,
+        tool_name: str,
+        arguments: Mapping[str, object],
+    ) -> dict[str, object]:
+        """Map alias argument keys to their canonical reference key names."""
+        alias_map = self.argument_aliases.get(tool_name, {})
+        normalized: dict[str, object] = {}
+        for key, value in arguments.items():
+            canonical_key = alias_map.get(key, key)
+            normalized.setdefault(canonical_key, value)
+        return normalized
+
+    def _values_match(
+        self,
+        tool_name: str,
+        reference_value: object,
+        coalition_value: object,
+    ) -> bool:
+        """Return whether one reference/coalition argument value pair matches."""
+        if tool_name == "calculator_tool":
+            numeric_match = _numeric_values_match(reference_value, coalition_value)
+            if numeric_match is not None:
+                return numeric_match
+        normalized_reference = _normalize_text(reference_value)
+        normalized_coalition = _normalize_text(coalition_value)
+        if not normalized_reference or not normalized_coalition:
+            return normalized_reference == normalized_coalition
+        return (
+            normalized_reference == normalized_coalition
+            or normalized_reference in normalized_coalition
+            or normalized_coalition in normalized_reference
+        )
+
+
+_PUNCTUATION_PATTERN = re.compile(r"[^\w\s]")
+_WHITESPACE_PATTERN = re.compile(r"\s+")
+
+
+def _normalize_text(value: object) -> str:
+    """Lowercase, strip punctuation, and collapse whitespace for fuzzy text matching."""
+    text = str(value).strip().lower()
+    text = _PUNCTUATION_PATTERN.sub("", text)
+    return _WHITESPACE_PATTERN.sub(" ", text).strip()
+
+
+def _numeric_values_match(reference_value: object, coalition_value: object) -> bool | None:
+    """Return arithmetic equality if both values evaluate as numbers, else None."""
+    reference_number = _safe_eval_arithmetic(str(reference_value))
+    coalition_number = _safe_eval_arithmetic(str(coalition_value))
+    if reference_number is None or coalition_number is None:
+        return None
+    return math.isclose(reference_number, coalition_number, rel_tol=1e-9, abs_tol=1e-9)
+
+
+def _safe_eval_arithmetic(expression: str) -> float | None:
+    """Evaluate a simple arithmetic expression, returning None if it is not numeric."""
+    try:
+        node = ast.parse(expression, mode="eval")
+        return _eval_numeric_node(node.body)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _eval_numeric_node(node: ast.AST) -> float:
+    if isinstance(node, ast.Constant) and isinstance(node.value, int | float):
+        return float(node.value)
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub):
+        return -_eval_numeric_node(node.operand)
+    if isinstance(node, ast.BinOp):
+        left = _eval_numeric_node(node.left)
+        right = _eval_numeric_node(node.right)
+        if isinstance(node.op, ast.Add):
+            return left + right
+        if isinstance(node.op, ast.Sub):
+            return left - right
+        if isinstance(node.op, ast.Mult):
+            return left * right
+        if isinstance(node.op, ast.Div):
+            return left / right
+    msg = "unsupported expression"
+    raise ValueError(msg)
+
+
+def build_groq_inference_trajectory_provider(
+    model_name: str,
+    tool_schemas: Sequence[Mapping[str, object]],
+    *,
+    tool_context: str,
+    client_factory: Callable[[str], object] | None = None,
+) -> Callable[[str], ToolTrajectory]:
+    """Build a trajectory_provider that re-runs the real Groq agent per coalition.
+
+    Unlike the router-prompt scorers in this module, this calls
+    ``groq_agent.run_groq_tool_inference`` -- the same real-agent decision path
+    used for the one-shot Inference tab -- on each coalition prompt's masked
+    user request, so :class:`TrajectoryArgumentMatchScorer` compares against
+    actual tool calls (name + arguments), not bare routing decisions. This
+    means one real Groq call per distinct coalition prompt.
+    """
+
+    def provider(prompt: str) -> ToolTrajectory:
+        system_prompt, user_request = split_coalition_prompt(prompt)
+        inference_result = run_groq_tool_inference(
+            user_request,
+            tool_schemas,
+            model_name,
+            system_prompt=system_prompt,
+            tool_context=tool_context,
+            client_factory=client_factory,
+        )
+        selected_tool = inference_result.selected_tool
+        if not isinstance(selected_tool, str) or not selected_tool:
+            selected_tool = ""
+        return ToolTrajectory(
+            selected_tool=selected_tool,
+            tool_arguments=dict(inference_result.tool_arguments or {}),
+        )
+
+    return provider
