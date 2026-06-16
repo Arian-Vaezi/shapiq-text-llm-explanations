@@ -20,7 +20,14 @@ from matplotlib.patches import Rectangle
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import DEFAULT_LOCAL_HF_ROUTER_MODEL_ID, LocalHFRouter
-from router_scorers import DEFAULT_GROQ_ROUTER_MODEL_ID, GroqDeterministicRouterScorer
+from router_scorers import (
+    DEFAULT_GROQ_ROUTER_MODEL_ID,
+    DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES,
+    DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES,
+    DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE,
+    GroqDeterministicRouterScorer,
+    GroqSoftVoteToolScorer,
+)
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
@@ -1149,6 +1156,7 @@ def main() -> None:
         )
         scorer_options = ["LLM logprob scorer"]
         if current_inference_backend == "Groq" or has_groq_inference_result:
+            scorer_options.append("Groq soft-vote scorer")
             scorer_options.append("Groq deterministic router")
         if show_developer_scorers:
             st.caption(
@@ -1158,7 +1166,7 @@ def main() -> None:
             scorer_options.extend(["Keyword scorer", "Mock model scorer"])
         if has_groq_inference_result:
             st.session_state["agentic_explanation_scorer_backend"] = (
-                "Groq deterministic router"
+                "Groq soft-vote scorer"
             )
         if st.session_state.get("agentic_explanation_scorer_backend") not in scorer_options:
             st.session_state["agentic_explanation_scorer_backend"] = scorer_options[0]
@@ -1174,6 +1182,11 @@ def main() -> None:
         normalize_by_length = True
         max_pairs_per_batch = 1
         router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
+        soft_vote_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
+        soft_vote_n_samples = DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES
+        soft_vote_temperature = DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE
+        soft_vote_max_retries = DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES
+        soft_vote_seed = None
         if scorer_backend == "LLM logprob scorer":
             with st.expander("Logprob scorer settings", expanded=True):
                 logprob_model_id = st.text_input(
@@ -1208,6 +1221,59 @@ def main() -> None:
                 )
                 if not os.getenv("GROQ_API_KEY"):
                     st.warning("GROQ_API_KEY is not set. Add it to use the Groq router scorer.")
+        elif scorer_backend == "Groq soft-vote scorer":
+            with st.expander("Groq soft-vote scorer settings", expanded=True):
+                soft_vote_model_id = st.text_input(
+                    "Groq soft-vote model",
+                    value=DEFAULT_GROQ_ROUTER_MODEL_ID,
+                    key="agentic_groq_soft_vote_model",
+                )
+                soft_vote_n_samples = st.number_input(
+                    "Groq soft-vote samples",
+                    min_value=1,
+                    max_value=25,
+                    value=DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES,
+                    step=1,
+                    key="agentic_groq_soft_vote_samples",
+                )
+                soft_vote_temperature = st.slider(
+                    "Groq soft-vote temperature",
+                    min_value=0.0,
+                    max_value=1.5,
+                    value=DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE,
+                    step=0.05,
+                    key="agentic_groq_soft_vote_temperature",
+                )
+                soft_vote_max_retries = st.number_input(
+                    "Groq soft-vote max retries",
+                    min_value=0,
+                    max_value=5,
+                    value=DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES,
+                    step=1,
+                    key="agentic_groq_soft_vote_max_retries",
+                )
+                use_soft_vote_seed = st.checkbox(
+                    "set Groq soft-vote seed",
+                    value=False,
+                    key="agentic_groq_soft_vote_use_seed",
+                )
+                if use_soft_vote_seed:
+                    soft_vote_seed = int(
+                        st.number_input(
+                            "Groq soft-vote seed",
+                            min_value=0,
+                            max_value=2_147_483_647,
+                            value=42,
+                            step=1,
+                            key="agentic_groq_soft_vote_seed",
+                        )
+                    )
+                st.caption(
+                    "Soft-vote score: empirical target-tool selection frequency across sampled "
+                    "Groq router calls."
+                )
+                if not os.getenv("GROQ_API_KEY"):
+                    st.warning("GROQ_API_KEY is not set. Add it to use the Groq soft-vote scorer.")
 
         with st.expander("Segmentation settings", expanded=False):
             segment_threshold = st.slider(
@@ -1351,6 +1417,11 @@ def main() -> None:
             normalize_by_length,
             int(max_pairs_per_batch),
             router_model_id,
+            soft_vote_model_id,
+            int(soft_vote_n_samples),
+            float(soft_vote_temperature),
+            int(soft_vote_max_retries),
+            soft_vote_seed,
             bool(enable_fallback_target_selection),
             show_lexical_comparison,
             segment_threshold,
@@ -1379,6 +1450,11 @@ def main() -> None:
                     normalize_by_length,
                     int(max_pairs_per_batch),
                     router_model_id,
+                    soft_vote_model_id,
+                    int(soft_vote_n_samples),
+                    float(soft_vote_temperature),
+                    int(soft_vote_max_retries),
+                    soft_vote_seed,
                     bool(enable_fallback_target_selection),
                     show_lexical_comparison,
                     segment_threshold,
@@ -1556,6 +1632,21 @@ def main() -> None:
                     return
                 primary_scorer = GroqDeterministicRouterScorer(model_name=router_model_id)
                 primary_label = "Groq deterministic router"
+            elif scorer_backend == "Groq soft-vote scorer":
+                if not os.getenv("GROQ_API_KEY"):
+                    st.error(
+                        "GROQ_API_KEY is not set. Add it to the environment to use the Groq "
+                        "soft-vote scorer."
+                    )
+                    return
+                primary_scorer = GroqSoftVoteToolScorer(
+                    model_name=soft_vote_model_id,
+                    n_samples=int(soft_vote_n_samples),
+                    temperature=float(soft_vote_temperature),
+                    max_retries=int(soft_vote_max_retries),
+                    seed=soft_vote_seed,
+                )
+                primary_label = "Groq soft-vote scorer"
             else:
                 primary_scorer = LLMToolScorer(llm=MockLLM())
                 primary_label = "Mock model scorer"
@@ -1688,6 +1779,11 @@ def main() -> None:
                 normalize_by_length,
                 int(max_pairs_per_batch),
                 router_model_id,
+                soft_vote_model_id,
+                int(soft_vote_n_samples),
+                float(soft_vote_temperature),
+                int(soft_vote_max_retries),
+                soft_vote_seed,
                 bool(enable_fallback_target_selection),
                 show_lexical_comparison,
                 segment_threshold,
@@ -1862,7 +1958,14 @@ def main() -> None:
                             )
                         debug_frame = pd.DataFrame(displayed_debug_outputs)
                         debug_columns = [
+                            "score_kind",
+                            "score_description",
+                            "selected_tools",
+                            "target_matches",
+                            "n_samples",
+                            "temperature",
                             "raw_output",
+                            "raw_outputs",
                             "parsed_score",
                             "used_fallback",
                             "fallback_score",

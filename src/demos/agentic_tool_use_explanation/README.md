@@ -191,6 +191,14 @@ Suggested first logprob model:
 Qwen/Qwen2.5-1.5B-Instruct
 ```
 
+## Optional Groq Soft-Vote Scorer
+
+The **Groq soft-vote scorer** is a black-box value function for API-only
+routers. For each coalition prompt, it samples the Groq router `N` times and
+returns the empirical frequency with which the target tool is selected. This is
+not calibrated; it is a behavioral soft-vote score under fixed decoding
+settings.
+
 Gemma model ids can be tried manually if the machine has enough memory and the
 required Hugging Face access.
 
@@ -221,8 +229,8 @@ For the final project demo, pass a richer model-backed scorer into `ToolUseGame`
 such as:
 
 - target tool-name log-likelihood from a tool-calling LLM,
-- probability from a small tool-router classifier,
-- structured tool-call probability from an agent trace,
+- soft-vote score from sampled tool-router decisions,
+- structured tool-call selection frequency from an agent trace,
 - contrastive log-odds between the target tool and `no_tool`.
 
 ## Demo Story

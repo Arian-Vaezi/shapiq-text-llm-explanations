@@ -11,7 +11,7 @@ import pytest
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
-from router_scorers import GroqDeterministicRouterScorer  # noqa: E402
+from router_scorers import GroqDeterministicRouterScorer, GroqSoftVoteToolScorer  # noqa: E402
 from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
 
 FIXED_PROMPT = (
@@ -230,3 +230,168 @@ def test_build_scoring_prompt_matches_actual_router_prompt(monkeypatch) -> None:
     )
 
     assert preview == calls[0]["messages"][1]["content"]
+
+
+def make_soft_vote_client_factory(outputs: list[str]):
+    """Build a fake Groq client factory that returns queued raw JSON/text outputs."""
+    calls: list[dict[str, object]] = []
+
+    class SoftVoteCompletions:
+        def __init__(self) -> None:
+            self.outputs = iter(outputs)
+
+        def create(self, **kwargs):
+            calls.append(kwargs)
+            content = next(self.outputs)
+            return SimpleNamespace(
+                choices=[SimpleNamespace(message=SimpleNamespace(content=content))],
+            )
+
+    class SoftVoteChat:
+        completions = SoftVoteCompletions()
+
+    class SoftVoteClient:
+        chat = SoftVoteChat()
+
+    return lambda api_key: SoftVoteClient(), calls
+
+
+def test_soft_vote_score_single_returns_one_for_all_target_votes(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, _calls = make_soft_vote_client_factory(
+        ['{"best_tool":"weather_tool"}'] * 5,
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=5, client_factory=factory)
+
+    score, votes, _raw_outputs = scorer.score_single(
+        FIXED_PROMPT,
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert score == 1.0
+    assert votes == ["weather_tool"] * 5
+
+
+def test_soft_vote_score_single_returns_zero_for_no_target_votes(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, _calls = make_soft_vote_client_factory(
+        [
+            '{"best_tool":"calculator_tool"}',
+            '{"best_tool":"no_tool"}',
+            '{"best_tool":"web_search_tool"}',
+        ],
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=3, client_factory=factory)
+
+    score, votes, _raw_outputs = scorer.score_single(
+        FIXED_PROMPT,
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert score == 0.0
+    assert votes == ["calculator_tool", "no_tool", "web_search_tool"]
+
+
+def test_soft_vote_score_single_returns_fractional_target_frequency(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, _calls = make_soft_vote_client_factory(
+        [
+            '{"best_tool":"weather_tool"}',
+            '{"best_tool":"calculator_tool"}',
+            '{"best_tool":"weather_tool"}',
+            '{"best_tool":"no_tool"}',
+            '{"best_tool":"weather_tool"}',
+        ],
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=5, client_factory=factory)
+
+    score, _votes, _raw_outputs = scorer.score_single(
+        FIXED_PROMPT,
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert score == 0.6
+
+
+def test_soft_vote_score_batch_returns_one_score_per_prompt(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, _calls = make_soft_vote_client_factory(
+        [
+            '{"best_tool":"weather_tool"}',
+            '{"best_tool":"calculator_tool"}',
+            '{"best_tool":"calculator_tool"}',
+            '{"best_tool":"weather_tool"}',
+        ],
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=2, client_factory=factory)
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT, FIXED_PROMPT.replace("Berlin", "Paris")],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == [0.5, 0.5]
+    assert len(scorer.last_debug_outputs) == 2
+
+
+def test_soft_vote_debug_output_uses_soft_vote_wording(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, _calls = make_soft_vote_client_factory(
+        ['{"best_tool":"weather_tool"}', '{"best_tool":"calculator_tool"}'],
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=2, client_factory=factory)
+
+    scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    debug_output = scorer.last_debug_outputs[0]
+    assert debug_output["score_kind"] == "soft-vote score"
+    assert debug_output["score_description"] == "empirical target-tool selection frequency"
+    assert "reference_tool" not in debug_output
+    assert "margin" not in debug_output
+
+
+def test_soft_vote_retries_invalid_outputs_then_counts_valid_vote(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, calls = make_soft_vote_client_factory(
+        [
+            "not json",
+            '{"best_tool":"calendar_tool"}',
+            '{"best_tool":"weather_tool"}',
+        ],
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=1, max_retries=2, client_factory=factory)
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == [1.0]
+    assert len(calls) == 3
+
+
+def test_soft_vote_invalid_outputs_fall_back_to_no_match(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    factory, calls = make_soft_vote_client_factory(
+        ["not json", '{"best_tool":"calendar_tool"}'],
+    )
+    scorer = GroqSoftVoteToolScorer(n_samples=1, max_retries=1, client_factory=factory)
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == [0.0]
+    assert scorer.last_debug_outputs[0]["selected_tools"] == [None]
+    assert len(calls) == 2
