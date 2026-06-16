@@ -899,6 +899,8 @@ def main() -> None:
         st.session_state["agentic_inferred_tool"] = None
     if "agentic_inference_result" not in st.session_state:
         st.session_state["agentic_inference_result"] = None
+    if "agentic_inference_signature" not in st.session_state:
+        st.session_state["agentic_inference_signature"] = None
 
     mode = st.sidebar.radio(
         "Input",
@@ -1036,6 +1038,24 @@ def main() -> None:
         tool_context=tool_context,
     )
 
+    inference_backend_choice = st.session_state.get("agentic_inference_backend_choice", "Groq")
+    custom_request_text = mock_input if mode == "Custom request" else None
+    current_inference_signature = (
+        mode,
+        trace_name,
+        custom_request_text,
+        request_text,
+        system_prompt,
+        tool_context,
+        inference_backend_choice,
+    )
+    if st.session_state.get("agentic_inference_signature") != current_inference_signature:
+        st.session_state["agentic_inference_signature"] = current_inference_signature
+        st.session_state["agentic_inferred_tool"] = None
+        st.session_state["agentic_inference_result"] = None
+        st.session_state["agentic_inference_backend"] = None
+        st.session_state["agentic_inference_model"] = None
+
     if scorer_backend == "Keyword baseline":
         preview_scorer = LexicalToolScorer()
     elif scorer_backend == "LLM logprob scorer":
@@ -1080,7 +1100,12 @@ def main() -> None:
     with inference_tab:
         st.markdown('<div class="section-label">Inference</div>', unsafe_allow_html=True)
         st.write(user_request)
-        inference_backend = st.selectbox("Inference backend", ["Groq", "Gemini"], index=0)
+        inference_backend = st.selectbox(
+            "Inference backend",
+            ["Groq", "Gemini"],
+            index=0,
+            key="agentic_inference_backend_choice",
+        )
         if inference_backend == "Groq":
             inference_model_name = st.text_input(
                 "Groq model",
@@ -1206,8 +1231,6 @@ def main() -> None:
                 <div class="scenario-hint">
                     <strong>Explaining why agent selected:</strong> {escape(target_tool)}<br>
                     <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
-                    <strong>Shapley players:</strong> {escape(players_text)}<br>
-                    <strong>Fixed context:</strong> system prompt + tool definitions
                 </div>
             </div>
             """,
