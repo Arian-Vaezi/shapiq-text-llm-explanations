@@ -57,7 +57,8 @@ This does not install a real LLM backend. Do not install `torch` or
 ## Current UI Flow
 
 1. Select either an example request or a custom request.
-2. Choose the tool to explain.
+2. Run inference to select the target tool. If no inference result is available,
+   the selected explanation scorer is used as a fallback target selector.
 3. Pick a scoring method. The default is the Mock model scorer; keyword
    comparison is hidden unless selected or enabled in more options.
 4. Run the explanation.

@@ -12,6 +12,14 @@ sys.path.insert(0, str(DEMO_DIR))
 from groq_agent import classify_groq_error, run_groq_tool_inference  # noqa: E402
 from tool_schemas import EXECUTABLE_TOOL_SCHEMAS  # noqa: E402
 
+FIXED_SYSTEM_PROMPT = (
+    "- Use weather_tool for weather, rain, temperature, forecast, or city-date questions."
+)
+FIXED_TOOL_CONTEXT = (
+    "- weather_tool: Get current weather conditions or a forecast.\n"
+    "- calculator_tool: Evaluate exact arithmetic and numeric expressions."
+)
+
 
 def fake_client_factory(content: str | None = None, error: Exception | None = None):
     class FakeCompletions:
@@ -44,6 +52,8 @@ def test_groq_inference_missing_api_key_returns_unavailable(monkeypatch) -> None
         "Calculate 2 + 3",
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
     )
 
     assert result.available is False
@@ -58,6 +68,8 @@ def test_groq_fake_client_returns_calculator_tool(monkeypatch) -> None:
         "Calculate 2 + 3",
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
         client_factory=fake_client_factory(
             '{"selected_tool":"calculator_tool","tool_arguments":{"expression":"2 + 3"},'
             '"assistant_answer":"2 + 3 is 5."}',
@@ -78,6 +90,8 @@ def test_groq_unknown_tool_returns_error(monkeypatch) -> None:
         "Schedule this",
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
         client_factory=fake_client_factory(
             '{"selected_tool":"calendar_tool","tool_arguments":{"date":"tomorrow"}}',
         ),
@@ -97,6 +111,8 @@ def test_groq_malformed_json_returns_clean_error(monkeypatch) -> None:
         "Calculate 2 + 3",
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
         client_factory=fake_client_factory("not json"),
     )
 
@@ -112,6 +128,8 @@ def test_groq_rate_limit_error_is_classified(monkeypatch) -> None:
         "Calculate 2 + 3",
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
         client_factory=fake_client_factory(error=RuntimeError("429 rate limit exceeded")),
     )
 
@@ -135,6 +153,8 @@ def test_groq_weather_tool_accepts_date_or_time(monkeypatch) -> None:
         "Will it rain in Berlin tomorrow morning?",
         EXECUTABLE_TOOL_SCHEMAS,
         "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
         client_factory=fake_client_factory(
             '{"selected_tool":"weather_tool",'
             '"tool_arguments":{"location":"Berlin","date_or_time":"tomorrow morning"}}',
@@ -146,3 +166,45 @@ def test_groq_weather_tool_accepts_date_or_time(monkeypatch) -> None:
     assert "would use the weather tool" in result.assistant_answer
     assert "tomorrow morning" in result.final_answer
     assert "tomorrow morning" in result.raw_trace["tool_output"]
+
+
+def test_groq_inference_prompt_includes_shared_system_prompt_and_tool_context(
+    monkeypatch,
+) -> None:
+    """The real inference prompt must use the same fixed context as the explanation."""
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    captured: dict[str, object] = {}
+
+    class CapturingCompletions:
+        def create(self, *, model, messages, temperature, response_format):
+            del model, temperature, response_format
+            captured["messages"] = messages
+            return SimpleNamespace(
+                choices=[
+                    SimpleNamespace(
+                        message=SimpleNamespace(
+                            content='{"selected_tool":"weather_tool",'
+                            '"tool_arguments":{"location":"Berlin"}}',
+                        ),
+                    ),
+                ],
+            )
+
+    class CapturingChat:
+        completions = CapturingCompletions()
+
+    class CapturingClient:
+        chat = CapturingChat()
+
+    run_groq_tool_inference(
+        "Will it rain in Berlin tomorrow?",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=lambda api_key: CapturingClient(),
+    )
+
+    prompt_text = " ".join(message["content"] for message in captured["messages"])
+    assert FIXED_SYSTEM_PROMPT in prompt_text
+    assert FIXED_TOOL_CONTEXT in prompt_text

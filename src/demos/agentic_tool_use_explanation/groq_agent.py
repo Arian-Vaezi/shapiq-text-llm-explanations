@@ -27,9 +27,16 @@ def run_groq_tool_inference(
     tool_schemas: Sequence[Mapping[str, object]],
     model_name: str,
     *,
+    system_prompt: str,
+    tool_context: str,
     client_factory: Callable[[str], object] | None = None,
 ) -> GroqInferenceResult:
-    """Ask Groq to select a demo tool using JSON output, then run a local demo tool."""
+    """Ask Groq to select a demo tool using JSON output, then run a local demo tool.
+
+    ``system_prompt`` and ``tool_context`` must be the same fixed context the
+    explanation uses, so the real inference decision and the Shapley
+    explanation are computed over identical context.
+    """
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
         return GroqInferenceResult(
@@ -47,7 +54,12 @@ def run_groq_tool_inference(
             error=f"Groq client is unavailable: {classify_groq_error(str(error))}",
         )
 
-    prompt = _build_inference_prompt(user_request, tool_schemas)
+    prompt = _build_inference_prompt(
+        user_request,
+        tool_schemas,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+    )
     try:
         response_text = _generate_json_selection(client, model_name, prompt)
     except Exception as error:  # noqa: BLE001
@@ -125,8 +137,13 @@ def _default_client_factory(api_key: str) -> object:
 def _build_inference_prompt(
     user_request: str,
     tool_schemas: Sequence[Mapping[str, object]],
+    *,
+    system_prompt: str,
+    tool_context: str,
 ) -> str:
     return (
+        f"{system_prompt.strip()}\n\n"
+        f"Available tools:\n{tool_context.strip()}\n\n"
         "Select the single best tool for the user request. Return JSON only with this shape:\n"
         '{"selected_tool":"...","tool_arguments":{...},"assistant_answer":"..."}\n\n'
         "assistant_answer must be a concise natural-language response to the user. "

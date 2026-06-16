@@ -28,9 +28,16 @@ def run_gemini_tool_inference(
     tool_schemas: Sequence[Mapping[str, object]],
     model_name: str,
     *,
+    system_prompt: str,
+    tool_context: str,
     client_factory: Callable[[str], object] | None = None,
 ) -> GeminiInferenceResult:
-    """Ask Gemini to select a demo tool, then run a deterministic local tool output."""
+    """Ask Gemini to select a demo tool, then run a deterministic local tool output.
+
+    ``system_prompt`` and ``tool_context`` must be the same fixed context the
+    explanation uses, so the real inference decision and the Shapley
+    explanation are computed over identical context.
+    """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         return GeminiInferenceResult(
@@ -48,7 +55,12 @@ def run_gemini_tool_inference(
             error=f"Gemini client is unavailable: {error}",
         )
 
-    prompt = _build_inference_prompt(user_request, tool_schemas)
+    prompt = _build_inference_prompt(
+        user_request,
+        tool_schemas,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
+    )
     try:
         response = _generate_content(client, model_name, prompt, tool_schemas)
     except Exception as error:  # noqa: BLE001
@@ -147,22 +159,19 @@ def _default_client_factory(api_key: str) -> object:
 def _build_inference_prompt(
     user_request: str,
     tool_schemas: Sequence[Mapping[str, object]],
+    *,
+    system_prompt: str,
+    tool_context: str,
 ) -> str:
-    tool_names = []
-    for schema in tool_schemas:
-        function = schema.get("function", {})
-        if isinstance(function, Mapping):
-            name = function.get("name")
-            description = function.get("description", "")
-            if isinstance(name, str):
-                tool_names.append(f"- {name}: {description}")
+    del tool_schemas
     return (
+        f"{system_prompt.strip()}\n\n"
+        f"Available tools:\n{tool_context.strip()}\n\n"
         "Select the single best tool for the user request. "
         "Return a tool call if tool calling is available. Otherwise return JSON with "
         "selected_tool, tool_arguments, and assistant_answer. assistant_answer must be a "
         "concise natural-language response. For weather_tool or web_search_tool, do not "
         "invent live facts; say the agent would use that tool to retrieve the information.\n\n"
-        f"Available tools:\n{chr(10).join(tool_names)}\n\n"
         f"User request:\n{user_request}"
     )
 

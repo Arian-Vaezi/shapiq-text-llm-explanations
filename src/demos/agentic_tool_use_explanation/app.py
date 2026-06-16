@@ -1116,12 +1116,16 @@ def main() -> None:
                         user_request,
                         get_executable_tool_schemas(),
                         inference_model_name,
+                        system_prompt=system_prompt,
+                        tool_context=tool_context,
                     )
                 else:
                     inference_result = run_gemini_tool_inference(
                         user_request,
                         get_executable_tool_schemas(),
                         inference_model_name,
+                        system_prompt=system_prompt,
+                        tool_context=tool_context,
                     )
             st.session_state["agentic_inference_backend"] = inference_backend
             st.session_state["agentic_inference_model"] = inference_model_name
