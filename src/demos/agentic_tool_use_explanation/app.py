@@ -19,6 +19,7 @@ import streamlit as st
 from matplotlib.patches import Rectangle
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
+from hf_router import DEFAULT_LOCAL_HF_ROUTER_MODEL_ID, LocalHFRouter
 from router_scorers import DEFAULT_GROQ_ROUTER_MODEL_ID, GroqDeterministicRouterScorer
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
@@ -65,6 +66,21 @@ st.set_page_config(
     page_icon="T",
     layout="wide",
 )
+
+
+@st.cache_resource
+def load_local_hf_router(
+    model_name: str,
+    max_new_tokens: int,
+    *,
+    trust_remote_code: bool,
+) -> LocalHFRouter:
+    """Load and cache the optional local HuggingFace router."""
+    return LocalHFRouter(
+        model_name=model_name,
+        max_new_tokens=max_new_tokens,
+        trust_remote_code=trust_remote_code,
+    )
 
 
 @st.cache_resource
@@ -1124,7 +1140,7 @@ def main() -> None:
         st.write(user_request)
         inference_backend = st.selectbox(
             "Inference backend",
-            ["Groq", "Gemini"],
+            ["Groq", "Gemini", "HF local"],
             index=0,
             key="agentic_inference_backend_choice",
         )
@@ -1135,7 +1151,7 @@ def main() -> None:
             )
             if not os.getenv("GROQ_API_KEY"):
                 st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
-        else:
+        elif inference_backend == "Gemini":
             inference_model_name = st.text_input(
                 "Gemini model",
                 value="gemini-2.5-flash",
@@ -1156,6 +1172,22 @@ def main() -> None:
                     st.warning("No available Gemini models were returned.")
             if not os.getenv("GEMINI_API_KEY"):
                 st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
+        elif inference_backend == "HF local":
+            inference_model_name = st.text_input(
+                "HF model",
+                value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
+            )
+            hf_max_new_tokens = st.number_input(
+                "HF max new tokens",
+                min_value=16,
+                max_value=1024,
+                value=256,
+                step=16,
+            )
+            hf_trust_remote_code = st.checkbox("trust remote code", value=False)
+            st.caption(
+                "Routes with a local transformers causal LM. No real tools are executed."
+            )
         if st.button("Run inference", type="primary", key="run_inference"):
             with st.spinner(f"Running {inference_backend} tool inference..."):
                 if inference_backend == "Groq":
@@ -1166,7 +1198,7 @@ def main() -> None:
                         system_prompt=system_prompt,
                         tool_context=tool_context,
                     )
-                else:
+                elif inference_backend == "Gemini":
                     inference_result = run_gemini_tool_inference(
                         user_request,
                         get_executable_tool_schemas(),
@@ -1174,6 +1206,24 @@ def main() -> None:
                         system_prompt=system_prompt,
                         tool_context=tool_context,
                     )
+                else:
+                    try:
+                        hf_router = load_local_hf_router(
+                            inference_model_name,
+                            int(hf_max_new_tokens),
+                            trust_remote_code=bool(hf_trust_remote_code),
+                        )
+                        inference_result = hf_router.choose_tool(user_request, TOOLS)
+                    except Exception as error:  # noqa: BLE001
+                        inference_result = types.SimpleNamespace(
+                            selected_tool=None,
+                            tool_arguments={},
+                            agent_response="",
+                            raw_response="",
+                            debug_prompt=None,
+                            error=f"HF local inference failed: {error}",
+                            available=False,
+                        )
             st.session_state["agentic_inference_backend"] = inference_backend
             st.session_state["agentic_inference_model"] = inference_model_name
             st.session_state["agentic_inference_result"] = inference_result
@@ -1187,12 +1237,14 @@ def main() -> None:
         if inference_result is None:
             st.info("Run inference to select a tool before explaining it.")
         else:
-            if inference_result.error:
-                st.warning(inference_result.error)
+            inference_error = getattr(inference_result, "error", None)
+            if inference_error:
+                st.warning(inference_error)
             st.markdown("**Agent response**")
             st.write(
-                getattr(inference_result, "assistant_answer", "")
-                or inference_result.final_answer
+                getattr(inference_result, "agent_response", "")
+                or getattr(inference_result, "assistant_answer", "")
+                or getattr(inference_result, "final_answer", "")
                 or "(none)"
             )
             st.markdown("**Inference details**")
@@ -1206,12 +1258,18 @@ def main() -> None:
             st.markdown("**Tool arguments**")
             st.json(inference_result.tool_arguments)
             with st.expander("Debug trace", expanded=False):
-                st.json(inference_result.raw_trace)
+                raw_trace = getattr(inference_result, "raw_trace", None)
+                if raw_trace is None:
+                    raw_trace = {
+                        "debug_prompt": getattr(inference_result, "debug_prompt", None),
+                        "raw_response": getattr(inference_result, "raw_response", ""),
+                    }
+                st.json(raw_trace)
 
     with explanation_tab:
         if not using_inferred_tool:
             st.warning(
-                "Fallback target selection: no Groq/Gemini inference result is available, "
+                "Fallback target selection: no Groq/Gemini/HF inference result is available, "
                 "so the selected explanation scorer is used to choose the target tool."
             )
             st.caption(f"Current fallback scorer: {scorer_backend}.")
