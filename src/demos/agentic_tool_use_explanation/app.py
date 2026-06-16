@@ -19,6 +19,7 @@ import streamlit as st
 from matplotlib.patches import Rectangle
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
+from router_scorers import DEFAULT_GROQ_ROUTER_MODEL_ID, GroqDeterministicRouterScorer
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
     DEFAULT_CANDIDATE_TEMPLATE,
@@ -54,7 +55,7 @@ DESCRIPTIVE_CANDIDATE_TEXTS = {
     "weather_tool": "The assistant should use the weather forecast tool.",
     "calculator_tool": "The assistant should use the calculator tool.",
     "web_search_tool": "The assistant should use the web search tool.",
-    "no_tool": "The assistant should answer directly without using an external tool.",
+    "no_tool": "The assistant should answer directly without calling a tool.",
 }
 TEXT_PLOT_PACKAGE = "_agentic_text_plot"
 
@@ -902,6 +903,8 @@ def main() -> None:
     if "agentic_inference_signature" not in st.session_state:
         st.session_state["agentic_inference_signature"] = None
 
+    inference_backend_choice = st.session_state.get("agentic_inference_backend_choice", "Groq")
+
     mode = st.sidebar.radio(
         "Input",
         ["Example request", "Custom request"],
@@ -916,15 +919,15 @@ def main() -> None:
             "The app keeps system/tool context fixed, removes user-request players, "
             "and then shows their importance."
         )
+    # Only presentation-ready scoring methods are exposed. Other experimental scorers
+    # remain in code but are hidden from the UI. The Groq router scorer additionally
+    # requires the Inference tab's backend to be Groq, since it calls the same API.
+    scorer_options = ["Mock model scorer", "Keyword baseline", "LLM logprob scorer"]
+    if inference_backend_choice == "Groq":
+        scorer_options.append("Groq deterministic router")
     scorer_backend = st.sidebar.selectbox(
         "Scoring method",
-        # Only presentation-ready scoring methods are exposed. Other experimental scorers
-        # remain in code but are hidden from the UI.
-        [
-            "Mock model scorer",
-            "Keyword baseline",
-            "LLM logprob scorer",
-        ],
+        scorer_options,
         index=0,
     )
     logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
@@ -932,6 +935,7 @@ def main() -> None:
     candidate_texts = None
     normalize_by_length = True
     max_pairs_per_batch = 1
+    router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
     if scorer_backend == "LLM logprob scorer":
         with st.sidebar.expander("Logprob scorer settings", expanded=True):
             logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
@@ -946,6 +950,17 @@ def main() -> None:
                     "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
                 ),
             )
+    elif scorer_backend == "Groq deterministic router":
+        with st.sidebar.expander("Groq router scorer settings", expanded=True):
+            router_model_id = st.text_input("Groq router model", value=DEFAULT_GROQ_ROUTER_MODEL_ID)
+            st.caption(
+                "Calls the real Groq API once per distinct coalition prompt to ask which tool "
+                "it would route to, and scores 1.0 if that matches the target tool, else 0.0. "
+                "Every app interaction re-runs the setup preview, so this issues real Groq "
+                "calls even before clicking Run explanation."
+            )
+            if not os.getenv("GROQ_API_KEY"):
+                st.warning("GROQ_API_KEY is not set. Add it to use the Groq router scorer.")
 
     with st.sidebar.expander("Segmentation settings", expanded=False):
         segment_threshold = st.slider(
@@ -1038,7 +1053,6 @@ def main() -> None:
         tool_context=tool_context,
     )
 
-    inference_backend_choice = st.session_state.get("agentic_inference_backend_choice", "Groq")
     custom_request_text = mock_input if mode == "Custom request" else None
     current_inference_signature = (
         mode,
@@ -1075,6 +1089,14 @@ def main() -> None:
                     f"Details: {error}"
                 )
                 return
+    elif scorer_backend == "Groq deterministic router":
+        if not os.getenv("GROQ_API_KEY"):
+            st.error(
+                "GROQ_API_KEY is not set. Add it to the environment to use the Groq "
+                "deterministic router scorer."
+            )
+            return
+        preview_scorer = GroqDeterministicRouterScorer(model_name=router_model_id)
     else:
         preview_scorer = LLMToolScorer(llm=MockLLM())
 
@@ -1207,6 +1229,7 @@ def main() -> None:
             bool(candidate_texts),
             normalize_by_length,
             int(max_pairs_per_batch),
+            router_model_id,
             show_lexical_comparison,
             segment_threshold,
             segment_window,
@@ -1336,6 +1359,8 @@ def main() -> None:
                 primary_label = "Keyword baseline"
             elif scorer_backend == "LLM logprob scorer":
                 primary_label = "LLM logprob scorer"
+            elif scorer_backend == "Groq deterministic router":
+                primary_label = "Groq deterministic router"
             else:
                 primary_label = "Mock model scorer"
     
