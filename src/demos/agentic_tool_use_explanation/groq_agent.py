@@ -8,6 +8,11 @@ import os
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 
+try:
+    from demos.agentic_tool_use_explanation.tool_schemas import NO_TOOL_NAME
+except ModuleNotFoundError:
+    from tool_schemas import NO_TOOL_NAME
+
 
 @dataclass
 class GroqInferenceResult:
@@ -93,7 +98,7 @@ def run_groq_tool_inference(
     elif not isinstance(assistant_answer, str) or not assistant_answer.strip():
         assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
 
-    if selected_tool not in _tool_names(tool_schemas):
+    if selected_tool not in _valid_decision_names(tool_schemas):
         return GroqInferenceResult(
             selected_tool=selected_tool,
             tool_arguments=tool_arguments,
@@ -150,7 +155,7 @@ def _build_inference_prompt(
         "For calculator_tool, include the computed result if clear. For weather_tool or "
         "web_search_tool, do not invent live facts; say the agent would use that tool to "
         "retrieve the needed information. If no external data is needed, answer directly.\n\n"
-        f"Valid selected_tool values: {', '.join(sorted(_tool_names(tool_schemas)))}\n\n"
+        f"Valid selected_tool values: {', '.join(sorted(_valid_decision_names(tool_schemas)))}\n\n"
         f"User request:\n{user_request}"
     )
 
@@ -178,6 +183,16 @@ def _tool_names(tool_schemas: Sequence[Mapping[str, object]]) -> set[str]:
         if isinstance(function, Mapping) and isinstance(function.get("name"), str):
             names.add(function["name"])
     return names
+
+
+def _valid_decision_names(tool_schemas: Sequence[Mapping[str, object]]) -> set[str]:
+    """Return valid selected_tool values: executable tools plus the no_tool decision.
+
+    ``no_tool`` is a decision candidate, not an executable function, so it is
+    never part of ``tool_schemas`` itself but must still be a selectable answer
+    when no external tool is needed.
+    """
+    return _tool_names(tool_schemas) | {NO_TOOL_NAME}
 
 
 def _run_demo_tool(tool_name: str, arguments: Mapping[str, object]) -> str:

@@ -208,3 +208,58 @@ def test_groq_inference_prompt_includes_shared_system_prompt_and_tool_context(
     prompt_text = " ".join(message["content"] for message in captured["messages"])
     assert FIXED_SYSTEM_PROMPT in prompt_text
     assert FIXED_TOOL_CONTEXT in prompt_text
+
+
+def test_groq_accepts_no_tool_without_unknown_tool_error(monkeypatch) -> None:
+    """no_tool is a valid decision candidate, even though it has no executable schema."""
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    result = run_groq_tool_inference(
+        "Tell me a joke.",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=fake_client_factory(
+            '{"selected_tool":"no_tool","assistant_answer":"Sure, here is a joke..."}',
+        ),
+    )
+
+    assert result.error is None
+    assert result.selected_tool == "no_tool"
+    assert result.assistant_answer == "Sure, here is a joke..."
+    assert result.final_answer == "Sure, here is a joke..."
+    assert result.raw_trace["tool_output"] == "Demo direct answer: no external tool was called."
+
+
+def test_groq_inference_prompt_lists_no_tool_as_a_valid_value(monkeypatch) -> None:
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    captured: dict[str, object] = {}
+
+    class CapturingCompletions:
+        def create(self, *, model, messages, temperature, response_format):
+            del model, temperature, response_format
+            captured["messages"] = messages
+            return SimpleNamespace(
+                choices=[
+                    SimpleNamespace(message=SimpleNamespace(content='{"selected_tool":"no_tool"}')),
+                ],
+            )
+
+    class CapturingChat:
+        completions = CapturingCompletions()
+
+    class CapturingClient:
+        chat = CapturingChat()
+
+    run_groq_tool_inference(
+        "Tell me a joke.",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=lambda api_key: CapturingClient(),
+    )
+
+    prompt_text = " ".join(message["content"] for message in captured["messages"])
+    assert "no_tool" in prompt_text
