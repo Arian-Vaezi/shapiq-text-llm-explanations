@@ -90,7 +90,6 @@ def load_logprob_scorer(
     candidate_texts: dict[str, str] | None,
     *,  # future-proof: make scoring-related args keyword-only
     normalize_by_length: bool,
-    max_pairs_per_batch: int,
 ) -> LogProbToolScorer:
     """Load and cache the optional local HuggingFace logprob scorer."""
     return LogProbToolScorer(
@@ -98,7 +97,7 @@ def load_logprob_scorer(
         candidate_template=candidate_template,
         candidate_texts=candidate_texts,
         normalize_by_length=normalize_by_length,
-        max_pairs_per_batch=max_pairs_per_batch,
+        max_pairs_per_batch=1,
     )
 
 
@@ -919,12 +918,11 @@ def main() -> None:
     if "agentic_inference_signature" not in st.session_state:
         st.session_state["agentic_inference_signature"] = None
 
-    inference_backend_choice = st.session_state.get("agentic_inference_backend_choice", "Groq")
-
     mode = st.sidebar.radio(
         "Input",
         ["Example request", "Custom request"],
         index=0,
+        key="agentic_input_mode",
     )
     with st.sidebar.expander("How it works", expanded=False):
         st.write(
@@ -935,83 +933,18 @@ def main() -> None:
             "The app keeps system/tool context fixed, removes user-request players, "
             "and then shows their importance."
         )
-    # Only presentation-ready scoring methods are exposed. Other experimental scorers
-    # remain in code but are hidden from the UI. The Groq router scorer additionally
-    # requires the Inference tab's backend to be Groq, since it calls the same API.
-    scorer_options = ["Mock model scorer", "Keyword baseline", "LLM logprob scorer"]
-    if inference_backend_choice == "Groq":
-        scorer_options.append("Groq deterministic router")
-    scorer_backend = st.sidebar.selectbox(
-        "Scoring method",
-        scorer_options,
-        index=0,
-    )
-    logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
-    candidate_template = DEFAULT_CANDIDATE_TEMPLATE
-    candidate_texts = None
-    normalize_by_length = True
-    max_pairs_per_batch = 1
-    router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
-    if scorer_backend == "LLM logprob scorer":
-        with st.sidebar.expander("Logprob scorer settings", expanded=True):
-            logprob_model_id = st.text_input("model id", value=DEFAULT_LOGPROB_MODEL_ID)
-            max_pairs_per_batch = st.number_input(
-                "HF pair batch size",
-                min_value=1,
-                max_value=16,
-                value=1,
-                step=1,
-                help=(
-                    "Number of prompt/candidate pairs scored per local-model forward pass. "
-                    "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
-                ),
-            )
-    elif scorer_backend == "Groq deterministic router":
-        with st.sidebar.expander("Groq router scorer settings", expanded=True):
-            router_model_id = st.text_input("Groq router model", value=DEFAULT_GROQ_ROUTER_MODEL_ID)
-            st.caption(
-                "Calls the real Groq API once per distinct coalition prompt to ask which tool "
-                "it would route to, and scores 1.0 if that matches the target tool, else 0.0. "
-                "Every app interaction re-runs the setup preview, so this issues real Groq "
-                "calls even before clicking Run explanation."
-            )
-            if not os.getenv("GROQ_API_KEY"):
-                st.warning("GROQ_API_KEY is not set. Add it to use the Groq router scorer.")
-
-    with st.sidebar.expander("Segmentation settings", expanded=False):
-        segment_threshold = st.slider(
-            "semantic threshold",
-            min_value=0.0,
-            max_value=1.0,
-            value=0.72,
-            step=0.01,
-        )
-        segment_window = st.slider(
-            "context window",
-            min_value=1,
-            max_value=10,
-            value=3,
-            step=1,
-        )
-        min_segment_words = st.slider(
-            "min words per segment",
-            min_value=1,
-            max_value=8,
-            value=1,
-            step=1,
-        )
 
     if mode == "Example request":
         trace_name = st.sidebar.selectbox(
             "Scenario",
             list(SAMPLE_TRACES),
             format_func=scenario_prompt_label,
+            key="agentic_scenario",
         )
         trace = SAMPLE_TRACES[trace_name]
         request_text = " ".join(trace["user_segments"])
     else:
-        st.markdown('<div class="section-label">Request</div>', unsafe_allow_html=True)
-        mock_input = st.text_area(
+        mock_input = st.sidebar.text_area(
             "Request text",
             value=DEFAULT_MOCK_QUERY,
             height=86,
@@ -1019,55 +952,16 @@ def main() -> None:
                 "This preview chooses a tool from the fixed context and request. "
                 "It does not call the selected tool."
             ),
+            key="agentic_custom_request",
         )
         trace_name = "Custom request"
         request_text = mock_input
         trace = build_mock_trace(mock_input)
 
     system_segments = build_segments(trace["system_segments"], "system")
-    try:
-        segmenter = load_semantic_segmenter(
-            segment_threshold,
-            segment_window,
-            min_segment_words,
-        )
-        semantic_user_texts, segment_debug_rows = segment_user_request(segmenter, request_text)
-    except Exception as error:  # noqa: BLE001
-        st.error(f"Could not segment the user request with MPNet: {error}")
-        return
-    user_segments = build_segments(semantic_user_texts, "user")
-    labels = [segment.label for segment in user_segments]
-    budget = budget_for_demo(len(user_segments))
-
-    with st.sidebar.expander("More options", expanded=False):
-        st.caption(f"index: fixed `{DEFAULT_INDEX}`")
-        st.caption(f"max_order: fixed `{DEFAULT_MAX_ORDER}`")
-        st.caption(f"budget: `{budget}` auto")
-        show_prompt_segments = st.checkbox("show prompt segments", value=False)
-        show_value_function_details = st.checkbox("show value function details", value=False)
-        show_scoring_prompt_preview = st.checkbox("show scoring prompt preview", value=False)
-        show_lexical_comparison = st.checkbox("show keyword comparison", value=False)
-
-    if len(user_segments) < 1:
-        st.warning("Add a user request with at least one segment.")
-        return
-
     user_request = request_text
     system_prompt = build_system_prompt(system_segments)
     tool_context = format_tool_context(TOOLS)
-    players_text = (
-        f"{len(user_segments)} user request segment{'' if len(user_segments) == 1 else 's'}"
-    )
-    full_prompt = build_coalition_prompt(
-        user_segments,
-        system_prompt=system_prompt,
-        tool_context=tool_context,
-    )
-    empty_prompt = build_coalition_prompt(
-        [],
-        system_prompt=system_prompt,
-        tool_context=tool_context,
-    )
 
     custom_request_text = mock_input if mode == "Custom request" else None
     current_inference_signature = (
@@ -1077,7 +971,6 @@ def main() -> None:
         request_text,
         system_prompt,
         tool_context,
-        inference_backend_choice,
     )
     if st.session_state.get("agentic_inference_signature") != current_inference_signature:
         st.session_state["agentic_inference_signature"] = current_inference_signature
@@ -1085,53 +978,6 @@ def main() -> None:
         st.session_state["agentic_inference_result"] = None
         st.session_state["agentic_inference_backend"] = None
         st.session_state["agentic_inference_model"] = None
-
-    if scorer_backend == "Keyword baseline":
-        preview_scorer = LexicalToolScorer()
-    elif scorer_backend == "LLM logprob scorer":
-        with st.spinner(f"Loading logprob scorer `{logprob_model_id}` for preview..."):
-            try:
-                preview_scorer = load_logprob_scorer(
-                    logprob_model_id,
-                    candidate_template,
-                    candidate_texts,
-                    normalize_by_length=bool(normalize_by_length),
-                    max_pairs_per_batch=int(max_pairs_per_batch),
-                )
-            except Exception as error:  # noqa: BLE001
-                st.error(
-                    "Could not load the logprob-based scorer for the setup preview. "
-                    "Try a smaller causal language model or check your environment. "
-                    f"Details: {error}"
-                )
-                return
-    elif scorer_backend == "Groq deterministic router":
-        if not os.getenv("GROQ_API_KEY"):
-            st.error(
-                "GROQ_API_KEY is not set. Add it to the environment to use the Groq "
-                "deterministic router scorer."
-            )
-            return
-        preview_scorer = GroqDeterministicRouterScorer(model_name=router_model_id)
-    else:
-        preview_scorer = LLMToolScorer(llm=MockLLM())
-
-    preview_choice = choose_tool_with_scorer(
-        preview_scorer,
-        full_prompt,
-        tool_descriptions=TOOLS,
-    )
-    inferred_tool = st.session_state.get("agentic_inferred_tool")
-    using_inferred_tool = inferred_tool in TOOLS
-    target_tool = inferred_tool if using_inferred_tool else preview_choice.tool
-    inference_source = st.session_state.get("agentic_inference_backend")
-    target_source = (
-        f"{inference_source} inference"
-        if using_inferred_tool and inference_source
-        else "Inference"
-        if using_inferred_tool
-        else "Preview scorer fallback"
-    )
 
     inference_tab, explanation_tab = st.tabs(["Inference", "Explanation"])
 
@@ -1148,6 +994,7 @@ def main() -> None:
             inference_model_name = st.text_input(
                 "Groq model",
                 value="llama-3.1-8b-instant",
+                key="agentic_groq_inference_model",
             )
             if not os.getenv("GROQ_API_KEY"):
                 st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
@@ -1155,6 +1002,7 @@ def main() -> None:
             inference_model_name = st.text_input(
                 "Gemini model",
                 value="gemini-2.5-flash",
+                key="agentic_gemini_inference_model",
             )
             with st.expander("Check available Gemini models", expanded=False):
                 if st.button("Check available Gemini models", key="check_gemini_models"):
@@ -1176,15 +1024,21 @@ def main() -> None:
             inference_model_name = st.text_input(
                 "HF model",
                 value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
+                key="agentic_hf_inference_model",
             )
             hf_max_new_tokens = st.number_input(
-                "HF max new tokens",
+                "HF max_new_tokens",
                 min_value=16,
                 max_value=1024,
                 value=256,
                 step=16,
+                key="agentic_hf_max_new_tokens",
             )
-            hf_trust_remote_code = st.checkbox("trust remote code", value=False)
+            hf_trust_remote_code = st.checkbox(
+                "trust remote code",
+                value=False,
+                key="agentic_hf_trust_remote_code",
+            )
             st.caption(
                 "Routes with a local transformers causal LM. No real tools are executed."
             )
@@ -1224,6 +1078,8 @@ def main() -> None:
                             error=f"HF local inference failed: {error}",
                             available=False,
                         )
+            setattr(inference_result, "backend", inference_backend)
+            setattr(inference_result, "model", inference_model_name)
             st.session_state["agentic_inference_backend"] = inference_backend
             st.session_state["agentic_inference_model"] = inference_model_name
             st.session_state["agentic_inference_result"] = inference_result
@@ -1232,6 +1088,9 @@ def main() -> None:
                 st.session_state.has_run = False
                 st.session_state.result = None
                 st.rerun()
+            st.session_state["agentic_inferred_tool"] = None
+            st.session_state.has_run = False
+            st.session_state.result = None
 
         inference_result = st.session_state.get("agentic_inference_result")
         if inference_result is None:
@@ -1248,12 +1107,18 @@ def main() -> None:
                 or "(none)"
             )
             st.markdown("**Inference details**")
-            st.write(
-                f"Backend: `{st.session_state.get('agentic_inference_backend', inference_backend)}`"
+            result_backend = getattr(
+                inference_result,
+                "backend",
+                st.session_state.get("agentic_inference_backend", inference_backend),
             )
-            st.write(
-                f"Model: `{st.session_state.get('agentic_inference_model', inference_model_name)}`"
+            result_model = getattr(
+                inference_result,
+                "model",
+                st.session_state.get("agentic_inference_model", inference_model_name),
             )
+            st.write(f"Backend: `{result_backend}`")
+            st.write(f"Model: `{result_model}`")
             st.metric("Selected tool", inference_result.selected_tool or "No tool selected")
             st.markdown("**Tool arguments**")
             st.json(inference_result.tool_arguments)
@@ -1267,20 +1132,218 @@ def main() -> None:
                 st.json(raw_trace)
 
     with explanation_tab:
-        if not using_inferred_tool:
-            st.warning(
-                "Fallback target selection: no Groq/Gemini/HF inference result is available, "
-                "so the selected explanation scorer is used to choose the target tool."
+        st.markdown('<div class="section-label">Explanation controls</div>', unsafe_allow_html=True)
+        current_inference_backend = st.session_state.get(
+            "agentic_inference_backend_choice",
+            "Groq",
+        )
+        latest_inference_backend = st.session_state.get("agentic_inference_backend")
+        has_groq_inference_result = (
+            latest_inference_backend == "Groq"
+            and st.session_state.get("agentic_inference_result") is not None
+        )
+        show_developer_scorers = st.checkbox(
+            "Show developer scoring methods",
+            value=False,
+            key="agentic_show_developer_scorers",
+        )
+        scorer_options = ["LLM logprob scorer"]
+        if current_inference_backend == "Groq" or has_groq_inference_result:
+            scorer_options.append("Groq deterministic router")
+        if show_developer_scorers:
+            st.caption(
+                "Developer scorers are intended for debugging and should not be used for "
+                "final demo results."
             )
-            st.caption(f"Current fallback scorer: {scorer_backend}.")
+            scorer_options.extend(["Keyword scorer", "Mock model scorer"])
+        if has_groq_inference_result:
+            st.session_state["agentic_explanation_scorer_backend"] = (
+                "Groq deterministic router"
+            )
+        if st.session_state.get("agentic_explanation_scorer_backend") not in scorer_options:
+            st.session_state["agentic_explanation_scorer_backend"] = scorer_options[0]
+        scorer_backend = st.selectbox(
+            "Scoring method",
+            scorer_options,
+            index=0,
+            key="agentic_explanation_scorer_backend",
+        )
+        logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
+        candidate_template = DEFAULT_CANDIDATE_TEMPLATE
+        candidate_texts = None
+        normalize_by_length = True
+        max_pairs_per_batch = 1
+        router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
+        if scorer_backend == "LLM logprob scorer":
+            with st.expander("Logprob scorer settings", expanded=True):
+                logprob_model_id = st.text_input(
+                    "model id",
+                    value=DEFAULT_LOGPROB_MODEL_ID,
+                    key="agentic_logprob_model_id",
+                )
+                max_pairs_per_batch = st.number_input(
+                    "HF pair batch size",
+                    min_value=1,
+                    max_value=16,
+                    value=1,
+                    step=1,
+                    key="agentic_logprob_pair_batch_size",
+                    help=(
+                        "Number of prompt/candidate pairs scored per local-model forward pass. "
+                        "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
+                    ),
+                )
+        elif scorer_backend == "Groq deterministic router":
+            with st.expander("Groq router scorer settings", expanded=True):
+                router_model_id = st.text_input(
+                    "Groq router model",
+                    value=DEFAULT_GROQ_ROUTER_MODEL_ID,
+                    key="agentic_groq_router_scorer_model",
+                )
+                st.caption(
+                    "Calls the real Groq API once per distinct coalition prompt to ask which "
+                    "tool it would route to, and scores 1.0 if that matches the target tool, "
+                    "else 0.0. Every app interaction re-runs the setup preview, so this "
+                    "issues real Groq calls even before clicking Run explanation."
+                )
+                if not os.getenv("GROQ_API_KEY"):
+                    st.warning("GROQ_API_KEY is not set. Add it to use the Groq router scorer.")
+
+        with st.expander("Segmentation settings", expanded=False):
+            segment_threshold = st.slider(
+                "semantic threshold",
+                min_value=0.0,
+                max_value=1.0,
+                value=0.72,
+                step=0.01,
+                key="agentic_segment_threshold",
+            )
+            segment_window = st.slider(
+                "context window",
+                min_value=1,
+                max_value=10,
+                value=3,
+                step=1,
+                key="agentic_segment_window",
+            )
+            min_segment_words = st.slider(
+                "min words per segment",
+                min_value=1,
+                max_value=8,
+                value=1,
+                step=1,
+                key="agentic_min_segment_words",
+            )
+
+        try:
+            segmenter = load_semantic_segmenter(
+                segment_threshold,
+                segment_window,
+                min_segment_words,
+            )
+            semantic_user_texts, segment_debug_rows = segment_user_request(
+                segmenter,
+                request_text,
+            )
+        except Exception as error:  # noqa: BLE001
+            st.error(f"Could not segment the user request with MPNet: {error}")
+            return
+        user_segments = build_segments(semantic_user_texts, "user")
+        labels = [segment.label for segment in user_segments]
+        budget = budget_for_demo(len(user_segments))
+
+        with st.expander("Shapley and debug settings", expanded=False):
+            st.caption(f"index: fixed `{DEFAULT_INDEX}`")
+            st.caption(f"max_order: fixed `{DEFAULT_MAX_ORDER}`")
+            st.caption(f"budget: `{budget}` auto")
+            show_prompt_segments = st.checkbox(
+                "show prompt segments",
+                value=False,
+                key="agentic_show_prompt_segments",
+            )
+            show_value_function_details = st.checkbox(
+                "show value function details",
+                value=False,
+                key="agentic_show_value_function_details",
+            )
+            show_scoring_prompt_preview = st.checkbox(
+                "show scoring prompt preview",
+                value=False,
+                key="agentic_show_scoring_prompt_preview",
+            )
+            show_lexical_comparison = st.checkbox(
+                "show keyword comparison",
+                value=False,
+                key="agentic_show_lexical_comparison",
+            )
+            enable_fallback_target_selection = st.checkbox(
+                "enable fallback target selection",
+                value=False,
+                key="agentic_enable_fallback_target_selection",
+                help=(
+                    "Use the selected explanation scorer to choose a target tool when no "
+                    "inference result is available."
+                ),
+            )
+
+        if len(user_segments) < 1:
+            st.warning("Add a user request with at least one segment.")
+            return
+
+        full_prompt = build_coalition_prompt(
+            user_segments,
+            system_prompt=system_prompt,
+            tool_context=tool_context,
+        )
+        empty_prompt = build_coalition_prompt(
+            [],
+            system_prompt=system_prompt,
+            tool_context=tool_context,
+        )
+
+        inferred_tool = st.session_state.get("agentic_inferred_tool")
+        using_inferred_tool = inferred_tool in TOOLS
+        inference_source = st.session_state.get("agentic_inference_backend")
+        result_target_tool = None
+        result_target_source = None
+        result = st.session_state.result
+        if isinstance(result, dict):
+            result_target_tool = result.get("target_tool")
+            result_target_source = result.get("target_source")
+        if using_inferred_tool:
+            target_tool = inferred_tool
+            target_source = f"{inference_source} inference" if inference_source else "Inference"
+            pending_fallback_target = False
+        elif result_target_tool in TOOLS and result_target_source == "fallback explanation scorer":
+            target_tool = str(result_target_tool)
+            target_source = "fallback explanation scorer"
+            pending_fallback_target = False
+        else:
+            target_tool = None
+            target_source = "fallback explanation scorer"
+            pending_fallback_target = bool(enable_fallback_target_selection)
+
+        if not using_inferred_tool:
+            if enable_fallback_target_selection:
+                st.info(
+                    "No inference result is available. Fallback target selection is enabled; "
+                    "the explanation scorer will choose the target when you run explanation."
+                )
+                st.caption("Target tool source: fallback explanation scorer")
+            else:
+                st.info(
+                    "No inference result is available. Run inference first, or enable fallback "
+                    "target selection in advanced settings."
+                )
 
         index = DEFAULT_INDEX
         max_order = DEFAULT_MAX_ORDER
+        signature_target = target_tool if target_tool is not None else "__pending_target__"
         signature = (
             mode,
             trace_name,
             user_request,
-            target_tool,
+            signature_target,
             scorer_backend,
             logprob_model_id,
             candidate_template,
@@ -1288,6 +1351,7 @@ def main() -> None:
             normalize_by_length,
             int(max_pairs_per_batch),
             router_model_id,
+            bool(enable_fallback_target_selection),
             show_lexical_comparison,
             segment_threshold,
             segment_window,
@@ -1299,8 +1363,37 @@ def main() -> None:
             st.session_state.result = None
             st.session_state.pending_run = False
             st.session_state.result_signature = signature
+            result = None
+            if not using_inferred_tool:
+                target_tool = None
+                pending_fallback_target = bool(enable_fallback_target_selection)
+                st.session_state.result_signature = (
+                    mode,
+                    trace_name,
+                    user_request,
+                    "__pending_target__",
+                    scorer_backend,
+                    logprob_model_id,
+                    candidate_template,
+                    bool(candidate_texts),
+                    normalize_by_length,
+                    int(max_pairs_per_batch),
+                    router_model_id,
+                    bool(enable_fallback_target_selection),
+                    show_lexical_comparison,
+                    segment_threshold,
+                    segment_window,
+                    min_segment_words,
+                    tuple(semantic_user_texts),
+                )
     
         st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
+        target_tool_label = target_tool if target_tool is not None else "Pending"
+        target_line = (
+            f"<strong>Explaining why agent selected:</strong> {escape(target_tool_label)}"
+            if using_inferred_tool
+            else f"<strong>Fallback target tool:</strong> {escape(target_tool_label)}"
+        )
         st.markdown(
             f"""
             <div class="scenario-panel">
@@ -1310,7 +1403,8 @@ def main() -> None:
                     <p>{escape(user_request)}</p>
                 </div>
                 <div class="scenario-hint">
-                    <strong>Explaining why agent selected:</strong> {escape(target_tool)}<br>
+                    {target_line}<br>
+                    <strong>Target tool source:</strong> {escape(target_source)}<br>
                     <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
                 </div>
             </div>
@@ -1318,33 +1412,34 @@ def main() -> None:
             unsafe_allow_html=True,
         )
     
-        run = False
-        if not st.session_state.has_run and not st.session_state.pending_run:
-            if st.button("Run explanation", type="primary"):
-                st.session_state.pending_run = True
-                st.rerun()
-            st.info("Enter a prompt and click Run to see the explanation.")
-            return
-    
         st.markdown('<div class="section-label">Explanation target</div>', unsafe_allow_html=True)
         target_left, target_right = st.columns([0.85, 1.15])
         with target_left:
-            st.markdown(f"### `{target_tool}`")
+            st.markdown(f"### `{target_tool_label}`")
         with target_right:
-            st.metric("Target source", target_source)
+            st.metric("Target tool source", target_source)
 
-        if not using_inferred_tool:
+        if pending_fallback_target:
+            st.caption(
+                "Fallback target selection will run with the selected explanation scorer after "
+                "you click Run explanation."
+            )
+        elif (
+            target_source == "fallback explanation scorer"
+            and isinstance(result, dict)
+            and result.get("fallback_choice_scores")
+        ):
             st.markdown("**Fallback scorer diagnostic**")
             st.caption(
-                "These scores are not from Groq or Gemini. They come from the selected "
-                "explanation scorer and are only used when no inference backend result is "
-                "available."
+                "These scores are not from Groq, Gemini, or HF local inference. They come "
+                "from the selected explanation scorer and were used to choose the fallback "
+                "target tool."
             )
             score_frame = pd.DataFrame(
                 [
                     {"tool": tool, "score": score}
                     for tool, score in sorted(
-                        preview_choice.scores.items(),
+                        result["fallback_choice_scores"].items(),
                         key=lambda item: item[1],
                         reverse=True,
                     )
@@ -1396,6 +1491,25 @@ def main() -> None:
                         use_container_width=True,
                         hide_index=True,
                     )
+
+        if not st.session_state.has_run and not st.session_state.pending_run:
+            can_run_explanation = target_tool is not None or pending_fallback_target
+            if st.button(
+                "Run explanation",
+                type="primary",
+                key="agentic_run_explanation",
+                disabled=not can_run_explanation,
+            ):
+                st.session_state.pending_run = True
+                st.rerun()
+            if can_run_explanation:
+                st.info("Enter a prompt and click Run explanation to compute the explanation.")
+            else:
+                st.info(
+                    "Run inference first, or enable fallback target selection in advanced "
+                    "settings before running explanation."
+                )
+            return
     
         run = st.session_state.pending_run
         st.session_state.pending_run = False
@@ -1412,15 +1526,56 @@ def main() -> None:
     
         if run:
             lexical_scorer = LexicalToolScorer()
-            primary_scorer = preview_scorer
-            if scorer_backend == "Keyword baseline":
-                primary_label = "Keyword baseline"
+            if scorer_backend == "Keyword scorer":
+                primary_scorer = lexical_scorer
+                primary_label = "Keyword scorer"
             elif scorer_backend == "LLM logprob scorer":
+                with st.spinner("Loading logprob scorer model..."):
+                    try:
+                        primary_scorer = load_logprob_scorer(
+                            logprob_model_id,
+                            candidate_template,
+                            candidate_texts,
+                            normalize_by_length=bool(normalize_by_length),
+                        )
+                    except Exception as error:  # noqa: BLE001
+                        st.error(
+                            "Could not load the logprob-based scorer. Install/check "
+                            "`transformers` and `torch`, try a smaller causal language model, "
+                            f"or check your environment. Details: {error}"
+                        )
+                        return
+                primary_scorer.max_pairs_per_batch = int(max_pairs_per_batch)
                 primary_label = "LLM logprob scorer"
             elif scorer_backend == "Groq deterministic router":
+                if not os.getenv("GROQ_API_KEY"):
+                    st.error(
+                        "GROQ_API_KEY is not set. Add it to the environment to use the Groq "
+                        "deterministic router scorer."
+                    )
+                    return
+                primary_scorer = GroqDeterministicRouterScorer(model_name=router_model_id)
                 primary_label = "Groq deterministic router"
             else:
+                primary_scorer = LLMToolScorer(llm=MockLLM())
                 primary_label = "Mock model scorer"
+
+            fallback_choice = None
+            if target_tool is None:
+                if not enable_fallback_target_selection:
+                    st.error(
+                        "No inference result is available. Run inference first, or enable "
+                        "fallback target selection in advanced settings."
+                    )
+                    return
+                with st.spinner("Selecting fallback target tool with the explanation scorer..."):
+                    fallback_choice = choose_tool_with_scorer(
+                        primary_scorer,
+                        full_prompt,
+                        tool_descriptions=TOOLS,
+                    )
+                target_tool = fallback_choice.tool
+                target_source = "fallback explanation scorer"
     
             full_score = primary_scorer.score_batch(
                 [full_prompt],
@@ -1462,7 +1617,7 @@ def main() -> None:
                 notes[0] if notes else "No interpretation is available for this run."
             )
     
-            compare_with_lexical = show_lexical_comparison and primary_label != "Keyword baseline"
+            compare_with_lexical = show_lexical_comparison and primary_label != "Keyword scorer"
             llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
             lexical_result = None
             if compare_with_lexical:
@@ -1503,7 +1658,7 @@ def main() -> None:
                     )[0]
                     lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
                     lexical_result = {
-                        "label": "Keyword baseline",
+                        "label": "Keyword scorer",
                         "full_score": lexical_full_score,
                         "empty_score": lexical_empty_score,
                         "top": "No segment"
@@ -1521,13 +1676,39 @@ def main() -> None:
                 tool_descriptions=TOOLS,
             )
             st.session_state.has_run = True
+            result_signature = (
+                mode,
+                trace_name,
+                user_request,
+                target_tool,
+                scorer_backend,
+                logprob_model_id,
+                candidate_template,
+                bool(candidate_texts),
+                normalize_by_length,
+                int(max_pairs_per_batch),
+                router_model_id,
+                bool(enable_fallback_target_selection),
+                show_lexical_comparison,
+                segment_threshold,
+                segment_window,
+                min_segment_words,
+                tuple(semantic_user_texts),
+            )
+            st.session_state.result_signature = result_signature
             st.session_state.result = {
+                "target_tool": target_tool,
+                "target_source": target_source,
+                "fallback_choice_scores": None
+                if fallback_choice is None
+                else fallback_choice.scores,
                 "primary_label": primary_label,
                 "full_score": full_score,
                 "empty_score": empty_score,
                 "first_order": first_order,
                 "attribution_frame": attribution_frame,
                 "explanation": explanation,
+                "pairwise_matrix": pairwise_matrix,
                 "pair_label": pair_label,
                 "pair_value": pair_value,
                 "top_label": top_label,
@@ -1549,6 +1730,9 @@ def main() -> None:
         first_order = result["first_order"]
         attribution_frame = result["attribution_frame"]
         explanation = result["explanation"]
+        pairwise_matrix = result.get("pairwise_matrix")
+        if pairwise_matrix is None:
+            pairwise_matrix = pairwise_matrix_from_explanation(explanation, len(user_segments))
         pair_label = result["pair_label"]
         pair_value = result["pair_value"]
         top_label = result["top_label"]
