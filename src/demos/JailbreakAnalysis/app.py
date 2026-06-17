@@ -92,7 +92,18 @@ def build_players(
                 current.append(words[i + 1])
         blocks.append(" ".join(current))
 
-        return blocks, similarities, windows
+        # Merge very short segments into the previous one, matching
+        # JailbreakGame._semantic_segments (semantic_min_segment_words = 3) so the
+        # preview player count equals the actual run.
+        min_words = 3
+        merged: list[str] = []
+        for blk in blocks:
+            if merged and len(blk.split()) < min_words:
+                merged[-1] += " " + blk
+            else:
+                merged.append(blk)
+
+        return merged, similarities, windows
 
     # token — return whole text as one segment (tokenization needs the LLM)
     return [input_text], [], []
@@ -908,8 +919,19 @@ with tab_explanation:
                     f"**Compliance score:** `{results['compliance']:+.4f}`"
                 )
 
-                st.markdown("### Shapley values")
+                # In first-order mode these are Shapley values; in second-order mode
+                # result[(i,)] is the k-SII order-1 main effect (not identical to the SV).
+                st.markdown(
+                    "### Segment attributions (k-SII, order 1)"
+                    if second_order
+                    else "### Shapley values"
+                )
                 st.html(attribution_table(results["players"], results["player_values"]))
+                if second_order:
+                    st.caption(
+                        "These are k-SII order-1 main effects — close to, but not identical to, "
+                        "the standalone Shapley values."
+                    )
 
                 if second_order:
                     st.markdown("### Top interaction pairs (k-SII)")
@@ -919,8 +941,10 @@ with tab_explanation:
                     else:
                         st.html(interaction_table(pairs))
                         st.caption(
-                            "Synergy: the pair pushes compliance more together than individually. "
-                            "Redundancy: the segments overlap or compete."
+                            "k-SII measures a pair's deviation from a purely additive model: "
+                            "(+) synergy = above the sum of the parts, (-) redundancy = below. "
+                            "The sign reflects additivity, not direction — a positive value does "
+                            "not mean the pair pushes toward compliance."
                         )
 
                     players = list(results["players"])
