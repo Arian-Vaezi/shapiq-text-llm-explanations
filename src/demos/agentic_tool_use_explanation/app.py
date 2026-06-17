@@ -927,13 +927,20 @@ def main() -> None:
         st.session_state["agentic_inference_result"] = None
     if "agentic_inference_signature" not in st.session_state:
         st.session_state["agentic_inference_signature"] = None
+    if "agentic_request_text" not in st.session_state:
+        st.session_state["agentic_request_text"] = DEFAULT_MOCK_QUERY
 
-    mode = st.sidebar.radio(
-        "Input",
-        ["Example request", "Custom request"],
-        index=0,
-        key="agentic_input_mode",
-    )
+    example_placeholder = "Choose an example..."
+    pending_example_request = st.session_state.pop("agentic_pending_example_request", None)
+    if pending_example_request is not None:
+        st.session_state["agentic_request_text"] = pending_example_request
+        st.session_state["agentic_inferred_tool"] = None
+        st.session_state["agentic_inference_result"] = None
+        st.session_state.has_run = False
+        st.session_state.result = None
+        st.session_state.result_signature = None
+        st.session_state["agentic_try_example_select"] = example_placeholder
+
     with st.sidebar.expander("How it works", expanded=False):
         st.write(
             "Request -> Segmentation -> Remove players -> Tool support score "
@@ -944,41 +951,15 @@ def main() -> None:
             "and then shows their importance."
         )
 
-    if mode == "Example request":
-        trace_name = st.sidebar.selectbox(
-            "Scenario",
-            list(SAMPLE_TRACES),
-            format_func=scenario_prompt_label,
-            key="agentic_scenario",
-        )
-        trace = SAMPLE_TRACES[trace_name]
-        request_text = " ".join(trace["user_segments"])
-    else:
-        mock_input = st.sidebar.text_area(
-            "Request text",
-            value=DEFAULT_MOCK_QUERY,
-            height=86,
-            help=(
-                "This preview chooses a tool from the fixed context and request. "
-                "It does not call the selected tool."
-            ),
-            key="agentic_custom_request",
-        )
-        trace_name = "Custom request"
-        request_text = mock_input
-        trace = build_mock_trace(mock_input)
-
+    user_request = st.session_state["agentic_request_text"]
+    trace_name = "Custom request"
+    trace = build_mock_trace(user_request)
     system_segments = build_segments(trace["system_segments"], "system")
-    user_request = request_text
     system_prompt = build_system_prompt(system_segments)
     tool_context = format_tool_context(TOOLS)
 
-    custom_request_text = mock_input if mode == "Custom request" else None
     current_inference_signature = (
-        mode,
-        trace_name,
-        custom_request_text,
-        request_text,
+        user_request,
         system_prompt,
         tool_context,
     )
@@ -993,101 +974,153 @@ def main() -> None:
 
     with inference_tab:
         st.markdown('<div class="section-label">Inference</div>', unsafe_allow_html=True)
-        st.write(user_request)
-        inference_backend = st.selectbox(
-            "Inference backend",
-            ["Groq", "Gemini", "HF local"],
-            index=0,
-            key="agentic_inference_backend_choice",
+        st.markdown("### User request")
+        st.text_area(
+            "User request",
+            height=96,
+            key="agentic_request_text",
+            label_visibility="collapsed",
+            help=(
+                "This preview chooses a tool from the fixed context and request. "
+                "It does not call the selected tool."
+            ),
         )
-        if inference_backend == "Groq":
-            inference_model_name = st.text_input(
-                "Groq model",
-                value="llama-3.1-8b-instant",
-                key="agentic_groq_inference_model",
+        user_request = st.session_state["agentic_request_text"]
+        trace = build_mock_trace(user_request)
+        system_segments = build_segments(trace["system_segments"], "system")
+        system_prompt = build_system_prompt(system_segments)
+        tool_context = format_tool_context(TOOLS)
+
+        def apply_selected_example() -> None:
+            selected = st.session_state.get("agentic_try_example_select")
+            if selected and selected != example_placeholder:
+                example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
+                st.session_state["agentic_pending_example_request"] = example_request
+
+        example_options = [example_placeholder] + list(SAMPLE_TRACES)
+        st.selectbox(
+            "Try example",
+            example_options,
+            format_func=lambda name: name
+            if name == example_placeholder
+            else scenario_prompt_label(name),
+            key="agentic_try_example_select",
+            on_change=apply_selected_example,
+        )
+        if st.session_state.get("agentic_pending_example_request") is not None:
+            st.rerun()
+
+        with st.expander("Inference settings", expanded=False):
+            inference_backend = st.selectbox(
+                "Inference backend",
+                ["Groq", "Gemini", "HF local"],
+                index=0,
+                key="agentic_inference_backend_choice",
             )
-            if not os.getenv("GROQ_API_KEY"):
-                st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
-        elif inference_backend == "Gemini":
-            inference_model_name = st.text_input(
-                "Gemini model",
-                value="gemini-2.5-flash",
-                key="agentic_gemini_inference_model",
-            )
-            with st.expander("Check available Gemini models", expanded=False):
-                if st.button("Check available Gemini models", key="check_gemini_models"):
-                    st.session_state["agentic_available_gemini_models"] = (
-                        list_available_gemini_models()
-                    )
-                available_models = st.session_state.get("agentic_available_gemini_models")
-                if available_models is None:
-                    st.caption(
-                        "Model listing is optional and may fail under quota or SDK differences."
-                    )
-                elif available_models:
-                    st.write(available_models)
-                else:
-                    st.warning("No available Gemini models were returned.")
-            if not os.getenv("GEMINI_API_KEY"):
-                st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
-        elif inference_backend == "HF local":
-            inference_model_name = st.text_input(
-                "HF model",
-                value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
-                key="agentic_hf_inference_model",
-            )
-            hf_max_new_tokens = st.number_input(
-                "HF max_new_tokens",
-                min_value=16,
-                max_value=1024,
-                value=256,
-                step=16,
-                key="agentic_hf_max_new_tokens",
-            )
-            hf_trust_remote_code = st.checkbox(
-                "trust remote code",
-                value=False,
-                key="agentic_hf_trust_remote_code",
-            )
-            st.caption(
-                "Routes with a local transformers causal LM. No real tools are executed."
-            )
-        if st.button("Run inference", type="primary", key="run_inference"):
-            with st.spinner(f"Running {inference_backend} tool inference..."):
-                if inference_backend == "Groq":
-                    inference_result = run_groq_tool_inference(
-                        user_request,
-                        get_executable_tool_schemas(),
-                        inference_model_name,
-                        system_prompt=system_prompt,
-                        tool_context=tool_context,
-                    )
-                elif inference_backend == "Gemini":
-                    inference_result = run_gemini_tool_inference(
-                        user_request,
-                        get_executable_tool_schemas(),
-                        inference_model_name,
-                        system_prompt=system_prompt,
-                        tool_context=tool_context,
-                    )
-                else:
-                    try:
-                        hf_router = load_local_hf_router(
-                            inference_model_name,
-                            int(hf_max_new_tokens),
-                            trust_remote_code=bool(hf_trust_remote_code),
+            if inference_backend == "Groq":
+                inference_model_name = st.text_input(
+                    "Groq model",
+                    value="llama-3.1-8b-instant",
+                    key="agentic_groq_inference_model",
+                )
+                if not os.getenv("GROQ_API_KEY"):
+                    st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
+            elif inference_backend == "Gemini":
+                inference_model_name = st.text_input(
+                    "Gemini model",
+                    value="gemini-2.5-flash",
+                    key="agentic_gemini_inference_model",
+                )
+                with st.expander("Check available Gemini models", expanded=False):
+                    if st.button("Check available Gemini models", key="check_gemini_models"):
+                        st.session_state["agentic_available_gemini_models"] = (
+                            list_available_gemini_models()
                         )
-                        inference_result = hf_router.choose_tool(user_request, TOOLS)
-                    except Exception as error:  # noqa: BLE001
-                        inference_result = types.SimpleNamespace(
-                            selected_tool=None,
-                            tool_arguments={},
-                            agent_response="",
-                            raw_response="",
-                            debug_prompt=None,
-                            error=f"HF local inference failed: {error}",
-                            available=False,
+                    available_models = st.session_state.get("agentic_available_gemini_models")
+                    if available_models is None:
+                        st.caption(
+                            "Model listing is optional and may fail under quota or SDK differences."
                         )
+                    elif available_models:
+                        st.write(available_models)
+                    else:
+                        st.warning("No available Gemini models were returned.")
+                if not os.getenv("GEMINI_API_KEY"):
+                    st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
+            elif inference_backend == "HF local":
+                inference_model_name = st.text_input(
+                    "HF model",
+                    value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
+                    key="agentic_hf_inference_model",
+                )
+                hf_max_new_tokens = st.number_input(
+                    "HF max_new_tokens",
+                    min_value=16,
+                    max_value=1024,
+                    value=256,
+                    step=16,
+                    key="agentic_hf_max_new_tokens",
+                )
+                hf_trust_remote_code = st.checkbox(
+                    "trust remote code",
+                    value=False,
+                    key="agentic_hf_trust_remote_code",
+                )
+                st.caption(
+                    "Routes with a local transformers causal LM. No real tools are executed."
+                )
+
+        def execute_tool_inference() -> object:
+            if inference_backend == "Groq":
+                return run_groq_tool_inference(
+                    user_request,
+                    get_executable_tool_schemas(),
+                    inference_model_name,
+                    system_prompt=system_prompt,
+                    tool_context=tool_context,
+                )
+            if inference_backend == "Gemini":
+                return run_gemini_tool_inference(
+                    user_request,
+                    get_executable_tool_schemas(),
+                    inference_model_name,
+                    system_prompt=system_prompt,
+                    tool_context=tool_context,
+                )
+            try:
+                hf_router = load_local_hf_router(
+                    inference_model_name,
+                    int(hf_max_new_tokens),
+                    trust_remote_code=bool(hf_trust_remote_code),
+                )
+                return hf_router.choose_tool(user_request, TOOLS)
+            except Exception as error:  # noqa: BLE001
+                return types.SimpleNamespace(
+                    selected_tool=None,
+                    tool_arguments={},
+                    agent_response="",
+                    raw_response="",
+                    debug_prompt=None,
+                    error=f"HF local inference failed: {error}",
+                    available=False,
+                )
+
+        _, run_column = st.columns([3, 1])
+        if run_column.button(
+            "Run inference",
+            type="primary",
+            key="run_inference",
+            use_container_width=True,
+        ):
+            if hasattr(st, "status"):
+                with st.status("Running agent inference...", expanded=True) as status:
+                    st.write(f"Backend: {inference_backend}")
+                    st.write(f"Model: {inference_model_name}")
+                    inference_result = execute_tool_inference()
+                    status.update(label="Agent inference complete.", state="complete")
+            else:
+                with st.spinner("Running agent inference..."):
+                    inference_result = execute_tool_inference()
             setattr(inference_result, "backend", inference_backend)
             setattr(inference_result, "model", inference_model_name)
             st.session_state["agentic_inference_backend"] = inference_backend
@@ -1109,14 +1142,19 @@ def main() -> None:
             inference_error = getattr(inference_result, "error", None)
             if inference_error:
                 st.warning(inference_error)
-            st.markdown("**Agent response**")
-            st.write(
+            selected_tool = getattr(inference_result, "selected_tool", None)
+            assistant_message = (
                 getattr(inference_result, "agent_response", "")
                 or getattr(inference_result, "assistant_answer", "")
                 or getattr(inference_result, "final_answer", "")
-                or "(none)"
+                or f"I recommend `{selected_tool}` for this request."
             )
-            st.markdown("**Inference details**")
+            with st.chat_message("user"):
+                st.write(user_request)
+            with st.chat_message("assistant"):
+                st.write(assistant_message)
+
+            st.divider()
             result_backend = getattr(
                 inference_result,
                 "backend",
@@ -1127,18 +1165,19 @@ def main() -> None:
                 "model",
                 st.session_state.get("agentic_inference_model", inference_model_name),
             )
-            st.write(f"Backend: `{result_backend}`")
-            st.write(f"Model: `{result_model}`")
-            st.metric("Selected tool", inference_result.selected_tool or "No tool selected")
-            st.markdown("**Tool arguments**")
-            st.json(inference_result.tool_arguments)
+            with st.expander("Model information and arguments", expanded=False):
+                st.write(f"Backend: `{result_backend}`")
+                st.write(f"Model: `{result_model}`")
+                st.metric("Selected tool", selected_tool or "No tool selected")
+                st.markdown("**Tool arguments**")
+                st.json(getattr(inference_result, "tool_arguments", {}))
+            raw_trace = getattr(inference_result, "raw_trace", None)
+            if raw_trace is None:
+                raw_trace = {
+                    "debug_prompt": getattr(inference_result, "debug_prompt", None),
+                    "raw_response": getattr(inference_result, "raw_response", ""),
+                }
             with st.expander("Debug trace", expanded=False):
-                raw_trace = getattr(inference_result, "raw_trace", None)
-                if raw_trace is None:
-                    raw_trace = {
-                        "debug_prompt": getattr(inference_result, "debug_prompt", None),
-                        "raw_response": getattr(inference_result, "raw_response", ""),
-                    }
                 st.json(raw_trace)
 
     with explanation_tab:
@@ -1345,7 +1384,7 @@ def main() -> None:
             )
             semantic_user_texts, segment_debug_rows = segment_user_request(
                 segmenter,
-                request_text,
+                user_request,
             )
         except Exception as error:  # noqa: BLE001
             st.error(f"Could not segment the user request with MPNet: {error}")
@@ -1448,7 +1487,6 @@ def main() -> None:
             else None
         )
         signature = (
-            mode,
             trace_name,
             user_request,
             signature_target,
@@ -1482,7 +1520,6 @@ def main() -> None:
                 target_tool = None
                 pending_fallback_target = bool(enable_fallback_target_selection)
                 st.session_state.result_signature = (
-                    mode,
                     trace_name,
                     user_request,
                     "__pending_target__",
@@ -1839,7 +1876,6 @@ def main() -> None:
             )
             st.session_state.has_run = True
             result_signature = (
-                mode,
                 trace_name,
                 user_request,
                 target_tool,
