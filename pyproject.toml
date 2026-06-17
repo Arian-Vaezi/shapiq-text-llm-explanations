@@ -28,9 +28,10 @@ dependencies = [
     "torch>=2.10.0",
     "accelerate>=1.13.0",
     "sentence-transformers>=5.5.1",
-    "python-dotenv>=1.2.2",
-    "groq>=1.4.0",
     "google-genai>=2.8.0",
+    "python-dotenv>=1.2.2",
+    "streamlit>=1.58.0",
+    "groq>=1.4.0",
 ]
 authors = [
     {name = "Maximilian Muschalik", email = "Maximilian.Muschalik@lmu.de"},
@@ -310,4 +311,19 @@ dev = [
     {include-group = "test"},
     {include-group = "lint"},
     {include-group = "all_ml"},
+]
+
+# ---------------------------------------------------------------------------
+# Local GPU support: pull the CUDA (cu126) build of torch on Windows only.
+# Scoped with a sys_platform marker so macOS/Linux/CI keep the default
+# PyPI wheels (there are no CUDA wheels for macOS, and CI has no GPU).
+# ---------------------------------------------------------------------------
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu126", marker = "sys_platform == 'win32'" },
 ]
