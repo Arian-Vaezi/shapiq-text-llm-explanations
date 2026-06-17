@@ -941,16 +941,6 @@ def main() -> None:
         st.session_state.result_signature = None
         st.session_state["agentic_try_example_select"] = example_placeholder
 
-    with st.sidebar.expander("How it works", expanded=False):
-        st.write(
-            "Request -> Segmentation -> Remove players -> Tool support score "
-            "-> Shapley Explanation"
-        )
-        st.caption(
-            "The app keeps system/tool context fixed, removes user-request players, "
-            "and then shows their importance."
-        )
-
     user_request = st.session_state["agentic_request_text"]
     trace_name = "Custom request"
     trace = build_mock_trace(user_request)
