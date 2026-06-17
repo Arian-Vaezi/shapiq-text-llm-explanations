@@ -16,7 +16,6 @@ from functools import lru_cache
 import numpy as np
 
 from .chunking import (
-    FIGURE_QUERY_RE,
     normalize_whitespace,
     query_asks_for_figures,
     query_asks_for_references,
@@ -204,6 +203,26 @@ def is_overview_chunk(chunk: CandidateChunk) -> bool:
 # Embedding backend
 # ---------------------------------------------------------------------------
 
+BGE_QUERY_INSTRUCTION = "Represent this sentence for searching relevant passages: "
+
+
+def _is_bge_embedding_model(model_id: str) -> bool:
+    """Return whether an embedding model uses the BGE v1.x encoding recipe."""
+    normalized = model_id.lower()
+    return "bge-" in normalized and "bge-m3" not in normalized
+
+
+def _prepare_embedding_texts(
+    texts: list[str],
+    *,
+    model_id: str,
+    is_query: bool,
+) -> list[str]:
+    """Apply model-specific retrieval instructions before tokenization."""
+    if is_query and _is_bge_embedding_model(model_id):
+        return [f"{BGE_QUERY_INSTRUCTION}{text}" for text in texts]
+    return texts
+
 
 @lru_cache(maxsize=2)
 def cached_embedding_backend(
@@ -234,20 +253,32 @@ def cached_embedding_backend(
     return tokenizer, model, device
 
 
+def resolved_embedding_device(model_id: str, device_name: str) -> str:
+    """Return the concrete device selected for one embedding backend."""
+    _, _, device = cached_embedding_backend(model_id, device_name)
+    return str(device)
+
+
 def dense_embed_texts(
     texts: list[str],
     *,
     model_id: str,
     device_name: str,
     batch_size: int = 16,
+    is_query: bool = False,
 ) -> np.ndarray:
-    """Embed texts with mean pooled Transformer hidden states."""
+    """Embed texts with the pooling and query recipe required by the model."""
     import torch
 
     tokenizer, model, device = cached_embedding_backend(model_id, device_name)
     embeddings = []
-    for start in range(0, len(texts), batch_size):
-        batch = texts[start : start + batch_size]
+    prepared_texts = _prepare_embedding_texts(
+        texts,
+        model_id=model_id,
+        is_query=is_query,
+    )
+    for start in range(0, len(prepared_texts), batch_size):
+        batch = prepared_texts[start : start + batch_size]
         inputs = tokenizer(
             batch,
             padding=True,
@@ -259,11 +290,14 @@ def dense_embed_texts(
         with torch.no_grad():
             outputs = model(**inputs)
         token_embeddings = outputs.last_hidden_state
-        attention_mask = inputs["attention_mask"].unsqueeze(-1).expand(token_embeddings.size())
-        masked_embeddings = token_embeddings * attention_mask
-        summed = masked_embeddings.sum(dim=1)
-        counts = attention_mask.sum(dim=1).clamp(min=1)
-        batch_embeddings = summed / counts
+        if _is_bge_embedding_model(model_id):
+            batch_embeddings = token_embeddings[:, 0]
+        else:
+            attention_mask = inputs["attention_mask"].unsqueeze(-1).expand(token_embeddings.size())
+            masked_embeddings = token_embeddings * attention_mask
+            summed = masked_embeddings.sum(dim=1)
+            counts = attention_mask.sum(dim=1).clamp(min=1)
+            batch_embeddings = summed / counts
         batch_embeddings = torch.nn.functional.normalize(batch_embeddings, p=2, dim=1)
         embeddings.append(batch_embeddings.detach().cpu().numpy())
     return np.vstack(embeddings)
@@ -316,11 +350,13 @@ def _dense_scores(
         documents,
         model_id=embedding_model_id,
         device_name=embedding_device,
+        is_query=False,
     )
     query_embeddings = dense_embed_texts(
         expand_retrieval_queries(question),
         model_id=embedding_model_id,
         device_name=embedding_device,
+        is_query=True,
     )
     scores = document_embeddings @ query_embeddings.T
     best_scores = np.max(scores, axis=1)

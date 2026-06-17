@@ -1,19 +1,14 @@
-"""Answer generation interface for the RAG pipeline.
-
-This module provides:
-- format_rag_context: format retrieved chunks into a grounded prompt context
-- generate_answer_from_chunks: high-level entry point for HF model generation
-
-The HuggingFaceCausalLMBackend implementation lives in core/model_backends.py
-and is imported here to give callers a single generation-oriented import path.
-Future backends (LM Studio, extractive) will be added here without changing
-the model_backends module.
-"""
+"""Answer generation interface for the local GGUF RAG pipeline."""
 
 from __future__ import annotations
 
-from .model_backends import GenerationResult, HuggingFaceCausalLMBackend
-from .schemas import RetrievedChunk
+import re
+from typing import TYPE_CHECKING
+
+from .model_backends import GenerationResult, LlamaCppBackend
+
+if TYPE_CHECKING:
+    from .schemas import RetrievedChunk
 
 
 def format_rag_context(chunks: list[RetrievedChunk]) -> str:
@@ -38,18 +33,18 @@ def generate_answer_from_chunks(
     *,
     question: str,
     chunks: list[RetrievedChunk],
-    model_id: str,
-    device_map: str,
-    torch_dtype: str,
+    model_path: str,
+    n_ctx: int,
+    n_gpu_layers: int,
+    n_threads: int,
     max_new_tokens: int,
 ) -> str:
-    """Use the configured HF causal LM to answer from retrieved chunks."""
-    import re
-
-    backend = HuggingFaceCausalLMBackend(
-        model_id=model_id,
-        device_map=device_map,
-        torch_dtype=torch_dtype,
+    """Use the configured local GGUF model to answer from retrieved chunks."""
+    backend = LlamaCppBackend(
+        model_path=model_path,
+        n_ctx=n_ctx,
+        n_gpu_layers=n_gpu_layers,
+        n_threads=n_threads,
         max_new_tokens=max_new_tokens,
     )
     context = format_rag_context(chunks)
@@ -62,7 +57,7 @@ def generate_answer_from_chunks(
 
 __all__ = [
     "GenerationResult",
-    "HuggingFaceCausalLMBackend",
+    "LlamaCppBackend",
     "format_rag_context",
     "generate_answer_from_chunks",
 ]

@@ -63,9 +63,7 @@ demos/rag_retrieval_explanation/
   rag_game.py               # Cooperative game over retrieved chunks
   value_functions.py        # Coalition support scorers
   evaluation.py             # Deletion/insertion validation utilities
-  regression_check.py       # Fixed PDF retrieval regression check
   sample_data.py            # Controlled scenario fixtures
-  evals/                    # Expected behavior and run records
 ```
 
 A later cleanup could split `app.py` into UI modules, but this is not required
@@ -86,51 +84,6 @@ content:
 
 These scenarios directly support the project claim that retrieval relevance and
 answer support are different signals.
-
-## Evaluation Records
-
-Each meaningful run should save enough information to reproduce the result:
-
-```text
-config.yaml
-retrieved_chunks.jsonl
-coalition_scores.jsonl
-shapley_values.csv
-interactions.csv
-deletion_curve.csv
-insertion_curve.csv
-metrics.json
-notes.md
-```
-
-Minimum metadata:
-
-```yaml
-git_commit: <commit>
-scenario: <scenario name>
-value_function: <value function name>
-interaction_index: <SV | k-SII | STII | FSII>
-budget: <coalition evaluation budget>
-retrieval_method: <scenario | dense embeddings | tf-idf>
-embedding_model: <model id or none>
-generator_model: <model id or none>
-top_k: <retrieved chunk count>
-```
-
-Useful metrics:
-
-```text
-top_expected_evidence_rank
-full_context_support
-score_without_top_shapley_chunk
-top_chunk_deletion_drop
-deletion_auc_shapley
-deletion_auc_retrieval
-deletion_auc_random
-insertion_auc_shapley
-interaction_hit
-missing_evidence_false_positive
-```
 
 ## Thesis Outline
 

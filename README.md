@@ -61,30 +61,6 @@ The strongest claim is:
 > Retrieval scores describe how chunks match a query, but Shapley attribution
 > describes how chunks support the final answer.
 
-## Evaluation Strategy
-
-The recommended evaluation is explanation-centered rather than benchmark-first:
-
-- **Controlled scenario checks:** verify that known evidence roles produce the
-  expected attribution patterns.
-- **Deletion validation:** removing top Shapley chunks should reduce support
-  faster than removing chunks by retrieval score or random order.
-- **Insertion validation:** adding top Shapley chunks should recover support
-  faster than baseline orders.
-- **Interaction checks:** puzzle-piece scenarios should produce positive
-  interactions, while near-duplicate evidence should produce redundancy signals.
-- **PDF regression checks:** fixed PDF questions should keep retrieving the
-  expected evidence themes after pipeline changes.
-
-See `demos/rag_retrieval_explanation/evals/` for the lightweight evaluation
-record structure.
-
-Run the controlled explanation evals:
-
-```bash
-make eval
-```
-
 ## Useful Commands
 
 Run the main demo:
@@ -97,18 +73,6 @@ Run the generic retrieval policy tests:
 
 ```bash
 make test
-```
-
-Run controlled explanation evals:
-
-```bash
-make eval
-```
-
-Run PDF smoke evals from a local JSON case file:
-
-```bash
-make pdf-smoke PDF_CASES=path/to/cases.json
 ```
 
 Run pre-commit:

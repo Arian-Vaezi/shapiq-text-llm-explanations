@@ -1,20 +1,16 @@
-.PHONY: app test eval eval-controlled eval-pdf pdf-cases-template \
-        compare-chunking compare-embeddings compare-full \
-        lint precommit help
+.PHONY: app api frontend frontend-build test eval-controlled eval-controlled-model eval-controlled-bge-lexical eval-interactions-controlled eval-report-html eval-stability eval-qasper-smoke eval-qasper verify-report-results paper setup-rag-local install-rag-local download-rag-model lint precommit help
 
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
 
-APP             := demos/rag_retrieval_explanation/app.py
-DEMO_DIR        := demos/rag_retrieval_explanation
-EVALS_DIR       := $(DEMO_DIR)/evals
-RUNNERS_DIR     := $(EVALS_DIR)/runners
-CONFIGS_DIR     := $(EVALS_DIR)/configs
-CASES_DIR       := $(EVALS_DIR)/cases
-
-PDF_CASES       ?= $(CASES_DIR)/pdf_cases.example.json
-PDF_CASE_TEMPLATE := $(CASES_DIR)/pdf_cases.example.json
+RAG_FRONTEND    := demos/rag_retrieval_explanation/frontend
+RAG_MODEL_DIR   := models/llm
+RAG_MODEL       := $(RAG_MODEL_DIR)/Qwen3-8B-Q4_K_M.gguf
+RAG_MODEL_URL   := https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/main/Qwen3-8B-Q4_K_M.gguf
+RAG_E4B_MODEL   := $(RAG_MODEL_DIR)/gemma-4-E4B-it-Q4_K_M.gguf
+RAG_CONTROLLED_BGE_LEXICAL_RUN := demos/rag_retrieval_explanation/evals/runs/20260616_controlled_interactions_bge_lexical
+RAG_CONTROLLED_INTERACTION_SUMMARY := demos/rag_retrieval_explanation/evals/runs/20260616_controlled_interaction_summary
 
 # ---------------------------------------------------------------------------
 # Targets
@@ -26,87 +22,94 @@ help:
 	@echo "=============================="
 	@echo ""
 	@echo "App:"
-	@echo "  make app                             Run the Streamlit demo"
+	@echo "  make app                             Build and run the local web dashboard"
+	@echo "  make api                             Run the FastAPI backend"
+	@echo "  make frontend                        Run the Vite development frontend"
+	@echo "  make frontend-build                  Build the React dashboard"
+	@echo "  make setup-rag-local                 Install llama.cpp and download the GGUF model"
+	@echo "  make install-rag-local               Install local llama.cpp demo dependencies"
+	@echo "  make download-rag-model              Download the default local GGUF model"
 	@echo ""
 	@echo "Tests:"
 	@echo "  make test                            Run retrieval policy unit tests"
-	@echo ""
-	@echo "Evals (controlled, no downloads):"
-	@echo "  make eval                            Alias for eval-controlled"
-	@echo "  make eval-controlled                 Controlled Shapley attribution evals"
-	@echo ""
-	@echo "Evals (PDF, requires a case file):"
-	@echo "  make eval-pdf PDF_CASES=...          PDF retrieval smoke eval"
-	@echo "  make pdf-cases-template PDF_CASES=local/my_cases.json"
-	@echo ""
-	@echo "Grid comparisons (PDF, may download models):"
-	@echo "  make compare-chunking PDF_CASES=...  3 chunk sizes × TF-IDF"
-	@echo "  make compare-embeddings PDF_CASES=.. TF-IDF + MiniLM + BGE"
-	@echo "  make compare-full PDF_CASES=...      Full 18-config research grid"
+	@echo "  make eval-controlled                 Run corpus retrieval + gold attribution eval"
+	@echo "  make eval-controlled-model           Add model knowledge-source experiments"
+	@echo "  make eval-controlled-bge-lexical     Run controlled BGE + lexical eval"
+	@echo "  make eval-interactions-controlled    Recompute controlled RQ2 interaction table"
+	@echo "  make eval-report-html                Rebuild static HTML report details"
+	@echo "  make eval-stability                  Analyze controlled attribution stability"
+	@echo "  make eval-qasper-smoke               Run the first five frozen QASPER cases"
+	@echo "  make eval-qasper                     Run the frozen 30-case QASPER eval"
+	@echo "  make verify-report-results           Recompute paper tables from saved runs"
+	@echo "  make paper                           Build the living LaTeX manuscript"
 	@echo ""
 	@echo "Code quality:"
 	@echo "  make lint                            Run pre-commit on all files"
 	@echo ""
 
 app:
-	uv run streamlit run $(APP)
+	npm --prefix $(RAG_FRONTEND) run build
+	uv run uvicorn demos.rag_retrieval_explanation.backend.api:app --host 127.0.0.1 --port 8000
+
+api:
+	uv run uvicorn demos.rag_retrieval_explanation.backend.api:app --reload --host 127.0.0.1 --port 8000
+
+frontend:
+	npm --prefix $(RAG_FRONTEND) run dev
+
+frontend-build:
+	npm --prefix $(RAG_FRONTEND) run build
+
+setup-rag-local: install-rag-local download-rag-model
+
+install-rag-local:
+	@if [ "$$(uname -s)-$$(uname -m)" = "Darwin-arm64" ]; then \
+		CMAKE_ARGS="-DGGML_METAL=on" uv sync --group rag_demo; \
+	else \
+		uv sync --group rag_demo; \
+	fi
+	npm --prefix $(RAG_FRONTEND) install
+
+download-rag-model:
+	@mkdir -p $(RAG_MODEL_DIR)
+	@if [ -f "$(RAG_MODEL)" ]; then \
+		echo "Model already exists: $(RAG_MODEL)"; \
+	else \
+		curl -L --fail --progress-bar "$(RAG_MODEL_URL)" -o "$(RAG_MODEL)"; \
+	fi
 
 test:
-	uv run pytest tests/test_rag_retrieval_policy.py
-
-# --- Controlled evals (no PDF, no model downloads) ---
-
-eval: eval-controlled
+	uv run pytest tests/test_rag_retrieval_policy.py tests/test_rag_llama_cpp_backend.py tests/test_rag_web_backend.py tests/test_rag_controlled_eval.py tests/test_rag_qasper_eval.py tests/test_rag_stability_analysis.py tests/test_rag_evaluation_protocol.py
 
 eval-controlled:
-	uv run python $(RUNNERS_DIR)/run_controlled_eval.py
+	uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval
 
-# --- PDF smoke evals ---
+eval-controlled-model:
+	uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval --model-path $(RAG_MODEL)
 
-eval-pdf:
-	uv run python $(RUNNERS_DIR)/run_pdf_smoke_eval.py $(PDF_CASES)
+eval-controlled-bge-lexical:
+	uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval --method "Dense embeddings" --embedding-model models/embedding/bge-base-en-v1.5 --embedding-device mps --value-function lexical --output-dir $(RAG_CONTROLLED_BGE_LEXICAL_RUN)
 
-pdf-cases-template:
-	@if [ "$(PDF_CASES)" = "$(PDF_CASE_TEMPLATE)" ]; then \
-		echo "Choose a writable case path, for example:"; \
-		echo "  make pdf-cases-template PDF_CASES=local/pdf_cases.json"; \
-		exit 1; \
-	fi
-	@mkdir -p "$$(dirname "$(PDF_CASES)")"
-	cp $(PDF_CASE_TEMPLATE) $(PDF_CASES)
-	@echo "Created $(PDF_CASES). Edit pdf_path, question, and expected_evidence_terms."
+eval-interactions-controlled:
+	uv run python -m demos.rag_retrieval_explanation.evals.analyze_interactions --run "BGE-base + lexical=$(RAG_CONTROLLED_BGE_LEXICAL_RUN)" --output-dir $(RAG_CONTROLLED_INTERACTION_SUMMARY)
 
-# --- Grid comparison evals ---
+eval-report-html:
+	uv run python -m demos.rag_retrieval_explanation.evals.build_eval_report
 
-compare-chunking:
-	uv run python $(RUNNERS_DIR)/run_grid_eval.py \
-		--config $(CONFIGS_DIR)/chunking_compare.yaml \
-		--cases $(PDF_CASES) \
-		--allow-failures
+eval-stability:
+	uv run python -m demos.rag_retrieval_explanation.evals.analyze_stability
 
-compare-embeddings:
-	uv run python $(RUNNERS_DIR)/run_grid_eval.py \
-		--config $(CONFIGS_DIR)/embedding_compare.yaml \
-		--cases $(PDF_CASES) \
-		--allow-failures
+eval-qasper-smoke:
+	uv run python -m demos.rag_retrieval_explanation.evals.run_qasper_eval --limit 5
 
-compare-full:
-	uv run python $(RUNNERS_DIR)/run_grid_eval.py \
-		--config $(CONFIGS_DIR)/full_grid.yaml \
-		--cases $(PDF_CASES) \
-		--allow-failures
+eval-qasper:
+	uv run python -m demos.rag_retrieval_explanation.evals.run_qasper_eval
 
-# --- Backward-compat aliases (old Makefile targets) ---
+verify-report-results:
+	uv run python -m demos.rag_retrieval_explanation.evals.verify_report_results
 
-pdf-smoke: eval-pdf
-
-pdf-compare:
-	uv run python $(RUNNERS_DIR)/run_grid_eval.py \
-		--config $(CONFIGS_DIR)/chunking_compare.yaml \
-		--cases $(PDF_CASES) \
-		--allow-failures
-
-embedding-compare: compare-embeddings
+paper:
+	TEXMFVAR=/tmp/shapiq-texmf-var latexmk -pdf -interaction=nonstopmode -halt-on-error -cd paper/main.tex
 
 # --- Code quality ---
 

@@ -29,23 +29,27 @@ The demo was refactored (June 2026). Key structural facts:
 - **`core/rag_pipeline.py`** is itself a shim re-exporting from `core/chunking.py`,
   `core/retrieval.py`, and `core/generation.py`. Edit those three files, not
   `core/rag_pipeline.py` directly.
-- **`evals/runners/`** contains the real runner logic. `evals/run_controlled_eval.py`
-  and `evals/run_pdf_smoke_eval.py` are shims that delegate to `evals/runners/`.
-- **`evals/configs/`** holds the eval config YAMLs. The grid runner reads these;
-  do not inline config values into runner scripts.
-- **`evals/runs/`** is gitignored. Run directories follow the canonical schema:
-  `manifest.json`, `summary.csv`, `report.md`, `plots/`, `artifacts/`.
-- **PyYAML** is needed for the grid runner (`run_grid_eval.py`). If missing:
-  `uv add pyyaml`.
 
 ## Project-specific surprises to remember
 
 - In `src/shapiq/game.py`, the base `Game` stores `player_name_lookup` but does
   not expose a `player_names` list. Demo code that needs display names should
   keep its own labels or use the demo's retrieved chunk titles.
-- `demos/rag_retrieval_explanation` may use Hugging Face gated models. Having a
-  Hugging Face account is not enough: the user may also need to accept access on
-  the specific model page and run `uv run huggingface-cli login` once.
-- Gemma 4 model repos use `model_type: gemma4`. If local `transformers` does not
-  recognize that architecture, the fix is a newer `transformers` build with
-  Gemma 4 support; this is separate from Hugging Face authentication.
+- Generation and model-backed value functions use `llama-cpp-python` with a
+  local GGUF file. The default path is
+  `models/llm/qwen2.5-1.5b-instruct-q4_k_m.gguf`; model files are gitignored.
+- Dense retrieval remains optional and still uses `transformers`. The default
+  PDF path uses TF-IDF and does not require Hugging Face.
+- `demos/rag_retrieval_explanation/eval_report.html` is a static report with a
+  generated detail block. Rebuild the per-question interaction panels with
+  `uv run python -m demos.rag_retrieval_explanation.evals.build_eval_report`
+  instead of hand-editing the generated block.
+
+## Living research paper
+
+- `paper/main.tex` is the living manuscript for the RAG Shapley study.
+- Any change to the benchmark, evaluation metrics, research questions,
+  experimental settings, or reported results must update `paper/main.tex` and
+  `paper/research_log.tex` in the same change.
+- Numerical claims must name or link the generated evaluation run that produced
+  them. Keep unmeasured results explicitly marked as `TBD`.

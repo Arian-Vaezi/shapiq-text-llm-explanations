@@ -1,16 +1,45 @@
-"""Model backends for RAG retrieval value functions.
-
-The demo keeps model loading behind a tiny interface so experiments can swap
-from the local lexical scorer to Hugging Face models without changing the
-shapiq game code.
-"""
+"""Local llama.cpp model backend for RAG generation and attribution scoring."""
 
 from __future__ import annotations
 
+import atexit
+import math
+import os
+import re
+import threading
 from dataclasses import dataclass
-from functools import cached_property
+from functools import cached_property, lru_cache
+from pathlib import Path
+from typing import Protocol
 
-import streamlit as st
+import numpy as np
+
+
+class LlamaModel(Protocol):
+    """Subset of the llama-cpp-python API used by this demo."""
+
+    scores: np.ndarray
+
+    def tokenize(
+        self,
+        text: bytes,
+        *,
+        add_bos: bool,
+        special: bool,
+    ) -> list[int]:
+        """Tokenize input bytes."""
+
+    def reset(self) -> None:
+        """Reset the active llama.cpp context."""
+
+    def eval(self, tokens: list[int]) -> None:
+        """Evaluate tokens and retain logits."""
+
+    def create_completion(self, **kwargs: object) -> dict[str, object]:
+        """Generate one completion."""
+
+    def close(self) -> None:
+        """Release the llama.cpp context."""
 
 
 @dataclass(frozen=True)
@@ -20,172 +49,168 @@ class GenerationResult:
     answer: str
 
 
-@st.cache_resource(show_spinner=False)
-def cached_hf_tokenizer(model_id: str) -> object:
-    """Load and cache one Hugging Face tokenizer."""
-    try:
-        from transformers import AutoTokenizer
-    except ImportError as error:  # pragma: no cover - depends on optional extra
+@lru_cache(maxsize=4)
+def cached_llama_cpp_model(
+    model_path: str,
+    n_ctx: int,
+    n_gpu_layers: int,
+    n_threads: int,
+) -> LlamaModel:
+    """Load and cache one local GGUF model through llama.cpp."""
+    path = Path(model_path).expanduser().resolve()
+    if not path.is_file():
         msg = (
-            "Hugging Face scoring requires `transformers`. Install the demo "
-            "requirements or the project's all_ml dependency group."
+            f"GGUF model not found: {path}. Download a GGUF model and set its path "
+            "on the Explanation Settings page."
+        )
+        raise RuntimeError(msg)
+    try:
+        from llama_cpp import Llama
+    except ImportError as error:  # pragma: no cover - depends on optional dependency
+        msg = (
+            "Local model inference requires `llama-cpp-python`. Install the demo "
+            "dependencies with `uv sync --group rag_demo`."
         )
         raise RuntimeError(msg) from error
 
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
-    if tokenizer.pad_token_id is None and tokenizer.eos_token_id is not None:
-        tokenizer.pad_token = tokenizer.eos_token
-    return tokenizer
-
-
-@st.cache_resource(show_spinner=False)
-def cached_hf_model(model_id: str, device_map: str, torch_dtype_name: str) -> object:
-    """Load and cache one Hugging Face model."""
-    try:
-        import torch
-        from transformers import (
-            AutoConfig,
-            AutoModelForCausalLM,
-            AutoModelForImageTextToText,
-        )
-    except ImportError as error:  # pragma: no cover - depends on optional extra
-        msg = (
-            "Hugging Face scoring requires `torch` and `transformers`. Install "
-            "the demo requirements or the project's all_ml dependency group."
-        )
-        raise RuntimeError(msg) from error
-
-    torch_dtype = "auto" if torch_dtype_name == "auto" else getattr(torch, torch_dtype_name)
-    model_kwargs = {
-        "device_map": device_map,
-        "torch_dtype": torch_dtype,
-    }
-    # Route to the correct Auto class by inspecting the model config, avoiding a
-    # broad ValueError catch that would silently swallow unrelated config errors.
-    config = AutoConfig.from_pretrained(model_id)
-    architectures = getattr(config, "architectures", []) or []
-    use_image_text = any(
-        "ForConditionalGeneration" in arch or "ImageTextToText" in arch for arch in architectures
+    model = Llama(
+        model_path=str(path),
+        n_ctx=n_ctx,
+        n_gpu_layers=n_gpu_layers,
+        n_threads=n_threads,
+        n_threads_batch=n_threads,
+        logits_all=True,
+        verbose=False,
     )
-    if use_image_text:
-        model = AutoModelForImageTextToText.from_pretrained(model_id, **model_kwargs)
-    else:
-        model = AutoModelForCausalLM.from_pretrained(model_id, **model_kwargs)
-    model.eval()
+    atexit.register(model.close)
     return model
 
 
-class HuggingFaceCausalLMBackend:
-    """Small wrapper around a Hugging Face causal language model.
-
-    The imports are intentionally lazy. This keeps the Streamlit demo usable in
-    lightweight environments, while still making the final experiment path a
-    direct Hugging Face model call.
-    """
+class LlamaCppBackend:
+    """Run a local GGUF model for grounded generation and token likelihood."""
 
     def __init__(
         self,
-        model_id: str,
+        model_path: str,
         *,
-        device_map: str = "auto",
-        torch_dtype: str = "auto",
+        n_ctx: int = 4096,
+        n_gpu_layers: int = -1,
+        n_threads: int = 0,
         max_new_tokens: int = 96,
     ) -> None:
-        """Store Hugging Face loading and generation settings."""
-        self.model_id = model_id
-        self.device_map = device_map
-        self.torch_dtype = torch_dtype
+        """Store llama.cpp loading and generation settings."""
+        self.model_path = str(Path(model_path).expanduser())
+        self.n_ctx = n_ctx
+        self.n_gpu_layers = n_gpu_layers
+        self.n_threads = n_threads or max(1, (os.cpu_count() or 2) // 2)
         self.max_new_tokens = max_new_tokens
+        self._lock = threading.RLock()
 
     @cached_property
-    def tokenizer(self) -> object:
-        """Load the tokenizer on first use."""
-        return cached_hf_tokenizer(self.model_id)
-
-    @cached_property
-    def model(self) -> object:
-        """Load the causal language model on first use."""
-        return cached_hf_model(self.model_id, self.device_map, self.torch_dtype)
-
-    def build_chat_prompt(self, question: str, context: str) -> str:
-        """Build a chat-style RAG prompt, using the tokenizer template if present."""
-        messages = [
-            {
-                "role": "system",
-                "content": (
-                    "Answer the question using only the retrieved context. If the context "
-                    "does not contain the answer, say that the provided context is insufficient. "
-                    "For broad explanatory questions, synthesize all distinct evidence types in "
-                    "the context instead of anchoring on the first or highest-scoring chunk. "
-                    "Mention multiple reasons when the context supports them, keep narrow "
-                    "subtopics as secondary points unless the question asks for them, and do not "
-                    "add claims that are not grounded in the retrieved context."
-                ),
-            },
-            {
-                "role": "user",
-                "content": f"Question:\n{question}\n\nRetrieved context:\n{context}\n\nAnswer:",
-            },
-        ]
-        if getattr(self.tokenizer, "chat_template", None):
-            return self.tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True,
-            )
-        return (
-            "Answer the question using only the retrieved context. If the context does not "
-            "contain the answer, say that the provided context is insufficient. For broad "
-            "explanatory questions, synthesize all distinct evidence types in the context instead "
-            "of anchoring on the first or highest-scoring chunk. Mention multiple reasons when "
-            "supported, keep narrow subtopics secondary unless asked, and do not add claims that "
-            "are not grounded in the retrieved context.\n\n"
-            f"Question:\n{question}\n\n"
-            f"Retrieved context:\n{context}\n\n"
-            "Answer:"
+    def model(self) -> LlamaModel:
+        """Load the GGUF model on first use."""
+        return cached_llama_cpp_model(
+            self.model_path,
+            self.n_ctx,
+            self.n_gpu_layers,
+            self.n_threads,
         )
+
+    def build_prompt(self, question: str, context: str) -> str:
+        """Build one deterministic grounded RAG completion prompt."""
+        system_prompt = (
+            "You are a grounded question-answering assistant.\n"
+            "Use only the retrieved context below. If the context is insufficient, "
+            "say so explicitly. Synthesize distinct evidence when the question is broad, "
+            "and do not add unsupported claims."
+        )
+        user_prompt = f"Question:\n{question}\n\nRetrieved context:\n{context}"
+        model_name = self.model_path.lower()
+        if "qwen" in model_name:
+            thinking_control = "\n/no_think" if "qwen3" in model_name else ""
+            return (
+                f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+                f"<|im_start|>user\n{user_prompt}{thinking_control}<|im_end|>\n"
+                "<|im_start|>assistant\n"
+            )
+        if "gemma" in model_name:
+            # Gemma 3 and Gemma 4 share the same chat template
+            return (
+                f"<start_of_turn>user\n{system_prompt}\n\n{user_prompt}<end_of_turn>\n"
+                "<start_of_turn>model\n"
+            )
+        return f"{system_prompt}\n\n{user_prompt}\n\nAnswer:\n"
 
     def target_log_likelihood(self, prompt: str, target_answer: str) -> float:
         """Return average token log-likelihood of the target answer after the prompt."""
-        import torch
-
         if not target_answer.strip():
             return 0.0
 
-        prompt_ids = self.tokenizer(prompt, return_tensors="pt").input_ids.to(self.model.device)
-        target_ids = self.tokenizer(
-            target_answer,
-            add_special_tokens=False,
-            return_tensors="pt",
-        ).input_ids.to(self.model.device)
-        input_ids = torch.cat([prompt_ids, target_ids], dim=1)
+        model = self.model
+        prompt_tokens = model.tokenize(prompt.encode("utf-8"), add_bos=True, special=True)
+        model_name = self.model_path.lower()
+        answer_prefix = "<think>\n\n</think>\n\n" if "qwen3" in model_name else ""
+        prefix_tokens = (
+            model.tokenize(
+                answer_prefix.encode("utf-8"),
+                add_bos=False,
+                special=True,
+            )
+            if answer_prefix
+            else []
+        )
+        target_tokens = model.tokenize(
+            target_answer.encode("utf-8"),
+            add_bos=False,
+            special=True,
+        )
+        full_tokens = [*prompt_tokens, *prefix_tokens, *target_tokens]
+        if len(full_tokens) > self.n_ctx:
+            msg = (
+                f"Prompt and target require {len(full_tokens)} tokens, exceeding the "
+                f"configured llama.cpp context size of {self.n_ctx}."
+            )
+            raise RuntimeError(msg)
 
-        with torch.no_grad():
-            logits = self.model(input_ids=input_ids).logits
+        with self._lock:
+            model.reset()
+            model.eval(full_tokens)
+            scores = np.asarray(model.scores)
 
-        target_start = prompt_ids.shape[1]
-        token_logits = logits[:, target_start - 1 : -1, :]
-        log_probs = torch.log_softmax(token_logits, dim=-1)
-        selected = log_probs.gather(dim=-1, index=target_ids.unsqueeze(-1)).squeeze(-1)
-        return float(selected.mean().detach().cpu())
+        target_start = len(prompt_tokens) + len(prefix_tokens)
+        token_logits = scores[target_start - 1 : len(full_tokens) - 1]
+        if token_logits.shape[0] != len(target_tokens):
+            msg = "llama.cpp did not return logits for every target token."
+            raise RuntimeError(msg)
+
+        selected_logits = token_logits[np.arange(len(target_tokens)), target_tokens]
+        row_max = np.max(token_logits, axis=1)
+        log_normalizers = row_max + np.log(
+            np.exp(token_logits - row_max[:, np.newaxis]).sum(axis=1)
+        )
+        return float(np.mean(selected_logits - log_normalizers))
 
     def generate(self, question: str, context: str) -> GenerationResult:
-        """Generate an answer from the selected context."""
-        import torch
-
-        prompt = self.build_chat_prompt(question, context)
-        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
-        pad_id = (
-            getattr(self.tokenizer, "pad_token_id", None)
-            or getattr(self.tokenizer, "eos_token_id", None)
-            or 0
-        )
-        with torch.no_grad():
-            output_ids = self.model.generate(
-                **inputs,
-                max_new_tokens=self.max_new_tokens,
-                do_sample=False,
-                pad_token_id=pad_id,
+        """Generate a deterministic answer from the selected context."""
+        prompt = self.build_prompt(question, context)
+        with self._lock:
+            response = self.model.create_completion(
+                prompt=prompt,
+                max_tokens=self.max_new_tokens,
+                temperature=0.0,
+                top_p=1.0,
+                repeat_penalty=1.05,
+                stop=["<|im_end|>", "<end_of_turn>", "\n\nQuestion:", "\nRetrieved context:"],
             )
-        new_ids = output_ids[:, inputs.input_ids.shape[1] :]
-        return GenerationResult(answer=self.tokenizer.decode(new_ids[0], skip_special_tokens=True))
+        choices = response.get("choices", [])
+        answer = str(choices[0].get("text", "")) if choices else ""
+        answer = re.sub(r"^\s*<think>.*?</think>\s*", "", answer, flags=re.DOTALL)
+        return GenerationResult(answer=answer.strip())
+
+
+def sigmoid(value: float) -> float:
+    """Return a numerically stable logistic transform."""
+    if value >= 0:
+        return 1.0 / (1.0 + math.exp(-value))
+    exp_value = math.exp(value)
+    return exp_value / (1.0 + exp_value)

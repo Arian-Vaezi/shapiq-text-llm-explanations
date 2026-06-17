@@ -28,7 +28,7 @@ def attribution_order(attribution_frame: pd.DataFrame) -> list[int]:
     """Return zero-based player ids sorted by attribution magnitude."""
     if attribution_frame.empty:
         return []
-    return [int(row.player) - 1 for row in attribution_frame.itertuples(index=False)]
+    return [int(player) - 1 for player in attribution_frame["player"].tolist()]
 
 
 def score_mask(game: RAGRetrievalGame, selected_indices: list[int]) -> float:
@@ -96,6 +96,16 @@ def retrieval_score_deletion_baseline(
         return None
     frame = deletion_evaluation_from_order(game, ordered_players)
     return frame["score"].to_numpy(dtype=float)
+
+
+def leave_one_out_order(game: RAGRetrievalGame) -> list[int]:
+    """Rank players by the full-score drop caused by removing each one."""
+    full = score_mask(game, list(range(game.n_players)))
+    drops = []
+    for player_id in range(game.n_players):
+        remaining = [idx for idx in range(game.n_players) if idx != player_id]
+        drops.append((player_id, full - score_mask(game, remaining)))
+    return [player_id for player_id, _drop in sorted(drops, key=lambda item: item[1], reverse=True)]
 
 
 def insertion_evaluation(game: RAGRetrievalGame, attribution_frame: pd.DataFrame) -> pd.DataFrame:

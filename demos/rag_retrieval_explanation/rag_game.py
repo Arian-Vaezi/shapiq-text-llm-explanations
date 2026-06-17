@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from core.rag_game import (  # noqa: F401
+    STOPWORDS,
     RAGRetrievalGame,
     RetrievedChunk,
     ScoreCallable,
-    STOPWORDS,
     budget_for_exactish_demo,
     lexical_grounding_score,
     normalize_tokens,

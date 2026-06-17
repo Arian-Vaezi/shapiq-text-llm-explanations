@@ -1,6 +1,6 @@
 """Backward-compatible shim — re-exports from core.rag_pipeline.
 
-This file keeps the original import paths working for app.py and tests while
+This file keeps the original import paths working for external users and tests while
 the real implementation lives in core/rag_pipeline.py.
 """
 

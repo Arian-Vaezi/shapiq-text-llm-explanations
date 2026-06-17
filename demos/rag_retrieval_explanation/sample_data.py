@@ -1,7 +1,7 @@
-"""Backward-compatible shim — re-exports from evals.cases.sample_data."""
+"""Backward-compatible shim - re-exports fixtures from core."""
 
 from __future__ import annotations
 
-from evals.cases.sample_data import SAMPLE_TRACES  # noqa: F401
+from core.sample_data import SAMPLE_TRACES
 
 __all__ = ["SAMPLE_TRACES"]
