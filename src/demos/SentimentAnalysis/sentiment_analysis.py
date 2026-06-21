@@ -113,7 +113,8 @@ ENCODER_MODELS: dict[str, dict] = {
 
 DECODER_MODELS: dict[str, str] = {
     "tinyllama": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    "gemma":     "google/gemma-3-1b-it",
+    "gemma3":     "google/gemma-3-1b-it",
+    "gemma4":    "google/gemma-4-E2B-it"
     
 }
 

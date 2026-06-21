@@ -208,11 +208,12 @@ with st.sidebar:
     st.markdown("**Model**")
     model_choice = st.radio(
         "Model",
-        options=["encoder", "tinyllama", "gemma"],
+        options=["encoder", "tinyllama", "gemma3", "gemma4"],
         format_func=lambda x: {
             "encoder":   "DistilBERT (encoder · fast · CPU)",
             "tinyllama": "TinyLlama 1.1B  (decoder · lighter)",
-            "gemma":     "Gemma 3 1B  (decoder · GPU recommended)",
+            "gemma3":     "Gemma 3 1B  (decoder · GPU recommended)",
+            "gemma4":    "Gemma 4 E2B  (decoder · 16GB VRAM)",
             
         }[x],
         label_visibility="collapsed",
