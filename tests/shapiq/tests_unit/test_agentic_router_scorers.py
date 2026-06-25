@@ -131,9 +131,11 @@ def test_score_batch_preserves_prompt_order(monkeypatch) -> None:
     scorer = GroqDeterministicRouterScorer(client_factory=lambda api_key: OrderedClient())
 
     scores = scorer.score_batch(
-        ["prompt one\n\nUser request:\nA\n\nAssistant:",
-         "prompt two\n\nUser request:\nB\n\nAssistant:",
-         "prompt three\n\nUser request:\nC\n\nAssistant:"],
+        [
+            "prompt one\n\nUser request:\nA\n\nAssistant:",
+            "prompt two\n\nUser request:\nB\n\nAssistant:",
+            "prompt three\n\nUser request:\nC\n\nAssistant:",
+        ],
         target_tool="calculator_tool",
         tool_descriptions=TOOL_DESCRIPTIONS,
     )
@@ -539,7 +541,9 @@ def test_trajectory_score_normalizes_alias_keys() -> None:
 
 
 def test_trajectory_score_value_normalization_ignores_case_and_punctuation() -> None:
-    reference = ToolTrajectory(selected_tool="web_search_tool", tool_arguments={"query": "Apple's newest product"})
+    reference = ToolTrajectory(
+        selected_tool="web_search_tool", tool_arguments={"query": "Apple's newest product"}
+    )
     provider, _calls = make_recording_provider(
         {
             FIXED_PROMPT: ToolTrajectory(

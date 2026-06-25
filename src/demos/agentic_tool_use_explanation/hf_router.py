@@ -79,7 +79,7 @@ class LocalHFRouter:
                 torch_dtype=torch_dtype,
                 trust_remote_code=trust_remote_code,
             )
-        except Exception as error:  # noqa: BLE001
+        except Exception as error:
             msg = (
                 f"Could not load local HuggingFace router model {model_name!r}. "
                 "Check that the model is available locally or that your environment can "

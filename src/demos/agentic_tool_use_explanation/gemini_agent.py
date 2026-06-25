@@ -85,9 +85,7 @@ def run_gemini_tool_inference(
             raw_trace={"prompt": prompt, "response_text": raw_text},
             error="Gemini did not return a recognizable tool selection.",
         )
-    if selected_tool in {"weather_tool", "web_search_tool"}:
-        assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
-    elif not assistant_answer.strip():
+    if selected_tool in {"weather_tool", "web_search_tool"} or not assistant_answer.strip():
         assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
 
     known_tool_names = _tool_names(tool_schemas)
@@ -204,7 +202,9 @@ def _generate_content(
     prompt: str,
     tool_schemas: Sequence[Mapping[str, object]],
 ) -> object:
-    config = {"tools": [{"function_declarations": [_to_function_declaration(s) for s in tool_schemas]}]}
+    config = {
+        "tools": [{"function_declarations": [_to_function_declaration(s) for s in tool_schemas]}]
+    }
     try:
         return client.models.generate_content(model=model_name, contents=prompt, config=config)
     except TypeError:

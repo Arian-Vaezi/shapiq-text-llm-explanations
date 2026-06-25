@@ -93,9 +93,11 @@ def run_groq_tool_inference(
     if not isinstance(tool_arguments, Mapping):
         tool_arguments = {}
     tool_arguments = dict(tool_arguments)
-    if selected_tool in {"weather_tool", "web_search_tool"}:
-        assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
-    elif not isinstance(assistant_answer, str) or not assistant_answer.strip():
+    if (
+        selected_tool in {"weather_tool", "web_search_tool"}
+        or not isinstance(assistant_answer, str)
+        or not assistant_answer.strip()
+    ):
         assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
 
     if selected_tool not in _valid_decision_names(tool_schemas):
@@ -126,7 +128,12 @@ def classify_groq_error(error_text: str) -> str:
     normalized = error_text.upper()
     if "429" in normalized or "RATE" in normalized:
         return "Groq rate limit reached. Try again later or use the preview fallback."
-    if "401" in normalized or "403" in normalized or "AUTH" in normalized or "API KEY" in normalized:
+    if (
+        "401" in normalized
+        or "403" in normalized
+        or "AUTH" in normalized
+        or "API KEY" in normalized
+    ):
         return "Groq authentication failed. Check GROQ_API_KEY."
     if "404" in normalized or "NOT_FOUND" in normalized or "MODEL" in normalized:
         return "Groq model is unavailable or not found. Try another model."

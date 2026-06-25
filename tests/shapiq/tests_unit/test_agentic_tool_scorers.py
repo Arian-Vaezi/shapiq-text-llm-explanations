@@ -122,9 +122,7 @@ def test_canonical_tool_schema_contents() -> None:
     assert NO_TOOL_NAME in DECISION_NAMES
     assert len(DECISION_NAMES) == len(set(DECISION_NAMES))
     assert schema_by_name["weather_tool"]["function"]["parameters"]["required"] == ["location"]
-    assert schema_by_name["calculator_tool"]["function"]["parameters"]["required"] == [
-        "expression"
-    ]
+    assert schema_by_name["calculator_tool"]["function"]["parameters"]["required"] == ["expression"]
     assert schema_by_name["web_search_tool"]["function"]["parameters"]["required"] == ["query"]
 
 
@@ -370,10 +368,14 @@ def test_logprob_next_token_log_probs_match_full_log_softmax_gather() -> None:
         dtype=torch.long,
     )
 
-    expected = torch.log_softmax(logits[:, :-1, :], dim=-1).gather(
-        dim=-1,
-        index=token_ids[:, 1:].unsqueeze(-1),
-    ).squeeze(-1)
+    expected = (
+        torch.log_softmax(logits[:, :-1, :], dim=-1)
+        .gather(
+            dim=-1,
+            index=token_ids[:, 1:].unsqueeze(-1),
+        )
+        .squeeze(-1)
+    )
     actual = LogProbToolScorer._next_token_log_probs(logits, token_ids)
 
     assert torch.allclose(actual, expected, rtol=1e-6, atol=1e-6)

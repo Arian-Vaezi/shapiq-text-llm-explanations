@@ -48,23 +48,31 @@ def test_unrelated_rerun_keeps_inferred_tool() -> None:
     assert at.session_state["agentic_inference_result"] is not None
 
 
-def test_switching_scenario_clears_stale_inferred_tool() -> None:
-    """Switching to a different scenario must invalidate a previous inference result."""
+def test_selecting_a_different_example_clears_stale_inferred_tool() -> None:
+    """Selecting a different "Try example" entry must invalidate a previous inference result.
+
+    The current app has no sidebar "Scenario" selectbox; sample scenarios are applied
+    through the "Try example" selectbox in the Inference tab instead, which rewrites
+    ``agentic_request_text`` and should invalidate any prior inference result tied to
+    the old request text.
+    """
     at = AppTest.from_file(APP_PATH, default_timeout=120)
     at.run()
     assert not at.exception
-
-    scenario_box = next(box for box in at.sidebar.selectbox if box.label == "Scenario")
-    current_trace = scenario_box.value
-    other_trace = next(name for name in SAMPLE_TRACES if name != current_trace)
+    default_request = at.session_state["agentic_request_text"]
 
     _inject_fake_inference_result(at)
     at.run()
     assert not at.exception
     assert at.session_state["agentic_inferred_tool"] == "calculator_tool"
 
-    scenario_box = next(box for box in at.sidebar.selectbox if box.label == "Scenario")
-    scenario_box.set_value(other_trace).run()
+    example_box = next(box for box in at.selectbox if box.label == "Try example")
+    other_trace = next(
+        name
+        for name in SAMPLE_TRACES
+        if " ".join(SAMPLE_TRACES[name]["user_segments"]) != default_request
+    )
+    example_box.select(other_trace).run()
 
     assert not at.exception
     assert at.session_state["agentic_inferred_tool"] is None
@@ -74,13 +82,13 @@ def test_switching_scenario_clears_stale_inferred_tool() -> None:
 
 
 def test_editing_custom_request_clears_stale_inferred_tool() -> None:
-    """Editing the custom request text must invalidate a previous inference result."""
+    """Editing the user request text must invalidate a previous inference result.
+
+    The current app's only input mode is the "User request" text area in the
+    Inference tab (there is no separate "Custom request" radio/mode anymore).
+    """
     at = AppTest.from_file(APP_PATH, default_timeout=120)
     at.run()
-    assert not at.exception
-
-    mode_radio = next(radio for radio in at.sidebar.radio if radio.label == "Input")
-    mode_radio.set_value("Custom request").run()
     assert not at.exception
 
     _inject_fake_inference_result(at)
@@ -88,7 +96,7 @@ def test_editing_custom_request_clears_stale_inferred_tool() -> None:
     assert not at.exception
     assert at.session_state["agentic_inferred_tool"] == "calculator_tool"
 
-    request_box = next(area for area in at.text_area if area.label == "Request text")
+    request_box = next(area for area in at.text_area if area.label == "User request")
     request_box.set_value("Explain what photosynthesis is in simple terms.").run()
 
     assert not at.exception

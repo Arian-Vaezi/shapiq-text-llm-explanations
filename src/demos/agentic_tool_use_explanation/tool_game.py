@@ -9,6 +9,17 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 
 try:
+    from demos.agentic_tool_use_explanation.scorers import (
+        build_coalition_prompt as _build_canonical_coalition_prompt,
+        join_user_request_segments as _join_user_request_segments,
+    )
+except ModuleNotFoundError:
+    from scorers import (
+        build_coalition_prompt as _build_canonical_coalition_prompt,
+        join_user_request_segments as _join_user_request_segments,
+    )
+
+try:
     from shapiq.game import Game
 except Exception:  # noqa: BLE001
 
@@ -154,20 +165,22 @@ class ToolUseGame(Game):
         return score
 
     def build_prompt(self, selected_segments: list[str | ToolUseSegment]) -> str:
-        """Build a coalition prompt with fixed system/tool context and selected user text."""
-        selected_texts = []
-        for segment in selected_segments:
-            text = str(segment.text).strip() if hasattr(segment, "text") else str(segment).strip()
-            if text:
-                selected_texts.append(text)
-        user_request = " ".join(selected_texts)
-        user_request_block = f"User request:\n{user_request}" if user_request else "User request:"
+        """Build a coalition prompt with fixed system/tool context and selected user text.
 
-        return (
-            f"{self.system_prompt}\n\n"
-            f"Available tools:\n{self.tool_context}\n\n"
-            f"{user_request_block}\n\n"
-            "Assistant:"
+        Delegates to ``scorers.build_coalition_prompt``, the single canonical prompt
+        format shared with ``app.py``, so the same coalition always produces the
+        identical prompt text regardless of call site. This matters most for the
+        empty coalition, which both this game's normalization baseline and
+        value-function scorers (e.g. ``FinalAnswerSimilarityScorer``) treat as a
+        cache key; a textually different "empty" prompt would trigger a second,
+        independent agent call for what should be a single cached value and could
+        break Shapley efficiency under non-deterministic backends.
+        """
+        user_request = _join_user_request_segments(selected_segments)
+        return _build_canonical_coalition_prompt(
+            user_request,
+            system_prompt=self.system_prompt,
+            tool_context=self.tool_context,
         )
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:

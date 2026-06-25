@@ -239,6 +239,50 @@ def split_coalition_prompt(prompt: str) -> tuple[str, str]:
     return system_prompt.strip(), user_request.strip()
 
 
+def join_user_request_segments(selected_segments: Sequence[object]) -> str:
+    """Join coalition-selected user-request segments into one canonical request string.
+
+    Accepts either bare strings or objects with a ``.text`` attribute (e.g. the
+    demo's ``ToolUseSegment``), stripping each segment and dropping ones that are
+    empty after stripping. This is the single place that decides how a coalition's
+    selected segments become the "user request" text; every prompt builder in this
+    demo (``app.py`` and ``tool_game.ToolUseGame``) must call this instead of
+    reimplementing the joining logic, so the same coalition always produces the
+    same user request string regardless of call site.
+    """
+    texts = []
+    for segment in selected_segments:
+        text = str(segment.text).strip() if hasattr(segment, "text") else str(segment).strip()
+        if text:
+            texts.append(text)
+    return " ".join(texts)
+
+
+def build_coalition_prompt(user_request: str, *, system_prompt: str, tool_context: str) -> str:
+    """Build the one canonical coalition prompt format used everywhere in this demo.
+
+    This is the single source of truth for embedding a (possibly empty) masked
+    user request into the fixed system prompt and tool context. Every prompt
+    builder in this demo (the Inference/Explanation tabs in ``app.py`` and
+    ``tool_game.ToolUseGame.build_prompt``) must call this function instead of
+    reimplementing the formatting -- otherwise the empty-coalition prompt used as
+    the Shapley normalization baseline can end up textually different across call
+    sites (extra/missing blank line), which causes duplicate, independently
+    re-run agent calls for what should be a single cached "empty coalition" value
+    and can break Shapley efficiency under any backend that is not perfectly
+    deterministic. This is the structural counterpart of
+    :func:`split_coalition_prompt`, which recovers ``user_request`` from this
+    exact format.
+    """
+    user_request_block = f"User request:\n{user_request}" if user_request else "User request:"
+    return (
+        f"{system_prompt.strip()}\n\n"
+        f"Available tools:\n{tool_context.strip()}\n\n"
+        f"{user_request_block}\n\n"
+        "Assistant:"
+    )
+
+
 @dataclass
 class LexicalToolScorer:
     """Fast keyword baseline for target-tool support."""

@@ -16,10 +16,16 @@ from typing import TYPE_CHECKING, Literal
 import numpy as np
 import pandas as pd
 import streamlit as st
-from matplotlib.patches import Rectangle
+from final_answer_similarity_scorer import (
+    DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID,
+    FinalAnswerSimilarityScorer,
+    SentenceTransformerAnswerEmbedder,
+    extract_final_answer,
+)
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import DEFAULT_LOCAL_HF_ROUTER_MODEL_ID, LocalHFRouter
+from matplotlib.patches import Rectangle
 from router_scorers import (
     DEFAULT_GROQ_ROUTER_MODEL_ID,
     DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES,
@@ -40,11 +46,15 @@ from scorers import (
     LogProbToolScorer,
     MockLLM,
     ToolChoice,
+    build_coalition_prompt as canonical_coalition_prompt,
+    join_user_request_segments,
 )
 from semantic_segmenter import SemanticSegmenter
 from tool_schemas import get_executable_tool_schemas
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import matplotlib.pyplot as plt
 
     import shapiq
@@ -56,6 +66,8 @@ DEFAULT_INDEX = "k-SII"
 DEFAULT_MAX_ORDER = 2
 DELTA_STATUS_THRESHOLD = 0.01
 DEFAULT_MOCK_QUERY = "Will it rain in Berlin tomorrow morning?"
+FINAL_ANSWER_SIMILARITY_LABEL = "Final answer semantic similarity"
+EFFICIENCY_RESIDUAL_TOLERANCE = 1e-4
 MOCK_SYSTEM_SEGMENTS = [
     "Use weather_tool for weather, rain, temperature, forecast, or city-date questions.",
     "Use calculator_tool for exact arithmetic, totals, percentages, and numeric expressions.",
@@ -124,6 +136,16 @@ def load_semantic_segmenter(
         window=window,
         min_segment_words=min_segment_words,
     )
+
+
+@st.cache_resource
+def load_final_answer_embedder(model_id: str) -> SentenceTransformerAnswerEmbedder:
+    """Load and cache the optional embedding model for the final-answer similarity scorer.
+
+    The underlying sentence-transformers model is only downloaded/loaded the first
+    time the embedder is called, not when this cached wrapper is constructed.
+    """
+    return SentenceTransformerAnswerEmbedder(model_id=model_id, device="auto")
 
 
 CSS = """
@@ -459,13 +481,18 @@ def build_coalition_prompt(
     system_prompt: str,
     tool_context: str,
 ) -> str:
-    """Build a coalition prompt with fixed context and selected user-request segments."""
-    user_request = " ".join(segment.text.strip() for segment in selected_user_segments)
-    return (
-        f"{system_prompt.strip()}\n\n"
-        f"Available tools:\n{tool_context.strip()}\n\n"
-        f"User request:\n{user_request}\n\n"
-        "Assistant:"
+    """Build a coalition prompt with fixed context and selected user-request segments.
+
+    Delegates to ``scorers.build_coalition_prompt``, the single canonical prompt
+    format shared with ``tool_game.ToolUseGame.build_prompt``, so the same
+    coalition (including the empty one used as the Shapley normalization
+    baseline) always produces byte-identical prompt text regardless of call site.
+    """
+    user_request = join_user_request_segments(selected_user_segments)
+    return canonical_coalition_prompt(
+        user_request,
+        system_prompt=system_prompt,
+        tool_context=tool_context,
     )
 
 
@@ -702,6 +729,37 @@ def pairwise_matrix_from_explanation(
     return pd.DataFrame(explanation.get_n_order_values(2))
 
 
+def interaction_order_diagnostics(
+    explanation: shapiq.InteractionValues,
+    *,
+    full_value: float,
+    empty_value: float,
+) -> dict[str, float]:
+    """Summarize order-1/order-2 values and the k-SII efficiency residual."""
+    order_1_sum = 0.0
+    unique_order_2: dict[tuple[int, int], float] = {}
+    for interaction, value in getattr(explanation, "dict_values", {}).items():
+        interaction_tuple = tuple(sorted(interaction))
+        if len(interaction_tuple) == 1:
+            order_1_sum += float(value)
+        elif len(interaction_tuple) == 2:
+            left, right = interaction_tuple
+            if left < right:
+                unique_order_2[(left, right)] = float(value)
+
+    order_2_sum = float(sum(unique_order_2.values()))
+    total_game_value = float(full_value) - float(empty_value)
+    residual = (order_1_sum + order_2_sum) - total_game_value
+    return {
+        "full_value": float(full_value),
+        "empty_value": float(empty_value),
+        "order_1_sum": order_1_sum,
+        "order_2_sum": order_2_sum,
+        "total_game_value": total_game_value,
+        "residual": residual,
+    }
+
+
 def strongest_pair(matrix: pd.DataFrame, labels: list[str]) -> tuple[str, float]:
     """Return the strongest non-diagonal second-order interaction."""
     if matrix.shape[0] < 2:
@@ -766,12 +824,17 @@ def build_interpretation_notes(
     return notes
 
 
-def polish_bar(fig: plt.Figure, ax: plt.Axes) -> plt.Figure:
+def polish_bar(
+    fig: plt.Figure,
+    ax: plt.Axes,
+    *,
+    xlabel: str = "Target-tool attribution",
+) -> plt.Figure:
     """Make package bar plot fit the Streamlit layout."""
     fig.set_size_inches(6.2, 3.7)
     ax.set_title("", loc="center")
     ax.set_title("User Request Segment Attribution", loc="left", fontsize=12, pad=8)
-    ax.set_xlabel("Target-tool attribution")
+    ax.set_xlabel(xlabel)
     ax.grid(axis="x", color="#d7dfdf", alpha=0.65, linewidth=0.8)
     ax.set_axisbelow(True)
     ax.spines["top"].set_visible(False)
@@ -805,7 +868,12 @@ def polish_heatmap(
     """Make package heatmap fit the Streamlit layout."""
     fig.set_size_inches(6.0, 4.7)
     ax.set_title("", loc="center")
-    ax.set_title("User Request Segment Interaction Heatmap", loc="left", fontsize=12, pad=8)
+    ax.set_title(
+        "First- and Second-Order Interaction Heatmap",
+        loc="left",
+        fontsize=12,
+        pad=8,
+    )
     ax.tick_params(axis="x", labelrotation=30)
 
     if segments:
@@ -904,6 +972,101 @@ def display_demo_path() -> str:
         return str(demo_path)
 
 
+def build_complete_agent_callable(
+    *,
+    inference_backend: str,
+    inference_model_name: str,
+    system_prompt: str,
+    tool_context: str,
+    hf_max_new_tokens: int = 256,
+    hf_trust_remote_code: bool = False,
+) -> Callable[[str], object]:
+    """Build a backend-agnostic callable that runs the complete tool-calling agent.
+
+    Mirrors the Inference tab's "Run inference" action (router/tool-choice -> tool
+    execution -> final answer) exactly, but parameterized over the user request so
+    it can be re-run once per Shapley coalition by
+    ``final_answer_similarity_scorer.FinalAnswerSimilarityScorer``.
+    """
+
+    def run(user_request: str) -> object:
+        if inference_backend == "Groq":
+            return run_groq_tool_inference(
+                user_request,
+                get_executable_tool_schemas(),
+                inference_model_name,
+                system_prompt=system_prompt,
+                tool_context=tool_context,
+            )
+        if inference_backend == "Gemini":
+            return run_gemini_tool_inference(
+                user_request,
+                get_executable_tool_schemas(),
+                inference_model_name,
+                system_prompt=system_prompt,
+                tool_context=tool_context,
+            )
+        try:
+            hf_router = load_local_hf_router(
+                inference_model_name,
+                int(hf_max_new_tokens),
+                trust_remote_code=bool(hf_trust_remote_code),
+            )
+            return hf_router.choose_tool(user_request, TOOLS)
+        except Exception as error:  # noqa: BLE001
+            return types.SimpleNamespace(
+                selected_tool=None,
+                tool_arguments={},
+                agent_response="",
+                raw_response="",
+                debug_prompt=None,
+                error=f"HF local inference failed: {error}",
+                available=False,
+            )
+
+    return run
+
+
+def resolve_full_run_reference_answer(
+    *,
+    agent_callable: Callable[[str], object],
+    user_request: str,
+    inference_result: object | None,
+    inference_result_is_current: bool,
+) -> tuple[str, bool, str | None]:
+    """Return (reference final answer, whether an existing result was reused, error reason).
+
+    Reuses the answer already produced by the normal "Run inference" action when it
+    matches the current request, system/tool configuration, and backend/model
+    configuration. Otherwise runs the full prompt once through the same agent
+    pipeline and uses that answer as the reference. The full-run reference answer
+    must never be missing or a placeholder: if it cannot be obtained, the third
+    return value carries a concrete, user-actionable reason so the caller can fail
+    the explanation clearly instead of silently computing meaningless scores.
+    """
+    if (
+        inference_result_is_current
+        and inference_result is not None
+        and not getattr(inference_result, "error", None)
+    ):
+        answer = extract_final_answer(inference_result)
+        if answer:
+            return answer, True, None
+
+    try:
+        full_run_result = agent_callable(user_request)
+    except Exception as error:  # noqa: BLE001
+        return "", False, f"The agent raised an error while answering the full request: {error}"
+
+    backend_error = getattr(full_run_result, "error", None)
+    answer = extract_final_answer(full_run_result)
+    if answer:
+        return answer, False, None
+    if backend_error:
+        return "", False, str(backend_error)
+    return "", False, "The agent returned no final-answer text for the full request."
+
+
 def main() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
     st.markdown(
@@ -987,7 +1150,7 @@ def main() -> None:
                 example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
                 st.session_state["agentic_pending_example_request"] = example_request
 
-        example_options = [example_placeholder] + list(SAMPLE_TRACES)
+        example_options = [example_placeholder, *list(SAMPLE_TRACES)]
         st.selectbox(
             "Try example",
             example_options,
@@ -1061,39 +1224,19 @@ def main() -> None:
                 )
 
         def execute_tool_inference() -> object:
-            if inference_backend == "Groq":
-                return run_groq_tool_inference(
-                    user_request,
-                    get_executable_tool_schemas(),
-                    inference_model_name,
-                    system_prompt=system_prompt,
-                    tool_context=tool_context,
-                )
-            if inference_backend == "Gemini":
-                return run_gemini_tool_inference(
-                    user_request,
-                    get_executable_tool_schemas(),
-                    inference_model_name,
-                    system_prompt=system_prompt,
-                    tool_context=tool_context,
-                )
-            try:
-                hf_router = load_local_hf_router(
-                    inference_model_name,
-                    int(hf_max_new_tokens),
-                    trust_remote_code=bool(hf_trust_remote_code),
-                )
-                return hf_router.choose_tool(user_request, TOOLS)
-            except Exception as error:  # noqa: BLE001
-                return types.SimpleNamespace(
-                    selected_tool=None,
-                    tool_arguments={},
-                    agent_response="",
-                    raw_response="",
-                    debug_prompt=None,
-                    error=f"HF local inference failed: {error}",
-                    available=False,
-                )
+            agent_callable = build_complete_agent_callable(
+                inference_backend=inference_backend,
+                inference_model_name=inference_model_name,
+                system_prompt=system_prompt,
+                tool_context=tool_context,
+                hf_max_new_tokens=int(hf_max_new_tokens)
+                if inference_backend == "HF local"
+                else 256,
+                hf_trust_remote_code=bool(hf_trust_remote_code)
+                if inference_backend == "HF local"
+                else False,
+            )
+            return agent_callable(user_request)
 
         _, run_column = st.columns([3, 1])
         if run_column.button(
@@ -1111,8 +1254,8 @@ def main() -> None:
             else:
                 with st.spinner("Running agent inference..."):
                     inference_result = execute_tool_inference()
-            setattr(inference_result, "backend", inference_backend)
-            setattr(inference_result, "model", inference_model_name)
+            inference_result.backend = inference_backend
+            inference_result.model = inference_model_name
             st.session_state["agentic_inference_backend"] = inference_backend
             st.session_state["agentic_inference_model"] = inference_model_name
             st.session_state["agentic_inference_result"] = inference_result
@@ -1198,6 +1341,10 @@ def main() -> None:
             key="agentic_show_developer_scorers",
         )
         scorer_options = ["LLM logprob scorer"]
+        if current_inference_backend in {"Groq", "Gemini", "HF local"}:
+            # All three backends can run the complete tool-calling agent end to end, which
+            # is what this scorer needs (it is not a routing-only scorer like the ones below).
+            scorer_options.append(FINAL_ANSWER_SIMILARITY_LABEL)
         if current_inference_backend == "Groq" or has_groq_inference_result:
             scorer_options.append("Groq soft-vote scorer")
             scorer_options.append("Groq deterministic router")
@@ -1234,6 +1381,7 @@ def main() -> None:
         soft_vote_temperature = DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE
         soft_vote_max_retries = DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES
         soft_vote_seed = None
+        final_answer_embedding_model_id = DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID
         if scorer_backend == "LLM logprob scorer":
             with st.expander("Logprob scorer settings", expanded=True):
                 logprob_model_id = st.text_input(
@@ -1253,6 +1401,22 @@ def main() -> None:
                         "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
                     ),
                 )
+        elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
+            with st.expander("Final answer similarity scorer settings", expanded=True):
+                final_answer_embedding_model_id = st.text_input(
+                    "Embedding model",
+                    value=DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID,
+                    key="agentic_final_answer_embedding_model_id",
+                    help=(
+                        "A sentence-transformers model used only to embed final answers for "
+                        "this scorer. Loaded lazily the first time you run this scorer, not "
+                        "at app startup."
+                    ),
+                )
+                if current_inference_backend == "Groq" and not os.getenv("GROQ_API_KEY"):
+                    st.warning("GROQ_API_KEY is not set. Add it to use this scorer with Groq.")
+                elif current_inference_backend == "Gemini" and not os.getenv("GEMINI_API_KEY"):
+                    st.warning("GEMINI_API_KEY is not set. Add it to use this scorer with Gemini.")
         elif scorer_backend == "Groq deterministic router":
             with st.expander("Groq router scorer settings", expanded=True):
                 router_model_id = st.text_input(
@@ -1493,6 +1657,7 @@ def main() -> None:
             int(soft_vote_max_retries),
             soft_vote_seed,
             trajectory_reference_signature,
+            final_answer_embedding_model_id,
             bool(enable_fallback_target_selection),
             show_lexical_comparison,
             segment_threshold,
@@ -1526,6 +1691,7 @@ def main() -> None:
                     int(soft_vote_max_retries),
                     soft_vote_seed,
                     trajectory_reference_signature,
+                    final_answer_embedding_model_id,
                     bool(enable_fallback_target_selection),
                     show_lexical_comparison,
                     segment_threshold,
@@ -1533,14 +1699,31 @@ def main() -> None:
                     min_segment_words,
                     tuple(semantic_user_texts),
                 )
-    
+
         st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
+        is_final_answer_similarity_scorer = scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL
         target_tool_label = target_tool if target_tool is not None else "Pending"
-        target_line = (
-            f"<strong>Explaining why agent selected:</strong> {escape(target_tool_label)}"
-            if using_inferred_tool
-            else f"<strong>Fallback target tool:</strong> {escape(target_tool_label)}"
-        )
+        if is_final_answer_similarity_scorer:
+            # This scorer compares final answers, not tool choice, so show the actual
+            # reference answer it computed instead of the legacy target-tool wording/value.
+            reference_answer_preview = None
+            if isinstance(result, dict):
+                final_answer_scorer_meta = result.get("final_answer_scorer_meta")
+                if final_answer_scorer_meta:
+                    reference_answer_preview = truncate_label(
+                        final_answer_scorer_meta["reference_answer"],
+                        max_length=96,
+                    )
+            target_line = (
+                "<strong>Reference answer from the full request:</strong> "
+                f"{escape(reference_answer_preview or 'Pending')}"
+            )
+        elif using_inferred_tool:
+            target_line = (
+                f"<strong>Explaining why agent selected:</strong> {escape(target_tool_label)}"
+            )
+        else:
+            target_line = f"<strong>Fallback target tool:</strong> {escape(target_tool_label)}"
         st.markdown(
             f"""
             <div class="scenario-panel">
@@ -1558,7 +1741,7 @@ def main() -> None:
             """,
             unsafe_allow_html=True,
         )
-    
+
         st.markdown('<div class="section-label">Explanation target</div>', unsafe_allow_html=True)
         target_left, target_right = st.columns([0.85, 1.15])
         with target_left:
@@ -1593,7 +1776,7 @@ def main() -> None:
                 ]
             )
             st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
-    
+
         with st.expander("Show fixed context and Shapley players", expanded=show_prompt_segments):
             segment_left, segment_right = st.columns(2)
             with segment_left:
@@ -1657,10 +1840,10 @@ def main() -> None:
                     "settings before running explanation."
                 )
             return
-    
+
         run = st.session_state.pending_run
         st.session_state.pending_run = False
-    
+
         if run:
             try:
                 from tool_game import ToolUseGame
@@ -1670,7 +1853,7 @@ def main() -> None:
                     f"could not be imported in this local environment: {error}"
                 )
                 return
-    
+
         if run:
             lexical_scorer = LexicalToolScorer()
             if scorer_backend == "Keyword scorer":
@@ -1694,6 +1877,57 @@ def main() -> None:
                         return
                 primary_scorer.max_pairs_per_batch = int(max_pairs_per_batch)
                 primary_label = "LLM logprob scorer"
+            elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
+                with st.spinner("Loading embedding model..."):
+                    try:
+                        embedder = load_final_answer_embedder(final_answer_embedding_model_id)
+                    except Exception as error:  # noqa: BLE001
+                        st.error(
+                            "Could not load embedding model "
+                            f"{final_answer_embedding_model_id!r}: {error}"
+                        )
+                        return
+                agent_callable = build_complete_agent_callable(
+                    inference_backend=inference_backend,
+                    inference_model_name=inference_model_name,
+                    system_prompt=system_prompt,
+                    tool_context=tool_context,
+                    hf_max_new_tokens=int(hf_max_new_tokens)
+                    if inference_backend == "HF local"
+                    else 256,
+                    hf_trust_remote_code=bool(hf_trust_remote_code)
+                    if inference_backend == "HF local"
+                    else False,
+                )
+                inference_result_is_current = (
+                    st.session_state.get("agentic_inference_signature")
+                    == current_inference_signature
+                    and st.session_state.get("agentic_inference_backend") == inference_backend
+                    and st.session_state.get("agentic_inference_model") == inference_model_name
+                )
+                with st.spinner("Resolving full-run reference answer..."):
+                    reference_answer, reused_existing_inference, reference_error = (
+                        resolve_full_run_reference_answer(
+                            agent_callable=agent_callable,
+                            user_request=user_request,
+                            inference_result=inference_result,
+                            inference_result_is_current=inference_result_is_current,
+                        )
+                    )
+                if not reference_answer:
+                    st.error(
+                        "Could not obtain a final answer for the full user request, so the "
+                        "final answer similarity scorer cannot run. "
+                        f"Reason: {reference_error or 'unknown error'}"
+                    )
+                    return
+                primary_scorer = FinalAnswerSimilarityScorer(
+                    agent_callable=agent_callable,
+                    embedder=embedder,
+                    reference_answer=reference_answer,
+                    empty_prompt=empty_prompt,
+                )
+                primary_label = FINAL_ANSWER_SIMILARITY_LABEL
             elif scorer_backend == "Groq deterministic router":
                 if not os.getenv("GROQ_API_KEY"):
                     st.error(
@@ -1765,7 +1999,7 @@ def main() -> None:
                     )
                 target_tool = fallback_choice.tool
                 target_source = "fallback explanation scorer"
-    
+
             full_score = primary_scorer.score_batch(
                 [full_prompt],
                 target_tool=target_tool,
@@ -1776,7 +2010,7 @@ def main() -> None:
                 target_tool=target_tool,
                 tool_descriptions=TOOLS,
             )[0]
-    
+
             with st.spinner("Computing tool-use attributions..."):
                 game = ToolUseGame(
                     target_tool=target_tool,
@@ -1798,14 +2032,14 @@ def main() -> None:
                     pair_value,
                     full_score,
                 )
-    
+
             top = attribution_frame.iloc[0] if not attribution_frame.empty else None
             top_label = "No segment" if top is None else f"{top['segment']} ({top['source']})"
             top_score = 0.0 if top is None else float(top["attribution"])
             interpretation_sentence = (
                 notes[0] if notes else "No interpretation is available for this run."
             )
-    
+
             compare_with_lexical = show_lexical_comparison and primary_label != "Keyword scorer"
             llm_debug_outputs = getattr(primary_scorer, "last_debug_outputs", [])
             lexical_result = None
@@ -1853,11 +2087,13 @@ def main() -> None:
                         "top": "No segment"
                         if lexical_top is None
                         else f"{lexical_top['segment']} ({lexical_top['source']})",
-                        "top_value": 0.0 if lexical_top is None else float(lexical_top["attribution"]),
+                        "top_value": 0.0
+                        if lexical_top is None
+                        else float(lexical_top["attribution"]),
                         "pair": lexical_pair_label,
                         "pair_value": lexical_pair_value,
                     }
-    
+
             scoring_prompt_preview = build_scoring_prompt_preview(
                 primary_scorer,
                 full_prompt,
@@ -1882,6 +2118,7 @@ def main() -> None:
                 int(soft_vote_max_retries),
                 soft_vote_seed,
                 trajectory_reference_signature,
+                final_answer_embedding_model_id,
                 bool(enable_fallback_target_selection),
                 show_lexical_comparison,
                 segment_threshold,
@@ -1912,8 +2149,18 @@ def main() -> None:
                 "llm_debug_outputs": llm_debug_outputs,
                 "lexical_result": lexical_result,
                 "scoring_prompt": scoring_prompt_preview,
+                "final_answer_scorer_meta": (
+                    {
+                        "embedding_model_id": final_answer_embedding_model_id,
+                        "reference_answer": primary_scorer.reference_answer,
+                        "reused_existing_inference": reused_existing_inference,
+                        "empty_raw_similarity": primary_scorer.last_empty_raw_similarity,
+                    }
+                    if primary_label == FINAL_ANSWER_SIMILARITY_LABEL
+                    else None
+                ),
             }
-    
+
         result = st.session_state.result
         if result is None:
             st.error("No explanation result is available. Click Run explanation to compute one.")
@@ -1935,16 +2182,39 @@ def main() -> None:
         compare_with_lexical = result["compare_with_lexical"]
         llm_debug_outputs = result["llm_debug_outputs"]
         lexical_result = result["lexical_result"]
+        final_answer_scorer_meta = result.get("final_answer_scorer_meta")
         delta_support = float(full_score) - float(empty_score)
-        if delta_support > DELTA_STATUS_THRESHOLD:
+        is_final_answer_result = primary_label == FINAL_ANSWER_SIMILARITY_LABEL
+        if is_final_answer_result:
+            if delta_support > DELTA_STATUS_THRESHOLD:
+                support_status = "Higher semantic fidelity"
+                support_interpretation = (
+                    "The complete prompt's final answer is more similar to the full-run "
+                    "reference answer than the empty-request baseline."
+                )
+            elif delta_support < -DELTA_STATUS_THRESHOLD:
+                support_status = "Lower semantic fidelity"
+                support_interpretation = (
+                    "The complete prompt's final answer is less similar to the full-run "
+                    "reference answer than the empty-request baseline."
+                )
+            else:
+                support_status = "Neutral / weak change"
+                support_interpretation = (
+                    "The complete prompt does not change final-answer similarity much compared "
+                    "with the empty-request baseline."
+                )
+        elif delta_support > DELTA_STATUS_THRESHOLD:
             support_status = "Supported by the prompt"
             support_interpretation = (
-                "The complete prompt increases support for the target tool compared with the baseline."
+                "The complete prompt increases support for the target tool compared with the "
+                "baseline."
             )
         elif delta_support < -DELTA_STATUS_THRESHOLD:
             support_status = "Reduced by the prompt"
             support_interpretation = (
-                "The complete prompt reduces support for the target tool compared with the baseline."
+                "The complete prompt reduces support for the target tool compared with the "
+                "baseline."
             )
         else:
             support_status = "Neutral / weak evidence"
@@ -1954,49 +2224,85 @@ def main() -> None:
         token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
             load_text_plotters()
         )
-    
+
         debug_requested = (
             show_value_function_details
             or show_scoring_prompt_preview
             or compare_with_lexical
             or bool(llm_debug_outputs)
+            or final_answer_scorer_meta is not None
         )
         tab_names = ["Summary", "Attribution", "Interactions"]
         if debug_requested:
             tab_names.append("Debug")
         tabs = st.tabs(tab_names)
-    
+
         with tabs[0]:
             st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
-            st.markdown("**Tool support overview**")
+            summary_heading = (
+                "**Final answer similarity overview**"
+                if is_final_answer_result
+                else "**Tool support overview**"
+            )
+            metric_labels = (
+                {
+                    "target": "Scorer",
+                    "full": "Normalized full-coalition value = v(all user segments)",
+                    "empty": "Normalized empty-coalition value = v(empty user request)",
+                    "delta": "Semantic fidelity gain",
+                }
+                if is_final_answer_result
+                else {
+                    "target": "Target tool",
+                    "full": "Full support score = v(all user segments)",
+                    "empty": "Baseline = fixed context + empty user request",
+                    "delta": "Delta support",
+                }
+            )
+            metric_target_value = (
+                "Final-answer semantic similarity" if is_final_answer_result else target_tool
+            )
+            st.markdown(summary_heading)
             st.markdown(
                 f"""
                 <div class="metric-strip">
                     <div class="metric-card">
-                        <span>Target tool</span><strong>{escape(target_tool)}</strong>
+                        <span>{metric_labels["target"]}</span>
+                        <strong>{escape(metric_target_value)}</strong>
                     </div>
                     <div class="metric-card">
-                        <span>Full support score = v(all user segments)</span>
+                        <span>{metric_labels["full"]}</span>
                         <strong>{full_score:.3f}</strong>
                     </div>
                     <div class="metric-card">
-                        <span>Baseline = fixed context + empty user request</span>
+                        <span>{metric_labels["empty"]}</span>
                         <strong>{empty_score:.3f}</strong>
                     </div>
                     <div class="metric-card">
-                        <span>Delta support</span><strong>{delta_support:.3f}</strong>
+                        <span>{metric_labels["delta"]}</span><strong>{delta_support:.3f}</strong>
                     </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
             st.info(f"**{support_status}.** {support_interpretation}")
-    
+
             st.caption("See the Attribution tab for the full first-order segment ranking.")
-    
+
         with tabs[1]:
             st.markdown("**First-order attribution ranking**")
             st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
+            if is_final_answer_result:
+                st.caption(
+                    "With k-SII up to order 2, first-order scores alone do not sum to the "
+                    "total game value; pairwise interactions account for the remaining "
+                    "contribution."
+                )
+            bar_xlabel = (
+                "Final-answer semantic-fidelity attribution"
+                if is_final_answer_result
+                else "Target-tool attribution"
+            )
             if token_attribution_bar_plot is None:
                 st.warning(
                     "The shapiq text attribution plot is unavailable in this environment. "
@@ -2015,10 +2321,14 @@ def main() -> None:
                 else:
                     if fig_ax is not None:
                         fig, ax = fig_ax
-                        st.pyplot(polish_bar(fig, ax), clear_figure=True)
-    
+                        st.pyplot(polish_bar(fig, ax, xlabel=bar_xlabel), clear_figure=True)
+
         with tabs[2]:
-            st.markdown("**Pairwise interaction heatmap**")
+            st.markdown("**First- and second-order interaction heatmap**")
+            st.caption(
+                "Diagonal: first-order segment attribution. Off-diagonal: pairwise k-SII "
+                "interaction."
+            )
             if sentence_interaction_heatmap is None:
                 st.warning(
                     "The shapiq text interaction heatmap is unavailable in this environment. "
@@ -2039,7 +2349,7 @@ def main() -> None:
                         fig, ax = fig_ax
                         st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
             st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
-    
+
         if debug_requested:
             with tabs[3]:
                 if llm_debug_outputs:
@@ -2073,12 +2383,105 @@ def main() -> None:
                             "candidate_probs",
                             "final_score",
                             "prompt_preview",
+                            "masked_user_request",
+                            "raw_similarity",
+                            "normalized_score",
+                            "execution_status",
+                            "execution_error",
                         ]
                         st.dataframe(
-                            debug_frame[[column for column in debug_columns if column in debug_frame]],
+                            debug_frame[
+                                [column for column in debug_columns if column in debug_frame]
+                            ],
                             use_container_width=True,
                             hide_index=True,
                         )
+                if final_answer_scorer_meta is not None:
+                    with st.expander("Final answer similarity details", expanded=False):
+                        diagnostics = interaction_order_diagnostics(
+                            explanation,
+                            full_value=full_score,
+                            empty_value=empty_score,
+                        )
+                        st.write(
+                            f"Embedding model: `{final_answer_scorer_meta['embedding_model_id']}`"
+                        )
+                        st.write("Normalized by empty-coalition raw similarity: `True`")
+                        empty_raw_similarity = final_answer_scorer_meta["empty_raw_similarity"]
+                        st.write(
+                            f"Raw empty-coalition similarity: `{empty_raw_similarity:.3f}`"
+                            if empty_raw_similarity is not None
+                            else "Raw empty-coalition similarity: not yet computed"
+                        )
+                        st.write(
+                            "Reused the existing Inference tab result as the reference answer: "
+                            f"`{final_answer_scorer_meta['reused_existing_inference']}`"
+                        )
+                        raw_full_similarity = (
+                            float(diagnostics["full_value"]) + float(empty_raw_similarity)
+                            if empty_raw_similarity is not None
+                            else None
+                        )
+                        diagnostic_frame = pd.DataFrame(
+                            [
+                                {
+                                    "quantity": "raw empty-coalition cosine similarity",
+                                    "value": empty_raw_similarity,
+                                },
+                                {
+                                    "quantity": "raw full-coalition cosine similarity",
+                                    "value": raw_full_similarity,
+                                },
+                                {
+                                    "quantity": "normalized full-coalition game value",
+                                    "value": diagnostics["full_value"],
+                                },
+                                {
+                                    "quantity": "sum of order-1 interaction values",
+                                    "value": diagnostics["order_1_sum"],
+                                },
+                                {
+                                    "quantity": "sum of unique order-2 pairwise interaction values",
+                                    "value": diagnostics["order_2_sum"],
+                                },
+                                {
+                                    "quantity": "k-SII efficiency residual",
+                                    "value": diagnostics["residual"],
+                                },
+                            ]
+                        )
+                        diagnostic_frame["value"] = diagnostic_frame["value"].map(
+                            lambda value: "n/a" if value is None else f"{float(value):.6f}"
+                        )
+                        st.dataframe(
+                            diagnostic_frame,
+                            use_container_width=True,
+                            hide_index=True,
+                        )
+                        if abs(diagnostics["residual"]) > EFFICIENCY_RESIDUAL_TOLERANCE:
+                            st.warning(
+                                "k-SII efficiency residual exceeds tolerance "
+                                f"{EFFICIENCY_RESIDUAL_TOLERANCE:g}: "
+                                f"{diagnostics['residual']:.6g}"
+                            )
+                        failed_coalition_rows = [
+                            row
+                            for row in llm_debug_outputs
+                            if row.get("execution_status") not in (None, "ok")
+                        ]
+                        if failed_coalition_rows:
+                            st.warning(
+                                f"{len(failed_coalition_rows)} of {len(llm_debug_outputs)} "
+                                "sampled coalitions did not produce a usable final answer "
+                                "(agent error or empty answer) and were scored with the "
+                                "configured fallback raw similarity instead of being embedded. "
+                                "See the model output diagnostics table above for per-coalition "
+                                "execution_status/execution_error."
+                            )
+                        else:
+                            st.caption("No coalition execution failures for this run.")
+                        st.markdown("**Reference final answer (full request)**")
+                        st.code(final_answer_scorer_meta["reference_answer"], language="text")
                 if lexical_result is not None:
                     st.markdown("**Scorer comparison**")
                     comparison_rows = [
@@ -2122,33 +2525,7 @@ def main() -> None:
                     st.code(full_prompt, language="text")
                     st.write("Empty coalition prompt:")
                     st.code(empty_prompt, language="text")
-    
-        st.markdown(
-            '<div class="section-label">How the explanation is computed</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            """
-            <div class="setup-line">
-                <strong>Value function:</strong>
-                <code>v(S) = score(target tool | fixed context + selected user segments S)</code><br>
-                S is a subset of user-request segment players. The system prompt and tool
-                definitions are included unchanged for every coalition.
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        with st.expander("Why this is a Shapley game", expanded=False):
-            st.markdown(
-                """
-                Shapley values compare tool-support scores across different user-segment
-                combinations to estimate each user segment's contribution.
-    
-                A positive contribution means the user segment supports the target tool.
-                A negative contribution means it weakens support for the target tool.
-                """
-            )
-    
+
         st.caption(f"Demo path: `{display_demo_path()}`")
 
 
