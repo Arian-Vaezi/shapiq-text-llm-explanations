@@ -318,8 +318,7 @@ def _write_report(summary: pd.DataFrame, output_dir: Path) -> None:
         f"- Mean retrieval MRR: {_mean(summary, 'retrieval_mrr')}",
         f"- Gold-answer top attribution is evidence: "
         f"{_mean_boolean(summary, 'top_attribution_is_gold')}",
-        f"- Gold-answer attribution mass on evidence: "
-        f"{_mean(summary, 'gold_attribution_mass')}",
+        f"- Gold-answer attribution mass on evidence: {_mean(summary, 'gold_attribution_mass')}",
         f"- Generated-answer top attribution is evidence: "
         f"{_mean_boolean(summary, 'generated_top_attribution_is_gold')}",
         f"- Generated-answer attribution mass on evidence: "
@@ -455,7 +454,7 @@ def main() -> int:
         n_gpu_layers=args.n_gpu_layers,
     )
     stamp = datetime.now(tz=UTC).strftime("%Y%m%d_%H%M%S")
-    suffix = f"qasper_{args.limit}" if args.limit is not None else "qasper_30"
+    suffix = f"qasper_{args.limit}" if args.limit is not None else "qasper_50"
     output_dir = args.output_dir or RUNS_DIR / f"{stamp}_{suffix}"
     summary = run_qasper(
         output_dir=output_dir,

@@ -189,28 +189,28 @@ this changes runtime but not the value function.
 \subsection{Datasets}
 \paragraph{Controlled corpus.}
 The bundled controlled corpus is maintained in
-\path{evals/cases/controlled_benchmark.json}. It contains 108 passages and 27
-questions covering five evidence patterns: direct, complementary, missing,
-conflicting, and redundant evidence. Gold evidence is labelled by stable
-passage IDs. The retriever searches the full 108-passage corpus for every query.
+\path{evals/cases/controlled_benchmark.json}. The current default file contains
+200 passages and 50 questions covering five evidence patterns: direct,
+complementary, missing, conflicting, and redundant evidence. Gold evidence is
+labelled by stable passage IDs. The retriever searches the full corpus for
+every query.
 The primary dense retriever is BAAI BGE-base-en-v1.5
 \cite{xiao2023cpack}, a 109.5-million-parameter English embedding model.
 Queries use the model's retrieval instruction,
 passages do not receive the instruction, and embeddings use the first-token
 representation followed by L2 normalization.
-For interaction recovery, the same controlled file contains 30 labelled
-passage pairs: 10 complementary, 10 redundant, and 10 conflicting. Each
+For interaction recovery, the same controlled file contains 60 labelled
+passage pairs across complementary, redundant, and conflicting relations. Each
 labelled pair records stable passage IDs, relation type, and expected sign.
-Earlier first-order attribution runs were recorded before this interaction
-expansion and are kept as historical 20-case results; new controlled runs use
-the 27-case file by default.
+The numerical results below are from archived 27-case runs recorded before the
+50-case expansion; evaluation on the expanded default file is \tbd{rerun}.
 
 \paragraph{External benchmark.}
 The external validation uses QASPER \cite{dasigi2021qasper}, a scientific
 question-answering benchmark over NLP papers released under CC BY 4.0. We use
 the official validation split from \texttt{allenai/qasper} and freeze a
-30-question subset in
-\path{evals/cases/qasper_validation_30.json}. The frozen manifest records the
+50-question subset in
+\path{evals/cases/qasper_validation_50.json}. The frozen manifest records the
 source revision
 \texttt{fdc9d8214fbab5dd782958601db4d678e6934a54}, paper IDs, question IDs, and
 answer annotation IDs; the full external text is downloaded into a local cache
@@ -221,8 +221,8 @@ abstract paragraphs included as candidates. A case is eligible when it has an
 answerable free-form or extractive annotation, a 2--40 word reference answer,
 and at least one official evidence string that maps back to a paper paragraph.
 The selection is deterministic: validation row order, then question order, then
-annotation order, with at most one question per paper. The resulting 30 cases
-contain 10 free-form and 20 extractive answers. QASPER is used as an external
+annotation order, with at most one question per paper. The resulting 50 cases
+contain 19 free-form and 31 extractive answers. QASPER is used as an external
 domain validation, not as an interaction-label benchmark.
 
 \paragraph{Artemis case study.}
@@ -317,8 +317,9 @@ Contrastive LL / generated & 30 & 21 & 0.550 & 0.451 & 0.667 & 0.529 & -- \\
 \bottomrule
 \end{tabular}
 \end{table}
-The QASPER results in Table 2 are from
-\path{evals/runs/20260615_qasper_30_bge_e4b_contrastive}.
+The QASPER results in Table 2 are archived 30-case results from
+\path{evals/runs/20260615_qasper_30_bge_e4b_contrastive}; evaluation on the
+current 50-case QASPER manifest is \tbd{rerun}.
 
 \begin{table}[ht]
 \centering
@@ -363,7 +364,7 @@ masses of 0.812 and 0.800. On the controlled corpus, generated-answer behavior
 is therefore still strongly aligned with the labelled evidence.
 
 Holding E4B and the contrastive value function fixed, TF--IDF retrieved less
-labelled evidence than BGE on the current benchmark:
+labelled evidence than BGE on the archived 27-case benchmark:
 \path{evals/runs/20260616_controlled_tfidf_contrastive_ll_e4b_layers20}
 retrieved at least one labelled evidence passage in 22 rather than 23 cases,
 with Recall@6 of 0.891 and MRR of 0.935. Conditional on the gold-hit cases,
@@ -374,7 +375,7 @@ labelled-evidence mass was 0.780. Thus the retriever ablation mainly reduces
 evidence coverage; once labelled evidence is retrieved, first-order attribution
 remains comparable on this synthetic benchmark.
 
-On the 30-case QASPER validation subset, the same BGE + E4B contrastive
+On the archived 30-case QASPER validation subset, the same BGE + E4B contrastive
 configuration achieved Recall@6 of 0.550 and MRR of 0.451. Because Shapley
 cannot assign attribution to evidence that was not retrieved, the most
 informative external result conditions on the 21 cases where at least one
@@ -433,7 +434,7 @@ nine retrieved complementary pairs have the expected positive sign. This
 supports using lexical support as a transparent diagnostic baseline, not as the
 strongest evidence for interaction recovery. E4B contrastive likelihood with
 20 Metal-offloaded layers produces strong first-order attribution metrics, but
-weaker pairwise sign recovery on the expanded interaction labels: 16 of 28
+weaker pairwise sign recovery on the archived 27-case interaction labels: 16 of 28
 evaluable gold-target signs and 9 of 28 generated-target signs match the
 expected relation signs. This suggests that the current sign convention and
 value function capture some redundancy but do not reliably separate all

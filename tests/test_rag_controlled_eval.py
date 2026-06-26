@@ -30,32 +30,30 @@ if TYPE_CHECKING:
 def test_controlled_benchmark_has_five_patterns_and_real_corpus() -> None:
     benchmark = load_benchmark()
 
-    assert len(benchmark.cases) == 27
+    assert len(benchmark.cases) == 50
     assert len({case.pattern for case in benchmark.cases}) == 5
     assert len(benchmark_candidates(benchmark)) == len(benchmark.passages)
     assert len(benchmark.passages) > len(benchmark.cases)
 
 
-def test_expanded_interaction_benchmark_has_valid_balanced_labels() -> None:
+def test_expanded_interaction_benchmark_has_valid_labels() -> None:
     benchmark = load_benchmark()
     known_ids = {passage.passage_id for passage in benchmark.passages}
     relation_counts: dict[str, int] = {}
 
-    assert len(benchmark.cases) == 27
-    assert len(benchmark.passages) == 108
+    assert len(benchmark.cases) == 50
+    assert len(benchmark.passages) == 200
     for case in benchmark.cases:
         for interaction in case.expected_interactions:
             assert interaction.left in known_ids
             assert interaction.right in known_ids
             assert interaction.expected_sign in {"positive", "negative"}
-            relation_counts[interaction.relation] = (
-                relation_counts.get(interaction.relation, 0) + 1
-            )
+            relation_counts[interaction.relation] = relation_counts.get(interaction.relation, 0) + 1
 
     assert relation_counts == {
-        "complementary": 10,
-        "conflicting": 10,
-        "redundant": 10,
+        "complementary": 20,
+        "conflicting": 18,
+        "redundant": 22,
     }
 
 
@@ -152,9 +150,7 @@ def test_model_protocol_separates_generated_and_gold_attribution() -> None:
 def test_model_protocol_separates_generated_and_gold_interactions() -> None:
     benchmark = load_benchmark()
     case = next(
-        case
-        for case in benchmark.cases
-        if case.case_id == "complementary_rgb_primary_light"
+        case for case in benchmark.cases if case.case_id == "complementary_rgb_primary_light"
     )
 
     row, artifacts = evaluate_case(

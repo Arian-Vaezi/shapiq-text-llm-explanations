@@ -1,5 +1,22 @@
 \section*{Research Log}
 \begin{description}
+  \item[2026-06-26, expanded controlled benchmark] Expanded
+  \path{evals/cases/controlled_benchmark.json} from the 27-case, 108-passage
+  benchmark to a 50-case, 200-passage benchmark with broader direct,
+  complementary, redundant, conflicting, and missing-evidence coverage. The
+  default file now contains 60 labelled interaction pairs: 20 complementary,
+  22 redundant, and 18 conflicting. A TF--IDF lexical smoke run in
+  \path{evals/runs/20260626_controlled_50_tfidf_lexical_smoke} completed all
+  50 cases and is used only as a pipeline check; primary BGE/E4B numerical
+  results on the expanded benchmark remain \textbf{TBD}.
+  \item[2026-06-26, expanded QASPER validation subset] Regenerated the frozen
+  QASPER validation manifest from the same validation cache and source
+  revision, increasing the default external subset from 30 to 50 cases in
+  \path{evals/cases/qasper_validation_50.json}. The 50 cases cover 50 unique
+  papers and contain 19 free-form and 31 extractive answers. Existing QASPER
+  numerical results remain the archived 30-case run in
+  \path{evals/runs/20260615_qasper_30_bge_e4b_contrastive}; primary BGE/E4B
+  results on the 50-case manifest remain \textbf{TBD}.
   \item[2026-06-17, research-question framing] Refocused the manuscript and
   HTML report around two core Shapley research questions: first-order evidence
   identification and pairwise interaction recovery. Stability checks and
@@ -94,7 +111,7 @@
   generated-answer attribution.
   \item[2026-06-16, interaction-aware controlled benchmark] Updated
   \path{evals/cases/controlled_benchmark.json} from the original 20-case,
-  80-passage corpus to the current 27-case, 108-passage controlled benchmark.
+  80-passage corpus to the then-current 27-case, 108-passage controlled benchmark.
   The file now includes 30 labelled interaction pairs: 10 complementary, 10
   redundant, and 10 conflicting. Added artifact-level reporting of interaction
   coverage, skipped
@@ -137,7 +154,7 @@
   Metal offload with \texttt{n\_gpu\_layers=-1} still caused native llama.cpp
   crashes, so the completed run uses partial Metal offload.
   \item[2026-06-17, completed missing 27-case attribution ablations] Added the
-  two missing controlled-benchmark runs on the current 27-case corpus:
+  two missing controlled-benchmark runs on the then-current 27-case corpus:
   BGE-base + E4B target likelihood in
   \path{evals/runs/20260616_controlled_bge_target_ll_e4b_layers20} and
   TF--IDF + E4B contrastive likelihood in
