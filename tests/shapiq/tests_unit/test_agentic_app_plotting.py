@@ -7,7 +7,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import pytest
+
+import shapiq
 
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
@@ -56,13 +57,6 @@ def test_fallback_attribution_chart_uses_streamlit_bar_chart(monkeypatch) -> Non
     assert use_container_width is True
 
 
-class FakeGame:
-    n_players = 2
-
-    def value_function(self, coalitions: np.ndarray) -> np.ndarray:
-        return np.asarray([0.2 + 0.3 * row[0] + 0.5 * row[1] for row in coalitions])
-
-
 class RecordingScorer:
     """Small scorer that records every batch it receives."""
 
@@ -92,24 +86,46 @@ class RecordingScorer:
         return [score for _ in prompts]
 
 
-def test_exact_fallback_approximator_returns_demo_interaction_values() -> None:
-    approximator = app.ExactFallbackApproximator(n=2, index="SV", max_order=2)
-
-    explanation = approximator.approximate(budget=4, game=FakeGame())
-    first_order = explanation.get_n_order(order=1)
-
-    assert first_order.dict_values == {
-        (0,): pytest.approx(0.3),
-        (1,): pytest.approx(0.5),
-        (0, 1): pytest.approx(0.0),
-    }
-    assert explanation.get_n_order_values(order=2).shape == (2, 2)
+def test_app_no_longer_has_invalid_heuristic_fallback() -> None:
+    """The hand-rolled finite-difference heuristic must not exist as a normal code path."""
+    assert not hasattr(app, "ExactFallbackApproximator")
+    assert not hasattr(app, "DemoInteractionValues")
 
 
-def test_values_to_frame_accepts_demo_interaction_values() -> None:
-    explanation = app.DemoInteractionValues(
-        first_order=[0.3, -0.1],
-        second_order=pd.DataFrame([[0.0, 0.2], [0.2, 0.0]]),
+def test_compute_interaction_explanation_uses_real_exact_computer_below_limit() -> None:
+    scorer = RecordingScorer()
+    game = ToolUseGame(
+        target_tool="calculator_tool",
+        user_segments=["Calculate", "238 times 47"],
+        system_prompt="Use calculator_tool for arithmetic.",
+        scorer=scorer,
+        tool_descriptions=app.TOOLS,
+        normalize=False,
+    )
+
+    explanation, algorithm_label = app.compute_interaction_explanation(
+        game=game,
+        index="k-SII",
+        max_order=2,
+        budget=None,
+    )
+
+    assert isinstance(explanation, shapiq.InteractionValues)
+    assert explanation.index == "k-SII"
+    assert "ExactComputer" in algorithm_label
+    assert "4 / 4 coalitions" in algorithm_label  # 2 ** n_players == 4
+
+
+def test_values_to_frame_accepts_real_interaction_values() -> None:
+    explanation = shapiq.InteractionValues(
+        values=np.asarray([0.0, 0.3, -0.1, 0.2]),
+        index="SV",
+        max_order=1,
+        min_order=0,
+        n_players=2,
+        interaction_lookup={(): 0, (0,): 1, (1,): 2},
+        estimated=False,
+        baseline_value=0.0,
     )
     segments = [
         ToolUseSegment(source="system", label="S1", text="Use weather_tool."),

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import importlib.util
-import itertools
 import math
 import os
 import sys
@@ -13,9 +12,14 @@ from html import escape
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
-import numpy as np
 import pandas as pd
 import streamlit as st
+from exact_interactions import (
+    MAX_EXACT_DEMO_PLAYERS,
+    ExactComputationLimitError,
+    UnsupportedExactIndexError,
+    compute_exact_interactions,
+)
 from final_answer_similarity_scorer import (
     DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID,
     FinalAnswerSimilarityScorer,
@@ -392,11 +396,6 @@ class ToolUseSegment:
     text: str
 
 
-def budget_for_demo(n_players: int) -> int:
-    """Small interactive default budget."""
-    return int(min(2**n_players, max(48, 8 * n_players * math.log2(n_players + 1))))
-
-
 def truncate_label(value: str, max_length: int = 72) -> str:
     """Shorten long selectbox labels without changing their underlying value."""
     if len(value) <= max_length:
@@ -592,131 +591,77 @@ def values_to_frame(
     return frame.sort_values("abs_attribution", ascending=False).drop(columns=["abs_attribution"])
 
 
-@dataclass
-class DemoInteractionValues:
-    """Minimal interaction-values object for the local fallback path."""
-
-    first_order: list[float]
-    second_order: pd.DataFrame
-    index: str = "SV"
-
-    @property
-    def max_order(self) -> int:
-        return 2
-
-    @property
-    def n_players(self) -> int:
-        return len(self.first_order)
-
-    @property
-    def dict_values(self) -> dict[tuple[int, ...], float]:
-        values = {(idx,): value for idx, value in enumerate(self.first_order)}
-        for left in range(self.n_players):
-            for right in range(left + 1, self.n_players):
-                values[(left, right)] = float(self.second_order.iloc[left, right])
-        return values
-
-    def __getitem__(self, interaction: tuple[int, ...]) -> float:
-        return self.dict_values.get(tuple(sorted(interaction)), 0.0)
-
-    def get_n_order(self, order: int) -> DemoInteractionValues:
-        if order == 1:
-            empty_matrix = pd.DataFrame([[0.0] * self.n_players for _ in range(self.n_players)])
-            return DemoInteractionValues(self.first_order, empty_matrix, self.index)
-        if order == 2:
-            return DemoInteractionValues([0.0] * self.n_players, self.second_order, self.index)
-        empty_matrix = pd.DataFrame([[0.0] * self.n_players for _ in range(self.n_players)])
-        return DemoInteractionValues([0.0] * self.n_players, empty_matrix, self.index)
-
-    def get_n_order_values(self, order: int) -> np.ndarray:
-        if order == 1:
-            return np.asarray(self.first_order, dtype=float)
-        if order == 2:
-            return self.second_order.to_numpy(dtype=float)
-        return np.zeros(tuple([self.n_players] * order), dtype=float)
-
-
-class ExactFallbackApproximator:
-    """Exact local Shapley fallback used when shapiq cannot import optional C extensions."""
-
-    def __init__(self, *, n: int, index: str, max_order: int) -> None:
-        self.n = n
-        self.index = index
-        self.max_order = max_order
-
-    def approximate(self, *, budget: int, game: object) -> DemoInteractionValues:
-        del budget
-        values = self._evaluate_all_coalitions(game)
-        first_order = [self._shapley_value(player, values) for player in range(self.n)]
-        second_order = self._pairwise_synergy(values)
-        return DemoInteractionValues(first_order, pd.DataFrame(second_order), self.index)
-
-    def _evaluate_all_coalitions(self, game: object) -> dict[int, float]:
-        coalitions = []
-        masks = []
-        for mask in range(1 << self.n):
-            masks.append(mask)
-            coalitions.append([(mask >> player) & 1 == 1 for player in range(self.n)])
-        scores = game.value_function(np.asarray(coalitions, dtype=bool))
-        return {mask: float(score) for mask, score in zip(masks, scores, strict=True)}
-
-    def _shapley_value(self, player: int, values: dict[int, float]) -> float:
-        other_players = [idx for idx in range(self.n) if idx != player]
-        score = 0.0
-        for size in range(self.n):
-            weight = (
-                math.factorial(size) * math.factorial(self.n - size - 1) / math.factorial(self.n)
-            )
-            for subset in itertools.combinations(other_players, size):
-                mask = sum(1 << idx for idx in subset)
-                score += weight * (values[mask | (1 << player)] - values[mask])
-        return score
-
-    def _pairwise_synergy(self, values: dict[int, float]) -> list[list[float]]:
-        full_mask = (1 << self.n) - 1
-        matrix = [[0.0] * self.n for _ in range(self.n)]
-        for left in range(self.n):
-            for right in range(left + 1, self.n):
-                without_pair = full_mask & ~(1 << left) & ~(1 << right)
-                without_left = full_mask & ~(1 << left)
-                without_right = full_mask & ~(1 << right)
-                synergy = (
-                    values[full_mask]
-                    - values[without_left]
-                    - values[without_right]
-                    + values[without_pair]
-                )
-                matrix[left][right] = synergy
-                matrix[right][left] = synergy
-        return matrix
+def budget_for_demo(n_players: int) -> int:
+    """Sampling budget for the official shapiq approximator used above the exact limit."""
+    return int(min(2**n_players, max(48, 8 * n_players * math.log2(n_players + 1))))
 
 
 def make_approximator(index: str, n_players: int, max_order: int) -> object:
-    """Create a shapiq approximator for the selected index."""
-    try:
-        import shapiq
-    except Exception:  # noqa: BLE001
-        return ExactFallbackApproximator(n=n_players, index=index, max_order=max_order)
+    """Create a real shapiq approximator for player counts above ``MAX_EXACT_DEMO_PLAYERS``.
 
-    try:
-        if index == "SV":
-            return shapiq.KernelSHAP(n=n_players, random_state=42)
-        if index == "STII":
-            return shapiq.PermutationSamplingSTII(
-                n=n_players,
-                max_order=max_order,
-                random_state=42,
-            )
-        if index == "FSII":
-            return shapiq.RegressionFSII(n=n_players, max_order=max_order, random_state=42)
-        return shapiq.KernelSHAPIQ(
+    This is only reached when exact computation is infeasible. It must never silently
+    substitute a hand-rolled heuristic: if shapiq is unavailable or construction fails,
+    the caller is expected to surface the error instead of falling back to one.
+    """
+    import shapiq
+
+    if index == "SV":
+        return shapiq.KernelSHAP(n=n_players, random_state=42)
+    if index == "STII":
+        return shapiq.PermutationSamplingSTII(
             n=n_players,
-            index=index,
             max_order=max_order,
             random_state=42,
         )
-    except Exception:  # noqa: BLE001
-        return ExactFallbackApproximator(n=n_players, index=index, max_order=max_order)
+    if index == "FSII":
+        return shapiq.RegressionFSII(n=n_players, max_order=max_order, random_state=42)
+    return shapiq.KernelSHAPIQ(
+        n=n_players,
+        index=index,
+        max_order=max_order,
+        random_state=42,
+    )
+
+
+def compute_interaction_explanation(
+    *,
+    game: object,
+    index: str,
+    max_order: int,
+    budget: int | None,
+) -> tuple[shapiq.InteractionValues, str]:
+    """Compute interaction values, preferring exact computation over approximation.
+
+    For ``game.n_players <= MAX_EXACT_DEMO_PLAYERS`` this always uses the real
+    ``shapiq.ExactComputer`` so the returned values are genuinely the requested official
+    index, not a heuristic. Above that limit it falls back to a real, clearly labelled
+    shapiq approximator instead of silently substituting a different computation.
+
+    Returns:
+        A tuple of the native ``shapiq.InteractionValues`` result and an algorithm label
+        describing how it was computed, for display in the UI.
+
+    Raises:
+        ExactComputationLimitError: Propagated from ``compute_exact_interactions`` if
+            ``game.n_players`` unexpectedly exceeds the exact limit.
+        UnsupportedExactIndexError: Propagated from ``compute_exact_interactions`` if
+            ``index`` is not supported by ``ExactComputer``.
+    """
+    if game.n_players <= MAX_EXACT_DEMO_PLAYERS:
+        explanation, metadata = compute_exact_interactions(
+            game=game,
+            index=index,
+            max_order=max_order,
+        )
+        algorithm_label = (
+            f"shapiq ExactComputer (exact evaluation: {metadata.coalition_count} / "
+            f"{metadata.coalition_count} coalitions)"
+        )
+        return explanation, algorithm_label
+
+    approximator = make_approximator(index, game.n_players, max_order)
+    explanation = approximator.approximate(budget=budget, game=game)
+    return explanation, f"Official shapiq approximation: {type(approximator).__name__}"
 
 
 def pairwise_matrix_from_explanation(
@@ -1545,12 +1490,24 @@ def main() -> None:
             return
         user_segments = build_segments(semantic_user_texts, "user")
         labels = [segment.label for segment in user_segments]
-        budget = budget_for_demo(len(user_segments))
+        using_exact_computation = len(user_segments) <= MAX_EXACT_DEMO_PLAYERS
+        budget = budget_for_demo(len(user_segments)) if not using_exact_computation else None
 
         with st.expander("Shapley and debug settings", expanded=False):
             st.caption(f"index: fixed `{DEFAULT_INDEX}`")
             st.caption(f"max_order: fixed `{DEFAULT_MAX_ORDER}`")
-            st.caption(f"budget: `{budget}` auto")
+            if using_exact_computation:
+                coalition_count = 2 ** len(user_segments)
+                st.caption(
+                    "Algorithm: `shapiq ExactComputer` "
+                    f"(exact evaluation: `{coalition_count}` / `{coalition_count}` coalitions)"
+                )
+            else:
+                st.caption(
+                    f"`{len(user_segments)}` players exceeds the exact limit of "
+                    f"`{MAX_EXACT_DEMO_PLAYERS}`. Algorithm: official shapiq approximation, "
+                    f"budget: `{budget}` auto."
+                )
             show_prompt_segments = st.checkbox(
                 "show prompt segments",
                 value=False,
@@ -2020,8 +1977,16 @@ def main() -> None:
                     scorer=primary_scorer,
                     tool_descriptions=TOOLS,
                 )
-                approximator = make_approximator(index, game.n_players, max_order)
-                explanation = approximator.approximate(budget=budget, game=game)
+                try:
+                    explanation, algorithm_label = compute_interaction_explanation(
+                        game=game,
+                        index=index,
+                        max_order=max_order,
+                        budget=budget,
+                    )
+                except (ExactComputationLimitError, UnsupportedExactIndexError) as error:
+                    st.error(f"Could not compute the {index} explanation: {error}")
+                    return
                 first_order = explanation.get_n_order(order=1)
                 attribution_frame = values_to_frame(first_order, user_segments)
                 pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
@@ -2053,14 +2018,11 @@ def main() -> None:
                         scorer=lexical_scorer,
                         tool_descriptions=TOOLS,
                     )
-                    lexical_approximator = make_approximator(
-                        index,
-                        lexical_game.n_players,
-                        max_order,
-                    )
-                    lexical_explanation = lexical_approximator.approximate(
-                        budget=budget,
+                    lexical_explanation, _lexical_algorithm_label = compute_interaction_explanation(
                         game=lexical_game,
+                        index=index,
+                        max_order=max_order,
+                        budget=budget,
                     )
                     lexical_first_order = lexical_explanation.get_n_order(order=1)
                     lexical_frame = values_to_frame(lexical_first_order, user_segments)
@@ -2134,6 +2096,7 @@ def main() -> None:
                 if fallback_choice is None
                 else fallback_choice.scores,
                 "primary_label": primary_label,
+                "algorithm_label": algorithm_label,
                 "full_score": full_score,
                 "empty_score": empty_score,
                 "first_order": first_order,
@@ -2166,6 +2129,7 @@ def main() -> None:
             st.error("No explanation result is available. Click Run explanation to compute one.")
             return
         primary_label = result["primary_label"]
+        algorithm_label = result["algorithm_label"]
         full_score = result["full_score"]
         empty_score = result["empty_score"]
         first_order = result["first_order"]
@@ -2518,9 +2482,11 @@ def main() -> None:
                         )
                 if show_value_function_details:
                     st.markdown("**Value function details**")
+                    st.write(f"Algorithm: `{algorithm_label}`")
                     st.write(f"Index: `{index}`")
                     st.write(f"Max order: `{max_order}`")
-                    st.write(f"Budget: `{budget}`")
+                    if not using_exact_computation:
+                        st.write(f"Budget: `{budget}`")
                     st.write("Full coalition prompt:")
                     st.code(full_prompt, language="text")
                     st.write("Empty coalition prompt:")
