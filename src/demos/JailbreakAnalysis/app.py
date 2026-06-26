@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import html
 import io
+import os
+import traceback
+from itertools import combinations
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import matplotlib as mpl
@@ -18,6 +22,20 @@ from shapiq.plot import sentence_interaction_heatmap
 
 if TYPE_CHECKING:
     from matplotlib.figure import Figure
+
+# Some setups leave SSL_CERT_FILE / REQUESTS_CA_BUNDLE pointing at a cert bundle that no
+# longer exists (e.g. an old miniconda path). httpx then crashes on every HTTPS call
+# (HuggingFace Hub, Groq, Gemini) with FileNotFoundError. If the configured cert file is
+# missing, fall back to certifi's bundle so the demo still runs.
+for _ca_var in ("SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"):
+    _ca_path = os.environ.get(_ca_var)
+    if _ca_path and not Path(_ca_path).exists():
+        try:
+            import certifi
+
+            os.environ[_ca_var] = certifi.where()
+        except Exception:  # noqa: BLE001
+            os.environ.pop(_ca_var, None)
 
 # Above this many players, second-order interactions become slow to approximate
 # (quadratic number of pairs) and the plots get unreadable. We still allow it,
@@ -145,6 +163,59 @@ def recommended_budget(n_players: int, *, second_order: bool, multiplier: float 
     if n_players <= 20:  # for small games, exact is cheap — don't waste calls past 2**n
         budget = min(budget, 2**n_players)
     return budget
+
+
+# =====================================================================================
+# Faithfulness / additivity metric.
+#
+# An explanation is only useful if it reproduces the model. We fit a purely additive
+# model (order 1) and an additive+pairwise model (order 2) — by plain least squares — to
+# the coalitions shapiq already evaluated, and report each one's held-out R^2. The gap
+# (order2 - order1) is how much the pairwise interactions explain *beyond* a first-order
+# (additive / plain-SHAP) explanation. This grounds the demo in Faith-Shap's notion that
+# an interaction is what best reproduces the value function, and stops us over-reading
+# interaction plots when a prompt is essentially additive (gap ~ 0).
+# =====================================================================================
+def _faith_design(coalitions: np.ndarray, order: int) -> np.ndarray:
+    """Least-squares design matrix: intercept + main effects (+ pairwise terms if order>=2)."""
+    n = coalitions.shape[1]
+    cols = [np.ones(len(coalitions))]
+    cols.extend(coalitions[:, i] for i in range(n))
+    if order >= 2:
+        cols.extend(coalitions[:, i] * coalitions[:, j] for i, j in combinations(range(n), 2))
+    return np.column_stack(cols)
+
+
+def _fit_r2(coalitions: np.ndarray, values: np.ndarray, order: int) -> float:
+    """In-sample R^2 of the best order-``order`` least-squares fit of the value function.
+
+    With an intercept this is bounded in [0, 1] and monotonic in order (order-2 >= order-1),
+    so the gap is the pairwise contribution. When all coalitions are evaluated (small player
+    counts) this is the exact decomposition faithfulness; when sampled it is the
+    reconstruction quality over the evaluated coalitions.
+    """
+    design = _faith_design(coalitions, order)
+    coef, *_ = np.linalg.lstsq(design, values, rcond=None)
+    pred = design @ coef
+    ss_tot = float(np.sum((values - values.mean()) ** 2))
+    if ss_tot <= 1e-12:
+        return float("nan")
+    return 1.0 - float(np.sum((values - pred) ** 2)) / ss_tot
+
+
+def faithfulness_scores(
+    coalitions: list[np.ndarray], values: list[float]
+) -> tuple[float, float, int]:
+    """Return (order-1 R^2, order-1+2 R^2, #unique coalitions) on the evaluated coalitions."""
+    if not coalitions:
+        return float("nan"), float("nan"), 0
+    uniq: dict[tuple[int, ...], list[float]] = {}
+    for row, val in zip(coalitions, values, strict=True):
+        uniq.setdefault(tuple(int(v) for v in row), []).append(val)
+    keys = list(uniq)
+    x = np.array(keys, dtype=float)
+    y = np.array([float(np.mean(uniq[k])) for k in keys])
+    return _fit_r2(x, y, 1), _fit_r2(x, y, 2), len(keys)
 
 
 # =====================================================================================
@@ -811,6 +882,7 @@ with tab_explanation:
             )
         else:
             run_error: str | None = None
+            run_traceback = ""
             results: dict | None = None
 
             with st.status("Running explanation...") as status:
@@ -874,7 +946,25 @@ with tab_explanation:
                     else:
                         status.write(f"Running Shapiq approximation (budget={budget})...")
                         approx = shapiq.KernelSHAP(n=game.n_players, random_state=42)
-                    result = approx.approximate(budget=budget, game=game)
+                    # Record the coalitions shapiq evaluates so the faithfulness metric is
+                    # free (no extra model calls). normalization_value is 0, so the recorded
+                    # value_function outputs equal the game outputs the approximator sees.
+                    rec_coalitions: list[np.ndarray] = []
+                    rec_values: list[float] = []
+                    _orig_value_fn = game.value_function
+
+                    def _recording_value_fn(coalitions: np.ndarray) -> np.ndarray:
+                        vals = _orig_value_fn(coalitions)
+                        for c, v in zip(coalitions, vals, strict=True):
+                            rec_coalitions.append(np.asarray(c, dtype=int))
+                            rec_values.append(float(v))
+                        return vals
+
+                    game.value_function = _recording_value_fn  # type: ignore[assignment]
+                    try:
+                        result = approx.approximate(budget=budget, game=game)
+                    finally:
+                        game.value_function = _orig_value_fn  # type: ignore[assignment]
 
                     # Computation done; the visualisation step renders below.
                     render_pipeline(
@@ -892,11 +982,15 @@ with tab_explanation:
                         "n_players": game.n_players,
                         "budget": budget,
                         "warning": player_warning,
+                        "faith": faithfulness_scores(rec_coalitions, rec_values)
+                        if second_order
+                        else None,
                     }
                     status.update(label="Explanation complete!", state="complete", expanded=False)
                 except Exception as e:  # noqa: BLE001
                     status.update(label="Error during explanation.", state="error")
                     run_error = str(e)
+                    run_traceback = traceback.format_exc()
 
             # Results render OUTSIDE the status block, otherwise they are hidden when the
             # status auto-collapses on completion.
@@ -909,7 +1003,7 @@ with tab_explanation:
                 else:
                     st.error("The explanation could not be completed.")
                 with st.expander("Technical details"):
-                    st.code(run_error)
+                    st.code(run_traceback or run_error)
             elif results is not None:
                 if results["warning"]:
                     st.warning(results["warning"])
@@ -932,6 +1026,39 @@ with tab_explanation:
                         "These are k-SII order-1 main effects — close to, but not identical to, "
                         "the standalone Shapley values."
                     )
+
+                if second_order and results.get("faith") is not None:
+                    r1, r2, n_uniq = results["faith"]
+                    n_pl = results["n_players"]
+                    params2 = 1 + n_pl + n_pl * (n_pl - 1) // 2
+                    st.markdown("### How much do the interactions add?")
+                    if not np.isfinite(r1) or not np.isfinite(r2) or n_uniq < params2 + 3:
+                        st.info(
+                            "Not enough evaluated coalitions for a reliable faithfulness estimate — "
+                            "raise **Approximation Quality** to *Thorough* (or use a shorter prompt) "
+                            "and re-run."
+                        )
+                    else:
+                        pct1 = max(0.0, r1) * 100
+                        pct2 = max(0.0, r2) * 100
+                        gap = max(0.0, pct2 - pct1)
+                        m1, m2, m3 = st.columns(3)
+                        m1.metric("Additive (order 1)", f"{pct1:.0f}%")
+                        m2.metric("+ pairwise (order 2)", f"{pct2:.0f}%")
+                        m3.metric("Interactions add", f"+{gap:.0f} pp")
+                        if gap >= 10:
+                            st.caption(
+                                "Interactions are doing real work: a first-order (additive / "
+                                f"plain-SHAP) explanation misses ~{gap:.0f} percentage points that the "
+                                "pairwise terms recover. Reconstruction R² over the "
+                                f"{n_uniq} evaluated coalitions."
+                            )
+                        else:
+                            st.caption(
+                                f"This prompt is close to additive — pairwise interactions add little "
+                                f"({gap:.0f} pp), so the per-segment view largely suffices. "
+                                f"Reconstruction R² over the {n_uniq} evaluated coalitions."
+                            )
 
                 if second_order:
                     st.markdown("### Top interaction pairs (k-SII)")
