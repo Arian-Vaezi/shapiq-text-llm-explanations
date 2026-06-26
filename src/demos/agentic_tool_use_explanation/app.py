@@ -14,6 +14,11 @@ from typing import TYPE_CHECKING, Literal
 
 import pandas as pd
 import streamlit as st
+from coalition_evaluation import (
+    DEFAULT_RETRY_POLICY,
+    CoalitionEvaluationIncompleteError,
+    evaluate_game_exactly,
+)
 from exact_interactions import (
     MAX_EXACT_DEMO_PLAYERS,
     ExactComputationLimitError,
@@ -646,8 +651,12 @@ def compute_interaction_explanation(
             ``game.n_players`` unexpectedly exceeds the exact limit.
         UnsupportedExactIndexError: Propagated from ``compute_exact_interactions`` if
             ``index`` is not supported by ``ExactComputer``.
+        CoalitionEvaluationIncompleteError: If any of the ``2**game.n_players``
+            coalitions could not be resolved to a real score (after retries for
+            transient failures). ``ExactComputer`` is never invoked in that case.
     """
     if game.n_players <= MAX_EXACT_DEMO_PLAYERS:
+        evaluate_game_exactly(game, retry_policy=DEFAULT_RETRY_POLICY)
         explanation, metadata = compute_exact_interactions(
             game=game,
             index=index,
@@ -659,6 +668,15 @@ def compute_interaction_explanation(
         )
         return explanation, algorithm_label
 
+    if not getattr(game, "_normalization_resolved", True):
+        msg = (
+            "Internal error: this game was constructed with "
+            "defer_empty_coalition_evaluation=True but its normalization baseline "
+            "was never resolved. The approximate path (above MAX_EXACT_DEMO_PLAYERS) "
+            "must only ever receive a game with an already-initialized baseline; "
+            "refusing to approximate against an uninitialized placeholder."
+        )
+        raise RuntimeError(msg)
     approximator = make_approximator(index, game.n_players, max_order)
     explanation = approximator.approximate(budget=budget, game=game)
     return explanation, f"Official shapiq approximation: {type(approximator).__name__}"
@@ -1976,6 +1994,7 @@ def main() -> None:
                     tool_context=tool_context,
                     scorer=primary_scorer,
                     tool_descriptions=TOOLS,
+                    defer_empty_coalition_evaluation=using_exact_computation,
                 )
                 try:
                     explanation, algorithm_label = compute_interaction_explanation(
@@ -1986,6 +2005,45 @@ def main() -> None:
                     )
                 except (ExactComputationLimitError, UnsupportedExactIndexError) as error:
                     st.error(f"Could not compute the {index} explanation: {error}")
+                    return
+                except CoalitionEvaluationIncompleteError as error:
+                    st.error(str(error))
+                    metrics = error.metrics
+                    st.dataframe(
+                        pd.DataFrame(
+                            [
+                                {"metric": "coalition_total", "value": metrics.coalition_total},
+                                {"metric": "real_count", "value": metrics.real_count},
+                                {"metric": "fallback_count", "value": metrics.fallback_count},
+                                {
+                                    "metric": "retry_triggered_count",
+                                    "value": metrics.retry_triggered_count,
+                                },
+                                {
+                                    "metric": "retry_success_count",
+                                    "value": metrics.retry_success_count,
+                                },
+                                {
+                                    "metric": "retry_exhausted_count",
+                                    "value": metrics.retry_exhausted_count,
+                                },
+                                {
+                                    "metric": "semantic_failure_count",
+                                    "value": metrics.semantic_failure_count,
+                                },
+                                {
+                                    "metric": "remote_request_count",
+                                    "value": metrics.remote_request_count,
+                                },
+                                {
+                                    "metric": "embedding_call_count",
+                                    "value": metrics.embedding_call_count,
+                                },
+                            ]
+                        ),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
                     return
                 first_order = explanation.get_n_order(order=1)
                 attribution_frame = values_to_frame(first_order, user_segments)
@@ -2017,44 +2075,60 @@ def main() -> None:
                         tool_context=tool_context,
                         scorer=lexical_scorer,
                         tool_descriptions=TOOLS,
+                        defer_empty_coalition_evaluation=using_exact_computation,
                     )
-                    lexical_explanation, _lexical_algorithm_label = compute_interaction_explanation(
-                        game=lexical_game,
-                        index=index,
-                        max_order=max_order,
-                        budget=budget,
-                    )
-                    lexical_first_order = lexical_explanation.get_n_order(order=1)
-                    lexical_frame = values_to_frame(lexical_first_order, user_segments)
-                    lexical_matrix = pairwise_matrix_from_explanation(
-                        lexical_explanation,
-                        lexical_game.n_players,
-                    )
-                    lexical_pair_label, lexical_pair_value = strongest_pair(lexical_matrix, labels)
-                    lexical_full_score = lexical_scorer.score_batch(
-                        [full_prompt],
-                        target_tool=target_tool,
-                        tool_descriptions=TOOLS,
-                    )[0]
-                    lexical_empty_score = lexical_scorer.score_batch(
-                        [empty_prompt],
-                        target_tool=target_tool,
-                        tool_descriptions=TOOLS,
-                    )[0]
-                    lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
-                    lexical_result = {
-                        "label": "Keyword scorer",
-                        "full_score": lexical_full_score,
-                        "empty_score": lexical_empty_score,
-                        "top": "No segment"
-                        if lexical_top is None
-                        else f"{lexical_top['segment']} ({lexical_top['source']})",
-                        "top_value": 0.0
-                        if lexical_top is None
-                        else float(lexical_top["attribution"]),
-                        "pair": lexical_pair_label,
-                        "pair_value": lexical_pair_value,
-                    }
+                    try:
+                        lexical_explanation, _lexical_algorithm_label = (
+                            compute_interaction_explanation(
+                                game=lexical_game,
+                                index=index,
+                                max_order=max_order,
+                                budget=budget,
+                            )
+                        )
+                    except (
+                        ExactComputationLimitError,
+                        UnsupportedExactIndexError,
+                        CoalitionEvaluationIncompleteError,
+                    ) as error:
+                        st.warning(f"Could not compute the keyword-scorer comparison: {error}")
+                        compare_with_lexical = False
+                        lexical_result = None
+                    else:
+                        lexical_first_order = lexical_explanation.get_n_order(order=1)
+                        lexical_frame = values_to_frame(lexical_first_order, user_segments)
+                        lexical_matrix = pairwise_matrix_from_explanation(
+                            lexical_explanation,
+                            lexical_game.n_players,
+                        )
+                        lexical_pair_label, lexical_pair_value = strongest_pair(
+                            lexical_matrix,
+                            labels,
+                        )
+                        lexical_full_score = lexical_scorer.score_batch(
+                            [full_prompt],
+                            target_tool=target_tool,
+                            tool_descriptions=TOOLS,
+                        )[0]
+                        lexical_empty_score = lexical_scorer.score_batch(
+                            [empty_prompt],
+                            target_tool=target_tool,
+                            tool_descriptions=TOOLS,
+                        )[0]
+                        lexical_top = lexical_frame.iloc[0] if not lexical_frame.empty else None
+                        lexical_result = {
+                            "label": "Keyword scorer",
+                            "full_score": lexical_full_score,
+                            "empty_score": lexical_empty_score,
+                            "top": "No segment"
+                            if lexical_top is None
+                            else f"{lexical_top['segment']} ({lexical_top['source']})",
+                            "top_value": 0.0
+                            if lexical_top is None
+                            else float(lexical_top["attribution"]),
+                            "pair": lexical_pair_label,
+                            "pair_value": lexical_pair_value,
+                        }
 
             scoring_prompt_preview = build_scoring_prompt_preview(
                 primary_scorer,

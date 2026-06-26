@@ -12,7 +12,18 @@ import pytest
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
+try:
+    # Must match how final_answer_similarity_scorer.py itself resolves this module
+    # (package path preferred), so the raised exception class identity matches what
+    # this test imports -- a bare import here would bind a second, distinct class.
+    from demos.agentic_tool_use_explanation.agent_failure import (
+        AgentFailureKind,
+        CoalitionTransientFailureError,
+    )
+except ModuleNotFoundError:
+    from agent_failure import AgentFailureKind, CoalitionTransientFailureError
 from final_answer_similarity_scorer import (  # noqa: E402
+    CoalitionSemanticFailureError,
     FinalAnswerSimilarityScorer,
     extract_final_answer,
 )
@@ -97,8 +108,15 @@ def make_fake_embedder(vectors: dict[str, list[float]], *, dimension: int = 3):
 
 
 def test_full_coalition_compared_with_itself_is_approximately_one() -> None:
-    agent, _calls = make_fake_agent({FULL_REQUEST: "It will be sunny."})
-    embedder, _embed_calls = make_fake_embedder({"It will be sunny.": [1.0, 0.0, 0.0]})
+    agent, _calls = make_fake_agent(
+        {FULL_REQUEST: "It will be sunny.", "": "I have no information."}
+    )
+    embedder, _embed_calls = make_fake_embedder(
+        {
+            "It will be sunny.": [1.0, 0.0, 0.0],
+            "I have no information.": [0.0, 1.0, 0.0],
+        }
+    )
     scorer = FinalAnswerSimilarityScorer(
         agent_callable=agent,
         embedder=embedder,
@@ -114,7 +132,7 @@ def test_full_coalition_compared_with_itself_is_approximately_one() -> None:
 
     assert scorer.last_debug_outputs[0]["raw_similarity"] == pytest.approx(1.0)
     # The full coalition's own answer matches the reference exactly here, and the empty
-    # coalition (no answer) is dissimilar, so the normalized score should stay close to 1.0.
+    # coalition's (real, dissimilar) answer is what the score is normalized against.
     assert scores[0] == pytest.approx(1.0, abs=1e-6)
 
 
@@ -324,7 +342,8 @@ def test_repeated_coalition_does_not_rerun_agent() -> None:
     assert total_embedded_texts == len({"It will be sunny.", "No info."})
 
 
-def test_agent_exception_does_not_reach_embedder_and_uses_fallback_score() -> None:
+def test_agent_exception_propagates_and_never_reaches_embedder() -> None:
+    """A failed coalition must raise, never silently fall back to a placeholder score."""
     failing_request = FULL_REQUEST
     agent, _calls = make_fake_agent(
         {"": "No info."},
@@ -338,27 +357,19 @@ def test_agent_exception_does_not_reach_embedder_and_uses_fallback_score() -> No
         empty_prompt=EMPTY_PROMPT,
     )
 
-    scores = scorer.score_batch(
-        [FULL_PROMPT],
-        target_tool="weather_tool",
-        tool_descriptions=TOOL_DESCRIPTIONS,
-    )
+    with pytest.raises(RuntimeError, match="simulated agent execution failure"):
+        scorer.score_batch(
+            [FULL_PROMPT],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
 
-    assert len(scores) == 1
-    assert np.isfinite(scores[0])
-    debug_output = scorer.last_debug_outputs[0]
-    assert debug_output["execution_status"] == "failed"
-    assert debug_output["execution_error"] == "simulated agent execution failure"
-    # The fallback raw similarity (default 0.0) is used directly; the failure never reaches
-    # the embedder with any text (placeholder or otherwise).
-    assert debug_output["raw_similarity"] == pytest.approx(scorer.fallback_raw_score)
-    # Only the reference answer and the (successful) empty-coalition answer are ever
-    # embedded; no placeholder or failure-derived text reaches the embedder.
+    # No placeholder or failure-derived text ever reaches the embedder.
     embedded_texts = {text for batch in embed_calls for text in batch}
-    assert embedded_texts == {"It will be sunny.", "No info."}
+    assert embedded_texts == set()
 
 
-def test_backend_reported_error_does_not_reach_embedder_and_uses_fallback_score() -> None:
+def test_backend_reported_error_raises_semantic_failure_and_never_reaches_embedder() -> None:
     """A result object with .error set and no answer text (e.g. missing API key)."""
     agent, _calls = make_fake_agent(
         {"": "No info."},
@@ -372,23 +383,18 @@ def test_backend_reported_error_does_not_reach_embedder_and_uses_fallback_score(
         empty_prompt=EMPTY_PROMPT,
     )
 
-    scores = scorer.score_batch(
-        [FULL_PROMPT],
-        target_tool="weather_tool",
-        tool_descriptions=TOOL_DESCRIPTIONS,
-    )
+    with pytest.raises(CoalitionSemanticFailureError, match=r"GROQ_API_KEY is not set\."):
+        scorer.score_batch(
+            [FULL_PROMPT],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
 
-    assert len(scores) == 1
-    assert np.isfinite(scores[0])
-    debug_output = scorer.last_debug_outputs[0]
-    assert debug_output["execution_status"] == "failed"
-    assert debug_output["execution_error"] == "GROQ_API_KEY is not set."
-    assert debug_output["raw_similarity"] == pytest.approx(scorer.fallback_raw_score)
     embedded_texts = {text for batch in embed_calls for text in batch}
     assert "GROQ_API_KEY is not set." not in embedded_texts
 
 
-def test_no_final_answer_does_not_reach_embedder_and_uses_fallback_score() -> None:
+def test_no_final_answer_raises_semantic_failure_and_never_reaches_embedder() -> None:
     agent, _calls = make_fake_agent({FULL_REQUEST: "", "": "No info."})
     embedder, embed_calls = make_fake_embedder({"No info.": [0.0, 1.0]}, dimension=2)
     scorer = FinalAnswerSimilarityScorer(
@@ -398,42 +404,59 @@ def test_no_final_answer_does_not_reach_embedder_and_uses_fallback_score() -> No
         empty_prompt=EMPTY_PROMPT,
     )
 
-    scores = scorer.score_batch(
-        [FULL_PROMPT],
-        target_tool="weather_tool",
-        tool_descriptions=TOOL_DESCRIPTIONS,
-    )
+    with pytest.raises(CoalitionSemanticFailureError, match="no usable final-answer text"):
+        scorer.score_batch(
+            [FULL_PROMPT],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
 
-    assert len(scores) == 1
-    assert np.isfinite(scores[0])
-    debug_output = scorer.last_debug_outputs[0]
-    assert debug_output["execution_status"] == "no_answer"
-    assert debug_output["raw_similarity"] == pytest.approx(scorer.fallback_raw_score)
     embedded_texts = {text for batch in embed_calls for text in batch}
     assert "" not in embedded_texts
 
 
-def test_custom_fallback_raw_score_is_used_for_failures() -> None:
-    agent, _calls = make_fake_agent(
-        {"": "No info."},
-        failing_requests=frozenset({FULL_REQUEST}),
+def test_failed_coalition_is_not_cached_and_can_be_retried() -> None:
+    """A failed attempt is never cached, so calling again re-runs the agent (retry-friendly)."""
+    request_state = {"should_fail": True}
+    calls: list[str] = []
+
+    def agent(user_request: str) -> object:
+        calls.append(user_request)
+        if user_request == FULL_REQUEST and request_state["should_fail"]:
+            msg = "simulated transient failure"
+            raise RuntimeError(msg)
+        answer = {"": "No info.", FULL_REQUEST: "It will be sunny."}[user_request]
+        return SimpleNamespace(
+            selected_tool="weather_tool" if answer else None,
+            tool_arguments={},
+            assistant_answer=answer,
+            final_answer=answer,
+            error=None,
+        )
+
+    embedder, _embed_calls = make_fake_embedder(
+        {"It will be sunny.": [1.0, 0.0], "No info.": [0.0, 1.0]}
     )
-    embedder, _embed_calls = make_fake_embedder({"No info.": [0.0, 1.0]}, dimension=2)
     scorer = FinalAnswerSimilarityScorer(
         agent_callable=agent,
         embedder=embedder,
         reference_answer="It will be sunny.",
         empty_prompt=EMPTY_PROMPT,
-        fallback_raw_score=-0.5,
     )
 
-    scorer.score_batch(
-        [FULL_PROMPT],
-        target_tool="weather_tool",
-        tool_descriptions=TOOL_DESCRIPTIONS,
+    with pytest.raises(RuntimeError, match="simulated transient failure"):
+        scorer.score_batch(
+            [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
+        )
+
+    request_state["should_fail"] = False
+    scores = scorer.score_batch(
+        [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
     )
 
-    assert scorer.last_debug_outputs[0]["raw_similarity"] == pytest.approx(-0.5)
+    assert len(scores) == 1
+    assert np.isfinite(scores[0])
+    assert calls.count(FULL_REQUEST) == 2  # re-run, not served from a poisoned cache
 
 
 def test_missing_reference_answer_raises_immediately() -> None:
@@ -455,30 +478,6 @@ def test_missing_reference_answer_raises_immediately() -> None:
             reference_answer="   ",
             empty_prompt=EMPTY_PROMPT,
         )
-
-
-def test_failed_coalition_is_cached_and_not_rerun() -> None:
-    agent, calls = make_fake_agent(
-        {"": "No info."},
-        failing_requests=frozenset({FULL_REQUEST}),
-    )
-    embedder, _embed_calls = make_fake_embedder({"No info.": [0.0, 1.0]}, dimension=2)
-    scorer = FinalAnswerSimilarityScorer(
-        agent_callable=agent,
-        embedder=embedder,
-        reference_answer="It will be sunny.",
-        empty_prompt=EMPTY_PROMPT,
-    )
-
-    scorer.score_batch(
-        [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
-    )
-    calls_after_first = len(calls)
-    scorer.score_batch(
-        [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
-    )
-
-    assert len(calls) == calls_after_first
 
 
 def test_batch_coalition_values_return_one_dimensional_array_in_order() -> None:
@@ -568,3 +567,146 @@ def test_existing_scorer_imports_are_unaffected() -> None:
     """Adding this scorer module must not break imports of the existing scorers."""
     import router_scorers  # noqa: F401
     import scorers  # noqa: F401
+
+
+def make_wrapped_failure_agent(failure_kind: AgentFailureKind | None, error_text: str):
+    """Build an agent_callable returning an opaque result with .error/.failure_kind set.
+
+    Mirrors the shape groq_agent.run_groq_tool_inference / gemini_agent.run_gemini_tool_inference
+    actually return: they catch the real provider exception internally and embed it as
+    .error text plus a structured .failure_kind, rather than letting it propagate.
+    """
+
+    def agent(user_request: str) -> object:
+        if user_request == "":
+            return SimpleNamespace(
+                selected_tool="weather_tool",
+                assistant_answer="No info.",
+                final_answer="No info.",
+                error=None,
+                failure_kind=None,
+            )
+        return SimpleNamespace(
+            selected_tool=None,
+            tool_arguments={},
+            assistant_answer="",
+            final_answer="",
+            error=error_text,
+            failure_kind=failure_kind,
+        )
+
+    return agent
+
+
+def make_fake_embedder_for_empty_only():
+    def embedder(texts):
+        return np.array([[0.0, 1.0] for _ in texts], dtype=float)
+
+    return embedder
+
+
+def test_wrapped_rate_limit_result_enters_retry_path_and_succeeds_later() -> None:
+    """A wrapped 429/rate-limit result must raise the retryable transient error type."""
+    attempts = {"n": 0}
+
+    def agent(user_request: str) -> object:
+        if user_request == "":
+            return SimpleNamespace(
+                selected_tool="weather_tool",
+                assistant_answer="No info.",
+                final_answer="No info.",
+                error=None,
+                failure_kind=None,
+            )
+        attempts["n"] += 1
+        if attempts["n"] == 1:
+            return SimpleNamespace(
+                selected_tool=None,
+                tool_arguments={},
+                assistant_answer="",
+                final_answer="",
+                error="429 rate limit exceeded",
+                failure_kind=AgentFailureKind.RATE_LIMIT,
+            )
+        return SimpleNamespace(
+            selected_tool="weather_tool",
+            assistant_answer="It will be sunny.",
+            final_answer="It will be sunny.",
+            error=None,
+            failure_kind=None,
+        )
+
+    embedder, _embed_calls = make_fake_embedder(
+        {"It will be sunny.": [1.0, 0.0], "No info.": [0.0, 1.0]}
+    )
+    scorer = FinalAnswerSimilarityScorer(
+        agent_callable=agent,
+        embedder=embedder,
+        reference_answer="It will be sunny.",
+        empty_prompt=EMPTY_PROMPT,
+    )
+
+    with pytest.raises(CoalitionTransientFailureError):
+        scorer.score_batch(
+            [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
+        )
+
+    scores = scorer.score_batch(
+        [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
+    )
+    assert len(scores) == 1
+    assert np.isfinite(scores[0])
+    assert attempts["n"] == 2  # the failed attempt was never cached, so it really retried
+
+
+def test_wrapped_timeout_result_enters_retry_path() -> None:
+    agent = make_wrapped_failure_agent(AgentFailureKind.TIMEOUT, "request timed out")
+    embedder = make_fake_embedder_for_empty_only()
+    scorer = FinalAnswerSimilarityScorer(
+        agent_callable=agent,
+        embedder=embedder,
+        reference_answer="It will be sunny.",
+        empty_prompt=EMPTY_PROMPT,
+    )
+
+    with pytest.raises(CoalitionTransientFailureError, match="request timed out"):
+        scorer.score_batch(
+            [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
+        )
+
+
+@pytest.mark.parametrize(
+    "failure_kind",
+    [AgentFailureKind.AUTHENTICATION, AgentFailureKind.INVALID_REQUEST],
+)
+def test_wrapped_permanent_failure_result_is_semantic_and_not_retried(failure_kind) -> None:
+    agent = make_wrapped_failure_agent(failure_kind, "permanent failure")
+    embedder = make_fake_embedder_for_empty_only()
+    scorer = FinalAnswerSimilarityScorer(
+        agent_callable=agent,
+        embedder=embedder,
+        reference_answer="It will be sunny.",
+        empty_prompt=EMPTY_PROMPT,
+    )
+
+    with pytest.raises(CoalitionSemanticFailureError, match="permanent failure"):
+        scorer.score_batch(
+            [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
+        )
+
+
+def test_wrapped_no_final_answer_result_is_semantic_and_not_retried() -> None:
+    """No .error at all, just an empty answer: must stay the original semantic path."""
+    agent, _calls = make_fake_agent({FULL_REQUEST: "", "": "No info."})
+    embedder, _embed_calls = make_fake_embedder({"No info.": [0.0, 1.0]}, dimension=2)
+    scorer = FinalAnswerSimilarityScorer(
+        agent_callable=agent,
+        embedder=embedder,
+        reference_answer="It will be sunny.",
+        empty_prompt=EMPTY_PROMPT,
+    )
+
+    with pytest.raises(CoalitionSemanticFailureError, match="no usable final-answer text"):
+        scorer.score_batch(
+            [FULL_PROMPT], target_tool="weather_tool", tool_descriptions=TOOL_DESCRIPTIONS
+        )

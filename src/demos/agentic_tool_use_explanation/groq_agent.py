@@ -9,6 +9,14 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 
 try:
+    from demos.agentic_tool_use_explanation.agent_failure import (
+        AgentFailureKind,
+        classify_agent_exception,
+    )
+except ModuleNotFoundError:
+    from agent_failure import AgentFailureKind, classify_agent_exception
+
+try:
     from demos.agentic_tool_use_explanation.tool_schemas import NO_TOOL_NAME
 except ModuleNotFoundError:
     from tool_schemas import NO_TOOL_NAME
@@ -25,6 +33,8 @@ class GroqInferenceResult:
     raw_trace: dict[str, object] = field(default_factory=dict)
     error: str | None = None
     available: bool = True
+    failure_kind: AgentFailureKind | None = None
+    """Structured reason ``error`` is set, e.g. for retry classification. ``None`` on success."""
 
 
 def run_groq_tool_inference(
@@ -47,6 +57,7 @@ def run_groq_tool_inference(
         return GroqInferenceResult(
             available=False,
             error="GROQ_API_KEY is not set. Add it to the environment to run Groq inference.",
+            failure_kind=AgentFailureKind.AUTHENTICATION,
         )
 
     try:
@@ -57,6 +68,7 @@ def run_groq_tool_inference(
         return GroqInferenceResult(
             available=False,
             error=f"Groq client is unavailable: {classify_groq_error(str(error))}",
+            failure_kind=classify_agent_exception(error),
         )
 
     prompt = _build_inference_prompt(
@@ -72,6 +84,7 @@ def run_groq_tool_inference(
             available=False,
             raw_trace={"prompt": prompt},
             error=f"Groq inference failed: {classify_groq_error(str(error))}",
+            failure_kind=classify_agent_exception(error),
         )
 
     try:
@@ -80,6 +93,7 @@ def run_groq_tool_inference(
         return GroqInferenceResult(
             raw_trace={"prompt": prompt, "response_text": response_text},
             error="Groq returned malformed JSON.",
+            failure_kind=AgentFailureKind.INVALID_REQUEST,
         )
 
     selected_tool = payload.get("selected_tool")
@@ -89,6 +103,7 @@ def run_groq_tool_inference(
         return GroqInferenceResult(
             raw_trace={"prompt": prompt, "response_text": response_text},
             error="Groq JSON did not contain a valid selected_tool.",
+            failure_kind=AgentFailureKind.INVALID_REQUEST,
         )
     if not isinstance(tool_arguments, Mapping):
         tool_arguments = {}
@@ -107,6 +122,7 @@ def run_groq_tool_inference(
             assistant_answer=assistant_answer,
             raw_trace={"prompt": prompt, "response_text": response_text},
             error=f"Groq selected unknown tool: {selected_tool}",
+            failure_kind=AgentFailureKind.INVALID_REQUEST,
         )
 
     tool_output = _run_demo_tool(selected_tool, tool_arguments)

@@ -72,7 +72,24 @@ class ToolUseGame(Game):
         tool_descriptions: dict[str, str] | None = None,
         normalize: bool = True,
         verbose: bool = False,
+        defer_empty_coalition_evaluation: bool = False,
     ) -> None:
+        """Build a ``ToolUseGame``.
+
+        Args:
+            defer_empty_coalition_evaluation: If ``False`` (default), construction
+                behaves exactly as before: the empty coalition is scored once,
+                synchronously, here, and ``normalization_value`` is correct
+                immediately -- ``game(...)`` can be called right away. If ``True``,
+                construction makes *no* scorer call at all; the empty coalition must
+                instead be resolved together with every other coalition by
+                ``coalition_evaluation.evaluate_game_exactly``, which goes through
+                the same typed-outcome/retry protocol and sets
+                ``normalization_value`` once that succeeds. Calling ``game(...)``
+                on a deferred game before that resolution raises ``RuntimeError``
+                rather than silently normalizing against a placeholder. Only the
+                exact-computation demo path should opt into this.
+        """
         self.target_tool = target_tool
         self.tool_descriptions = (
             dict(tool_descriptions)
@@ -109,7 +126,20 @@ class ToolUseGame(Game):
                 from scorers import LexicalToolScorer
 
             self.scorer = LexicalToolScorer()
-        empty_score = self.score_segments([])
+
+        self.normalize_requested = normalize
+        self.empty_coalition_evaluation_deferred = defer_empty_coalition_evaluation
+        if defer_empty_coalition_evaluation:
+            # Opt-in only: the empty coalition is itself a real coalition value and
+            # must go through the same typed-outcome and retry protocol as every
+            # other coalition, not an untracked, unretried call made here.
+            # normalization_value starts as an explicit placeholder and __call__
+            # refuses to use it until something resolves it -- see __call__ below.
+            empty_score = 0.0
+            self._normalization_resolved = False
+        else:
+            empty_score = self.score_segments([])
+            self._normalization_resolved = True
         super().__init__(
             n_players=len(self.segments),
             normalize=normalize,
@@ -117,6 +147,20 @@ class ToolUseGame(Game):
             verbose=verbose,
             player_names=[segment.label for segment in self.segments],
         )
+
+    def __call__(self, coalitions: np.ndarray, *, verbose: bool = False) -> np.ndarray:
+        """Evaluate and normalize coalitions, guarding against an unresolved deferred baseline."""
+        if not self._normalization_resolved:
+            msg = (
+                "ToolUseGame was constructed with defer_empty_coalition_evaluation=True "
+                "and its normalization baseline has not been resolved yet. Resolve it "
+                "first -- e.g. coalition_evaluation.evaluate_game_exactly(game, ...) -- "
+                "before calling the game; otherwise normalized values would be computed "
+                "against an uninitialized placeholder baseline instead of the real "
+                "empty-coalition score."
+            )
+            raise RuntimeError(msg)
+        return super().__call__(coalitions, verbose=verbose)
 
     @staticmethod
     def _format_tool_context(tool_descriptions: dict[str, str]) -> str:

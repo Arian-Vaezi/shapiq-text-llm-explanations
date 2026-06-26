@@ -9,6 +9,14 @@ import re
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 
+try:
+    from demos.agentic_tool_use_explanation.agent_failure import (
+        AgentFailureKind,
+        classify_agent_exception,
+    )
+except ModuleNotFoundError:
+    from agent_failure import AgentFailureKind, classify_agent_exception
+
 
 @dataclass
 class GeminiInferenceResult:
@@ -21,6 +29,8 @@ class GeminiInferenceResult:
     raw_trace: dict[str, object] = field(default_factory=dict)
     error: str | None = None
     available: bool = True
+    failure_kind: AgentFailureKind | None = None
+    """Structured reason ``error`` is set, e.g. for retry classification. ``None`` on success."""
 
 
 def run_gemini_tool_inference(
@@ -43,6 +53,7 @@ def run_gemini_tool_inference(
         return GeminiInferenceResult(
             available=False,
             error="GEMINI_API_KEY is not set. Add it to the environment to run Gemini inference.",
+            failure_kind=AgentFailureKind.AUTHENTICATION,
         )
 
     try:
@@ -53,6 +64,7 @@ def run_gemini_tool_inference(
         return GeminiInferenceResult(
             available=False,
             error=f"Gemini client is unavailable: {error}",
+            failure_kind=classify_agent_exception(error),
         )
 
     prompt = _build_inference_prompt(
@@ -69,6 +81,7 @@ def run_gemini_tool_inference(
             available=False,
             raw_trace={"prompt": prompt},
             error=f"Gemini inference failed: {friendly_error}",
+            failure_kind=classify_agent_exception(error),
         )
 
     selected_tool, tool_arguments = _extract_tool_call(response)
@@ -84,6 +97,7 @@ def run_gemini_tool_inference(
             final_answer=raw_text,
             raw_trace={"prompt": prompt, "response_text": raw_text},
             error="Gemini did not return a recognizable tool selection.",
+            failure_kind=AgentFailureKind.INVALID_REQUEST,
         )
     if selected_tool in {"weather_tool", "web_search_tool"} or not assistant_answer.strip():
         assistant_answer = _build_assistant_answer(user_request, selected_tool, tool_arguments)
@@ -96,6 +110,7 @@ def run_gemini_tool_inference(
             assistant_answer=assistant_answer,
             raw_trace={"prompt": prompt, "response_text": raw_text},
             error=f"Gemini selected unknown tool: {selected_tool}",
+            failure_kind=AgentFailureKind.INVALID_REQUEST,
         )
 
     tool_output = _run_demo_tool(selected_tool, tool_arguments)

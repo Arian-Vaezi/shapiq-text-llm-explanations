@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
@@ -13,6 +14,8 @@ except ModuleNotFoundError:
     from tool_schemas import NO_TOOL_NAME
 
 DEFAULT_LOCAL_HF_ROUTER_MODEL_ID = "Qwen/Qwen3-4B-Instruct-2507"
+
+LOGGER = logging.getLogger(__name__)
 
 ALLOWED_TOOLS: tuple[str, ...] = (
     "calculator_tool",
@@ -257,7 +260,7 @@ class LocalHFRouter:
                     )
                 )
             except Exception:  # noqa: BLE001
-                pass
+                LOGGER.debug("Falling back after chat-template formatting failed.", exc_info=True)
         return (
             "System:\nYou are a strict tool router. Return JSON only.\n\n"
             f"User:\n{router_prompt}\n\n"

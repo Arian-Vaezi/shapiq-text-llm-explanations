@@ -33,7 +33,14 @@ import numpy as np
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
-    from typing import Literal
+
+try:
+    from demos.agentic_tool_use_explanation.agent_failure import (
+        TRANSIENT_AGENT_FAILURE_KINDS,
+        CoalitionTransientFailureError,
+    )
+except ModuleNotFoundError:
+    from agent_failure import TRANSIENT_AGENT_FAILURE_KINDS, CoalitionTransientFailureError
 
 try:
     from demos.agentic_tool_use_explanation.scorers import split_coalition_prompt
@@ -41,7 +48,15 @@ except ModuleNotFoundError:
     from scorers import split_coalition_prompt
 
 DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID = "sentence-transformers/all-MiniLM-L6-v2"
-DEFAULT_FALLBACK_RAW_SCORE = 0.0
+
+
+class CoalitionSemanticFailureError(ValueError):
+    """Raised when a coalition's agent run completed but produced no usable result.
+
+    Examples: no final-answer text, or the backend reported an error. This is never
+    retried by ``coalition_evaluation.classify_exception`` -- retrying would not help
+    because the failure is not about infrastructure availability.
+    """
 
 
 def extract_final_answer(inference_result: object) -> str:
@@ -119,16 +134,16 @@ class SentenceTransformerAnswerEmbedder:
 
 @dataclass(frozen=True)
 class CoalitionAnswer:
-    """Structured outcome of running the complete agent for one coalition prompt.
+    """A successful complete-agent run for one coalition prompt.
 
-    Replaces ad hoc placeholder strings (e.g. ``"[NO_FINAL_ANSWER]"``) with an
-    explicit status so a coalition's failure is never silently embedded as if it
-    were a real, just-very-dissimilar answer.
+    Only ever constructed for a coalition that actually produced usable
+    final-answer text -- a failed or no-answer run raises
+    :class:`CoalitionSemanticFailureError` (or lets the agent's own exception
+    propagate) instead of being cached here, so a coalition's failure can never
+    be silently embedded as if it were a real, just-very-dissimilar answer.
     """
 
-    answer: str | None
-    status: Literal["ok", "failed", "no_answer"]
-    error_message: str | None = None
+    answer: str
     selected_tool: str | None = None
 
 
@@ -165,13 +180,17 @@ class FinalAnswerSimilarityScorer:
     remain available via :attr:`last_empty_raw_similarity` and per-coalition
     debug output for diagnostics.
 
-    Failure handling: if the agent raises, returns an explicit error, or
-    produces no usable final-answer text, the coalition is recorded as a
-    :class:`CoalitionAnswer` with ``status in {"failed", "no_answer"}`` and is
-    *not* sent to the embedding model -- it is assigned ``fallback_raw_score``
-    (default ``0.0``) directly. The reference answer (the full request's
-    answer) is validated at construction time and is never allowed to silently
-    fall back; a missing/failed reference raises immediately.
+    Failure handling: if the agent raises, returns an explicit error, or produces
+    no usable final-answer text, this coalition is never cached, never sent to
+    the embedding model, and never assigned a placeholder score -- the agent's
+    own exception propagates, or :class:`CoalitionSemanticFailureError` is raised for
+    a no-answer/backend-error result. Callers (the coalition-evaluation
+    orchestration boundary in ``coalition_evaluation.py``) are responsible for
+    classifying and retrying transient failures; this scorer itself never
+    retries and never substitutes a fallback float. The reference answer (the
+    full request's answer) is validated at construction time and is never
+    allowed to silently fall back; a missing/failed reference raises
+    immediately.
 
     This is an end-to-end output-fidelity measure, not an objective correctness
     metric.
@@ -181,7 +200,6 @@ class FinalAnswerSimilarityScorer:
     embedder: Callable[[Sequence[str]], np.ndarray]
     reference_answer: str
     empty_prompt: str
-    fallback_raw_score: float = DEFAULT_FALLBACK_RAW_SCORE
     last_debug_outputs: list[dict[str, object]] = field(default_factory=list, init=False)
     last_empty_raw_similarity: float | None = field(default=None, init=False)
     _answer_cache: dict[str, CoalitionAnswer] = field(default_factory=dict, init=False, repr=False)
@@ -230,15 +248,11 @@ class FinalAnswerSimilarityScorer:
                     "target_tool": target_tool,
                     "masked_user_request": split_coalition_prompt(prompt)[1],
                     "selected_tool": coalition_answer.selected_tool,
-                    "final_answer_preview": (
-                        coalition_answer.answer[:240]
-                        if coalition_answer.answer
-                        else f"<{coalition_answer.status}>"
-                    ),
+                    "final_answer_preview": coalition_answer.answer[:240],
                     "raw_similarity": raw_similarity,
                     "normalized_score": normalized_score,
-                    "execution_status": coalition_answer.status,
-                    "execution_error": coalition_answer.error_message,
+                    "execution_status": "ok",
+                    "execution_error": None,
                     "final_score": normalized_score,
                     "prompt_preview": prompt[:240],
                 }
@@ -246,60 +260,58 @@ class FinalAnswerSimilarityScorer:
         return scores
 
     def _ensure_answer(self, prompt: str) -> None:
-        """Run the complete agent for one coalition prompt, caching the structured result.
+        """Run the complete agent for one coalition prompt, caching the successful result.
 
-        Caches both successful and failed/no-answer outcomes, so a coalition is never
-        re-run within the lifetime of this scorer instance once its outcome is known.
+        Caches only successful outcomes, so a coalition is never re-run once it has
+        produced a usable final answer. A failure is never cached and never
+        converted into a placeholder score:
+
+        * if the agent itself raises, that exception propagates unchanged, so
+          transient-vs-semantic classification at the coalition-evaluation boundary
+          sees the real exception type (e.g. ``groq.RateLimitError``);
+        * if the agent instead returns a result object with ``.error`` set (the
+          shape ``groq_agent``/``gemini_agent`` use to report a caught provider
+          failure without raising), that result's ``failure_kind`` -- a structured
+          :class:`agent_failure.AgentFailureKind`, not a string match against the
+          error message -- decides whether this raises
+          :class:`agent_failure.CoalitionTransientFailureError` (retryable) or
+          :class:`CoalitionSemanticFailureError` (not retryable);
+        * a missing final answer with no reported backend error raises
+          :class:`CoalitionSemanticFailureError` directly.
+
+        Either way, a failed attempt can be retried by simply calling this again --
+        nothing is cached.
         """
         if prompt in self._answer_cache:
             return
         _system_prompt, user_request = split_coalition_prompt(prompt)
-        try:
-            inference_result = self.agent_callable(user_request)
-        except Exception as error:  # noqa: BLE001
-            self._answer_cache[prompt] = CoalitionAnswer(
-                answer=None,
-                status="failed",
-                error_message=str(error),
-            )
-            return
+        inference_result = self.agent_callable(user_request)
 
         backend_error = getattr(inference_result, "error", None)
         selected_tool = getattr(inference_result, "selected_tool", None)
         answer = extract_final_answer(inference_result)
         if answer:
-            self._answer_cache[prompt] = CoalitionAnswer(
-                answer=answer,
-                status="ok",
-                selected_tool=selected_tool,
-            )
-        elif backend_error:
-            self._answer_cache[prompt] = CoalitionAnswer(
-                answer=None,
-                status="failed",
-                error_message=str(backend_error),
-                selected_tool=selected_tool,
-            )
-        else:
-            self._answer_cache[prompt] = CoalitionAnswer(
-                answer=None,
-                status="no_answer",
-                selected_tool=selected_tool,
-            )
+            self._answer_cache[prompt] = CoalitionAnswer(answer=answer, selected_tool=selected_tool)
+            return
+        if backend_error:
+            failure_kind = getattr(inference_result, "failure_kind", None)
+            msg = f"Agent backend reported an error for this coalition: {backend_error}"
+            if failure_kind in TRANSIENT_AGENT_FAILURE_KINDS:
+                raise CoalitionTransientFailureError(msg)
+            raise CoalitionSemanticFailureError(msg)
+        msg = "Agent produced no usable final-answer text for this coalition."
+        raise CoalitionSemanticFailureError(msg)
 
     def _ensure_embeddings(self, prompts: Sequence[str]) -> None:
-        """Embed every not-yet-cached *successful* answer text (and the reference) in one batch.
+        """Embed every not-yet-cached successful answer text (and the reference) in one batch.
 
-        Failed/no-answer coalitions never reach the embedder; their raw score is
-        ``fallback_raw_score`` instead (see :meth:`_raw_similarity`).
+        By the time this runs, every prompt in ``prompts`` has a successful, cached
+        :class:`CoalitionAnswer` -- :meth:`_ensure_answer` never caches a failure.
         """
         texts_to_embed: list[str] = []
         seen: set[str] = set()
         candidate_texts = [self.reference_answer]
-        for prompt in prompts:
-            coalition_answer = self._answer_cache[prompt]
-            if coalition_answer.status == "ok" and coalition_answer.answer is not None:
-                candidate_texts.append(coalition_answer.answer)
+        candidate_texts.extend(self._answer_cache[prompt].answer for prompt in prompts)
         for text in candidate_texts:
             if text not in self._embedding_cache and text not in seen:
                 texts_to_embed.append(text)
@@ -314,14 +326,8 @@ class FinalAnswerSimilarityScorer:
             self._embedding_cache[text] = np.asarray(vector, dtype=float)
 
     def _raw_similarity(self, prompt: str) -> float:
-        """Return the raw cosine similarity for one coalition, or the configured fallback.
-
-        Coalitions whose agent run failed or produced no final answer never reach the
-        embedding model; they receive ``fallback_raw_score`` directly.
-        """
+        """Return the raw cosine similarity between one coalition's answer and the reference."""
         coalition_answer = self._answer_cache[prompt]
-        if coalition_answer.status != "ok" or coalition_answer.answer is None:
-            return self.fallback_raw_score
         similarity = _cosine_similarity(
             self._embedding_cache[coalition_answer.answer],
             self._embedding_cache[self.reference_answer],

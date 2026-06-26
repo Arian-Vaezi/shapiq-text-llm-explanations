@@ -74,7 +74,7 @@ def _function_mapping(schema: Mapping[str, object]) -> Mapping[str, object]:
     function = schema.get("function")
     if not isinstance(function, Mapping):
         msg = "Executable tool schema must contain a function mapping."
-        raise ValueError(msg)
+        raise TypeError(msg)
     return function
 
 
@@ -170,7 +170,7 @@ def validate_tool_configuration(
             raise ValueError(msg)
         if not isinstance(parameters, Mapping):
             msg = f"Tool schema {name!r} must define a parameters mapping."
-            raise ValueError(msg)
+            raise TypeError(msg)
         if not description:
             msg = f"Tool schema {name!r} must define a non-empty description."
             raise ValueError(msg)

@@ -14,8 +14,11 @@ import json
 import math
 import os
 import re
-from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping, Sequence
 
 try:
     from demos.agentic_tool_use_explanation.groq_agent import run_groq_tool_inference

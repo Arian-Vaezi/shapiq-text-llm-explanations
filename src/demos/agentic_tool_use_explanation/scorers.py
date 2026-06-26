@@ -5,10 +5,12 @@ from __future__ import annotations
 import math
 import re
 import sys
-from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
 
 try:
     from demos.agentic_tool_use_explanation.tool_schemas import (

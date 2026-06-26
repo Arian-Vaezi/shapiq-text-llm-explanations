@@ -95,6 +95,59 @@ def test_tool_use_game_uses_only_user_segments_as_players():
     assert [segment.label for segment in game.segments] == ["U1", "U2"]
 
 
+def test_default_construction_resolves_normalization_eagerly():
+    """Default behavior (defer_empty_coalition_evaluation=False) is unchanged.
+
+    The constructor scores the empty coalition once, synchronously, so
+    normalization_value is correct immediately and game(...) can be called right
+    away -- existing non-demo callers must see no behavior change.
+    """
+    module = load_tool_game_module()
+    scorer = FakeScorer()
+
+    game = module.ToolUseGame(
+        target_tool="weather_tool",
+        user_segments=["What is the weather", "in Berlin tomorrow?"],
+        system_prompt="You are a tool router.",
+        scorer=scorer,
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert len(scorer.calls) == 1  # the constructor's own empty-coalition call
+    assert game.normalization_value == 0.25  # FakeScorer always returns 0.25
+    assert game.normalize_requested is True
+    assert float(game(game.empty_coalition)[0]) == pytest.approx(0.0)
+
+
+def test_deferred_construction_makes_no_scorer_call():
+    """Opting into defer_empty_coalition_evaluation=True skips the eager scorer call.
+
+    The empty coalition must instead go through the same retry/typed-outcome
+    protocol as every other coalition (coalition_evaluation.evaluate_game_exactly),
+    not an untracked call made during __init__. Calling the game before that
+    resolution must raise rather than silently normalize against a placeholder.
+    """
+    module = load_tool_game_module()
+    scorer = FakeScorer()
+
+    game = module.ToolUseGame(
+        target_tool="weather_tool",
+        user_segments=["What is the weather", "in Berlin tomorrow?"],
+        system_prompt="You are a tool router.",
+        scorer=scorer,
+        tool_descriptions=TOOL_DESCRIPTIONS,
+        defer_empty_coalition_evaluation=True,
+    )
+
+    assert scorer.calls == []
+    assert game.normalization_value == 0.0
+    assert game.normalize_requested is True
+    assert game.empty_coalition_evaluation_deferred is True
+
+    with pytest.raises(RuntimeError, match="defer_empty_coalition_evaluation=True"):
+        game(game.empty_coalition)
+
+
 def test_empty_coalition_keeps_fixed_context_and_removes_user_segments():
     module = load_tool_game_module()
     game = make_game(module)
