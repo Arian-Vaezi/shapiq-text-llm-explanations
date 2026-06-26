@@ -166,15 +166,13 @@ def recommended_budget(n_players: int, *, second_order: bool, multiplier: float 
 
 
 # =====================================================================================
-# Faithfulness / additivity metric.
+# Reconstruction / additivity diagnostic.
 #
-# An explanation is only useful if it reproduces the model. We fit a purely additive
-# model (order 1) and an additive+pairwise model (order 2) — by plain least squares — to
-# the coalitions shapiq already evaluated, and report each one's held-out R^2. The gap
-# (order2 - order1) is how much the pairwise interactions explain *beyond* a first-order
-# (additive / plain-SHAP) explanation. This grounds the demo in Faith-Shap's notion that
-# an interaction is what best reproduces the value function, and stops us over-reading
-# interaction plots when a prompt is essentially additive (gap ~ 0).
+# To avoid over-reading interaction plots, we fit a purely additive model (order 1)
+# and an additive+pairwise model (order 2) — by ordinary least squares — to the coalitions
+# shapiq already evaluated, and report each one's in-sample reconstruction R^2. The gap
+# (order2 - order1) is a Faith-Shap-inspired diagnostic for whether pairwise terms improve
+# reconstruction beyond a first-order explanation. It is not the FSII index itself.
 # =====================================================================================
 def _faith_design(coalitions: np.ndarray, order: int) -> np.ndarray:
     """Least-squares design matrix: intercept + main effects (+ pairwise terms if order>=2)."""
@@ -190,9 +188,9 @@ def _fit_r2(coalitions: np.ndarray, values: np.ndarray, order: int) -> float:
     """In-sample R^2 of the best order-``order`` least-squares fit of the value function.
 
     With an intercept this is bounded in [0, 1] and monotonic in order (order-2 >= order-1),
-    so the gap is the pairwise contribution. When all coalitions are evaluated (small player
-    counts) this is the exact decomposition faithfulness; when sampled it is the
-    reconstruction quality over the evaluated coalitions.
+    so the gap shows how much pairwise terms improve this surrogate fit. When all coalitions
+    are evaluated (small player counts), this covers the full coalition space for this chosen
+    basis; when sampled, it is training reconstruction over the evaluated coalitions.
     """
     design = _faith_design(coalitions, order)
     coef, *_ = np.linalg.lstsq(design, values, rcond=None)
@@ -203,7 +201,7 @@ def _fit_r2(coalitions: np.ndarray, values: np.ndarray, order: int) -> float:
     return 1.0 - float(np.sum((values - pred) ** 2)) / ss_tot
 
 
-def faithfulness_scores(
+def reconstruction_scores(
     coalitions: list[np.ndarray], values: list[float]
 ) -> tuple[float, float, int]:
     """Return (order-1 R^2, order-1+2 R^2, #unique coalitions) on the evaluated coalitions."""
@@ -946,7 +944,7 @@ with tab_explanation:
                     else:
                         status.write(f"Running Shapiq approximation (budget={budget})...")
                         approx = shapiq.KernelSHAP(n=game.n_players, random_state=42)
-                    # Record the coalitions shapiq evaluates so the faithfulness metric is
+                    # Record the coalitions shapiq evaluates so the reconstruction diagnostic is
                     # free (no extra model calls). normalization_value is 0, so the recorded
                     # value_function outputs equal the game outputs the approximator sees.
                     rec_coalitions: list[np.ndarray] = []
@@ -982,7 +980,7 @@ with tab_explanation:
                         "n_players": game.n_players,
                         "budget": budget,
                         "warning": player_warning,
-                        "faith": faithfulness_scores(rec_coalitions, rec_values)
+                        "reconstruction": reconstruction_scores(rec_coalitions, rec_values)
                         if second_order
                         else None,
                     }
@@ -1027,14 +1025,14 @@ with tab_explanation:
                         "the standalone Shapley values."
                     )
 
-                if second_order and results.get("faith") is not None:
-                    r1, r2, n_uniq = results["faith"]
+                if second_order and results.get("reconstruction") is not None:
+                    r1, r2, n_uniq = results["reconstruction"]
                     n_pl = results["n_players"]
                     params2 = 1 + n_pl + n_pl * (n_pl - 1) // 2
-                    st.markdown("### How much do the interactions add?")
+                    st.markdown("### How much do pairwise terms improve reconstruction?")
                     if not np.isfinite(r1) or not np.isfinite(r2) or n_uniq < params2 + 3:
                         st.info(
-                            "Not enough evaluated coalitions for a reliable faithfulness estimate — "
+                            "Not enough evaluated coalitions for a reliable reconstruction estimate — "
                             "raise **Approximation Quality** to *Thorough* (or use a shorter prompt) "
                             "and re-run."
                         )
@@ -1048,9 +1046,10 @@ with tab_explanation:
                         m3.metric("Interactions add", f"+{gap:.0f} pp")
                         if gap >= 10:
                             st.caption(
-                                "Interactions are doing real work: a first-order (additive / "
-                                f"plain-SHAP) explanation misses ~{gap:.0f} percentage points that the "
-                                "pairwise terms recover. Reconstruction R² over the "
+                                "Pairwise terms materially improve this surrogate: the additive "
+                                f"model leaves ~{gap:.0f} percentage points of in-sample "
+                                "reconstruction that the pairwise model recovers. Reconstruction "
+                                "R² over the "
                                 f"{n_uniq} evaluated coalitions."
                             )
                         else:
