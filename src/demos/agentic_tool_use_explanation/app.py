@@ -34,6 +34,7 @@ from final_answer_similarity_scorer import (
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import DEFAULT_LOCAL_HF_ROUTER_MODEL_ID, LocalHFRouter
+from linguistic_segmenter import LinguisticSegmenter
 from matplotlib.patches import Rectangle
 from router_scorers import (
     DEFAULT_GROQ_ROUTER_MODEL_ID,
@@ -145,6 +146,12 @@ def load_semantic_segmenter(
         window=window,
         min_segment_words=min_segment_words,
     )
+
+
+@st.cache_resource
+def load_linguistic_segmenter() -> LinguisticSegmenter:
+    """Load and cache the optional spaCy linguistic segmenter."""
+    return LinguisticSegmenter()
 
 
 @st.cache_resource
@@ -501,7 +508,7 @@ def build_coalition_prompt(
 
 
 def segment_user_request(
-    segmenter: SemanticSegmenter,
+    segmenter: SemanticSegmenter | LinguisticSegmenter,
     user_request: str,
 ) -> tuple[list[str], list[dict[str, object]]]:
     """Segment only the user request; fixed context is not a Shapley player."""
@@ -608,7 +615,7 @@ def make_approximator(index: str, n_players: int, max_order: int) -> object:
     substitute a hand-rolled heuristic: if shapiq is unavailable or construction fails,
     the caller is expected to surface the error instead of falling back to one.
     """
-    import shapiq
+    import shapiq  # noqa: PLC0415
 
     if index == "SV":
         return shapiq.KernelSHAP(n=n_players, random_state=42)
@@ -1468,6 +1475,14 @@ def main() -> None:
                     )
 
         with st.expander("Segmentation settings", expanded=False):
+            segmenter_choice = st.selectbox(
+                "Segmenter",
+                [
+                    "Embedding (semantic similarity)",
+                    "Linguistic (spaCy chunking)",
+                ],
+                key="agentic_segmenter",
+            )
             segment_threshold = st.slider(
                 "semantic threshold",
                 min_value=0.0,
@@ -1494,17 +1509,20 @@ def main() -> None:
             )
 
         try:
-            segmenter = load_semantic_segmenter(
-                segment_threshold,
-                segment_window,
-                min_segment_words,
-            )
+            if segmenter_choice == "Linguistic (spaCy chunking)":
+                segmenter = load_linguistic_segmenter()
+            else:
+                segmenter = load_semantic_segmenter(
+                    segment_threshold,
+                    segment_window,
+                    min_segment_words,
+                )
             semantic_user_texts, segment_debug_rows = segment_user_request(
                 segmenter,
                 user_request,
             )
         except Exception as error:  # noqa: BLE001
-            st.error(f"Could not segment the user request with MPNet: {error}")
+            st.error(f"Could not segment the user request with {segmenter_choice}: {error}")
             return
         user_segments = build_segments(semantic_user_texts, "user")
         labels = [segment.label for segment in user_segments]
@@ -1635,6 +1653,7 @@ def main() -> None:
             final_answer_embedding_model_id,
             bool(enable_fallback_target_selection),
             show_lexical_comparison,
+            segmenter_choice,
             segment_threshold,
             segment_window,
             min_segment_words,
@@ -1669,6 +1688,7 @@ def main() -> None:
                     final_answer_embedding_model_id,
                     bool(enable_fallback_target_selection),
                     show_lexical_comparison,
+                    segmenter_choice,
                     segment_threshold,
                     segment_window,
                     min_segment_words,
@@ -1776,11 +1796,17 @@ def main() -> None:
                     )
             with segment_right:
                 st.markdown("**Shapley players: user request segments**")
-                st.caption(
-                    f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
-                    f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
-                    f"window={segmenter.window}, min words={segmenter.min_segment_words}."
-                )
+                if isinstance(segmenter, LinguisticSegmenter):
+                    st.caption(
+                        f"{len(user_segments)} user segments from `{segmenter.model_id}` "
+                        f"with stray_merge=`{segmenter.stray_merge}`."
+                    )
+                else:
+                    st.caption(
+                        f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
+                        f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
+                        f"window={segmenter.window}, min words={segmenter.min_segment_words}."
+                    )
                 for segment in user_segments:
                     st.markdown(
                         (
@@ -1790,7 +1816,12 @@ def main() -> None:
                         unsafe_allow_html=True,
                     )
                 if segment_debug_rows:
-                    st.markdown("**Semantic boundary diagnostics**")
+                    diagnostic_label = (
+                        "Linguistic segment diagnostics"
+                        if isinstance(segmenter, LinguisticSegmenter)
+                        else "Semantic boundary diagnostics"
+                    )
+                    st.markdown(f"**{diagnostic_label}**")
                     st.dataframe(
                         pd.DataFrame(segment_debug_rows),
                         use_container_width=True,
@@ -2157,6 +2188,7 @@ def main() -> None:
                 final_answer_embedding_model_id,
                 bool(enable_fallback_target_selection),
                 show_lexical_comparison,
+                segmenter_choice,
                 segment_threshold,
                 segment_window,
                 min_segment_words,
