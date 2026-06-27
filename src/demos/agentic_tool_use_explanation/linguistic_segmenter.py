@@ -335,12 +335,8 @@ class LinguisticSegmenter:
         try:
             spacy = importlib.import_module("spacy")
             self.nlp = spacy.load(self.model_id)
-        except Exception as error:
-            msg = (
-                f"Could not load spaCy model {self.model_id!r}. Install it with "
-                "`python -m spacy download en_core_web_sm`."
-            )
-            raise RuntimeError(msg) from error
+        except Exception:  # noqa: BLE001 - a missing model must use the safe fallback
+            self.nlp = None
 
     def segment(self, text: str) -> list[str]:
         """Return linguistic segments preserving every whitespace token exactly once."""
@@ -350,6 +346,8 @@ class LinguisticSegmenter:
     def segment_with_debug(self, text: str) -> tuple[list[str], list[dict[str, object]]]:
         """Return linguistic segments plus the rule used for every final segment."""
         tokens = whitespace_tokens(text)
+        if self.nlp is None:
+            return fallback_partition(text, tokens)
         try:
             doc = self.nlp(text)
             candidates = snap_candidates_to_words(

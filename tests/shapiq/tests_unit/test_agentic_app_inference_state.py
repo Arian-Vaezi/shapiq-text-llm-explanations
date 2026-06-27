@@ -34,6 +34,16 @@ def _inject_fake_inference_result(at: AppTest) -> None:
     at.session_state["agentic_inference_model"] = "llama-3.1-8b-instant"
 
 
+def test_linguistic_segmenter_is_selected_by_default() -> None:
+    at = AppTest.from_file(APP_PATH, default_timeout=120)
+    at.run()
+
+    segmenter_box = next(box for box in at.selectbox if box.label == "Segmenter")
+
+    assert not at.exception
+    assert segmenter_box.value == "Linguistic (spaCy chunking)"
+
+
 def test_unrelated_rerun_keeps_inferred_tool() -> None:
     """Re-running without changing the request must not drop a real inference result."""
     at = AppTest.from_file(APP_PATH, default_timeout=120)

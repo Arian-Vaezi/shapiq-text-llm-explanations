@@ -1481,6 +1481,7 @@ def main() -> None:
                     "Embedding (semantic similarity)",
                     "Linguistic (spaCy chunking)",
                 ],
+                index=1,
                 key="agentic_segmenter",
             )
             segment_threshold = st.slider(

@@ -148,6 +148,25 @@ def test_zero_candidates_falls_back_to_one_segment_per_word() -> None:
     validate_partition(text, segments)
 
 
+def test_missing_model_falls_back_without_raising(monkeypatch) -> None:
+    spacy = importlib.import_module("spacy")
+
+    def fail_model_load(model_id: str) -> None:
+        del model_id
+        msg = "model unavailable"
+        raise OSError(msg)
+
+    monkeypatch.setattr(spacy, "load", fail_model_load)
+
+    segmenter = LinguisticSegmenter()
+    segments, debug_rows = segmenter.segment_with_debug("what is the weather")
+
+    assert segmenter.nlp is None
+    assert segments == ["what", "is", "the", "weather"]
+    assert all(row["rule"] == "FALLBACK" for row in debug_rows)
+    validate_partition("what is the weather", segments)
+
+
 @requires_model
 def test_real_model_segments_weather_request_into_signal_units() -> None:
     segmenter = LinguisticSegmenter()

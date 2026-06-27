@@ -25,8 +25,8 @@ From the repository root:
 uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
 ```
 
-The default embedding segmenter needs no additional setup. To use the optional
-linguistic segmenter, install its English spaCy model locally:
+The embedding segmenter needs no additional setup. For full linguistic
+segmentation, install the English spaCy model locally:
 
 ```bash
 python -m spacy download en_core_web_sm
