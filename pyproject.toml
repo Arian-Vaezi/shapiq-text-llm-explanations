@@ -314,16 +314,28 @@ dev = [
 ]
 
 # ---------------------------------------------------------------------------
-# Local GPU support: pull the CUDA (cu126) build of torch on Windows only.
-# Scoped with a sys_platform marker so macOS/Linux/CI keep the default
-# PyPI wheels (there are no CUDA wheels for macOS, and CI has no GPU).
+# GPU support: pull a CUDA build of torch matched to the platform's driver.
+# Scoped with sys_platform markers so macOS keeps the default PyPI wheels
+# (there are no CUDA wheels for macOS).
+#   - Windows dev boxes:  cu126
+#   - Linux GPU clusters: cu128. The default PyPI Linux wheel is now built for
+#     CUDA 13.0, which is too new for drivers like LRZ HLAI's CUDA 12.9 (torch
+#     then reports cuda_available=False and silently runs on CPU). A cu128 build
+#     runs on any 12.8+ driver. CI is GPU-less, but CUDA wheels run fine on CPU,
+#     so this is safe there too.
 # ---------------------------------------------------------------------------
 [[tool.uv.index]]
 name = "pytorch-cu126"
 url = "https://download.pytorch.org/whl/cu126"
 explicit = true
 
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
 [tool.uv.sources]
 torch = [
     { index = "pytorch-cu126", marker = "sys_platform == 'win32'" },
+    { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
 ]
