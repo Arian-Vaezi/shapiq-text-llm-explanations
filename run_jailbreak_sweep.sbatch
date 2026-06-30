@@ -23,7 +23,9 @@ export TOKENIZERS_PARALLELISM=false
 mkdir -p "$HF_HOME"
 echo "HF_HOME=$HF_HOME"
 
-cd "$HOME/projects/shapiq-text-llm-explanations"
+# Run in whatever directory the job was submitted from (so this works from your own
+# clone, e.g. on scratch), not a hardcoded shared path.
+cd "${SLURM_SUBMIT_DIR:-$PWD}"
 OUTDIR="results/sweep_${SLURM_JOB_ID:-manual}"
 mkdir -p logs "$OUTDIR"
 source .venv/bin/activate

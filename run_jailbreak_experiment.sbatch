@@ -17,11 +17,15 @@
 set -euo pipefail
 
 export SLURM_CONF="/lrz/sys/share/CMUC4/etc/slurm_hlai.conf"
-export HF_HOME="$HOME/.cache/huggingface"
-export TRANSFORMERS_CACHE="$HOME/.cache/huggingface"
+# Model cache on SCRATCH (huge), never $HOME (small quota). Fall back to the known
+# LRZ scratch path if $SCRATCH isn't inherited by the batch job.
+: "${SCRATCH:=/dss/lxclscratch/04/$USER}"
+export HF_HOME="$SCRATCH/hf_cache"
 export TOKENIZERS_PARALLELISM=false
+mkdir -p "$HF_HOME"
 
-cd "$HOME/projects/shapiq-text-llm-explanations"
+# Run in the submit directory (works from your own clone on scratch), not a hardcoded path.
+cd "${SLURM_SUBMIT_DIR:-$PWD}"
 mkdir -p logs results
 source .venv/bin/activate
 
