@@ -615,7 +615,7 @@ def make_approximator(index: str, n_players: int, max_order: int) -> object:
     substitute a hand-rolled heuristic: if shapiq is unavailable or construction fails,
     the caller is expected to surface the error instead of falling back to one.
     """
-    import shapiq  # noqa: PLC0415
+    import shapiq
 
     if index == "SV":
         return shapiq.KernelSHAP(n=n_players, random_state=42)

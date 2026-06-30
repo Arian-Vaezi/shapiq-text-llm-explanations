@@ -21,6 +21,17 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
 
 try:
+    from demos.agentic_tool_use_explanation.agent_failure import (
+        TRANSIENT_AGENT_FAILURE_KINDS,
+        CoalitionTransientFailureError,
+    )
+except ModuleNotFoundError:
+    from agent_failure import (
+        TRANSIENT_AGENT_FAILURE_KINDS,
+        CoalitionTransientFailureError,
+    )
+
+try:
     from demos.agentic_tool_use_explanation.groq_agent import run_groq_tool_inference
 except ModuleNotFoundError:
     from groq_agent import run_groq_tool_inference
@@ -29,6 +40,19 @@ try:
     from demos.agentic_tool_use_explanation.scorers import split_coalition_prompt
 except ModuleNotFoundError:
     from scorers import split_coalition_prompt
+
+try:
+    from demos.agentic_tool_use_explanation.tool_schemas import (
+        DECISION_NAMES,
+        EXECUTABLE_TOOL_SCHEMAS,
+        NO_TOOL_NAME,
+    )
+except ModuleNotFoundError:
+    from tool_schemas import (
+        DECISION_NAMES,
+        EXECUTABLE_TOOL_SCHEMAS,
+        NO_TOOL_NAME,
+    )
 
 DEFAULT_GROQ_ROUTER_MODEL_ID = "llama-3.1-8b-instant"
 DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES = 5
@@ -445,6 +469,28 @@ class TrajectoryArgumentMatchScorer:
         if self.arg_match_weight < 0:
             msg = "arg_match_weight must be non-negative."
             raise ValueError(msg)
+        if not math.isclose(self.tool_match_weight + self.arg_match_weight, 1.0, abs_tol=1e-12):
+            msg = "tool_match_weight and arg_match_weight must sum to 1.0."
+            raise ValueError(msg)
+        ref_tool = self.reference_trajectory.selected_tool
+        if ref_tool not in DECISION_NAMES:
+            msg = (
+                f"Reference trajectory selected_tool {ref_tool!r} is not a known decision. "
+                f"Valid decisions: {sorted(DECISION_NAMES)}"
+            )
+            raise ValueError(msg)
+        if ref_tool != NO_TOOL_NAME:
+            alias_map = self.argument_aliases.get(ref_tool, {})
+            canonical_ref = _canonicalize_arguments(
+                ref_tool, self.reference_trajectory.tool_arguments, alias_map
+            )
+            missing = _required_args_for_tool(ref_tool) - set(canonical_ref)
+            if missing:
+                msg = (
+                    f"Reference trajectory for {ref_tool!r} is missing required "
+                    f"arguments: {sorted(missing)}"
+                )
+                raise ValueError(msg)
 
     def score_batch(
         self,
@@ -504,37 +550,26 @@ class TrajectoryArgumentMatchScorer:
         return score, argument_match_ratio
 
     def _argument_match_ratio(self, coalition_trajectory: ToolTrajectory) -> float:
-        """Return the fraction of canonical reference argument keys that are matched."""
+        """Return the fraction of canonical reference arguments matched by the coalition."""
         tool_name = self.reference_trajectory.selected_tool
-        normalized_coalition_arguments = self._normalize_keys(
-            tool_name,
-            coalition_trajectory.tool_arguments,
+        alias_map = self.argument_aliases.get(tool_name, {})
+        canonical_reference = _canonicalize_arguments(
+            tool_name, self.reference_trajectory.tool_arguments, alias_map
         )
-        reference_arguments = self.reference_trajectory.tool_arguments
+        canonical_coalition = _canonicalize_arguments(
+            tool_name, coalition_trajectory.tool_arguments, alias_map
+        )
         matched = sum(
             1
-            for canonical_key, reference_value in reference_arguments.items()
-            if canonical_key in normalized_coalition_arguments
+            for canonical_key, reference_value in canonical_reference.items()
+            if canonical_key in canonical_coalition
             and self._values_match(
                 tool_name,
                 reference_value,
-                normalized_coalition_arguments[canonical_key],
+                canonical_coalition[canonical_key],
             )
         )
-        return matched / len(reference_arguments)
-
-    def _normalize_keys(
-        self,
-        tool_name: str,
-        arguments: Mapping[str, object],
-    ) -> dict[str, object]:
-        """Map alias argument keys to their canonical reference key names."""
-        alias_map = self.argument_aliases.get(tool_name, {})
-        normalized: dict[str, object] = {}
-        for key, value in arguments.items():
-            canonical_key = alias_map.get(key, key)
-            normalized.setdefault(canonical_key, value)
-        return normalized
+        return matched / len(canonical_reference)
 
     def _values_match(
         self,
@@ -542,24 +577,66 @@ class TrajectoryArgumentMatchScorer:
         reference_value: object,
         coalition_value: object,
     ) -> bool:
-        """Return whether one reference/coalition argument value pair matches."""
+        """Return whether one reference/coalition argument value pair matches as a fidelity check."""
         if tool_name == "calculator_tool":
             numeric_match = _numeric_values_match(reference_value, coalition_value)
             if numeric_match is not None:
                 return numeric_match
         normalized_reference = _normalize_text(reference_value)
         normalized_coalition = _normalize_text(coalition_value)
-        if not normalized_reference or not normalized_coalition:
-            return normalized_reference == normalized_coalition
-        return (
-            normalized_reference == normalized_coalition
-            or normalized_reference in normalized_coalition
-            or normalized_coalition in normalized_reference
-        )
+        return normalized_reference == normalized_coalition
 
 
 _PUNCTUATION_PATTERN = re.compile(r"[^\w\s]")
 _WHITESPACE_PATTERN = re.compile(r"\s+")
+_UNICODE_ARITH_TABLE = str.maketrans({"\u00d7": "*", "\u00f7": "/", "\u2212": "-"})
+
+
+def _normalize_arithmetic_operators(expression: str) -> str:
+    """Replace Unicode arithmetic symbols with ASCII equivalents before evaluation."""
+    return expression.translate(_UNICODE_ARITH_TABLE)
+
+
+def _canonicalize_arguments(
+    tool_name: str,
+    arguments: Mapping[str, object],
+    alias_map: Mapping[str, str],
+) -> dict[str, object]:
+    """Map alias argument keys to canonical keys, raising ValueError on conflicting aliases.
+
+    Applied symmetrically to both reference and coalition trajectories so that
+    alias-key differences never create false mismatches.
+    """
+    canonical: dict[str, object] = {}
+    for key, value in arguments.items():
+        ckey = alias_map.get(key, key)
+        if ckey in canonical:
+            if canonical[ckey] != value:
+                msg = (
+                    f"Conflicting values for canonical argument {ckey!r} in {tool_name!r}: "
+                    f"{canonical[ckey]!r} vs {value!r}"
+                )
+                raise ValueError(msg)
+        else:
+            canonical[ckey] = value
+    return canonical
+
+
+def _required_args_for_tool(tool_name: str) -> frozenset[str]:
+    """Return the required argument names for a tool, derived from EXECUTABLE_TOOL_SCHEMAS."""
+    for schema in EXECUTABLE_TOOL_SCHEMAS:
+        func = schema.get("function")
+        if not isinstance(func, dict):
+            continue
+        if func.get("name") != tool_name:
+            continue
+        params = func.get("parameters")
+        if not isinstance(params, dict):
+            continue
+        required = params.get("required", [])
+        if isinstance(required, list):
+            return frozenset(str(k) for k in required)
+    return frozenset()
 
 
 def _normalize_text(value: object) -> str:
@@ -581,7 +658,7 @@ def _numeric_values_match(reference_value: object, coalition_value: object) -> b
 def _safe_eval_arithmetic(expression: str) -> float | None:
     """Evaluate a simple arithmetic expression, returning None if it is not numeric."""
     try:
-        node = ast.parse(expression, mode="eval")
+        node = ast.parse(_normalize_arithmetic_operators(expression), mode="eval")
         return _eval_numeric_node(node.body)
     except Exception:  # noqa: BLE001
         return None
@@ -634,9 +711,16 @@ def build_groq_inference_trajectory_provider(
             tool_context=tool_context,
             client_factory=client_factory,
         )
+        if inference_result.error is not None:
+            if inference_result.failure_kind in TRANSIENT_AGENT_FAILURE_KINDS:
+                msg = f"Transient Groq provider failure: {inference_result.error}"
+                raise CoalitionTransientFailureError(msg)
+            msg = f"Groq trajectory provider failed: {inference_result.error}"
+            raise ValueError(msg)
         selected_tool = inference_result.selected_tool
         if not isinstance(selected_tool, str) or not selected_tool:
-            selected_tool = ""
+            msg = "Groq inference returned missing or empty selected_tool."
+            raise ValueError(msg)
         return ToolTrajectory(
             selected_tool=selected_tool,
             tool_arguments=dict(inference_result.tool_arguments or {}),

@@ -185,7 +185,12 @@ def _transient_exception_types() -> tuple[type[BaseException], ...]:
         import httpx
 
         transient_types.extend(
-            [httpx.TimeoutException, httpx.ConnectError, httpx.ReadTimeout, httpx.RemoteProtocolError]
+            [
+                httpx.TimeoutException,
+                httpx.ConnectError,
+                httpx.ReadTimeout,
+                httpx.RemoteProtocolError,
+            ]
         )
     except ImportError:
         pass

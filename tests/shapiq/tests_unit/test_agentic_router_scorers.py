@@ -11,13 +11,17 @@ import pytest
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
+import router_scorers  # noqa: E402
+from agent_failure import AgentFailureKind  # noqa: E402
+from groq_agent import GroqInferenceResult  # noqa: E402
 from router_scorers import (  # noqa: E402
     GroqDeterministicRouterScorer,
     GroqSoftVoteToolScorer,
     ToolTrajectory,
     TrajectoryArgumentMatchScorer,
+    build_groq_inference_trajectory_provider,
 )
-from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
+from tool_schemas import EXECUTABLE_TOOL_SCHEMAS, TOOL_DESCRIPTIONS  # noqa: E402
 
 FIXED_PROMPT = (
     "- Use weather_tool for weather, rain, temperature, forecast, or city-date questions.\n\n"
@@ -566,7 +570,8 @@ def test_trajectory_score_value_normalization_ignores_case_and_punctuation() -> 
     assert scores == pytest.approx([1.0])
 
 
-def test_trajectory_score_substring_match_for_partial_extracted_text() -> None:
+def test_trajectory_score_strict_text_equality_different_text_scores_tool_weight_only() -> None:
+    # "Berlin" != "weather in Berlin tomorrow" under strict equality → arg ratio 0
     reference = ToolTrajectory(selected_tool="web_search_tool", tool_arguments={"query": "Berlin"})
     provider, _calls = make_recording_provider(
         {
@@ -587,7 +592,8 @@ def test_trajectory_score_substring_match_for_partial_extracted_text() -> None:
         tool_descriptions=TOOL_DESCRIPTIONS,
     )
 
-    assert scores == pytest.approx([1.0])
+    # tool match (0.5) + arg_match_weight * 0 = 0.5
+    assert scores == pytest.approx([0.5])
 
 
 def test_trajectory_score_calculator_expression_arithmetic_normalization() -> None:
@@ -645,7 +651,7 @@ def test_trajectory_score_calculator_expression_mismatch_scores_zero_ratio() -> 
 
 
 def test_trajectory_score_rejects_target_tool_not_matching_reference() -> None:
-    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"location": "Berlin"})
     provider, _calls = make_recording_provider({})
     scorer = TrajectoryArgumentMatchScorer(
         reference_trajectory=reference,
@@ -661,7 +667,7 @@ def test_trajectory_score_rejects_target_tool_not_matching_reference() -> None:
 
 
 def test_trajectory_score_rejects_unknown_target_tool() -> None:
-    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"location": "Berlin"})
     provider, _calls = make_recording_provider({})
     scorer = TrajectoryArgumentMatchScorer(
         reference_trajectory=reference,
@@ -677,9 +683,13 @@ def test_trajectory_score_rejects_unknown_target_tool() -> None:
 
 
 def test_trajectory_score_caches_provider_calls_per_prompt() -> None:
-    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={})
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"location": "Berlin"})
     provider, calls = make_recording_provider(
-        {FIXED_PROMPT: ToolTrajectory(selected_tool="weather_tool", tool_arguments={})},
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="weather_tool", tool_arguments={"location": "Berlin"}
+            )
+        },
     )
     scorer = TrajectoryArgumentMatchScorer(
         reference_trajectory=reference,
@@ -710,3 +720,272 @@ def test_trajectory_score_rejects_negative_weights() -> None:
             trajectory_provider=provider,
             tool_match_weight=-0.1,
         )
+
+
+# ---------------------------------------------------------------------------
+# New tests: trajectory fidelity edge cases
+# ---------------------------------------------------------------------------
+
+
+def test_trajectory_score_alias_on_both_sides_still_scores_one() -> None:
+    # Reference uses alias "city"; coalition uses alias "date_or_time". Both canonicalize.
+    reference = ToolTrajectory(
+        selected_tool="weather_tool",
+        tool_arguments={"city": "Berlin", "date_or_time": "tomorrow"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="weather_tool",
+                tool_arguments={"location": "Berlin", "date": "tomorrow"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_conflicting_aliases_raises_value_error() -> None:
+    # "city" and "place" both map to "location" but carry different values.
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"location": "Berlin"})
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="weather_tool",
+                tool_arguments={"city": "Berlin", "place": "Paris"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    with pytest.raises(ValueError, match="Conflicting values"):
+        scorer.score_batch(
+            [FIXED_PROMPT],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_trajectory_score_weights_not_summing_to_one_raises_value_error() -> None:
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"location": "Berlin"})
+    provider, _calls = make_recording_provider({})
+
+    with pytest.raises(ValueError, match=r"sum to 1\.0"):
+        TrajectoryArgumentMatchScorer(
+            reference_trajectory=reference,
+            trajectory_provider=provider,
+            tool_match_weight=0.6,
+            arg_match_weight=0.6,
+        )
+
+
+def test_trajectory_score_unicode_multiply_matches_ascii() -> None:
+    # "238 * 47" should evaluate to the same value as "238 * 47".
+    reference = ToolTrajectory(
+        selected_tool="calculator_tool",
+        tool_arguments={"expression": "238 \u00d7 47"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="calculator_tool",
+                tool_arguments={"expression": "238 * 47"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="calculator_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_unicode_multiply_commutative_match() -> None:
+    # "238 * 47" and "47 * 238" both evaluate to 11186.
+    reference = ToolTrajectory(
+        selected_tool="calculator_tool",
+        tool_arguments={"expression": "238 \u00d7 47"},
+    )
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="calculator_tool",
+                tool_arguments={"expression": "47 * 238"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="calculator_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert scores == pytest.approx([1.0])
+
+
+def test_trajectory_score_york_does_not_match_new_york() -> None:
+    # Strict text equality: "york" must not match "new york".
+    reference = ToolTrajectory(selected_tool="web_search_tool", tool_arguments={"query": "York"})
+    provider, _calls = make_recording_provider(
+        {
+            FIXED_PROMPT: ToolTrajectory(
+                selected_tool="web_search_tool",
+                tool_arguments={"query": "New York"},
+            ),
+        },
+    )
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="web_search_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    # tool match (0.5) + arg_match_weight * 0 = 0.5
+    assert scores == pytest.approx([0.5])
+
+
+def test_trajectory_score_reference_unknown_tool_raises_at_construction() -> None:
+    reference = ToolTrajectory(selected_tool="calendar_tool", tool_arguments={"date": "tomorrow"})
+    provider, _calls = make_recording_provider({})
+
+    with pytest.raises(ValueError, match="not a known decision"):
+        TrajectoryArgumentMatchScorer(
+            reference_trajectory=reference,
+            trajectory_provider=provider,
+        )
+
+
+def test_trajectory_score_reference_missing_required_arg_raises_at_construction() -> None:
+    # weather_tool requires "location"; providing only "date" is invalid.
+    reference = ToolTrajectory(selected_tool="weather_tool", tool_arguments={"date": "tomorrow"})
+    provider, _calls = make_recording_provider({})
+
+    with pytest.raises(ValueError, match="missing required arguments"):
+        TrajectoryArgumentMatchScorer(
+            reference_trajectory=reference,
+            trajectory_provider=provider,
+        )
+
+
+def test_groq_trajectory_provider_transient_failure_raises_coalition_transient_error(
+    monkeypatch,
+) -> None:
+    # Arrange: Groq returns a transient failure (rate limit).
+    def fake_groq_inference(user_request, tool_schemas, model_name, **kwargs):
+        return GroqInferenceResult(
+            available=False,
+            error="429 rate limit",
+            failure_kind=AgentFailureKind.RATE_LIMIT,
+        )
+
+    monkeypatch.setattr(router_scorers, "run_groq_tool_inference", fake_groq_inference)
+    provider = build_groq_inference_trajectory_provider(
+        model_name="llama-3.1-8b-instant",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+        tool_context="dummy context",
+    )
+
+    # Act / Assert — use the class from router_scorers to avoid dual-path identity issues
+    with pytest.raises(router_scorers.CoalitionTransientFailureError, match="rate limit"):
+        provider(FIXED_PROMPT)
+
+
+def test_groq_trajectory_provider_malformed_response_raises_value_error(
+    monkeypatch,
+) -> None:
+    # Arrange: Groq returns a non-transient failure (malformed JSON).
+    def fake_groq_inference(user_request, tool_schemas, model_name, **kwargs):
+        return GroqInferenceResult(
+            error="Groq returned malformed JSON.",
+            failure_kind=AgentFailureKind.INVALID_REQUEST,
+        )
+
+    monkeypatch.setattr(router_scorers, "run_groq_tool_inference", fake_groq_inference)
+    provider = build_groq_inference_trajectory_provider(
+        model_name="llama-3.1-8b-instant",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+        tool_context="dummy context",
+    )
+
+    # Act / Assert: non-transient → ValueError, not a silent empty trajectory
+    with pytest.raises(ValueError, match="malformed JSON"):
+        provider(FIXED_PROMPT)
+
+
+def test_groq_trajectory_provider_failure_not_cached_second_call_retries(
+    monkeypatch,
+) -> None:
+    # Arrange: first call raises, second call succeeds.
+    call_count = {"n": 0}
+
+    def failing_then_succeeding(user_request, tool_schemas, model_name, **kwargs):
+        call_count["n"] += 1
+        if call_count["n"] == 1:
+            return GroqInferenceResult(
+                error="Groq returned malformed JSON.",
+                failure_kind=AgentFailureKind.INVALID_REQUEST,
+            )
+        return GroqInferenceResult(
+            selected_tool="no_tool",
+            tool_arguments={},
+        )
+
+    monkeypatch.setattr(router_scorers, "run_groq_tool_inference", failing_then_succeeding)
+    provider = build_groq_inference_trajectory_provider(
+        model_name="llama-3.1-8b-instant",
+        tool_schemas=EXECUTABLE_TOOL_SCHEMAS,
+        tool_context="dummy context",
+    )
+    reference = ToolTrajectory(selected_tool="no_tool", tool_arguments={})
+    scorer = TrajectoryArgumentMatchScorer(
+        reference_trajectory=reference,
+        trajectory_provider=provider,
+    )
+
+    # First call raises (provider failure, not cached).
+    with pytest.raises(ValueError):
+        scorer.score_batch(
+            [FIXED_PROMPT],
+            target_tool="no_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+    # Second call invokes provider again (not returning a cached failure).
+    scores = scorer.score_batch(
+        [FIXED_PROMPT],
+        target_tool="no_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert call_count["n"] == 2
+    assert scores == pytest.approx([1.0])
