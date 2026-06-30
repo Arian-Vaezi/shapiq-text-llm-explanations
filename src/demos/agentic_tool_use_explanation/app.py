@@ -745,6 +745,31 @@ def strongest_pair(matrix: pd.DataFrame, labels: list[str]) -> tuple[str, float]
     return f"{labels[best_pair[0]]} + {labels[best_pair[1]]}", best_value
 
 
+def top_pairwise_interactions(
+    pairwise_matrix: pd.DataFrame,
+    user_segments: list[ToolUseSegment],
+    n: int = 5,
+) -> list[dict[str, object]]:
+    """Return the top N off-diagonal pairwise k-SII interactions sorted by |value|."""
+    rows: list[dict[str, object]] = []
+    n_players = pairwise_matrix.shape[0]
+    for i in range(n_players):
+        for j in range(i + 1, n_players):
+            value = float(pairwise_matrix.iloc[i, j])
+            rows.append(
+                {
+                    "segment_i": user_segments[i].label,
+                    "segment_j": user_segments[j].label,
+                    "text_i": user_segments[i].text,
+                    "text_j": user_segments[j].text,
+                    "value": value,
+                    "type": "complementary" if value > 0 else "redundant",
+                }
+            )
+    rows.sort(key=lambda r: abs(float(r["value"])), reverse=True)
+    return rows[:n]
+
+
 def build_interpretation_notes(
     attribution_frame: pd.DataFrame,
     pair_label: str,
@@ -1853,7 +1878,9 @@ def main() -> None:
 
         if run:
             try:
-                from tool_game import ToolUseGame
+                from tool_game import (
+                    ToolUseGame,
+                )
             except Exception as error:  # noqa: BLE001
                 st.error(
                     "The demo controls are ready, but the full shapiq explanation stack "
@@ -2393,6 +2420,7 @@ def main() -> None:
                     if fig_ax is not None:
                         fig, ax = fig_ax
                         st.pyplot(polish_bar(fig, ax, xlabel=bar_xlabel), clear_figure=True)
+            st.caption("See the Interactions tab for pairwise k-SII interactions between segments.")
 
         with tabs[2]:
             st.markdown("**First- and second-order interaction heatmap**")
@@ -2420,6 +2448,96 @@ def main() -> None:
                         fig, ax = fig_ax
                         st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
             st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
+
+            if pairwise_matrix.shape[0] >= 2:
+                top_pairs = top_pairwise_interactions(pairwise_matrix, user_segments)
+                if top_pairs:
+                    st.markdown("**Top pairwise interactions**")
+                    pairs_frame = pd.DataFrame(
+                        [
+                            {
+                                "segments": f"{row['segment_i']} + {row['segment_j']}",
+                                "text": f"{row['text_i']}  |  {row['text_j']}",
+                                "k-SII": format_attribution(row["value"]),
+                                "type": row["type"],
+                            }
+                            for row in top_pairs
+                        ]
+                    )
+                    st.dataframe(pairs_frame, use_container_width=True, hide_index=True)
+
+            n_segs = pairwise_matrix.shape[0]
+            pos_pairs = [
+                (i, j, float(pairwise_matrix.iloc[i, j]))
+                for i in range(n_segs)
+                for j in range(i + 1, n_segs)
+                if float(pairwise_matrix.iloc[i, j]) > 0
+            ]
+            neg_pairs = [
+                (i, j, float(pairwise_matrix.iloc[i, j]))
+                for i in range(n_segs)
+                for j in range(i + 1, n_segs)
+                if float(pairwise_matrix.iloc[i, j]) < 0
+            ]
+            if pos_pairs:
+                pos_i, pos_j, pos_val = max(pos_pairs, key=lambda x: x[2])
+                pos_lbl_i = user_segments[pos_i].label
+                pos_lbl_j = user_segments[pos_j].label
+                st.success(
+                    f"**Complementary: `{pos_lbl_i}` + `{pos_lbl_j}` "
+                    f"(k-SII = {pos_val:+.3f})**\n\n"
+                    "These segments reinforce each other's support for the selected tool "
+                    "beyond their individual contributions."
+                )
+            if neg_pairs:
+                neg_i, neg_j, neg_val = min(neg_pairs, key=lambda x: x[2])
+                neg_lbl_i = user_segments[neg_i].label
+                neg_lbl_j = user_segments[neg_j].label
+                st.info(
+                    f"**Redundant: `{neg_lbl_i}` + `{neg_lbl_j}` "
+                    f"(k-SII = {neg_val:+.3f})**\n\n"
+                    "These segments overlap in the routing signal they carry; "
+                    "having both adds less than expected from their individual attributions."
+                )
+
+            with st.expander("k-SII decomposition diagnostic", expanded=False):
+                diag = interaction_order_diagnostics(
+                    explanation,
+                    full_value=full_score,
+                    empty_value=empty_score,
+                )
+                diag_frame = pd.DataFrame(
+                    [
+                        {
+                            "quantity": "sum of order-1 values",
+                            "value": f"{diag['order_1_sum']:.6f}",
+                        },
+                        {
+                            "quantity": "sum of order-2 pairwise values",
+                            "value": f"{diag['order_2_sum']:.6f}",
+                        },
+                        {
+                            "quantity": "total game value v(N) - v(empty)",
+                            "value": f"{diag['total_game_value']:.6f}",
+                        },
+                        {
+                            "quantity": "efficiency residual",
+                            "value": f"{diag['residual']:.6g}",
+                        },
+                    ]
+                )
+                st.dataframe(diag_frame, use_container_width=True, hide_index=True)
+                if abs(diag["residual"]) <= EFFICIENCY_RESIDUAL_TOLERANCE:
+                    st.caption(
+                        "k-SII order-2 efficiency holds: first- and second-order values "
+                        "sum to the total game value."
+                    )
+                else:
+                    st.warning(
+                        f"Efficiency residual {diag['residual']:.6g} exceeds tolerance "
+                        f"{EFFICIENCY_RESIDUAL_TOLERANCE:g}. "
+                        "This may indicate approximation error above the exact-computation limit."
+                    )
 
         if debug_requested:
             with tabs[3]:

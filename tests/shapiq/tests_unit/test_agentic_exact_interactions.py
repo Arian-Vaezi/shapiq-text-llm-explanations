@@ -10,6 +10,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 import shapiq
@@ -106,3 +107,43 @@ def test_player_count_at_limit_is_accepted() -> None:
     assert isinstance(explanation, shapiq.InteractionValues)
     assert metadata.n_players == MAX_EXACT_DEMO_PLAYERS
     assert metadata.coalition_count == 2**MAX_EXACT_DEMO_PLAYERS
+
+
+def test_k_sii_order2_efficiency_residual_near_zero() -> None:
+    """k-SII at max_order=2 is efficient: sum of all values equals the total game value."""
+    game = make_toy_game(3)
+    explanation, _ = compute_exact_interactions(game=game, index="k-SII", max_order=2)
+
+    all_mask = np.ones((1, 3), dtype=bool)
+    empty_mask = np.zeros((1, 3), dtype=bool)
+    full_value = float(game.value_function(all_mask)[0])
+    empty_value = float(game.value_function(empty_mask)[0])
+    total_game_value = full_value - empty_value
+
+    ksii_sum = sum(float(v) for k, v in explanation.dict_values.items() if 1 <= len(k) <= 2)
+    assert abs(ksii_sum - total_game_value) < 1e-4
+
+
+def test_k_sii_order2_nonzero_for_nonadditive_game() -> None:
+    """For a game with genuine interactions, k-SII order-2 values are non-zero."""
+
+    class PairwiseScorer:
+        def score_batch(self, prompts, *, target_tool, tool_descriptions):
+            del target_tool, tool_descriptions
+            # Score = number of distinct pairs of SEG tokens present
+            counts = [prompt.count("SEG") for prompt in prompts]
+            return [float(n * (n - 1)) / 2 for n in counts]
+
+    game = ToolUseGame(
+        target_tool="weather_tool",
+        user_segments=["SEG0", "SEG1", "SEG2"],
+        system_prompt="Use weather_tool for weather questions.",
+        scorer=PairwiseScorer(),
+        tool_descriptions={"weather_tool": TOOL_DESCRIPTIONS["weather_tool"]},
+        normalize=False,
+    )
+
+    explanation, _ = compute_exact_interactions(game=game, index="k-SII", max_order=2)
+
+    order_2_values = [float(v) for k, v in explanation.dict_values.items() if len(k) == 2]
+    assert any(abs(v) > 1e-6 for v in order_2_values)

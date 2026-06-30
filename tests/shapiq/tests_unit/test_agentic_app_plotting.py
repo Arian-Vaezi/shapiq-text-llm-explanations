@@ -324,3 +324,74 @@ def test_sample_data_uses_derived_tool_descriptions() -> None:
     assert app.TOOLS == TOOL_DESCRIPTIONS
     for trace in sample_data.SAMPLE_TRACES.values():
         assert trace["target_tool"] in app.TOOLS
+
+
+def test_top_pairwise_interactions_sorted_by_abs_value() -> None:
+    matrix = pd.DataFrame([[0.0, 0.1, 0.5], [0.1, 0.0, -0.3], [0.5, -0.3, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="first"),
+        app.ToolUseSegment(source="user", label="U2", text="second"),
+        app.ToolUseSegment(source="user", label="U3", text="third"),
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments)
+
+    values = [row["value"] for row in result]
+    assert values == sorted(values, key=abs, reverse=True)
+    assert abs(float(result[0]["value"]) - 0.5) < 1e-9
+
+
+def test_top_pairwise_interactions_has_segment_text_and_labels() -> None:
+    matrix = pd.DataFrame([[0.0, 0.4], [0.4, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="rain in Berlin"),
+        app.ToolUseSegment(source="user", label="U2", text="tomorrow morning"),
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments)
+
+    assert len(result) == 1
+    row = result[0]
+    assert row["segment_i"] == "U1"
+    assert row["segment_j"] == "U2"
+    assert row["text_i"] == "rain in Berlin"
+    assert row["text_j"] == "tomorrow morning"
+
+
+def test_top_pairwise_interactions_complementary_for_positive_value() -> None:
+    matrix = pd.DataFrame([[0.0, 0.3], [0.3, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="a"),
+        app.ToolUseSegment(source="user", label="U2", text="b"),
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments)
+
+    assert result[0]["type"] == "complementary"
+
+
+def test_top_pairwise_interactions_redundant_for_negative_value() -> None:
+    matrix = pd.DataFrame([[0.0, -0.2], [-0.2, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="a"),
+        app.ToolUseSegment(source="user", label="U2", text="b"),
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments)
+
+    assert result[0]["type"] == "redundant"
+
+
+def test_top_pairwise_interactions_respects_n_limit() -> None:
+    matrix = pd.DataFrame([[0.0, 0.1, 0.2], [0.1, 0.0, 0.3], [0.2, 0.3, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label=f"U{i}", text=f"text {i}") for i in range(3)
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments, n=2)
+
+    assert len(result) == 2
+
+
+def test_attribution_tab_mentions_interactions_tab() -> None:
+    assert any(isinstance(c, str) and "Interactions tab" in c for c in app.main.__code__.co_consts)
