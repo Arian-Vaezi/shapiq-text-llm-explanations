@@ -29,12 +29,15 @@ nvidia-smi || true
 # No `set -e`: one failed config must not abort the whole sweep.
 set -uo pipefail
 
-# Trim this list to taste. All are ungated (no HF license) and recognized by CausalModelWrapper.
+# Trimmed to the two small models so the HF cache (~5 GB) fits the home-directory
+# disk quota. Re-enable Phi-3 (+7 GB) and Mistral-7B (+14 GB) only after pointing
+# HF_HOME at a large scratch/work filesystem (set HF_HOME above), or home will fill up
+# again ("Disk quota exceeded"). All are ungated and recognized by CausalModelWrapper.
 MODELS=(
   "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
   "Qwen/Qwen2.5-1.5B-Instruct"
-  "microsoft/Phi-3-mini-4k-instruct"
-  "mistralai/Mistral-7B-Instruct-v0.3"
+  # "microsoft/Phi-3-mini-4k-instruct"      # +7 GB  -> needs scratch HF_HOME
+  # "mistralai/Mistral-7B-Instruct-v0.3"    # +14 GB -> needs scratch HF_HOME
 )
 EXAMPLES=(0 1 2 3)
 
