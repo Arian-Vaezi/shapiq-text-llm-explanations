@@ -17,12 +17,14 @@
 set -euo pipefail
 
 export SLURM_CONF="/lrz/sys/share/CMUC4/etc/slurm_hlai.conf"
-# Model cache on SCRATCH (huge), never $HOME (small quota). Fall back to the known
-# LRZ scratch path if $SCRATCH isn't inherited by the batch job.
+# ALL caches on SCRATCH (huge), never $HOME (small, shared quota): HF model cache,
+# uv build cache, and tempfiles. Fall back to the LRZ scratch path if not inherited.
 : "${SCRATCH:=/dss/lxclscratch/04/$USER}"
 export HF_HOME="$SCRATCH/hf_cache"
+export UV_CACHE_DIR="$SCRATCH/uv_cache"
+export TMPDIR="$SCRATCH/tmp"
 export TOKENIZERS_PARALLELISM=false
-mkdir -p "$HF_HOME"
+mkdir -p "$HF_HOME" "$UV_CACHE_DIR" "$TMPDIR"
 
 # Run in the submit directory (works from your own clone on scratch), not a hardcoded path.
 cd "${SLURM_SUBMIT_DIR:-$PWD}"

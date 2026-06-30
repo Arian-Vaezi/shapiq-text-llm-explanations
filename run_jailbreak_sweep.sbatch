@@ -14,14 +14,16 @@
 #SBATCH --time=08:00:00
 
 export SLURM_CONF="/lrz/sys/share/CMUC4/etc/slurm_hlai.conf"
-# Model cache goes on SCRATCH (petabytes), never on $HOME (small quota -> the
-# "Disk quota exceeded" failure). Fall back to the known LRZ scratch path if the
-# batch job doesn't inherit $SCRATCH.
+# ALL caches go on SCRATCH (petabytes), never $HOME (small, shared quota -> the
+# "Disk quota exceeded" failure - applies to the HF model cache, uv's build cache,
+# and tempfiles). Fall back to the known LRZ scratch path if $SCRATCH isn't inherited.
 : "${SCRATCH:=/dss/lxclscratch/04/$USER}"
 export HF_HOME="$SCRATCH/hf_cache"
+export UV_CACHE_DIR="$SCRATCH/uv_cache"
+export TMPDIR="$SCRATCH/tmp"
 export TOKENIZERS_PARALLELISM=false
-mkdir -p "$HF_HOME"
-echo "HF_HOME=$HF_HOME"
+mkdir -p "$HF_HOME" "$UV_CACHE_DIR" "$TMPDIR"
+echo "HF_HOME=$HF_HOME  UV_CACHE_DIR=$UV_CACHE_DIR  TMPDIR=$TMPDIR"
 
 # Run in whatever directory the job was submitted from (so this works from your own
 # clone, e.g. on scratch), not a hardcoded shared path.
