@@ -14,9 +14,14 @@
 #SBATCH --time=08:00:00
 
 export SLURM_CONF="/lrz/sys/share/CMUC4/etc/slurm_hlai.conf"
-export HF_HOME="$HOME/.cache/huggingface"
-export TRANSFORMERS_CACHE="$HOME/.cache/huggingface"
+# Model cache goes on SCRATCH (petabytes), never on $HOME (small quota -> the
+# "Disk quota exceeded" failure). Fall back to the known LRZ scratch path if the
+# batch job doesn't inherit $SCRATCH.
+: "${SCRATCH:=/dss/lxclscratch/04/$USER}"
+export HF_HOME="$SCRATCH/hf_cache"
 export TOKENIZERS_PARALLELISM=false
+mkdir -p "$HF_HOME"
+echo "HF_HOME=$HF_HOME"
 
 cd "$HOME/projects/shapiq-text-llm-explanations"
 OUTDIR="results/sweep_${SLURM_JOB_ID:-manual}"
@@ -29,15 +34,14 @@ nvidia-smi || true
 # No `set -e`: one failed config must not abort the whole sweep.
 set -uo pipefail
 
-# Trimmed to the two small models so the HF cache (~5 GB) fits the home-directory
-# disk quota. Re-enable Phi-3 (+7 GB) and Mistral-7B (+14 GB) only after pointing
-# HF_HOME at a large scratch/work filesystem (set HF_HOME above), or home will fill up
-# again ("Disk quota exceeded"). All are ungated and recognized by CausalModelWrapper.
+# All four models. Caches (~26 GB total) land in HF_HOME on SCRATCH, set above, so
+# they don't touch the home quota. All are ungated (no HF license acceptance) and
+# recognized by CausalModelWrapper.
 MODELS=(
   "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
   "Qwen/Qwen2.5-1.5B-Instruct"
-  # "microsoft/Phi-3-mini-4k-instruct"      # +7 GB  -> needs scratch HF_HOME
-  # "mistralai/Mistral-7B-Instruct-v0.3"    # +14 GB -> needs scratch HF_HOME
+  "microsoft/Phi-3-mini-4k-instruct"
+  "mistralai/Mistral-7B-Instruct-v0.3"
 )
 EXAMPLES=(0 1 2 3)
 
