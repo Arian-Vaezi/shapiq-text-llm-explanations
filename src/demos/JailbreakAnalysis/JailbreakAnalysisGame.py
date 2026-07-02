@@ -57,12 +57,14 @@ class JailbreakGame(Game):
         )
 
         # =====================================================
-        # JUDGE model (lazy used but initialized here)
+        # JUDGE model (only needed for llm-as-a-judge scoring)
         # =====================================================
-        self.judge_model = HFModelWrapper(
-            model_name=judge_model_name,
-            device=device or self.text_generation_model.device,
-        )
+        self.judge_model = None
+        if self.scoring_mode == "llm-as-a-judge":
+            self.judge_model = HFModelWrapper(
+                model_name=judge_model_name,
+                device=device or self.text_generation_model.device,
+            )
 
         # =====================================================
         # Embedding model (semantic segmentation)
@@ -247,6 +249,10 @@ class JailbreakGame(Game):
     """.strip()
 
     def _judge_score(self, prompts: list[str], responses: list[str]) -> np.ndarray:
+        if self.judge_model is None:
+            msg = "Judge model is only initialized for llm-as-a-judge scoring."
+            raise RuntimeError(msg)
+
         scores = []
 
         for p, r in zip(prompts, responses, strict=True):
