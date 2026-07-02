@@ -46,7 +46,7 @@ import os
 import platform
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from itertools import combinations
 from pathlib import Path
 
@@ -69,7 +69,7 @@ for _ca_var in ("SSL_CERT_FILE", "REQUESTS_CA_BUNDLE"):
         except Exception:  # noqa: BLE001
             os.environ.pop(_ca_var, None)
 
-import matplotlib as mpl
+import matplotlib as mpl  # noqa: E402
 
 mpl.use("Agg")  # non-interactive backend — no display on a compute node
 import matplotlib.pyplot as plt  # noqa: E402
@@ -233,7 +233,7 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(msg)
 
     # Resolve output paths.
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    stamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
     out_json = args.output or Path("results") / f"jailbreak_{stamp}.json"
     out_json.parent.mkdir(parents=True, exist_ok=True)
     plot_dir = args.plot_dir or out_json.parent
@@ -253,8 +253,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"[run_experiment] torch unavailable: {exc}")
 
     t0 = time.time()
-    print(f"[run_experiment] building game: model={args.model} seg={args.segmentation} "
-          f"order={args.order} scoring={args.scoring_mode}")
+    print(
+        f"[run_experiment] building game: model={args.model} seg={args.segmentation} "
+        f"order={args.order} scoring={args.scoring_mode}"
+    )
     game = JailbreakGame(
         model_name=args.model,
         input_text=prompt,
