@@ -400,7 +400,7 @@ def evaluate_game_exactly(
     ``game.value_function`` call (one row), to get independent per-coalition typed
     outcomes and retry. This does not change ``ToolScorerProtocol.score_batch``'s
     public interface -- a scorer that batches internally (e.g.
-    ``LogProbToolScorer``'s GPU micro-batching) still receives a one-prompt list
+    ``CalibratedToolLogOddsScorer``'s GPU micro-batching) still receives a one-prompt list
     here and batches as much as it can per call. Other callers that pass many rows
     at once (e.g. the official shapiq approximators used above
     ``MAX_EXACT_DEMO_PLAYERS``) still get genuine multi-coalition batching; only

@@ -2,10 +2,28 @@
 
 from __future__ import annotations
 
+import os
+
+# Must be set before torch/transformers/spaCy/sentence-transformers are
+# imported (directly below, and transitively by linguistic_segmenter /
+# semantic_segmenter / final_answer_similarity_scorer). Several of this app's
+# ML dependencies each bundle their own OpenMP runtime (libomp.dylib); loading
+# more than one in the same process on macOS causes a native SIGSEGV inside
+# libomp's thread-barrier code (confirmed via ~/Library/Logs/DiagnosticReports
+# .ips crash reports) with no Python traceback -- Streamlit just exits.
+# KMP_DUPLICATE_LIB_OK=TRUE alone does NOT prevent this crash (verified): it
+# only suppresses the *graceful* "duplicate runtime" abort message, not the
+# underlying multi-threaded barrier corruption. OMP_NUM_THREADS=1 is what
+# actually avoids the crash, by keeping every OpenMP-linked library
+# (PyTorch, spaCy/thinc, NumPy/OpenBLAS, sentence-transformers) to a single
+# worker thread, so the conflicting thread-pool barrier code never runs.
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
 import importlib.util
 import math
-import os
 import sys
+import threading
 import types
 from dataclasses import dataclass
 from html import escape
@@ -33,7 +51,12 @@ from final_answer_similarity_scorer import (
 )
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
-from hf_router import DEFAULT_LOCAL_HF_ROUTER_MODEL_ID, LocalHFRouter
+from hf_router import (
+    DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
+    HFArgumentExtractor,
+    LocalHFClassificationRouter,
+    LocalHFRouter,
+)
 from linguistic_segmenter import LinguisticSegmenter
 from matplotlib.patches import Rectangle
 from router_scorers import (
@@ -49,11 +72,10 @@ from router_scorers import (
 )
 from sample_data import SAMPLE_TRACES, TOOLS
 from scorers import (
-    DEFAULT_CANDIDATE_TEMPLATE,
     DEFAULT_LOGPROB_MODEL_ID,
+    CalibratedToolLogOddsScorer,
     LexicalToolScorer,
     LLMToolScorer,
-    LogProbToolScorer,
     MockLLM,
     ToolChoice,
     build_coalition_prompt as canonical_coalition_prompt,
@@ -77,6 +99,36 @@ DEFAULT_MAX_ORDER = 2
 DELTA_STATUS_THRESHOLD = 0.01
 DEFAULT_MOCK_QUERY = "Will it rain in Berlin tomorrow morning?"
 FINAL_ANSWER_SIMILARITY_LABEL = "Final answer semantic similarity"
+LOGPROB_SCORER_LABEL = "Calibrated multiclass tool log-odds (HF local)"
+# Shared session-state key for the Explanation tab's "Scoring method" selectbox,
+# read from the Inference tab too so "HF local" inference can detect that the
+# calibrated log-odds scorer is selected and route through the same single
+# Qwen2.5-1.5B model instance instead of the separate structured-JSON router.
+SCORER_BACKEND_SESSION_KEY = "agentic_explanation_scorer_backend"
+LOGPROB_SCORER_HELP = (
+    "Scores each retained-segment coalition by the local router model's calibrated "
+    "log-odds for the target tool against all other available routing decisions. "
+    "The score is model-internal routing preference, not trajectory correctness "
+    "or tool-execution success."
+)
+# Temporary HF model-lifecycle tracing for the "two Qwen models resident at
+# once" / MPS crash investigation. Set to True only for local debugging; keep
+# False in normal runs. Remove once the investigation is closed out.
+DEBUG_HF_LIFECYCLE = False
+
+
+def _hf_lifecycle_log(*parts: object) -> None:
+    """Print a temporary HF model-lifecycle trace line, gated by DEBUG_HF_LIFECYCLE."""
+    if not DEBUG_HF_LIFECYCLE:
+        return
+    print(
+        "[HF LIFECYCLE]",
+        f"pid={os.getpid()}",
+        f"thread={threading.current_thread().name}",
+        *parts,
+    )
+
+
 EFFICIENCY_RESIDUAL_TOLERANCE = 1e-4
 MOCK_SYSTEM_SEGMENTS = [
     "Use weather_tool for weather, rain, temperature, forecast, or city-date questions.",
@@ -84,12 +136,6 @@ MOCK_SYSTEM_SEGMENTS = [
     "Use web_search_tool when the answer depends on current, latest, recent, or live information.",
     "Use no_tool for stable conceptual explanations that do not require external data.",
 ]
-DESCRIPTIVE_CANDIDATE_TEXTS = {
-    "weather_tool": "The assistant should use the weather forecast tool.",
-    "calculator_tool": "The assistant should use the calculator tool.",
-    "web_search_tool": "The assistant should use the web search tool.",
-    "no_tool": "The assistant should answer directly without calling a tool.",
-}
 TEXT_PLOT_PACKAGE = "_agentic_text_plot"
 
 
@@ -108,29 +154,56 @@ def load_local_hf_router(
     trust_remote_code: bool,
 ) -> LocalHFRouter:
     """Load and cache the optional local HuggingFace router."""
-    return LocalHFRouter(
+    _hf_lifecycle_log("[HF LOAD] entering load_local_hf_router", f"model_name={model_name}")
+    router = LocalHFRouter(
         model_name=model_name,
         max_new_tokens=max_new_tokens,
         trust_remote_code=trust_remote_code,
     )
+    _hf_lifecycle_log("[HF LOAD] LocalHFRouter loaded", f"model_name={model_name}")
+    if DEBUG_HF_LIFECYCLE:
+        first_param = next(router.model.parameters())
+        _hf_lifecycle_log(
+            "[HF MODEL]",
+            f"device={first_param.device}",
+            f"dtype={first_param.dtype}",
+            f"model_id={model_name}",
+        )
+    return router
 
 
 @st.cache_resource
 def load_logprob_scorer(
     model_id: str,
-    candidate_template: str,
-    candidate_texts: dict[str, str] | None,
-    *,  # future-proof: make scoring-related args keyword-only
-    normalize_by_length: bool,
-) -> LogProbToolScorer:
-    """Load and cache the optional local HuggingFace logprob scorer."""
-    return LogProbToolScorer(
+    *,
+    max_pairs_per_batch: int,
+    device: str | None = None,
+    dtype: str = "auto",
+) -> CalibratedToolLogOddsScorer:
+    """Load and cache the optional local HuggingFace calibrated log-odds scorer.
+
+    ``max_pairs_per_batch`` (and ``device``/``dtype``) are part of the cache
+    key, not mutated on the returned instance afterwards -- a different batch
+    size loads (or reuses) a distinct cached scorer instead of reaching into a
+    shared cached object and changing its configuration in place.
+    """
+    _hf_lifecycle_log("[HF LOAD] entering load_logprob_scorer", f"model_id={model_id}")
+    scorer = CalibratedToolLogOddsScorer(
         model_id=model_id,
-        candidate_template=candidate_template,
-        candidate_texts=candidate_texts,
-        normalize_by_length=normalize_by_length,
-        max_pairs_per_batch=1,
+        device=device,
+        dtype=dtype,
+        max_pairs_per_batch=max_pairs_per_batch,
     )
+    _hf_lifecycle_log("[HF LOAD] CalibratedToolLogOddsScorer loaded", f"model_id={model_id}")
+    if DEBUG_HF_LIFECYCLE:
+        first_param = next(scorer.model.parameters())
+        _hf_lifecycle_log(
+            "[HF MODEL]",
+            f"device={first_param.device}",
+            f"dtype={first_param.dtype}",
+            f"model_id={model_id}",
+        )
+    return scorer
 
 
 @st.cache_resource
@@ -975,6 +1048,9 @@ def build_complete_agent_callable(
     tool_context: str,
     hf_max_new_tokens: int = 256,
     hf_trust_remote_code: bool = False,
+    calibrated_hf_mode: bool = False,
+    logprob_model_id: str = DEFAULT_LOGPROB_MODEL_ID,
+    logprob_max_pairs_per_batch: int = 1,
 ) -> Callable[[str], object]:
     """Build a backend-agnostic callable that runs the complete tool-calling agent.
 
@@ -982,6 +1058,14 @@ def build_complete_agent_callable(
     execution -> final answer) exactly, but parameterized over the user request so
     it can be re-run once per Shapley coalition by
     ``final_answer_similarity_scorer.FinalAnswerSimilarityScorer``.
+
+    ``calibrated_hf_mode`` selects the calibrated HF-local path: when
+    ``inference_backend == "HF local"`` and the Explanation tab's scorer is set
+    to ``LOGPROB_SCORER_LABEL``, inference must use the exact same
+    ``CalibratedToolLogOddsScorer`` model/tokenizer instance (via
+    ``LocalHFClassificationRouter`` for routing and ``HFArgumentExtractor`` for
+    arguments) instead of loading the separate structured-JSON
+    ``LocalHFRouter``/Qwen3-4B model.
     """
 
     def run(user_request: str) -> object:
@@ -1001,7 +1085,64 @@ def build_complete_agent_callable(
                 system_prompt=system_prompt,
                 tool_context=tool_context,
             )
+        if calibrated_hf_mode:
+            try:
+                primary_scorer = load_logprob_scorer(
+                    logprob_model_id,
+                    max_pairs_per_batch=logprob_max_pairs_per_batch,
+                )
+                classification_router = LocalHFClassificationRouter(primary_scorer)
+                _hf_lifecycle_log(
+                    "[HF ROUTING] LocalHFClassificationRouter reusing scorer instance",
+                    f"model_id={logprob_model_id}",
+                )
+                target_choice = classification_router.choose_tool(
+                    user_request,
+                    system_prompt=system_prompt,
+                    tool_descriptions=TOOLS,
+                )
+                argument_extractor = HFArgumentExtractor(
+                    model=primary_scorer.model,
+                    tokenizer=primary_scorer.tokenizer,
+                    device=primary_scorer.device,
+                )
+                _hf_lifecycle_log(
+                    "[HF ARGUMENTS] HFArgumentExtractor reusing scorer model/tokenizer",
+                    f"model_id={logprob_model_id}",
+                )
+                tool_arguments = argument_extractor.extract_arguments(
+                    user_request=user_request,
+                    selected_tool=target_choice.tool,
+                    tool_descriptions=TOOLS,
+                )
+                agent_response = (
+                    f"I would use {target_choice.tool} for this request (calibrated "
+                    "A/B/C/D routing evidence, same model instance as the coalition scorer)."
+                )
+                return types.SimpleNamespace(
+                    selected_tool=target_choice.tool,
+                    tool_arguments=tool_arguments,
+                    agent_response=agent_response,
+                    raw_response=f"calibrated_scores={target_choice.scores}",
+                    debug_prompt=None,
+                    error=None,
+                    available=True,
+                    calibrated_hf_mode=True,
+                )
+            except Exception as error:  # noqa: BLE001
+                return types.SimpleNamespace(
+                    selected_tool=None,
+                    tool_arguments={},
+                    agent_response="",
+                    raw_response="",
+                    debug_prompt=None,
+                    error=f"HF calibrated inference failed: {error}",
+                    available=False,
+                )
         try:
+            _hf_lifecycle_log(
+                "[HF LOAD] using structured LocalHFRouter", f"model_name={inference_model_name}"
+            )
             hf_router = load_local_hf_router(
                 inference_model_name,
                 int(hf_max_new_tokens),
@@ -1196,29 +1337,51 @@ def main() -> None:
                 if not os.getenv("GEMINI_API_KEY"):
                     st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
             elif inference_backend == "HF local":
-                inference_model_name = st.text_input(
-                    "HF model",
-                    value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
-                    key="agentic_hf_inference_model",
+                is_calibrated_hf_mode = (
+                    st.session_state.get(SCORER_BACKEND_SESSION_KEY) == LOGPROB_SCORER_LABEL
                 )
-                hf_max_new_tokens = st.number_input(
-                    "HF max_new_tokens",
-                    min_value=16,
-                    max_value=1024,
-                    value=256,
-                    step=16,
-                    key="agentic_hf_max_new_tokens",
-                )
-                hf_trust_remote_code = st.checkbox(
-                    "trust remote code",
-                    value=False,
-                    key="agentic_hf_trust_remote_code",
-                )
-                st.caption(
-                    "Routes with a local transformers causal LM. No real tools are executed."
-                )
+                if is_calibrated_hf_mode:
+                    inference_model_name = st.text_input(
+                        "HF model (calibrated log-odds -- single shared model)",
+                        value=DEFAULT_LOGPROB_MODEL_ID,
+                        key="agentic_hf_calibrated_inference_model",
+                    )
+                    hf_max_new_tokens = 256
+                    hf_trust_remote_code = False
+                    st.caption(
+                        "Calibrated HF-local mode: inference and explanation reuse the exact "
+                        f"same `{inference_model_name}` model/tokenizer instance via the "
+                        "A/B/C/D routing classifier. No separate structured JSON router or "
+                        "second model is loaded."
+                    )
+                else:
+                    inference_model_name = st.text_input(
+                        "HF model",
+                        value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
+                        key="agentic_hf_inference_model",
+                    )
+                    hf_max_new_tokens = st.number_input(
+                        "HF max_new_tokens",
+                        min_value=16,
+                        max_value=1024,
+                        value=256,
+                        step=16,
+                        key="agentic_hf_max_new_tokens",
+                    )
+                    hf_trust_remote_code = st.checkbox(
+                        "trust remote code",
+                        value=False,
+                        key="agentic_hf_trust_remote_code",
+                    )
+                    st.caption(
+                        "Routes with a local transformers causal LM. No real tools are executed."
+                    )
 
         def execute_tool_inference() -> object:
+            calibrated_hf_mode = (
+                inference_backend == "HF local"
+                and st.session_state.get(SCORER_BACKEND_SESSION_KEY) == LOGPROB_SCORER_LABEL
+            )
             agent_callable = build_complete_agent_callable(
                 inference_backend=inference_backend,
                 inference_model_name=inference_model_name,
@@ -1230,6 +1393,13 @@ def main() -> None:
                 hf_trust_remote_code=bool(hf_trust_remote_code)
                 if inference_backend == "HF local"
                 else False,
+                calibrated_hf_mode=calibrated_hf_mode,
+                logprob_model_id=inference_model_name
+                if calibrated_hf_mode
+                else DEFAULT_LOGPROB_MODEL_ID,
+                logprob_max_pairs_per_batch=int(
+                    st.session_state.get("agentic_logprob_pair_batch_size", 1)
+                ),
             )
             return agent_callable(user_request)
 
@@ -1299,6 +1469,11 @@ def main() -> None:
                 st.metric("Selected tool", selected_tool or "No tool selected")
                 st.markdown("**Tool arguments**")
                 st.json(getattr(inference_result, "tool_arguments", {}))
+                if getattr(inference_result, "calibrated_hf_mode", False):
+                    st.caption(
+                        "Arguments were generated in a second stage using the same model "
+                        "instance as routing (not part of the calibrated Shapley payoff)."
+                    )
             raw_trace = getattr(inference_result, "raw_trace", None)
             if raw_trace is None:
                 raw_trace = {
@@ -1335,7 +1510,7 @@ def main() -> None:
             value=False,
             key="agentic_show_developer_scorers",
         )
-        scorer_options = ["LLM logprob scorer"]
+        scorer_options = [LOGPROB_SCORER_LABEL]
         if current_inference_backend in {"Groq", "Gemini", "HF local"}:
             # All three backends can run the complete tool-calling agent end to end, which
             # is what this scorer needs (it is not a routing-only scorer like the ones below).
@@ -1351,7 +1526,7 @@ def main() -> None:
                 "final demo results."
             )
             scorer_options.extend(["Keyword scorer", "Mock model scorer"])
-        scorer_backend_key = "agentic_explanation_scorer_backend"
+        scorer_backend_key = SCORER_BACKEND_SESSION_KEY
         default_scorer = "Groq soft-vote scorer" if has_groq_inference_result else scorer_options[0]
         if scorer_backend_key not in st.session_state:
             st.session_state[scorer_backend_key] = default_scorer
@@ -1366,9 +1541,6 @@ def main() -> None:
             key=scorer_backend_key,
         )
         logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
-        candidate_template = DEFAULT_CANDIDATE_TEMPLATE
-        candidate_texts = None
-        normalize_by_length = True
         max_pairs_per_batch = 1
         router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
         soft_vote_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
@@ -1377,8 +1549,8 @@ def main() -> None:
         soft_vote_max_retries = DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES
         soft_vote_seed = None
         final_answer_embedding_model_id = DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID
-        if scorer_backend == "LLM logprob scorer":
-            with st.expander("Logprob scorer settings", expanded=True):
+        if scorer_backend == LOGPROB_SCORER_LABEL:
+            with st.expander("Calibrated log-odds scorer settings", expanded=True):
                 logprob_model_id = st.text_input(
                     "model id",
                     value=DEFAULT_LOGPROB_MODEL_ID,
@@ -1396,6 +1568,7 @@ def main() -> None:
                         "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
                     ),
                 )
+                st.caption(LOGPROB_SCORER_HELP)
         elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
             with st.expander("Final answer similarity scorer settings", expanded=True):
                 final_answer_embedding_model_id = st.text_input(
@@ -1665,9 +1838,6 @@ def main() -> None:
             signature_target,
             scorer_backend,
             logprob_model_id,
-            candidate_template,
-            bool(candidate_texts),
-            normalize_by_length,
             int(max_pairs_per_batch),
             router_model_id,
             soft_vote_model_id,
@@ -1700,9 +1870,6 @@ def main() -> None:
                     "__pending_target__",
                     scorer_backend,
                     logprob_model_id,
-                    candidate_template,
-                    bool(candidate_texts),
-                    normalize_by_length,
                     int(max_pairs_per_batch),
                     router_model_id,
                     soft_vote_model_id,
@@ -1762,6 +1929,16 @@ def main() -> None:
             """,
             unsafe_allow_html=True,
         )
+        if scorer_backend == LOGPROB_SCORER_LABEL:
+            st.caption(
+                "Routing and Shapley scoring use the same loaded local HF model instance. "
+                "This scorer mode ignores the Inference tab's Groq/Gemini/structured-JSON "
+                "selected tool. When you run the explanation, the target tool is "
+                "redetermined by the calibrated A/B/C/D routing evidence on the full user "
+                "request -- the same evidence used for every coalition -- so the target "
+                "being explained and the classifier producing the coalition scores are "
+                "always the same model instance."
+            )
 
         st.markdown('<div class="section-label">Explanation target</div>', unsafe_allow_html=True)
         target_left, target_right = st.columns([0.85, 1.15])
@@ -1855,7 +2032,14 @@ def main() -> None:
                     )
 
         if not st.session_state.has_run and not st.session_state.pending_run:
-            can_run_explanation = target_tool is not None or pending_fallback_target
+            # The calibrated log-odds scorer always determines its own target via the
+            # HF classifier's argmax at run time, so it never needs a prior inference
+            # result or fallback target selection to be enabled first.
+            can_run_explanation = (
+                target_tool is not None
+                or pending_fallback_target
+                or scorer_backend == LOGPROB_SCORER_LABEL
+            )
             if st.button(
                 "Run explanation",
                 type="primary",
@@ -1893,24 +2077,33 @@ def main() -> None:
             if scorer_backend == "Keyword scorer":
                 primary_scorer = lexical_scorer
                 primary_label = "Keyword scorer"
-            elif scorer_backend == "LLM logprob scorer":
-                with st.spinner("Loading logprob scorer model..."):
+            elif scorer_backend == LOGPROB_SCORER_LABEL:
+                with st.spinner("Loading calibrated log-odds scorer model..."):
                     try:
                         primary_scorer = load_logprob_scorer(
                             logprob_model_id,
-                            candidate_template,
-                            candidate_texts,
-                            normalize_by_length=bool(normalize_by_length),
+                            max_pairs_per_batch=int(max_pairs_per_batch),
                         )
                     except Exception as error:  # noqa: BLE001
                         st.error(
-                            "Could not load the logprob-based scorer. Install/check "
+                            "Could not load the calibrated log-odds scorer. Install/check "
                             "`transformers` and `torch`, try a smaller causal language model, "
                             f"or check your environment. Details: {error}"
                         )
                         return
-                primary_scorer.max_pairs_per_batch = int(max_pairs_per_batch)
-                primary_label = "LLM logprob scorer"
+                primary_label = LOGPROB_SCORER_LABEL
+                _hf_lifecycle_log(
+                    "[HF ROUTING] LocalHFClassificationRouter reusing scorer instance",
+                    f"model_id={logprob_model_id}",
+                )
+                classification_router = LocalHFClassificationRouter(primary_scorer)
+                classifier_choice = classification_router.choose_tool(
+                    user_request,
+                    system_prompt=system_prompt,
+                    tool_descriptions=TOOLS,
+                )
+                target_tool = classifier_choice.tool
+                target_source = "HF classifier argmax (A/B/C/D)"
             elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
                 with st.spinner("Loading embedding model..."):
                     try:
@@ -2039,6 +2232,11 @@ def main() -> None:
                 target_tool=target_tool,
                 tool_descriptions=TOOLS,
             )[0]
+            logprob_full_diagnostics = (
+                dict(primary_scorer.last_debug_outputs[0])
+                if primary_label == LOGPROB_SCORER_LABEL and primary_scorer.last_debug_outputs
+                else None
+            )
             empty_score = primary_scorer.score_batch(
                 [empty_prompt],
                 target_tool=target_tool,
@@ -2202,9 +2400,6 @@ def main() -> None:
                 target_tool,
                 scorer_backend,
                 logprob_model_id,
-                candidate_template,
-                bool(candidate_texts),
-                normalize_by_length,
                 int(max_pairs_per_batch),
                 router_model_id,
                 soft_vote_model_id,
@@ -2246,6 +2441,7 @@ def main() -> None:
                 "llm_debug_outputs": llm_debug_outputs,
                 "lexical_result": lexical_result,
                 "scoring_prompt": scoring_prompt_preview,
+                "logprob_full_diagnostics": logprob_full_diagnostics,
                 "final_answer_scorer_meta": (
                     {
                         "embedding_model_id": final_answer_embedding_model_id,
@@ -2281,6 +2477,7 @@ def main() -> None:
         llm_debug_outputs = result["llm_debug_outputs"]
         lexical_result = result["lexical_result"]
         final_answer_scorer_meta = result.get("final_answer_scorer_meta")
+        logprob_full_diagnostics = result.get("logprob_full_diagnostics")
         delta_support = float(full_score) - float(empty_score)
         is_final_answer_result = primary_label == FINAL_ANSWER_SIMILARITY_LABEL
         if is_final_answer_result:
@@ -2384,6 +2581,37 @@ def main() -> None:
                 unsafe_allow_html=True,
             )
             st.info(f"**{support_status}.** {support_interpretation}")
+
+            if primary_label == LOGPROB_SCORER_LABEL and logprob_full_diagnostics is not None:
+                argmax_tool = logprob_full_diagnostics.get("argmax_tool")
+                is_router_argmax = argmax_tool == target_tool
+                calibrated_probability = logprob_full_diagnostics["calibrated_probabilities"].get(
+                    target_tool
+                )
+                st.markdown("**Calibrated multiclass tool log-odds (full user request)**")
+                st.caption(LOGPROB_SCORER_HELP)
+                logprob_metric_left, logprob_metric_mid, logprob_metric_right = st.columns(3)
+                logprob_metric_left.metric(
+                    "Calibrated probability",
+                    f"{calibrated_probability:.3f}"
+                    if calibrated_probability is not None
+                    else "n/a",
+                )
+                logprob_metric_mid.metric(
+                    "Target-vs-all log-odds",
+                    f"{logprob_full_diagnostics['target_vs_all_log_odds']:.3f}",
+                )
+                logprob_metric_right.metric(
+                    "Local-router argmax match",
+                    "Yes" if is_router_argmax else "No",
+                    help=f"Local-router argmax candidate: `{argmax_tool}`.",
+                )
+                st.caption(
+                    f"Routing and Shapley scoring use the same loaded `{logprob_model_id}` "
+                    "model/tokenizer instance -- no second model is loaded for target-tool "
+                    "selection. Argument extraction was not executed; this run explains "
+                    "routing only."
+                )
 
             st.caption("See the Attribution tab for the full first-order segment ranking.")
 
@@ -2544,15 +2772,6 @@ def main() -> None:
                 if llm_debug_outputs:
                     with st.expander("Model output diagnostics", expanded=False):
                         displayed_debug_outputs = llm_debug_outputs[:10]
-                        if (
-                            primary_label == "LLM logprob scorer"
-                            and displayed_debug_outputs
-                            and all(row.get("used_fallback") for row in displayed_debug_outputs)
-                        ):
-                            st.warning(
-                                "The local model did not return numeric scores for this run, "
-                                "so the keyword baseline was used as fallback."
-                            )
                         debug_frame = pd.DataFrame(displayed_debug_outputs)
                         debug_columns = [
                             "score_kind",
@@ -2566,10 +2785,18 @@ def main() -> None:
                             "parsed_score",
                             "used_fallback",
                             "fallback_score",
+                            "target_tool",
+                            "target_label",
                             "candidate_tools",
+                            "candidate_labels",
                             "candidate_continuations",
-                            "candidate_logprobs",
-                            "candidate_probs",
+                            "raw_log_scores",
+                            "calibration_log_scores",
+                            "calibrated_scores",
+                            "target_vs_all_log_odds",
+                            "empty_coalition_log_odds",
+                            "calibrated_probabilities",
+                            "argmax_tool",
                             "final_score",
                             "prompt_preview",
                             "masked_user_request",

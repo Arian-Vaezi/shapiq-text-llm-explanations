@@ -77,7 +77,8 @@ The UI currently exposes three scoring methods:
 
 1. Mock model scorer for lightweight deterministic demo behavior.
 2. Keyword baseline for a transparent lexical baseline.
-3. LLM logprob scorer for local Hugging Face likelihood-based scoring.
+3. Calibrated multiclass tool log-odds (HF local) for local Hugging Face
+   likelihood-based scoring.
 
 ## What The App Shows
 
@@ -86,8 +87,8 @@ The UI currently exposes three scoring methods:
 - A custom-request mode with a user-input box, suggested tool, short
   reason, and per-tool scores.
 - Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
-- Optional LLM logprob scorer backend, loaded lazily only after it is selected
-  and the explanation is run.
+- Optional calibrated multiclass tool log-odds (HF local) scorer backend,
+  loaded lazily only after it is selected and the explanation is run.
 - A compact setup panel for the coalition value function.
 - Summary metrics for target-tool support after running the explanation.
 - First-order attribution ranking: which segment most pushes the tool decision.
@@ -115,8 +116,11 @@ exposes the presentation-ready methods listed above:
 - `LexicalToolScorer` is a fast keyword baseline.
 - `LLMToolScorer` is a generation-based numeric judge. It remains in code for
   experiments, but is hidden from the Streamlit scoring-method dropdown.
-- `LogProbToolScorer` avoids numeric parsing by scoring candidate tool
-  completions with model likelihood and subtracting reference candidate scores.
+- `CalibratedToolLogOddsScorer` avoids numeric parsing by scoring a fixed
+  routing-label decision code (`A`/`B`/`C`/`D`) for every candidate tool with
+  model likelihood, calibrating each candidate against a content-free probe
+  prompt, and combining the results into a target-vs-all multiclass log-odds
+  value normalized against the true empty coalition.
 
 The selected scorer first evaluates the full fixed context and full user request
 for every candidate decision. The highest-scoring candidate becomes the tool to
@@ -148,37 +152,50 @@ agent should use for the current full prompt. The preview returns:
 This lets the UI and shapiq explanation flow be developed without API keys, GPU
 dependencies, or Hugging Face model downloads.
 
-## Optional LLM Logprob Scorer
+## Optional Calibrated Multiclass Tool Log-Odds Scorer (HF Local)
 
 The default scoring method is the **Mock model scorer** so the demo stays fast and
-usable on a clean local machine. The optional **LLM logprob scorer** uses a
-local Hugging Face causal language model.
+usable on a clean local machine. The optional **Calibrated multiclass tool
+log-odds (HF local)** scorer (`CalibratedToolLogOddsScorer`) uses a local
+Hugging Face causal language model.
 
-For each coalition, the LLM receives the fixed system prompt, structured tool
-schemas when the tokenizer supports them, and the coalition user request. It
-scores standardized textual candidate continuations with model likelihood and
-uses a contrastive target-vs-reference log-score difference. shapiq then uses
-these coalition scores to compute segment attributions and pairwise
-interactions.
+For each coalition, the LLM is queried with a fixed constrained-classification
+routing prompt (see `ROUTING_LABELS` and `build_routing_classification_prompt`
+in `scorers.py`): choose exactly one routing decision code (`A`/`B`/`C`/`D` for
+`weather_tool`/`calculator_tool`/`web_search_tool`/`no_tool`), each rendered
+with its canonical description from `tool_schemas.py`/`TOOLS` (not a second
+hard-coded description dictionary) -- so editing a tool's description changes
+this prompt, and changes the calibration cache key. Every candidate's
+decision-code continuation is scored with model log-likelihood, calibrated
+against a content-free probe prompt (`CALIBRATION_USER_REQUEST =
+"[NO USER REQUEST]"`) to remove any fixed per-label prior, and combined into a
+target-vs-all multiclass log-odds. The result is normalized against the true
+empty coalition so that `V(empty_coalition) == 0`. shapiq then uses these
+coalition values to compute segment attributions and pairwise interactions.
 
-In Colab, TinyLlama can load successfully but still fail as a generation-based
-numeric judge by returning text such as `Assistant:\nSure` or
-`Target tool:\nweather`. When every generated output is non-numeric,
-`LLMToolScorer` correctly falls back to the keyword baseline. The
-`LogProbToolScorer` was added for this case: it scores continuations such as
-`The correct tool is weather_tool.` directly with log scores, then subtracts the
-`no_tool` score for external tool targets. For `no_tool`, it subtracts the
-strongest executable-tool candidate. This is inspired by the same general idea
-as the jailbreak demo: use continuation likelihoods as coalition values rather
-than free-form generated scores.
+Unlike a naive target-vs-`no_tool` contrast, `no_tool` is treated as one
+routing alternative among all candidates, not a fixed reference -- so a
+candidate outscoring `no_tool` is never mistaken for genuine support when a
+third candidate is actually strongest. The same canonical routing-classification
+prompt builder (`build_routing_classification_prompt`) is shared by HF local
+classification routing, HF local logprob scoring, calibration scoring, and
+coalition scoring, so token boundaries and any residual template prior stay
+identical across all four.
 
-The logprob scorer can also use per-tool candidate continuations instead of one
-uniform template. This can improve calibration when tool names have overlapping
-semantics, such as `weather_tool` versus `web_search_tool`, or when the literal
-tool name is unnatural, such as `no_tool`. In the Streamlit UI, enable
-descriptive candidate continuations in the Logprob scorer settings to score
-phrases like "The assistant should answer directly without using an external
-tool." for `no_tool`.
+**The target tool being explained is always produced by this same protocol.**
+`hf_router.LocalHFClassificationRouter` wraps an already-loaded
+`CalibratedToolLogOddsScorer` and selects a tool by scoring every routing-label
+continuation for the full (unmasked) request and taking the argmax --
+`scorer.score_full_request_labels(...)`, the same method the coalition value
+function itself calls. When this scorer mode is selected, the Streamlit UI
+ignores the Inference tab's selected tool (from Groq/Gemini/the structured-JSON
+`LocalHFRouter`) and instead redetermines the target from this classifier's own
+argmax at run time, so the tool being explained and the classifier producing
+the coalition values are never different models. This is intentionally
+separate from `LocalHFRouter` in `hf_router.py`, which still uses its own
+structured JSON protocol to run the real Inference tab agent end to end
+(selecting a tool and extracting call arguments such as location/date) -- that
+router is for execution, not for what this scorer mode explains.
 
 Run the app with:
 
@@ -212,18 +229,10 @@ required Hugging Face access.
 Colab-style scorer wiring:
 
 ```python
-from demos.agentic_tool_use_explanation.scorers import LogProbToolScorer
+from demos.agentic_tool_use_explanation.scorers import CalibratedToolLogOddsScorer
 from demos.agentic_tool_use_explanation.tool_game import ToolUseGame
 
-scorer = LogProbToolScorer(
-    model_id="Qwen/Qwen2.5-1.5B-Instruct",
-    candidate_texts={
-        "weather_tool": "The assistant should use the weather forecast tool.",
-        "calculator_tool": "The assistant should use the calculator tool.",
-        "web_search_tool": "The assistant should use the web search tool.",
-        "no_tool": "The assistant should answer directly without using an external tool.",
-    },
-)
+scorer = CalibratedToolLogOddsScorer(model_id="Qwen/Qwen2.5-1.5B-Instruct")
 game = ToolUseGame(
     target_tool="weather_tool",
     segments=segments,
@@ -238,7 +247,8 @@ such as:
 - target tool-name log-likelihood from a tool-calling LLM,
 - soft-vote score from sampled tool-router decisions,
 - structured tool-call selection frequency from an agent trace,
-- contrastive log-odds between the target tool and `no_tool`.
+- calibrated target-vs-all multiclass log-odds across every routing decision
+  (not a fixed contrast against `no_tool` alone).
 
 ## Demo Story
 

@@ -9,6 +9,11 @@ from dataclasses import dataclass
 from typing import Any
 
 try:
+    from demos.agentic_tool_use_explanation.scorers import CalibratedToolLogOddsScorer, ToolChoice
+except ModuleNotFoundError:
+    from scorers import CalibratedToolLogOddsScorer, ToolChoice
+
+try:
     from demos.agentic_tool_use_explanation.tool_schemas import NO_TOOL_NAME
 except ModuleNotFoundError:
     from tool_schemas import NO_TOOL_NAME
@@ -70,7 +75,23 @@ class LocalHFRouter:
             raise RuntimeError(msg) from error
 
         self._torch = torch
-        torch_dtype = torch.bfloat16 if torch.cuda.is_available() else torch.float32
+        # Resolve a single concrete device up front -- the same pattern used by
+        # CalibratedToolLogOddsScorer -- instead of accelerate's device_map="auto"
+        # dispatch. device_map="auto" is CUDA/multi-GPU oriented; on an
+        # MPS-only Mac it can plan a fragile multi-device (or CPU-offloaded)
+        # placement instead of the simple, verified-working single-device
+        # `.to("mps")` move, and is not needed here since this router is a
+        # single dense causal LM sized to fit on one device.
+        if torch.cuda.is_available():
+            device = "cuda"
+            model_dtype = torch.bfloat16
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            device = "mps"
+            model_dtype = torch.float16
+        else:
+            device = "cpu"
+            model_dtype = torch.float32
+        self.device = device
         try:
             self.tokenizer = AutoTokenizer.from_pretrained(
                 model_name,
@@ -78,10 +99,11 @@ class LocalHFRouter:
             )
             self.model = AutoModelForCausalLM.from_pretrained(
                 model_name,
-                device_map="auto",
-                torch_dtype=torch_dtype,
+                dtype=model_dtype,
+                low_cpu_mem_usage=True,
                 trust_remote_code=trust_remote_code,
             )
+            self.model.to(device)
         except Exception as error:
             msg = (
                 f"Could not load local HuggingFace router model {model_name!r}. "
@@ -272,3 +294,171 @@ class LocalHFRouter:
             return next(self.model.parameters()).device
         except StopIteration:
             return self._torch.device("cuda" if self._torch.cuda.is_available() else "cpu")
+
+
+class LocalHFClassificationRouter:
+    """Route tool-use requests with the exact A/B/C/D protocol used by the scorer.
+
+    Unlike ``LocalHFRouter`` (structured JSON tool-calling, used for real
+    execution and argument extraction), this router selects a tool by scoring
+    every routing-label continuation under ``build_routing_classification_prompt``
+    -- the identical canonical protocol used by
+    ``scorers.CalibratedToolLogOddsScorer`` -- and taking the argmax of the
+    *calibrated* evidence ``r_t(N) = g_t(N) - b_t`` (the same per-label
+    calibration baseline subtracted for every Shapley coalition), not the raw
+    label likelihood ``g_t(N)``. It is the only target-tool selector that may
+    be presented as "the decision explained by" the calibrated multiclass tool
+    log-odds (HF local) scorer, since the scorer's own coalition values are
+    computed from that same calibrated evidence.
+
+    This router does not execute tools and does not extract call arguments; it
+    wraps an already-loaded ``CalibratedToolLogOddsScorer`` so no separate model
+    is loaded for routing versus scoring.
+    """
+
+    def __init__(self, scorer: CalibratedToolLogOddsScorer) -> None:
+        self.scorer = scorer
+
+    def choose_tool(
+        self,
+        user_request: str,
+        *,
+        system_prompt: str,
+        tool_descriptions: Mapping[str, str],
+    ) -> ToolChoice:
+        """Return the calibrated-evidence argmax decision for one full user request."""
+        calibrated_scores = self.scorer.score_full_request_calibrated_labels(
+            user_request,
+            system_prompt=system_prompt,
+            tool_descriptions=tool_descriptions,
+        )
+        selected_tool = max(calibrated_scores, key=calibrated_scores.get)
+        label = self.scorer.routing_labels.get(selected_tool, "?")
+        return ToolChoice(
+            tool=selected_tool,
+            score=calibrated_scores[selected_tool],
+            reason=(
+                "Highest calibrated routing evidence under the A/B/C/D "
+                f"classifier protocol (label {label!r})."
+            ),
+            scores=dict(calibrated_scores),
+        )
+
+
+class HFArgumentExtractor:
+    """Second-stage structured-JSON tool-argument extraction.
+
+    Reuses an already-loaded model/tokenizer/device -- e.g. the ones owned by
+    a ``CalibratedToolLogOddsScorer`` -- instead of loading an independent
+    model. This is deliberately separate from the A/B/C/D routing
+    classification protocol: routing decides *which* tool via
+    ``build_routing_classification_prompt`` and the scorer's calibrated
+    log-odds; this extractor only runs once routing is already decided, to
+    fill in call arguments (e.g. ``weather_tool``'s location/date) via a
+    structured JSON generation prompt. Its output is a second-stage,
+    display-only convenience and must never enter the Shapley/k-SII payoff.
+    """
+
+    def __init__(
+        self,
+        *,
+        model: object,
+        tokenizer: object,
+        device: str,
+        max_new_tokens: int = 128,
+    ) -> None:
+        self.model = model
+        self.tokenizer = tokenizer
+        self.device = device
+        self.max_new_tokens = max_new_tokens
+
+    def extract_arguments(
+        self,
+        *,
+        user_request: str,
+        selected_tool: str,
+        tool_descriptions: Mapping[str, str],
+    ) -> dict[str, object]:
+        """Return structured JSON call arguments for one already-selected tool.
+
+        Returns an empty dict for ``no_tool`` (no arguments to extract) and
+        whenever generation does not yield parseable JSON, rather than raising
+        -- this is a best-effort display convenience, not a routing decision.
+        """
+        if selected_tool == NO_TOOL_NAME:
+            return {}
+        prompt = self._build_argument_prompt(user_request, selected_tool, tool_descriptions)
+        raw_response = self._generate(prompt)
+        payload = LocalHFRouter._parse_json_payload(raw_response)  # noqa: SLF001
+        if payload is None:
+            return {}
+        raw_arguments = payload.get("tool_arguments", {})
+        return dict(raw_arguments) if isinstance(raw_arguments, Mapping) else {}
+
+    @staticmethod
+    def _build_argument_prompt(
+        user_request: str,
+        selected_tool: str,
+        tool_descriptions: Mapping[str, str],
+    ) -> str:
+        """Build the argument-extraction prompt, kept separate from the routing prompt."""
+        description = tool_descriptions.get(selected_tool, "")
+        return (
+            "Extract call arguments for exactly one already-selected tool. The tool "
+            "choice is final; do not reconsider or return a different tool.\n\n"
+            f"Selected tool: {selected_tool}\n"
+            f"Tool description: {description}\n\n"
+            "Return only valid JSON with this exact shape:\n"
+            '{"tool_arguments": {...}}\n\n'
+            "For weather_tool, include location/date fields when available.\n"
+            "For calculator_tool, include an expression field when available.\n"
+            "For web_search_tool, include a query field when available.\n"
+            "Do not include any other keys or text.\n\n"
+            f"User request:\n{user_request.strip()}"
+        )
+
+    def _generate(self, prompt: str) -> str:
+        model_prompt = self._format_model_prompt(prompt)
+        inputs = self.tokenizer(model_prompt, return_tensors="pt")
+        inputs = {key: value.to(self.device) for key, value in inputs.items()}
+        prompt_token_count = int(inputs["input_ids"].shape[-1])
+
+        generation_kwargs: dict[str, Any] = {
+            "max_new_tokens": self.max_new_tokens,
+            "do_sample": False,
+        }
+        if getattr(self.tokenizer, "eos_token_id", None) is not None:
+            generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
+
+        import torch
+
+        with torch.inference_mode():
+            output_ids = self.model.generate(**inputs, **generation_kwargs)
+        new_token_ids = output_ids[0, prompt_token_count:]
+        return str(self.tokenizer.decode(new_token_ids, skip_special_tokens=True)).strip()
+
+    def _format_model_prompt(self, prompt: str) -> str:
+        messages = [
+            {
+                "role": "system",
+                "content": "You are a strict tool-argument extractor. Return JSON only.",
+            },
+            {"role": "user", "content": prompt},
+        ]
+        apply_chat_template = getattr(self.tokenizer, "apply_chat_template", None)
+        if callable(apply_chat_template):
+            try:
+                return str(
+                    apply_chat_template(
+                        messages,
+                        tokenize=False,
+                        add_generation_prompt=True,
+                    )
+                )
+            except Exception:  # noqa: BLE001
+                LOGGER.debug("Falling back after chat-template formatting failed.", exc_info=True)
+        return (
+            "System:\nYou are a strict tool-argument extractor. Return JSON only.\n\n"
+            f"User:\n{prompt}\n\n"
+            "Assistant:"
+        )
