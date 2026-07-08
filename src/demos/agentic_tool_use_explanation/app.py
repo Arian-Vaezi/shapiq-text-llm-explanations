@@ -191,6 +191,7 @@ def load_local_hf_router(
     return router
 
 
+@st.cache_resource(show_spinner="Preparing local HF scorer...")
 def load_logprob_scorer(
     model_id: str,
     *,
