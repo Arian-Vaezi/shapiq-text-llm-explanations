@@ -49,7 +49,7 @@ from final_answer_similarity_scorer import (
     SentenceTransformerAnswerEmbedder,
     extract_final_answer,
 )
-from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
+from gemini_agent import run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import (
     HFArgumentExtractor,
@@ -465,6 +465,26 @@ section[data-testid="stSidebar"] {
     background: #efe8d9;
     border-radius: 4px;
     padding: 0.08rem 0.22rem;
+}
+.segment-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 0.9rem 0;
+}
+.segment-chip {
+    background: #fffdf7;
+    border: 1px solid #d6cab2;
+    border-left: 4px solid #b15d3b;
+    border-radius: 999px;
+    color: #403d37;
+    font-size: 0.85rem;
+    max-width: 360px;
+    padding: 0.35rem 0.75rem 0.35rem 0.65rem;
+}
+.segment-chip strong {
+    color: #222;
+    margin-right: 0.3rem;
 }
 @media (max-width: 850px) {
     .scenario-panel,
@@ -1188,6 +1208,10 @@ def build_complete_agent_callable(
                     error=None,
                     available=True,
                     calibrated_hf_mode=True,
+                    # Display-only: the router's raw calibrated log-odds per tool, exposed so
+                    # the UI can render a presentation-level probability distribution (via a
+                    # local softmax) without re-deriving it from scorer internals.
+                    tool_scores=dict(target_choice.scores),
                 )
             except Exception as error:  # noqa: BLE001
                 return types.SimpleNamespace(
@@ -1282,8 +1306,12 @@ def _extract_raw_log_odds_summary(debug_outputs: object) -> tuple[float, float] 
     ``target_vs_all_log_odds`` (``h(N)``, the raw target-vs-all log-odds for the full
     prompt) and ``empty_coalition_log_odds`` (``h(empty)``, the same raw log-odds for
     the empty coalition) on its debug records, so this returns ``None`` for every
-    other scorer's debug output shape instead of fabricating raw values. The Summary
-    tab must never display a raw score that was not genuinely produced by the scorer.
+    other scorer's debug output shape instead of fabricating raw values.
+
+    For this scorer, the normalized Shapley game value ``V(S) = h(S) - h(empty)`` is
+    zero at the empty coalition *by construction* -- so the main-UI baseline metric
+    must show these raw, non-normalized scores instead, or it would always read
+    0.000 regardless of the actual routing evidence.
     """
     if not isinstance(debug_outputs, dict):
         return None
@@ -1294,13 +1322,68 @@ def _extract_raw_log_odds_summary(debug_outputs: object) -> tuple[float, float] 
     return raw_full_score, raw_empty_score
 
 
+def softmax_dict(scores: dict[str, float]) -> dict[str, float]:
+    """Convert log-odds scores into a display-only softmax probability distribution.
+
+    Presentation-only: mirrors how ``CalibratedToolLogOddsScorer`` derives its own
+    diagnostic ``calibrated_probabilities`` from raw calibrated log-odds, so the
+    Agent Result routing chart can show the same kind of distribution without
+    re-deriving it from scoring internals.
+    """
+    if not scores:
+        return {}
+    max_score = max(scores.values())
+    exp_scores = {tool: math.exp(score - max_score) for tool, score in scores.items()}
+    total = sum(exp_scores.values())
+    if total <= 0:
+        return dict.fromkeys(scores, 0.0)
+    return {tool: value / total for tool, value in exp_scores.items()}
+
+
+def build_takeaway_sentence(
+    *,
+    target_tool: str,
+    attribution_frame: pd.DataFrame,
+    pair_label: str,
+    pair_value: float,
+) -> str:
+    """Generate a conservative one-sentence takeaway from already-computed SV/k-SII results.
+
+    Uses only the top Shapley Value segment(s) and the strongest k-SII pair already
+    computed for this run as a template -- it does not run any separate free-form
+    generation step.
+    """
+    if attribution_frame.empty:
+        return (
+            f"No individual segment attributions are available to summarize the "
+            f"`{target_tool}` decision."
+        )
+
+    positive = attribution_frame[attribution_frame["attribution"] > 0]
+    driver_frame = positive if not positive.empty else attribution_frame
+    driver_labels = list(driver_frame["segment"].head(2))
+    driver_text = " and ".join(driver_labels) if driver_labels else "no single segment"
+
+    if pair_label == "No pair" or abs(pair_value) < 0.03:
+        return (
+            f"The decision is mainly driven by {driver_text}. No pairwise interaction is "
+            f"strong enough to stand out, so individual segment effects dominate the "
+            f"`{target_tool}` decision."
+        )
+    relation = "jointly strengthen" if pair_value > 0 else "are partly redundant for"
+    return (
+        f"The decision is mainly driven by {driver_text}. The strongest interaction is "
+        f"{pair_label}, suggesting these segments {relation} the `{target_tool}` decision."
+    )
+
+
 def main() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
     st.markdown(
         """
         <div class="tool-title">
-            <h1>Explaining tool selection</h1>
-            <p>Inspect which user-request parts support a tool choice.</p>
+            <h1>Agentic Tool-Use Explanation</h1>
+            <p>Explain why an agent selected a tool by attributing the decision to user-request segments.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -1331,18 +1414,103 @@ def main() -> None:
         st.session_state.result_signature = None
         st.session_state["agentic_try_example_select"] = example_placeholder
 
-    user_request = st.session_state["agentic_request_text"]
     trace_name = "Custom request"
+
+    # ------------------------------------------------------------------
+    # 1. Top-level mode selector + developer mode toggle
+    # ------------------------------------------------------------------
+    mode_col, dev_col = st.columns([3, 1])
+    with mode_col:
+        st.markdown('<div class="section-label">Explanation mode</div>', unsafe_allow_html=True)
+        explanation_mode = st.radio(
+            "Explanation mode",
+            ["HF Local", "API Agent"],
+            captions=[
+                "Model-internal routing evidence",
+                "Black-box Groq tool-use trajectory",
+            ],
+            horizontal=True,
+            key="agentic_explanation_mode",
+            label_visibility="collapsed",
+        )
+    with dev_col:
+        st.markdown('<div class="section-label">&nbsp;</div>', unsafe_allow_html=True)
+        developer_mode = st.toggle(
+            "Developer mode",
+            value=False,
+            key="agentic_developer_mode",
+            help="Show segmentation, scorer, and raw-diagnostic controls for debugging.",
+        )
+
+    inference_backend = "HF local" if explanation_mode == "HF Local" else "Groq"
+
+    if inference_backend == "HF local":
+        inference_model_name = st.selectbox(
+            "HF model",
+            HF_LOCAL_MODEL_OPTIONS,
+            key=HF_MODEL_ID_SESSION_KEY,
+            help=(
+                "Local HF model used for both routing and the calibrated log-odds "
+                "explanation scorer."
+            ),
+        )
+    else:
+        inference_model_name = st.text_input(
+            "Groq model",
+            value="llama-3.1-8b-instant",
+            key="agentic_groq_inference_model",
+        )
+        if not os.getenv("GROQ_API_KEY"):
+            st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
+
+    # ------------------------------------------------------------------
+    # 2. Shared input area
+    # ------------------------------------------------------------------
+    st.markdown("### User request")
+    st.text_area(
+        "User request",
+        height=96,
+        key="agentic_request_text",
+        label_visibility="collapsed",
+        help=(
+            "This preview chooses a tool from the fixed context and request. "
+            "It does not call the selected tool."
+        ),
+    )
+    user_request = st.session_state["agentic_request_text"]
     trace = build_mock_trace(user_request)
     system_segments = build_segments(trace["system_segments"], "system")
     system_prompt = build_system_prompt(system_segments)
     tool_context = format_tool_context(TOOLS)
 
-    current_inference_signature = (
-        user_request,
-        system_prompt,
-        tool_context,
+    def apply_selected_example() -> None:
+        selected = st.session_state.get("agentic_try_example_select")
+        if selected and selected != example_placeholder:
+            example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
+            st.session_state["agentic_pending_example_request"] = example_request
+
+    example_options = [example_placeholder, *list(SAMPLE_TRACES)]
+    st.selectbox(
+        "Try example",
+        example_options,
+        format_func=lambda name: (
+            name if name == example_placeholder else scenario_prompt_label(name)
+        ),
+        key="agentic_try_example_select",
+        on_change=apply_selected_example,
     )
+    if st.session_state.get("agentic_pending_example_request") is not None:
+        st.rerun()
+
+    run_full_pipeline_clicked = st.button(
+        "Run full pipeline",
+        type="primary",
+        key="agentic_run_full_pipeline",
+        use_container_width=True,
+        help="Runs the agent, then prepares the shapiq explanation for the selected tool.",
+    )
+
+    current_inference_signature = (user_request, system_prompt, tool_context)
     if st.session_state.get("agentic_inference_signature") != current_inference_signature:
         st.session_state["agentic_inference_signature"] = current_inference_signature
         st.session_state["agentic_inferred_tool"] = None
@@ -1350,302 +1518,121 @@ def main() -> None:
         st.session_state["agentic_inference_backend"] = None
         st.session_state["agentic_inference_model"] = None
 
-    inference_tab, explanation_tab = st.tabs(["Inference", "Explanation"])
+    # ------------------------------------------------------------------
+    # 6. Developer mode: grouped controls (hidden entirely when OFF)
+    # ------------------------------------------------------------------
+    latest_inference_backend = st.session_state.get("agentic_inference_backend")
+    has_groq_inference_result = (
+        latest_inference_backend == "Groq"
+        and st.session_state.get("agentic_inference_result") is not None
+    )
+    groq_reference_result = (
+        st.session_state.get("agentic_inference_result") if has_groq_inference_result else None
+    )
+    trajectory_match_available = (
+        groq_reference_result is not None
+        and st.session_state.get("agentic_inferred_tool") in TOOLS
+        and bool(getattr(groq_reference_result, "tool_arguments", None))
+    )
 
-    with inference_tab:
-        st.markdown('<div class="section-label">Inference</div>', unsafe_allow_html=True)
-        st.markdown("### User request")
-        st.text_area(
-            "User request",
-            height=96,
-            key="agentic_request_text",
-            label_visibility="collapsed",
-            help=(
-                "This preview chooses a tool from the fixed context and request. "
-                "It does not call the selected tool."
-            ),
-        )
-        user_request = st.session_state["agentic_request_text"]
-        trace = build_mock_trace(user_request)
-        system_segments = build_segments(trace["system_segments"], "system")
-        system_prompt = build_system_prompt(system_segments)
-        tool_context = format_tool_context(TOOLS)
+    scorer_backend_key = SCORER_BACKEND_SESSION_KEY
+    logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
+    max_pairs_per_batch = 1
+    router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
+    soft_vote_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
+    soft_vote_n_samples = DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES
+    soft_vote_temperature = DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE
+    soft_vote_max_retries = DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES
+    soft_vote_seed = None
+    final_answer_embedding_model_id = DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID
+    show_lexical_comparison = False
+    enable_fallback_target_selection = False
+    segmenter_choice = "Linguistic (spaCy chunking)"
+    segment_threshold = 0.72
+    segment_window = 3
+    min_segment_words = 1
+    show_value_function_details = False
+    show_scoring_prompt_preview = False
 
-        def apply_selected_example() -> None:
-            selected = st.session_state.get("agentic_try_example_select")
-            if selected and selected != example_placeholder:
-                example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
-                st.session_state["agentic_pending_example_request"] = example_request
+    forced_default_scorer = (
+        LOGPROB_SCORER_LABEL
+        if inference_backend == "HF local"
+        else ("Groq soft-vote scorer" if has_groq_inference_result else LOGPROB_SCORER_LABEL)
+    )
 
-        example_options = [example_placeholder, *list(SAMPLE_TRACES)]
-        st.selectbox(
-            "Try example",
-            example_options,
-            format_func=lambda name: (
-                name if name == example_placeholder else scenario_prompt_label(name)
-            ),
-            key="agentic_try_example_select",
-            on_change=apply_selected_example,
-        )
-        if st.session_state.get("agentic_pending_example_request") is not None:
-            st.rerun()
-
-        with st.expander("Inference settings", expanded=False):
-            inference_backend = st.selectbox(
-                "Inference backend",
-                ["Groq", "Gemini", "HF local"],
-                index=0,
-                key="agentic_inference_backend_choice",
+    if not developer_mode:
+        st.session_state[scorer_backend_key] = forced_default_scorer
+        scorer_backend = forced_default_scorer
+    else:
+        st.markdown('<div class="section-label">Developer settings</div>', unsafe_allow_html=True)
+        with st.expander("Segmentation", expanded=False):
+            segmenter_choice = st.selectbox(
+                "Segmenter",
+                [
+                    "Embedding (semantic similarity)",
+                    "Linguistic (spaCy chunking)",
+                ],
+                index=1,
+                key="agentic_segmenter",
             )
-            if inference_backend == "Groq":
-                inference_model_name = st.text_input(
-                    "Groq model",
-                    value="llama-3.1-8b-instant",
-                    key="agentic_groq_inference_model",
+            segment_threshold = st.slider(
+                "semantic threshold",
+                min_value=0.0,
+                max_value=1.0,
+                value=0.72,
+                step=0.01,
+                key="agentic_segment_threshold",
+            )
+            segment_window = st.slider(
+                "context window",
+                min_value=1,
+                max_value=10,
+                value=3,
+                step=1,
+                key="agentic_segment_window",
+            )
+            min_segment_words = st.slider(
+                "min words per segment",
+                min_value=1,
+                max_value=8,
+                value=1,
+                step=1,
+                key="agentic_min_segment_words",
+            )
+
+        with st.expander("Value function / scorer diagnostics", expanded=False):
+            show_developer_scorers = st.checkbox(
+                "Show developer scoring methods",
+                value=False,
+                key="agentic_show_developer_scorers",
+            )
+            scorer_options = [LOGPROB_SCORER_LABEL, FINAL_ANSWER_SIMILARITY_LABEL]
+            if inference_backend == "Groq" or has_groq_inference_result:
+                scorer_options.append("Groq soft-vote scorer")
+                scorer_options.append("Groq deterministic router")
+            if trajectory_match_available:
+                scorer_options.append("Trajectory match: tool + normalized args")
+            if show_developer_scorers:
+                st.caption(
+                    "Developer scorers are intended for debugging and should not be used for "
+                    "final demo results."
                 )
-                if not os.getenv("GROQ_API_KEY"):
-                    st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
-            elif inference_backend == "Gemini":
-                inference_model_name = st.text_input(
-                    "Gemini model",
-                    value="gemini-2.5-flash",
-                    key="agentic_gemini_inference_model",
-                )
-                with st.expander("Check available Gemini models", expanded=False):
-                    if st.button("Check available Gemini models", key="check_gemini_models"):
-                        st.session_state["agentic_available_gemini_models"] = (
-                            list_available_gemini_models()
-                        )
-                    available_models = st.session_state.get("agentic_available_gemini_models")
-                    if available_models is None:
-                        st.caption(
-                            "Model listing is optional and may fail under quota or SDK differences."
-                        )
-                    elif available_models:
-                        st.write(available_models)
-                    else:
-                        st.warning("No available Gemini models were returned.")
-                if not os.getenv("GEMINI_API_KEY"):
-                    st.warning("GEMINI_API_KEY is not set. Add it to run Gemini inference.")
-            elif inference_backend == "HF local":
-                is_calibrated_hf_mode = (
-                    st.session_state.get(SCORER_BACKEND_SESSION_KEY) == LOGPROB_SCORER_LABEL
-                )
-                hf_model_id = st.selectbox(
-                    "HF model",
-                    HF_LOCAL_MODEL_OPTIONS,
-                    key=HF_MODEL_ID_SESSION_KEY,
-                    help=(
-                        "Fixed set of supported local models. The same selection is used for "
-                        "HF-local inference and, in calibrated log-odds mode, for the "
-                        "explanation scorer -- see the Explanation tab's scorer settings."
-                    ),
-                )
-                inference_model_name = hf_model_id
-                if is_calibrated_hf_mode:
-                    hf_max_new_tokens = 256
-                    hf_trust_remote_code = False
-                    st.caption(f"{SAME_HF_MODEL_EXPLANATION} No second model is loaded.")
-                else:
-                    hf_max_new_tokens = st.number_input(
-                        "HF max_new_tokens",
-                        min_value=16,
-                        max_value=1024,
-                        value=256,
-                        step=16,
-                        key="agentic_hf_max_new_tokens",
-                    )
-                    hf_trust_remote_code = st.checkbox(
-                        "trust remote code",
-                        value=False,
-                        key="agentic_hf_trust_remote_code",
-                    )
-                    st.caption(
-                        "Routes with a local transformers causal LM. No real tools are executed."
-                    )
-
-        def execute_tool_inference() -> object:
-            calibrated_hf_mode = (
-                inference_backend == "HF local"
-                and st.session_state.get(SCORER_BACKEND_SESSION_KEY) == LOGPROB_SCORER_LABEL
+                scorer_options.extend(["Keyword scorer", "Mock model scorer"])
+            if scorer_backend_key not in st.session_state:
+                st.session_state[scorer_backend_key] = forced_default_scorer
+            if st.session_state[scorer_backend_key] not in scorer_options:
+                st.session_state[scorer_backend_key] = forced_default_scorer
+            scorer_backend = st.selectbox(
+                "Scoring method",
+                scorer_options,
+                key=scorer_backend_key,
             )
-            agent_callable = build_complete_agent_callable(
-                inference_backend=inference_backend,
-                inference_model_name=inference_model_name,
-                system_prompt=system_prompt,
-                tool_context=tool_context,
-                hf_max_new_tokens=int(hf_max_new_tokens)
-                if inference_backend == "HF local"
-                else 256,
-                hf_trust_remote_code=bool(hf_trust_remote_code)
-                if inference_backend == "HF local"
-                else False,
-                calibrated_hf_mode=calibrated_hf_mode,
-                logprob_model_id=inference_model_name
-                if calibrated_hf_mode
-                else DEFAULT_LOGPROB_MODEL_ID,
-                logprob_max_pairs_per_batch=int(
-                    st.session_state.get("agentic_logprob_pair_batch_size", 1)
-                ),
-            )
-            return agent_callable(user_request)
-
-        _, run_column = st.columns([3, 1])
-        if run_column.button(
-            "Run inference",
-            type="primary",
-            key="run_inference",
-            use_container_width=True,
-        ):
-            if hasattr(st, "status"):
-                with st.status("Running agent inference...", expanded=True) as status:
-                    st.write(f"Backend: {inference_backend}")
-                    st.write(f"Model: {inference_model_name}")
-                    inference_result = execute_tool_inference()
-                    status.update(label="Agent inference complete.", state="complete")
-            else:
-                with st.spinner("Running agent inference..."):
-                    inference_result = execute_tool_inference()
-            inference_result.backend = inference_backend
-            inference_result.model = inference_model_name
-            st.session_state["agentic_inference_backend"] = inference_backend
-            st.session_state["agentic_inference_model"] = inference_model_name
-            st.session_state["agentic_inference_result"] = inference_result
-            if inference_result.selected_tool in TOOLS:
-                st.session_state["agentic_inferred_tool"] = inference_result.selected_tool
-                st.session_state.has_run = False
-                st.session_state.result = None
-                st.rerun()
-            st.session_state["agentic_inferred_tool"] = None
-            st.session_state.has_run = False
-            st.session_state.result = None
-
-        inference_result = st.session_state.get("agentic_inference_result")
-        if inference_result is None:
-            st.info("Run inference to select a tool before explaining it.")
-        else:
-            inference_error = getattr(inference_result, "error", None)
-            if inference_error:
-                st.warning(inference_error)
-            selected_tool = getattr(inference_result, "selected_tool", None)
-            assistant_message = (
-                getattr(inference_result, "agent_response", "")
-                or getattr(inference_result, "assistant_answer", "")
-                or getattr(inference_result, "final_answer", "")
-                or f"I recommend `{selected_tool}` for this request."
-            )
-            with st.chat_message("user"):
-                st.write(user_request)
-            with st.chat_message("assistant"):
-                st.write(assistant_message)
-
-            st.divider()
-            result_backend = getattr(
-                inference_result,
-                "backend",
-                st.session_state.get("agentic_inference_backend", inference_backend),
-            )
-            result_model = getattr(
-                inference_result,
-                "model",
-                st.session_state.get("agentic_inference_model", inference_model_name),
-            )
-            with st.expander("Model information and arguments", expanded=False):
-                st.write(f"Backend: `{result_backend}`")
-                st.write(f"Model: `{result_model}`")
-                st.metric("Selected tool", selected_tool or "No tool selected")
-                st.markdown("**Tool arguments**")
-                st.json(getattr(inference_result, "tool_arguments", {}))
-                if getattr(inference_result, "calibrated_hf_mode", False):
-                    st.caption(
-                        "Arguments were generated in a second stage using the same model "
-                        "instance as routing (not part of the calibrated Shapley payoff)."
-                    )
-            raw_trace = getattr(inference_result, "raw_trace", None)
-            if raw_trace is None:
-                raw_trace = {
-                    "debug_prompt": getattr(inference_result, "debug_prompt", None),
-                    "raw_response": getattr(inference_result, "raw_response", ""),
-                }
-            with st.expander("Debug trace", expanded=False):
-                st.json(raw_trace)
-
-    with explanation_tab:
-        st.markdown('<div class="section-label">Explanation controls</div>', unsafe_allow_html=True)
-        current_inference_backend = st.session_state.get(
-            "agentic_inference_backend_choice",
-            "Groq",
-        )
-        latest_inference_backend = st.session_state.get("agentic_inference_backend")
-        has_groq_inference_result = (
-            latest_inference_backend == "Groq"
-            and st.session_state.get("agentic_inference_result") is not None
-        )
-        groq_reference_result = (
-            st.session_state.get("agentic_inference_result") if has_groq_inference_result else None
-        )
-        # Only offer trajectory matching when a real Groq inference result selected a
-        # known tool AND that tool was actually called with non-empty arguments --
-        # otherwise the argument-match part of the score would be meaningless.
-        trajectory_match_available = (
-            groq_reference_result is not None
-            and st.session_state.get("agentic_inferred_tool") in TOOLS
-            and bool(getattr(groq_reference_result, "tool_arguments", None))
-        )
-        show_developer_scorers = st.checkbox(
-            "Show developer scoring methods",
-            value=False,
-            key="agentic_show_developer_scorers",
-        )
-        scorer_options = [LOGPROB_SCORER_LABEL]
-        if current_inference_backend in {"Groq", "Gemini", "HF local"}:
-            # All three backends can run the complete tool-calling agent end to end, which
-            # is what this scorer needs (it is not a routing-only scorer like the ones below).
-            scorer_options.append(FINAL_ANSWER_SIMILARITY_LABEL)
-        if current_inference_backend == "Groq" or has_groq_inference_result:
-            scorer_options.append("Groq soft-vote scorer")
-            scorer_options.append("Groq deterministic router")
-        if trajectory_match_available:
-            scorer_options.append("Trajectory match: tool + normalized args")
-        if show_developer_scorers:
-            st.caption(
-                "Developer scorers are intended for debugging and should not be used for "
-                "final demo results."
-            )
-            scorer_options.extend(["Keyword scorer", "Mock model scorer"])
-        scorer_backend_key = SCORER_BACKEND_SESSION_KEY
-        default_scorer = "Groq soft-vote scorer" if has_groq_inference_result else scorer_options[0]
-        if scorer_backend_key not in st.session_state:
-            st.session_state[scorer_backend_key] = default_scorer
-        # Only reset the stored selection when it is no longer a valid option -- never
-        # overwrite a still-valid manual selection on every rerun (that previously made
-        # selecting any scorer impossible whenever a Groq inference result was present).
-        if st.session_state[scorer_backend_key] not in scorer_options:
-            st.session_state[scorer_backend_key] = default_scorer
-        scorer_backend = st.selectbox(
-            "Scoring method",
-            scorer_options,
-            key=scorer_backend_key,
-        )
-        logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
-        max_pairs_per_batch = 1
-        router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
-        soft_vote_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
-        soft_vote_n_samples = DEFAULT_GROQ_SOFT_VOTE_N_SAMPLES
-        soft_vote_temperature = DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE
-        soft_vote_max_retries = DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES
-        soft_vote_seed = None
-        final_answer_embedding_model_id = DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID
-        if scorer_backend == LOGPROB_SCORER_LABEL:
-            with st.expander("Calibrated log-odds scorer settings", expanded=True):
+            if scorer_backend == LOGPROB_SCORER_LABEL:
                 logprob_model_id = st.session_state.get(
                     HF_MODEL_ID_SESSION_KEY, DEFAULT_LOGPROB_MODEL_ID
                 )
-                st.caption(f"Inherited from inference model: `{logprob_model_id}`")
-                st.caption(
-                    f"{SAME_HF_MODEL_EXPLANATION} Select the model in the Inference tab's "
-                    "'HF local' settings; it is not independently editable here."
-                )
+                st.caption(f"Inherited from HF model selection: `{logprob_model_id}`")
+                st.caption(SAME_HF_MODEL_EXPLANATION)
                 max_pairs_per_batch = st.number_input(
                     "HF pair batch size",
                     min_value=1,
@@ -1659,8 +1646,7 @@ def main() -> None:
                     ),
                 )
                 st.caption(LOGPROB_SCORER_HELP)
-        elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
-            with st.expander("Final answer similarity scorer settings", expanded=True):
+            elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
                 final_answer_embedding_model_id = st.text_input(
                     "Embedding model",
                     value=DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID,
@@ -1671,12 +1657,9 @@ def main() -> None:
                         "at app startup."
                     ),
                 )
-                if current_inference_backend == "Groq" and not os.getenv("GROQ_API_KEY"):
+                if inference_backend == "Groq" and not os.getenv("GROQ_API_KEY"):
                     st.warning("GROQ_API_KEY is not set. Add it to use this scorer with Groq.")
-                elif current_inference_backend == "Gemini" and not os.getenv("GEMINI_API_KEY"):
-                    st.warning("GEMINI_API_KEY is not set. Add it to use this scorer with Gemini.")
-        elif scorer_backend == "Groq deterministic router":
-            with st.expander("Groq router scorer settings", expanded=True):
+            elif scorer_backend == "Groq deterministic router":
                 router_model_id = st.text_input(
                     "Groq router model",
                     value=DEFAULT_GROQ_ROUTER_MODEL_ID,
@@ -1685,13 +1668,11 @@ def main() -> None:
                 st.caption(
                     "Calls the real Groq API once per distinct coalition prompt to ask which "
                     "tool it would route to, and scores 1.0 if that matches the target tool, "
-                    "else 0.0. Every app interaction re-runs the setup preview, so this "
-                    "issues real Groq calls even before clicking Run explanation."
+                    "else 0.0."
                 )
                 if not os.getenv("GROQ_API_KEY"):
                     st.warning("GROQ_API_KEY is not set. Add it to use the Groq router scorer.")
-        elif scorer_backend == "Groq soft-vote scorer":
-            with st.expander("Groq soft-vote scorer settings", expanded=True):
+            elif scorer_backend == "Groq soft-vote scorer":
                 soft_vote_model_id = st.text_input(
                     "Groq soft-vote model",
                     value=DEFAULT_GROQ_ROUTER_MODEL_ID,
@@ -1743,8 +1724,7 @@ def main() -> None:
                 )
                 if not os.getenv("GROQ_API_KEY"):
                     st.warning("GROQ_API_KEY is not set. Add it to use the Groq soft-vote scorer.")
-        elif scorer_backend == "Trajectory match: tool + normalized args":
-            with st.expander("Trajectory match scorer settings", expanded=True):
+            elif scorer_backend == "Trajectory match: tool + normalized args":
                 st.warning(
                     "This scorer re-runs the real Groq agent once per distinct coalition "
                     "prompt to get an actual tool call (name + arguments), not just a routing "
@@ -1762,40 +1742,163 @@ def main() -> None:
                         "GROQ_API_KEY is not set. Add it to use the trajectory match scorer."
                     )
 
-        with st.expander("Segmentation settings", expanded=False):
-            segmenter_choice = st.selectbox(
-                "Segmenter",
-                [
-                    "Embedding (semantic similarity)",
-                    "Linguistic (spaCy chunking)",
-                ],
-                index=1,
-                key="agentic_segmenter",
+            show_lexical_comparison = st.checkbox(
+                "show keyword comparison",
+                value=False,
+                key="agentic_show_lexical_comparison",
             )
-            segment_threshold = st.slider(
-                "semantic threshold",
-                min_value=0.0,
-                max_value=1.0,
-                value=0.72,
-                step=0.01,
-                key="agentic_segment_threshold",
+            enable_fallback_target_selection = st.checkbox(
+                "enable fallback target selection",
+                value=False,
+                key="agentic_enable_fallback_target_selection",
+                help=(
+                    "Use the selected explanation scorer to choose a target tool when no "
+                    "inference result is available."
+                ),
             )
-            segment_window = st.slider(
-                "context window",
-                min_value=1,
-                max_value=10,
-                value=3,
-                step=1,
-                key="agentic_segment_window",
+
+        with st.expander("Computation diagnostics", expanded=False):
+            st.caption(f"Individual effects: `{SV_INDEX}`")
+            st.caption(f"Pairwise interactions: `{KSII_INDEX}`, max_order=`{KSII_MAX_ORDER}`")
+            st.caption("Players: user-request segments")
+            st.caption("Fixed context: system prompt + tool definitions")
+            st.caption("Value function: selected-tool support under the chosen scorer")
+            show_value_function_details = st.checkbox(
+                "show value function details",
+                value=False,
+                key="agentic_show_value_function_details",
             )
-            min_segment_words = st.slider(
-                "min words per segment",
-                min_value=1,
-                max_value=8,
-                value=1,
-                step=1,
-                key="agentic_min_segment_words",
+            show_scoring_prompt_preview = st.checkbox(
+                "show scoring prompt preview",
+                value=False,
+                key="agentic_show_scoring_prompt_preview",
             )
+
+    def execute_tool_inference() -> object:
+        calibrated_hf_mode = (
+            inference_backend == "HF local"
+            and st.session_state.get(SCORER_BACKEND_SESSION_KEY) == LOGPROB_SCORER_LABEL
+        )
+        agent_callable = build_complete_agent_callable(
+            inference_backend=inference_backend,
+            inference_model_name=inference_model_name,
+            system_prompt=system_prompt,
+            tool_context=tool_context,
+            hf_max_new_tokens=256,
+            hf_trust_remote_code=False,
+            calibrated_hf_mode=calibrated_hf_mode,
+            logprob_model_id=inference_model_name
+            if calibrated_hf_mode
+            else DEFAULT_LOGPROB_MODEL_ID,
+            logprob_max_pairs_per_batch=int(
+                st.session_state.get("agentic_logprob_pair_batch_size", 1)
+            ),
+        )
+        return agent_callable(user_request)
+
+    if run_full_pipeline_clicked:
+        if hasattr(st, "status"):
+            with st.status("Running agent...", expanded=True) as status:
+                st.write(f"Mode: {explanation_mode}")
+                st.write(f"Model: {inference_model_name}")
+                inference_result = execute_tool_inference()
+                status.update(
+                    label="Agent step complete. Preparing explanation...", state="complete"
+                )
+        else:
+            with st.spinner("Running agent..."):
+                inference_result = execute_tool_inference()
+        inference_result.backend = inference_backend
+        inference_result.model = inference_model_name
+        st.session_state["agentic_inference_backend"] = inference_backend
+        st.session_state["agentic_inference_model"] = inference_model_name
+        st.session_state["agentic_inference_result"] = inference_result
+        st.session_state["agentic_inferred_tool"] = (
+            inference_result.selected_tool if inference_result.selected_tool in TOOLS else None
+        )
+        st.session_state.has_run = False
+        st.session_state.result = None
+        st.session_state.pending_run = True
+        st.rerun()
+
+    # ------------------------------------------------------------------
+    # 3. Two tabs, feeling like two stages of one pipeline
+    # ------------------------------------------------------------------
+    agent_tab, xai_tab = st.tabs(["1. Agent Result", "2. XAI Explanation"])
+
+    # ------------------------------------------------------------------
+    # 4. Tab 1: Agent Result
+    # ------------------------------------------------------------------
+    with agent_tab:
+        st.markdown('<div class="section-label">Agent Result</div>', unsafe_allow_html=True)
+        inference_result = st.session_state.get("agentic_inference_result")
+        if inference_result is None:
+            st.info("Click **Run full pipeline** above to run the agent and select a tool.")
+        else:
+            inference_error = getattr(inference_result, "error", None)
+            if inference_error:
+                st.warning(inference_error)
+            selected_tool = getattr(inference_result, "selected_tool", None)
+            result_backend = getattr(inference_result, "backend", inference_backend)
+            result_model = getattr(inference_result, "model", inference_model_name)
+
+            if result_backend == "HF local":
+                st.metric("Model routed to", selected_tool or "No tool selected")
+                tool_scores = getattr(inference_result, "tool_scores", None)
+                if tool_scores:
+                    probabilities = softmax_dict(tool_scores)
+                    prob_frame = pd.DataFrame(
+                        [
+                            {"tool": tool_name, "probability": probabilities.get(tool_name, 0.0)}
+                            for tool_name in TOOLS
+                        ]
+                    ).sort_values("probability", ascending=False)
+                    st.bar_chart(prob_frame.set_index("tool"), use_container_width=True)
+                    st.dataframe(
+                        prob_frame.assign(
+                            probability=prob_frame["probability"].map(lambda v: f"{v:.3f}")
+                        ),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+                st.caption(
+                    "Decision and explanation use the same local HF model and calibrated "
+                    "log-odds scorer."
+                )
+            else:
+                st.write("**Backend:** Groq")
+                st.write(f"**Model:** `{result_model}`")
+                st.metric("Selected tool", selected_tool or "No tool selected")
+                st.markdown("**Tool arguments**")
+                st.json(getattr(inference_result, "tool_arguments", {}))
+                assistant_message = (
+                    getattr(inference_result, "agent_response", "")
+                    or getattr(inference_result, "assistant_answer", "")
+                    or getattr(inference_result, "final_answer", "")
+                    or f"I recommend `{selected_tool}` for this request."
+                )
+                st.markdown("**Agent response**")
+                st.write(assistant_message)
+
+            if developer_mode:
+                with st.expander("Raw backend diagnostics (agent)", expanded=False):
+                    st.write(f"Backend: `{result_backend}`")
+                    st.write(f"Model: `{result_model}`")
+                    st.markdown("**Tool arguments**")
+                    st.json(getattr(inference_result, "tool_arguments", {}))
+                    raw_trace = getattr(inference_result, "raw_trace", None)
+                    if raw_trace is None:
+                        raw_trace = {
+                            "debug_prompt": getattr(inference_result, "debug_prompt", None),
+                            "raw_response": getattr(inference_result, "raw_response", ""),
+                        }
+                    st.json(raw_trace)
+
+    # ------------------------------------------------------------------
+    # 5. Tab 2: XAI Explanation
+    # ------------------------------------------------------------------
+    with xai_tab:
+        st.markdown('<div class="section-label">XAI Explanation</div>', unsafe_allow_html=True)
 
         try:
             if segmenter_choice == "Linguistic (spaCy chunking)":
@@ -1818,12 +1921,7 @@ def main() -> None:
         using_exact_computation = len(user_segments) <= MAX_EXACT_DEMO_PLAYERS
         budget = budget_for_demo(len(user_segments)) if not using_exact_computation else None
 
-        with st.expander("Shapley and debug settings", expanded=False):
-            st.caption(f"Individual effects: `{SV_INDEX}`")
-            st.caption(f"Pairwise interactions: `{KSII_INDEX}`, max_order=`{KSII_MAX_ORDER}`")
-            st.caption("Players: user-request segments")
-            st.caption("Fixed context: system prompt + tool definitions")
-            st.caption("Value function: selected-tool support under the chosen scorer")
+        if developer_mode:
             if using_exact_computation:
                 coalition_count = 2 ** len(user_segments)
                 st.caption(
@@ -1836,35 +1934,6 @@ def main() -> None:
                     f"`{MAX_EXACT_DEMO_PLAYERS}`. Algorithm: official shapiq approximation, "
                     f"budget: `{budget}` auto."
                 )
-            show_prompt_segments = st.checkbox(
-                "show prompt segments",
-                value=False,
-                key="agentic_show_prompt_segments",
-            )
-            show_value_function_details = st.checkbox(
-                "show value function details",
-                value=False,
-                key="agentic_show_value_function_details",
-            )
-            show_scoring_prompt_preview = st.checkbox(
-                "show scoring prompt preview",
-                value=False,
-                key="agentic_show_scoring_prompt_preview",
-            )
-            show_lexical_comparison = st.checkbox(
-                "show keyword comparison",
-                value=False,
-                key="agentic_show_lexical_comparison",
-            )
-            enable_fallback_target_selection = st.checkbox(
-                "enable fallback target selection",
-                value=False,
-                key="agentic_enable_fallback_target_selection",
-                help=(
-                    "Use the selected explanation scorer to choose a target tool when no "
-                    "inference result is available."
-                ),
-            )
 
         if len(user_segments) < 1:
             st.warning("Add a user request with at least one segment.")
@@ -1883,37 +1952,31 @@ def main() -> None:
 
         inferred_tool = st.session_state.get("agentic_inferred_tool")
         using_inferred_tool = inferred_tool in TOOLS
-        inference_source = st.session_state.get("agentic_inference_backend")
+        result = st.session_state.result
         result_target_tool = None
         result_target_source = None
-        result = st.session_state.result
         if isinstance(result, dict):
             result_target_tool = result.get("target_tool")
             result_target_source = result.get("target_source")
         if using_inferred_tool:
             target_tool = inferred_tool
-            target_source = f"{inference_source} inference" if inference_source else "Inference"
-            pending_fallback_target = False
+            target_source = "Agent Result"
         elif result_target_tool in TOOLS and result_target_source == "fallback explanation scorer":
             target_tool = str(result_target_tool)
             target_source = "fallback explanation scorer"
-            pending_fallback_target = False
         else:
             target_tool = None
             target_source = "fallback explanation scorer"
-            pending_fallback_target = bool(enable_fallback_target_selection)
 
-        if not using_inferred_tool:
+        if not using_inferred_tool and target_tool is None:
             if enable_fallback_target_selection:
                 st.info(
-                    "No inference result is available. Fallback target selection is enabled; "
-                    "the explanation scorer will choose the target when you run explanation."
+                    "No agent result is available. Fallback target selection is enabled; "
+                    "the explanation scorer will choose the target when the pipeline runs."
                 )
-                st.caption("Target tool source: fallback explanation scorer")
             else:
                 st.info(
-                    "No inference result is available. Run inference first, or enable fallback "
-                    "target selection in advanced settings."
+                    "Click **Run full pipeline** above to run the agent and explain its decision."
                 )
 
         signature_target = target_tool if target_tool is not None else "__pending_target__"
@@ -1947,14 +2010,17 @@ def main() -> None:
             tuple(semantic_user_texts),
         )
         if st.session_state.get("result_signature") != signature:
+            # Note: unlike a stale-settings mismatch, `pending_run` is deliberately left
+            # untouched here. It is only ever set True immediately before a rerun, right
+            # after this exact signature was (re)computed from the freshly stored agent
+            # result -- so a mismatch at this point reflects that legitimate change, not
+            # a stale request that should cancel the run the user just triggered.
             st.session_state.has_run = False
             st.session_state.result = None
-            st.session_state.pending_run = False
             st.session_state.result_signature = signature
             result = None
             if not using_inferred_tool:
                 target_tool = None
-                pending_fallback_target = bool(enable_fallback_target_selection)
                 st.session_state.result_signature = (
                     trace_name,
                     user_request,
@@ -1979,179 +2045,108 @@ def main() -> None:
                     tuple(semantic_user_texts),
                 )
 
-        st.markdown('<div class="section-label">Setup</div>', unsafe_allow_html=True)
         is_final_answer_similarity_scorer = scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL
-        target_tool_label = target_tool if target_tool is not None else "Pending"
         if is_final_answer_similarity_scorer:
-            # This scorer compares final answers, not tool choice, so show the actual
-            # reference answer it computed instead of the legacy target-tool wording/value.
             reference_answer_preview = None
             if isinstance(result, dict):
-                final_answer_scorer_meta = result.get("final_answer_scorer_meta")
-                if final_answer_scorer_meta:
+                final_answer_scorer_meta_preview = result.get("final_answer_scorer_meta")
+                if final_answer_scorer_meta_preview:
                     reference_answer_preview = truncate_label(
-                        final_answer_scorer_meta["reference_answer"],
+                        final_answer_scorer_meta_preview["reference_answer"],
                         max_length=96,
                     )
-            target_line = (
-                "<strong>Reference answer from the full request:</strong> "
-                f"{escape(reference_answer_preview or 'Pending')}"
-            )
-        elif using_inferred_tool:
-            target_line = (
-                f"<strong>Explaining why agent selected:</strong> {escape(target_tool_label)}"
-            )
+            explaining_value = reference_answer_preview or "Pending (final-answer similarity)"
         else:
-            target_line = f"<strong>Fallback target tool:</strong> {escape(target_tool_label)}"
+            explaining_value = target_tool if target_tool is not None else "Pending"
+
+        # ---- Compact explanation setup panel ----
         st.markdown(
             f"""
-            <div class="scenario-panel">
-                <div>
-                    <span class="scenario-tag">Tool selection</span>
-                    <h3>{escape(trace_name)}</h3>
-                    <p>{escape(user_request)}</p>
-                </div>
-                <div class="scenario-hint">
-                    {target_line}<br>
-                    <strong>Target tool source:</strong> {escape(target_source)}<br>
-                    <strong>Available tools:</strong> {escape(", ".join(TOOLS))}<br>
-                </div>
+            <div class="setup-line">
+                <strong>Explaining:</strong> <code>{escape(str(explaining_value))}</code><br>
+                <strong>Target source:</strong> {escape(target_source)}<br>
+                <strong>Players:</strong> user-request segments<br>
+                <strong>Fixed context:</strong> system prompt + tool definitions<br>
+                <strong>Masking:</strong> remove absent segments<br>
+                <strong>Individual effects:</strong> SV<br>
+                <strong>Pairwise interactions:</strong> k-SII
             </div>
             """,
             unsafe_allow_html=True,
         )
-        if scorer_backend == LOGPROB_SCORER_LABEL:
-            st.caption(
-                f"{SAME_HF_MODEL_EXPLANATION} This scorer mode ignores the Inference tab's "
-                "Groq/Gemini/structured-JSON selected tool. When you run the explanation, the "
-                "target tool is redetermined by the calibrated A/B/C/D routing evidence on the "
-                "full user request -- the same evidence used for every coalition -- so the "
-                "target being explained and the classifier producing the coalition scores are "
-                "always the same model instance."
-            )
 
-        st.markdown('<div class="section-label">Explanation target</div>', unsafe_allow_html=True)
-        target_left, target_right = st.columns([0.85, 1.15])
-        with target_left:
-            st.markdown(f"### `{target_tool_label}`")
-        with target_right:
-            st.metric("Target tool source", target_source)
-
-        if pending_fallback_target:
-            st.caption(
-                "Fallback target selection will run with the selected explanation scorer after "
-                "you click Run explanation."
-            )
-        elif (
+        if (
             target_source == "fallback explanation scorer"
             and isinstance(result, dict)
             and result.get("fallback_choice_scores")
         ):
-            st.markdown("**Fallback scorer diagnostic**")
-            st.caption(
-                "These scores are not from Groq, Gemini, or HF local inference. They come "
-                "from the selected explanation scorer and were used to choose the fallback "
-                "target tool."
-            )
-            score_frame = pd.DataFrame(
-                [
-                    {"tool": tool, "score": score}
-                    for tool, score in sorted(
-                        result["fallback_choice_scores"].items(),
-                        key=lambda item: item[1],
-                        reverse=True,
-                    )
-                ]
-            )
-            st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
+            with st.expander("Fallback scorer diagnostic", expanded=False):
+                st.caption(
+                    "These scores come from the selected explanation scorer and were used to "
+                    "choose the fallback target tool (no agent result was available)."
+                )
+                score_frame = pd.DataFrame(
+                    [
+                        {"tool": tool, "score": score}
+                        for tool, score in sorted(
+                            result["fallback_choice_scores"].items(),
+                            key=lambda item: item[1],
+                            reverse=True,
+                        )
+                    ]
+                )
+                st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
 
-        with st.expander("Show fixed context and Shapley players", expanded=show_prompt_segments):
-            segment_left, segment_right = st.columns(2)
-            with segment_left:
-                st.markdown("**Fixed context, not explained**")
-                st.caption("System prompt")
-                for segment in system_segments:
-                    st.markdown(
-                        (
-                            "<div class='segment-box'>"
-                            f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
-                        ),
-                        unsafe_allow_html=True,
-                    )
-                st.caption("Tool definitions")
-                for tool_name, description in TOOLS.items():
-                    st.markdown(
-                        (
-                            "<div class='segment-box'>"
-                            f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
-                        ),
-                        unsafe_allow_html=True,
-                    )
-            with segment_right:
-                st.markdown("**Shapley players: user request segments**")
-                # Duck-typed rather than isinstance(segmenter, LinguisticSegmenter): Streamlit's
-                # local file watcher can hot-reload a same-directory module (e.g. after an edit
-                # to linguistic_segmenter.py) while an older cached segmenter instance from
-                # st.cache_resource survives the rerun. That instance is then built from a stale
-                # class object, so isinstance against the freshly reloaded class silently returns
-                # False -- attribute presence is robust to that class-identity mismatch.
+        # ---- A. Player segmentation ----
+        st.markdown('<div class="section-label">Player segmentation</div>', unsafe_allow_html=True)
+        chip_html = "".join(
+            (
+                "<div class='segment-chip'>"
+                f"<strong>{escape(segment.label)}:</strong> {escape(segment.text)}</div>"
+            )
+            for segment in user_segments
+        )
+        st.markdown(f"<div class='segment-chip-row'>{chip_html}</div>", unsafe_allow_html=True)
+
+        with st.expander("Fixed context: system prompt + tool definitions", expanded=False):
+            st.caption("System prompt")
+            for segment in system_segments:
+                st.markdown(
+                    (
+                        "<div class='segment-box'>"
+                        f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
+                    ),
+                    unsafe_allow_html=True,
+                )
+            st.caption("Tool definitions")
+            for tool_name, description in TOOLS.items():
+                st.markdown(
+                    (
+                        "<div class='segment-box'>"
+                        f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
+                    ),
+                    unsafe_allow_html=True,
+                )
+            if developer_mode and segment_debug_rows:
+                # Duck-typed rather than isinstance(...): Streamlit's local file watcher can
+                # hot-reload a same-directory module while an older cached segmenter instance
+                # from st.cache_resource survives the rerun, which breaks isinstance checks
+                # against the freshly reloaded class.
                 is_linguistic_segmenter = hasattr(segmenter, "stray_merge")
-                if is_linguistic_segmenter:
-                    st.caption(
-                        f"{len(user_segments)} user segments from `{segmenter.model_id}` "
-                        f"with stray_merge=`{segmenter.stray_merge}`."
-                    )
-                else:
-                    st.caption(
-                        f"{len(user_segments)} user segments from `{segmenter.model_id}` on "
-                        f"`{segmenter.device}`. threshold={segmenter.threshold:.2f}, "
-                        f"window={segmenter.window}, min words={segmenter.min_segment_words}."
-                    )
-                for segment in user_segments:
-                    st.markdown(
-                        (
-                            "<div class='segment-box user'>"
-                            f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
-                        ),
-                        unsafe_allow_html=True,
-                    )
-                if segment_debug_rows:
-                    diagnostic_label = (
-                        "Linguistic segment diagnostics"
-                        if is_linguistic_segmenter
-                        else "Semantic boundary diagnostics"
-                    )
-                    st.markdown(f"**{diagnostic_label}**")
-                    st.dataframe(
-                        pd.DataFrame(segment_debug_rows),
-                        use_container_width=True,
-                        hide_index=True,
-                    )
+                diagnostic_label = (
+                    "Linguistic segment diagnostics"
+                    if is_linguistic_segmenter
+                    else "Semantic boundary diagnostics"
+                )
+                st.markdown(f"**{diagnostic_label}**")
+                st.dataframe(
+                    pd.DataFrame(segment_debug_rows),
+                    use_container_width=True,
+                    hide_index=True,
+                )
 
         if not st.session_state.has_run and not st.session_state.pending_run:
-            # The calibrated log-odds scorer always determines its own target via the
-            # HF classifier's argmax at run time, so it never needs a prior inference
-            # result or fallback target selection to be enabled first.
-            can_run_explanation = (
-                target_tool is not None
-                or pending_fallback_target
-                or scorer_backend == LOGPROB_SCORER_LABEL
-            )
-            if st.button(
-                "Run explanation",
-                type="primary",
-                key="agentic_run_explanation",
-                disabled=not can_run_explanation,
-            ):
-                st.session_state.pending_run = True
-                st.rerun()
-            if can_run_explanation:
-                st.info("Enter a prompt and click Run explanation to compute the explanation.")
-            else:
-                st.info(
-                    "Run inference first, or enable fallback target selection in advanced "
-                    "settings before running explanation."
-                )
+            st.info("Click **Run full pipeline** above to compute the SV / k-SII explanation.")
             return
 
         run = st.session_state.pending_run
@@ -2216,12 +2211,8 @@ def main() -> None:
                     inference_model_name=inference_model_name,
                     system_prompt=system_prompt,
                     tool_context=tool_context,
-                    hf_max_new_tokens=int(hf_max_new_tokens)
-                    if inference_backend == "HF local"
-                    else 256,
-                    hf_trust_remote_code=bool(hf_trust_remote_code)
-                    if inference_backend == "HF local"
-                    else False,
+                    hf_max_new_tokens=256,
+                    hf_trust_remote_code=False,
                 )
                 inference_result_is_current = (
                     st.session_state.get("agentic_inference_signature")
@@ -2311,8 +2302,8 @@ def main() -> None:
             if target_tool is None:
                 if not enable_fallback_target_selection:
                     st.error(
-                        "No inference result is available. Run inference first, or enable "
-                        "fallback target selection in advanced settings."
+                        "No agent result is available. Run the full pipeline first, or enable "
+                        "fallback target selection in developer settings."
                     )
                     return
                 with st.spinner("Selecting fallback target tool with the explanation scorer..."):
@@ -2556,7 +2547,7 @@ def main() -> None:
 
         result = st.session_state.result
         if result is None:
-            st.error("No explanation result is available. Click Run explanation to compute one.")
+            st.error("No explanation result is available. Click Run full pipeline to compute one.")
             return
         primary_label = result["primary_label"]
         sv_algorithm_label = result["sv_algorithm_label"]
@@ -2575,275 +2566,169 @@ def main() -> None:
             pairwise_matrix = pairwise_matrix_from_explanation(pairwise_ksii, len(user_segments))
         pair_label = result["pair_label"]
         pair_value = result["pair_value"]
-        top_label = result["top_label"]
-        top_score = result["top_score"]
-        interpretation_sentence = result["interpretation_sentence"]
         compare_with_lexical = result["compare_with_lexical"]
         llm_debug_outputs = result["llm_debug_outputs"]
         lexical_result = result["lexical_result"]
         final_answer_scorer_meta = result.get("final_answer_scorer_meta")
         logprob_full_diagnostics = result.get("logprob_full_diagnostics")
-        delta_support = float(full_score) - float(empty_score)
         is_final_answer_result = primary_label == FINAL_ANSWER_SIMILARITY_LABEL
-        if is_final_answer_result:
-            if delta_support > DELTA_STATUS_THRESHOLD:
-                support_status = "Higher semantic fidelity"
-                support_interpretation = (
-                    "The complete prompt's final answer is more similar to the full-run "
-                    "reference answer than the empty-request baseline."
-                )
-            elif delta_support < -DELTA_STATUS_THRESHOLD:
-                support_status = "Lower semantic fidelity"
-                support_interpretation = (
-                    "The complete prompt's final answer is less similar to the full-run "
-                    "reference answer than the empty-request baseline."
-                )
-            else:
-                support_status = "Neutral / weak change"
-                support_interpretation = (
-                    "The complete prompt does not change final-answer similarity much compared "
-                    "with the empty-request baseline."
-                )
-        elif delta_support > DELTA_STATUS_THRESHOLD:
-            support_status = "Supported by the prompt"
-            support_interpretation = (
-                "The complete prompt increases support for the target tool compared with the "
-                "baseline."
-            )
-        elif delta_support < -DELTA_STATUS_THRESHOLD:
-            support_status = "Reduced by the prompt"
-            support_interpretation = (
-                "The complete prompt reduces support for the target tool compared with the "
-                "baseline."
-            )
-        else:
-            support_status = "Neutral / weak evidence"
-            support_interpretation = (
-                "The complete prompt does not change support much compared with the baseline."
-            )
-        token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
-            load_text_plotters()
-        )
+        target_tool = result["target_tool"]
 
-        debug_requested = (
-            show_value_function_details
-            or show_scoring_prompt_preview
-            or compare_with_lexical
-            or bool(llm_debug_outputs)
-            or final_answer_scorer_meta is not None
+        # ---- B. Summary metrics (exactly four) ----
+        st.markdown('<div class="section-label">Summary metrics</div>', unsafe_allow_html=True)
+        metric_target_value = (
+            "Final-answer semantic similarity"
+            if is_final_answer_result
+            else (target_tool or "Pending")
         )
-        tab_names = ["Summary", "Attribution", "Interactions"]
-        if debug_requested:
-            tab_names.append("Debug")
-        tabs = st.tabs(tab_names)
-
+        # The calibrated log-odds scorer normalizes its Shapley game value against the
+        # empty coalition by construction (V(empty) = h(empty) - h(empty) == 0), so the
+        # normalized baseline is always trivially zero for this scorer specifically. Show
+        # its raw, non-normalized h(∅)/h(N) log-odds instead -- otherwise this card would
+        # always read 0.000 for HF Local mode's default scorer regardless of the actual
+        # routing evidence.
         raw_log_odds_summary = (
             None
             if is_final_answer_result
             else _extract_raw_log_odds_summary(logprob_full_diagnostics)
         )
-
-        with tabs[0]:
-            st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
-            summary_heading = (
-                "**Final answer similarity overview**"
-                if is_final_answer_result
-                else "**Tool support overview**"
-            )
-            st.markdown(summary_heading)
-
-            if raw_log_odds_summary is not None:
-                raw_full_score, raw_empty_score = raw_log_odds_summary
-                explained_increase = raw_full_score - raw_empty_score
-                metric_labels = {
-                    "target": "Explained decision",
-                    "empty": "Raw empty score h(∅)",
-                    "full": "Raw full score h(N)",
-                    "delta": "Explained increase h(N)-h(∅)",
-                }
-                empty_display = f"{raw_empty_score:.3f}"
-                full_display = f"{raw_full_score:.3f}"
-            else:
-                explained_increase = float(full_score) - float(empty_score)
-                metric_labels = (
-                    {
-                        "target": "Scorer",
-                        "empty": "Normalized empty-coalition value V(∅)",
-                        "full": "Normalized full-coalition value V(N)",
-                        "delta": "Explained value V(N)-V(∅)",
-                    }
-                    if is_final_answer_result
-                    else {
-                        "target": "Explained decision",
-                        "empty": "Empty baseline V(∅)",
-                        "full": "Full game value V(N)",
-                        "delta": "Explained value V(N)-V(∅)",
-                    }
-                )
-                empty_display = f"{empty_score:.3f}"
-                full_display = f"{full_score:.3f}"
-            metric_target_value = (
-                "Final-answer semantic similarity" if is_final_answer_result else target_tool
-            )
-            st.markdown(
-                f"""
-                <div class="metric-strip">
-                    <div class="metric-card">
-                        <span>{metric_labels["target"]}</span>
-                        <strong>{escape(metric_target_value)}</strong>
-                    </div>
-                    <div class="metric-card">
-                        <span>{metric_labels["empty"]}</span>
-                        <strong>{empty_display}</strong>
-                    </div>
-                    <div class="metric-card">
-                        <span>{metric_labels["full"]}</span>
-                        <strong>{full_display}</strong>
-                    </div>
-                    <div class="metric-card">
-                        <span>{metric_labels["delta"]}</span>
-                        <strong>{explained_increase:.3f}</strong>
-                    </div>
+        if raw_log_odds_summary is not None:
+            raw_full_score, raw_empty_score = raw_log_odds_summary
+            explained_increase = raw_full_score - raw_empty_score
+            empty_label, empty_display = "Raw empty score h(&empty;)", f"{raw_empty_score:.3f}"
+            full_label, full_display = "Raw full score h(N)", f"{raw_full_score:.3f}"
+            delta_label = "Explained increase h(N)-h(&empty;)"
+        else:
+            explained_increase = float(full_score) - float(empty_score)
+            empty_label, empty_display = "Baseline support V(&empty;)", f"{empty_score:.3f}"
+            full_label, full_display = "Full-request support V(N)", f"{full_score:.3f}"
+            delta_label = "Explained increase V(N)-V(&empty;)"
+        st.markdown(
+            f"""
+            <div class="metric-strip">
+                <div class="metric-card">
+                    <span>Explained decision</span>
+                    <strong>{escape(str(metric_target_value))}</strong>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            st.info(f"**{support_status}.** {support_interpretation}")
+                <div class="metric-card">
+                    <span>{empty_label}</span>
+                    <strong>{empty_display}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>{full_label}</span>
+                    <strong>{full_display}</strong>
+                </div>
+                <div class="metric-card">
+                    <span>{delta_label}</span>
+                    <strong>{explained_increase:.3f}</strong>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-            sv_sum = float(sum(getattr(first_order_sv, "dict_values", {}).values()))
-            sv_residual = abs(sv_sum - explained_increase)
-            sv_efficiency_status = (
-                "passes" if sv_residual <= SV_EFFICIENCY_TOLERANCE else "exceeds tolerance"
+        # ---- C. Individual segment effects -- Shapley Values ----
+        st.markdown(
+            '<div class="section-label">Individual segment effects — Shapley Values (SV)</div>',
+            unsafe_allow_html=True,
+        )
+        token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
+            load_text_plotters()
+        )
+        bar_xlabel = (
+            "Final-answer semantic-fidelity attribution"
+            if is_final_answer_result
+            else "Target-tool attribution"
+        )
+        if token_attribution_bar_plot is None:
+            st.warning(
+                "The shapiq text attribution plot is unavailable in this environment. "
+                f"Showing a simple fallback chart instead. Details: {plot_import_error}"
             )
-            st.caption(
-                f"SV efficiency check: sum(SV)={sv_sum:.3f}, "
-                f"explained increase={explained_increase:.3f}, "
-                f"residual={sv_residual:.6g} ({sv_efficiency_status})"
-            )
-
-            st.caption("See the Attribution tab for the full Shapley Value (SV) segment ranking.")
-
-        with tabs[1]:
-            st.markdown("**Individual segment effects — Shapley Values (SV)**")
-            st.caption(
-                "Which individual user-request segments push the agent toward the selected tool?"
-            )
-            st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
-            if is_final_answer_result:
-                st.caption(
-                    "Shapley Values are efficient on their own: they sum exactly to the "
-                    "total game value. The heatmap's pairwise k-SII interactions are a "
-                    "separate, complementary decomposition of the same value function."
-                )
-            bar_xlabel = (
-                "Final-answer semantic-fidelity attribution"
-                if is_final_answer_result
-                else "Target-tool attribution"
-            )
-            if token_attribution_bar_plot is None:
+            show_fallback_attribution_chart(attribution_frame)
+        else:
+            try:
+                fig_ax = token_attribution_bar_plot(first_order_sv, labels, show=False)
+            except Exception as error:  # noqa: BLE001
                 st.warning(
-                    "The shapiq text attribution plot is unavailable in this environment. "
-                    f"Showing a simple fallback chart instead. Details: {plot_import_error}"
+                    "The shapiq text attribution plot failed. "
+                    f"Showing a simple fallback chart instead. Details: {error}"
                 )
                 show_fallback_attribution_chart(attribution_frame)
             else:
-                try:
-                    fig_ax = token_attribution_bar_plot(first_order_sv, labels, show=False)
-                except Exception as error:  # noqa: BLE001
-                    st.warning(
-                        "The shapiq text attribution plot failed. "
-                        f"Showing a simple fallback chart instead. Details: {error}"
-                    )
-                    show_fallback_attribution_chart(attribution_frame)
-                else:
-                    if fig_ax is not None:
-                        fig, ax = fig_ax
-                        st.pyplot(polish_bar(fig, ax, xlabel=bar_xlabel), clear_figure=True)
-            st.caption("See the Interactions tab for pairwise k-SII interactions between segments.")
+                if fig_ax is not None:
+                    fig, ax = fig_ax
+                    st.pyplot(polish_bar(fig, ax, xlabel=bar_xlabel), clear_figure=True)
+        st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
+        st.caption("Which individual request segments push the agent toward the selected tool?")
 
-        with tabs[2]:
-            st.markdown("**Pairwise segment interactions — k-SII, order 2**")
-            st.caption(
-                "Which segment pairs jointly trigger or suppress the selected tool-use "
-                "decision beyond their individual effects?"
+        # ---- D. Pairwise interactions -- k-SII ----
+        st.markdown(
+            '<div class="section-label">Pairwise interactions — k-SII</div>',
+            unsafe_allow_html=True,
+        )
+        if sentence_interaction_heatmap is None:
+            st.warning(
+                "The shapiq text interaction heatmap is unavailable in this environment. "
+                f"Showing a fallback interaction table instead. Details: {plot_import_error}"
             )
-            st.caption(
-                "Diagonal: order-1 k-SII component, shown for reference only (see the "
-                "Attribution tab for standard Shapley Values). Off-diagonal: pairwise "
-                "k-SII interaction (order 2)."
-            )
-            if sentence_interaction_heatmap is None:
+            show_fallback_interaction_table(pairwise_matrix, labels)
+        else:
+            try:
+                fig_ax = sentence_interaction_heatmap(ksii_explanation, labels, show=False)
+            except Exception as error:  # noqa: BLE001
                 st.warning(
-                    "The shapiq text interaction heatmap is unavailable in this environment. "
-                    f"Showing a fallback interaction table instead. Details: {plot_import_error}"
+                    "The shapiq text interaction heatmap failed. "
+                    f"Showing a fallback interaction table instead. Details: {error}"
                 )
                 show_fallback_interaction_table(pairwise_matrix, labels)
             else:
-                try:
-                    fig_ax = sentence_interaction_heatmap(ksii_explanation, labels, show=False)
-                except Exception as error:  # noqa: BLE001
-                    st.warning(
-                        "The shapiq text interaction heatmap failed. "
-                        f"Showing a fallback interaction table instead. Details: {error}"
-                    )
-                    show_fallback_interaction_table(pairwise_matrix, labels)
-                else:
-                    if fig_ax is not None:
-                        fig, ax = fig_ax
-                        st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
+                if fig_ax is not None:
+                    fig, ax = fig_ax
+                    st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
 
-            if pairwise_matrix.shape[0] >= 2:
-                top_pairs = top_pairwise_interactions(pairwise_matrix, user_segments)
-                if top_pairs:
-                    st.markdown("**Top pairwise interactions**")
-                    pairs_frame = pd.DataFrame(
-                        [
-                            {
-                                "segments": f"{row['segment_i']} + {row['segment_j']}",
-                                "text": f"{row['text_i']}  |  {row['text_j']}",
-                                "k-SII": format_attribution(row["value"]),
-                                "type": row["type"],
-                            }
-                            for row in top_pairs
-                        ]
-                    )
-                    st.dataframe(pairs_frame, use_container_width=True, hide_index=True)
-
-            n_segs = pairwise_matrix.shape[0]
-            pos_pairs = [
-                (i, j, float(pairwise_matrix.iloc[i, j]))
-                for i in range(n_segs)
-                for j in range(i + 1, n_segs)
-                if float(pairwise_matrix.iloc[i, j]) > 0
-            ]
-            neg_pairs = [
-                (i, j, float(pairwise_matrix.iloc[i, j]))
-                for i in range(n_segs)
-                for j in range(i + 1, n_segs)
-                if float(pairwise_matrix.iloc[i, j]) < 0
-            ]
-            if pos_pairs:
-                pos_i, pos_j, pos_val = max(pos_pairs, key=lambda x: x[2])
-                pos_lbl_i = user_segments[pos_i].label
-                pos_lbl_j = user_segments[pos_j].label
-                st.success(
-                    f"**Complementary: `{pos_lbl_i}` + `{pos_lbl_j}` "
-                    f"(k-SII = {pos_val:+.3f})**\n\n"
-                    "These segments reinforce each other's support for the selected tool "
-                    "beyond their individual contributions."
+        if pairwise_matrix.shape[0] >= 2:
+            top_pairs = top_pairwise_interactions(pairwise_matrix, user_segments)
+            if top_pairs:
+                pairs_frame = pd.DataFrame(
+                    [
+                        {
+                            "segments": f"{row['segment_i']} + {row['segment_j']}",
+                            "text": f"{row['text_i']}  |  {row['text_j']}",
+                            "k-SII": format_attribution(row["value"]),
+                            "type": row["type"],
+                        }
+                        for row in top_pairs
+                    ]
                 )
-            if neg_pairs:
-                neg_i, neg_j, neg_val = min(neg_pairs, key=lambda x: x[2])
-                neg_lbl_i = user_segments[neg_i].label
-                neg_lbl_j = user_segments[neg_j].label
-                st.info(
-                    f"**Redundant: `{neg_lbl_i}` + `{neg_lbl_j}` "
-                    f"(k-SII = {neg_val:+.3f})**\n\n"
-                    "These segments overlap in the routing signal they carry; "
-                    "having both adds less than expected from their individual attributions."
-                )
+                st.dataframe(pairs_frame, use_container_width=True, hide_index=True)
+        st.caption(
+            "Which segment pairs jointly trigger or redundantly encode the tool-use decision?"
+        )
 
-            with st.expander("k-SII decomposition diagnostic", expanded=False):
+        # ---- E. Takeaway ----
+        takeaway_target = str(metric_target_value)
+        takeaway_sentence = build_takeaway_sentence(
+            target_tool=takeaway_target,
+            attribution_frame=attribution_frame,
+            pair_label=pair_label,
+            pair_value=pair_value,
+        )
+        st.success(takeaway_sentence)
+
+        # ---- Developer mode: raw backend diagnostics ----
+        if developer_mode:
+            with st.expander("Raw backend diagnostics", expanded=False):
+                sv_sum = float(sum(getattr(first_order_sv, "dict_values", {}).values()))
+                sv_residual = abs(sv_sum - explained_increase)
+                sv_efficiency_status = (
+                    "passes" if sv_residual <= SV_EFFICIENCY_TOLERANCE else "exceeds tolerance"
+                )
+                st.caption(
+                    f"SV efficiency check: sum(SV)={sv_sum:.3f}, "
+                    f"explained increase={explained_increase:.3f}, "
+                    f"residual={sv_residual:.6g} ({sv_efficiency_status})"
+                )
                 diag = interaction_order_diagnostics(
                     ksii_explanation,
                     full_value=full_score,
@@ -2882,171 +2767,163 @@ def main() -> None:
                         "This may indicate approximation error above the exact-computation limit."
                     )
 
-        if debug_requested:
-            with tabs[3]:
                 if llm_debug_outputs:
-                    with st.expander("Model output diagnostics", expanded=False):
-                        displayed_debug_outputs = llm_debug_outputs[:10]
-                        debug_frame = pd.DataFrame(displayed_debug_outputs)
-                        debug_columns = [
-                            "score_kind",
-                            "score_description",
-                            "selected_tools",
-                            "target_matches",
-                            "n_samples",
-                            "temperature",
-                            "raw_output",
-                            "raw_outputs",
-                            "parsed_score",
-                            "used_fallback",
-                            "fallback_score",
-                            "target_tool",
-                            "target_label",
-                            "candidate_tools",
-                            "candidate_labels",
-                            "candidate_continuations",
-                            "raw_log_scores",
-                            "calibration_log_scores",
-                            "calibrated_scores",
-                            "target_vs_all_log_odds",
-                            "empty_coalition_log_odds",
-                            "calibrated_probabilities",
-                            "argmax_tool",
-                            "final_score",
-                            "prompt_preview",
-                            "masked_user_request",
-                            "raw_similarity",
-                            "normalized_score",
-                            "execution_status",
-                            "execution_error",
-                        ]
-                        st.dataframe(
-                            debug_frame[
-                                [column for column in debug_columns if column in debug_frame]
-                            ],
-                            use_container_width=True,
-                            hide_index=True,
-                        )
+                    st.markdown("**Model output diagnostics**")
+                    displayed_debug_outputs = llm_debug_outputs[:10]
+                    debug_frame = pd.DataFrame(displayed_debug_outputs)
+                    debug_columns = [
+                        "score_kind",
+                        "score_description",
+                        "selected_tools",
+                        "target_matches",
+                        "n_samples",
+                        "temperature",
+                        "raw_output",
+                        "raw_outputs",
+                        "parsed_score",
+                        "used_fallback",
+                        "fallback_score",
+                        "target_tool",
+                        "target_label",
+                        "candidate_tools",
+                        "candidate_labels",
+                        "candidate_continuations",
+                        "raw_log_scores",
+                        "calibration_log_scores",
+                        "calibrated_scores",
+                        "target_vs_all_log_odds",
+                        "empty_coalition_log_odds",
+                        "calibrated_probabilities",
+                        "argmax_tool",
+                        "final_score",
+                        "prompt_preview",
+                        "masked_user_request",
+                        "raw_similarity",
+                        "normalized_score",
+                        "execution_status",
+                        "execution_error",
+                    ]
+                    st.dataframe(
+                        debug_frame[[column for column in debug_columns if column in debug_frame]],
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+
                 if primary_label == LOGPROB_SCORER_LABEL and logprob_full_diagnostics is not None:
-                    with st.expander(
-                        "Calibrated multiclass tool log-odds (full user request)",
-                        expanded=False,
-                    ):
-                        argmax_tool = logprob_full_diagnostics.get("argmax_tool")
-                        is_router_argmax = argmax_tool == target_tool
-                        calibrated_probability = logprob_full_diagnostics[
-                            "calibrated_probabilities"
-                        ].get(target_tool)
-                        st.caption(LOGPROB_SCORER_HELP)
-                        logprob_metric_left, logprob_metric_mid, logprob_metric_right = st.columns(
-                            3
-                        )
-                        logprob_metric_left.metric(
-                            "Calibrated probability",
-                            f"{calibrated_probability:.3f}"
-                            if calibrated_probability is not None
-                            else "n/a",
-                        )
-                        logprob_metric_mid.metric(
-                            "Target-vs-all log-odds",
-                            f"{logprob_full_diagnostics['target_vs_all_log_odds']:.3f}",
-                        )
-                        logprob_metric_right.metric(
-                            "Local-router argmax match",
-                            "Yes" if is_router_argmax else "No",
-                            help=f"Local-router argmax candidate: `{argmax_tool}`.",
-                        )
-                        st.caption(
-                            f"{SAME_HF_MODEL_EXPLANATION} Loaded model: `{logprob_model_id}`. "
-                            "No second model is loaded for target-tool selection. Argument "
-                            "extraction was not executed; this run explains routing only."
-                        )
+                    st.markdown("**Calibrated multiclass tool log-odds (full user request)**")
+                    argmax_tool = logprob_full_diagnostics.get("argmax_tool")
+                    is_router_argmax = argmax_tool == target_tool
+                    calibrated_probability = logprob_full_diagnostics[
+                        "calibrated_probabilities"
+                    ].get(target_tool)
+                    st.caption(LOGPROB_SCORER_HELP)
+                    logprob_metric_left, logprob_metric_mid, logprob_metric_right = st.columns(3)
+                    logprob_metric_left.metric(
+                        "Calibrated probability",
+                        f"{calibrated_probability:.3f}"
+                        if calibrated_probability is not None
+                        else "n/a",
+                    )
+                    logprob_metric_mid.metric(
+                        "Target-vs-all log-odds",
+                        f"{logprob_full_diagnostics['target_vs_all_log_odds']:.3f}",
+                    )
+                    logprob_metric_right.metric(
+                        "Local-router argmax match",
+                        "Yes" if is_router_argmax else "No",
+                        help=f"Local-router argmax candidate: `{argmax_tool}`.",
+                    )
+                    st.caption(
+                        f"{SAME_HF_MODEL_EXPLANATION} Loaded model: `{logprob_model_id}`. "
+                        "No second model is loaded for target-tool selection. Argument "
+                        "extraction was not executed; this run explains routing only."
+                    )
+
                 if final_answer_scorer_meta is not None:
-                    with st.expander("Final answer similarity details", expanded=False):
-                        diagnostics = interaction_order_diagnostics(
-                            ksii_explanation,
-                            full_value=full_score,
-                            empty_value=empty_score,
-                        )
-                        st.write(
-                            f"Embedding model: `{final_answer_scorer_meta['embedding_model_id']}`"
-                        )
-                        st.write("Normalized by empty-coalition raw similarity: `True`")
-                        empty_raw_similarity = final_answer_scorer_meta["empty_raw_similarity"]
-                        st.write(
-                            f"Raw empty-coalition similarity: `{empty_raw_similarity:.3f}`"
-                            if empty_raw_similarity is not None
-                            else "Raw empty-coalition similarity: not yet computed"
-                        )
-                        st.write(
-                            "Reused the existing Inference tab result as the reference answer: "
-                            f"`{final_answer_scorer_meta['reused_existing_inference']}`"
-                        )
-                        raw_full_similarity = (
-                            float(diagnostics["full_value"]) + float(empty_raw_similarity)
-                            if empty_raw_similarity is not None
-                            else None
-                        )
-                        diagnostic_frame = pd.DataFrame(
-                            [
-                                {
-                                    "quantity": "raw empty-coalition cosine similarity",
-                                    "value": empty_raw_similarity,
-                                },
-                                {
-                                    "quantity": "raw full-coalition cosine similarity",
-                                    "value": raw_full_similarity,
-                                },
-                                {
-                                    "quantity": "normalized full-coalition game value",
-                                    "value": diagnostics["full_value"],
-                                },
-                                {
-                                    "quantity": "sum of order-1 interaction values",
-                                    "value": diagnostics["order_1_sum"],
-                                },
-                                {
-                                    "quantity": "sum of unique order-2 pairwise interaction values",
-                                    "value": diagnostics["order_2_sum"],
-                                },
-                                {
-                                    "quantity": "k-SII efficiency residual",
-                                    "value": diagnostics["residual"],
-                                },
-                            ]
-                        )
-                        diagnostic_frame["value"] = diagnostic_frame["value"].map(
-                            lambda value: "n/a" if value is None else f"{float(value):.6f}"
-                        )
-                        st.dataframe(
-                            diagnostic_frame,
-                            use_container_width=True,
-                            hide_index=True,
-                        )
-                        if abs(diagnostics["residual"]) > EFFICIENCY_RESIDUAL_TOLERANCE:
-                            st.warning(
-                                "k-SII efficiency residual exceeds tolerance "
-                                f"{EFFICIENCY_RESIDUAL_TOLERANCE:g}: "
-                                f"{diagnostics['residual']:.6g}"
-                            )
-                        failed_coalition_rows = [
-                            row
-                            for row in llm_debug_outputs
-                            if row.get("execution_status") not in (None, "ok")
+                    st.markdown("**Final answer similarity details**")
+                    diagnostics = interaction_order_diagnostics(
+                        ksii_explanation,
+                        full_value=full_score,
+                        empty_value=empty_score,
+                    )
+                    st.write(f"Embedding model: `{final_answer_scorer_meta['embedding_model_id']}`")
+                    st.write("Normalized by empty-coalition raw similarity: `True`")
+                    empty_raw_similarity = final_answer_scorer_meta["empty_raw_similarity"]
+                    st.write(
+                        f"Raw empty-coalition similarity: `{empty_raw_similarity:.3f}`"
+                        if empty_raw_similarity is not None
+                        else "Raw empty-coalition similarity: not yet computed"
+                    )
+                    st.write(
+                        "Reused the existing agent result as the reference answer: "
+                        f"`{final_answer_scorer_meta['reused_existing_inference']}`"
+                    )
+                    raw_full_similarity = (
+                        float(diagnostics["full_value"]) + float(empty_raw_similarity)
+                        if empty_raw_similarity is not None
+                        else None
+                    )
+                    diagnostic_frame = pd.DataFrame(
+                        [
+                            {
+                                "quantity": "raw empty-coalition cosine similarity",
+                                "value": empty_raw_similarity,
+                            },
+                            {
+                                "quantity": "raw full-coalition cosine similarity",
+                                "value": raw_full_similarity,
+                            },
+                            {
+                                "quantity": "normalized full-coalition game value",
+                                "value": diagnostics["full_value"],
+                            },
+                            {
+                                "quantity": "sum of order-1 interaction values",
+                                "value": diagnostics["order_1_sum"],
+                            },
+                            {
+                                "quantity": "sum of unique order-2 pairwise interaction values",
+                                "value": diagnostics["order_2_sum"],
+                            },
+                            {
+                                "quantity": "k-SII efficiency residual",
+                                "value": diagnostics["residual"],
+                            },
                         ]
-                        if failed_coalition_rows:
-                            st.warning(
-                                f"{len(failed_coalition_rows)} of {len(llm_debug_outputs)} "
-                                "sampled coalitions did not produce a usable final answer "
-                                "(agent error or empty answer) and were scored with the "
-                                "configured fallback raw similarity instead of being embedded. "
-                                "See the model output diagnostics table above for per-coalition "
-                                "execution_status/execution_error."
-                            )
-                        else:
-                            st.caption("No coalition execution failures for this run.")
-                        st.markdown("**Reference final answer (full request)**")
-                        st.code(final_answer_scorer_meta["reference_answer"], language="text")
+                    )
+                    diagnostic_frame["value"] = diagnostic_frame["value"].map(
+                        lambda value: "n/a" if value is None else f"{float(value):.6f}"
+                    )
+                    st.dataframe(
+                        diagnostic_frame,
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+                    if abs(diagnostics["residual"]) > EFFICIENCY_RESIDUAL_TOLERANCE:
+                        st.warning(
+                            "k-SII efficiency residual exceeds tolerance "
+                            f"{EFFICIENCY_RESIDUAL_TOLERANCE:g}: "
+                            f"{diagnostics['residual']:.6g}"
+                        )
+                    failed_coalition_rows = [
+                        row
+                        for row in llm_debug_outputs
+                        if row.get("execution_status") not in (None, "ok")
+                    ]
+                    if failed_coalition_rows:
+                        st.warning(
+                            f"{len(failed_coalition_rows)} of {len(llm_debug_outputs)} "
+                            "sampled coalitions did not produce a usable final answer "
+                            "(agent error or empty answer) and were scored with the "
+                            "configured fallback raw similarity instead of being embedded. "
+                            "See the model output diagnostics table above for per-coalition "
+                            "execution_status/execution_error."
+                        )
+                    else:
+                        st.caption("No coalition execution failures for this run.")
+                    st.markdown("**Reference final answer (full request)**")
+                    st.code(final_answer_scorer_meta["reference_answer"], language="text")
+
                 if lexical_result is not None:
                     st.markdown("**Scorer comparison**")
                     comparison_rows = [
@@ -3054,8 +2931,8 @@ def main() -> None:
                             "scorer": primary_label,
                             "full_score": full_score,
                             "empty_score": empty_score,
-                            "top_segment": top_label,
-                            "top_attribution": top_score,
+                            "top_segment": result["top_label"],
+                            "top_attribution": result["top_score"],
                             "strongest_pair": pair_label,
                             "pair_value": pair_value,
                         },
@@ -3071,6 +2948,7 @@ def main() -> None:
                     ]
                     comparison_frame = pd.DataFrame(comparison_rows)
                     st.dataframe(comparison_frame, use_container_width=True, hide_index=True)
+
                 if show_scoring_prompt_preview:
                     st.markdown("**Scoring prompt preview**")
                     scoring_prompt = result.get("scoring_prompt")
@@ -3078,9 +2956,10 @@ def main() -> None:
                         st.code(scoring_prompt, language="text")
                     else:
                         st.caption(
-                            "A separate scoring-prompt preview is not available for this scoring "
-                            "backend."
+                            "A separate scoring-prompt preview is not available for this "
+                            "scoring backend."
                         )
+
                 if show_value_function_details:
                     st.markdown("**Value function details**")
                     st.write(
