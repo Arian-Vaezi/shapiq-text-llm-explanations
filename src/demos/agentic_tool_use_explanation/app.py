@@ -99,6 +99,14 @@ KSII_INDEX = "k-SII"
 KSII_MAX_ORDER = 2
 DELTA_STATUS_THRESHOLD = 0.01
 DEFAULT_MOCK_QUERY = "Will it rain in Berlin tomorrow morning?"
+# Display-only: per-tool icons for the XAI summary card and Agent Result cards.
+# Purely cosmetic -- has no effect on which tool is selected, scored, or explained.
+TOOL_ICONS = {
+    "weather_tool": "🌦️",
+    "calculator_tool": "🧮",
+    "web_search_tool": "🌐",
+    "no_tool": "💬",
+}
 FINAL_ANSWER_SIMILARITY_LABEL = "Final answer semantic similarity"
 LOGPROB_SCORER_LABEL = "Calibrated multiclass tool log-odds (HF local)"
 # Shared session-state key for the Explanation tab's "Scoring method" selectbox,
@@ -157,7 +165,7 @@ st.set_page_config(
 )
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading local HF router...")
 def load_local_hf_router(
     model_name: str,
     max_new_tokens: int,
@@ -183,7 +191,6 @@ def load_local_hf_router(
     return router
 
 
-@st.cache_resource
 def load_logprob_scorer(
     model_id: str,
     *,
@@ -217,7 +224,7 @@ def load_logprob_scorer(
     return scorer
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading segmentation model...")
 def load_semantic_segmenter(
     threshold: float,
     window: int,
@@ -232,13 +239,13 @@ def load_semantic_segmenter(
     )
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading segmentation model...")
 def load_linguistic_segmenter() -> LinguisticSegmenter:
     """Load and cache the optional spaCy linguistic segmenter."""
     return LinguisticSegmenter()
 
 
-@st.cache_resource
+@st.cache_resource(show_spinner="Loading embedding model...")
 def load_final_answer_embedder(model_id: str) -> SentenceTransformerAnswerEmbedder:
     """Load and cache the optional embedding model for the final-answer similarity scorer.
 
@@ -250,32 +257,255 @@ def load_final_answer_embedder(model_id: str) -> SentenceTransformerAnswerEmbedd
 
 CSS = """
 <style>
+.stApp {
+    background: #f8f6f0;
+}
 section[data-testid="stSidebar"] {
     background: #f7f5ef;
     border-right: 1px solid #ddd6c7;
 }
 .main .block-container {
-    max-width: 1180px;
+    max-width: 1220px;
     padding-top: 2rem;
 }
-.tool-title {
-    border-bottom: 1px solid #252525;
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.75rem;
+/* ---- App header: logo + title + subtitle -------------------------- */
+.app-header {
+    align-items: center;
+    display: flex;
+    gap: 0.95rem;
+    margin: 0 0 0.3rem 0;
 }
-.tool-title h1 {
+.app-logo {
+    align-items: center;
+    background: linear-gradient(135deg, #2d6f73 0%, #1a4245 100%);
+    border-radius: 11px;
+    box-shadow: 0 3px 10px rgba(45, 111, 115, 0.35);
+    color: #ffffff;
+    display: flex;
+    flex-shrink: 0;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+.app-header h1 {
     color: #1f1f1f;
-    font-family: Georgia, serif;
-    font-size: 2.15rem;
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1.08;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
     margin: 0;
 }
-.tool-title p {
-    color: #59544a;
-    font-size: 0.96rem;
-    margin: 0.45rem 0 0 0;
+.app-header p {
+    color: #6d6658;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.92rem;
+    margin: 0.25rem 0 0 0;
+}
+/* ---- Mode selector: two pill/card options -------------------------
+   st.radio's own DOM wrapper picks up `.st-key-agentic_mode_card_row`
+   (Streamlit's documented key-to-CSS-class mechanism) since the Python
+   API has no way to attach a literal class to an individual widget's
+   option labels. `.mode-card`/`.mode-card.selected` are defined as real,
+   reusable classes in parallel -- any element carrying them gets the
+   same look, they are not just inert placeholders. */
+.st-key-agentic_mode_card_row {
+    margin: 0.85rem 0 1rem 0;
+}
+.mode-card,
+.st-key-agentic_mode_card_row div[data-testid="stRadio"] label {
+    background: #ffffff !important;
+    border: 1.5px solid #ded6c4 !important;
+    border-radius: 12px !important;
+    padding: 0.75rem 1.05rem !important;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.mode-card.selected,
+.st-key-agentic_mode_card_row div[data-testid="stRadio"] label:has(input:checked),
+.st-key-agentic_mode_card_row div[data-testid="stRadio"] label:has([aria-checked="true"]) {
+    background: #eaf4f1 !important;
+    border-color: #2d6f73 !important;
+    font-weight: 700 !important;
+}
+/* ---- Shared input bar: request + example + run button ------------- */
+.input-bar,
+.st-key-agentic_input_bar {
+    background: #ffffff;
+    border: 1px solid #ded6c4;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(45, 41, 35, 0.06);
+    margin: 0 0 1.1rem 0;
+    padding: 1rem 1.1rem 0.7rem 1.1rem;
+}
+.input-bar-label {
+    color: #6d6658;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.3rem 0;
+    text-transform: uppercase;
+}
+.primary-run-button,
+.st-key-agentic_run_full_pipeline button {
+    background: #2f6fed !important;
+    border-color: #2f6fed !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+}
+.primary-run-button:hover,
+.st-key-agentic_run_full_pipeline button:hover {
+    background: #2558c4 !important;
+    border-color: #2558c4 !important;
+}
+/* ---- Agent Result: compact product-style cards --------------------- */
+.result-card {
+    background: #ffffff;
+    border: 1px solid #ded6c4;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(45, 41, 35, 0.06);
+    margin: 0.4rem 0 1.1rem 0;
+    padding: 1.1rem 1.3rem;
+}
+.result-card-header {
+    color: #1f1f1f;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0;
+}
+.result-card-header code {
+    background: #eaf4f1;
+    border-radius: 5px;
+    color: #1f554c;
+    padding: 0.08rem 0.4rem;
+}
+.result-card-subtitle {
+    color: #6d6658;
+    font-size: 0.84rem;
+    margin: 0.2rem 0 0.9rem 0;
+}
+.result-meta-row {
+    color: #403d37;
+    font-size: 0.86rem;
+    margin: 0.25rem 0;
+}
+.result-meta-row code {
+    background: #f3efe2;
+    border-radius: 4px;
+    padding: 0.05rem 0.35rem;
+}
+.probability-row {
+    align-items: center;
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: 8.5rem 1fr 3rem;
+    margin: 0.32rem 0;
+}
+.probability-label {
+    color: #403d37;
+    font-size: 0.84rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.probability-track {
+    background: #f0ece0;
+    border-radius: 999px;
+    height: 0.6rem;
+    overflow: hidden;
+    width: 100%;
+}
+.probability-fill {
+    background: #bcb5a2;
+    border-radius: 999px;
+    display: block;
+    height: 100%;
+}
+.probability-fill.selected {
+    background: linear-gradient(90deg, #2d6f73, #45a196);
+}
+.probability-value {
+    color: #403d37;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+.kv-table {
+    margin: 0.35rem 0 0.15rem 0;
+}
+.kv-row {
+    border-bottom: 1px solid #f0ece0;
+    display: grid;
+    gap: 0.6rem;
+    grid-template-columns: 8rem 1fr;
+    padding: 0.35rem 0;
+}
+.kv-row:last-child {
+    border-bottom: none;
+}
+.kv-row .kv-key {
+    color: #6d6658;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+.kv-row .kv-value {
+    color: #2d2923;
+    font-size: 0.88rem;
+}
+.agent-response-block {
+    background: #f9f7f0;
+    border-radius: 8px;
+    color: #2d2923;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-top: 0.3rem;
+    padding: 0.7rem 0.9rem;
+}
+.empty-state-card {
+    background: #fffdf8;
+    border: 1px dashed #ded6c4;
+    border-radius: 14px;
+    margin: 0.4rem 0 1.1rem 0;
+    padding: 1.7rem 1.4rem;
+    text-align: center;
+}
+.empty-state-card h3 {
+    color: #1f1f1f;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.1rem;
+    margin: 0 0 0.45rem 0;
+}
+.empty-state-card p {
+    color: #6d6658;
+    font-size: 0.9rem;
+    margin: 0 0 0.6rem 0;
+}
+.empty-state-card .pipeline-hint {
+    color: #8a8372;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+.error-card {
+    background: #fdf2f0;
+    border: 1px solid #e3b7ac;
+    border-left: 4px solid #b2472f;
+    border-radius: 10px;
+    margin: 0.4rem 0 1.1rem 0;
+    padding: 0.95rem 1.15rem;
+}
+.error-card h3 {
+    color: #7c2c1c;
+    font-size: 1rem;
+    margin: 0 0 0.3rem 0;
+}
+.error-card p {
+    color: #5c3a32;
+    font-size: 0.88rem;
+    margin: 0;
 }
 .scenario-panel {
     background: #fffef9;
@@ -317,30 +547,6 @@ section[data-testid="stSidebar"] {
     line-height: 1.45;
     padding-left: 0.9rem;
 }
-.metric-strip {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.75rem;
-    margin: 0.75rem 0 1.1rem 0;
-}
-.metric-card {
-    background: #fffdf8;
-    border: 1px solid #ded6c4;
-    border-radius: 6px;
-    padding: 0.75rem 0.9rem;
-}
-.metric-card span {
-    color: #6d6658;
-    display: block;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-}
-.metric-card strong {
-    color: #1f1f1f;
-    display: block;
-    font-size: 1.25rem;
-    margin-top: 0.2rem;
-}
 .section-label {
     color: #5f584b;
     font-size: 0.76rem;
@@ -370,37 +576,333 @@ section[data-testid="stSidebar"] {
     line-height: 1.4;
     margin: 0;
 }
-.verdict {
-    background: #1f2a28;
-    border-radius: 7px;
-    color: #f7f1e4;
+/* ---- XAI summary card: compact "why <tool>?" explanation ------------ */
+.xai-summary-card {
+    background: #ffffff;
+    border: 1px solid #ded6c4;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(45, 41, 35, 0.06);
+    column-gap: 1.3rem;
     display: grid;
-    gap: 1rem;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin: 0.4rem 0 1rem 0;
-    padding: 1rem;
+    grid-template-columns: minmax(110px, 0.8fr) minmax(240px, 1.7fr) minmax(230px, 1.2fr);
+    margin: 0.4rem 0 1.1rem 0;
+    padding: 1.1rem 1.3rem;
+    row-gap: 0.85rem;
 }
-.verdict-card {
-    border-left: 1px solid rgba(247, 241, 228, 0.22);
-    padding-left: 1rem;
+/* ---- Left: icon + "Why <tool>?" -------------------------------------- */
+.xai-summary-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
-.verdict-card:first-child {
-    border-left: 0;
-    padding-left: 0;
+.xai-summary-icon {
+    align-items: center;
+    background: linear-gradient(135deg, #2d6f73 0%, #1a4245 100%);
+    border-radius: 9px;
+    color: #ffffff;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    height: 34px;
+    justify-content: center;
+    line-height: 1;
+    width: 34px;
 }
-.verdict-card span {
-    color: #c8d3c7;
-    display: block;
+.xai-summary-title {
+    color: #1f1f1f;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0;
+}
+.xai-summary-title .target-highlight {
+    background: #eaf4f1;
+    border-radius: 5px;
+    color: #1f554c;
+    padding: 0.06rem 0.4rem;
+}
+/* ---- Middle: evidence chips + interpretation ------------------------- */
+.xai-summary-main {
+    border-left: 1px solid #ede7d8;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-left: 1.1rem;
+}
+.evidence-row {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 0.3rem 0;
+}
+.evidence-row-label {
+    color: #8a8372;
     font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    margin-bottom: 0.28rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
-.verdict-card strong {
-    color: #ffffff;
+.evidence-chip {
+    background: #f3efe2;
+    border-radius: 999px;
+    color: #403d37;
+    display: inline-block;
+    font-size: 0.82rem;
+    padding: 0.18rem 0.65rem;
+}
+.xai-summary-interpretation {
+    color: #403d37;
+    font-size: 0.88rem;
+    margin: 0.45rem 0 0 0;
+}
+/* ---- Right: prominent score metric cluster ---------------------------- */
+.xai-summary-metrics {
+    align-content: flex-start;
+    border-left: 1px solid #ede7d8;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-left: 1.1rem;
+}
+.xai-metric {
+    background: #fffdf8;
+    border: 1px solid #ded6c4;
+    border-radius: 10px;
+    flex: 1 1 88px;
+    min-width: 88px;
+    padding: 0.5rem 0.6rem;
+    text-align: center;
+}
+.xai-metric-label {
+    color: #8a8372;
     display: block;
-    font-size: 1.12rem;
-    line-height: 1.2;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.xai-metric-value {
+    color: #1f1f1f;
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-top: 0.2rem;
+}
+.xai-metric.delta {
+    background: #eaf4f1;
+    border-color: #2d6f73;
+}
+.xai-metric.delta .xai-metric-label {
+    color: #1f554c;
+}
+.xai-metric.delta .xai-metric-value {
+    color: #197a52;
+    font-size: 1.3rem;
+}
+/* ---- Secondary compact score recap, spans the full card width -------- */
+.xai-score-flow {
+    color: #6d6658;
+    font-size: 0.82rem;
+    grid-column: 1 / -1;
+}
+.xai-score-flow strong {
+    color: #403d37;
+}
+.xai-score-flow .delta-highlight {
+    color: #1f554c;
+    font-weight: 800;
+    margin-left: 0.5rem;
+}
+/* ---- Setup chips: compact user-facing run metadata ------------------ */
+.setup-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1rem 0;
+}
+.setup-chip {
+    background: #fffdf8;
+    border: 1px solid #ded6c4;
+    border-radius: 999px;
+    color: #403d37;
+    font-size: 0.82rem;
+    padding: 0.32rem 0.8rem;
+}
+.setup-chip strong {
+    color: #1f554c;
+    font-weight: 700;
+}
+/* ---- Player segmentation card ---------------------------------------- */
+.st-key-agentic_player_card,
+.player-card {
+    background: #ffffff;
+    border: 1px solid #ded6c4;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(45, 41, 35, 0.06);
+    margin: 0.4rem 0 1.1rem 0;
+    padding: 1.05rem 1.25rem 0.2rem 1.25rem;
+}
+.player-card-header {
+    color: #1f1f1f;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin: 0 0 0.75rem 0;
+}
+.player-chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 0.9rem;
+}
+.player-chip {
+    align-items: center;
+    background: #fffdf7;
+    border: 1px solid #d6cab2;
+    border-radius: 999px;
+    cursor: default;
+    display: inline-flex;
+    gap: 0.45rem;
+    max-width: 230px;
+    padding: 0.28rem 0.75rem 0.28rem 0.28rem;
+}
+.player-badge {
+    align-items: center;
+    background: linear-gradient(135deg, #2d6f73, #1a4245);
+    border-radius: 999px;
+    color: #ffffff;
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 800;
+    height: 22px;
+    justify-content: center;
+    min-width: 22px;
+    padding: 0 0.15rem;
+}
+.player-chip-text {
+    color: #403d37;
+    font-size: 0.84rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/* ---- Evidence cards: SV / k-SII ---------------------------------------- */
+.evidence-card,
+.st-key-agentic_sv_card,
+.st-key-agentic_ksii_card {
+    background: #ffffff;
+    border: 1px solid #ded6c4;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(45, 41, 35, 0.06);
+    padding: 1.05rem 1.2rem;
+}
+.evidence-card-header {
+    margin-bottom: 0.2rem;
+}
+.evidence-card-title {
+    color: #1f1f1f;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.02rem;
+    font-weight: 800;
+    margin: 0;
+}
+.evidence-card-caption {
+    color: #6d6658;
+    font-size: 0.82rem;
+    margin: 0.15rem 0 0.7rem 0;
+}
+.mini-table {
+    margin: 0.5rem 0 0.2rem 0;
+}
+.mini-table-row {
+    align-items: center;
+    border-bottom: 1px solid #f0ece0;
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.4rem 0.1rem;
+}
+.mini-table-row:last-child {
+    border-bottom: none;
+}
+.mini-table-row.header {
+    color: #8a8372;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.mini-table-row.sv-row {
+    grid-template-columns: 3.5rem 1fr 3.5rem;
+}
+.mini-table-row.ksii-row {
+    grid-template-columns: 4.5rem 1fr 3.2rem 5.5rem;
+}
+.mini-table-row .cell-segment {
+    color: #1f554c;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+.mini-table-row .cell-text {
+    color: #403d37;
+    font-size: 0.84rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.mini-table-row .cell-value {
+    color: #1f1f1f;
+    font-size: 0.86rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    text-align: right;
+}
+.type-pill {
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.08rem 0.55rem;
+    text-align: center;
+}
+.type-pill.complementary {
+    background: #eaf4f1;
+    color: #197a52;
+}
+.type-pill.redundant {
+    background: #eaf1f7;
+    color: #2b5f8a;
+}
+.player-legend {
+    background: #fffdf8;
+    border: 1px solid #ede7d8;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.9rem;
+    margin: 0.6rem 0;
+    padding: 0.55rem 0.75rem;
+}
+.player-legend-row {
+    color: #403d37;
+    font-size: 0.78rem;
+}
+.player-legend-row strong {
+    color: #1f554c;
+}
+.interpretation-card {
+    background: #fffdf8;
+    border: 1px solid #ded6c4;
+    border-left: 4px solid #b15d3b;
+    border-radius: 10px;
+    color: #2d2923;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    margin: 0.3rem 0 1rem 0;
+    padding: 0.9rem 1.15rem;
 }
 .note-box {
     background: #fffdf7;
@@ -453,48 +955,15 @@ section[data-testid="stSidebar"] {
     line-height: 1.42;
     margin: 0;
 }
-.setup-line {
-    background: #fffdf8;
-    border: 1px solid #ded6c4;
-    border-radius: 7px;
-    color: #2d2923;
-    margin: 0 0 1rem 0;
-    padding: 0.8rem 0.95rem;
-}
-.setup-line code {
-    background: #efe8d9;
-    border-radius: 4px;
-    padding: 0.08rem 0.22rem;
-}
-.segment-chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0 0 0.9rem 0;
-}
-.segment-chip {
-    background: #fffdf7;
-    border: 1px solid #d6cab2;
-    border-left: 4px solid #b15d3b;
-    border-radius: 999px;
-    color: #403d37;
-    font-size: 0.85rem;
-    max-width: 360px;
-    padding: 0.35rem 0.75rem 0.35rem 0.65rem;
-}
-.segment-chip strong {
-    color: #222;
-    margin-right: 0.3rem;
-}
 @media (max-width: 850px) {
     .scenario-panel,
     .mock-chat,
-    .metric-strip,
-    .verdict {
+    .xai-summary-card {
         grid-template-columns: 1fr;
     }
     .scenario-hint,
-    .verdict-card {
+    .xai-summary-main,
+    .xai-summary-metrics {
         border-left: 0;
         padding-left: 0;
     }
@@ -523,6 +992,20 @@ def scenario_prompt_label(trace_name: str) -> str:
     """Display a sample scenario by its user prompt instead of its internal name."""
     user_prompt = " ".join(SAMPLE_TRACES[trace_name]["user_segments"])
     return truncate_label(user_prompt)
+
+
+def short_player_label(segment: ToolUseSegment, max_chars: int = 18) -> str:
+    """Build a short, text-aware label like 'U2: it rain' for plot axes.
+
+    Presentation-only: combines the player's short id with a truncated preview of its
+    underlying text, so plot axes are self-explanatory without requiring the reader to
+    cross-reference the player chips separately. Never used as a lookup key or player
+    identity -- only as display text for matplotlib tick labels.
+    """
+    preview = " ".join(segment.text.split())
+    if len(preview) > max_chars:
+        preview = preview[: max_chars - 1].rstrip() + "…"
+    return f"{segment.label}: {preview}"
 
 
 def format_attribution(value: float, digits: int = 3) -> str:
@@ -972,13 +1455,22 @@ def polish_bar(
     ax: plt.Axes,
     *,
     xlabel: str = "Target-tool attribution",
-    title: str = "Individual segment effects — Shapley Values (SV)",
+    title: str = "",
+    figsize: tuple[float, float] = (5.2, 2.6),
 ) -> plt.Figure:
-    """Make package bar plot fit the Streamlit layout."""
-    fig.set_size_inches(6.2, 3.7)
+    """Make package bar plot fit a compact Streamlit layout (e.g. one of two side-by-side columns).
+
+    ``title`` defaults to empty: the Streamlit section header directly above the plot
+    (e.g. "2. Individual segment effects -- SV") already states what the plot is, so an
+    internal matplotlib title would just repeat it. Pass a non-empty ``title`` to opt
+    back into an in-plot title for a call site without its own section header.
+    """
+    fig.set_size_inches(*figsize)
     ax.set_title("", loc="center")
-    ax.set_title(title, loc="left", fontsize=12, pad=8)
-    ax.set_xlabel(xlabel)
+    if title:
+        ax.set_title(title, loc="left", fontsize=9, pad=5)
+    ax.set_xlabel(xlabel, fontsize=8)
+    ax.tick_params(axis="both", labelsize=7)
     ax.grid(axis="x", color="#d7dfdf", alpha=0.65, linewidth=0.8)
     ax.set_axisbelow(True)
     ax.spines["top"].set_visible(False)
@@ -996,7 +1488,7 @@ def polish_bar(
             f"{width:.2f}",
             va="center",
             ha=ha,
-            fontsize=8,
+            fontsize=7,
             color="#403d37",
         )
 
@@ -1009,18 +1501,22 @@ def polish_heatmap(
     ax: plt.Axes,
     segments: list[ToolUseSegment],
     *,
-    title: str = "Pairwise segment interactions — k-SII, order 2",
+    title: str = "",
+    figsize: tuple[float, float] = (4.3, 3.2),
 ) -> plt.Figure:
-    """Make package heatmap fit the Streamlit layout."""
-    fig.set_size_inches(6.0, 4.7)
+    """Make package heatmap fit a compact Streamlit layout (e.g. one of two side-by-side columns).
+
+    ``title`` defaults to empty: the Streamlit section header directly above the plot
+    (e.g. "3. Pairwise interactions -- k-SII") already states what the plot is, so an
+    internal matplotlib title would just repeat it. Pass a non-empty ``title`` to opt
+    back into an in-plot title for a call site without its own section header.
+    """
+    fig.set_size_inches(*figsize)
     ax.set_title("", loc="center")
-    ax.set_title(
-        title,
-        loc="left",
-        fontsize=12,
-        pad=8,
-    )
-    ax.tick_params(axis="x", labelrotation=30)
+    if title:
+        ax.set_title(title, loc="left", fontsize=9, pad=5)
+    ax.tick_params(axis="x", labelrotation=30, labelsize=6.5)
+    ax.tick_params(axis="y", labelsize=6.5)
 
     if segments:
         ax.add_patch(
@@ -1340,54 +1836,200 @@ def softmax_dict(scores: dict[str, float]) -> dict[str, float]:
     return {tool: value / total for tool, value in exp_scores.items()}
 
 
-def build_takeaway_sentence(
+def build_probability_bar_html(tool_name: str, probability: float, *, is_selected: bool) -> str:
+    """Render one compact horizontal probability bar row as HTML.
+
+    Presentation-only: formats an already-computed probability (e.g. from
+    ``softmax_dict``) as a labeled bar, in place of a full-size ``st.bar_chart`` +
+    dataframe pair. Does not compute or alter the probability itself.
+    """
+    width_pct = max(0.0, min(100.0, float(probability) * 100))
+    fill_class = "probability-fill selected" if is_selected else "probability-fill"
+    return (
+        "<div class='probability-row'>"
+        f"<span class='probability-label'>{escape(str(tool_name))}</span>"
+        "<span class='probability-track'>"
+        f"<span class='{fill_class}' style='width:{width_pct:.1f}%'></span>"
+        "</span>"
+        f"<span class='probability-value'>{float(probability):.2f}</span>"
+        "</div>"
+    )
+
+
+def build_kv_table_html(items: dict[str, object]) -> str:
+    """Render a compact two-column key/value table as HTML (e.g. tool arguments).
+
+    Presentation-only: formats an already-available mapping (e.g.
+    ``inference_result.tool_arguments``); returns an empty string for an empty
+    mapping so callers can show their own "no arguments" message instead.
+    """
+    if not items:
+        return ""
+    rows = "".join(
+        "<div class='kv-row'>"
+        f"<span class='kv-key'>{escape(str(key))}</span>"
+        f"<span class='kv-value'>{escape(str(value))}</span>"
+        "</div>"
+        for key, value in items.items()
+    )
+    return f"<div class='kv-table'>{rows}</div>"
+
+
+def build_player_chip_html(segment: ToolUseSegment, *, max_chars: int = 30) -> str:
+    """Render one player chip: a small colored player-id badge plus a text preview.
+
+    Presentation-only: truncates the segment's own text for display (via
+    ``truncate_label``) and carries the full text in a ``title`` tooltip attribute,
+    so long segments degrade gracefully without hiding the underlying content.
+    """
+    preview = truncate_label(segment.text, max_length=max_chars)
+    return (
+        f'<span class="player-chip" title="{escape(segment.text)}">'
+        f'<span class="player-badge">{escape(segment.label)}</span>'
+        f'<span class="player-chip-text">{escape(preview)}</span>'
+        "</span>"
+    )
+
+
+def build_sv_mini_table_html(rows: pd.DataFrame) -> str:
+    """Render a compact Segment/Text/SV mini-table as HTML rows.
+
+    Presentation-only: the caller passes an already-sliced top-N frame (e.g.
+    ``attribution_frame.head(3)``); this only formats it, it does not rank or select.
+    """
+    header = (
+        "<div class='mini-table-row sv-row header'>"
+        "<span>Segment</span><span>Text</span><span>SV</span></div>"
+    )
+    body_rows = "".join(
+        "<div class='mini-table-row sv-row'>"
+        f"<span class='cell-segment'>{escape(str(row['segment']))}</span>"
+        f"<span class='cell-text' title='{escape(str(row['text']))}'>"
+        f"{escape(truncate_label(str(row['text']), max_length=42))}</span>"
+        f"<span class='cell-value'>{format_attribution(float(row['attribution']))}</span>"
+        "</div>"
+        for _, row in rows.iterrows()
+    )
+    return f"<div class='mini-table'>{header}{body_rows}</div>"
+
+
+def build_ksii_mini_table_html(rows: list[dict[str, object]]) -> str:
+    """Render a compact Pair/Text/k-SII/Type mini-table as HTML rows, with a colored type pill.
+
+    Presentation-only: the caller passes an already-ranked list of pairwise-interaction
+    rows (from ``top_pairwise_interactions``, sliced or not by the caller); this only
+    formats it, it does not rank, select, or compute k-SII values.
+    """
+    header = (
+        "<div class='mini-table-row ksii-row header'>"
+        "<span>Pair</span><span>Text</span><span>k-SII</span><span>Type</span></div>"
+    )
+    body_rows = "".join(
+        "<div class='mini-table-row ksii-row'>"
+        f"<span class='cell-segment'>{escape(str(row['segment_i']))} + "
+        f"{escape(str(row['segment_j']))}</span>"
+        f"<span class='cell-text' title='{escape(str(row['text_i']))} + "
+        f"{escape(str(row['text_j']))}'>"
+        f"{escape(truncate_label(str(row['text_i']), max_length=18))} + "
+        f"{escape(truncate_label(str(row['text_j']), max_length=18))}</span>"
+        f"<span class='cell-value'>{format_attribution(float(row['value']))}</span>"
+        f"<span class='type-pill {escape(str(row['type']))}'>{escape(str(row['type']))}</span>"
+        "</div>"
+        for row in rows
+    )
+    return f"<div class='mini-table'>{header}{body_rows}</div>"
+
+
+def build_player_legend_html(segments: list[ToolUseSegment], *, max_chars: int = 34) -> str:
+    """Render a compact 'U1 = text' legend mapping bare player ids to their segment text.
+
+    Presentation-only: used alongside a heatmap plotted with bare U-labels, so the
+    reader can still map each axis tick back to its underlying text.
+    """
+    rows = "".join(
+        f"<span class='player-legend-row'><strong>{escape(segment.label)}</strong> = "
+        f"{escape(truncate_label(segment.text, max_length=max_chars))}</span>"
+        for segment in segments
+    )
+    return f"<div class='player-legend'>{rows}</div>"
+
+
+def build_interaction_interpretation(
     *,
-    target_tool: str,
-    attribution_frame: pd.DataFrame,
     pair_label: str,
     pair_value: float,
+    top_pairs: list[dict[str, object]],
 ) -> str:
-    """Generate a conservative one-sentence takeaway from already-computed SV/k-SII results.
+    """Generate the final plain-language interpretation of the strongest k-SII interaction.
 
-    Uses only the top Shapley Value segment(s) and the strongest k-SII pair already
-    computed for this run as a template -- it does not run any separate free-form
-    generation step.
+    Uses only the already-computed strongest pair (``pair_label``/``pair_value``) and its
+    text preview from ``top_pairs`` (the same ranked list used for the k-SII mini-table) --
+    it does not run any separate free-form generation step or recompute any interaction.
+
+    Returns HTML (segment text is escaped) meant for embedding via
+    ``st.markdown(..., unsafe_allow_html=True)``, not markdown source.
     """
-    if attribution_frame.empty:
+    if not top_pairs or pair_label == "No pair":
         return (
-            f"No individual segment attributions are available to summarize the "
-            f"`{target_tool}` decision."
+            "Only one segment was found for this request, so no pairwise interaction "
+            "could be evaluated."
         )
-
-    positive = attribution_frame[attribution_frame["attribution"] > 0]
-    driver_frame = positive if not positive.empty else attribution_frame
-    driver_labels = list(driver_frame["segment"].head(2))
-    driver_text = " and ".join(driver_labels) if driver_labels else "no single segment"
-
-    if pair_label == "No pair" or abs(pair_value) < 0.03:
+    strongest = top_pairs[0]
+    pair_text = f"“{escape(str(strongest['text_i']))}” + “{escape(str(strongest['text_j']))}”"
+    pair_label_html = escape(pair_label)
+    if abs(pair_value) < 0.03:
         return (
-            f"The decision is mainly driven by {driver_text}. No pairwise interaction is "
-            f"strong enough to stand out, so individual segment effects dominate the "
-            f"`{target_tool}` decision."
+            f"<strong>No dominant pairwise interaction was detected</strong> (strongest pair "
+            f"<code>{pair_label_html}</code>, k-SII = {pair_value:+.3f}). The decision is "
+            "explained mostly by individual segment effects rather than by how segments combine."
         )
-    relation = "jointly strengthen" if pair_value > 0 else "are partly redundant for"
+    if pair_value > 0:
+        return (
+            f"<strong>Strongest complementary interaction: {pair_label_html}</strong> -- "
+            f"{pair_text} contribute more support together (k-SII = {pair_value:+.3f}) than "
+            "the sum of their individual effects would predict: the two segments reinforce "
+            "each other."
+        )
     return (
-        f"The decision is mainly driven by {driver_text}. The strongest interaction is "
-        f"{pair_label}, suggesting these segments {relation} the `{target_tool}` decision."
+        f"<strong>Strongest redundant interaction: {pair_label_html}</strong> -- "
+        f"{pair_text} contribute less support together (k-SII = {pair_value:+.3f}) than "
+        "the sum of their individual effects would predict: the segments carry overlapping "
+        "evidence."
     )
 
 
 def main() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="tool-title">
-            <h1>Agentic Tool-Use Explanation</h1>
-            <p>Explain why an agent selected a tool by attributing the decision to user-request segments.</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+
+    # ------------------------------------------------------------------
+    # Header: logo + title + subtitle (left), developer mode toggle (right).
+    # The toggle is a real Streamlit widget, so it cannot live inside the
+    # hand-authored HTML on the left -- st.columns keeps them on one visual
+    # row instead.
+    # ------------------------------------------------------------------
+    header_left, header_right = st.columns([5, 1], vertical_alignment="center")
+    with header_left:
+        st.markdown(
+            """
+            <div class="app-header">
+                <div class="app-logo">T</div>
+                <div>
+                    <h1>Agentic Tool-Use Explanation</h1>
+                    <p>Explain why an agent selected a tool by attributing the decision to
+                    user-request segments.</p>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    with header_right:
+        developer_mode = st.toggle(
+            "Developer mode",
+            value=False,
+            key="agentic_developer_mode",
+            help="Show segmentation, scorer, and raw-diagnostic controls for debugging.",
+        )
+
     if "has_run" not in st.session_state:
         st.session_state.has_run = False
     if "result" not in st.session_state:
@@ -1417,11 +2059,14 @@ def main() -> None:
     trace_name = "Custom request"
 
     # ------------------------------------------------------------------
-    # 1. Top-level mode selector + developer mode toggle
+    # Mode selector: HF Local vs. API Agent, styled as two pill/cards.
+    # st.container(key=...) is the only way to get a real, stable DOM
+    # wrapper around a widget (a hand-written <div> in st.markdown would
+    # not actually nest the radio inside it -- each Streamlit call renders
+    # as its own sibling element), so the pill/card CSS targets the
+    # `st-key-agentic_mode_card_row` class Streamlit derives from `key=`.
     # ------------------------------------------------------------------
-    mode_col, dev_col = st.columns([3, 1])
-    with mode_col:
-        st.markdown('<div class="section-label">Explanation mode</div>', unsafe_allow_html=True)
+    with st.container(key="agentic_mode_card_row"):
         explanation_mode = st.radio(
             "Explanation mode",
             ["HF Local", "API Agent"],
@@ -1432,14 +2077,6 @@ def main() -> None:
             horizontal=True,
             key="agentic_explanation_mode",
             label_visibility="collapsed",
-        )
-    with dev_col:
-        st.markdown('<div class="section-label">&nbsp;</div>', unsafe_allow_html=True)
-        developer_mode = st.toggle(
-            "Developer mode",
-            value=False,
-            key="agentic_developer_mode",
-            help="Show segmentation, scorer, and raw-diagnostic controls for debugging.",
         )
 
     inference_backend = "HF local" if explanation_mode == "HF Local" else "Groq"
@@ -1464,59 +2101,82 @@ def main() -> None:
             st.warning("GROQ_API_KEY is not set. Add it to run Groq inference.")
 
     # ------------------------------------------------------------------
-    # 2. Shared input area
+    # Shared input bar: request + example + run button, grouped into one
+    # bordered/shadowed container (see the mode-selector comment above for
+    # why st.container(key=...) is what actually makes this one visual bar).
     # ------------------------------------------------------------------
-    st.markdown("### User request")
-    st.text_area(
-        "User request",
-        height=96,
-        key="agentic_request_text",
-        label_visibility="collapsed",
-        help=(
-            "This preview chooses a tool from the fixed context and request. "
-            "It does not call the selected tool."
-        ),
-    )
-    user_request = st.session_state["agentic_request_text"]
-    trace = build_mock_trace(user_request)
-    system_segments = build_segments(trace["system_segments"], "system")
-    system_prompt = build_system_prompt(system_segments)
-    tool_context = format_tool_context(TOOLS)
+    with st.container(key="agentic_input_bar"):
+        input_col, example_col, button_col = st.columns([3, 1.3, 1.4], vertical_alignment="bottom")
+        with input_col:
+            st.markdown('<div class="input-bar-label">User request</div>', unsafe_allow_html=True)
+            st.text_area(
+                "User request",
+                height=96,
+                key="agentic_request_text",
+                label_visibility="collapsed",
+                help=(
+                    "This preview chooses a tool from the fixed context and request. "
+                    "It does not call the selected tool."
+                ),
+            )
+        user_request = st.session_state["agentic_request_text"]
+        trace = build_mock_trace(user_request)
+        system_segments = build_segments(trace["system_segments"], "system")
+        system_prompt = build_system_prompt(system_segments)
+        tool_context = format_tool_context(TOOLS)
 
-    def apply_selected_example() -> None:
-        selected = st.session_state.get("agentic_try_example_select")
-        if selected and selected != example_placeholder:
-            example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
-            st.session_state["agentic_pending_example_request"] = example_request
+        def apply_selected_example() -> None:
+            selected = st.session_state.get("agentic_try_example_select")
+            if selected and selected != example_placeholder:
+                example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
+                st.session_state["agentic_pending_example_request"] = example_request
 
-    example_options = [example_placeholder, *list(SAMPLE_TRACES)]
-    st.selectbox(
-        "Try example",
-        example_options,
-        format_func=lambda name: (
-            name if name == example_placeholder else scenario_prompt_label(name)
-        ),
-        key="agentic_try_example_select",
-        on_change=apply_selected_example,
-    )
+        example_options = [example_placeholder, *list(SAMPLE_TRACES)]
+        with example_col:
+            st.markdown('<div class="input-bar-label">Try example</div>', unsafe_allow_html=True)
+            st.selectbox(
+                "Try example",
+                example_options,
+                format_func=lambda name: (
+                    name if name == example_placeholder else scenario_prompt_label(name)
+                ),
+                key="agentic_try_example_select",
+                on_change=apply_selected_example,
+                label_visibility="collapsed",
+            )
+        with button_col:
+            st.markdown('<div class="input-bar-label">&nbsp;</div>', unsafe_allow_html=True)
+            run_full_pipeline_clicked = st.button(
+                "▶ Run full pipeline",
+                type="primary",
+                key="agentic_run_full_pipeline",
+                use_container_width=True,
+                help="Runs the agent, then prepares the shapiq explanation for the selected tool.",
+            )
     if st.session_state.get("agentic_pending_example_request") is not None:
         st.rerun()
 
-    run_full_pipeline_clicked = st.button(
-        "Run full pipeline",
-        type="primary",
-        key="agentic_run_full_pipeline",
-        use_container_width=True,
-        help="Runs the agent, then prepares the shapiq explanation for the selected tool.",
+    # Includes inference_backend/inference_model_name/explanation_mode so that switching
+    # the HF model (e.g. 1.5B -> 3B) or the mode itself invalidates the previous agent
+    # result exactly like changing the request text does -- otherwise a stale
+    # `agentic_inferred_tool` from the old model can survive into the next run.
+    current_inference_signature = (
+        user_request,
+        system_prompt,
+        tool_context,
+        inference_backend,
+        inference_model_name,
+        explanation_mode,
     )
-
-    current_inference_signature = (user_request, system_prompt, tool_context)
     if st.session_state.get("agentic_inference_signature") != current_inference_signature:
         st.session_state["agentic_inference_signature"] = current_inference_signature
         st.session_state["agentic_inferred_tool"] = None
         st.session_state["agentic_inference_result"] = None
         st.session_state["agentic_inference_backend"] = None
         st.session_state["agentic_inference_model"] = None
+        st.session_state.has_run = False
+        st.session_state.result = None
+        st.session_state.result_signature = None
 
     # ------------------------------------------------------------------
     # 6. Developer mode: grouped controls (hidden entirely when OFF)
@@ -1536,7 +2196,12 @@ def main() -> None:
     )
 
     scorer_backend_key = SCORER_BACKEND_SESSION_KEY
-    logprob_model_id = DEFAULT_LOGPROB_MODEL_ID
+    # Always the current HF model selection, regardless of Developer mode: this is what
+    # the LOGPROB_SCORER_LABEL explanation scorer loads, and it must never silently stay
+    # on a stale default (e.g. after the user switches HF models with Developer mode
+    # off) -- otherwise the explanation step's classifier can disagree with the agent
+    # step's, which used `inference_model_name` directly.
+    logprob_model_id = st.session_state.get(HF_MODEL_ID_SESSION_KEY, DEFAULT_LOGPROB_MODEL_ID)
     max_pairs_per_batch = 1
     router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
     soft_vote_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
@@ -1628,9 +2293,8 @@ def main() -> None:
                 key=scorer_backend_key,
             )
             if scorer_backend == LOGPROB_SCORER_LABEL:
-                logprob_model_id = st.session_state.get(
-                    HF_MODEL_ID_SESSION_KEY, DEFAULT_LOGPROB_MODEL_ID
-                )
+                # `logprob_model_id` is already set above from HF_MODEL_ID_SESSION_KEY,
+                # unconditional on Developer mode -- just display it here.
                 st.caption(f"Inherited from HF model selection: `{logprob_model_id}`")
                 st.caption(SAME_HF_MODEL_EXPLANATION)
                 max_pairs_per_batch = st.number_input(
@@ -1816,8 +2480,12 @@ def main() -> None:
         st.session_state["agentic_inferred_tool"] = (
             inference_result.selected_tool if inference_result.selected_tool in TOOLS else None
         )
+        # Hard-reset any previous explanation before computing the new one: a fresh
+        # agent result must never be paired with a stale XAI result computed for a
+        # different backend/model/tool (e.g. after switching the HF model).
         st.session_state.has_run = False
         st.session_state.result = None
+        st.session_state.result_signature = None
         st.session_state.pending_run = True
         st.rerun()
 
@@ -1830,76 +2498,141 @@ def main() -> None:
     # 4. Tab 1: Agent Result
     # ------------------------------------------------------------------
     with agent_tab:
-        st.markdown('<div class="section-label">Agent Result</div>', unsafe_allow_html=True)
         inference_result = st.session_state.get("agentic_inference_result")
+
         if inference_result is None:
-            st.info("Click **Run full pipeline** above to run the agent and select a tool.")
+            st.markdown(
+                """
+                <div class="empty-state-card">
+                    <h3>Run the agent first</h3>
+                    <p>Click <strong>Run full pipeline</strong> to select a tool and prepare
+                    the explanation.</p>
+                    <div class="pipeline-hint">User request &rarr; tool decision &rarr;
+                    XAI explanation</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
         else:
             inference_error = getattr(inference_result, "error", None)
-            if inference_error:
-                st.warning(inference_error)
             selected_tool = getattr(inference_result, "selected_tool", None)
             result_backend = getattr(inference_result, "backend", inference_backend)
             result_model = getattr(inference_result, "model", inference_model_name)
+            selected_tool_display = escape(str(selected_tool or "No tool selected"))
+            selected_tool_icon = TOOL_ICONS.get(selected_tool, "?")
 
-            if result_backend == "HF local":
-                st.metric("Model routed to", selected_tool or "No tool selected")
+            if inference_error:
+                st.markdown(
+                    f"""
+                    <div class="error-card">
+                        <h3>Agent run failed</h3>
+                        <p>{escape(str(inference_error))}</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            elif result_backend == "HF local":
                 tool_scores = getattr(inference_result, "tool_scores", None)
                 if tool_scores:
                     probabilities = softmax_dict(tool_scores)
-                    prob_frame = pd.DataFrame(
-                        [
-                            {"tool": tool_name, "probability": probabilities.get(tool_name, 0.0)}
-                            for tool_name in TOOLS
-                        ]
-                    ).sort_values("probability", ascending=False)
-                    st.bar_chart(prob_frame.set_index("tool"), use_container_width=True)
-                    st.dataframe(
-                        prob_frame.assign(
-                            probability=prob_frame["probability"].map(lambda v: f"{v:.3f}")
-                        ),
-                        use_container_width=True,
-                        hide_index=True,
+                    ranked_tools = sorted(
+                        TOOLS, key=lambda name: probabilities.get(name, 0.0), reverse=True
                     )
-                st.caption(
-                    "Decision and explanation use the same local HF model and calibrated "
-                    "log-odds scorer."
+                    probability_rows_html = "".join(
+                        build_probability_bar_html(
+                            tool_name,
+                            probabilities.get(tool_name, 0.0),
+                            is_selected=tool_name == selected_tool,
+                        )
+                        for tool_name in ranked_tools
+                    )
+                else:
+                    probability_rows_html = (
+                        "<p class='result-meta-row'>No calibrated probability distribution "
+                        "is available for this run.</p>"
+                    )
+                st.markdown(
+                    f"""
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            {selected_tool_icon} Model routed to: <code>{selected_tool_display}</code>
+                        </div>
+                        <div class="result-card-subtitle">Local HF router decision</div>
+                        {probability_rows_html}
+                        <p class="result-meta-row" style="margin-top:0.7rem;">
+                            Decision and explanation use the same local HF model and
+                            calibrated log-odds scorer.
+                        </p>
+                        <div class="result-meta-row">
+                            Model: <code>{escape(str(result_model))}</code>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
                 )
             else:
-                st.write("**Backend:** Groq")
-                st.write(f"**Model:** `{result_model}`")
-                st.metric("Selected tool", selected_tool or "No tool selected")
-                st.markdown("**Tool arguments**")
-                st.json(getattr(inference_result, "tool_arguments", {}))
+                tool_arguments = getattr(inference_result, "tool_arguments", {}) or {}
+                kv_html = build_kv_table_html(tool_arguments) or (
+                    "<p class='result-meta-row'>No structured tool arguments returned.</p>"
+                )
                 assistant_message = (
                     getattr(inference_result, "agent_response", "")
                     or getattr(inference_result, "assistant_answer", "")
                     or getattr(inference_result, "final_answer", "")
                     or f"I recommend `{selected_tool}` for this request."
                 )
-                st.markdown("**Agent response**")
-                st.write(assistant_message)
+                st.markdown(
+                    f"""
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            {selected_tool_icon} Groq selected: <code>{selected_tool_display}</code>
+                        </div>
+                        <div class="result-card-subtitle">Black-box API agent trajectory</div>
+                        <div class="result-meta-row">Backend: <code>Groq</code></div>
+                        <div class="result-meta-row">
+                            Model: <code>{escape(str(result_model))}</code>
+                        </div>
+                        <div class="result-meta-row">
+                            Selected tool: <code>{selected_tool_display}</code>
+                        </div>
+                        <p class="result-meta-row" style="margin-top:0.7rem;">
+                            <strong>Tool arguments</strong>
+                        </p>
+                        {kv_html}
+                        <p class="result-meta-row" style="margin-top:0.7rem;">
+                            <strong>Agent response</strong>
+                        </p>
+                        <div class="agent-response-block">
+                            {escape(str(assistant_message))}
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
 
             if developer_mode:
-                with st.expander("Raw backend diagnostics (agent)", expanded=False):
+                with st.expander("Raw backend diagnostics", expanded=False):
                     st.write(f"Backend: `{result_backend}`")
                     st.write(f"Model: `{result_model}`")
-                    st.markdown("**Tool arguments**")
+                    st.markdown("**Raw tool arguments**")
                     st.json(getattr(inference_result, "tool_arguments", {}))
                     raw_trace = getattr(inference_result, "raw_trace", None)
-                    if raw_trace is None:
-                        raw_trace = {
-                            "debug_prompt": getattr(inference_result, "debug_prompt", None),
-                            "raw_response": getattr(inference_result, "raw_response", ""),
-                        }
-                    st.json(raw_trace)
+                    if raw_trace is not None:
+                        st.markdown("**Raw trace**")
+                        st.json(raw_trace)
+                    debug_prompt = getattr(inference_result, "debug_prompt", None)
+                    if debug_prompt is not None:
+                        st.markdown("**Debug prompt**")
+                        st.code(str(debug_prompt), language="text")
+                    raw_response = getattr(inference_result, "raw_response", None)
+                    if raw_response:
+                        st.markdown("**Raw response**")
+                        st.code(str(raw_response), language="text")
 
     # ------------------------------------------------------------------
     # 5. Tab 2: XAI Explanation
     # ------------------------------------------------------------------
     with xai_tab:
-        st.markdown('<div class="section-label">XAI Explanation</div>', unsafe_allow_html=True)
-
         try:
             if segmenter_choice == "Linguistic (spaCy chunking)":
                 segmenter = load_linguistic_segmenter()
@@ -1920,20 +2653,6 @@ def main() -> None:
         labels = [segment.label for segment in user_segments]
         using_exact_computation = len(user_segments) <= MAX_EXACT_DEMO_PLAYERS
         budget = budget_for_demo(len(user_segments)) if not using_exact_computation else None
-
-        if developer_mode:
-            if using_exact_computation:
-                coalition_count = 2 ** len(user_segments)
-                st.caption(
-                    "Algorithm: `shapiq ExactComputer` "
-                    f"(exact evaluation: `{coalition_count}` / `{coalition_count}` coalitions)"
-                )
-            else:
-                st.caption(
-                    f"`{len(user_segments)}` players exceeds the exact limit of "
-                    f"`{MAX_EXACT_DEMO_PLAYERS}`. Algorithm: official shapiq approximation, "
-                    f"budget: `{budget}` auto."
-                )
 
         if len(user_segments) < 1:
             st.warning("Add a user request with at least one segment.")
@@ -1988,6 +2707,8 @@ def main() -> None:
         )
         signature = (
             trace_name,
+            inference_backend,
+            inference_model_name,
             user_request,
             signature_target,
             scorer_backend,
@@ -2023,6 +2744,8 @@ def main() -> None:
                 target_tool = None
                 st.session_state.result_signature = (
                     trace_name,
+                    inference_backend,
+                    inference_model_name,
                     user_request,
                     "__pending_target__",
                     scorer_backend,
@@ -2045,109 +2768,9 @@ def main() -> None:
                     tuple(semantic_user_texts),
                 )
 
-        is_final_answer_similarity_scorer = scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL
-        if is_final_answer_similarity_scorer:
-            reference_answer_preview = None
-            if isinstance(result, dict):
-                final_answer_scorer_meta_preview = result.get("final_answer_scorer_meta")
-                if final_answer_scorer_meta_preview:
-                    reference_answer_preview = truncate_label(
-                        final_answer_scorer_meta_preview["reference_answer"],
-                        max_length=96,
-                    )
-            explaining_value = reference_answer_preview or "Pending (final-answer similarity)"
-        else:
-            explaining_value = target_tool if target_tool is not None else "Pending"
-
-        # ---- Compact explanation setup panel ----
-        st.markdown(
-            f"""
-            <div class="setup-line">
-                <strong>Explaining:</strong> <code>{escape(str(explaining_value))}</code><br>
-                <strong>Target source:</strong> {escape(target_source)}<br>
-                <strong>Players:</strong> user-request segments<br>
-                <strong>Fixed context:</strong> system prompt + tool definitions<br>
-                <strong>Masking:</strong> remove absent segments<br>
-                <strong>Individual effects:</strong> SV<br>
-                <strong>Pairwise interactions:</strong> k-SII
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        if (
-            target_source == "fallback explanation scorer"
-            and isinstance(result, dict)
-            and result.get("fallback_choice_scores")
-        ):
-            with st.expander("Fallback scorer diagnostic", expanded=False):
-                st.caption(
-                    "These scores come from the selected explanation scorer and were used to "
-                    "choose the fallback target tool (no agent result was available)."
-                )
-                score_frame = pd.DataFrame(
-                    [
-                        {"tool": tool, "score": score}
-                        for tool, score in sorted(
-                            result["fallback_choice_scores"].items(),
-                            key=lambda item: item[1],
-                            reverse=True,
-                        )
-                    ]
-                )
-                st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
-
-        # ---- A. Player segmentation ----
-        st.markdown('<div class="section-label">Player segmentation</div>', unsafe_allow_html=True)
-        chip_html = "".join(
-            (
-                "<div class='segment-chip'>"
-                f"<strong>{escape(segment.label)}:</strong> {escape(segment.text)}</div>"
-            )
-            for segment in user_segments
-        )
-        st.markdown(f"<div class='segment-chip-row'>{chip_html}</div>", unsafe_allow_html=True)
-
-        with st.expander("Fixed context: system prompt + tool definitions", expanded=False):
-            st.caption("System prompt")
-            for segment in system_segments:
-                st.markdown(
-                    (
-                        "<div class='segment-box'>"
-                        f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
-                    ),
-                    unsafe_allow_html=True,
-                )
-            st.caption("Tool definitions")
-            for tool_name, description in TOOLS.items():
-                st.markdown(
-                    (
-                        "<div class='segment-box'>"
-                        f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
-                    ),
-                    unsafe_allow_html=True,
-                )
-            if developer_mode and segment_debug_rows:
-                # Duck-typed rather than isinstance(...): Streamlit's local file watcher can
-                # hot-reload a same-directory module while an older cached segmenter instance
-                # from st.cache_resource survives the rerun, which breaks isinstance checks
-                # against the freshly reloaded class.
-                is_linguistic_segmenter = hasattr(segmenter, "stray_merge")
-                diagnostic_label = (
-                    "Linguistic segment diagnostics"
-                    if is_linguistic_segmenter
-                    else "Semantic boundary diagnostics"
-                )
-                st.markdown(f"**{diagnostic_label}**")
-                st.dataframe(
-                    pd.DataFrame(segment_debug_rows),
-                    use_container_width=True,
-                    hide_index=True,
-                )
-
-        if not st.session_state.has_run and not st.session_state.pending_run:
-            st.info("Click **Run full pipeline** above to compute the SV / k-SII explanation.")
-            return
+        # ---- Run-gating + compute happens here, ahead of every visual section below
+        # (including the executive summary), so the whole layout has final results
+        # available on first paint instead of computing mid-scroll. ----
 
         run = st.session_state.pending_run
         st.session_state.pending_run = False
@@ -2170,19 +2793,21 @@ def main() -> None:
                 primary_scorer = lexical_scorer
                 primary_label = "Keyword scorer"
             elif scorer_backend == LOGPROB_SCORER_LABEL:
-                with st.spinner("Loading calibrated log-odds scorer model..."):
-                    try:
-                        primary_scorer = load_logprob_scorer(
-                            logprob_model_id,
-                            max_pairs_per_batch=int(max_pairs_per_batch),
-                        )
-                    except Exception as error:  # noqa: BLE001
-                        st.error(
-                            "Could not load the calibrated log-odds scorer. Install/check "
-                            "`transformers` and `torch`, try a smaller causal language model, "
-                            f"or check your environment. Details: {error}"
-                        )
-                        return
+                # No explicit st.spinner() wrapper here: load_logprob_scorer's own
+                # @st.cache_resource(show_spinner="Preparing local HF scorer...") already
+                # shows a friendly progress message on a real (non-cached) load.
+                try:
+                    primary_scorer = load_logprob_scorer(
+                        logprob_model_id,
+                        max_pairs_per_batch=int(max_pairs_per_batch),
+                    )
+                except Exception as error:  # noqa: BLE001
+                    st.error(
+                        "Could not load the calibrated log-odds scorer. Install/check "
+                        "`transformers` and `torch`, try a smaller causal language model, "
+                        f"or check your environment. Details: {error}"
+                    )
+                    return
                 primary_label = LOGPROB_SCORER_LABEL
                 _hf_lifecycle_log(
                     "[HF ROUTING] LocalHFClassificationRouter reusing scorer instance",
@@ -2197,15 +2822,17 @@ def main() -> None:
                 target_tool = classifier_choice.tool
                 target_source = "HF classifier argmax (A/B/C/D)"
             elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
-                with st.spinner("Loading embedding model..."):
-                    try:
-                        embedder = load_final_answer_embedder(final_answer_embedding_model_id)
-                    except Exception as error:  # noqa: BLE001
-                        st.error(
-                            "Could not load embedding model "
-                            f"{final_answer_embedding_model_id!r}: {error}"
-                        )
-                        return
+                # No explicit st.spinner() wrapper here: load_final_answer_embedder's own
+                # @st.cache_resource(show_spinner="Loading embedding model...") already
+                # shows a friendly progress message on a real (non-cached) load.
+                try:
+                    embedder = load_final_answer_embedder(final_answer_embedding_model_id)
+                except Exception as error:  # noqa: BLE001
+                    st.error(
+                        "Could not load embedding model "
+                        f"{final_answer_embedding_model_id!r}: {error}"
+                    )
+                    return
                 agent_callable = build_complete_agent_callable(
                     inference_backend=inference_backend,
                     inference_model_name=inference_model_name,
@@ -2331,7 +2958,7 @@ def main() -> None:
                 tool_descriptions=TOOLS,
             )[0]
 
-            with st.spinner("Computing tool-use attributions..."):
+            with st.spinner("Computing SV and k-SII..."):
                 game = ToolUseGame(
                     target_tool=target_tool,
                     user_segments=user_segments,
@@ -2484,6 +3111,8 @@ def main() -> None:
             st.session_state.has_run = True
             result_signature = (
                 trace_name,
+                inference_backend,
+                inference_model_name,
                 user_request,
                 target_tool,
                 scorer_backend,
@@ -2573,9 +3202,34 @@ def main() -> None:
         logprob_full_diagnostics = result.get("logprob_full_diagnostics")
         is_final_answer_result = primary_label == FINAL_ANSWER_SIMILARITY_LABEL
         target_tool = result["target_tool"]
+        target_source = result["target_source"]
 
-        # ---- B. Summary metrics (exactly four) ----
-        st.markdown('<div class="section-label">Summary metrics</div>', unsafe_allow_html=True)
+        # ---- Defensive consistency check ----
+        # The cached `result` dict must never explain a different tool than the current
+        # Agent Result (e.g. a stale result computed for the previous HF model before a
+        # 1.5B -> 3B switch). This should never trigger given the signature invalidation
+        # above; it exists as a last-resort guard so a mismatch is caught and surfaced
+        # instead of silently rendering the wrong explanation. Only checked when there is
+        # a genuine current agent-selected tool to compare against -- the fallback
+        # explanation scorer path legitimately has no `agentic_inferred_tool` to match.
+        current_agentic_inferred_tool = st.session_state.get("agentic_inferred_tool")
+        if current_agentic_inferred_tool in TOOLS and target_tool != current_agentic_inferred_tool:
+            st.session_state.has_run = False
+            st.session_state.result = None
+            st.session_state.result_signature = None
+            st.warning(
+                "The previous explanation no longer matches the current Agent Result "
+                f"(`{current_agentic_inferred_tool}`). Click **Run full pipeline** above "
+                "to recompute the explanation."
+            )
+            return
+
+        # ================================================================
+        # Visual layout: a readable explanation first (0), then progressively
+        # more detail (1-4). Every value below is read from the `result` dict
+        # already unpacked above -- no new computation is introduced here.
+        # ================================================================
+
         metric_target_value = (
             "Final-answer semantic similarity"
             if is_final_answer_result
@@ -2598,39 +3252,200 @@ def main() -> None:
             empty_label, empty_display = "Raw empty score h(&empty;)", f"{raw_empty_score:.3f}"
             full_label, full_display = "Raw full score h(N)", f"{raw_full_score:.3f}"
             delta_label = "Explained increase h(N)-h(&empty;)"
+            empty_short_label, full_short_label = "Baseline H(&empty;)", "Full H(N)"
         else:
             explained_increase = float(full_score) - float(empty_score)
-            empty_label, empty_display = "Baseline support V(&empty;)", f"{empty_score:.3f}"
-            full_label, full_display = "Full-request support V(N)", f"{full_score:.3f}"
+            empty_label, empty_display = "Baseline V(&empty;)", f"{empty_score:.3f}"
+            full_label, full_display = "Full V(N)", f"{full_score:.3f}"
             delta_label = "Explained increase V(N)-V(&empty;)"
+            empty_short_label, full_short_label = "Baseline V(&empty;)", "Full V(N)"
+
+        # Computed once here and reused below by the explanation card, the k-SII mini-table,
+        # and the interpretation card, instead of being recomputed per section.
+        top_row = attribution_frame.iloc[0] if not attribution_frame.empty else None
+        top_pairs = (
+            top_pairwise_interactions(pairwise_matrix, user_segments)
+            if pairwise_matrix.shape[0] >= 2
+            else []
+        )
+        short_labels = [short_player_label(segment) for segment in user_segments]
+
+        if top_row is not None:
+            main_evidence_chip_html = (
+                f"<span class='evidence-chip'>{escape(str(top_row['segment']))}: "
+                f"“{escape(truncate_label(str(top_row['text']), max_length=48))}”</span>"
+            )
+        else:
+            main_evidence_chip_html = "<span class='evidence-chip'>No segment evidence</span>"
+
+        if top_pairs:
+            strongest_pair_row = top_pairs[0]
+            interaction_evidence_chip_html = (
+                f"<span class='evidence-chip'>"
+                f"{escape(str(strongest_pair_row['segment_i']))} + "
+                f"{escape(str(strongest_pair_row['segment_j']))}: "
+                f"“{escape(truncate_label(str(strongest_pair_row['text_i']), max_length=24))}” + "
+                f"“{escape(truncate_label(str(strongest_pair_row['text_j']), max_length=24))}”"
+                "</span>"
+            )
+        else:
+            interaction_evidence_chip_html = "<span class='evidence-chip'>No pair available</span>"
+
+        # Suggested interpretation logic, reusing the already-computed strongest-pair
+        # value/label (result["pair_value"]/result["pair_label"]) -- no recomputation.
+        if not top_pairs or pair_label == "No pair":
+            xai_summary_interpretation = "Only one segment was found for this request."
+        elif abs(pair_value) < 0.03:
+            xai_summary_interpretation = "No dominant pairwise interaction was detected."
+        elif pair_value > 0:
+            xai_summary_interpretation = "These segments reinforce the selected tool decision."
+        else:
+            xai_summary_interpretation = "These segments carry partly overlapping evidence."
+
+        # ---- 0. Decision explained: compact "why <tool>?" summary card ----
+        xai_summary_icon = TOOL_ICONS.get(target_tool, "?")
         st.markdown(
             f"""
-            <div class="metric-strip">
-                <div class="metric-card">
-                    <span>Explained decision</span>
-                    <strong>{escape(str(metric_target_value))}</strong>
+            <div class="xai-summary-card">
+                <div class="xai-summary-left">
+                    <span class="xai-summary-icon">{xai_summary_icon}</span>
+                    <span class="xai-summary-title">Why
+                        <span class="target-highlight">{escape(str(metric_target_value))}</span>?
+                    </span>
                 </div>
-                <div class="metric-card">
-                    <span>{empty_label}</span>
-                    <strong>{empty_display}</strong>
+                <div class="xai-summary-main">
+                    <div class="evidence-row">
+                        <span class="evidence-row-label">Main evidence</span>
+                        {main_evidence_chip_html}
+                    </div>
+                    <div class="evidence-row">
+                        <span class="evidence-row-label">Interaction evidence</span>
+                        {interaction_evidence_chip_html}
+                    </div>
+                    <p class="xai-summary-interpretation">{escape(xai_summary_interpretation)}</p>
                 </div>
-                <div class="metric-card">
-                    <span>{full_label}</span>
-                    <strong>{full_display}</strong>
+                <div class="xai-summary-metrics">
+                    <div class="xai-metric">
+                        <span class="xai-metric-label" title="{empty_label}">
+                            {empty_short_label}
+                        </span>
+                        <span class="xai-metric-value">{empty_display}</span>
+                    </div>
+                    <div class="xai-metric">
+                        <span class="xai-metric-label" title="{full_label}">{full_short_label}</span>
+                        <span class="xai-metric-value">{full_display}</span>
+                    </div>
+                    <div class="xai-metric delta">
+                        <span class="xai-metric-label" title="{delta_label}">&Delta; Increase</span>
+                        <span class="xai-metric-value">{explained_increase:+.3f}</span>
+                    </div>
                 </div>
-                <div class="metric-card">
-                    <span>{delta_label}</span>
-                    <strong>{explained_increase:.3f}</strong>
+                <div class="xai-score-flow">
+                    Baseline <strong>{empty_display}</strong>
+                    &rarr; Full <strong>{full_display}</strong>
+                    <span class="delta-highlight">&Delta; {explained_increase:+.3f}</span>
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        # ---- C. Individual segment effects -- Shapley Values ----
+        # ---- Setup chips: compact, user-facing run metadata only ----
+        if using_exact_computation:
+            coalition_chip_label = "Coalitions"
+            coalition_chip_value = f"{2 ** len(user_segments)} exact"
+        else:
+            coalition_chip_label = "Budget"
+            coalition_chip_value = f"{budget} (approx.)"
         st.markdown(
-            '<div class="section-label">Individual segment effects — Shapley Values (SV)</div>',
+            f"""
+            <div class="setup-chip-row">
+                <span class="setup-chip">
+                    <strong>Players:</strong> {len(user_segments)} user-request segments
+                </span>
+                <span class="setup-chip"><strong>Indices:</strong> SV + k-SII</span>
+                <span class="setup-chip">
+                    <strong>{coalition_chip_label}:</strong> {coalition_chip_value}
+                </span>
+            </div>
+            """,
             unsafe_allow_html=True,
+        )
+
+        if (
+            developer_mode
+            and target_source == "fallback explanation scorer"
+            and isinstance(result, dict)
+            and result.get("fallback_choice_scores")
+        ):
+            with st.expander("Fallback scorer diagnostic", expanded=False):
+                st.caption(
+                    "These scores come from the selected explanation scorer and were used to "
+                    "choose the fallback target tool (no agent result was available)."
+                )
+                score_frame = pd.DataFrame(
+                    [
+                        {"tool": tool, "score": score}
+                        for tool, score in sorted(
+                            result["fallback_choice_scores"].items(),
+                            key=lambda item: item[1],
+                            reverse=True,
+                        )
+                    ]
+                )
+                st.dataframe(score_frame, use_container_width=True, hide_index=True, height=178)
+
+        # ---- 1. Player segmentation card, with fixed context nested inside it ----
+        with st.container(key="agentic_player_card"):
+            player_chip_html = "".join(build_player_chip_html(segment) for segment in user_segments)
+            st.markdown(
+                f"""
+                <div class="player-card-header">Player segmentation</div>
+                <div class="player-chip-grid">{player_chip_html}</div>
+                """,
+                unsafe_allow_html=True,
+            )
+            with st.expander("Fixed context — system prompt + tool definitions", expanded=False):
+                st.caption("System prompt")
+                for segment in system_segments:
+                    st.markdown(
+                        (
+                            "<div class='segment-box'>"
+                            f"<h4>{segment.label}</h4><p>{escape(segment.text)}</p></div>"
+                        ),
+                        unsafe_allow_html=True,
+                    )
+                st.caption("Tool definitions")
+                for tool_name, description in TOOLS.items():
+                    st.markdown(
+                        (
+                            "<div class='segment-box'>"
+                            f"<h4>{escape(tool_name)}</h4><p>{escape(description)}</p></div>"
+                        ),
+                        unsafe_allow_html=True,
+                    )
+                if developer_mode and segment_debug_rows:
+                    # Duck-typed rather than isinstance(...): Streamlit's local file watcher
+                    # can hot-reload a same-directory module while an older cached segmenter
+                    # instance from st.cache_resource survives the rerun, which breaks
+                    # isinstance checks against the freshly reloaded class.
+                    is_linguistic_segmenter = hasattr(segmenter, "stray_merge")
+                    diagnostic_label = (
+                        "Linguistic segment diagnostics"
+                        if is_linguistic_segmenter
+                        else "Semantic boundary diagnostics"
+                    )
+                    st.markdown(f"**{diagnostic_label}**")
+                    st.dataframe(
+                        pd.DataFrame(segment_debug_rows),
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+
+        # ---- 2 & 3. SV | k-SII evidence, two balanced cards side by side ----
+        st.caption(
+            "SV explains which segments matter individually. k-SII explains which segment "
+            "pairs matter together."
         )
         token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
             load_text_plotters()
@@ -2640,85 +3455,134 @@ def main() -> None:
             if is_final_answer_result
             else "Target-tool attribution"
         )
-        if token_attribution_bar_plot is None:
-            st.warning(
-                "The shapiq text attribution plot is unavailable in this environment. "
-                f"Showing a simple fallback chart instead. Details: {plot_import_error}"
+        sv_col, ksii_col = st.columns(2, gap="medium")
+        with sv_col, st.container(key="agentic_sv_card"):
+            st.markdown(
+                """
+                <div class="evidence-card-header">
+                    <div class="evidence-card-title">Individual effects — SV</div>
+                    <div class="evidence-card-caption">Positive bars push toward the
+                    selected tool; negative bars push away.</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
-            show_fallback_attribution_chart(attribution_frame)
-        else:
-            try:
-                fig_ax = token_attribution_bar_plot(first_order_sv, labels, show=False)
-            except Exception as error:  # noqa: BLE001
+            if token_attribution_bar_plot is None:
                 st.warning(
-                    "The shapiq text attribution plot failed. "
-                    f"Showing a simple fallback chart instead. Details: {error}"
+                    "The shapiq text attribution plot is unavailable in this environment. "
+                    f"Showing a simple fallback chart instead. Details: {plot_import_error}"
                 )
                 show_fallback_attribution_chart(attribution_frame)
             else:
-                if fig_ax is not None:
-                    fig, ax = fig_ax
-                    st.pyplot(polish_bar(fig, ax, xlabel=bar_xlabel), clear_figure=True)
-        st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
-        st.caption("Which individual request segments push the agent toward the selected tool?")
+                try:
+                    fig_ax = token_attribution_bar_plot(first_order_sv, short_labels, show=False)
+                except Exception as error:  # noqa: BLE001
+                    st.warning(
+                        "The shapiq text attribution plot failed. "
+                        f"Showing a simple fallback chart instead. Details: {error}"
+                    )
+                    show_fallback_attribution_chart(attribution_frame)
+                else:
+                    if fig_ax is not None:
+                        fig, ax = fig_ax
+                        st.pyplot(polish_bar(fig, ax, xlabel=bar_xlabel), clear_figure=True)
+            # Compact by default; for larger player sets, show the top rows inline and
+            # keep the rest in an expander instead of growing the card unboundedly.
+            # `attribution_frame` is already ranked by |attribution| descending.
+            show_all_sv_inline = len(user_segments) <= 6
+            sv_rows_to_show = attribution_frame if show_all_sv_inline else attribution_frame.head(5)
+            st.markdown(build_sv_mini_table_html(sv_rows_to_show), unsafe_allow_html=True)
+            if not show_all_sv_inline:
+                with st.expander("Show full SV attribution table", expanded=False):
+                    st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
 
-        # ---- D. Pairwise interactions -- k-SII ----
-        st.markdown(
-            '<div class="section-label">Pairwise interactions — k-SII</div>',
-            unsafe_allow_html=True,
-        )
-        if sentence_interaction_heatmap is None:
-            st.warning(
-                "The shapiq text interaction heatmap is unavailable in this environment. "
-                f"Showing a fallback interaction table instead. Details: {plot_import_error}"
+        with ksii_col, st.container(key="agentic_ksii_card"):
+            st.markdown(
+                """
+                <div class="evidence-card-header">
+                    <div class="evidence-card-title">Pairwise interactions — k-SII</div>
+                    <div class="evidence-card-caption">Red means reinforcing; blue means
+                    redundant or suppressing.</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
-            show_fallback_interaction_table(pairwise_matrix, labels)
-        else:
-            try:
-                fig_ax = sentence_interaction_heatmap(ksii_explanation, labels, show=False)
-            except Exception as error:  # noqa: BLE001
+            if sentence_interaction_heatmap is None:
                 st.warning(
-                    "The shapiq text interaction heatmap failed. "
-                    f"Showing a fallback interaction table instead. Details: {error}"
+                    "The shapiq text interaction heatmap is unavailable in this environment. "
+                    f"Showing a fallback interaction table instead. Details: {plot_import_error}"
                 )
                 show_fallback_interaction_table(pairwise_matrix, labels)
             else:
-                if fig_ax is not None:
-                    fig, ax = fig_ax
-                    st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
+                try:
+                    fig_ax = sentence_interaction_heatmap(ksii_explanation, labels, show=False)
+                except Exception as error:  # noqa: BLE001
+                    st.warning(
+                        "The shapiq text interaction heatmap failed. "
+                        f"Showing a fallback interaction table instead. Details: {error}"
+                    )
+                    show_fallback_interaction_table(pairwise_matrix, labels)
+                else:
+                    if fig_ax is not None:
+                        fig, ax = fig_ax
+                        st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
+            st.markdown(build_player_legend_html(user_segments), unsafe_allow_html=True)
 
-        if pairwise_matrix.shape[0] >= 2:
-            top_pairs = top_pairwise_interactions(pairwise_matrix, user_segments)
-            if top_pairs:
-                pairs_frame = pd.DataFrame(
-                    [
-                        {
-                            "segments": f"{row['segment_i']} + {row['segment_j']}",
-                            "text": f"{row['text_i']}  |  {row['text_j']}",
-                            "k-SII": format_attribution(row["value"]),
-                            "type": row["type"],
-                        }
-                        for row in top_pairs
-                    ]
+            # `top_pairwise_interactions` already ranks by |k-SII| descending; requesting
+            # every pair (instead of the default top-5) here is the same ranking, just
+            # unsliced, so the compact table below can show them all when there are few
+            # enough players.
+            all_pairs = (
+                top_pairwise_interactions(
+                    pairwise_matrix,
+                    user_segments,
+                    n=max(len(user_segments) * (len(user_segments) - 1) // 2, 1),
                 )
-                st.dataframe(pairs_frame, use_container_width=True, hide_index=True)
-        st.caption(
-            "Which segment pairs jointly trigger or redundantly encode the tool-use decision?"
-        )
+                if pairwise_matrix.shape[0] >= 2
+                else []
+            )
+            show_all_ksii_inline = len(user_segments) <= 6
+            ksii_rows_to_show = all_pairs if show_all_ksii_inline else all_pairs[:5]
 
-        # ---- E. Takeaway ----
-        takeaway_target = str(metric_target_value)
-        takeaway_sentence = build_takeaway_sentence(
-            target_tool=takeaway_target,
-            attribution_frame=attribution_frame,
-            pair_label=pair_label,
-            pair_value=pair_value,
-        )
-        st.success(takeaway_sentence)
+            if ksii_rows_to_show:
+                st.markdown(build_ksii_mini_table_html(ksii_rows_to_show), unsafe_allow_html=True)
+            else:
+                st.caption("Only one player -- no pairwise interactions to show.")
 
-        # ---- Developer mode: raw backend diagnostics ----
+            if not show_all_ksii_inline and all_pairs:
+                with st.expander("Show all pairwise interactions", expanded=False):
+                    st.markdown(build_ksii_mini_table_html(all_pairs), unsafe_allow_html=True)
+
+            with st.expander("Show full interaction matrix", expanded=False):
+                show_fallback_interaction_table(pairwise_matrix, labels)
+
+        # ---- Detailed interpretation (collapsed: already summarized in the top card) ----
+        with st.expander("Detailed interpretation", expanded=False):
+            interpretation_html = build_interaction_interpretation(
+                pair_label=pair_label,
+                pair_value=pair_value,
+                top_pairs=top_pairs,
+            )
+            st.markdown(
+                f'<div class="interpretation-card">{interpretation_html}</div>',
+                unsafe_allow_html=True,
+            )
+
+        # ---- Developer mode: computation diagnostics + raw backend diagnostics ----
         if developer_mode:
-            with st.expander("Raw backend diagnostics", expanded=False):
+            with st.expander("Show computation diagnostics", expanded=False):
+                if using_exact_computation:
+                    coalition_count = 2 ** len(user_segments)
+                    st.caption(
+                        "Algorithm: `shapiq ExactComputer` "
+                        f"(exact evaluation: `{coalition_count}` / `{coalition_count}` coalitions)"
+                    )
+                else:
+                    st.caption(
+                        f"`{len(user_segments)}` players exceeds the exact limit of "
+                        f"`{MAX_EXACT_DEMO_PLAYERS}`. Algorithm: official shapiq approximation, "
+                        f"budget: `{budget}` auto."
+                    )
                 sv_sum = float(sum(getattr(first_order_sv, "dict_values", {}).values()))
                 sv_residual = abs(sv_sum - explained_increase)
                 sv_efficiency_status = (
@@ -2767,6 +3631,27 @@ def main() -> None:
                         "This may indicate approximation error above the exact-computation limit."
                     )
 
+                if show_value_function_details:
+                    st.markdown("**Value function details**")
+                    st.write(
+                        f"Individual effects: `{SV_INDEX}`, max_order=`{SV_MAX_ORDER}`, "
+                        f"algorithm: `{sv_algorithm_label}`"
+                    )
+                    st.write(
+                        f"Pairwise interactions: `{KSII_INDEX}`, max_order=`{KSII_MAX_ORDER}`, "
+                        f"algorithm: `{ksii_algorithm_label}`"
+                    )
+                    st.write("Players: user-request segments")
+                    st.write("Fixed context: system prompt + tool definitions")
+                    st.write("Value function: selected-tool support under the chosen scorer")
+                    if not using_exact_computation:
+                        st.write(f"Budget: `{budget}`")
+                    st.write("Full coalition prompt:")
+                    st.code(full_prompt, language="text")
+                    st.write("Empty coalition prompt:")
+                    st.code(empty_prompt, language="text")
+
+            with st.expander("Raw backend diagnostics", expanded=False):
                 if llm_debug_outputs:
                     st.markdown("**Model output diagnostics**")
                     displayed_debug_outputs = llm_debug_outputs[:10]
@@ -2959,26 +3844,6 @@ def main() -> None:
                             "A separate scoring-prompt preview is not available for this "
                             "scoring backend."
                         )
-
-                if show_value_function_details:
-                    st.markdown("**Value function details**")
-                    st.write(
-                        f"Individual effects: `{SV_INDEX}`, max_order=`{SV_MAX_ORDER}`, "
-                        f"algorithm: `{sv_algorithm_label}`"
-                    )
-                    st.write(
-                        f"Pairwise interactions: `{KSII_INDEX}`, max_order=`{KSII_MAX_ORDER}`, "
-                        f"algorithm: `{ksii_algorithm_label}`"
-                    )
-                    st.write("Players: user-request segments")
-                    st.write("Fixed context: system prompt + tool definitions")
-                    st.write("Value function: selected-tool support under the chosen scorer")
-                    if not using_exact_computation:
-                        st.write(f"Budget: `{budget}`")
-                    st.write("Full coalition prompt:")
-                    st.code(full_prompt, language="text")
-                    st.write("Empty coalition prompt:")
-                    st.code(empty_prompt, language="text")
 
         st.caption(f"Demo path: `{display_demo_path()}`")
 

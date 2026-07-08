@@ -35,7 +35,10 @@ def _inject_fake_inference_result(at: AppTest) -> None:
 
 
 def test_linguistic_segmenter_is_selected_by_default() -> None:
+    """The "Segmenter" control itself is Developer-mode-only; enable it to find the widget."""
     at = AppTest.from_file(APP_PATH, default_timeout=120)
+    at.run()
+    at.toggle(key="agentic_developer_mode").set_value(True)
     at.run()
 
     segmenter_box = next(box for box in at.selectbox if box.label == "Segmenter")
@@ -112,3 +115,57 @@ def test_editing_custom_request_clears_stale_inferred_tool() -> None:
     assert not at.exception
     assert at.session_state["agentic_inferred_tool"] is None
     assert at.session_state["agentic_inference_result"] is None
+
+
+def test_switching_hf_model_clears_stale_inferred_tool_and_explanation() -> None:
+    """Switching the HF Local model must invalidate the previous agent + XAI result.
+
+    Regression test: switching HF Local models (e.g. 1.5B -> 3B) with Developer mode
+    OFF used to leave a stale XAI explanation computed for the *old* model's target
+    tool, because ``logprob_model_id`` silently stayed on ``DEFAULT_LOGPROB_MODEL_ID``
+    unless Developer mode was on, and neither the inference signature nor the
+    explanation result signature accounted for the selected HF model at all. That let
+    Agent Result move on to a new tool (e.g. after a real model switch) while XAI
+    Explanation kept rendering the previous tool's cached result.
+    """
+    at = AppTest.from_file(APP_PATH, default_timeout=120)
+    at.run()
+    assert not at.exception
+
+    hf_model_box = next(box for box in at.selectbox if box.label == "HF model")
+    assert hf_model_box.value == "Qwen/Qwen2.5-1.5B-Instruct"
+
+    # Simulate a completed HF-local run with the 1.5B model: an agent result plus a
+    # cached XAI explanation result, both pointing at `calculator_tool`. The XAI
+    # `result` is deliberately a minimal stand-in (not a full explanation payload) --
+    # switching the model must invalidate it before anything tries to render it.
+    at.session_state["agentic_inferred_tool"] = "calculator_tool"
+    at.session_state["agentic_inference_result"] = SimpleNamespace(
+        selected_tool="calculator_tool",
+        tool_arguments={},
+        agent_response="demo",
+        raw_trace={},
+        error=None,
+        available=True,
+        backend="HF local",
+        model="Qwen/Qwen2.5-1.5B-Instruct",
+    )
+    at.session_state["agentic_inference_backend"] = "HF local"
+    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-1.5B-Instruct"
+    at.session_state["has_run"] = True
+    at.session_state["result"] = {"target_tool": "calculator_tool"}
+    at.session_state["result_signature"] = "fake-signature-for-1.5b-calculator_tool"
+
+    hf_model_box.select("Qwen/Qwen2.5-3B-Instruct").run()
+
+    assert not at.exception
+    assert at.session_state["agentic_inferred_tool"] is None
+    assert at.session_state["agentic_inference_result"] is None
+    assert at.session_state["agentic_inference_backend"] is None
+    assert at.session_state["agentic_inference_model"] is None
+    assert at.session_state["has_run"] is False
+    assert at.session_state["result"] is None
+    # `result_signature` is eagerly re-synced to the current (pending) settings as soon
+    # as the XAI tab re-renders in the same run -- it does not stay `None` -- but it must
+    # no longer be the stale signature from the old (1.5B, calculator_tool) result.
+    assert at.session_state["result_signature"] != "fake-signature-for-1.5b-calculator_tool"
