@@ -52,7 +52,6 @@ from final_answer_similarity_scorer import (
 from gemini_agent import list_available_gemini_models, run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import (
-    DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
     HFArgumentExtractor,
     LocalHFClassificationRouter,
     LocalHFRouter,
@@ -94,17 +93,29 @@ if TYPE_CHECKING:
 SegmentSource = Literal["system", "user"]
 
 
-DEFAULT_INDEX = "k-SII"
-DEFAULT_MAX_ORDER = 2
+SV_INDEX = "SV"
+SV_MAX_ORDER = 1
+KSII_INDEX = "k-SII"
+KSII_MAX_ORDER = 2
 DELTA_STATUS_THRESHOLD = 0.01
 DEFAULT_MOCK_QUERY = "Will it rain in Berlin tomorrow morning?"
 FINAL_ANSWER_SIMILARITY_LABEL = "Final answer semantic similarity"
 LOGPROB_SCORER_LABEL = "Calibrated multiclass tool log-odds (HF local)"
 # Shared session-state key for the Explanation tab's "Scoring method" selectbox,
 # read from the Inference tab too so "HF local" inference can detect that the
-# calibrated log-odds scorer is selected and route through the same single
-# Qwen2.5-1.5B model instance instead of the separate structured-JSON router.
+# calibrated log-odds scorer is selected and route through the same selected HF
+# model instance instead of the separate structured-JSON router.
 SCORER_BACKEND_SESSION_KEY = "agentic_explanation_scorer_backend"
+HF_LOCAL_MODEL_OPTIONS = ["Qwen/Qwen2.5-1.5B-Instruct", "Qwen/Qwen2.5-3B-Instruct"]
+# Single canonical session-state key for the "HF local" backend's model dropdown,
+# read from both the Inference tab (router/calibrated inference) and the
+# Explanation tab (calibrated log-odds scorer settings, read-only there) so the
+# two can never silently diverge onto two different loaded model instances.
+HF_MODEL_ID_SESSION_KEY = "agentic_hf_model_id"
+SAME_HF_MODEL_EXPLANATION = (
+    "In calibrated HF-local mode, inference and explanation use the same selected "
+    "HF model/tokenizer instance."
+)
 LOGPROB_SCORER_HELP = (
     "Scores each retained-segment coalition by the local router model's calibrated "
     "log-odds for the target tool against all other available routing decisions. "
@@ -736,7 +747,12 @@ def compute_interaction_explanation(
             transient failures). ``ExactComputer`` is never invoked in that case.
     """
     if game.n_players <= MAX_EXACT_DEMO_PLAYERS:
-        evaluate_game_exactly(game, retry_policy=DEFAULT_RETRY_POLICY)
+        # Skip re-evaluation if this game was already precomputed by an earlier call
+        # (e.g. computing SV and k-SII from the same game): every one of the
+        # 2**n_players coalitions was already scored exactly once, so a second call
+        # here must read from that cached table instead of invoking the scorer again.
+        if not getattr(game, "precomputed", False):
+            evaluate_game_exactly(game, retry_policy=DEFAULT_RETRY_POLICY)
         explanation, metadata = compute_exact_interactions(
             game=game,
             index=index,
@@ -760,6 +776,45 @@ def compute_interaction_explanation(
     approximator = make_approximator(index, game.n_players, max_order)
     explanation = approximator.approximate(budget=budget, game=game)
     return explanation, f"Official shapiq approximation: {type(approximator).__name__}"
+
+
+def compute_dual_index_explanations(
+    *,
+    game: object,
+    budget: int | None,
+) -> tuple[shapiq.InteractionValues, str, shapiq.InteractionValues, str]:
+    """Compute standard Shapley Values (SV) and pairwise k-SII from the same game.
+
+    The bar plot's individual segment effects and the heatmap's pairwise interactions
+    are theoretically distinct indices (``SV`` at ``max_order=1`` vs. ``k-SII`` at
+    ``max_order=2``), not two views of one k-SII result. Both are computed here from
+    the same ``game``/players/target tool/value function via two
+    :func:`compute_interaction_explanation` calls.
+
+    For ``game.n_players <= MAX_EXACT_DEMO_PLAYERS`` the second call reuses the first
+    call's precomputed coalition table (see the ``precomputed`` guard in
+    :func:`compute_interaction_explanation`), so every coalition's value function
+    (the scorer/API call) is still only evaluated once, not once per index. Above
+    that limit, SV and k-SII each get their own real shapiq approximator, since
+    approximators sample coalitions independently and cannot share evaluations.
+
+    Returns:
+        A 4-tuple of ``(sv_explanation, sv_algorithm_label, ksii_explanation,
+        ksii_algorithm_label)``.
+    """
+    sv_explanation, sv_algorithm_label = compute_interaction_explanation(
+        game=game,
+        index=SV_INDEX,
+        max_order=SV_MAX_ORDER,
+        budget=budget,
+    )
+    ksii_explanation, ksii_algorithm_label = compute_interaction_explanation(
+        game=game,
+        index=KSII_INDEX,
+        max_order=KSII_MAX_ORDER,
+        budget=budget,
+    )
+    return sv_explanation, sv_algorithm_label, ksii_explanation, ksii_algorithm_label
 
 
 def pairwise_matrix_from_explanation(
@@ -897,11 +952,12 @@ def polish_bar(
     ax: plt.Axes,
     *,
     xlabel: str = "Target-tool attribution",
+    title: str = "Individual segment effects — Shapley Values (SV)",
 ) -> plt.Figure:
     """Make package bar plot fit the Streamlit layout."""
     fig.set_size_inches(6.2, 3.7)
     ax.set_title("", loc="center")
-    ax.set_title("User Request Segment Attribution", loc="left", fontsize=12, pad=8)
+    ax.set_title(title, loc="left", fontsize=12, pad=8)
     ax.set_xlabel(xlabel)
     ax.grid(axis="x", color="#d7dfdf", alpha=0.65, linewidth=0.8)
     ax.set_axisbelow(True)
@@ -932,12 +988,14 @@ def polish_heatmap(
     fig: plt.Figure,
     ax: plt.Axes,
     segments: list[ToolUseSegment],
+    *,
+    title: str = "Pairwise segment interactions — k-SII, order 2",
 ) -> plt.Figure:
     """Make package heatmap fit the Streamlit layout."""
     fig.set_size_inches(6.0, 4.7)
     ax.set_title("", loc="center")
     ax.set_title(
-        "First- and Second-Order Interaction Heatmap",
+        title,
         loc="left",
         fontsize=12,
         pad=8,
@@ -1064,8 +1122,10 @@ def build_complete_agent_callable(
     to ``LOGPROB_SCORER_LABEL``, inference must use the exact same
     ``CalibratedToolLogOddsScorer`` model/tokenizer instance (via
     ``LocalHFClassificationRouter`` for routing and ``HFArgumentExtractor`` for
-    arguments) instead of loading the separate structured-JSON
-    ``LocalHFRouter``/Qwen3-4B model.
+    arguments) instead of loading a separate structured-JSON ``LocalHFRouter``.
+    Either way, ``inference_model_name`` is always the single ``HF_MODEL_ID_SESSION_KEY``
+    dropdown selection from the Inference tab -- there is no second, independently
+    editable model id for the structured-JSON path.
     """
 
     def run(user_request: str) -> object:
@@ -1203,6 +1263,37 @@ def resolve_full_run_reference_answer(
     return "", False, "The agent returned no final-answer text for the full request."
 
 
+SV_EFFICIENCY_TOLERANCE = 1e-6
+
+
+def _as_finite_float(value: object) -> float | None:
+    """Return ``value`` as a finite ``float``, or ``None`` if that is not possible."""
+    try:
+        number = float(value)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _extract_raw_log_odds_summary(debug_outputs: object) -> tuple[float, float] | None:
+    """Return ``(raw_full_score, raw_empty_score)`` from a scorer's full-request debug record.
+
+    Only the ``CalibratedToolLogOddsScorer`` currently populates
+    ``target_vs_all_log_odds`` (``h(N)``, the raw target-vs-all log-odds for the full
+    prompt) and ``empty_coalition_log_odds`` (``h(empty)``, the same raw log-odds for
+    the empty coalition) on its debug records, so this returns ``None`` for every
+    other scorer's debug output shape instead of fabricating raw values. The Summary
+    tab must never display a raw score that was not genuinely produced by the scorer.
+    """
+    if not isinstance(debug_outputs, dict):
+        return None
+    raw_full_score = _as_finite_float(debug_outputs.get("target_vs_all_log_odds"))
+    raw_empty_score = _as_finite_float(debug_outputs.get("empty_coalition_log_odds"))
+    if raw_full_score is None or raw_empty_score is None:
+        return None
+    return raw_full_score, raw_empty_score
+
+
 def main() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
     st.markdown(
@@ -1290,9 +1381,9 @@ def main() -> None:
         st.selectbox(
             "Try example",
             example_options,
-            format_func=lambda name: name
-            if name == example_placeholder
-            else scenario_prompt_label(name),
+            format_func=lambda name: (
+                name if name == example_placeholder else scenario_prompt_label(name)
+            ),
             key="agentic_try_example_select",
             on_change=apply_selected_example,
         )
@@ -1340,26 +1431,22 @@ def main() -> None:
                 is_calibrated_hf_mode = (
                     st.session_state.get(SCORER_BACKEND_SESSION_KEY) == LOGPROB_SCORER_LABEL
                 )
+                hf_model_id = st.selectbox(
+                    "HF model",
+                    HF_LOCAL_MODEL_OPTIONS,
+                    key=HF_MODEL_ID_SESSION_KEY,
+                    help=(
+                        "Fixed set of supported local models. The same selection is used for "
+                        "HF-local inference and, in calibrated log-odds mode, for the "
+                        "explanation scorer -- see the Explanation tab's scorer settings."
+                    ),
+                )
+                inference_model_name = hf_model_id
                 if is_calibrated_hf_mode:
-                    inference_model_name = st.text_input(
-                        "HF model (calibrated log-odds -- single shared model)",
-                        value=DEFAULT_LOGPROB_MODEL_ID,
-                        key="agentic_hf_calibrated_inference_model",
-                    )
                     hf_max_new_tokens = 256
                     hf_trust_remote_code = False
-                    st.caption(
-                        "Calibrated HF-local mode: inference and explanation reuse the exact "
-                        f"same `{inference_model_name}` model/tokenizer instance via the "
-                        "A/B/C/D routing classifier. No separate structured JSON router or "
-                        "second model is loaded."
-                    )
+                    st.caption(f"{SAME_HF_MODEL_EXPLANATION} No second model is loaded.")
                 else:
-                    inference_model_name = st.text_input(
-                        "HF model",
-                        value=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
-                        key="agentic_hf_inference_model",
-                    )
                     hf_max_new_tokens = st.number_input(
                         "HF max_new_tokens",
                         min_value=16,
@@ -1551,10 +1638,13 @@ def main() -> None:
         final_answer_embedding_model_id = DEFAULT_FINAL_ANSWER_EMBEDDING_MODEL_ID
         if scorer_backend == LOGPROB_SCORER_LABEL:
             with st.expander("Calibrated log-odds scorer settings", expanded=True):
-                logprob_model_id = st.text_input(
-                    "model id",
-                    value=DEFAULT_LOGPROB_MODEL_ID,
-                    key="agentic_logprob_model_id",
+                logprob_model_id = st.session_state.get(
+                    HF_MODEL_ID_SESSION_KEY, DEFAULT_LOGPROB_MODEL_ID
+                )
+                st.caption(f"Inherited from inference model: `{logprob_model_id}`")
+                st.caption(
+                    f"{SAME_HF_MODEL_EXPLANATION} Select the model in the Inference tab's "
+                    "'HF local' settings; it is not independently editable here."
                 )
                 max_pairs_per_batch = st.number_input(
                     "HF pair batch size",
@@ -1729,8 +1819,11 @@ def main() -> None:
         budget = budget_for_demo(len(user_segments)) if not using_exact_computation else None
 
         with st.expander("Shapley and debug settings", expanded=False):
-            st.caption(f"index: fixed `{DEFAULT_INDEX}`")
-            st.caption(f"max_order: fixed `{DEFAULT_MAX_ORDER}`")
+            st.caption(f"Individual effects: `{SV_INDEX}`")
+            st.caption(f"Pairwise interactions: `{KSII_INDEX}`, max_order=`{KSII_MAX_ORDER}`")
+            st.caption("Players: user-request segments")
+            st.caption("Fixed context: system prompt + tool definitions")
+            st.caption("Value function: selected-tool support under the chosen scorer")
             if using_exact_computation:
                 coalition_count = 2 ** len(user_segments)
                 st.caption(
@@ -1823,8 +1916,6 @@ def main() -> None:
                     "target selection in advanced settings."
                 )
 
-        index = DEFAULT_INDEX
-        max_order = DEFAULT_MAX_ORDER
         signature_target = target_tool if target_tool is not None else "__pending_target__"
         trajectory_reference_signature = (
             tuple(sorted(groq_reference_result.tool_arguments.items()))
@@ -1931,12 +2022,11 @@ def main() -> None:
         )
         if scorer_backend == LOGPROB_SCORER_LABEL:
             st.caption(
-                "Routing and Shapley scoring use the same loaded local HF model instance. "
-                "This scorer mode ignores the Inference tab's Groq/Gemini/structured-JSON "
-                "selected tool. When you run the explanation, the target tool is "
-                "redetermined by the calibrated A/B/C/D routing evidence on the full user "
-                "request -- the same evidence used for every coalition -- so the target "
-                "being explained and the classifier producing the coalition scores are "
+                f"{SAME_HF_MODEL_EXPLANATION} This scorer mode ignores the Inference tab's "
+                "Groq/Gemini/structured-JSON selected tool. When you run the explanation, the "
+                "target tool is redetermined by the calibrated A/B/C/D routing evidence on the "
+                "full user request -- the same evidence used for every coalition -- so the "
+                "target being explained and the classifier producing the coalition scores are "
                 "always the same model instance."
             )
 
@@ -1999,7 +2089,14 @@ def main() -> None:
                     )
             with segment_right:
                 st.markdown("**Shapley players: user request segments**")
-                if isinstance(segmenter, LinguisticSegmenter):
+                # Duck-typed rather than isinstance(segmenter, LinguisticSegmenter): Streamlit's
+                # local file watcher can hot-reload a same-directory module (e.g. after an edit
+                # to linguistic_segmenter.py) while an older cached segmenter instance from
+                # st.cache_resource survives the rerun. That instance is then built from a stale
+                # class object, so isinstance against the freshly reloaded class silently returns
+                # False -- attribute presence is robust to that class-identity mismatch.
+                is_linguistic_segmenter = hasattr(segmenter, "stray_merge")
+                if is_linguistic_segmenter:
                     st.caption(
                         f"{len(user_segments)} user segments from `{segmenter.model_id}` "
                         f"with stray_merge=`{segmenter.stray_merge}`."
@@ -2021,7 +2118,7 @@ def main() -> None:
                 if segment_debug_rows:
                     diagnostic_label = (
                         "Linguistic segment diagnostics"
-                        if isinstance(segmenter, LinguisticSegmenter)
+                        if is_linguistic_segmenter
                         else "Semantic boundary diagnostics"
                     )
                     st.markdown(f"**{diagnostic_label}**")
@@ -2254,14 +2351,11 @@ def main() -> None:
                     defer_empty_coalition_evaluation=using_exact_computation,
                 )
                 try:
-                    explanation, algorithm_label = compute_interaction_explanation(
-                        game=game,
-                        index=index,
-                        max_order=max_order,
-                        budget=budget,
+                    sv_explanation, sv_algorithm_label, ksii_explanation, ksii_algorithm_label = (
+                        compute_dual_index_explanations(game=game, budget=budget)
                     )
                 except (ExactComputationLimitError, UnsupportedExactIndexError) as error:
-                    st.error(f"Could not compute the {index} explanation: {error}")
+                    st.error(f"Could not compute the {SV_INDEX}/{KSII_INDEX} explanations: {error}")
                     return
                 except CoalitionEvaluationIncompleteError as error:
                     st.error(str(error))
@@ -2302,9 +2396,10 @@ def main() -> None:
                         hide_index=True,
                     )
                     return
-                first_order = explanation.get_n_order(order=1)
-                attribution_frame = values_to_frame(first_order, user_segments)
-                pairwise_matrix = pairwise_matrix_from_explanation(explanation, game.n_players)
+                first_order_sv = sv_explanation.get_n_order(order=1)
+                attribution_frame = values_to_frame(first_order_sv, user_segments)
+                pairwise_ksii = ksii_explanation.get_n_order(order=2)
+                pairwise_matrix = pairwise_matrix_from_explanation(pairwise_ksii, game.n_players)
                 pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
                 notes = build_interpretation_notes(
                     attribution_frame,
@@ -2335,13 +2430,14 @@ def main() -> None:
                         defer_empty_coalition_evaluation=using_exact_computation,
                     )
                     try:
-                        lexical_explanation, _lexical_algorithm_label = (
-                            compute_interaction_explanation(
-                                game=lexical_game,
-                                index=index,
-                                max_order=max_order,
-                                budget=budget,
-                            )
+                        (
+                            lexical_sv_explanation,
+                            _lexical_sv_algorithm_label,
+                            lexical_ksii_explanation,
+                            _lexical_ksii_algorithm_label,
+                        ) = compute_dual_index_explanations(
+                            game=lexical_game,
+                            budget=budget,
                         )
                     except (
                         ExactComputationLimitError,
@@ -2352,10 +2448,11 @@ def main() -> None:
                         compare_with_lexical = False
                         lexical_result = None
                     else:
-                        lexical_first_order = lexical_explanation.get_n_order(order=1)
-                        lexical_frame = values_to_frame(lexical_first_order, user_segments)
+                        lexical_first_order_sv = lexical_sv_explanation.get_n_order(order=1)
+                        lexical_frame = values_to_frame(lexical_first_order_sv, user_segments)
+                        lexical_pairwise_ksii = lexical_ksii_explanation.get_n_order(order=2)
                         lexical_matrix = pairwise_matrix_from_explanation(
-                            lexical_explanation,
+                            lexical_pairwise_ksii,
                             lexical_game.n_players,
                         )
                         lexical_pair_label, lexical_pair_value = strongest_pair(
@@ -2425,12 +2522,15 @@ def main() -> None:
                 if fallback_choice is None
                 else fallback_choice.scores,
                 "primary_label": primary_label,
-                "algorithm_label": algorithm_label,
+                "sv_algorithm_label": sv_algorithm_label,
+                "ksii_algorithm_label": ksii_algorithm_label,
                 "full_score": full_score,
                 "empty_score": empty_score,
-                "first_order": first_order,
+                "first_order_sv": first_order_sv,
                 "attribution_frame": attribution_frame,
-                "explanation": explanation,
+                "sv_explanation": sv_explanation,
+                "ksii_explanation": ksii_explanation,
+                "pairwise_ksii": pairwise_ksii,
                 "pairwise_matrix": pairwise_matrix,
                 "pair_label": pair_label,
                 "pair_value": pair_value,
@@ -2459,15 +2559,20 @@ def main() -> None:
             st.error("No explanation result is available. Click Run explanation to compute one.")
             return
         primary_label = result["primary_label"]
-        algorithm_label = result["algorithm_label"]
+        sv_algorithm_label = result["sv_algorithm_label"]
+        ksii_algorithm_label = result["ksii_algorithm_label"]
         full_score = result["full_score"]
         empty_score = result["empty_score"]
-        first_order = result["first_order"]
+        first_order_sv = result["first_order_sv"]
         attribution_frame = result["attribution_frame"]
-        explanation = result["explanation"]
+        sv_explanation = result["sv_explanation"]
+        ksii_explanation = result["ksii_explanation"]
+        pairwise_ksii = result.get("pairwise_ksii")
+        if pairwise_ksii is None:
+            pairwise_ksii = ksii_explanation.get_n_order(order=2)
         pairwise_matrix = result.get("pairwise_matrix")
         if pairwise_matrix is None:
-            pairwise_matrix = pairwise_matrix_from_explanation(explanation, len(user_segments))
+            pairwise_matrix = pairwise_matrix_from_explanation(pairwise_ksii, len(user_segments))
         pair_label = result["pair_label"]
         pair_value = result["pair_value"]
         top_label = result["top_label"]
@@ -2532,6 +2637,12 @@ def main() -> None:
             tab_names.append("Debug")
         tabs = st.tabs(tab_names)
 
+        raw_log_odds_summary = (
+            None
+            if is_final_answer_result
+            else _extract_raw_log_odds_summary(logprob_full_diagnostics)
+        )
+
         with tabs[0]:
             st.markdown('<div class="section-label">Summary</div>', unsafe_allow_html=True)
             summary_heading = (
@@ -2539,25 +2650,41 @@ def main() -> None:
                 if is_final_answer_result
                 else "**Tool support overview**"
             )
-            metric_labels = (
-                {
-                    "target": "Scorer",
-                    "full": "Normalized full-coalition value = v(all user segments)",
-                    "empty": "Normalized empty-coalition value = v(empty user request)",
-                    "delta": "Semantic fidelity gain",
+            st.markdown(summary_heading)
+
+            if raw_log_odds_summary is not None:
+                raw_full_score, raw_empty_score = raw_log_odds_summary
+                explained_increase = raw_full_score - raw_empty_score
+                metric_labels = {
+                    "target": "Explained decision",
+                    "empty": "Raw empty score h(∅)",
+                    "full": "Raw full score h(N)",
+                    "delta": "Explained increase h(N)-h(∅)",
                 }
-                if is_final_answer_result
-                else {
-                    "target": "Target tool",
-                    "full": "Full support score = v(all user segments)",
-                    "empty": "Baseline = fixed context + empty user request",
-                    "delta": "Delta support",
-                }
-            )
+                empty_display = f"{raw_empty_score:.3f}"
+                full_display = f"{raw_full_score:.3f}"
+            else:
+                explained_increase = float(full_score) - float(empty_score)
+                metric_labels = (
+                    {
+                        "target": "Scorer",
+                        "empty": "Normalized empty-coalition value V(∅)",
+                        "full": "Normalized full-coalition value V(N)",
+                        "delta": "Explained value V(N)-V(∅)",
+                    }
+                    if is_final_answer_result
+                    else {
+                        "target": "Explained decision",
+                        "empty": "Empty baseline V(∅)",
+                        "full": "Full game value V(N)",
+                        "delta": "Explained value V(N)-V(∅)",
+                    }
+                )
+                empty_display = f"{empty_score:.3f}"
+                full_display = f"{full_score:.3f}"
             metric_target_value = (
                 "Final-answer semantic similarity" if is_final_answer_result else target_tool
             )
-            st.markdown(summary_heading)
             st.markdown(
                 f"""
                 <div class="metric-strip">
@@ -2566,15 +2693,16 @@ def main() -> None:
                         <strong>{escape(metric_target_value)}</strong>
                     </div>
                     <div class="metric-card">
-                        <span>{metric_labels["full"]}</span>
-                        <strong>{full_score:.3f}</strong>
-                    </div>
-                    <div class="metric-card">
                         <span>{metric_labels["empty"]}</span>
-                        <strong>{empty_score:.3f}</strong>
+                        <strong>{empty_display}</strong>
                     </div>
                     <div class="metric-card">
-                        <span>{metric_labels["delta"]}</span><strong>{delta_support:.3f}</strong>
+                        <span>{metric_labels["full"]}</span>
+                        <strong>{full_display}</strong>
+                    </div>
+                    <div class="metric-card">
+                        <span>{metric_labels["delta"]}</span>
+                        <strong>{explained_increase:.3f}</strong>
                     </div>
                 </div>
                 """,
@@ -2582,47 +2710,30 @@ def main() -> None:
             )
             st.info(f"**{support_status}.** {support_interpretation}")
 
-            if primary_label == LOGPROB_SCORER_LABEL and logprob_full_diagnostics is not None:
-                argmax_tool = logprob_full_diagnostics.get("argmax_tool")
-                is_router_argmax = argmax_tool == target_tool
-                calibrated_probability = logprob_full_diagnostics["calibrated_probabilities"].get(
-                    target_tool
-                )
-                st.markdown("**Calibrated multiclass tool log-odds (full user request)**")
-                st.caption(LOGPROB_SCORER_HELP)
-                logprob_metric_left, logprob_metric_mid, logprob_metric_right = st.columns(3)
-                logprob_metric_left.metric(
-                    "Calibrated probability",
-                    f"{calibrated_probability:.3f}"
-                    if calibrated_probability is not None
-                    else "n/a",
-                )
-                logprob_metric_mid.metric(
-                    "Target-vs-all log-odds",
-                    f"{logprob_full_diagnostics['target_vs_all_log_odds']:.3f}",
-                )
-                logprob_metric_right.metric(
-                    "Local-router argmax match",
-                    "Yes" if is_router_argmax else "No",
-                    help=f"Local-router argmax candidate: `{argmax_tool}`.",
-                )
-                st.caption(
-                    f"Routing and Shapley scoring use the same loaded `{logprob_model_id}` "
-                    "model/tokenizer instance -- no second model is loaded for target-tool "
-                    "selection. Argument extraction was not executed; this run explains "
-                    "routing only."
-                )
+            sv_sum = float(sum(getattr(first_order_sv, "dict_values", {}).values()))
+            sv_residual = abs(sv_sum - explained_increase)
+            sv_efficiency_status = (
+                "passes" if sv_residual <= SV_EFFICIENCY_TOLERANCE else "exceeds tolerance"
+            )
+            st.caption(
+                f"SV efficiency check: sum(SV)={sv_sum:.3f}, "
+                f"explained increase={explained_increase:.3f}, "
+                f"residual={sv_residual:.6g} ({sv_efficiency_status})"
+            )
 
-            st.caption("See the Attribution tab for the full first-order segment ranking.")
+            st.caption("See the Attribution tab for the full Shapley Value (SV) segment ranking.")
 
         with tabs[1]:
-            st.markdown("**First-order attribution ranking**")
+            st.markdown("**Individual segment effects — Shapley Values (SV)**")
+            st.caption(
+                "Which individual user-request segments push the agent toward the selected tool?"
+            )
             st.dataframe(attribution_frame, use_container_width=True, hide_index=True)
             if is_final_answer_result:
                 st.caption(
-                    "With k-SII up to order 2, first-order scores alone do not sum to the "
-                    "total game value; pairwise interactions account for the remaining "
-                    "contribution."
+                    "Shapley Values are efficient on their own: they sum exactly to the "
+                    "total game value. The heatmap's pairwise k-SII interactions are a "
+                    "separate, complementary decomposition of the same value function."
                 )
             bar_xlabel = (
                 "Final-answer semantic-fidelity attribution"
@@ -2637,7 +2748,7 @@ def main() -> None:
                 show_fallback_attribution_chart(attribution_frame)
             else:
                 try:
-                    fig_ax = token_attribution_bar_plot(first_order, labels, show=False)
+                    fig_ax = token_attribution_bar_plot(first_order_sv, labels, show=False)
                 except Exception as error:  # noqa: BLE001
                     st.warning(
                         "The shapiq text attribution plot failed. "
@@ -2651,10 +2762,15 @@ def main() -> None:
             st.caption("See the Interactions tab for pairwise k-SII interactions between segments.")
 
         with tabs[2]:
-            st.markdown("**First- and second-order interaction heatmap**")
+            st.markdown("**Pairwise segment interactions — k-SII, order 2**")
             st.caption(
-                "Diagonal: first-order segment attribution. Off-diagonal: pairwise k-SII "
-                "interaction."
+                "Which segment pairs jointly trigger or suppress the selected tool-use "
+                "decision beyond their individual effects?"
+            )
+            st.caption(
+                "Diagonal: order-1 k-SII component, shown for reference only (see the "
+                "Attribution tab for standard Shapley Values). Off-diagonal: pairwise "
+                "k-SII interaction (order 2)."
             )
             if sentence_interaction_heatmap is None:
                 st.warning(
@@ -2664,7 +2780,7 @@ def main() -> None:
                 show_fallback_interaction_table(pairwise_matrix, labels)
             else:
                 try:
-                    fig_ax = sentence_interaction_heatmap(explanation, labels, show=False)
+                    fig_ax = sentence_interaction_heatmap(ksii_explanation, labels, show=False)
                 except Exception as error:  # noqa: BLE001
                     st.warning(
                         "The shapiq text interaction heatmap failed. "
@@ -2675,7 +2791,6 @@ def main() -> None:
                     if fig_ax is not None:
                         fig, ax = fig_ax
                         st.pyplot(polish_heatmap(fig, ax, user_segments), clear_figure=True)
-            st.write(f"Strongest interaction pair: `{pair_label}` ({pair_value:.3f})")
 
             if pairwise_matrix.shape[0] >= 2:
                 top_pairs = top_pairwise_interactions(pairwise_matrix, user_segments)
@@ -2730,7 +2845,7 @@ def main() -> None:
 
             with st.expander("k-SII decomposition diagnostic", expanded=False):
                 diag = interaction_order_diagnostics(
-                    explanation,
+                    ksii_explanation,
                     full_value=full_score,
                     empty_value=empty_score,
                 )
@@ -2812,10 +2927,44 @@ def main() -> None:
                             use_container_width=True,
                             hide_index=True,
                         )
+                if primary_label == LOGPROB_SCORER_LABEL and logprob_full_diagnostics is not None:
+                    with st.expander(
+                        "Calibrated multiclass tool log-odds (full user request)",
+                        expanded=False,
+                    ):
+                        argmax_tool = logprob_full_diagnostics.get("argmax_tool")
+                        is_router_argmax = argmax_tool == target_tool
+                        calibrated_probability = logprob_full_diagnostics[
+                            "calibrated_probabilities"
+                        ].get(target_tool)
+                        st.caption(LOGPROB_SCORER_HELP)
+                        logprob_metric_left, logprob_metric_mid, logprob_metric_right = st.columns(
+                            3
+                        )
+                        logprob_metric_left.metric(
+                            "Calibrated probability",
+                            f"{calibrated_probability:.3f}"
+                            if calibrated_probability is not None
+                            else "n/a",
+                        )
+                        logprob_metric_mid.metric(
+                            "Target-vs-all log-odds",
+                            f"{logprob_full_diagnostics['target_vs_all_log_odds']:.3f}",
+                        )
+                        logprob_metric_right.metric(
+                            "Local-router argmax match",
+                            "Yes" if is_router_argmax else "No",
+                            help=f"Local-router argmax candidate: `{argmax_tool}`.",
+                        )
+                        st.caption(
+                            f"{SAME_HF_MODEL_EXPLANATION} Loaded model: `{logprob_model_id}`. "
+                            "No second model is loaded for target-tool selection. Argument "
+                            "extraction was not executed; this run explains routing only."
+                        )
                 if final_answer_scorer_meta is not None:
                     with st.expander("Final answer similarity details", expanded=False):
                         diagnostics = interaction_order_diagnostics(
-                            explanation,
+                            ksii_explanation,
                             full_value=full_score,
                             empty_value=empty_score,
                         )
@@ -2934,9 +3083,17 @@ def main() -> None:
                         )
                 if show_value_function_details:
                     st.markdown("**Value function details**")
-                    st.write(f"Algorithm: `{algorithm_label}`")
-                    st.write(f"Index: `{index}`")
-                    st.write(f"Max order: `{max_order}`")
+                    st.write(
+                        f"Individual effects: `{SV_INDEX}`, max_order=`{SV_MAX_ORDER}`, "
+                        f"algorithm: `{sv_algorithm_label}`"
+                    )
+                    st.write(
+                        f"Pairwise interactions: `{KSII_INDEX}`, max_order=`{KSII_MAX_ORDER}`, "
+                        f"algorithm: `{ksii_algorithm_label}`"
+                    )
+                    st.write("Players: user-request segments")
+                    st.write("Fixed context: system prompt + tool definitions")
+                    st.write("Value function: selected-tool support under the chosen scorer")
                     if not using_exact_computation:
                         st.write(f"Budget: `{budget}`")
                     st.write("Full coalition prompt:")
