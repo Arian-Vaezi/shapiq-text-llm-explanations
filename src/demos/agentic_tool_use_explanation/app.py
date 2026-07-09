@@ -311,7 +311,7 @@ section[data-testid="stSidebar"] {
 }
 .floating-robot-wrap {
     position: absolute;
-    top: 72px;
+    top: 8px;
     right: 115px;
     z-index: 10;
     pointer-events: auto;
