@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import os
 
 # Must be set before torch/transformers/spaCy/sentence-transformers are
@@ -156,6 +157,8 @@ MOCK_SYSTEM_SEGMENTS = [
     "Use no_tool for stable conceptual explanations that do not require external data.",
 ]
 TEXT_PLOT_PACKAGE = "_agentic_text_plot"
+ASSET_DIR = Path(__file__).parent / "assets"
+ROBOT_IMAGE_PATH = ASSET_DIR / "robot_canva.png"
 
 
 st.set_page_config(
@@ -305,6 +308,20 @@ section[data-testid="stSidebar"] {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 0.92rem;
     margin: 0.25rem 0 0 0;
+}
+.floating-robot-wrap {
+    position: absolute;
+    top: 72px;
+    right: 115px;
+    z-index: 10;
+    pointer-events: auto;
+}
+.floating-robot {
+    width: 145px;
+    height: auto;
+    opacity: 0.97;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 /* ---- Mode selector: two pill/card options -------------------------
    st.radio's own DOM wrapper picks up `.st-key-agentic_mode_card_row`
@@ -957,6 +974,9 @@ section[data-testid="stSidebar"] {
     margin: 0;
 }
 @media (max-width: 850px) {
+    .floating-robot-wrap {
+        display: none;
+    }
     .scenario-panel,
     .mock-chat,
     .xai-summary-card {
@@ -971,6 +991,10 @@ section[data-testid="stSidebar"] {
 }
 </style>
 """
+
+
+def _image_to_base64(path: Path) -> str:
+    return base64.b64encode(path.read_bytes()).decode("utf-8")
 
 
 @dataclass(frozen=True)
@@ -2029,6 +2053,21 @@ def main() -> None:
             value=False,
             key="agentic_developer_mode",
             help="Show segmentation, scorer, and raw-diagnostic controls for debugging.",
+        )
+    if ROBOT_IMAGE_PATH.exists():
+        robot_base64 = _image_to_base64(ROBOT_IMAGE_PATH)
+        st.markdown(
+            f"""
+            <div class="floating-robot-wrap">
+                <img
+                    src="data:image/png;base64,{robot_base64}"
+                    class="floating-robot"
+                    title="Image from Canva"
+                    alt="Decorative robot illustration"
+                />
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
     if "has_run" not in st.session_state:
