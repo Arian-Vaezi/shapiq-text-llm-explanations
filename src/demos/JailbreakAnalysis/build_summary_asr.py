@@ -63,27 +63,36 @@ def build_summary():
                 data = json.load(f)
 
 
+            # experiment config lives under "settings" in the raw files,
+            # but keep top-level fallbacks in case older files differ
+            settings = data.get("settings", {})
+
+            judge = data.get("judge", {}) or {}
+
             # keep only what the explorer needs
             entry = {
 
                 "file": file.name,
 
                 # experiment config
-                "model": data.get("model"),
-                "temperature": data.get("temperature"),
+                "model": settings.get("model", data.get("model")),
+                "temperature": settings.get("temperature", data.get("temperature")),
+                "tier": settings.get("tier"),
+                "device": settings.get("device"),
+                "judge_model": settings.get("judge_model"),
 
                 # jailbreak prompt
-                "prompt_id": data.get(
-                    "prompt_id",
-                    data.get("id")
-                ),
+                "prompt_id": settings.get("prompt_id", data.get("prompt_id", data.get("id"))),
 
-                "prompt_class": data.get(
-                    "class_name"
-                ),
+                "prompt_class": settings.get("class_name", data.get("class_name")),
+                "class_id": settings.get("class_id", data.get("class_id")),
+                "template": settings.get("template", data.get("template")),
+                "source": settings.get("source", data.get("source")),
+                "domain": settings.get("domain", data.get("domain")),
 
                 "prompt_text": data.get(
-                    "prompt"
+                    "prompt_text",
+                    data.get("goal_en", data.get("prompt"))
                 ),
 
                 # generation result
@@ -92,18 +101,19 @@ def build_summary():
                     ""
                 ),
 
+                "generation_error": data.get("generation_error"),
+
                 # judge
                 "jailbroken": data.get(
                     "jailbroken",
-                    False
+                    judge.get("jailbroken", False)
                 ),
 
-                "judge_raw": data.get(
-                    "judge",
-                    {}
-                ).get(
-                    "judge_raw"
-                ),
+                "judge_raw": judge.get("judge_raw"),
+
+                # misc metadata (handy for debugging/sorting)
+                "timestamp_utc": data.get("timestamp_utc"),
+                "runtime_seconds": data.get("runtime_seconds"),
 
             }
 
