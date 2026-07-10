@@ -136,7 +136,7 @@ SAMPLE_TRACES = {
             "the intended action."
         ),
     },
-    "Web search: latest F1 winner": {
+    "Web search: latest Formula 1 winner": {
         "target_tool": "web_search_tool",
         "system_segments": [
             "Use web_search_tool when the answer depends on current, latest, recent, or live information.",
