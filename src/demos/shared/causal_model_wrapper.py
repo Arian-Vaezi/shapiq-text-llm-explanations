@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from threading import Thread
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -28,7 +28,7 @@ class CausalModelWrapper:
     - Streaming text generation
     """
 
-    CAUSAL_MODELS: list[str] = [
+    CAUSAL_MODELS: ClassVar[list[str]] = [
         "mistral",
         "llama",
         "gemma",
@@ -45,11 +45,13 @@ class CausalModelWrapper:
         model_name: str,
         device: str | int = "cuda",
         hf_token: str | None = None,
+        temperature: float = 0.0,
     ) -> None:
         self.model_name = model_name
         self.device = resolve_device(device)
         self.is_causal = True
         self.is_encoder = False
+        self.temperature = temperature
 
         print(f"[CausalModelWrapper] Loading '{model_name}' on {self.device}")
 
@@ -61,7 +63,7 @@ class CausalModelWrapper:
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
-        dtype = torch.float16 if self.device in ("cuda", "mps") else torch.float32
+        dtype = torch.float16 if self.device == "cuda" else torch.float32
 
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,
@@ -127,6 +129,7 @@ class CausalModelWrapper:
         max_new_tokens: int = 32,
         *,
         chat: bool = False,
+        temperature: float | None = None,
     ) -> str:
         """Generate text from a prompt.
 
@@ -145,12 +148,18 @@ class CausalModelWrapper:
                 add_generation_prompt=True,
             )
 
-        result = self.pipe(
-            prompt,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-            return_full_text=False,
-        )
+        temp = temperature if temperature is not None else self.temperature
+        do_sample = temp > 0.0
+
+        kwargs = {
+            "max_new_tokens": max_new_tokens,
+            "do_sample": do_sample,
+            "return_full_text": False,
+        }
+        if do_sample:
+            kwargs["temperature"] = temp
+
+        result = self.pipe(prompt, **kwargs)
         return result[0]["generated_text"].strip()
 
     def generate_text_stream(
@@ -159,6 +168,7 @@ class CausalModelWrapper:
         max_new_tokens: int = 32,
         *,
         chat: bool = False,
+        temperature: float | None = None,
     ) -> Iterator[str]:
         """Same as generate_text but yields tokens as they are produced."""
         if chat:
@@ -175,9 +185,21 @@ class CausalModelWrapper:
             skip_special_tokens=True,
         )
 
+        temp = temperature if temperature is not None else self.temperature
+        do_sample = temp > 0.0
+
+        gen_kwargs = dict(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            streamer=streamer,
+        )
+        if do_sample:
+            gen_kwargs["temperature"] = temp
+
         thread = Thread(
             target=self.model.generate,
-            kwargs=dict(**inputs, max_new_tokens=max_new_tokens, do_sample=False, streamer=streamer),
+            kwargs=gen_kwargs,
         )
         thread.start()
         yield from streamer

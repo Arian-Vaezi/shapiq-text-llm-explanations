@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-import numpy as np
+from typing import TYPE_CHECKING, ClassVar
+
 import torch
 from transformers import AutoModel, AutoTokenizer
 
 from .device_utils import resolve_device
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 class EncoderModelWrapper:
@@ -15,7 +19,7 @@ class EncoderModelWrapper:
       with encoder-based safety classifiers.
     """
 
-    ENCODER_MODELS: list[str] = [
+    ENCODER_MODELS: ClassVar[list[str]] = [
         "distilbert",
         "roberta",
         "bert",

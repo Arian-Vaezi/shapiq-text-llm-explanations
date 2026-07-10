@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-import numpy as np
+from typing import TYPE_CHECKING
+
 import torch
 from sentence_transformers import SentenceTransformer
 
 from demos.shared.device_utils import resolve_device
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 class EmbeddingModelWrapper:
@@ -20,8 +24,13 @@ class EmbeddingModelWrapper:
         vecs = emb.encode(["hello world", "foo bar"])  # shape (2, 768), L2-normalized
     """
 
-    
-    EMBEDDING_MODELS: list[str] = ("sentence-transformers", "all-mpnet", "all-minilm", "bge-", "e5-")
+    EMBEDDING_MODELS: list[str] = (
+        "sentence-transformers",
+        "all-mpnet",
+        "all-minilm",
+        "bge-",
+        "e5-",
+    )
 
     def __init__(
         self,
