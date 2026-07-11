@@ -150,7 +150,7 @@ def test_local_hf_classification_router_picks_argmax_via_scorer_labels() -> None
         "weather_tool": -0.5,
         "calculator_tool": -2.0,
         "web_search_tool": -3.0,
-        "no_tool": -4.0,
+        "no_tool": -3.25,
     }
     assert "A" in choice.reason
     assert captured["user_request"] == "Will it rain in Berlin tomorrow?"
@@ -207,9 +207,9 @@ def test_local_hf_classification_router_uses_calibrated_argmax_not_raw_argmax() 
         "weather_tool": 1.0,
         "calculator_tool": 0.2,
         "web_search_tool": -1.0,
-        "no_tool": -2.0,
+        "no_tool": -1.25,
     }
-    assert "calibrated" in choice.reason.lower()
+    assert "no_tool_boost" in choice.reason.lower()
     assert "raw" not in choice.reason.lower()
 
 
@@ -227,7 +227,7 @@ def test_confidence_aware_raw_margin_gate_is_optional_and_thresholded() -> None:
         "no_tool": 0.0,
     }
 
-    default_tool, _ = select_tool_from_scores(raw_scores, calibrated_scores)
+    default_tool, default_scores = select_tool_from_scores(raw_scores, calibrated_scores)
     gated_tool, gated_scores = select_tool_from_scores(
         raw_scores,
         calibrated_scores,
@@ -241,7 +241,8 @@ def test_confidence_aware_raw_margin_gate_is_optional_and_thresholded() -> None:
         raw_margin_threshold=0.5,
     )
 
-    assert default_tool == "weather_tool"
+    assert default_tool == "no_tool"
+    assert default_scores["no_tool"] == 0.75
     assert gated_tool == "no_tool"
     assert gated_scores == raw_scores
     assert ungated_tool == "weather_tool"
@@ -289,7 +290,7 @@ def test_scaled_calibration_interpolates_raw_and_fully_calibrated_scores() -> No
     assert calibrated_endpoint == calibrated_scores
 
 
-def test_no_tool_boost_adjusts_only_no_tool_and_is_opt_in() -> None:
+def test_no_tool_boost_adjusts_only_no_tool_and_is_the_default() -> None:
     raw_scores = {
         "weather_tool": -1.0,
         "calculator_tool": -2.0,
@@ -303,15 +304,15 @@ def test_no_tool_boost_adjusts_only_no_tool_and_is_opt_in() -> None:
         "no_tool": 0.0,
     }
 
-    default_tool, default_scores = select_tool_from_scores(raw_scores, calibrated_scores)
-    boosted_tool, boosted_scores = select_tool_from_scores(
+    calibrated_tool, unadjusted_scores = select_tool_from_scores(
         raw_scores,
         calibrated_scores,
-        mode="no_tool_boost",
+        mode="calibrated",
     )
+    boosted_tool, boosted_scores = select_tool_from_scores(raw_scores, calibrated_scores)
 
-    assert default_tool == "weather_tool"
-    assert default_scores == calibrated_scores
+    assert calibrated_tool == "weather_tool"
+    assert unadjusted_scores == calibrated_scores
     assert boosted_tool == "no_tool"
     assert boosted_scores == {
         "weather_tool": 0.5,
@@ -437,7 +438,7 @@ def test_local_hf_classification_router_owns_no_model_or_tokenizer() -> None:
 
     assert vars(router) == {
         "scorer": sentinel_scorer,
-        "selection_mode": "calibrated",
+        "selection_mode": "no_tool_boost",
         "raw_margin_threshold": 1.0,
         "calibration_strength": 1.0,
         "no_tool_boost_delta": 0.75,

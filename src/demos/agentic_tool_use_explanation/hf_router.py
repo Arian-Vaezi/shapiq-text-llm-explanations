@@ -308,14 +308,15 @@ def select_tool_from_scores(
     raw_scores: Mapping[str, float],
     calibrated_scores: Mapping[str, float],
     *,
-    mode: str = "calibrated",
+    mode: str = "no_tool_boost",
     raw_margin_threshold: float = 1.0,
     calibration_strength: float = 1.0,
     no_tool_boost_delta: float = 0.75,
 ) -> tuple[str, dict[str, float]]:
     """Select a tool with an isolated, optional confidence-aware adjustment.
 
-    ``calibrated`` preserves the production behavior. ``raw_margin_gate``
+    ``no_tool_boost`` is the default production behavior. ``calibrated``
+    preserves the unadjusted calibrated evidence, while ``raw_margin_gate``
     trusts the raw argmax when its top-vs-runner-up margin reaches the supplied
     threshold. ``scaled_calibration`` applies only a fraction of the inferred
     baseline correction: ``raw - strength * (raw - calibrated)``.
@@ -386,7 +387,7 @@ class LocalHFClassificationRouter:
         self,
         scorer: CalibratedToolLogOddsScorer,
         *,
-        selection_mode: str = "calibrated",
+        selection_mode: str = "no_tool_boost",
         raw_margin_threshold: float = 1.0,
         calibration_strength: float = 1.0,
         no_tool_boost_delta: float = 0.75,
