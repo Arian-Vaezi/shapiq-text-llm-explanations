@@ -12,7 +12,7 @@ sys.path.insert(0, str(DEMO_DIR))
 
 from hf_router import HFArgumentExtractor, LocalHFClassificationRouter, LocalHFRouter  # noqa: E402
 from scorers import (  # noqa: E402
-    CALIBRATION_USER_REQUEST,
+    CALIBRATION_USER_REQUESTS,
     ROUTING_LABELS,
     CalibratedToolLogOddsScorer,
     build_routing_classification_prompt,
@@ -218,7 +218,7 @@ def test_local_hf_classification_router_scores_the_exact_canonical_prompt() -> N
     """
     scorer = CalibratedToolLogOddsScorer.__new__(CalibratedToolLogOddsScorer)
     scorer.routing_labels = dict(ROUTING_LABELS)
-    scorer.calibration_user_request = CALIBRATION_USER_REQUEST
+    scorer.calibration_user_requests = CALIBRATION_USER_REQUESTS
     scorer.model_id = "fake-model-id"
     scorer.routing_label_separator = " "
     scorer._calibration_cache = {}
@@ -248,12 +248,15 @@ def test_local_hf_classification_router_scores_the_exact_canonical_prompt() -> N
             tool_descriptions=TOOL_DESCRIPTIONS,
             routing_labels=ROUTING_LABELS,
         ),
-        build_routing_classification_prompt(
-            system_prompt="Route to the correct tool.",
-            user_request=CALIBRATION_USER_REQUEST,
-            tool_descriptions=TOOL_DESCRIPTIONS,
-            routing_labels=ROUTING_LABELS,
-        ),
+        *[
+            build_routing_classification_prompt(
+                system_prompt="Route to the correct tool.",
+                user_request=calibration_user_request,
+                tool_descriptions=TOOL_DESCRIPTIONS,
+                routing_labels=ROUTING_LABELS,
+            )
+            for calibration_user_request in CALIBRATION_USER_REQUESTS
+        ],
     ]
 
 

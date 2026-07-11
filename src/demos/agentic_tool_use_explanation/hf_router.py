@@ -327,12 +327,41 @@ class LocalHFClassificationRouter:
         tool_descriptions: Mapping[str, str],
     ) -> ToolChoice:
         """Return the calibrated-evidence argmax decision for one full user request."""
+        raw_score_method = getattr(self.scorer, "score_full_request_labels", None)
+        raw_scores = (
+            raw_score_method(
+                user_request,
+                system_prompt=system_prompt,
+                tool_descriptions=tool_descriptions,
+            )
+            if callable(raw_score_method)
+            else None
+        )
         calibrated_scores = self.scorer.score_full_request_calibrated_labels(
             user_request,
             system_prompt=system_prompt,
             tool_descriptions=tool_descriptions,
         )
         selected_tool = max(calibrated_scores, key=calibrated_scores.get)
+        if raw_scores is None:  # Compatibility with lightweight test doubles.
+            raw_scores = calibrated_scores
+        raw_argmax = max(raw_scores, key=raw_scores.get)
+        calibration_debug = {
+            tool_name: raw_scores[tool_name] - calibrated_scores[tool_name]
+            for tool_name in calibrated_scores
+        }
+
+        import sys
+
+        print(
+            f"[ROUTE-DEBUG] request={user_request[:60]!r} "
+            f"raw_scores={raw_scores} "
+            f"calibrated_scores={calibrated_scores} "
+            f"calibration_baseline_b_t={calibration_debug} "
+            f"raw_argmax={raw_argmax} "
+            f"calibrated_argmax={selected_tool}",
+            file=sys.stderr,
+        )
         label = self.scorer.routing_labels.get(selected_tool, "?")
         return ToolChoice(
             tool=selected_tool,

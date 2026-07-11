@@ -48,11 +48,17 @@ ROUTING_LABELS: dict[str, str] = {
 # the label's first character into a single (different) token.
 ROUTING_LABEL_SEPARATOR = " "
 
-# Content-free calibration request. Distinct from the empty Shapley coalition
-# (which uses an empty user request "") -- this is a separate, fixed probe used
-# only to estimate each label's per-prompt/per-label prior under the routing
-# protocol.
-CALIBRATION_USER_REQUEST = "[NO USER REQUEST]"
+# Diverse neutral calibration requests. Distinct from the empty Shapley
+# coalition (which uses an empty user request "") -- these fixed probes are
+# used only to estimate each label's per-prompt/per-label prior under the
+# routing protocol.
+CALIBRATION_USER_REQUESTS: tuple[str, ...] = (
+    "Hello there.",
+    "I have a quick question for you.",
+    "Let's talk about something for a moment.",
+    "Can you help me with this?",
+    "Just checking in.",
+)
 
 TOOL_KEYWORDS = {
     "weather_tool": {
@@ -687,7 +693,7 @@ class CalibratedToolLogOddsScorer:
         *,  # future-proof: force all following args to be keyword-only
         routing_labels: Mapping[str, str] = ROUTING_LABELS,
         routing_label_separator: str = ROUTING_LABEL_SEPARATOR,
-        calibration_user_request: str = CALIBRATION_USER_REQUEST,
+        calibration_user_requests: tuple[str, ...] = CALIBRATION_USER_REQUESTS,
         max_pairs_per_batch: int | None = None,
     ) -> None:
         self.model_id = model_id
@@ -695,7 +701,7 @@ class CalibratedToolLogOddsScorer:
         self.dtype = dtype
         self.routing_labels = dict(routing_labels)
         self.routing_label_separator = routing_label_separator
-        self.calibration_user_request = calibration_user_request
+        self.calibration_user_requests = tuple(calibration_user_requests)
         self.last_debug_outputs: list[dict[str, object]] = []
         self.tokenizer_label_diagnostics: dict[str, RoutingLabelTokenization] | None = None
         # Keyed by the full protocol identity (see _protocol_key): model id,
@@ -760,18 +766,29 @@ class CalibratedToolLogOddsScorer:
 
     def _validate_tokenizer_labels(self) -> None:
         """Validate routing-label tokenization once and warn if labels are multi-token."""
-        probe_prompt = build_routing_classification_prompt(
-            system_prompt="",
-            user_request=self.calibration_user_request,
-            tool_descriptions={},
-            routing_labels=self.routing_labels,
-        )
-        diagnostics = validate_routing_label_tokens(
-            self.tokenizer,
-            probe_prompt,
-            routing_labels=self.routing_labels,
-            separator=self.routing_label_separator,
-        )
+        diagnostics_by_probe = []
+        for calibration_user_request in self.calibration_user_requests:
+            probe_prompt = build_routing_classification_prompt(
+                system_prompt="",
+                user_request=calibration_user_request,
+                tool_descriptions={},
+                routing_labels=self.routing_labels,
+            )
+            diagnostics_by_probe.append(
+                validate_routing_label_tokens(
+                    self.tokenizer,
+                    probe_prompt,
+                    routing_labels=self.routing_labels,
+                    separator=self.routing_label_separator,
+                )
+            )
+        diagnostics = {
+            tool_name: max(
+                (probe_diagnostics[tool_name] for probe_diagnostics in diagnostics_by_probe),
+                key=lambda diagnostic: diagnostic.token_length,
+            )
+            for tool_name in self.routing_labels
+        }
         self.tokenizer_label_diagnostics = diagnostics
         multi_token_labels = {
             tool_name: diag.token_length
@@ -992,7 +1009,7 @@ class CalibratedToolLogOddsScorer:
             tuple(tool_descriptions.items()),
             tuple(self.routing_labels.items()),
             self.routing_label_separator,
-            self.calibration_user_request,
+            tuple(self.calibration_user_requests),
             tuple(candidate_tools),
         )
 
@@ -1006,15 +1023,23 @@ class CalibratedToolLogOddsScorer:
         """Return the cached (or freshly computed) calibration label scores ``b_t``."""
         if protocol_key in self._calibration_cache:
             return self._calibration_cache[protocol_key]
-        calibration_prompt = build_routing_classification_prompt(
-            system_prompt=system_prompt,
-            user_request=self.calibration_user_request,
-            tool_descriptions=tool_descriptions,
-            routing_labels=self.routing_labels,
-        )
-        calibration_scores = self._label_log_scores_batched([calibration_prompt], candidate_tools)[
-            0
+        calibration_prompts = [
+            build_routing_classification_prompt(
+                system_prompt=system_prompt,
+                user_request=calibration_user_request,
+                tool_descriptions=tool_descriptions,
+                routing_labels=self.routing_labels,
+            )
+            for calibration_user_request in self.calibration_user_requests
         ]
+        calibration_score_rows = self._label_log_scores_batched(
+            calibration_prompts, candidate_tools
+        )
+        calibration_scores = {
+            tool_name: sum(row[tool_name] for row in calibration_score_rows)
+            / len(calibration_score_rows)
+            for tool_name in candidate_tools
+        }
         self._calibration_cache[protocol_key] = calibration_scores
         return calibration_scores
 
@@ -1208,6 +1233,24 @@ class CalibratedToolLogOddsScorer:
         )
         prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
         full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
+        for row_index, prompt in enumerate(prompts):
+            prompt_only_ids = prompt_inputs["input_ids"][row_index][
+                : int(prompt_inputs["attention_mask"][row_index].sum())
+            ].tolist()
+            full_ids = full_inputs["input_ids"][row_index][
+                : int(full_inputs["attention_mask"][row_index].sum())
+            ].tolist()
+            prefix_len = min(len(prompt_only_ids), len(full_ids))
+            if prompt_only_ids[:prefix_len] != full_ids[:prefix_len]:
+                import sys
+
+                print(
+                    f"[TOKEN-BOUNDARY-MISMATCH] row={row_index} "
+                    f"prompt_only_tail={prompt_only_ids[-5:]} "
+                    f"full_prefix_tail={full_ids[len(prompt_only_ids) - 5 : len(prompt_only_ids)]} "
+                    f"prompt='{prompt[-40:]!r}'",
+                    file=sys.stderr,
+                )
         continuation_lengths = [
             int(full_len - prompt_len)
             for prompt_len, full_len in zip(prompt_lengths, full_lengths, strict=True)
@@ -1233,6 +1276,16 @@ class CalibratedToolLogOddsScorer:
                 ):
                     start = int(prompt_len - 1)
                     stop = start + int(continuation_len)
+                    full_ids = full_inputs["input_ids"][row_index][
+                        : int(full_inputs["attention_mask"][row_index].sum())
+                    ].tolist()
+                    sliced_ids = full_ids[start:stop]
+                    decode = getattr(self.tokenizer, "decode", None)
+                    decoded = decode(sliced_ids) if callable(decode) else repr(sliced_ids)
+                    print(
+                        f"[SCORED-SPAN] row={row_index} decoded={decoded!r} "
+                        f"expected_label_token={getattr(self, 'routing_labels', None)}"
+                    )
                     score = float(token_log_probs[row_index, start:stop].sum().item())
                     scores.append(score)
                 return scores

@@ -16,7 +16,7 @@ sys.path.insert(0, str(DEMO_DIR))
 
 import app as app_module  # noqa: E402
 from scorers import (  # noqa: E402
-    CALIBRATION_USER_REQUEST,
+    CALIBRATION_USER_REQUESTS,
     ROUTING_LABELS,
     CalibratedToolLogOddsScorer,
     LexicalToolRouter,
@@ -50,7 +50,7 @@ def make_fake_calibrated_scorer(
     """Build a CalibratedToolLogOddsScorer with a stubbed model-scoring layer.
 
     Real coalition prompts route to ``coalition_scores``; the calibration probe
-    prompt (``CALIBRATION_USER_REQUEST``) routes to ``calibration_scores``; and
+    prompts (``CALIBRATION_USER_REQUESTS``) route to ``calibration_scores``; and
     the true empty-coalition prompt (empty user request) routes to
     ``empty_scores``. This lets tests exercise the real calibration/target-vs-all/
     empty-coalition-normalization logic without loading a model.
@@ -59,13 +59,15 @@ def make_fake_calibrated_scorer(
     scorer.model_id = "fake-model-id"
     scorer.routing_labels = dict(ROUTING_LABELS)
     scorer.routing_label_separator = " "
-    scorer.calibration_user_request = CALIBRATION_USER_REQUEST
+    scorer.calibration_user_requests = CALIBRATION_USER_REQUESTS
     scorer.last_debug_outputs = []
     scorer._calibration_cache = {}
     scorer._empty_log_odds_cache = {}
     scorer._raw_score_row_cache = {}
 
-    calibration_marker = f"User request:\n{CALIBRATION_USER_REQUEST}\n\n"
+    calibration_markers = tuple(
+        f"User request:\n{request}\n\n" for request in CALIBRATION_USER_REQUESTS
+    )
     empty_marker = "User request:\n\nDecision:"
 
     def fake_compute_label_log_scores_batched(
@@ -75,7 +77,7 @@ def make_fake_calibrated_scorer(
         del candidate_tools
         rows = []
         for prompt in prompts:
-            if calibration_marker in prompt:
+            if any(marker in prompt for marker in calibration_markers):
                 rows.append(dict(calibration_scores))
             elif prompt.endswith(empty_marker):
                 rows.append(dict(empty_scores))
@@ -810,10 +812,10 @@ def test_calibrated_scorer_reuses_raw_scores_for_repeated_empty_coalition_prompt
     )
     prompts_computed_after_first = call_counter["prompts_computed"]
     # One real compute call for the empty-coalition prompt (main-loop scoring)
-    # and one for the distinct calibration probe prompt -- the internal
+    # and one for each distinct calibration probe prompt -- the internal
     # empty-coalition-normalization helper reuses the first call's cached row
-    # instead of triggering a third compute call for the identical text.
-    assert prompts_computed_after_first == 2
+    # instead of triggering another compute call for the identical text.
+    assert prompts_computed_after_first == 1 + len(CALIBRATION_USER_REQUESTS)
 
     # Ask again with a different target tool: the empty-coalition raw scores
     # for this exact prompt text must be reused from cache, not recomputed --
