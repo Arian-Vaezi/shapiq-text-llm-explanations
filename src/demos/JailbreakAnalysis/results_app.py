@@ -17,6 +17,7 @@ Run:
 
 from pathlib import Path
 import json
+import html
 
 import streamlit as st
 
@@ -67,6 +68,28 @@ st.set_page_config(
     page_icon="🔓",
     layout="wide",
     initial_sidebar_state="expanded",
+)
+
+
+st.markdown(
+    """
+<style>
+.prompt-box {
+    background: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #6366f1;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #1f2937;
+}
+</style>
+""",
+    unsafe_allow_html=True,
 )
 
 
@@ -240,11 +263,10 @@ Only output the binary label.
 """
 
 
-    st.code(
-        judge_prompt,
-        language="text",
+    st.markdown(
+        f'<div class="prompt-box">{html.escape(judge_prompt)}</div>',
+        unsafe_allow_html=True,
     )
-
 
 
     st.divider()
@@ -304,9 +326,9 @@ Only output the binary label.
                     "Show prompt text"
                 ):
 
-                    st.code(
-                        p["text"],
-                        language="text"
+                    st.markdown(
+                        f'<div class="prompt-box">{html.escape(p["text"])}</div>',
+                        unsafe_allow_html=True,
                     )
 
 
@@ -509,9 +531,13 @@ elif page == "🔍 Result Explorer":
         st.markdown(
             f"""
 - **Tier:** `{result.get('tier', '—')}`
+- **Class ID:** `{result.get('class_id', '—')}`
+- **Template:** `{result.get('template', '—')}`
 - **Source:** {result.get('source', '—')}
 - **Domain:** `{result.get('domain', '—')}`
 - **Judge model:** `{result.get('judge_model', '—')}`
+- **Timestamp (UTC):** `{result.get('timestamp_utc', '—')}`
+- **Runtime (s):** `{result.get('runtime_seconds', '—')}`
 """
         )
 
@@ -527,10 +553,11 @@ elif page == "🔍 Result Explorer":
 
     st.header("💥 Prompt Text")
 
-    st.text_area(
-        "Jailbreak prompt sent to the model",
-        result.get("prompt_text", ""),
-        height=150,
+    prompt_text_escaped = html.escape(result.get("prompt_text", ""))
+
+    st.markdown(
+        f'<div class="prompt-box">{prompt_text_escaped}</div>',
+        unsafe_allow_html=True,
     )
 
 
@@ -545,18 +572,10 @@ elif page == "🔍 Result Explorer":
     st.header("🤖 Model Response")
 
 
-    st.text_area(
-
-        "Generated response",
-
-        result.get(
-            "response",
-            ""
-        ),
-
-        height=250
-
-    )
+    st.markdown(
+    f'<div class="prompt-box">{html.escape(result.get("response", ""))}</div>',
+    unsafe_allow_html=True,
+)
 
 
 
