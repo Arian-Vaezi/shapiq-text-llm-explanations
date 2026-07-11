@@ -296,7 +296,12 @@ class LocalHFRouter:
             return self._torch.device("cuda" if self._torch.cuda.is_available() else "cpu")
 
 
-HF_SELECTION_MODES = ("calibrated", "raw_margin_gate", "scaled_calibration")
+HF_SELECTION_MODES = (
+    "calibrated",
+    "raw_margin_gate",
+    "scaled_calibration",
+    "no_tool_boost",
+)
 
 
 def select_tool_from_scores(
@@ -306,6 +311,7 @@ def select_tool_from_scores(
     mode: str = "calibrated",
     raw_margin_threshold: float = 1.0,
     calibration_strength: float = 1.0,
+    no_tool_boost_delta: float = 0.75,
 ) -> tuple[str, dict[str, float]]:
     """Select a tool with an isolated, optional confidence-aware adjustment.
 
@@ -313,6 +319,8 @@ def select_tool_from_scores(
     trusts the raw argmax when its top-vs-runner-up margin reaches the supplied
     threshold. ``scaled_calibration`` applies only a fraction of the inferred
     baseline correction: ``raw - strength * (raw - calibrated)``.
+    ``no_tool_boost`` adds a fixed delta to only the calibrated ``no_tool``
+    score before recomputing the argmax.
     """
     if mode not in HF_SELECTION_MODES:
         raise ValueError(f"Unknown HF selection mode {mode!r}; expected one of {HF_SELECTION_MODES!r}.")
@@ -324,6 +332,8 @@ def select_tool_from_scores(
         raise ValueError("raw_margin_threshold must be non-negative.")
     if not 0.0 <= calibration_strength <= 1.0:
         raise ValueError("calibration_strength must be between 0 and 1.")
+    if mode == "no_tool_boost" and no_tool_boost_delta < 0:
+        raise ValueError("no_tool_boost_delta must be non-negative.")
 
     raw = dict(raw_scores)
     calibrated = dict(calibrated_scores)
@@ -340,10 +350,15 @@ def select_tool_from_scores(
                 - calibration_strength * (raw[tool_name] - calibrated[tool_name])
                 for tool_name in raw
             }
-    else:
+    elif mode == "raw_margin_gate":
         ranked_raw = sorted(raw.values(), reverse=True)
         raw_margin = ranked_raw[0] - ranked_raw[1] if len(ranked_raw) > 1 else float("inf")
         decision_scores = raw if raw_margin >= raw_margin_threshold else calibrated
+    else:
+        if "no_tool" not in calibrated:
+            raise ValueError("no_tool_boost mode requires a 'no_tool' candidate.")
+        decision_scores = dict(calibrated)
+        decision_scores["no_tool"] += no_tool_boost_delta
     return max(decision_scores, key=decision_scores.get), decision_scores
 
 
@@ -374,11 +389,13 @@ class LocalHFClassificationRouter:
         selection_mode: str = "calibrated",
         raw_margin_threshold: float = 1.0,
         calibration_strength: float = 1.0,
+        no_tool_boost_delta: float = 0.75,
     ) -> None:
         self.scorer = scorer
         self.selection_mode = selection_mode
         self.raw_margin_threshold = raw_margin_threshold
         self.calibration_strength = calibration_strength
+        self.no_tool_boost_delta = no_tool_boost_delta
 
     def choose_tool(
         self,
@@ -413,6 +430,7 @@ class LocalHFClassificationRouter:
             mode=self.selection_mode,
             raw_margin_threshold=self.raw_margin_threshold,
             calibration_strength=self.calibration_strength,
+            no_tool_boost_delta=self.no_tool_boost_delta,
         )
         calibration_debug = {
             tool_name: raw_scores[tool_name] - calibrated_scores[tool_name]

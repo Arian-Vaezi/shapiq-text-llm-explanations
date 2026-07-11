@@ -33,6 +33,7 @@ DEFAULT_TESTSET = Path(__file__).with_name("holdout_samples.json")
 DEFAULT_OUTPUT = Path(__file__).with_name("holdout_eval_results.json")
 RAW_MARGIN_THRESHOLDS = (0.25, 0.5, 0.75, 1.0, 1.5, 2.0)
 CALIBRATION_STRENGTHS = (0.0, 0.25, 0.5, 0.75, 1.0)
+NO_TOOL_BOOST_DELTAS = (0.25, 0.5, 0.75, 1.0, 1.5, 2.0)
 
 
 def parse_args() -> argparse.Namespace:
@@ -46,6 +47,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--selection-mode", choices=HF_SELECTION_MODES, default="calibrated")
     parser.add_argument("--raw-margin-threshold", type=float, default=1.0)
     parser.add_argument("--calibration-strength", type=float, default=1.0)
+    parser.add_argument("--no-tool-boost-delta", type=float, default=0.75)
     return parser.parse_args()
 
 
@@ -155,6 +157,7 @@ def predictions_for_strategy(
     mode: str,
     raw_margin_threshold: float = 1.0,
     calibration_strength: float = 1.0,
+    no_tool_boost_delta: float = 0.75,
 ) -> list[str]:
     """Recompute decisions from saved scores without another model call."""
     return [
@@ -164,6 +167,7 @@ def predictions_for_strategy(
             mode=mode,
             raw_margin_threshold=raw_margin_threshold,
             calibration_strength=calibration_strength,
+            no_tool_boost_delta=no_tool_boost_delta,
         )[0]
         for result in results
     ]
@@ -198,10 +202,22 @@ def build_strategy_sweep(results: list[dict[str, Any]]) -> dict[str, Any]:
         )
         for strength in CALIBRATION_STRENGTHS
     }
+    no_tool_boost = {
+        str(delta): strategy_metrics(
+            results,
+            predictions_for_strategy(
+                results,
+                mode="no_tool_boost",
+                no_tool_boost_delta=delta,
+            ),
+        )
+        for delta in NO_TOOL_BOOST_DELTAS
+    }
     return {
         "calibrated_baseline": baseline,
         "raw_margin_gate": margin_gate,
         "scaled_calibration": scaled_calibration,
+        "no_tool_boost": no_tool_boost,
     }
 
 
@@ -269,6 +285,11 @@ def print_summary(summary: dict[str, Any]) -> None:
                 f"  calibration strength={strength}: {metrics['correct']}/{metrics['total']} "
                 f"({format_accuracy(metrics['accuracy'])}) keys={metrics['key_samples_correct']}"
             )
+        for delta, metrics in sweep["no_tool_boost"].items():
+            print(
+                f"  no_tool boost delta={delta}: {metrics['correct']}/{metrics['total']} "
+                f"({format_accuracy(metrics['accuracy'])}) keys={metrics['key_samples_correct']}"
+            )
 
 
 def main() -> None:
@@ -286,6 +307,7 @@ def main() -> None:
         selection_mode=args.selection_mode,
         raw_margin_threshold=args.raw_margin_threshold,
         calibration_strength=args.calibration_strength,
+        no_tool_boost_delta=args.no_tool_boost_delta,
     )
     results: list[dict[str, Any]] = []
 

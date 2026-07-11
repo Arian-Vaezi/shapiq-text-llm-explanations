@@ -289,6 +289,39 @@ def test_scaled_calibration_interpolates_raw_and_fully_calibrated_scores() -> No
     assert calibrated_endpoint == calibrated_scores
 
 
+def test_no_tool_boost_adjusts_only_no_tool_and_is_opt_in() -> None:
+    raw_scores = {
+        "weather_tool": -1.0,
+        "calculator_tool": -2.0,
+        "web_search_tool": -3.0,
+        "no_tool": -4.0,
+    }
+    calibrated_scores = {
+        "weather_tool": 0.5,
+        "calculator_tool": 0.1,
+        "web_search_tool": 0.0,
+        "no_tool": 0.0,
+    }
+
+    default_tool, default_scores = select_tool_from_scores(raw_scores, calibrated_scores)
+    boosted_tool, boosted_scores = select_tool_from_scores(
+        raw_scores,
+        calibrated_scores,
+        mode="no_tool_boost",
+    )
+
+    assert default_tool == "weather_tool"
+    assert default_scores == calibrated_scores
+    assert boosted_tool == "no_tool"
+    assert boosted_scores == {
+        "weather_tool": 0.5,
+        "calculator_tool": 0.1,
+        "web_search_tool": 0.0,
+        "no_tool": 0.75,
+    }
+    assert calibrated_scores["no_tool"] == 0.0
+
+
 def test_local_hf_classification_router_scores_the_exact_canonical_prompt() -> None:
     """LocalHFClassificationRouter must query the same prompts CalibratedToolLogOddsScorer builds.
 
@@ -407,6 +440,7 @@ def test_local_hf_classification_router_owns_no_model_or_tokenizer() -> None:
         "selection_mode": "calibrated",
         "raw_margin_threshold": 1.0,
         "calibration_strength": 1.0,
+        "no_tool_boost_delta": 0.75,
     }
     assert not hasattr(router, "model")
     assert not hasattr(router, "tokenizer")
