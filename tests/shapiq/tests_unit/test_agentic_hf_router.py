@@ -10,7 +10,12 @@ import pytest
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
 
-from hf_router import HFArgumentExtractor, LocalHFClassificationRouter, LocalHFRouter  # noqa: E402
+from hf_router import (  # noqa: E402
+    HFArgumentExtractor,
+    LocalHFClassificationRouter,
+    LocalHFRouter,
+    select_tool_from_scores,
+)
 from scorers import (  # noqa: E402
     CALIBRATION_USER_REQUESTS,
     ROUTING_LABELS,
@@ -208,6 +213,82 @@ def test_local_hf_classification_router_uses_calibrated_argmax_not_raw_argmax() 
     assert "raw" not in choice.reason.lower()
 
 
+def test_confidence_aware_raw_margin_gate_is_optional_and_thresholded() -> None:
+    raw_scores = {
+        "weather_tool": -0.4,
+        "calculator_tool": -2.0,
+        "web_search_tool": -3.0,
+        "no_tool": 0.0,
+    }
+    calibrated_scores = {
+        "weather_tool": 0.2,
+        "calculator_tool": -1.0,
+        "web_search_tool": -2.0,
+        "no_tool": 0.0,
+    }
+
+    default_tool, _ = select_tool_from_scores(raw_scores, calibrated_scores)
+    gated_tool, gated_scores = select_tool_from_scores(
+        raw_scores,
+        calibrated_scores,
+        mode="raw_margin_gate",
+        raw_margin_threshold=0.3,
+    )
+    ungated_tool, ungated_scores = select_tool_from_scores(
+        raw_scores,
+        calibrated_scores,
+        mode="raw_margin_gate",
+        raw_margin_threshold=0.5,
+    )
+
+    assert default_tool == "weather_tool"
+    assert gated_tool == "no_tool"
+    assert gated_scores == raw_scores
+    assert ungated_tool == "weather_tool"
+    assert ungated_scores == calibrated_scores
+
+
+def test_scaled_calibration_interpolates_raw_and_fully_calibrated_scores() -> None:
+    raw_scores = {
+        "weather_tool": -0.4,
+        "calculator_tool": -2.0,
+        "web_search_tool": -3.0,
+        "no_tool": 0.0,
+    }
+    calibrated_scores = {
+        "weather_tool": 0.2,
+        "calculator_tool": -1.0,
+        "web_search_tool": -2.0,
+        "no_tool": 0.0,
+    }
+
+    raw_tool, raw_endpoint = select_tool_from_scores(
+        raw_scores,
+        calibrated_scores,
+        mode="scaled_calibration",
+        calibration_strength=0.0,
+    )
+    partial_tool, partial_scores = select_tool_from_scores(
+        raw_scores,
+        calibrated_scores,
+        mode="scaled_calibration",
+        calibration_strength=0.5,
+    )
+    calibrated_tool, calibrated_endpoint = select_tool_from_scores(
+        raw_scores,
+        calibrated_scores,
+        mode="scaled_calibration",
+        calibration_strength=1.0,
+    )
+
+    assert raw_tool == "no_tool"
+    assert raw_endpoint == raw_scores
+    assert partial_tool == "no_tool"
+    assert partial_scores["weather_tool"] == pytest.approx(-0.1)
+    assert calibrated_tool == "weather_tool"
+    assert calibrated_endpoint == calibrated_scores
+
+
 def test_local_hf_classification_router_scores_the_exact_canonical_prompt() -> None:
     """LocalHFClassificationRouter must query the same prompts CalibratedToolLogOddsScorer builds.
 
@@ -321,7 +402,14 @@ def test_local_hf_classification_router_owns_no_model_or_tokenizer() -> None:
 
     router = LocalHFClassificationRouter(sentinel_scorer)
 
-    assert vars(router) == {"scorer": sentinel_scorer}
+    assert vars(router) == {
+        "scorer": sentinel_scorer,
+        "selection_mode": "calibrated",
+        "raw_margin_threshold": 1.0,
+        "calibration_strength": 1.0,
+    }
+    assert not hasattr(router, "model")
+    assert not hasattr(router, "tokenizer")
     assert not hasattr(router, "model")
     assert not hasattr(router, "tokenizer")
 

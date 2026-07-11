@@ -16,17 +16,23 @@ try:
         build_segments,
         build_system_prompt,
     )
-    from demos.agentic_tool_use_explanation.hf_router import LocalHFClassificationRouter
+    from demos.agentic_tool_use_explanation.hf_router import (
+        HF_SELECTION_MODES,
+        LocalHFClassificationRouter,
+        select_tool_from_scores,
+    )
     from demos.agentic_tool_use_explanation.scorers import CalibratedToolLogOddsScorer
 except ModuleNotFoundError:
     from app import MOCK_SYSTEM_SEGMENTS, TOOLS, build_segments, build_system_prompt
-    from hf_router import LocalHFClassificationRouter
+    from hf_router import HF_SELECTION_MODES, LocalHFClassificationRouter, select_tool_from_scores
     from scorers import CalibratedToolLogOddsScorer
 
 
 TOOL_NAMES = ("weather_tool", "calculator_tool", "web_search_tool", "no_tool")
 DEFAULT_TESTSET = Path(__file__).with_name("holdout_samples.json")
 DEFAULT_OUTPUT = Path(__file__).with_name("holdout_eval_results.json")
+RAW_MARGIN_THRESHOLDS = (0.25, 0.5, 0.75, 1.0, 1.5, 2.0)
+CALIBRATION_STRENGTHS = (0.0, 0.25, 0.5, 0.75, 1.0)
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,6 +43,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--max-pairs-per-batch", type=int, default=None)
+    parser.add_argument("--selection-mode", choices=HF_SELECTION_MODES, default="calibrated")
+    parser.add_argument("--raw-margin-threshold", type=float, default=1.0)
+    parser.add_argument("--calibration-strength", type=float, default=1.0)
     return parser.parse_args()
 
 
@@ -80,7 +89,7 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         truth: {prediction: 0 for prediction in TOOL_NAMES} for truth in TOOL_NAMES
     }
     for result in results:
-        confusion_matrix[result["ground_truth"]][result["calibrated_argmax"]] += 1
+        confusion_matrix[result["ground_truth"]][result["selected_tool"]] += 1
 
     total = len(results)
     correct = sum(bool(result["correct"]) for result in results)
@@ -107,6 +116,92 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
         "overall_accuracy": correct / total if total else None,
         "per_category_accuracy": per_category_accuracy,
         "boundary_accuracy": boundary_accuracy,
+        "strategy_sweep": build_strategy_sweep(results),
+    }
+
+
+def strategy_metrics(results: list[dict[str, Any]], predictions: list[str]) -> dict[str, Any]:
+    """Return accuracy metrics for one offline selection strategy."""
+    correctness = [
+        prediction == result["ground_truth"]
+        for result, prediction in zip(results, predictions, strict=True)
+    ]
+    per_category = {}
+    for tool_name in TOOL_NAMES:
+        indices = [
+            index for index, result in enumerate(results) if result["ground_truth"] == tool_name
+        ]
+        per_category[tool_name] = (
+            sum(correctness[index] for index in indices) / len(indices) if indices else None
+        )
+    key_samples = {}
+    for sample_id in ("n08", "n09", "s05", "s09"):
+        matching = [
+            index for index, result in enumerate(results) if result["id"] == sample_id
+        ]
+        key_samples[sample_id] = correctness[matching[0]] if matching else None
+    return {
+        "correct": sum(correctness),
+        "total": len(results),
+        "accuracy": sum(correctness) / len(results) if results else None,
+        "per_category_accuracy": per_category,
+        "key_samples_correct": key_samples,
+    }
+
+
+def predictions_for_strategy(
+    results: list[dict[str, Any]],
+    *,
+    mode: str,
+    raw_margin_threshold: float = 1.0,
+    calibration_strength: float = 1.0,
+) -> list[str]:
+    """Recompute decisions from saved scores without another model call."""
+    return [
+        select_tool_from_scores(
+            result["raw_scores"],
+            result["calibrated_scores"],
+            mode=mode,
+            raw_margin_threshold=raw_margin_threshold,
+            calibration_strength=calibration_strength,
+        )[0]
+        for result in results
+    ]
+
+
+def build_strategy_sweep(results: list[dict[str, Any]]) -> dict[str, Any]:
+    """Evaluate candidate gates/scales offline from the single inference pass."""
+    if not results or any("raw_scores" not in result for result in results):
+        return {}
+    baseline = strategy_metrics(
+        results, predictions_for_strategy(results, mode="calibrated")
+    )
+    margin_gate = {
+        str(threshold): strategy_metrics(
+            results,
+            predictions_for_strategy(
+                results,
+                mode="raw_margin_gate",
+                raw_margin_threshold=threshold,
+            ),
+        )
+        for threshold in RAW_MARGIN_THRESHOLDS
+    }
+    scaled_calibration = {
+        str(strength): strategy_metrics(
+            results,
+            predictions_for_strategy(
+                results,
+                mode="scaled_calibration",
+                calibration_strength=strength,
+            ),
+        )
+        for strength in CALIBRATION_STRENGTHS
+    }
+    return {
+        "calibrated_baseline": baseline,
+        "raw_margin_gate": margin_gate,
+        "scaled_calibration": scaled_calibration,
     }
 
 
@@ -156,6 +251,25 @@ def print_summary(summary: dict[str, Any]) -> None:
             f"({format_accuracy(summary['per_category_accuracy'][tool_name])})"
         )
 
+    sweep = summary.get("strategy_sweep", {})
+    if sweep:
+        print("Offline strategy sweep (same saved model scores; no extra inference):")
+        baseline = sweep["calibrated_baseline"]
+        print(
+            f"  calibrated baseline: {baseline['correct']}/{baseline['total']} "
+            f"({format_accuracy(baseline['accuracy'])})"
+        )
+        for threshold, metrics in sweep["raw_margin_gate"].items():
+            print(
+                f"  raw-margin threshold={threshold}: {metrics['correct']}/{metrics['total']} "
+                f"({format_accuracy(metrics['accuracy'])}) keys={metrics['key_samples_correct']}"
+            )
+        for strength, metrics in sweep["scaled_calibration"].items():
+            print(
+                f"  calibration strength={strength}: {metrics['correct']}/{metrics['total']} "
+                f"({format_accuracy(metrics['accuracy'])}) keys={metrics['key_samples_correct']}"
+            )
+
 
 def main() -> None:
     """Run the hold-out evaluation."""
@@ -167,7 +281,12 @@ def main() -> None:
         device=args.device,
         max_pairs_per_batch=args.max_pairs_per_batch,
     )
-    router = LocalHFClassificationRouter(scorer)
+    router = LocalHFClassificationRouter(
+        scorer,
+        selection_mode=args.selection_mode,
+        raw_margin_threshold=args.raw_margin_threshold,
+        calibration_strength=args.calibration_strength,
+    )
     results: list[dict[str, Any]] = []
 
     try:
@@ -179,6 +298,12 @@ def main() -> None:
                 tool_descriptions=TOOLS,
             )
             raw_argmax = max(raw_scores, key=raw_scores.get)
+            calibrated_scores = scorer.score_full_request_calibrated_labels(
+                sample["request"],
+                system_prompt=system_prompt,
+                tool_descriptions=TOOLS,
+            )
+            full_calibrated_argmax = max(calibrated_scores, key=calibrated_scores.get)
             choice = router.choose_tool(
                 sample["request"],
                 system_prompt=system_prompt,
@@ -189,7 +314,10 @@ def main() -> None:
                 {
                     **sample,
                     "raw_argmax": raw_argmax,
-                    "calibrated_argmax": choice.tool,
+                    "calibrated_argmax": full_calibrated_argmax,
+                    "selected_tool": choice.tool,
+                    "raw_scores": dict(raw_scores),
+                    "calibrated_scores": dict(calibrated_scores),
                     "correct": correct,
                 }
             )

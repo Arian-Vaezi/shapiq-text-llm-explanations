@@ -296,6 +296,57 @@ class LocalHFRouter:
             return self._torch.device("cuda" if self._torch.cuda.is_available() else "cpu")
 
 
+HF_SELECTION_MODES = ("calibrated", "raw_margin_gate", "scaled_calibration")
+
+
+def select_tool_from_scores(
+    raw_scores: Mapping[str, float],
+    calibrated_scores: Mapping[str, float],
+    *,
+    mode: str = "calibrated",
+    raw_margin_threshold: float = 1.0,
+    calibration_strength: float = 1.0,
+) -> tuple[str, dict[str, float]]:
+    """Select a tool with an isolated, optional confidence-aware adjustment.
+
+    ``calibrated`` preserves the production behavior. ``raw_margin_gate``
+    trusts the raw argmax when its top-vs-runner-up margin reaches the supplied
+    threshold. ``scaled_calibration`` applies only a fraction of the inferred
+    baseline correction: ``raw - strength * (raw - calibrated)``.
+    """
+    if mode not in HF_SELECTION_MODES:
+        raise ValueError(f"Unknown HF selection mode {mode!r}; expected one of {HF_SELECTION_MODES!r}.")
+    if raw_scores.keys() != calibrated_scores.keys():
+        raise ValueError("Raw and calibrated scores must contain identical candidates.")
+    if not raw_scores:
+        raise ValueError("At least one routing candidate is required.")
+    if raw_margin_threshold < 0:
+        raise ValueError("raw_margin_threshold must be non-negative.")
+    if not 0.0 <= calibration_strength <= 1.0:
+        raise ValueError("calibration_strength must be between 0 and 1.")
+
+    raw = dict(raw_scores)
+    calibrated = dict(calibrated_scores)
+    if mode == "calibrated":
+        decision_scores = calibrated
+    elif mode == "scaled_calibration":
+        if calibration_strength == 0.0:
+            decision_scores = raw
+        elif calibration_strength == 1.0:
+            decision_scores = calibrated
+        else:
+            decision_scores = {
+                tool_name: raw[tool_name]
+                - calibration_strength * (raw[tool_name] - calibrated[tool_name])
+                for tool_name in raw
+            }
+    else:
+        ranked_raw = sorted(raw.values(), reverse=True)
+        raw_margin = ranked_raw[0] - ranked_raw[1] if len(ranked_raw) > 1 else float("inf")
+        decision_scores = raw if raw_margin >= raw_margin_threshold else calibrated
+    return max(decision_scores, key=decision_scores.get), decision_scores
+
+
 class LocalHFClassificationRouter:
     """Route tool-use requests with the exact A/B/C/D protocol used by the scorer.
 
@@ -316,8 +367,18 @@ class LocalHFClassificationRouter:
     is loaded for routing versus scoring.
     """
 
-    def __init__(self, scorer: CalibratedToolLogOddsScorer) -> None:
+    def __init__(
+        self,
+        scorer: CalibratedToolLogOddsScorer,
+        *,
+        selection_mode: str = "calibrated",
+        raw_margin_threshold: float = 1.0,
+        calibration_strength: float = 1.0,
+    ) -> None:
         self.scorer = scorer
+        self.selection_mode = selection_mode
+        self.raw_margin_threshold = raw_margin_threshold
+        self.calibration_strength = calibration_strength
 
     def choose_tool(
         self,
@@ -342,10 +403,17 @@ class LocalHFClassificationRouter:
             system_prompt=system_prompt,
             tool_descriptions=tool_descriptions,
         )
-        selected_tool = max(calibrated_scores, key=calibrated_scores.get)
         if raw_scores is None:  # Compatibility with lightweight test doubles.
             raw_scores = calibrated_scores
         raw_argmax = max(raw_scores, key=raw_scores.get)
+        calibrated_argmax = max(calibrated_scores, key=calibrated_scores.get)
+        selected_tool, decision_scores = select_tool_from_scores(
+            raw_scores,
+            calibrated_scores,
+            mode=self.selection_mode,
+            raw_margin_threshold=self.raw_margin_threshold,
+            calibration_strength=self.calibration_strength,
+        )
         calibration_debug = {
             tool_name: raw_scores[tool_name] - calibrated_scores[tool_name]
             for tool_name in calibrated_scores
@@ -359,18 +427,20 @@ class LocalHFClassificationRouter:
             f"calibrated_scores={calibrated_scores} "
             f"calibration_baseline_b_t={calibration_debug} "
             f"raw_argmax={raw_argmax} "
-            f"calibrated_argmax={selected_tool}",
+            f"calibrated_argmax={calibrated_argmax} "
+            f"selection_mode={self.selection_mode} "
+            f"selected_tool={selected_tool}",
             file=sys.stderr,
         )
         label = self.scorer.routing_labels.get(selected_tool, "?")
         return ToolChoice(
             tool=selected_tool,
-            score=calibrated_scores[selected_tool],
+            score=decision_scores[selected_tool],
             reason=(
-                "Highest calibrated routing evidence under the A/B/C/D "
-                f"classifier protocol (label {label!r})."
+                f"Highest routing evidence under the {self.selection_mode!r} "
+                f"A/B/C/D selection policy (label {label!r})."
             ),
-            scores=dict(calibrated_scores),
+            scores=dict(decision_scores),
         )
 
 
