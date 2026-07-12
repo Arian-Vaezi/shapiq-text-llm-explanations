@@ -669,7 +669,7 @@ elif page == "🔍 Result Explorer":
             sv_df = pd.DataFrame({
                 "Player": short_labels,
                 "Shapley Value": player_values,
-                "Safety Impact": ["🚨 Jailbreak Contributing" if v < 0 else "🛡️ Safety Restoring" for v in player_values]
+                "Safety Impact": ["🛡️ Pushing towards refusal" if v < 0 else "🚨 Towards compliance" for v in player_values]
             }).sort_values(by="Shapley Value", ascending=True)
             st.dataframe(sv_df, use_container_width=True, hide_index=True)
 
@@ -849,7 +849,7 @@ elif page == "🧩 Explanation Explorer":
     exp_prompts = sorted(set(r["prompt_id"] for r in explained if r.get("prompt_id")))
     exp_temperatures = sorted(set(r["temperature"] for r in explained if r.get("temperature") is not None))
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
 
     with col1:
         sel_model = st.selectbox("Model", exp_models, key="exp_model")
@@ -861,31 +861,30 @@ elif page == "🧩 Explanation Explorer":
         )
         sel_prompt = st.selectbox("Prompt", prompts_for_model, key="exp_prompt")
 
-    with col3:
-        # Show all temperatures — explanation is temperature-agnostic, but
-        # the inference result (response / jailbroken) depends on temperature.
-        sel_temperature = st.selectbox("Temperature", exp_temperatures, key="exp_temp")
-
-    # Find match (explanation data is the same across temperatures for the same model+prompt)
-    exp_matches = [
+    # NOTE: the Shapiq explanation (players / player_values / interactions) is
+    # identical across all 6 temperatures for a given model+prompt — it was
+    # only computed once, not re-run per temperature. So there's no real
+    # "temperature" selector for the explanation itself. We still need *a*
+    # concrete response/jailbroken-verdict to display alongside it, so we
+    # default to the t=0.7 run (falling back to whichever run is available).
+    # This is a known simplification — the explanation shown does not
+    # necessarily correspond 1:1 to the specific response shown below.
+    candidates = [
         r for r in explained
-        if r["model"] == sel_model
-        and r["prompt_id"] == sel_prompt
-        and r["temperature"] == sel_temperature
+        if r["model"] == sel_model and r["prompt_id"] == sel_prompt
     ]
 
-    # Fallback: grab any temperature if the exact one isn't present
-    if not exp_matches:
-        exp_matches = [
-            r for r in explained
-            if r["model"] == sel_model and r["prompt_id"] == sel_prompt
-        ]
-
-    if not exp_matches:
+    if not candidates:
         st.warning("No matching result found.")
         st.stop()
 
-    result = exp_matches[0]
+    default_temp_matches = [r for r in candidates if r.get("temperature") == 0.7]
+    result = default_temp_matches[0] if default_temp_matches else candidates[0]
+
+    st.caption(
+        f"Explanation is temperature-agnostic (computed once per model+prompt). "
+        f"Prompt/response shown below are from the **t={result.get('temperature', '—')}** run."
+    )
 
     st.divider()
 
@@ -912,14 +911,48 @@ elif page == "🧩 Explanation Explorer":
 """
         )
 
+    st.divider()
+
+    # -------------------------------------------------------------------------
+    # Prompt text
+    # -------------------------------------------------------------------------
+
+    st.header("💥 Prompt Text")
+
+    prompt_text_escaped = html.escape(result.get("prompt_text", ""))
+    st.markdown(
+        f'<div class="prompt-box">{prompt_text_escaped}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.divider()
+
+    # -------------------------------------------------------------------------
+    # Response
+    # -------------------------------------------------------------------------
+
+    st.header("🤖 Model Response")
+
+    st.markdown(
+        f'<div class="prompt-box">{html.escape(result.get("response", ""))}</div>',
+        unsafe_allow_html=True,
+    )
+
+    st.divider()
+
     # -------------------------------------------------------------------------
     # Judge badge
     # -------------------------------------------------------------------------
+
+    st.header("⚖️ Judge Result")
 
     if result.get("jailbroken"):
         st.error("🚨 Jailbroken")
     else:
         st.success("✅ Not Jailbroken")
+
+    if result.get("judge_raw"):
+        st.caption(f"Judge output: {result['judge_raw']}")
 
     st.divider()
 
