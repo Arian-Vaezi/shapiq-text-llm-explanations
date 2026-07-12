@@ -117,12 +117,55 @@ section[data-testid="stSidebar"] {
     background: #2f6fed !important;
     border-color: #2f6fed !important;
     color: #ffffff !important;
+    font-size: 1.05rem !important;
     font-weight: 700 !important;
+    min-height: 80px !important;
+    padding: 1rem 1.25rem !important;
 }
 .primary-run-button:hover,
 .st-key-agentic_run_full_pipeline button:hover {
     background: #2558c4 !important;
     border-color: #2558c4 !important;
+}
+.st-key-agentic_try_example_select div[data-baseweb="select"] > div {
+    height: auto !important;
+    min-height: 2.5rem !important;
+}
+.st-key-agentic_try_example_select div[data-baseweb="select"] span {
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+}
+body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
+    div[data-baseweb="popover"] [role="listbox"] {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
+    div[data-baseweb="popover"] [role="option"] {
+    align-items: flex-start !important;
+    display: flex !important;
+    height: auto !important;
+    line-height: 1.35 !important;
+    min-height: 2.75rem !important;
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
+    padding-bottom: 0.65rem !important;
+    padding-top: 0.65rem !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+}
+body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
+    div[data-baseweb="popover"] [role="option"] div,
+body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
+    div[data-baseweb="popover"] [role="option"] span {
+    height: auto !important;
+    max-height: none !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    overflow-wrap: anywhere !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
 }
 /* ---- Agent Result: compact product-style cards --------------------- */
 .result-card {
