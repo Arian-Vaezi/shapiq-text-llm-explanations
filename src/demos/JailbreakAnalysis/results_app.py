@@ -19,6 +19,11 @@ from pathlib import Path
 import json
 import html
 
+import numpy as np
+import pandas as pd
+import shapiq
+from shapiq.plot import sentence_plot, sentence_interaction_heatmap
+import matplotlib.pyplot as plt
 import streamlit as st
 
 from jailbreak_prompts import get_all_prompts
@@ -35,7 +40,7 @@ RESULT_FIGURE = (
 )
 
 SUMMARY_ASR = (
-    THIS_DIR / "results" / "summary_asr.json"
+    THIS_DIR / "results" / "summary_asr_with_explanations.json"
 )
 
 
@@ -609,21 +614,192 @@ elif page == "🔍 Result Explorer":
 
 
     # -------------------------------------------------------------------------
-    # Future explanation
+    # Explanation
     # -------------------------------------------------------------------------
 
     st.divider()
-
-
     st.header("🧩 Explanation")
 
+    if "players" not in result or not result["players"]:
+        st.info("No precomputed Shapiq explanation data available for this configuration.")
+    else:
+        players = result["players"]
+        player_values = result["player_values"]
+        all_interactions = result["all_interactions"]
+        top_interaction_pairs = result["top_interaction_pairs"]
 
-    st.info(
-        """
-Future extension:
+        n_players = len(players)
 
-- Top Shapley values
-- Top k-SII interactions
-- Prompt token contribution visualization
-"""
-    )
+        # Helper function to shorten sentences for labels
+        def shorten_sentence(text: str) -> str:
+            w = text.strip().split()
+            if len(w) <= 4:
+                return text
+            return f"{w[0]} {w[1]} ... {w[-2]} {w[-1]}"
+
+        short_labels = [f"[{i}] {shorten_sentence(p)}" for i, p in enumerate(players)]
+
+        # --- Section 1: Legend Mapping ---
+        st.subheader("📝 Players (Prompt Sentences) Mapping")
+        legend_data = []
+        for i, (short_lbl, full_txt, val) in enumerate(zip(short_labels, players, player_values)):
+            legend_data.append({
+                "Index": i,
+                "Short Label": short_lbl,
+                "Full Text of prompt sentence": full_txt,
+                "Shapley Value": val
+            })
+        st.dataframe(
+            pd.DataFrame(legend_data),
+            column_config={
+                "Index": st.column_config.NumberColumn("Index", width="small"),
+                "Short Label": st.column_config.TextColumn("Short Label", width="medium"),
+                "Full Text of prompt sentence": st.column_config.TextColumn("Full Text of prompt sentence", width="large"),
+                "Shapley Value": st.column_config.NumberColumn("Shapley Value", format="%.4f")
+            },
+            hide_index=True,
+            use_container_width=True
+        )
+
+        col_left, col_right = st.columns(2)
+
+        with col_left:
+            st.subheader("🏆 Top Shapley Values Ranked")
+            sv_df = pd.DataFrame({
+                "Player": short_labels,
+                "Shapley Value": player_values,
+                "Safety Impact": ["🚨 Jailbreak Contributing" if v < 0 else "🛡️ Safety Restoring" for v in player_values]
+            }).sort_values(by="Shapley Value", ascending=True)
+            st.dataframe(sv_df, use_container_width=True, hide_index=True)
+
+        with col_right:
+            st.subheader("🏆 Top Pairwise Interactions Ranked")
+            if top_interaction_pairs:
+                interactions_ranked = []
+                for pair in top_interaction_pairs:
+                    p_i = pair.get("player_i")
+                    p_j = pair.get("player_j")
+                    
+                    # Find indices of players in the original list
+                    idx_i = players.index(p_i) if p_i in players else -1
+                    idx_j = players.index(p_j) if p_j in players else -1
+                    
+                    lbl_i = short_labels[idx_i] if idx_i != -1 else p_i
+                    lbl_j = short_labels[idx_j] if idx_j != -1 else p_j
+                    
+                    val = pair.get("k_sii", 0.0)
+                    interactions_ranked.append({
+                        "Player 1": lbl_i,
+                        "Player 2": lbl_j,
+                        "k-SII Value": val,
+                        "Relationship": "🔥 Synergy" if val > 0 else "❄️ Redundancy"
+                    })
+                
+                sii_df = pd.DataFrame(interactions_ranked).sort_values(by="k-SII Value", key=abs, ascending=False)
+                st.dataframe(sii_df, use_container_width=True, hide_index=True)
+            else:
+                st.info("No pairwise interaction data available.")
+
+        # --- Section 2: Plots ---
+        st.subheader("📊 Shapiq Visualizations")
+        
+        # Build shapiq objects
+        # 1. SV (Order 1)
+        lookup_sv = {(i,): i for i in range(n_players)}
+        sv_values = np.array(player_values, dtype=float)
+        sv_obj = shapiq.InteractionValues(
+            values=sv_values,
+            index="SV",
+            max_order=1,
+            min_order=1,
+            n_players=n_players,
+            interaction_lookup=lookup_sv,
+            baseline_value=0.0,
+            estimated=False,
+        )
+
+        # 2. k-SII (Order 1 + Order 2)
+        lookup_sii = {}
+        values_sii = []
+
+        # Order 1
+        for i in range(n_players):
+            lookup_sii[(i,)] = len(values_sii)
+            values_sii.append(player_values[i])
+
+        # Order 2
+        pair_values = {}
+        for item in all_interactions:
+            pls = item["players"]
+            if len(pls) == 2:
+                pair_values[tuple(sorted(pls))] = item["value"]
+
+        for i in range(n_players):
+            for j in range(i + 1, n_players):
+                pair = (i, j)
+                val = pair_values.get(pair, 0.0)
+                lookup_sii[pair] = len(values_sii)
+                values_sii.append(val)
+
+        sii_obj = shapiq.InteractionValues(
+            values=np.array(values_sii, dtype=float),
+            index="k-SII",
+            max_order=2,
+            min_order=1,
+            n_players=n_players,
+            interaction_lookup=lookup_sii,
+            baseline_value=0.0,
+            estimated=False,
+        )
+
+        # Display plots in tabs
+        tab1, tab2, tab3 = st.tabs([
+            "📈 Sentence Attribution Plot (SV)", 
+            "🌡️ Interaction Heatmap (k-SII)", 
+            "🕸️ Interaction Network (k-SII)"
+        ])
+
+        with tab1:
+            st.markdown("**Sentence Attribution Plot**: Words highlighted in red increase safety, blue decreases safety (jailbreak contributing).")
+            try:
+                fig, ax = sentence_plot(sv_obj, short_labels, show=False, chars_per_line=80)
+                if fig is not None:
+                    fig.patch.set_facecolor("white")
+                    fig.set_size_inches(12, 4)
+                    fig.tight_layout()
+                    st.pyplot(fig)
+                    plt.close(fig)
+                else:
+                    st.warning("Sentence plot returned empty figure.")
+            except Exception as e:
+                st.error(f"Failed to generate sentence plot: {e}")
+
+        with tab2:
+            st.markdown("**Interaction Heatmap**: Pairwise interactions between prompt sentences. Red shows synergetic jailbreaking impact.")
+            try:
+                fig, ax = sentence_interaction_heatmap(sii_obj, short_labels, show=False)
+                if fig is not None:
+                    fig.patch.set_facecolor("white")
+                    fig.set_size_inches(8, 7)
+                    fig.tight_layout()
+                    st.pyplot(fig)
+                    plt.close(fig)
+                else:
+                    st.warning("Heatmap plot returned empty figure.")
+            except Exception as e:
+                st.error(f"Failed to generate interaction heatmap: {e}")
+
+        with tab3:
+            st.markdown("**Interaction Network**: Graph representation of player interactions. Stronger connections show higher synergy/redundancy.")
+            try:
+                result_net = sii_obj.plot_network(feature_names=short_labels, show=False)
+                if result_net is not None:
+                    fig = result_net[0] if isinstance(result_net, tuple) else result_net
+                    fig.patch.set_facecolor("white")
+                    fig.set_size_inches(8, 8)
+                    st.pyplot(fig)
+                    plt.close(fig)
+                else:
+                    st.warning("Network plot returned empty figure.")
+            except Exception as e:
+                st.error(f"Failed to generate interaction network: {e}")
