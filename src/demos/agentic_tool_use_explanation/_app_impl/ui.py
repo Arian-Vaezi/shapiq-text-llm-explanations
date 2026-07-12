@@ -166,7 +166,7 @@ def main() -> None:
             )
         with button_col:
             run_full_pipeline_clicked = st.button(
-                "▶ Run full pipeline",
+                "Run full pipeline",
                 type="primary",
                 key="agentic_run_full_pipeline",
                 use_container_width=True,
