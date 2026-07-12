@@ -9,7 +9,7 @@ import warnings
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Any, Literal, Protocol
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -358,6 +358,197 @@ def build_native_tool_call_continuation(
         msg = f"Rendered native tool-call continuation did not contain {target_tool!r}."
         raise ValueError(msg)
     return continuation[: name_end + len(target_tool)]
+
+
+def build_native_direct_answer_prompt(
+    tokenizer: object,
+    *,
+    system_prompt: str,
+    user_request: str,
+    tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+) -> str:
+    """Build the native assistant-continuation boundary used for direct-answer scoring.
+
+    Reuses :func:`build_native_tool_call_prompt` -- the identical system/user
+    messages, structured tool schemas, and chat-template assistant-generation
+    boundary used by full-context native inference and by
+    :class:`NativeToolCallScorer` -- so a direct-answer continuation is
+    teacher-forced at exactly the same assistant boundary as a tool-identity
+    continuation, never scored as part of the user message.
+    """
+    return build_native_tool_call_prompt(
+        tokenizer,
+        system_prompt=system_prompt,
+        user_request=user_request,
+        tool_schemas=tool_schemas,
+    )
+
+
+# Fixed, deterministic set of leading discourse preambles stripped from a direct
+# answer before target-fragment extraction. Not an NLP heuristic -- a literal
+# prefix match evaluated only once, only at the very start of the (already
+# artifact-stripped) answer text.
+DIRECT_ANSWER_DISCOURSE_PREAMBLES: tuple[str, ...] = (
+    "Sure,",
+    "Certainly,",
+    "Of course,",
+    "Here is the answer:",
+    "Here's the answer:",
+    "I can help with that.",
+)
+
+# Known trailing native-generation artifacts stripped before extraction, mirroring
+# hf_router.normalize_native_tool_output's handling for the same tokens. Duplicated
+# here (rather than imported) because hf_router imports from this module already;
+# importing back would create a circular import.
+_DIRECT_ANSWER_TRAILING_ARTIFACTS: tuple[str, ...] = ("<|im_end|>",)
+
+_DIRECT_ANSWER_SENTINEL_ONLY_RE = re.compile(
+    r"^\s*(?:no_tool|notool|no tool)\s*$",
+    flags=re.IGNORECASE,
+)
+
+# Small fixed set of common abbreviations that must not be treated as a sentence
+# boundary when immediately followed by a period. Deterministic lookup only --
+# no NLP/grammar model.
+_DIRECT_ANSWER_SENTENCE_ABBREVIATIONS: frozenset[str] = frozenset(
+    {
+        "mr",
+        "mrs",
+        "ms",
+        "dr",
+        "prof",
+        "sr",
+        "jr",
+        "vs",
+        "etc",
+        "e.g",
+        "i.e",
+        "u.s",
+        "u.k",
+        "st",
+        "no",
+        "approx",
+        "fig",
+        "vol",
+    }
+)
+
+
+def _strip_trailing_direct_answer_artifacts(text: str) -> str:
+    """Strip known trailing model-generation artifacts, repeatedly, from the end."""
+    stripped = text.strip()
+    changed = True
+    while changed:
+        changed = False
+        for artifact in _DIRECT_ANSWER_TRAILING_ARTIFACTS:
+            if stripped.endswith(artifact):
+                stripped = stripped[: -len(artifact)].rstrip()
+                changed = True
+    return stripped
+
+
+def _strip_leading_direct_answer_preamble(text: str) -> str:
+    """Strip one leading discourse preamble, only if it occurs at the very start."""
+    for preamble in DIRECT_ANSWER_DISCOURSE_PREAMBLES:
+        if text.startswith(preamble):
+            return text[len(preamble) :].lstrip()
+    return text
+
+
+def _find_direct_answer_sentence_end(text: str, start: int = 0) -> int | None:
+    """Return the index just after the first qualifying sentence-ending punctuation.
+
+    Treats ``.``, ``!``, and ``?`` as sentence-enders, but a lone ``.`` is
+    skipped (not treated as a boundary) when it separates two digits (a decimal
+    number such as ``3.14``) or immediately follows a known abbreviation (such
+    as ``Dr.`` or ``e.g.``). A qualifying boundary must be followed by
+    whitespace or by the end of the text, so punctuation glued to further
+    non-space characters (e.g. inside a URL) is not treated as a boundary.
+    """
+    length = len(text)
+    for match in re.finditer(r"[.!?]+", text):
+        if match.start() < start:
+            continue
+        end = match.end()
+        punctuation = match.group(0)
+        if punctuation == ".":
+            before = text[: match.start()]
+            after = text[end:]
+            if before[-1:].isdigit() and after[:1].isdigit():
+                continue
+            trailing_word_match = re.search(r"(\S+)$", before)
+            if (
+                trailing_word_match is not None
+                and trailing_word_match.group(1).lower().rstrip(".")
+                in _DIRECT_ANSWER_SENTENCE_ABBREVIATIONS
+            ):
+                continue
+        if end == length or text[end].isspace():
+            return end
+    return None
+
+
+def build_canonical_direct_answer_target(
+    answer: str,
+    *,
+    tokenizer: object,
+    max_target_tokens: int = 24,
+    min_target_tokens: int = 4,
+) -> str:
+    """Return a deterministic, bounded first-sentence fragment of a direct answer.
+
+    This is a pure function -- no model calls, no nondeterministic or semantic
+    heuristics. It strips known trailing native-generation artifacts and a
+    small fixed set of leading discourse preambles, then prefers the first
+    sentence (respecting common abbreviations and decimal numbers), extending
+    into subsequent text only if the first sentence would tokenize under
+    ``min_target_tokens``, and finally truncates to ``max_target_tokens`` by
+    re-decoding the truncated token ids. The result is the *canonical
+    deterministic answer fragment* -- calling this twice with the same inputs
+    always returns the same string.
+    """
+    if max_target_tokens < min_target_tokens:
+        msg = "max_target_tokens must be greater than or equal to min_target_tokens."
+        raise ValueError(msg)
+
+    text = _strip_trailing_direct_answer_artifacts(answer)
+    text = _strip_leading_direct_answer_preamble(text).strip()
+    if not text:
+        msg = "No usable canonical direct-answer target remains after cleanup."
+        raise ValueError(msg)
+    if _DIRECT_ANSWER_SENTINEL_ONLY_RE.fullmatch(text):
+        msg = "Direct-answer target text is only an internal sentinel, not a usable answer."
+        raise ValueError(msg)
+
+    end = _find_direct_answer_sentence_end(text)
+    candidate = text[:end].strip() if end is not None else text
+    candidate_ids = _tokenize_to_ids(tokenizer, candidate)
+
+    # Extend into subsequent sentences only if the first sentence under-shoots
+    # min_target_tokens, stopping once the minimum is reached or the input ends.
+    while len(candidate_ids) < min_target_tokens and end is not None and end < len(text):
+        next_end = _find_direct_answer_sentence_end(text, end)
+        if next_end is None:
+            candidate = text.strip()
+            end = len(text)
+        else:
+            candidate = text[:next_end].strip()
+            end = next_end
+        candidate_ids = _tokenize_to_ids(tokenizer, candidate)
+
+    if len(candidate_ids) > max_target_tokens:
+        candidate_ids = candidate_ids[:max_target_tokens]
+        decode = getattr(tokenizer, "decode", None)
+        if not callable(decode):
+            msg = "Tokenizer must support decode() to truncate the direct-answer target."
+            raise ValueError(msg)
+        candidate = str(decode(candidate_ids)).strip()
+
+    if not candidate:
+        msg = "Canonical direct-answer target extraction produced an empty fragment."
+        raise ValueError(msg)
+    return candidate
 
 
 def _build_tool_calling_prompt_fallback(
@@ -1376,15 +1567,13 @@ class CalibratedToolLogOddsScorer:
             ].tolist()
             prefix_len = min(len(prompt_only_ids), len(full_ids))
             if prompt_only_ids[:prefix_len] != full_ids[:prefix_len]:
-                import sys
-
-                print(
-                    f"[TOKEN-BOUNDARY-MISMATCH] row={row_index} "
-                    f"prompt_only_tail={prompt_only_ids[-5:]} "
-                    f"full_prefix_tail={full_ids[len(prompt_only_ids) - 5 : len(prompt_only_ids)]} "
-                    f"prompt='{prompt[-40:]!r}'",
-                    file=sys.stderr,
+                msg = (
+                    f"Tokenizer boundary mismatch at row {row_index}: tokenizing "
+                    "prompt_prefix alone is not a strict prefix of tokenizing "
+                    "prompt_prefix + continuation, so the scored span cannot be "
+                    f"located safely for prompt ending {prompt[-40:]!r}."
                 )
+                raise ValueError(msg)
         continuation_lengths = [
             int(full_len - prompt_len)
             for prompt_len, full_len in zip(prompt_lengths, full_lengths, strict=True)
@@ -1410,16 +1599,6 @@ class CalibratedToolLogOddsScorer:
                 ):
                     start = int(prompt_len - 1)
                     stop = start + int(continuation_len)
-                    full_ids = full_inputs["input_ids"][row_index][
-                        : int(full_inputs["attention_mask"][row_index].sum())
-                    ].tolist()
-                    sliced_ids = full_ids[start:stop]
-                    decode = getattr(self.tokenizer, "decode", None)
-                    decoded = decode(sliced_ids) if callable(decode) else repr(sliced_ids)
-                    print(
-                        f"[SCORED-SPAN] row={row_index} decoded={decoded!r} "
-                        f"expected_label_token={getattr(self, 'routing_labels', None)}"
-                    )
                     score = float(token_log_probs[row_index, start:stop].sum().item())
                     scores.append(score)
                 return scores
@@ -1440,33 +1619,49 @@ class CalibratedToolLogOddsScorer:
             torch.mps.empty_cache()
 
 
-class NativeToolCallScorer:
-    """Score canonical native tool-identity continuation support for one frozen tool.
+@dataclass(frozen=True)
+class FrozenContinuationTarget:
+    """A frozen teacher-forced continuation target shared by both scorer families.
 
-    The model input always uses the tokenizer's structured tool template. For
-    executable tools, full-context native inference first freezes the target
-    tool identity. The scorer then constructs a canonical native-format
-    assistant continuation with that same tokenizer/template and keeps only the
-    prefix through the target tool name, intentionally excluding free-form
-    arguments. ``no_tool`` is intentionally rejected here; direct-answer cases
-    use the clearly labeled legacy A/B/C/D surrogate branch. Scores are mean
-    continuation-token log-probabilities, so tool names with different token
-    lengths are less distorted by sequence length.
+    ``kind`` distinguishes a tool-identity continuation (truncated at the tool
+    name, varies with the chosen executable target tool) from a direct-answer
+    continuation (a fixed deterministic answer fragment, identical for every
+    coalition). ``token_ids`` is the tokenizer identity of ``text`` computed
+    once, so callers can use it as a stable cache/identity key without
+    retokenizing on every coalition.
+    """
+
+    kind: Literal["tool_identity", "direct_answer"]
+    text: str
+    token_ids: tuple[int, ...] | None
+    source: str
+
+
+class _NativeContinuationScorer:
+    """Shared teacher-forced continuation scoring machinery.
+
+    Owns everything that is expensive and identical between scoring a
+    tool-identity continuation and scoring a direct-answer continuation:
+    tokenizer/model loading, batched forward passes, next-token
+    log-probability extraction, continuation-mean scoring, device-cache
+    cleanup, and finite-score validation. Subclasses
+    (:class:`NativeToolCallScorer`, :class:`NativeDirectAnswerScorer`) only
+    decide which continuation text is scored and how debug metadata for it is
+    described -- neither one reimplements the model-scoring loop.
     """
 
     def __init__(
         self,
         *,
-        model: object | None = None,
-        tokenizer: object | None = None,
-        device: str | None = None,
-        model_id: str = DEFAULT_LOGPROB_MODEL_ID,
-        tokenizer_id: str | None = None,
-        quantization_mode: str = "none",
-        actual_quantization_mode: str | None = None,
-        dtype: str = "auto",
-        max_pairs_per_batch: int | None = None,
-        tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+        model: object | None,
+        tokenizer: object | None,
+        device: str | None,
+        model_id: str,
+        tokenizer_id: str | None,
+        quantization_mode: str,
+        actual_quantization_mode: str | None,
+        dtype: str,
+        max_pairs_per_batch: int | None,
     ) -> None:
         self.model_id = model_id
         self.tokenizer_id = tokenizer_id or model_id
@@ -1476,16 +1671,13 @@ class NativeToolCallScorer:
         self.tokenizer = tokenizer
         self.device = device
         self.dtype = dtype
-        self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
-        self.last_debug_outputs: list[dict[str, object]] = []
-        self._score_cache: dict[tuple[str, str], float] = {}
 
         import torch
 
         self._torch = torch
         if quantization_mode != "none":
             msg = (
-                f"NativeToolCallScorer does not currently support quantization mode "
+                f"{type(self).__name__} does not currently support quantization mode "
                 f"{quantization_mode!r}. Use 'none' so teacher-forced logits are computed "
                 "on the same supported model configuration as inference."
             )
@@ -1521,6 +1713,164 @@ class NativeToolCallScorer:
             msg = "max_pairs_per_batch must be positive."
             raise ValueError(msg)
         self.max_pairs_per_batch = max_pairs_per_batch
+
+    def _continuation_token_count(self, prompt: str, continuation: str) -> int | None:
+        try:
+            prompt_ids = _tokenize_to_ids(self.tokenizer, prompt)
+            full_ids = _tokenize_to_ids(self.tokenizer, prompt + continuation)
+        except (AttributeError, TypeError):
+            return None
+        return max(0, len(full_ids) - len(prompt_ids))
+
+    def _sequence_mean_logprobs_batched(
+        self,
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        if len(prompts) != len(continuations):
+            msg = "Prompts and continuations must have the same length."
+            raise ValueError(msg)
+        scores: list[float] = []
+        for start in range(0, len(prompts), self.max_pairs_per_batch):
+            stop = start + self.max_pairs_per_batch
+            scores.extend(
+                self._sequence_mean_logprobs_batch(
+                    prompts[start:stop],
+                    continuations[start:stop],
+                )
+            )
+            self._release_device_cache()
+        return scores
+
+    def _sequence_mean_logprobs_batch(
+        self,
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        torch = self._torch
+        prompt_inputs = self.tokenizer(
+            prompts,
+            return_tensors="pt",
+            add_special_tokens=False,
+            padding=True,
+        )
+        full_inputs = self.tokenizer(
+            [
+                prompt + continuation
+                for prompt, continuation in zip(prompts, continuations, strict=True)
+            ],
+            return_tensors="pt",
+            add_special_tokens=False,
+            padding=True,
+        )
+        prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
+        full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
+        # Continuation length is derived from the robust full-sequence boundary
+        # (attention-mask length delta), not from independently
+        # tokenize(prompt) + tokenize(continuation) token counts, which are not
+        # always identical to tokenize(prompt + continuation) once tokenizer
+        # boundary merging is taken into account. A non-positive delta here
+        # means the boundary could not be located safely, and is treated as a
+        # hard failure rather than silently scoring the wrong span.
+        continuation_lengths = [
+            int(full_len - prompt_len)
+            for prompt_len, full_len in zip(prompt_lengths, full_lengths, strict=True)
+        ]
+        if any(length <= 0 for length in continuation_lengths):
+            msg = "Native target continuation must add at least one token."
+            raise ValueError(msg)
+
+        input_ids = full_inputs["input_ids"].to(self.device)
+        attention_mask = full_inputs["attention_mask"].to(self.device)
+        try:
+            with torch.inference_mode():
+                logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
+                logits = logits.to(torch.float32)
+                token_log_probs = self._next_token_log_probs(
+                    logits,
+                    input_ids,
+                )
+                scores = []
+                for row_index, (prompt_len, continuation_len) in enumerate(
+                    zip(prompt_lengths, continuation_lengths, strict=True)
+                ):
+                    start = int(prompt_len - 1)
+                    stop = start + int(continuation_len)
+                    score = float(token_log_probs[row_index, start:stop].mean().item())
+                    if not math.isfinite(score):
+                        msg = "Native continuation score must be finite."
+                        raise ValueError(msg)
+                    scores.append(score)
+                return scores
+        finally:
+            del input_ids, attention_mask, full_inputs, prompt_inputs
+            if "logits" in locals():
+                del logits
+            if "token_log_probs" in locals():
+                del token_log_probs
+            self._release_device_cache()
+
+    def _release_device_cache(self) -> None:
+        torch = self._torch
+        if self.device == "cuda" and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        elif self.device == "mps" and hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
+            torch.mps.empty_cache()
+
+    @staticmethod
+    def _next_token_log_probs(logits: object, token_ids: object) -> object:
+        """Return log probabilities for observed next-token labels."""
+        shifted_logits = logits[:, :-1, :]
+        shifted_token_ids = token_ids[:, 1:]
+        target_logits = shifted_logits.gather(
+            dim=-1,
+            index=shifted_token_ids.unsqueeze(-1),
+        ).squeeze(-1)
+        return target_logits - shifted_logits.logsumexp(dim=-1)
+
+
+class NativeToolCallScorer(_NativeContinuationScorer):
+    """Score canonical native tool-identity continuation support for one frozen tool.
+
+    The model input always uses the tokenizer's structured tool template. For
+    executable tools, full-context native inference first freezes the target
+    tool identity. The scorer then constructs a canonical native-format
+    assistant continuation with that same tokenizer/template and keeps only the
+    prefix through the target tool name, intentionally excluding free-form
+    arguments. ``no_tool`` is intentionally rejected here; direct-answer cases
+    use :class:`NativeDirectAnswerScorer` instead. Scores are mean
+    continuation-token log-probabilities, so tool names with different token
+    lengths are less distorted by sequence length.
+    """
+
+    def __init__(
+        self,
+        *,
+        model: object | None = None,
+        tokenizer: object | None = None,
+        device: str | None = None,
+        model_id: str = DEFAULT_LOGPROB_MODEL_ID,
+        tokenizer_id: str | None = None,
+        quantization_mode: str = "none",
+        actual_quantization_mode: str | None = None,
+        dtype: str = "auto",
+        max_pairs_per_batch: int | None = None,
+        tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+    ) -> None:
+        super().__init__(
+            model=model,
+            tokenizer=tokenizer,
+            device=device,
+            model_id=model_id,
+            tokenizer_id=tokenizer_id,
+            quantization_mode=quantization_mode,
+            actual_quantization_mode=actual_quantization_mode,
+            dtype=dtype,
+            max_pairs_per_batch=max_pairs_per_batch,
+        )
+        self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
+        self.last_debug_outputs: list[dict[str, object]] = []
+        self._score_cache: dict[tuple[str, str], float] = {}
 
     def score_batch(
         self,
@@ -1632,112 +1982,194 @@ class NativeToolCallScorer:
             tool_schemas=self.tool_schemas,
         )
 
-    def _continuation_token_count(self, prompt: str, continuation: str) -> int | None:
-        try:
-            prompt_ids = _tokenize_to_ids(self.tokenizer, prompt)
-            full_ids = _tokenize_to_ids(self.tokenizer, prompt + continuation)
-        except (AttributeError, TypeError):
-            return None
-        return max(0, len(full_ids) - len(prompt_ids))
 
-    def _sequence_mean_logprobs_batched(
+class NativeDirectAnswerScorer(_NativeContinuationScorer):
+    """Score canonical direct-answer continuation support for one frozen answer fragment.
+
+    Scores the teacher-forced mean log-probability of a single frozen
+    deterministic answer fragment (see :func:`build_canonical_direct_answer_target`),
+    extracted once from the full-context HF-native direct answer and reused
+    unchanged for every coalition -- never regenerated, never re-run through
+    native routing, and never produced by calling ``generate()`` during
+    coalition scoring. This explains support for that specific answer content;
+    it is not a probability of choosing not to call a tool. Uses the identical
+    teacher-forced sequence-scoring machinery as :class:`NativeToolCallScorer`
+    (via :class:`_NativeContinuationScorer`), so both scorer families share
+    tokenization, batching, and scoring semantics and differ only in which
+    continuation text is frozen and scored.
+    """
+
+    def __init__(
+        self,
+        *,
+        model: object | None = None,
+        tokenizer: object | None = None,
+        device: str | None = None,
+        model_id: str = DEFAULT_LOGPROB_MODEL_ID,
+        tokenizer_id: str | None = None,
+        quantization_mode: str = "none",
+        actual_quantization_mode: str | None = None,
+        dtype: str = "auto",
+        max_pairs_per_batch: int | None = None,
+        direct_answer_target: str,
+        tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+    ) -> None:
+        super().__init__(
+            model=model,
+            tokenizer=tokenizer,
+            device=device,
+            model_id=model_id,
+            tokenizer_id=tokenizer_id,
+            quantization_mode=quantization_mode,
+            actual_quantization_mode=actual_quantization_mode,
+            dtype=dtype,
+            max_pairs_per_batch=max_pairs_per_batch,
+        )
+        if not direct_answer_target or not direct_answer_target.strip():
+            msg = "NativeDirectAnswerScorer requires a non-empty direct_answer_target."
+            raise ValueError(msg)
+        self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
+        target_token_ids = tuple(_tokenize_to_ids(self.tokenizer, direct_answer_target))
+        if not target_token_ids:
+            msg = "Frozen direct-answer target tokenized to zero continuation tokens."
+            raise ValueError(msg)
+        # Frozen once, here, at construction -- score_batch below reuses
+        # self.frozen_target.text unchanged for every coalition it is asked to
+        # score, and never rebuilds it from coalition-specific text.
+        self.frozen_target = FrozenContinuationTarget(
+            kind="direct_answer",
+            text=direct_answer_target,
+            token_ids=target_token_ids,
+            source="full-context native direct answer",
+        )
+        self.last_debug_outputs: list[dict[str, object]] = []
+        # Keyed by (coalition prompt, frozen target token identity, model id,
+        # tokenizer id) so repeated coalition prompts (e.g. the empty
+        # coalition scored both as an ordinary coalition and as the
+        # normalization baseline) reuse one real model call, and two
+        # differently-constructed scorers (different frozen targets and/or
+        # runtimes) can never collide on the same cache entry.
+        self._score_cache: dict[tuple[object, ...], tuple[float, dict[str, object]]] = {}
+
+    @property
+    def direct_answer_target(self) -> str:
+        """Return the frozen direct-answer continuation text."""
+        return self.frozen_target.text
+
+    def score_batch(
         self,
         prompts: list[str],
-        continuations: list[str],
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
     ) -> list[float]:
-        if len(prompts) != len(continuations):
-            msg = "Prompts and continuations must have the same length."
-            raise ValueError(msg)
-        scores: list[float] = []
-        for start in range(0, len(prompts), self.max_pairs_per_batch):
-            stop = start + self.max_pairs_per_batch
-            scores.extend(
-                self._sequence_mean_logprobs_batch(
-                    prompts[start:stop],
-                    continuations[start:stop],
-                )
+        """Return frozen direct-answer continuation support for each coalition prompt."""
+        del tool_descriptions
+        if target_tool != NO_TOOL_NAME:
+            msg = (
+                "NativeDirectAnswerScorer is valid only for target_tool='no_tool', "
+                f"got {target_tool!r}."
             )
-            self._release_device_cache()
-        return scores
-
-    def _sequence_mean_logprobs_batch(
-        self,
-        prompts: list[str],
-        continuations: list[str],
-    ) -> list[float]:
-        torch = self._torch
-        prompt_inputs = self.tokenizer(
-            prompts,
-            return_tensors="pt",
-            add_special_tokens=False,
-            padding=True,
-        )
-        full_inputs = self.tokenizer(
-            [
-                prompt + continuation
-                for prompt, continuation in zip(prompts, continuations, strict=True)
-            ],
-            return_tensors="pt",
-            add_special_tokens=False,
-            padding=True,
-        )
-        prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
-        full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
-        continuation_lengths = [
-            int(full_len - prompt_len)
-            for prompt_len, full_len in zip(prompt_lengths, full_lengths, strict=True)
-        ]
-        if any(length <= 0 for length in continuation_lengths):
-            msg = "Native target continuation must add at least one token."
             raise ValueError(msg)
 
-        input_ids = full_inputs["input_ids"].to(self.device)
-        attention_mask = full_inputs["attention_mask"].to(self.device)
-        try:
-            with torch.inference_mode():
-                logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
-                logits = logits.to(torch.float32)
-                token_log_probs = self._next_token_log_probs(
-                    logits,
-                    input_ids,
+        cache_key_suffix = (self.frozen_target.token_ids, self.model_id, self.tokenizer_id)
+        results: list[float | None] = [None] * len(prompts)
+        debug_entries: list[dict[str, object] | None] = [None] * len(prompts)
+
+        pending_prompts: list[str] = []
+        pending_model_prompts: list[str] = []
+        pending_indices: list[int] = []
+        for index, prompt in enumerate(prompts):
+            cache_key = (prompt, *cache_key_suffix)
+            cached = self._score_cache.get(cache_key)
+            if cached is not None:
+                results[index], debug_entries[index] = cached
+                continue
+            system_prompt, user_request = split_coalition_prompt(prompt)
+            model_prompt = build_native_direct_answer_prompt(
+                self.tokenizer,
+                system_prompt=system_prompt,
+                user_request=user_request,
+                tool_schemas=self.tool_schemas,
+            )
+            pending_prompts.append(prompt)
+            pending_model_prompts.append(model_prompt)
+            pending_indices.append(index)
+
+        if pending_model_prompts:
+            continuations = [self.frozen_target.text] * len(pending_model_prompts)
+            token_counts = [
+                self._continuation_token_count(model_prompt, continuation)
+                for model_prompt, continuation in zip(
+                    pending_model_prompts, continuations, strict=True
                 )
-                scores = []
-                for row_index, (prompt_len, continuation_len) in enumerate(
-                    zip(prompt_lengths, continuation_lengths, strict=True)
-                ):
-                    start = int(prompt_len - 1)
-                    stop = start + int(continuation_len)
-                    score = float(token_log_probs[row_index, start:stop].mean().item())
-                    if not math.isfinite(score):
-                        msg = "Native continuation score must be finite."
-                        raise ValueError(msg)
-                    scores.append(score)
-                return scores
-        finally:
-            del input_ids, attention_mask, full_inputs, prompt_inputs
-            if "logits" in locals():
-                del logits
-            if "token_log_probs" in locals():
-                del token_log_probs
-            self._release_device_cache()
+            ]
+            computed_scores = self._sequence_mean_logprobs_batched(
+                pending_model_prompts, continuations
+            )
+            for original_prompt, index, model_prompt, token_count, score in zip(
+                pending_prompts,
+                pending_indices,
+                pending_model_prompts,
+                token_counts,
+                computed_scores,
+                strict=True,
+            ):
+                debug_entry: dict[str, object] = {
+                    "score_kind": "native_direct_answer_mean_logprob",
+                    "score_description": (
+                        "Mean log-probability of the frozen canonical deterministic "
+                        "direct-answer fragment; not a probability of choosing no tool."
+                    ),
+                    "model_id": self.model_id,
+                    "tokenizer_id": self.tokenizer_id,
+                    "requested_quantization": self.requested_quantization_mode,
+                    "actual_quantization": self.actual_quantization_mode,
+                    "device": self.device,
+                    "dtype": self.dtype,
+                    "target_tool": target_tool,
+                    "target_source": "full-context native direct answer",
+                    "continuation_type": "canonical deterministic answer fragment",
+                    "continuation_scope": "bounded direct-answer text",
+                    "target_regenerated_per_coalition": "no",
+                    "continuation_token_count": token_count,
+                    "frozen_target_text": self.frozen_target.text,
+                    "final_score": score,
+                    "prompt_preview": model_prompt[:240],
+                }
+                results[index] = score
+                debug_entries[index] = debug_entry
+                self._score_cache[(original_prompt, *cache_key_suffix)] = (score, debug_entry)
 
-    def _release_device_cache(self) -> None:
-        torch = self._torch
-        if self.device == "cuda" and torch.cuda.is_available():
-            torch.cuda.empty_cache()
-        elif self.device == "mps" and hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
-            torch.mps.empty_cache()
+        self.last_debug_outputs = [entry for entry in debug_entries if entry is not None]
+        final_scores: list[float] = []
+        for score in results:
+            if score is None:
+                msg = "Internal error: direct-answer score not computed for a coalition prompt."
+                raise RuntimeError(msg)
+            final_scores.append(score)
+        return final_scores
 
-    @staticmethod
-    def _next_token_log_probs(logits: object, token_ids: object) -> object:
-        """Return log probabilities for observed next-token labels."""
-        shifted_logits = logits[:, :-1, :]
-        shifted_token_ids = token_ids[:, 1:]
-        target_logits = shifted_logits.gather(
-            dim=-1,
-            index=shifted_token_ids.unsqueeze(-1),
-        ).squeeze(-1)
-        return target_logits - shifted_logits.logsumexp(dim=-1)
+    def build_scoring_prompt(
+        self,
+        prompt: str,
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> str:
+        """Return the native chat-template input used before the frozen continuation."""
+        del tool_descriptions
+        if target_tool != NO_TOOL_NAME:
+            msg = "NativeDirectAnswerScorer is valid only for target_tool='no_tool'."
+            raise ValueError(msg)
+        system_prompt, user_request = split_coalition_prompt(prompt)
+        model_prompt = build_native_direct_answer_prompt(
+            self.tokenizer,
+            system_prompt=system_prompt,
+            user_request=user_request,
+            tool_schemas=self.tool_schemas,
+        )
+        return f"{model_prompt}{self.frozen_target.text}"
 
 
 def _softmax_probabilities(

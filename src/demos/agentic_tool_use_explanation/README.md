@@ -71,12 +71,22 @@ This does not install a real LLM backend. Do not install `torch` or
 5. Use Developer settings only when you need alternate scorers, prompt previews,
    value-function details, or raw backend diagnostics.
 
-The presentation path uses a mixed-fidelity value-function architecture:
+The presentation path uses one unified HF-native continuation-likelihood family
+for both branches:
 
-1. Executable tool calls use a canonical native tool-identity continuation
+1. Executable tool calls use a canonical tool-identity continuation
    likelihood value function.
-2. Direct-answer (`no_tool`) cases use the legacy A/B/C/D forced-choice
-   surrogate, explicitly labeled as a surrogate rather than native evidence.
+2. Direct-answer (`no_tool`) cases use a canonical direct-answer continuation
+   likelihood value function.
+
+Both use the same model, tokenizer, chat template, coalition masking,
+teacher-forced sequence-likelihood implementation, and empty-request baseline.
+They differ only in the frozen target continuation. The direct-answer value
+function explains support for a specific answer fragment; it does not
+directly measure the contrast between answering and calling a tool. The
+legacy A/B/C/D forced-choice scorer remains in the codebase only as a
+historical/developer ablation -- it is no longer selected automatically for
+either branch.
 
 ## What The App Shows
 
@@ -131,6 +141,53 @@ h_t(S) = mean_k log P_theta(y_{t,k} | x_S, y_{t,<k})
 v_t(S) = h_t(S) - h_t(empty)
 ```
 
+### Native Direct-Answer Continuation Scorer
+
+`no_tool` Agent Results are scored by `NativeDirectAnswerScorer`, the formal
+default for trusted HF-local direct-answer cases, replacing the legacy A/B/C/D
+surrogate that was previously substituted in automatically:
+
+- Full-context native inference produces a direct answer for the `no_tool`
+  case. The direct answer is frozen once, before any coalition is scored --
+  never regenerated per coalition, never re-run through native routing, and
+  never produced by calling `generate()` during coalition scoring.
+- `build_canonical_direct_answer_target` extracts a deterministic, bounded
+  first-sentence fragment from that answer (respecting common abbreviations
+  and decimal numbers, extending into subsequent text only if the first
+  sentence is very short, and truncating to a maximum token budget). This is
+  a pure, non-semantic function -- no model calls, no NLP/embedding heuristics.
+- The frozen fragment is teacher-forced at exactly the same native
+  assistant-continuation boundary used by tool-identity scoring (system
+  prompt + coalition user request + executable tool schemas + assistant
+  generation boundary), reusing the identical chat-template prompt builder.
+- `NativeToolCallScorer` and `NativeDirectAnswerScorer` share one lower-level
+  teacher-forced sequence-scoring implementation (tokenization, batched
+  forward passes, next-token log-probability extraction, continuation-mean
+  scoring, device-cache cleanup, finite-score validation); they differ only in
+  which continuation text is frozen and scored.
+
+The direct-answer value function is:
+
+```text
+h_direct(S) = mean_k log P_theta(y_{direct,k} | x_S, y_{direct,<k})
+v_direct(S) = h_direct(S) - h_direct(empty)
+```
+
+**Scope of this explanation.** The direct-answer scorer explains *which
+request segments support or oppose this specific direct-answer continuation*.
+It does not directly estimate *why the model chose no tool rather than
+calling a tool* -- that would require a contrastive formulation such as
+`v_contrastive(S) = h_direct(S) - h_tool_foil(S)`, which is documented here as
+future work and is not implemented. Do not describe this scorer's output as a
+"no-tool probability", "no-tool decision likelihood", or "probability of
+answering directly"; use terminology such as *canonical direct-answer
+continuation likelihood* or *direct-answer continuation support* instead.
+Mean log-probability mitigates length effects within one target continuation,
+but different target continuations (a tool name vs. a direct-answer fragment)
+are not automatically calibrated to a shared magnitude scale -- native
+tool-identity and native direct-answer scores are not numerically comparable
+merely because they share the same computational family.
+
 Other implementations remain available for development and comparison:
 
 - `LexicalToolScorer` is a fast keyword baseline.
@@ -159,12 +216,16 @@ path.
 This lets the UI and shapiq explanation flow be developed without API keys, GPU
 dependencies, or Hugging Face model downloads.
 
-## Legacy A/B/C/D Forced-Choice Scorer (HF Local)
+## Legacy A/B/C/D Forced-Choice Scorer (HF Local) -- Historical / Developer Ablation
 
 The legacy **Calibrated multiclass tool log-odds (HF local)** scorer
 (`CalibratedToolLogOddsScorer`) uses a local Hugging Face causal language model.
-It is retained for developer comparison and for the direct-answer branch as a
-clearly labeled surrogate.
+It is **not primary** and is retained only as a historical/developer ablation,
+manually selectable in Developer Mode. It is no longer substituted in
+automatically for either the executable-tool or the direct-answer branch --
+see "Native Direct-Answer Continuation Scorer" above for the current formal
+default. Its scores are not numerically comparable to the native continuation
+methods.
 
 For each coalition, the LLM is queried with a fixed artificial
 constrained-classification routing prompt (see `ROUTING_LABELS` and
@@ -193,12 +254,11 @@ routing, HF local logprob scoring, calibration scoring, and coalition scoring,
 so token boundaries and any residual template prior stay identical across all
 four.
 
-**This branch does not have the same fidelity as native tool-call scoring.**
+**This branch does not have the same fidelity as native continuation scoring.**
 `hf_router.LocalHFClassificationRouter` wraps an already-loaded
 `CalibratedToolLogOddsScorer` and selects a tool by scoring every routing-label
 continuation for the full (unmasked) request and taking the argmax. This path
-remains available as a developer ablation; direct-answer explanations use it as
-a retained legacy surrogate.
+remains available only as a manually selected developer ablation.
 
 ## HF Local Model Consistency
 

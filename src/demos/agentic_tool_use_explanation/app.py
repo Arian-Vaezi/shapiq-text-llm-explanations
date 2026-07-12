@@ -78,8 +78,10 @@ from scorers import (
     LexicalToolScorer,
     LLMToolScorer,
     MockLLM,
+    NativeDirectAnswerScorer,
     NativeToolCallScorer,
     ToolChoice,
+    build_canonical_direct_answer_target,
     build_coalition_prompt as canonical_coalition_prompt,
     join_user_request_segments,
 )
@@ -119,6 +121,8 @@ TOOL_ROUTE_EXPLANATIONS = {
 FINAL_ANSWER_SIMILARITY_LABEL = "Final answer semantic similarity"
 NATIVE_HF_SCORER_LABEL = "Canonical native tool-identity continuation likelihood"
 NATIVE_HF_SCORER_SHORT_LABEL = "Native tool-identity likelihood"
+NATIVE_DIRECT_ANSWER_SCORER_LABEL = "Canonical direct-answer continuation likelihood"
+NATIVE_DIRECT_ANSWER_SCORER_SHORT_LABEL = "Direct-answer continuation likelihood"
 NO_TOOL_SURROGATE_SCORER_LABEL = "Legacy A/B/C/D no-tool probe — surrogate ablation"
 LOGPROB_SCORER_LABEL = "Calibrated A/B/C/D classification (Developer ablation)"
 # Shared session-state key for the Explanation tab's "Scoring method" selectbox.
@@ -133,6 +137,12 @@ NATIVE_HF_SCORER_HELP = (
     "canonical native-format continuation for the frozen Agent Result tool identity. "
     "The continuation is derived from the selected tokenizer's chat template, stops "
     "at the tool name, and excludes free-form argument tokens."
+)
+NATIVE_DIRECT_ANSWER_SCORER_HELP = (
+    "Scores each retained-segment coalition by the teacher-forced mean "
+    "log-probability of a frozen deterministic fragment extracted from the "
+    "full-context direct answer. This explains support for that answer content; "
+    "it is not a probability of choosing no tool."
 )
 NO_TOOL_SURROGATE_HELP = (
     "This direct-answer explanation uses the legacy A/B/C/D forced-choice surrogate. "
@@ -150,6 +160,16 @@ NATIVE_HF_CONTINUATION_DIAGNOSTICS = {
     "Continuation scope": "tool identity only",
     "Arguments included": "no",
 }
+NATIVE_DIRECT_ANSWER_CONTINUATION_DIAGNOSTICS = {
+    "Target source": "full-context native direct answer",
+    "Continuation type": "canonical deterministic answer fragment",
+    "Continuation scope": "bounded direct-answer text",
+    "Target regenerated per coalition": "no",
+}
+REQUIRE_TRUSTED_DIRECT_ANSWER_TARGET_MESSAGE = (
+    "A trusted current HF-native direct answer is required before the "
+    "direct-answer continuation explanation can run. Re-run the full pipeline."
+)
 # Temporary HF model-lifecycle tracing for the "two Qwen models resident at
 # once" / MPS crash investigation. Set to True only for local debugging; keep
 # False in normal runs. Remove once the investigation is closed out.
@@ -364,10 +384,52 @@ def build_native_hf_scorer_from_router(
     )
 
 
+def build_native_direct_answer_scorer_from_router(
+    router: LocalHFRouter,
+    *,
+    direct_answer_target: str,
+    max_pairs_per_batch: int,
+    selected_config: SelectedHFModelConfig | None = None,
+) -> NativeDirectAnswerScorer:
+    """Wrap an already-cached local HF router as the direct-answer coalition scorer.
+
+    Reuses the router's already-loaded ``model``/``tokenizer`` (never loads a
+    second HF model), exactly like :func:`build_native_hf_scorer_from_router`.
+    """
+    model_id = getattr(router, "model_name", None) or (
+        selected_config.model_id if selected_config is not None else DEFAULT_LOGPROB_MODEL_ID
+    )
+    tokenizer_id = getattr(router, "tokenizer_id", None) or model_id
+    quantization_mode = getattr(
+        router,
+        "requested_quantization_mode",
+        selected_config.quantization_mode if selected_config is not None else "none",
+    )
+    return NativeDirectAnswerScorer(
+        model=router.model,
+        tokenizer=router.tokenizer,
+        device=router.device,
+        model_id=model_id,
+        tokenizer_id=tokenizer_id,
+        quantization_mode=quantization_mode,
+        actual_quantization_mode=getattr(router, "actual_quantization_mode", quantization_mode),
+        dtype=getattr(router, "dtype", selected_config.dtype if selected_config else "auto"),
+        max_pairs_per_batch=max_pairs_per_batch,
+        direct_answer_target=direct_answer_target,
+    )
+
+
 def hf_value_function_label_for_target(target_tool: str | None, requested_label: str) -> str:
-    """Return the HF-local value-function label for a frozen Agent Result target."""
+    """Return the HF-local value-function label for a frozen Agent Result target.
+
+    ``no_tool`` Agent Results default to the native direct-answer continuation
+    scorer, the same unified continuation-likelihood family used for
+    executable tools. The legacy A/B/C/D surrogate (``NO_TOOL_SURROGATE_SCORER_LABEL``)
+    remains available only as a manually selected developer ablation; it is no
+    longer substituted in automatically.
+    """
     if target_tool == "no_tool" and requested_label == NATIVE_HF_SCORER_LABEL:
-        return NO_TOOL_SURROGATE_SCORER_LABEL
+        return NATIVE_DIRECT_ANSWER_SCORER_LABEL
     return requested_label
 
 
@@ -375,11 +437,55 @@ def value_function_metadata(label: str) -> tuple[str, str]:
     """Return ``(value_function_type, value_function_fidelity)`` for result metadata."""
     if label == NATIVE_HF_SCORER_LABEL:
         return "native_target_tool_continuation_likelihood", "native_tool_call"
+    if label == NATIVE_DIRECT_ANSWER_SCORER_LABEL:
+        return "native_direct_answer_continuation_likelihood", "native_direct_answer"
     if label == NO_TOOL_SURROGATE_SCORER_LABEL:
         return "legacy_abcd_no_tool_probe", "surrogate_ablation"
     if label == LOGPROB_SCORER_LABEL:
         return "legacy_abcd_forced_choice_probe", "developer_ablation"
     return label.lower().replace(" ", "_"), "diagnostic"
+
+
+def extract_direct_answer_text(inference_result: object) -> str | None:
+    """Return the first non-empty natural-language direct answer, in priority order.
+
+    Priority: ``cleaned_direct_answer`` (sentinel-stripped by native parsing),
+    then ``direct_answer``, then ``agent_response``. Never falls back to
+    ``raw_response``/``raw_response_original`` or an internal sentinel -- those
+    are excluded on purpose so a malformed or sentinel-only native output can
+    never become a direct-answer continuation target.
+    """
+    for attribute in ("cleaned_direct_answer", "direct_answer", "agent_response"):
+        value = getattr(inference_result, attribute, None)
+        if isinstance(value, str) and value.strip():
+            return value
+    return None
+
+
+def require_trusted_direct_answer_target(
+    inference_result: object | None,
+    *,
+    inference_backend: str,
+) -> str:
+    """Return the frozen direct-answer text, or raise when no trusted target exists.
+
+    Requires an HF-local, parse-error-free, ``no_tool`` full-context inference
+    result with a non-empty natural-language answer. The existing inference
+    signature invalidation (switching HF model/backend or editing the user
+    request clears ``agentic_inference_result``) already guarantees that any
+    non-``None`` result reaching this point is current for the active
+    configuration, so no separate staleness check is needed here.
+    """
+    if inference_backend != "HF local" or inference_result is None:
+        raise RuntimeError(REQUIRE_TRUSTED_DIRECT_ANSWER_TARGET_MESSAGE)
+    if getattr(inference_result, "parse_error", None) is not None:
+        raise RuntimeError(REQUIRE_TRUSTED_DIRECT_ANSWER_TARGET_MESSAGE)
+    if getattr(inference_result, "selected_tool", None) != "no_tool":
+        raise RuntimeError(REQUIRE_TRUSTED_DIRECT_ANSWER_TARGET_MESSAGE)
+    answer_text = extract_direct_answer_text(inference_result)
+    if not answer_text:
+        raise RuntimeError(REQUIRE_TRUSTED_DIRECT_ANSWER_TARGET_MESSAGE)
+    return answer_text
 
 
 def selected_hf_model_config(model_id: str) -> SelectedHFModelConfig:
@@ -1280,6 +1386,15 @@ class ToolUseSegment:
     source: SegmentSource
     label: str
     text: str
+
+
+def scorer_short_label(label: str) -> str:
+    """Return the compact setup-chip label for a value-function scorer label."""
+    if label == NATIVE_HF_SCORER_LABEL:
+        return NATIVE_HF_SCORER_SHORT_LABEL
+    if label == NATIVE_DIRECT_ANSWER_SCORER_LABEL:
+        return NATIVE_DIRECT_ANSWER_SCORER_SHORT_LABEL
+    return str(label)
 
 
 def truncate_label(value: str, max_length: int = 72) -> str:
@@ -3269,6 +3384,7 @@ def main() -> None:
                 if inference_backend == "HF local"
                 else scorer_backend
             )
+            frozen_direct_answer_target = None
             if effective_scorer_backend == "Keyword scorer":
                 primary_scorer = lexical_scorer
                 primary_label = "Keyword scorer"
@@ -3302,6 +3418,49 @@ def main() -> None:
                     )
                     return
                 primary_label = NATIVE_HF_SCORER_LABEL
+                target_source = "Agent Result"
+            elif effective_scorer_backend == NATIVE_DIRECT_ANSWER_SCORER_LABEL:
+                try:
+                    selected_native_hf_config = require_selected_hf_config(selected_hf_config)
+                    direct_answer_target_text = require_trusted_direct_answer_target(
+                        st.session_state.get("agentic_inference_result"),
+                        inference_backend=inference_backend,
+                    )
+                    hf_router = load_local_hf_router(
+                        selected_native_hf_config.model_id,
+                        DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
+                        trust_remote_code=False,
+                        quantization_mode=selected_native_hf_config.quantization_mode,
+                        device=selected_native_hf_config.device,
+                        dtype=selected_native_hf_config.dtype,
+                    )
+                    # Frozen once, here -- not rebuilt per coalition below.
+                    frozen_direct_answer_target = build_canonical_direct_answer_target(
+                        direct_answer_target_text,
+                        tokenizer=hf_router.tokenizer,
+                    )
+                    primary_scorer = build_native_direct_answer_scorer_from_router(
+                        hf_router,
+                        direct_answer_target=frozen_direct_answer_target,
+                        max_pairs_per_batch=int(max_pairs_per_batch),
+                        selected_config=selected_native_hf_config,
+                    )
+                    native_hf_consistency = validate_hf_inference_xai_consistency(
+                        selected_config=selected_native_hf_config,
+                        router=hf_router,
+                        scorer=primary_scorer,
+                    )
+                except RuntimeError as error:
+                    st.error(str(error))
+                    return
+                except Exception as error:  # noqa: BLE001
+                    st.error(
+                        "Could not prepare the native direct-answer continuation scorer. "
+                        "Install/check `transformers` and `torch`, try a smaller causal "
+                        f"language model, or check your environment. Details: {error}"
+                    )
+                    return
+                primary_label = NATIVE_DIRECT_ANSWER_SCORER_LABEL
                 target_source = "Agent Result"
             elif effective_scorer_backend in {LOGPROB_SCORER_LABEL, NO_TOOL_SURROGATE_SCORER_LABEL}:
                 # No explicit st.spinner() wrapper here: load_logprob_scorer's own
@@ -3692,6 +3851,7 @@ def main() -> None:
                 "logprob_full_diagnostics": logprob_full_diagnostics,
                 "native_hf_consistency": native_hf_consistency,
                 "hf_selected_model_config": selected_hf_config,
+                "direct_answer_target": frozen_direct_answer_target,
                 "final_answer_scorer_meta": (
                     {
                         "embedding_model_id": final_answer_embedding_model_id,
@@ -3783,7 +3943,7 @@ def main() -> None:
             full_label, full_display = "Raw full score h(N)", f"{raw_full_score:.3f}"
             delta_label = "Support change h(N)-h(&empty;)"
             empty_short_label, full_short_label = "Baseline H(&empty;)", "Full H(N)"
-        elif primary_label == NATIVE_HF_SCORER_LABEL:
+        elif primary_label in {NATIVE_HF_SCORER_LABEL, NATIVE_DIRECT_ANSWER_SCORER_LABEL}:
             explained_increase = float(full_score) - float(empty_score)
             empty_label, empty_display = "Empty native score h(&empty;)", f"{empty_score:.3f}"
             full_label, full_display = "Full native score h(N)", f"{full_score:.3f}"
@@ -3858,7 +4018,7 @@ def main() -> None:
         summary_title = (
             f"Why did the model call {target_tool}?"
             if target_tool in EXECUTABLE_TOOL_NAMES
-            else "Why did the model answer directly?"
+            else "What supports this direct-answer continuation?"
         )
         st.markdown(
             f"""
@@ -3905,7 +4065,7 @@ def main() -> None:
             """,
             unsafe_allow_html=True,
         )
-        if primary_label == NATIVE_HF_SCORER_LABEL:
+        if primary_label in {NATIVE_HF_SCORER_LABEL, NATIVE_DIRECT_ANSWER_SCORER_LABEL}:
             st.caption(
                 "Log-probability values are at most zero; values closer to zero indicate "
                 "stronger native continuation support."
@@ -3932,7 +4092,7 @@ def main() -> None:
                 </span>
                 <span class="setup-chip">
                     <strong>VF:</strong>
-                    {escape(NATIVE_HF_SCORER_SHORT_LABEL if scorer_label == NATIVE_HF_SCORER_LABEL else str(scorer_label))}
+                    {escape(scorer_short_label(scorer_label))}
                 </span>
             </div>
             """,
@@ -4243,10 +4403,15 @@ def main() -> None:
                     st.write(
                         "Native tool template source: `selected tokenizer.apply_chat_template`"
                     )
+                    continuation_diagnostics = (
+                        NATIVE_DIRECT_ANSWER_CONTINUATION_DIAGNOSTICS
+                        if primary_label == NATIVE_DIRECT_ANSWER_SCORER_LABEL
+                        else NATIVE_HF_CONTINUATION_DIAGNOSTICS
+                    )
                     for (
                         diagnostic_name,
                         diagnostic_value,
-                    ) in NATIVE_HF_CONTINUATION_DIAGNOSTICS.items():
+                    ) in continuation_diagnostics.items():
                         st.write(f"{diagnostic_name}: `{diagnostic_value}`")
                     st.write(f"Scorer mode: `{primary_label}`")
                     if isinstance(hf_selected_model_config, SelectedHFModelConfig):

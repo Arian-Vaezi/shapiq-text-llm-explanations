@@ -169,3 +169,59 @@ def test_switching_hf_model_clears_stale_inferred_tool_and_explanation() -> None
     # as the XAI tab re-renders in the same run -- it does not stay `None` -- but it must
     # no longer be the stale signature from the old (1.5B, calculator_tool) result.
     assert at.session_state["result_signature"] != "fake-signature-for-1.5b-calculator_tool"
+
+
+def _fake_no_tool_inference_result() -> SimpleNamespace:
+    return SimpleNamespace(
+        selected_tool="no_tool",
+        tool_arguments={},
+        agent_response="Photosynthesis converts light energy into chemical energy.",
+        cleaned_direct_answer="Photosynthesis converts light energy into chemical energy.",
+        direct_answer="Photosynthesis converts light energy into chemical energy.",
+        parse_error=None,
+        raw_trace={},
+        error=None,
+        available=True,
+        backend="HF local",
+        model="Qwen/Qwen2.5-1.5B-Instruct",
+    )
+
+
+def test_switching_hf_model_invalidates_frozen_direct_answer_target() -> None:
+    """A no_tool Agent Result's frozen direct-answer target is sourced from
+    ``agentic_inference_result`` -- switching the HF model must clear that
+    result (the same generic invalidation covered above for executable-tool
+    results) so a stale direct-answer target can never survive the switch.
+    """
+    at = AppTest.from_file(APP_PATH, default_timeout=120)
+    at.run()
+    assert not at.exception
+
+    hf_model_box = next(box for box in at.selectbox if box.label == "HF model")
+    at.session_state["agentic_inference_result"] = _fake_no_tool_inference_result()
+    at.session_state["agentic_inference_backend"] = "HF local"
+    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-1.5B-Instruct"
+
+    hf_model_box.select("Qwen/Qwen2.5-3B-Instruct").run()
+
+    assert not at.exception
+    assert at.session_state["agentic_inference_result"] is None
+
+
+def test_editing_request_invalidates_frozen_direct_answer_target() -> None:
+    """Editing the user request must clear a no_tool Agent Result the same way."""
+    at = AppTest.from_file(APP_PATH, default_timeout=120)
+    at.run()
+    assert not at.exception
+
+    at.session_state["agentic_inference_result"] = _fake_no_tool_inference_result()
+    at.session_state["agentic_inference_backend"] = "HF local"
+    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-1.5B-Instruct"
+    at.run()
+    assert at.session_state["agentic_inference_result"] is not None
+
+    request_box = next(area for area in at.text_area if area.label == "User request")
+    request_box.set_value("Explain what entropy is in simple terms.").run()
+
+    assert not at.exception
+    assert at.session_state["agentic_inference_result"] is None

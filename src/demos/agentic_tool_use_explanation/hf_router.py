@@ -717,19 +717,18 @@ class LocalHFClassificationRouter:
             tool_name: raw_scores[tool_name] - calibrated_scores[tool_name]
             for tool_name in calibrated_scores
         }
-
-        import sys
-
-        print(
-            f"[ROUTE-DEBUG] request={user_request[:60]!r} "
-            f"raw_scores={raw_scores} "
-            f"calibrated_scores={calibrated_scores} "
-            f"calibration_baseline_b_t={calibration_debug} "
-            f"raw_argmax={raw_argmax} "
-            f"calibrated_argmax={calibrated_argmax} "
-            f"selection_mode={self.selection_mode} "
-            f"selected_tool={selected_tool}",
-            file=sys.stderr,
+        LOGGER.debug(
+            "route request=%r raw_scores=%s calibrated_scores=%s "
+            "calibration_baseline_b_t=%s raw_argmax=%s calibrated_argmax=%s "
+            "selection_mode=%r selected_tool=%s",
+            user_request[:60],
+            raw_scores,
+            calibrated_scores,
+            calibration_debug,
+            raw_argmax,
+            calibrated_argmax,
+            self.selection_mode,
+            selected_tool,
         )
         label = self.scorer.routing_labels.get(selected_tool, "?")
         return ToolChoice(

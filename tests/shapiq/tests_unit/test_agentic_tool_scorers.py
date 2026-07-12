@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import inspect
 import math
 import sys
@@ -27,13 +28,17 @@ from scorers import (  # noqa: E402
     CALIBRATION_USER_REQUESTS,
     ROUTING_LABELS,
     CalibratedToolLogOddsScorer,
+    FrozenContinuationTarget,
     LexicalToolRouter,
     LexicalToolScorer,
     LLMToolScorer,
     MockLLM,
+    NativeDirectAnswerScorer,
     NativeToolCallScorer,
     RoutingLabelTokenization,
+    build_canonical_direct_answer_target,
     build_coalition_prompt,
+    build_native_direct_answer_prompt,
     build_native_tool_call_continuation,
     build_native_tool_call_prompt,
     build_routing_classification_prompt,
@@ -1952,21 +1957,34 @@ def test_native_tool_call_scorer_empty_subtraction_is_game_normalization(monkeyp
     assert game(full)[0] == pytest.approx(-0.25)
 
 
-def test_no_tool_selects_legacy_surrogate_branch_and_metadata() -> None:
+def test_no_tool_legacy_surrogate_remains_a_developer_ablation() -> None:
+    """The legacy A/B/C/D no-tool probe is retained but no longer auto-selected."""
     assert "surrogate" in app_module.NO_TOOL_SURROGATE_SCORER_LABEL.lower()
     assert "surrogate" in app_module.NO_TOOL_SURROGATE_HELP.lower()
     assert "not executable" in app_module.NO_TOOL_SURROGATE_HELP
     assert "not native" in app_module.NO_TOOL_SURROGATE_HELP
+    assert app_module.value_function_metadata(app_module.NO_TOOL_SURROGATE_SCORER_LABEL) == (
+        "legacy_abcd_no_tool_probe",
+        "surrogate_ablation",
+    )
+
+
+def test_no_tool_selects_native_direct_answer_branch_and_metadata() -> None:
+    """A no_tool Agent Result now defaults to the native direct-answer scorer, not ABCD."""
+    assert "direct-answer" in app_module.NATIVE_DIRECT_ANSWER_SCORER_LABEL.lower()
+    assert "no-tool probability" not in app_module.NATIVE_DIRECT_ANSWER_SCORER_HELP.lower()
+    assert "no-tool decision likelihood" not in app_module.NATIVE_DIRECT_ANSWER_SCORER_HELP.lower()
+    assert "not a probability of choosing no tool" in app_module.NATIVE_DIRECT_ANSWER_SCORER_HELP
     assert (
         app_module.hf_value_function_label_for_target(
             "no_tool",
             app_module.NATIVE_HF_SCORER_LABEL,
         )
-        == app_module.NO_TOOL_SURROGATE_SCORER_LABEL
+        == app_module.NATIVE_DIRECT_ANSWER_SCORER_LABEL
     )
-    assert app_module.value_function_metadata(app_module.NO_TOOL_SURROGATE_SCORER_LABEL) == (
-        "legacy_abcd_no_tool_probe",
-        "surrogate_ablation",
+    assert app_module.value_function_metadata(app_module.NATIVE_DIRECT_ANSWER_SCORER_LABEL) == (
+        "native_direct_answer_continuation_likelihood",
+        "native_direct_answer",
     )
 
 
@@ -2206,3 +2224,513 @@ def test_tool_use_game_builds_coalition_prompt() -> None:
     assert "Available tools:" in prompt
     assert "Will it rain tomorrow?" not in prompt
     assert "User request:\n\nAssistant:" in prompt
+
+
+# ===========================================================================
+# Native direct-answer continuation: target extraction + scorer
+# ===========================================================================
+
+
+class WordTokenizer:
+    """Deterministic, reversible whitespace-word tokenizer for target-extraction tests.
+
+    Splits on literal single spaces so ``decode(encode(text)) == text`` for any
+    input using single-space word separation -- no real HF tokenizer is loaded.
+    """
+
+    def __init__(self) -> None:
+        self._id_to_word: list[str] = []
+        self._word_to_id: dict[str, int] = {}
+
+    def _id_for(self, word: str) -> int:
+        if word not in self._word_to_id:
+            self._word_to_id[word] = len(self._id_to_word)
+            self._id_to_word.append(word)
+        return self._word_to_id[word]
+
+    def __call__(self, text: str, *, add_special_tokens: bool = False) -> dict[str, list[int]]:
+        del add_special_tokens
+        return {"input_ids": [self._id_for(word) for word in text.split(" ")]}
+
+    def decode(self, token_ids: list[int]) -> str:
+        return " ".join(self._id_to_word[token_id] for token_id in token_ids)
+
+
+def test_direct_answer_target_single_sentence() -> None:
+    answer = "Photosynthesis converts light energy into chemical energy for plants today."
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert target == answer
+
+
+def test_direct_answer_target_uses_first_qualifying_sentence() -> None:
+    answer = (
+        "Photosynthesis converts light energy into chemical energy for plants. "
+        "Chlorophyll absorbs the light needed for this reaction to occur reliably."
+    )
+
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert target == "Photosynthesis converts light energy into chemical energy for plants."
+
+
+def test_direct_answer_target_removes_generic_preamble() -> None:
+    answer = "Sure, photosynthesis converts light energy into chemical energy for plants."
+
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert not target.startswith("Sure,")
+    assert target.startswith("photosynthesis")
+
+
+def test_direct_answer_target_without_punctuation_uses_whole_text() -> None:
+    answer = "Photosynthesis converts light energy into chemical energy for plants"
+
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert target == answer
+
+
+def test_direct_answer_target_extends_past_short_first_sentence() -> None:
+    answer = "Yes. It converts light energy into chemical energy for plants reliably."
+
+    target = build_canonical_direct_answer_target(
+        answer, tokenizer=WordTokenizer(), min_target_tokens=4
+    )
+
+    assert target.startswith("Yes. It converts")
+    assert len(target.split(" ")) >= 4
+
+
+def test_direct_answer_target_truncates_to_max_tokens() -> None:
+    words = [f"word{index}" for index in range(40)]
+    answer = " ".join(words) + "."
+
+    target = build_canonical_direct_answer_target(
+        answer, tokenizer=WordTokenizer(), max_target_tokens=10, min_target_tokens=4
+    )
+
+    assert target.split(" ") == words[:10]
+
+
+def test_direct_answer_target_handles_unicode_text() -> None:
+    answer = "Café résumé naïve façade coöperate — a quick summary of these terms."
+
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert target == answer
+
+
+def test_direct_answer_target_preserves_decimal_numbers() -> None:
+    answer = "Pi is approximately 3.14 which is useful for circle calculations today."
+
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert target == answer
+    assert "3.14" in target
+
+
+@pytest.mark.parametrize(
+    ("answer", "expected"),
+    [
+        (
+            "Dr. Smith explained the theory in simple terms for the class. It helped.",
+            "Dr. Smith explained the theory in simple terms for the class.",
+        ),
+        (
+            "This is common knowledge, e.g. water boils at 100 degrees. It is well known.",
+            "This is common knowledge, e.g. water boils at 100 degrees.",
+        ),
+    ],
+)
+def test_direct_answer_target_preserves_abbreviations(answer: str, expected: str) -> None:
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert target == expected
+
+
+def test_direct_answer_target_empty_answer_raises() -> None:
+    with pytest.raises(ValueError, match="No usable"):
+        build_canonical_direct_answer_target("   ", tokenizer=WordTokenizer())
+
+
+def test_direct_answer_target_sentinel_only_raises() -> None:
+    with pytest.raises(ValueError, match="sentinel"):
+        build_canonical_direct_answer_target("no_tool", tokenizer=WordTokenizer())
+
+
+def test_direct_answer_target_strips_termination_artifacts() -> None:
+    answer = "Photosynthesis converts light energy into chemical energy. <|im_end|>"
+
+    target = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert "<|im_end|>" not in target
+    assert target == "Photosynthesis converts light energy into chemical energy."
+
+
+def test_direct_answer_target_decode_after_truncation_produces_nonempty_target() -> None:
+    words = [f"word{index}" for index in range(40)]
+    answer = " ".join(words) + "."
+
+    target = build_canonical_direct_answer_target(
+        answer, tokenizer=WordTokenizer(), max_target_tokens=5, min_target_tokens=4
+    )
+
+    assert target.strip() != ""
+
+
+def test_direct_answer_target_extraction_is_deterministic() -> None:
+    answer = (
+        "Photosynthesis converts light energy into chemical energy for plants. "
+        "More text follows this sentence for good measure."
+    )
+
+    first = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+    second = build_canonical_direct_answer_target(answer, tokenizer=WordTokenizer())
+
+    assert first == second
+
+
+def test_frozen_continuation_target_is_immutable() -> None:
+    target = FrozenContinuationTarget(
+        kind="direct_answer", text="abc", token_ids=(1, 2, 3), source="test"
+    )
+
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        target.text = "changed"  # type: ignore[misc]
+
+
+def test_build_native_direct_answer_prompt_matches_tool_call_prompt() -> None:
+    tokenizer = NativeTemplateTokenizer()
+
+    direct_prompt = build_native_direct_answer_prompt(
+        tokenizer, system_prompt="Route.", user_request="Explain photosynthesis."
+    )
+    tool_prompt = build_native_tool_call_prompt(
+        tokenizer, system_prompt="Route.", user_request="Explain photosynthesis."
+    )
+
+    assert direct_prompt == tool_prompt
+
+
+class DirectAnswerFakeTokenizer(NativeTemplateTokenizer):
+    """Fake tokenizer supporting both single-text id lookup and batched tensor calls.
+
+    ``NativeDirectAnswerScorer`` needs both: a plain ``tokenizer(text,
+    add_special_tokens=False)`` call (to freeze the target's token identity at
+    construction) and the batched ``tokenizer(list_of_texts, return_tensors=...,
+    padding=...)`` call used by the shared teacher-forced scoring machinery.
+    """
+
+    def __call__(
+        self,
+        texts: object,
+        *,
+        add_special_tokens: bool = False,
+        return_tensors: str | None = None,
+        padding: bool | None = None,
+    ) -> dict[str, object]:
+        del add_special_tokens
+        if isinstance(texts, str):
+            return {"input_ids": [ord(character) for character in texts]}
+        del return_tensors, padding
+        import torch
+
+        rows = [[ord(character) for character in text] for text in texts]
+        max_len = max(len(row) for row in rows)
+        input_ids = torch.zeros((len(rows), max_len), dtype=torch.long)
+        attention_mask = torch.zeros((len(rows), max_len), dtype=torch.long)
+        for row_index, row in enumerate(rows):
+            input_ids[row_index, : len(row)] = torch.tensor(row, dtype=torch.long)
+            attention_mask[row_index, : len(row)] = 1
+        return {"input_ids": input_ids, "attention_mask": attention_mask}
+
+
+def make_direct_answer_scorer(
+    *,
+    direct_answer_target: str = "ok",
+    model: object | None = None,
+    tokenizer: object | None = None,
+    max_pairs_per_batch: int = 4,
+) -> NativeDirectAnswerScorer:
+    return NativeDirectAnswerScorer(
+        model=model or ControlledLogitModel({}),
+        tokenizer=tokenizer or DirectAnswerFakeTokenizer(),
+        device="cpu",
+        model_id="fake-direct-answer-model",
+        max_pairs_per_batch=max_pairs_per_batch,
+        direct_answer_target=direct_answer_target,
+    )
+
+
+def test_direct_answer_scorer_rejects_non_no_tool_target() -> None:
+    scorer = make_direct_answer_scorer()
+
+    with pytest.raises(ValueError, match="no_tool"):
+        scorer.score_batch(
+            [build_coalition_prompt("Explain X", system_prompt="Route.", tool_context="- x: y")],
+            target_tool="weather_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_direct_answer_scorer_rejects_empty_target() -> None:
+    with pytest.raises(ValueError, match="non-empty"):
+        make_direct_answer_scorer(direct_answer_target="   ")
+
+
+def test_direct_answer_scorer_uses_same_frozen_target_for_every_coalition() -> None:
+    scorer = make_direct_answer_scorer(direct_answer_target="Photosynthesis converts light.")
+    prompts = [
+        build_coalition_prompt(text, system_prompt="Route.", tool_context="- x: y")
+        for text in ("Explain X", "Explain Y", "")
+    ]
+
+    previews = [
+        scorer.build_scoring_prompt(
+            prompt, target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS
+        )
+        for prompt in prompts
+    ]
+
+    assert all(preview.endswith("Photosynthesis converts light.") for preview in previews)
+    assert scorer.direct_answer_target == "Photosynthesis converts light."
+
+
+def test_direct_answer_scorer_never_calls_generate() -> None:
+    class ExplodingGenerateModel(ControlledLogitModel):
+        def generate(self, *args: object, **kwargs: object) -> object:
+            msg = "generate() must not be called during coalition scoring."
+            raise AssertionError(msg)
+
+    scorer = make_direct_answer_scorer(model=ExplodingGenerateModel({}))
+    prompt = build_coalition_prompt("Explain X", system_prompt="Route.", tool_context="- x: y")
+
+    scores = scorer.score_batch(
+        [prompt], target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS
+    )
+
+    assert len(scores) == 1
+
+
+def test_direct_answer_scorer_one_batched_call_scores_all_coalitions_in_order(
+    monkeypatch,
+) -> None:
+    scorer = make_direct_answer_scorer(direct_answer_target="ok")
+    seen_prompts: list[list[str]] = []
+
+    def fake_batched(prompts: list[str], continuations: list[str]) -> list[float]:
+        seen_prompts.append(list(prompts))
+        assert continuations == [scorer.frozen_target.text] * len(prompts)
+        return [-0.1 * index for index in range(len(prompts))]
+
+    monkeypatch.setattr(scorer, "_sequence_mean_logprobs_batched", fake_batched)
+    prompts = [
+        build_coalition_prompt(f"Request {index}", system_prompt="Route.", tool_context="- x: y")
+        for index in range(4)
+    ]
+
+    scores = scorer.score_batch(
+        prompts, target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS
+    )
+
+    expected_model_prompts = [
+        build_native_direct_answer_prompt(
+            scorer.tokenizer,
+            system_prompt=split_coalition_prompt(prompt)[0],
+            user_request=split_coalition_prompt(prompt)[1],
+        )
+        for prompt in prompts
+    ]
+    assert len(seen_prompts) == 1
+    assert seen_prompts[0] == expected_model_prompts
+    assert scores == pytest.approx([-0.1 * index for index in range(4)])
+
+
+def test_direct_answer_scorer_reuses_cache_for_repeated_coalition_prompt(monkeypatch) -> None:
+    scorer = make_direct_answer_scorer()
+    call_counter = {"n": 0}
+    original = scorer._sequence_mean_logprobs_batched
+
+    def counting(prompts: list[str], continuations: list[str]) -> list[float]:
+        call_counter["n"] += 1
+        return original(prompts, continuations)
+
+    monkeypatch.setattr(scorer, "_sequence_mean_logprobs_batched", counting)
+    prompt = build_coalition_prompt("Explain X", system_prompt="Route.", tool_context="- x: y")
+
+    first = scorer.score_batch(
+        [prompt], target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS
+    )
+    second = scorer.score_batch(
+        [prompt, prompt], target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS
+    )
+
+    assert call_counter["n"] == 1
+    assert second == [first[0], first[0]]
+
+
+def test_direct_answer_scorer_cache_key_includes_target_identity() -> None:
+    scorer_a = make_direct_answer_scorer(direct_answer_target="alpha")
+    scorer_b = make_direct_answer_scorer(direct_answer_target="beta")
+    prompt = build_coalition_prompt("Explain X", system_prompt="Route.", tool_context="- x: y")
+
+    scorer_a.score_batch([prompt], target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS)
+    scorer_b.score_batch([prompt], target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS)
+
+    key_a = next(iter(scorer_a._score_cache))
+    key_b = next(iter(scorer_b._score_cache))
+    assert key_a[0] == key_b[0] == prompt
+    assert key_a[1] != key_b[1]  # different frozen target token identity -- no cache collision
+
+
+def test_direct_answer_scorer_rejects_non_finite_score() -> None:
+    class NaNLogitModel:
+        def eval(self) -> None:
+            return None
+
+        def __call__(self, *, input_ids: object, attention_mask: object) -> object:
+            del attention_mask
+            import torch
+
+            vocab_size = 256
+            logits = torch.full((input_ids.shape[0], input_ids.shape[1], vocab_size), float("nan"))
+            return types.SimpleNamespace(logits=logits)
+
+    scorer = make_direct_answer_scorer(model=NaNLogitModel())
+    prompt = build_coalition_prompt("Explain X", system_prompt="Route.", tool_context="- x: y")
+
+    with pytest.raises(ValueError, match="finite"):
+        scorer.score_batch([prompt], target_tool=NO_TOOL_NAME, tool_descriptions=TOOL_DESCRIPTIONS)
+
+
+def test_direct_answer_scorer_empty_subtraction_is_game_normalization(monkeypatch) -> None:
+    scorer = make_direct_answer_scorer()
+
+    def fake_score_batch(prompts, *, target_tool, tool_descriptions):
+        del target_tool, tool_descriptions
+        return [0.0 if "User request:\n\nAssistant:" in prompt else -0.3 for prompt in prompts]
+
+    monkeypatch.setattr(scorer, "score_batch", fake_score_batch)
+    game = ToolUseGame(
+        target_tool=NO_TOOL_NAME,
+        user_segments=["Explain X", "in simple terms"],
+        system_prompt="Route.",
+        scorer=scorer,
+        tool_descriptions=TOOL_DESCRIPTIONS,
+        normalize=True,
+    )
+
+    empty = np.zeros((1, game.n_players), dtype=bool)
+    full = np.ones((1, game.n_players), dtype=bool)
+
+    assert game(empty)[0] == pytest.approx(0.0)
+    assert game(full)[0] == pytest.approx(-0.3)
+
+
+def test_direct_answer_and_tool_call_scorers_share_sequence_scoring_implementation() -> None:
+    """Both scorer families must reuse one lower-level teacher-forced scoring implementation."""
+    assert (
+        NativeDirectAnswerScorer._sequence_mean_logprobs_batch
+        is NativeToolCallScorer._sequence_mean_logprobs_batch
+    )
+    assert (
+        NativeDirectAnswerScorer._next_token_log_probs is NativeToolCallScorer._next_token_log_probs
+    )
+    assert (
+        NativeDirectAnswerScorer._sequence_mean_logprobs_batched
+        is NativeToolCallScorer._sequence_mean_logprobs_batched
+    )
+
+
+# ---------------------------------------------------------------------------
+# app.py integration: direct-answer target sourcing and scorer selection
+# ---------------------------------------------------------------------------
+
+
+def test_extract_direct_answer_text_prefers_cleaned_direct_answer() -> None:
+    result = types.SimpleNamespace(
+        cleaned_direct_answer="Cleaned answer.",
+        direct_answer="Raw direct answer.",
+        agent_response="Agent response.",
+    )
+
+    assert app_module.extract_direct_answer_text(result) == "Cleaned answer."
+
+
+def test_extract_direct_answer_text_falls_back_in_priority_order() -> None:
+    only_direct_answer = types.SimpleNamespace(
+        cleaned_direct_answer=None, direct_answer="Raw direct answer.", agent_response="Agent."
+    )
+    only_agent_response = types.SimpleNamespace(
+        cleaned_direct_answer="", direct_answer=None, agent_response="Agent response."
+    )
+
+    assert app_module.extract_direct_answer_text(only_direct_answer) == "Raw direct answer."
+    assert app_module.extract_direct_answer_text(only_agent_response) == "Agent response."
+
+
+def test_extract_direct_answer_text_never_uses_raw_response() -> None:
+    result = types.SimpleNamespace(
+        cleaned_direct_answer=None,
+        direct_answer=None,
+        agent_response=None,
+        raw_response="no_tool\nSome answer.",
+    )
+
+    assert app_module.extract_direct_answer_text(result) is None
+
+
+def test_require_trusted_direct_answer_target_rejects_parse_failure() -> None:
+    result = types.SimpleNamespace(
+        parse_error="malformed", selected_tool=None, cleaned_direct_answer=None
+    )
+
+    with pytest.raises(RuntimeError, match="trusted current HF-native direct answer"):
+        app_module.require_trusted_direct_answer_target(result, inference_backend="HF local")
+
+
+def test_require_trusted_direct_answer_target_rejects_non_no_tool_selection() -> None:
+    result = types.SimpleNamespace(
+        parse_error=None, selected_tool="weather_tool", cleaned_direct_answer=None
+    )
+
+    with pytest.raises(RuntimeError, match="trusted current HF-native direct answer"):
+        app_module.require_trusted_direct_answer_target(result, inference_backend="HF local")
+
+
+def test_require_trusted_direct_answer_target_rejects_non_hf_local_backend() -> None:
+    result = types.SimpleNamespace(
+        parse_error=None, selected_tool="no_tool", cleaned_direct_answer="An answer."
+    )
+
+    with pytest.raises(RuntimeError, match="trusted current HF-native direct answer"):
+        app_module.require_trusted_direct_answer_target(result, inference_backend="Groq")
+
+
+def test_require_trusted_direct_answer_target_rejects_missing_result() -> None:
+    with pytest.raises(RuntimeError, match="trusted current HF-native direct answer"):
+        app_module.require_trusted_direct_answer_target(None, inference_backend="HF local")
+
+
+def test_require_trusted_direct_answer_target_returns_answer_when_trusted() -> None:
+    result = types.SimpleNamespace(
+        parse_error=None,
+        selected_tool="no_tool",
+        cleaned_direct_answer="Photosynthesis converts light energy into chemical energy.",
+    )
+
+    answer = app_module.require_trusted_direct_answer_target(result, inference_backend="HF local")
+
+    assert answer == "Photosynthesis converts light energy into chemical energy."
+
+
+def test_hf_direct_answer_ui_wording_does_not_claim_no_tool_probability() -> None:
+    """UI/help text for the native direct-answer scorer must not overclaim."""
+    forbidden_phrases = [
+        "no-tool probability",
+        "no-tool decision likelihood",
+        "probability of answering directly",
+    ]
+    for phrase in forbidden_phrases:
+        assert phrase not in app_module.NATIVE_DIRECT_ANSWER_SCORER_HELP.lower()
