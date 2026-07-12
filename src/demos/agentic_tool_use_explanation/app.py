@@ -2631,15 +2631,6 @@ def render_tool_decision_card(
         "The agent prepared an external tool call for this request.",
     )
     status_label, tool_output = tool_execution_state(inference_result)
-    output_html = (
-        (
-            "<p class='result-meta-row' style='margin-top:0.7rem;'>"
-            "<strong>Execution result</strong></p>"
-            f"<div class='agent-response-block'>{escape(str(tool_output))}</div>"
-        )
-        if tool_output is not None
-        else ""
-    )
     flow_html = (
         "<div class='agent-flow-line'>"
         f"User request &rarr; {escape(selected_tool)} &rarr; {escape(status_label)}"
@@ -2653,7 +2644,6 @@ def render_tool_decision_card(
             <div class="result-card-subtitle">{escape(route_explanation)}</div>
             {flow_html}
             {render_tool_arguments_html(getattr(inference_result, "tool_arguments", {}))}
-            {output_html}
             {agent_model_line_html(model=model, backend=backend)}
         </div>
     """)
@@ -4655,10 +4645,11 @@ def main() -> None:
                 <div class="evidence-card-header">
                     <div class="evidence-card-title">Main and pairwise effects — k-SII</div>
                     <div class="evidence-card-caption">Diagonal: individual k-SII main
-                    effects. Off-diagonal: pairwise k-SII interactions. Red indicates
-                    positive effects; blue indicates negative effects. For off-diagonal
-                    cells, positive values indicate reinforcement, while negative values
-                    indicate redundancy or suppression.</div>
+                    effects. Off-diagonal: pairwise k-SII interactions. Cell labels show
+                    the exact effect values. Red indicates positive effects; blue
+                    indicates negative effects. For off-diagonal cells, positive values
+                    indicate reinforcement, while negative values indicate redundancy or
+                    suppression.</div>
                 </div>
                 """,
                 unsafe_allow_html=True,

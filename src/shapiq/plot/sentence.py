@@ -367,6 +367,30 @@ def sentence_interaction_heatmap(
         vmax=max_abs_score,
     )
 
+    if n_words <= 6:
+        annotation_fontsize = 9
+    elif n_words <= 10:
+        annotation_fontsize = 8
+    else:
+        annotation_fontsize = 7
+
+    # annotate every cell with its numeric value
+    for i in range(n_words):
+        for j in range(n_words):
+            value = interaction_matrix[i, j]
+            display_value = 0.0 if abs(value) < 0.0005 else value
+            normalized_intensity = abs(value) / max_abs_score if max_abs_score > 0 else 0.0
+            text_color = "white" if normalized_intensity >= 0.55 else "black"
+            ax.text(
+                j,
+                i,
+                f"{display_value:+.3f}",
+                ha="center",
+                va="center",
+                color=text_color,
+                fontsize=annotation_fontsize,
+            )
+
     # x&y achses show word/player lables
     ax.set_xticks(np.arange(n_words))
     ax.set_yticks(np.arange(n_words))
