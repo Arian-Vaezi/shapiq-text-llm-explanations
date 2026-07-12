@@ -113,6 +113,7 @@ with st.sidebar:
         [
             "🧪 Experimental Setup",
             "🔍 Result Explorer",
+            "🧩 Explanation Explorer",
         ],
         label_visibility="collapsed",
     )
@@ -803,3 +804,304 @@ elif page == "🔍 Result Explorer":
                     st.warning("Network plot returned empty figure.")
             except Exception as e:
                 st.error(f"Failed to generate interaction network: {e}")
+
+
+# =============================================================================
+# Explanation Explorer  –  pre-filtered to configs WITH shapiq data
+# =============================================================================
+
+elif page == "🧩 Explanation Explorer":
+
+    st.title("🧩 Explanation Explorer")
+    st.caption(
+        "Browse only the configurations that have precomputed Shapiq explanations "
+        "(Shapley values + pairwise k-SII interactions)."
+    )
+
+    all_results = load_asr_results()
+
+    if not all_results:
+        st.warning(f"No summary file found:\n{SUMMARY_ASR}")
+        st.stop()
+
+    # Pre-filter: keep only entries that have explanation data
+    explained = [r for r in all_results if r.get("players")]
+
+    if not explained:
+        st.warning(
+            "No explanations found in the data. "
+            "Run `aggregate_explanations.py` to merge the interactions data."
+        )
+        st.stop()
+
+    st.success(
+        f"**{len(explained)}** configurations have explanation data "
+        f"(out of {len(all_results)} total)."
+    )
+
+    st.divider()
+
+    # -------------------------------------------------------------------------
+    # Explanation-aware filters
+    # -------------------------------------------------------------------------
+
+    exp_models = sorted(set(r["model"] for r in explained if r.get("model")))
+    exp_prompts = sorted(set(r["prompt_id"] for r in explained if r.get("prompt_id")))
+    exp_temperatures = sorted(set(r["temperature"] for r in explained if r.get("temperature") is not None))
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        sel_model = st.selectbox("Model", exp_models, key="exp_model")
+
+    with col2:
+        # Filter prompts to those available for the selected model
+        prompts_for_model = sorted(
+            set(r["prompt_id"] for r in explained if r.get("model") == sel_model)
+        )
+        sel_prompt = st.selectbox("Prompt", prompts_for_model, key="exp_prompt")
+
+    with col3:
+        # Show all temperatures — explanation is temperature-agnostic, but
+        # the inference result (response / jailbroken) depends on temperature.
+        sel_temperature = st.selectbox("Temperature", exp_temperatures, key="exp_temp")
+
+    # Find match (explanation data is the same across temperatures for the same model+prompt)
+    exp_matches = [
+        r for r in explained
+        if r["model"] == sel_model
+        and r["prompt_id"] == sel_prompt
+        and r["temperature"] == sel_temperature
+    ]
+
+    # Fallback: grab any temperature if the exact one isn't present
+    if not exp_matches:
+        exp_matches = [
+            r for r in explained
+            if r["model"] == sel_model and r["prompt_id"] == sel_prompt
+        ]
+
+    if not exp_matches:
+        st.warning("No matching result found.")
+        st.stop()
+
+    result = exp_matches[0]
+
+    st.divider()
+
+    # -------------------------------------------------------------------------
+    # Config summary chips
+    # -------------------------------------------------------------------------
+
+    st.header("⚙️ Configuration")
+    cc1, cc2, cc3, cc4 = st.columns(4)
+    cc1.metric("Model", result.get("model", "—"))
+    cc2.metric("Temperature", result.get("temperature", "—"))
+    cc3.metric("Prompt ID", result.get("prompt_id", "—"))
+    cc4.metric("Attack class", result.get("prompt_class", "unknown"))
+
+    with st.expander("More config details"):
+        st.markdown(
+            f"""
+- **Tier:** `{result.get('tier', '—')}`
+- **Class ID:** `{result.get('class_id', '—')}`
+- **Template:** `{result.get('template', '—')}`
+- **Source:** {result.get('source', '—')}
+- **Domain:** `{result.get('domain', '—')}`
+- **Judge model:** `{result.get('judge_model', '—')}`
+"""
+        )
+
+    # -------------------------------------------------------------------------
+    # Judge badge
+    # -------------------------------------------------------------------------
+
+    if result.get("jailbroken"):
+        st.error("🚨 Jailbroken")
+    else:
+        st.success("✅ Not Jailbroken")
+
+    st.divider()
+
+    # -------------------------------------------------------------------------
+    # Explanation section (identical to Result Explorer, but always present)
+    # -------------------------------------------------------------------------
+
+    players = result["players"]
+    player_values = result["player_values"]
+    all_interactions = result["all_interactions"]
+    top_interaction_pairs = result["top_interaction_pairs"]
+    n_players = len(players)
+
+    def shorten_sentence(text: str) -> str:
+        w = text.strip().split()
+        if len(w) <= 4:
+            return text
+        return f"{w[0]} {w[1]} … {w[-2]} {w[-1]}"
+
+    short_labels = [f"[{i}] {shorten_sentence(p)}" for i, p in enumerate(players)]
+
+    # ── Legend table ─────────────────────────────────────────────────────────
+    st.subheader("📝 Players (Prompt Sentences) Mapping")
+    legend_data = [
+        {
+            "Index": i,
+            "Short Label": short_labels[i],
+            "Full text": players[i],
+            "Shapley Value": player_values[i],
+        }
+        for i in range(n_players)
+    ]
+    st.dataframe(
+        pd.DataFrame(legend_data),
+        column_config={
+            "Index": st.column_config.NumberColumn("Index", width="small"),
+            "Short Label": st.column_config.TextColumn("Short Label", width="medium"),
+            "Full text": st.column_config.TextColumn("Full text", width="large"),
+            "Shapley Value": st.column_config.NumberColumn("Shapley Value", format="%.4f"),
+        },
+        hide_index=True,
+        use_container_width=True,
+    )
+
+    # ── Ranked tables ────────────────────────────────────────────────────────
+    col_left, col_right = st.columns(2)
+
+    with col_left:
+        st.subheader("🏆 Top Shapley Values Ranked")
+        sv_df = pd.DataFrame(
+            {
+                "Player": short_labels,
+                "Shapley Value": player_values,
+                "Safety Impact": [
+                    "🚨 Jailbreak Contributing" if v < 0 else "🛡️ Safety Restoring"
+                    for v in player_values
+                ],
+            }
+        ).sort_values(by="Shapley Value", ascending=True)
+        st.dataframe(sv_df, use_container_width=True, hide_index=True)
+
+    with col_right:
+        st.subheader("🏆 Top Pairwise Interactions Ranked")
+        if top_interaction_pairs:
+            rows = []
+            for pair in top_interaction_pairs:
+                p_i, p_j = pair.get("player_i"), pair.get("player_j")
+                idx_i = players.index(p_i) if p_i in players else -1
+                idx_j = players.index(p_j) if p_j in players else -1
+                lbl_i = short_labels[idx_i] if idx_i != -1 else p_i
+                lbl_j = short_labels[idx_j] if idx_j != -1 else p_j
+                val = pair.get("k_sii", 0.0)
+                rows.append(
+                    {
+                        "Player 1": lbl_i,
+                        "Player 2": lbl_j,
+                        "k-SII Value": val,
+                        "Relationship": "🔥 Synergy" if val > 0 else "❄️ Redundancy",
+                    }
+                )
+            sii_df = pd.DataFrame(rows).sort_values(
+                by="k-SII Value", key=abs, ascending=False
+            )
+            st.dataframe(sii_df, use_container_width=True, hide_index=True)
+        else:
+            st.info("No pairwise interaction data available.")
+
+    # ── shapiq objects ───────────────────────────────────────────────────────
+    lookup_sv = {(i,): i for i in range(n_players)}
+    sv_obj = shapiq.InteractionValues(
+        values=np.array(player_values, dtype=float),
+        index="SV",
+        max_order=1,
+        min_order=1,
+        n_players=n_players,
+        interaction_lookup=lookup_sv,
+        baseline_value=0.0,
+        estimated=False,
+    )
+
+    lookup_sii: dict = {}
+    values_sii: list = []
+    for i in range(n_players):
+        lookup_sii[(i,)] = len(values_sii)
+        values_sii.append(player_values[i])
+
+    pair_values_map = {}
+    for item in all_interactions:
+        pls = item["players"]
+        if len(pls) == 2:
+            pair_values_map[tuple(sorted(pls))] = item["value"]
+
+    for i in range(n_players):
+        for j in range(i + 1, n_players):
+            lookup_sii[(i, j)] = len(values_sii)
+            values_sii.append(pair_values_map.get((i, j), 0.0))
+
+    sii_obj = shapiq.InteractionValues(
+        values=np.array(values_sii, dtype=float),
+        index="k-SII",
+        max_order=2,
+        min_order=1,
+        n_players=n_players,
+        interaction_lookup=lookup_sii,
+        baseline_value=0.0,
+        estimated=False,
+    )
+
+    # ── Plot tabs ────────────────────────────────────────────────────────────
+    st.subheader("📊 Shapiq Visualizations")
+    tab1, tab2, tab3 = st.tabs(
+        [
+            "📈 Sentence Attribution (SV)",
+            "🌡️ Interaction Heatmap (k-SII)",
+            "🕸️ Interaction Network (k-SII)",
+        ]
+    )
+
+    with tab1:
+        st.markdown(
+            "Words colored **red** increase compliance score (jailbreak), "
+            "**blue** decrease it (safety-restoring)."
+        )
+        try:
+            fig, _ = sentence_plot(sv_obj, short_labels, show=False, chars_per_line=80)
+            if fig is not None:
+                fig.patch.set_facecolor("white")
+                fig.set_size_inches(12, 4)
+                fig.tight_layout()
+                st.pyplot(fig)
+                plt.close(fig)
+        except Exception as e:
+            st.error(f"Sentence plot error: {e}")
+
+    with tab2:
+        st.markdown(
+            "Pairwise interactions between prompt sentences. "
+            "**Red** = synergy (reinforce jailbreak), **Blue** = redundancy."
+        )
+        try:
+            fig, _ = sentence_interaction_heatmap(sii_obj, short_labels, show=False)
+            if fig is not None:
+                fig.patch.set_facecolor("white")
+                fig.set_size_inches(8, 7)
+                fig.tight_layout()
+                st.pyplot(fig)
+                plt.close(fig)
+        except Exception as e:
+            st.error(f"Heatmap error: {e}")
+
+    with tab3:
+        st.markdown(
+            "Node size ∝ |Shapley value|. "
+            "Edge thickness ∝ |k-SII|. Red = positive, blue = negative."
+        )
+        try:
+            result_net = sii_obj.plot_network(feature_names=short_labels, show=False)
+            if result_net is not None:
+                fig = result_net[0] if isinstance(result_net, tuple) else result_net
+                fig.patch.set_facecolor("white")
+                fig.set_size_inches(8, 8)
+                st.pyplot(fig)
+                plt.close(fig)
+        except Exception as e:
+            st.error(f"Network plot error: {e}")
