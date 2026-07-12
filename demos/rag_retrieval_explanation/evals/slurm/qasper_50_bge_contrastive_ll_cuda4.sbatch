@@ -28,7 +28,7 @@ nvidia-smi || true
 
 test -f models/llm/gemma-4-E4B-it-Q4_K_M.gguf
 test -d models/embedding/bge-base-en-v1.5
-test -f demos/rag_retrieval_explanation/evals/cases/qasper_validation_50.json
+test -f demos/rag_retrieval_explanation/evals/cases/qasper_validation.json
 
 uv run python - <<'PY'
 import torch

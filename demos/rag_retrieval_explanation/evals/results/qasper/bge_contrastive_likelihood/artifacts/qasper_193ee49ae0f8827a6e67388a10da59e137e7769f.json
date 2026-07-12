@@ -1,0 +1,1583 @@
+{
+  "case": {
+    "case_id": "qasper_193ee49ae0f8827a6e67388a10da59e137e7769f",
+    "paper_id": "2004.01853",
+    "paper_title": "STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization",
+    "question_id": "193ee49ae0f8827a6e67388a10da59e137e7769f",
+    "annotation_id": "76a501b9515d4193ab7a8ffb1deb205281a48991",
+    "question": "What is masked document generation?",
+    "gold_answer": "A task for seq2seq model pra-training that recovers a masked document to its original form.",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "2004.01853:paragraph:0002"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "2004.01853:paragraph:0002",
+      "score": 0.8501130396064704,
+      "title": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+      "text": "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2seq model pre-training, namely Sentence Reordering (SR), Next Sentence Generation (NSG), and Masked Document Generation (MDG). SR learns to recover a document with randomly shuffled sentences. NSG generates the next segment of a document based on its preceding segment. MDG recovers a masked document to its original form. After pre-trianing Step using the three tasks on unlabeled documents, we fine-tune it on supervised summarization datasets."
+    },
+    {
+      "rank": 2,
+      "passage_id": "2004.01853:paragraph:0009",
+      "score": 0.7732184552174955,
+      "title": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+      "text": "dong2019unified proposed a Transformer language model that can be used for both natural language understanding and generation tasks, which is pre-trained using masked, unidirectional and seq2seq language modeling objectives. Their method tries to pre-train a seq2seq Transformer with its encoder and decoder parameters shared. Differently, we pre-train a seq2seq Transformer with separate parameters for the encoder and decoder. song2019mass proposed a method to pre-train a seq2seq Transformer by masking a span of text and then predicting the original text with masked tokens at other positions. Their pre-training task is similar to our Masked Document Generation task, but we apply a different masking strategy and predict the original text without masked tokens. Besides, we propose another two tasks for seq2seq model pre-training. BIBREF30 tested their model on sentence-level tasks (e.g., machine translation and sentence compression), while we aim to solve document-level tasks (e.g., abstractive document summarization)."
+    },
+    {
+      "rank": 3,
+      "passage_id": "2004.01853:paragraph:0020",
+      "score": 0.9456440672201434,
+      "title": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "text": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted as $X=(x_1, x_2, \\cdots , x_{|X|})$. We randomly sample the length of the span $l$ from a discrete uniform distribution $\\mathcal {U}(a, b)$ and the span start position $k$ from another discrete uniform distribution $\\mathcal {U}(1, |X|-l+1)$ (see Section SECREF4 for more details). Thus, $\\mathcal {M}=(x_k, x_{k+1}, \\cdots , x_{k+l-1})$ is the text span to be masked."
+    },
+    {
+      "rank": 4,
+      "passage_id": "2004.01853:paragraph:0031",
+      "score": 0.9006633028741722,
+      "title": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+      "text": "We leverage unlabeled documents differently for different pre-training tasks (see Section SECREF9). We first split each document into 512 token segments if it contains more than 512 tokens (segments or documents with less than 512 tokens are removed). In Sentence Reordering (SR) and Masked Document Generation (MDG), we use the segment after transformation to predict the original segment. We set the minimum masked length $a=100$ and the maximum masked length $b=256$ in MDG. In Next Sentence Generation (NSG), each segment is used to predict its next 256 tokens."
+    },
+    {
+      "rank": 5,
+      "passage_id": "2004.01853:paragraph:0001",
+      "score": 0.5557642666295848,
+      "title": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+      "text": "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, abstractive document summarization may paraphrase original sentences or delete contents from them. For more details on differences between abstractive and extractive document summary, we refer the interested readers to Nenkova:McKeown:2011 and Section SECREF2. This task is usually framed as a sequence-to-sequence learning problem BIBREF10, BIBREF11. In this paper, we adopt the sequence-to-sequence (seq2seq) Transformer BIBREF9, which has been demonstrated to be the state-of-the-art for seq2seq modeling BIBREF9, BIBREF12. Unfortunately, training large seq2seq Transformers on limited supervised summarization data is challenging BIBREF12 (refer to Section SECREF5). The seq2seq Transformer has an encoder and a decoder Transformer. Abstractive summarization requires both encoding of an input document and generation of a summary usually containing multiple sentences. As mentioned earlier, we can take advantage of recent pre-trained Transformer encoders for the document encoding part as in liu2019text. However, liu2019text leave the decoder randomly initialized. In this paper, we aim to pre-train both the encoder (i.e., the encoding part) and decoder (i.e., the generation part) of a seq2seq Transformer , which is able to improve abstractive summarization performance."
+    },
+    {
+      "rank": 6,
+      "passage_id": "2004.01853:paragraph:0017",
+      "score": 0.4644948158929656,
+      "title": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+      "text": "The second pre-training task leverages the natural order of text. Next Sentence Generation (NSG) uses one span of text in a document to predict its next span of text, as shown in Figure FIGREF5. Specifically, we split a document into two segments (i.e., $G_1$ and $G_2$). Note that each segment might contain multiple sentences, which fits the document summarization task very well, since either a document or its summary usually includes multiple sentences. Intuitively, in a document, sentences are highly correlated with their preceding sentences due to the context dependent nature of documents or language. We intend our model to learn to generate multiple sentences and also learn to focus on preceding context."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+      "attribution": 0.15178930698625212
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+      "attribution": 0.026410610141589644
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+      "attribution": -0.025022745616156014
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "attribution": -0.0028934666083223594
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+      "attribution": -0.0007782170325028694
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+      "attribution": -0.0007165576355674134
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+      "attribution": 0.07753229231348324
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+      "attribution": 0.06119304893184071
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+      "attribution": 0.00945184857506756
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+      "attribution": 0.004819717817697076
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+      "attribution": 0.004025476571855245
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+      "attribution": -0.0013378947464139468
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0009",
+      "interaction": -0.046057535847346495
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0020",
+      "interaction": -0.004108710597512664
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0031",
+      "interaction": -0.003361837190299584
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.011738338219995684
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.013524144561203589
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0020",
+      "interaction": 0.017586396826324614
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0031",
+      "interaction": 0.010851279132838183
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.027924869231939584
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.013276184189980788
+    },
+    {
+      "left": "2004.01853:paragraph:0020",
+      "right": "2004.01853:paragraph:0031",
+      "interaction": 0.008202365846364062
+    },
+    {
+      "left": "2004.01853:paragraph:0020",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.014019209871613402
+    },
+    {
+      "left": "2004.01853:paragraph:0020",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.0008637841016460203
+    },
+    {
+      "left": "2004.01853:paragraph:0031",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.015417686475948489
+    },
+    {
+      "left": "2004.01853:paragraph:0031",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.0019235510636400539
+    },
+    {
+      "left": "2004.01853:paragraph:0001",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.029066533458052306
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0009",
+      "interaction": -0.011276877657798234
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0020",
+      "interaction": 0.0020331007768205184
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0031",
+      "interaction": -0.005163890494562148
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.0016953308687161026
+    },
+    {
+      "left": "2004.01853:paragraph:0002",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": -0.009522636021525269
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0020",
+      "interaction": -0.0030585743611183506
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0031",
+      "interaction": 0.009209393299707956
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.002509110505248204
+    },
+    {
+      "left": "2004.01853:paragraph:0009",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.0008582698740535093
+    },
+    {
+      "left": "2004.01853:paragraph:0020",
+      "right": "2004.01853:paragraph:0031",
+      "interaction": 0.010969680772253687
+    },
+    {
+      "left": "2004.01853:paragraph:0020",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": -0.0007139438352361204
+    },
+    {
+      "left": "2004.01853:paragraph:0020",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": 0.0008352441268108909
+    },
+    {
+      "left": "2004.01853:paragraph:0031",
+      "right": "2004.01853:paragraph:0001",
+      "interaction": 0.0005967145245557458
+    },
+    {
+      "left": "2004.01853:paragraph:0031",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": -0.005598094201934959
+    },
+    {
+      "left": "2004.01853:paragraph:0001",
+      "right": "2004.01853:paragraph:0017",
+      "interaction": -0.0032161445279463388
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.14878893017621453
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.008686145373831944
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "remaining_chunks": 4,
+        "score": -0.022865904896111178
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "remaining_chunks": 3,
+        "score": -0.009577652356382471
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "remaining_chunks": 2,
+        "score": -0.03822260721838183
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.0031114117016934895
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "selected_chunks": 1,
+        "score": 0.19184506241396315
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "selected_chunks": 2,
+        "score": 0.15184932376125793
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "selected_chunks": 3,
+        "score": 0.1612229638070144
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "selected_chunks": 4,
+        "score": 0.14528994716075305
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "selected_chunks": 5,
+        "score": 0.14347984635597666
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "selected_chunks": 6,
+        "score": 0.14878893017621453
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.14878893017621453
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "remaining_chunks": 5,
+        "score": 0.14882329091613467
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "remaining_chunks": 4,
+        "score": 0.14525158223237777
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.043236245369267734
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "remaining_chunks": 2,
+        "score": -0.017317547794339028
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "remaining_chunks": 1,
+        "score": -0.055072697400324166
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.14878893017621453
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.008686145373831944
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "remaining_chunks": 4,
+        "score": 0.0001879930407630015
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "remaining_chunks": 3,
+        "score": 0.012346528977584592
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.1050506014300836
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "remaining_chunks": 1,
+        "score": -0.008558986890062237
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.1487889301762147
+      },
+      {
+        "step": 1,
+        "score": 0.12561806691906519
+      },
+      {
+        "step": 2,
+        "score": 0.09603809450102174
+      },
+      {
+        "step": 3,
+        "score": 0.08218031255935222
+      },
+      {
+        "step": 4,
+        "score": 0.04395282107876581
+      },
+      {
+        "step": 5,
+        "score": 0.03560839028457123
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is masked document generation?",
+    "expanded_queries": [
+      "What is masked document generation?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "dense": 0.7634,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "flags": "",
+        "preview": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted"
+      },
+      {
+        "rank": 2,
+        "source": "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "dense": 0.7171,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "flags": "",
+        "preview": "We leverage unlabeled documents differently for different pre-training tasks (see Section SECREF9). We first split each document into 512 token segments if it contains more than 512 tokens (segments or documents with les"
+      },
+      {
+        "rank": 3,
+        "source": "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "dense": 0.6683,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2"
+      },
+      {
+        "rank": 4,
+        "source": "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "dense": 0.6676,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work ::: Pre-training",
+        "flags": "",
+        "preview": "dong2019unified proposed a Transformer language model that can be used for both natural language understanding and generation tasks, which is pre-trained using masked, unidirectional and seq2seq language modeling objecti"
+      },
+      {
+        "rank": 5,
+        "source": "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "dense": 0.6261,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, a"
+      },
+      {
+        "rank": 6,
+        "source": "2004.01853:paragraph:0021 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "dense": 0.6259,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "flags": "",
+        "preview": "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will "
+      },
+      {
+        "rank": 7,
+        "source": "2004.01853:paragraph:0022 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "dense": 0.623,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "flags": "",
+        "preview": "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tok"
+      },
+      {
+        "rank": 8,
+        "source": "2004.01853:paragraph:0012 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "dense": 0.5959,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "flags": "",
+        "preview": "Let us use $X = (x_1, x_2, \\dots , x_{|X|})$ to denote a document and use $Y = (y_1, y_2, \\dots , y_{|Y|})$ to denote its summary. The encoder takes the document $X$ as input and transforms it to its contextual represent"
+      },
+      {
+        "rank": 9,
+        "source": "2004.01853:paragraph:0015 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "dense": 0.595,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "flags": "",
+        "preview": "A document is typically composed of multiple sentences separated by full stops. In this task, we first shuffle the document by sentences and then recover the original document. There are several reasons why we design thi"
+      },
+      {
+        "rank": 10,
+        "source": "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "dense": 0.5936,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "flags": "",
+        "preview": "The second pre-training task leverages the natural order of text. Next Sentence Generation (NSG) uses one span of text in a document to predict its next span of text, as shown in Figure FIGREF5. Specifically, we split a "
+      },
+      {
+        "rank": 11,
+        "source": "2004.01853:paragraph:0039 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "dense": 0.5903,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Automatic Evaluation",
+        "flags": "",
+        "preview": "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). I"
+      },
+      {
+        "rank": 12,
+        "source": "2004.01853:paragraph:0036 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "dense": 0.5849,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Automatic Evaluation",
+        "flags": "",
+        "preview": "The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "keyword": 0.2531,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2"
+      },
+      {
+        "rank": 2,
+        "source": "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "keyword": 0.2222,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "flags": "",
+        "preview": "We leverage unlabeled documents differently for different pre-training tasks (see Section SECREF9). We first split each document into 512 token segments if it contains more than 512 tokens (segments or documents with les"
+      },
+      {
+        "rank": 3,
+        "source": "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "keyword": 0.1904,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "flags": "",
+        "preview": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted"
+      },
+      {
+        "rank": 4,
+        "source": "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "keyword": 0.1893,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work ::: Pre-training",
+        "flags": "",
+        "preview": "dong2019unified proposed a Transformer language model that can be used for both natural language understanding and generation tasks, which is pre-trained using masked, unidirectional and seq2seq language modeling objecti"
+      },
+      {
+        "rank": 5,
+        "source": "2004.01853:abstract:000 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Abstract",
+        "keyword": 0.1353,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Abstractive summarization aims to rewrite a long document to its shorter form, which is usually modeled as a sequence-to-sequence (Seq2Seq) learning problem. Seq2Seq Transformers are powerful models for this problem. Unf"
+      },
+      {
+        "rank": 6,
+        "source": "2004.01853:paragraph:0041 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Conclusion",
+        "keyword": 0.1296,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "We proposed Step, a seq2seq transformer pre-training approach, for abstractive document summarization. Specifically, three pre-training tasks are designed, sentence reordering, next sentence generation, and masked docume"
+      },
+      {
+        "rank": 7,
+        "source": "2004.01853:paragraph:0037 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "keyword": 0.112,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Automatic Evaluation",
+        "flags": "",
+        "preview": "Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM"
+      },
+      {
+        "rank": 8,
+        "source": "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "keyword": 0.0938,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, a"
+      },
+      {
+        "rank": 9,
+        "source": "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "keyword": 0.0657,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "flags": "",
+        "preview": "The second pre-training task leverages the natural order of text. Next Sentence Generation (NSG) uses one span of text in a document to predict its next span of text, as shown in Figure FIGREF5. Specifically, we split a "
+      },
+      {
+        "rank": 10,
+        "source": "2004.01853:paragraph:0024 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+        "keyword": 0.0639,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+        "flags": "",
+        "preview": "After pre-training Step with the three tasks introduced in Section SECREF9, we fine-tune the model on abstractive document summarization datasets. The fine-tuning process is straightforward. We simply continue to train S"
+      },
+      {
+        "rank": 11,
+        "source": "2004.01853:paragraph:0019 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "keyword": 0.0518,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "flags": "",
+        "preview": "Next sentence prediction has been used in skip-thought vectors BIBREF33. There are two differences. First, each segment in their model only has one sentence; second, they use this task to pre-train an encoder rather than"
+      },
+      {
+        "rank": 12,
+        "source": "2004.01853:paragraph:0015 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "keyword": 0.0511,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "flags": "",
+        "preview": "A document is typically composed of multiple sentences separated by full stops. In this task, we first shuffle the document by sentences and then recover the original document. There are several reasons why we design thi"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7634,
+        "keyword": 0.1904,
+        "rerank": 0.9456,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted"
+      },
+      {
+        "rank": 2,
+        "source": "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7171,
+        "keyword": 0.2222,
+        "rerank": 0.9007,
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "We leverage unlabeled documents differently for different pre-training tasks (see Section SECREF9). We first split each document into 512 token segments if it contains more than 512 tokens (segments or documents with les"
+      },
+      {
+        "rank": 3,
+        "source": "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6683,
+        "keyword": 0.2531,
+        "rerank": 0.8501,
+        "section": "Introduction",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2"
+      },
+      {
+        "rank": 4,
+        "source": "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6676,
+        "keyword": 0.1893,
+        "rerank": 0.7732,
+        "section": "Related Work ::: Pre-training",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "dong2019unified proposed a Transformer language model that can be used for both natural language understanding and generation tasks, which is pre-trained using masked, unidirectional and seq2seq language modeling objecti"
+      },
+      {
+        "rank": 5,
+        "source": "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6261,
+        "keyword": 0.0938,
+        "rerank": 0.5558,
+        "section": "Introduction",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence",
+        "preview": "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, a"
+      },
+      {
+        "rank": 6,
+        "source": "2004.01853:paragraph:0041 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5824,
+        "keyword": 0.1296,
+        "rerank": 0.5501,
+        "section": "Conclusion",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "We proposed Step, a seq2seq transformer pre-training approach, for abstractive document summarization. Specifically, three pre-training tasks are designed, sentence reordering, next sentence generation, and masked docume"
+      },
+      {
+        "rank": 7,
+        "source": "2004.01853:abstract:000 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5719,
+        "keyword": 0.1353,
+        "rerank": 0.5382,
+        "section": "Abstract",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "Abstractive summarization aims to rewrite a long document to its shorter form, which is usually modeled as a sequence-to-sequence (Seq2Seq) learning problem. Seq2Seq Transformers are powerful models for this problem. Unf"
+      },
+      {
+        "rank": 8,
+        "source": "2004.01853:paragraph:0037 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5779,
+        "keyword": 0.112,
+        "rerank": 0.5213,
+        "section": "Results ::: Automatic Evaluation",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM"
+      },
+      {
+        "rank": 9,
+        "source": "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5936,
+        "keyword": 0.0657,
+        "rerank": 0.4645,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence",
+        "preview": "The second pre-training task leverages the natural order of text. Next Sentence Generation (NSG) uses one span of text in a document to predict its next span of text, as shown in Figure FIGREF5. Specifically, we split a "
+      },
+      {
+        "rank": 10,
+        "source": "2004.01853:paragraph:0021 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6259,
+        "keyword": 0.01,
+        "rerank": 0.4261,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will "
+      },
+      {
+        "rank": 11,
+        "source": "2004.01853:paragraph:0022 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.623,
+        "keyword": 0.01,
+        "rerank": 0.421,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tok"
+      },
+      {
+        "rank": 12,
+        "source": "2004.01853:paragraph:0015 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.595,
+        "keyword": 0.0511,
+        "rerank": 0.4195,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "A document is typically composed of multiple sentences separated by full stops. In this task, we first shuffle the document by sentences and then recover the original document. There are several reasons why we design thi"
+      },
+      {
+        "rank": 13,
+        "source": "2004.01853:paragraph:0036 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5849,
+        "keyword": 0.0194,
+        "rerank": 0.394,
+        "section": "Results ::: Automatic Evaluation",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence",
+        "preview": "The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is"
+      },
+      {
+        "rank": 14,
+        "source": "2004.01853:paragraph:0012 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5959,
+        "keyword": 0.0247,
+        "rerank": 0.3899,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "Let us use $X = (x_1, x_2, \\dots , x_{|X|})$ to denote a document and use $Y = (y_1, y_2, \\dots , y_{|Y|})$ to denote its summary. The encoder takes the document $X$ as input and transforms it to its contextual represent"
+      },
+      {
+        "rank": 15,
+        "source": "2004.01853:paragraph:0039 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5903,
+        "keyword": 0.0179,
+        "rerank": 0.3719,
+        "section": "Results ::: Automatic Evaluation",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). I"
+      },
+      {
+        "rank": 16,
+        "source": "2004.01853:paragraph:0006 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Abstractive Summarization",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5706,
+        "keyword": 0.0188,
+        "rerank": 0.3377,
+        "section": "Related Work ::: Abstractive Summarization",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "The goal of abstractive summarization is to generate summaries by rewriting a document, which is a sequence-to-sequence learning problem. seq2seq attentive LSTMs BIBREF8, BIBREF24 are employed in nallapati2016abstractive"
+      },
+      {
+        "rank": 17,
+        "source": "2004.01853:paragraph:0000 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5673,
+        "keyword": 0.0234,
+        "rerank": 0.3373,
+        "section": "Introduction",
+        "query_hits": "masked",
+        "reasons": "body/table evidence",
+        "preview": "Large pre-trained language models BIBREF0, BIBREF1, BIBREF2, BIBREF3, BIBREF4 improved the state-of-the-art of various natural language understanding (NLU) tasks such as question answering (e.g., SQuAD; BIBREF5), natural"
+      },
+      {
+        "rank": 18,
+        "source": "2004.01853:paragraph:0008 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5653,
+        "keyword": 0.0262,
+        "rerank": 0.337,
+        "section": "Related Work ::: Pre-training",
+        "query_hits": "masked",
+        "reasons": "body/table evidence",
+        "preview": "Pre-training methods draw a lot of attention recently. peters2018deep and radford:2019:arxiv pre-trained LSTM and Transformer encoders using language modeling objectives. To leverage the context in both directions, BIBRE"
+      },
+      {
+        "rank": 19,
+        "source": "2004.01853:paragraph:0014 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5584,
+        "keyword": 0.0306,
+        "rerank": 0.3299,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks",
+        "query_hits": "generation",
+        "reasons": "body/table evidence",
+        "preview": "Training a seq2seq Transformer model on a summarization dataset from scratch is difficult due to the limited number of document-summary pairs. Pre-trained Transformer encoders such as BERT BIBREF2 and RoBERTa BIBREF4 hav"
+      },
+      {
+        "rank": 20,
+        "source": "2004.01853:paragraph:0035 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Evaluations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5577,
+        "keyword": 0.0297,
+        "rerank": 0.3275,
+        "section": "Experimental Setup ::: Evaluations",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "Since summaries generated by abstractive models may produce disfluent or ungrammatical outputs, we also evaluated abstractive systems by eliciting human judgements. Following previous work BIBREF15, BIBREF17, 20 document"
+      },
+      {
+        "rank": 21,
+        "source": "2004.01853:paragraph:0011 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5606,
+        "keyword": 0.0205,
+        "rerank": 0.3219,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "In this work, the task of abstractive document summarization is modeled as a sequence-to-sequence learning problem, where a document is viewed as a sequence of tokens and its corresponding summary as another sequence of "
+      },
+      {
+        "rank": 22,
+        "source": "2004.01853:paragraph:0024 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5656,
+        "keyword": 0.0639,
+        "rerank": 0.3122,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "After pre-training Step with the three tasks introduced in Section SECREF9, we fine-tune the model on abstractive document summarization datasets. The fine-tuning process is straightforward. We simply continue to train S"
+      },
+      {
+        "rank": 23,
+        "source": "2004.01853:paragraph:0019 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5274,
+        "keyword": 0.0518,
+        "rerank": 0.2996,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "query_hits": "generation",
+        "reasons": "body/table evidence",
+        "preview": "Next sentence prediction has been used in skip-thought vectors BIBREF33. There are two differences. First, each segment in their model only has one sentence; second, they use this task to pre-train an encoder rather than"
+      },
+      {
+        "rank": 24,
+        "source": "2004.01853:paragraph:0029 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5764,
+        "keyword": 0.0,
+        "rerank": 0.2958,
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To pre-train our model with the tasks introduced in Section SECREF9, following the procedures in BIBREF22, we created the GIGA-CM dataset, which contains only unlabeled documents. The training set of GIGA-CM is composed "
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7634,
+        "keyword": 0.1904,
+        "rerank": 0.9456,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted"
+      },
+      {
+        "rank": 2,
+        "source": "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7171,
+        "keyword": 0.2222,
+        "rerank": 0.9007,
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "We leverage unlabeled documents differently for different pre-training tasks (see Section SECREF9). We first split each document into 512 token segments if it contains more than 512 tokens (segments or documents with les"
+      },
+      {
+        "rank": 3,
+        "source": "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6683,
+        "keyword": 0.2531,
+        "rerank": 0.8501,
+        "section": "Introduction",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2"
+      },
+      {
+        "rank": 4,
+        "source": "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6676,
+        "keyword": 0.1893,
+        "rerank": 0.7732,
+        "section": "Related Work ::: Pre-training",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "dong2019unified proposed a Transformer language model that can be used for both natural language understanding and generation tasks, which is pre-trained using masked, unidirectional and seq2seq language modeling objecti"
+      },
+      {
+        "rank": 5,
+        "source": "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6261,
+        "keyword": 0.0938,
+        "rerank": 0.5558,
+        "section": "Introduction",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence",
+        "preview": "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, a"
+      },
+      {
+        "rank": 6,
+        "source": "2004.01853:paragraph:0041 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5824,
+        "keyword": 0.1296,
+        "rerank": 0.5501,
+        "section": "Conclusion",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "We proposed Step, a seq2seq transformer pre-training approach, for abstractive document summarization. Specifically, three pre-training tasks are designed, sentence reordering, next sentence generation, and masked docume"
+      },
+      {
+        "rank": 7,
+        "source": "2004.01853:abstract:000 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5719,
+        "keyword": 0.1353,
+        "rerank": 0.5382,
+        "section": "Abstract",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "Abstractive summarization aims to rewrite a long document to its shorter form, which is usually modeled as a sequence-to-sequence (Seq2Seq) learning problem. Seq2Seq Transformers are powerful models for this problem. Unf"
+      },
+      {
+        "rank": 8,
+        "source": "2004.01853:paragraph:0037 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5779,
+        "keyword": 0.112,
+        "rerank": 0.5213,
+        "section": "Results ::: Automatic Evaluation",
+        "query_hits": "document, generation, masked",
+        "reasons": "body/table evidence",
+        "preview": "Based on $\\text{RoBERTa}$-S2S (the sizes of Step and $\\text{RoBERTa}$-S2S are identical), we study the effect of different pre-training tasks (see Section SECREF9). We first pre-train Step on unlabeled documents of CNNDM"
+      },
+      {
+        "rank": 9,
+        "source": "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5936,
+        "keyword": 0.0657,
+        "rerank": 0.4645,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence",
+        "preview": "The second pre-training task leverages the natural order of text. Next Sentence Generation (NSG) uses one span of text in a document to predict its next span of text, as shown in Figure FIGREF5. Specifically, we split a "
+      },
+      {
+        "rank": 10,
+        "source": "2004.01853:paragraph:0021 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6259,
+        "keyword": 0.01,
+        "rerank": 0.4261,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "One straightforward masking strategy is to replace each token residing in $\\mathcal {M}$ with a special [MASK] token. However, we refrain from doing so because of the following three reasons. Usually, [MASK] tokens will "
+      },
+      {
+        "rank": 11,
+        "source": "2004.01853:paragraph:0022 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.623,
+        "keyword": 0.01,
+        "rerank": 0.421,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "In the sub-sequence $\\mathcal {M}$, each token is processed with one of the three strategies: 1) replaced with the [MASK] token; 2) replaced with a random token; 3) remain unchanged. Inspired by BERT BIBREF2, for 80% tok"
+      },
+      {
+        "rank": 12,
+        "source": "2004.01853:paragraph:0015 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.595,
+        "keyword": 0.0511,
+        "rerank": 0.4195,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Sentence Reordering",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "A document is typically composed of multiple sentences separated by full stops. In this task, we first shuffle the document by sentences and then recover the original document. There are several reasons why we design thi"
+      },
+      {
+        "rank": 13,
+        "source": "2004.01853:paragraph:0036 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5849,
+        "keyword": 0.0194,
+        "rerank": 0.394,
+        "section": "Results ::: Automatic Evaluation",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence",
+        "preview": "The results on the CNNDM are summarized in Table TABREF25. The first and second blocks show results of previous extractive and abstractive models, respectively. Results of Step are all listed in the third block. Lead3 is"
+      },
+      {
+        "rank": 14,
+        "source": "2004.01853:paragraph:0012 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5959,
+        "keyword": 0.0247,
+        "rerank": 0.3899,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "Let us use $X = (x_1, x_2, \\dots , x_{|X|})$ to denote a document and use $Y = (y_1, y_2, \\dots , y_{|Y|})$ to denote its summary. The encoder takes the document $X$ as input and transforms it to its contextual represent"
+      },
+      {
+        "rank": 15,
+        "source": "2004.01853:paragraph:0039 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Results ::: Automatic Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5903,
+        "keyword": 0.0179,
+        "rerank": 0.3719,
+        "section": "Results ::: Automatic Evaluation",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "Among all three pre-training tasks, SR works slightly better than the other two tasks (i.e., NSG and MDG). We also tried to randomly use all the three tasks during training with 1/3 probability each (indicated as ALL). I"
+      },
+      {
+        "rank": 16,
+        "source": "2004.01853:paragraph:0006 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Abstractive Summarization",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5706,
+        "keyword": 0.0188,
+        "rerank": 0.3377,
+        "section": "Related Work ::: Abstractive Summarization",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "The goal of abstractive summarization is to generate summaries by rewriting a document, which is a sequence-to-sequence learning problem. seq2seq attentive LSTMs BIBREF8, BIBREF24 are employed in nallapati2016abstractive"
+      },
+      {
+        "rank": 17,
+        "source": "2004.01853:paragraph:0000 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5673,
+        "keyword": 0.0234,
+        "rerank": 0.3373,
+        "section": "Introduction",
+        "query_hits": "masked",
+        "reasons": "body/table evidence",
+        "preview": "Large pre-trained language models BIBREF0, BIBREF1, BIBREF2, BIBREF3, BIBREF4 improved the state-of-the-art of various natural language understanding (NLU) tasks such as question answering (e.g., SQuAD; BIBREF5), natural"
+      },
+      {
+        "rank": 18,
+        "source": "2004.01853:paragraph:0008 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5653,
+        "keyword": 0.0262,
+        "rerank": 0.337,
+        "section": "Related Work ::: Pre-training",
+        "query_hits": "masked",
+        "reasons": "body/table evidence",
+        "preview": "Pre-training methods draw a lot of attention recently. peters2018deep and radford:2019:arxiv pre-trained LSTM and Transformer encoders using language modeling objectives. To leverage the context in both directions, BIBRE"
+      },
+      {
+        "rank": 19,
+        "source": "2004.01853:paragraph:0014 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5584,
+        "keyword": 0.0306,
+        "rerank": 0.3299,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks",
+        "query_hits": "generation",
+        "reasons": "body/table evidence",
+        "preview": "Training a seq2seq Transformer model on a summarization dataset from scratch is difficult due to the limited number of document-summary pairs. Pre-trained Transformer encoders such as BERT BIBREF2 and RoBERTa BIBREF4 hav"
+      },
+      {
+        "rank": 20,
+        "source": "2004.01853:paragraph:0035 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Evaluations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5577,
+        "keyword": 0.0297,
+        "rerank": 0.3275,
+        "section": "Experimental Setup ::: Evaluations",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "Since summaries generated by abstractive models may produce disfluent or ungrammatical outputs, we also evaluated abstractive systems by eliciting human judgements. Following previous work BIBREF15, BIBREF17, 20 document"
+      },
+      {
+        "rank": 21,
+        "source": "2004.01853:paragraph:0011 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5606,
+        "keyword": 0.0205,
+        "rerank": 0.3219,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Architecture",
+        "query_hits": "document",
+        "reasons": "body/table evidence",
+        "preview": "In this work, the task of abstractive document summarization is modeled as a sequence-to-sequence learning problem, where a document is viewed as a sequence of tokens and its corresponding summary as another sequence of "
+      },
+      {
+        "rank": 22,
+        "source": "2004.01853:paragraph:0024 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5656,
+        "keyword": 0.0639,
+        "rerank": 0.3122,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Fine-tuning",
+        "query_hits": "document, generation",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "After pre-training Step with the three tasks introduced in Section SECREF9, we fine-tune the model on abstractive document summarization datasets. The fine-tuning process is straightforward. We simply continue to train S"
+      },
+      {
+        "rank": 23,
+        "source": "2004.01853:paragraph:0019 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5274,
+        "keyword": 0.0518,
+        "rerank": 0.2996,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "query_hits": "generation",
+        "reasons": "body/table evidence",
+        "preview": "Next sentence prediction has been used in skip-thought vectors BIBREF33. There are two differences. First, each segment in their model only has one sentence; second, they use this task to pre-train an encoder rather than"
+      },
+      {
+        "rank": 24,
+        "source": "2004.01853:paragraph:0029 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5764,
+        "keyword": 0.0,
+        "rerank": 0.2958,
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To pre-train our model with the tasks introduced in Section SECREF9, following the procedures in BIBREF22, we created the GIGA-CM dataset, which contains only unlabeled documents. The training set of GIGA-CM is composed "
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6683,
+        "keyword": 0.2531,
+        "rerank": 0.8501,
+        "section": "Introduction",
+        "query_hits": "document, generation, masked",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9011,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3949,
+        "reasons": "body/table evidence",
+        "preview": "Based on the above observations, we propose Step (as shorthand for Sequence-to-Sequence TransformEr Pre-training), which can be pre-trained on large scale unlabeled documents. Specifically, we design three tasks for seq2"
+      },
+      {
+        "rank": 2,
+        "source": "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6676,
+        "keyword": 0.1893,
+        "rerank": 0.7732,
+        "section": "Related Work ::: Pre-training",
+        "query_hits": "document, generation, masked",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8214,
+        "novelty": 0.6773,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2813,
+        "reasons": "body/table evidence",
+        "preview": "dong2019unified proposed a Transformer language model that can be used for both natural language understanding and generation tasks, which is pre-trained using masked, unidirectional and seq2seq language modeling objecti"
+      },
+      {
+        "rank": 3,
+        "source": "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7634,
+        "keyword": 0.1904,
+        "rerank": 0.9456,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "query_hits": "document, generation, masked",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7092,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2793,
+        "reasons": "body/table evidence",
+        "preview": "The third task we consider is Masked Document Generation (MDG) that learns to recover a document with a masked span of tokens (see Figure FIGREF5). For simplicity, a document consisting of a sequence of tokens is denoted"
+      },
+      {
+        "rank": 4,
+        "source": "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7171,
+        "keyword": 0.2222,
+        "rerank": 0.9007,
+        "section": "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "query_hits": "document, generation, masked",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9534,
+        "novelty": 0.6597,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2323,
+        "reasons": "body/table evidence",
+        "preview": "We leverage unlabeled documents differently for different pre-training tasks (see Section SECREF9). We first split each document into 512 token segments if it contains more than 512 tokens (segments or documents with les"
+      },
+      {
+        "rank": 5,
+        "source": "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6261,
+        "keyword": 0.0938,
+        "rerank": 0.5558,
+        "section": "Introduction",
+        "query_hits": "document, generation",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5962,
+        "novelty": 0.444,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0149,
+        "reasons": "body/table evidence",
+        "preview": "Abstractive document summarization aims to rewrite a long document to its shorter form while still retaining its important information. Different from extractive document summarization that extacts important sentences, a"
+      },
+      {
+        "rank": 6,
+        "source": "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5936,
+        "keyword": 0.0657,
+        "rerank": 0.4645,
+        "section": "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation",
+        "query_hits": "document, generation",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5017,
+        "novelty": 0.6859,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9675,
+        "reasons": "body/table evidence",
+        "preview": "The second pre-training task leverages the natural order of text. Next Sentence Generation (NSG) uses one span of text in a document to predict its next span of text, as shown in Figure FIGREF5. Specifically, we split a "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "document",
+        "generation",
+        "masked"
+      ],
+      "covered_query_terms": [
+        "document",
+        "generation",
+        "masked"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction": [
+          "document",
+          "generation",
+          "masked"
+        ],
+        "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training": [
+          "document",
+          "generation",
+          "masked"
+        ],
+        "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation": [
+          "document",
+          "generation",
+          "masked"
+        ],
+        "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM": [
+          "document",
+          "generation",
+          "masked"
+        ],
+        "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction": [
+          "document",
+          "generation"
+        ],
+        "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation": [
+          "document",
+          "generation"
+        ]
+      },
+      "section_titles": [
+        "Experimental Setup ::: Datasets ::: GIGA-CM",
+        "Introduction",
+        "Related Work ::: Pre-training",
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation",
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "2004.01853:paragraph:0002 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction",
+          "2004.01853:paragraph:0001 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Introduction"
+        ],
+        "Related Work ::: Pre-training": [
+          "2004.01853:paragraph:0009 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Related Work ::: Pre-training"
+        ],
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation": [
+          "2004.01853:paragraph:0020 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Masked Document Generation"
+        ],
+        "Experimental Setup ::: Datasets ::: GIGA-CM": [
+          "2004.01853:paragraph:0031 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Experimental Setup ::: Datasets ::: GIGA-CM"
+        ],
+        "Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation": [
+          "2004.01853:paragraph:0017 | STEP: Sequence-to-Sequence Transformer Pre-training for Document Summarization / Sequence-to-Sequence Transformer Pre-training ::: Pre-training Tasks ::: Next Sentence Generation"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have any retrieved context to answer your question.",
+    "gold_context_answer": "MDG recovers a masked document to its original form.",
+    "retrieved_context_answer": "Masked Document Generation (MDG) is one of three tasks proposed for seq2seq model pre-training, alongside Sentence Reordering (SR) and Next Sentence Generation (NSG). MDG specifically learns to recover a document to its original form after a span of tokens has been masked.\n\nKey aspects of MDG include:\n*   **Process:** It involves masking a text span ($\\mathcal{M}$) within a document, where the length of the span ($l",
+    "closed_book_f1": 0.07407407407407407,
+    "gold_context_f1": 0.64,
+    "retrieved_context_f1": 0.2891566265060241,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

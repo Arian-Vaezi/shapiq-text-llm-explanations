@@ -1,0 +1,3343 @@
+{
+  "case": {
+    "case_id": "conflict_mona_lisa_artist",
+    "pattern": "conflicting_evidence",
+    "question": "Who painted the Mona Lisa?",
+    "gold_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "gold_evidence_ids": [
+      "conflict_monalisa_correct"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_monalisa_correct",
+        "right": "conflict_monalisa_michelangelo",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_monalisa_correct",
+      "score": 0.92,
+      "title": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+      "text": "Leonardo da Vinci painted the Mona Lisa."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_monalisa_museum",
+      "score": 0.6817652832753869,
+      "title": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+      "text": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+    },
+    {
+      "rank": 3,
+      "passage_id": "missing_van_gogh_sunflowers",
+      "score": 0.3778523629356386,
+      "title": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+      "text": "Vincent van Gogh painted several versions of Sunflowers."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_monalisa_michelangelo",
+      "score": 0.325217158808497,
+      "title": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+      "text": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+    },
+    {
+      "rank": 5,
+      "passage_id": "redundant_france_lyon",
+      "score": 0.1160615614312286,
+      "title": "Retrieved 5: redundant_france_lyon | Lyon",
+      "text": "Lyon is a major French city known for commerce and gastronomy."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_japan_language",
+      "score": 0.0966304703510038,
+      "title": "Retrieved 6: missing_japan_language | Japanese language",
+      "text": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+      "attribution": 0.1473594835331962
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_france_lyon | Lyon",
+      "attribution": 0.01204827641409668
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+      "attribution": 0.008790193412860577
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+      "attribution": 0.008279545581316656
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_japan_language | Japanese language",
+      "attribution": -0.005411511447535776
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+      "attribution": 0.004628954783437016
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+      "attribution": 0.1473594835331962
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_france_lyon | Lyon",
+      "attribution": 0.01204827641409668
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+      "attribution": 0.008790193412860577
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+      "attribution": 0.008279545581316656
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_japan_language | Japanese language",
+      "attribution": -0.005411511447535776
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+      "attribution": 0.004628954783437016
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_michelangelo",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.014248382173863459,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_michelangelo",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.014248382173863459,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_museum",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.006043363152930383,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.008666002656690232,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_michelangelo",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.014248382173863459,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "redundant_france_lyon",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.015762629303937885,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_japan_language",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.01241597214077873,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.008367591906352148,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "conflict_monalisa_michelangelo",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.003008163424811344,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "redundant_france_lyon",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.008480438841076977,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_japan_language",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.0024585587768145255,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "conflict_monalisa_michelangelo",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.010099380790013766,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "redundant_france_lyon",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.010390290706828339,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_japan_language",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.006249644374704068,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_michelangelo",
+      "right": "redundant_france_lyon",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.008405496230963668,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_michelangelo",
+      "right": "missing_japan_language",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.0028126239517277177,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_japan_language",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.010343146649988227,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_museum",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.006043363152930383,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.008666002656690232,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_michelangelo",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.014248382173863459,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "redundant_france_lyon",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.015762629303937885,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_japan_language",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.01241597214077873,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.008367591906352148,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "conflict_monalisa_michelangelo",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.003008163424811344,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "redundant_france_lyon",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.008480438841076977,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_japan_language",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.0024585587768145255,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "conflict_monalisa_michelangelo",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.010099380790013766,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "redundant_france_lyon",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.010390290706828339,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_japan_language",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.006249644374704068,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_michelangelo",
+      "right": "redundant_france_lyon",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.008405496230963668,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_michelangelo",
+      "right": "missing_japan_language",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.0028126239517277177,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_japan_language",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.010343146649988227,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct"
+      ],
+      "score": 0.17557990517598854
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.02846378077038897
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.043889080382913226
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.03840555991831662
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon"
+      ],
+      "score": 0.053401418569310743
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_language"
+      ],
+      "score": 0.009038727160557092
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.1758447879613464
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.17552012181773757
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.17517891602436786
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17586567937952302
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_japan_language"
+      ],
+      "score": 0.17559766733376664
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.042425140425062347
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.04520697983165839
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "redundant_france_lyon"
+      ],
+      "score": 0.05221688119371409
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_japan_language"
+      ],
+      "score": 0.016163481416386016
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.04772089125814971
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.06827421779177467
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.025644672356674725
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.06631322956681757
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.028142541338624927
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.025320947554465623
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.17567017629174658
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.17580993416447283
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17602251405938196
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_japan_language"
+      ],
+      "score": 0.175899773222772
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.17520758574274187
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17592576083943512
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.17540627719253576
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17550018410178814
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.17509710901721431
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17516018534398542
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.04710844433728517
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.03742574855534797
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.016806894942825112
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.0455276848144075
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.025489214000847582
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.020110801326655714
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.04405143884976609
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.02419107691565553
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.02463666099648487
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.020955204707205077
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.1757216448505794
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17601892287998533
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.1755736615990841
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17607179219492902
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.1751759507056429
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17530472606762743
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.1754526494965984
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.17559857630329134
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17456321935872904
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17524899591393972
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.039943511984347146
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.029272044958966847
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.017960647092930493
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.039589299607307504
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.02369554901782045
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17610421712010815
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.1756755258027155
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17586342930518312
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.1755787726894712
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17558927799227553
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.03241944269106817
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.1756949419953338
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct"
+      ],
+      "score": 0.17557990517598854
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.02846378077038897
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.043889080382913226
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.03840555991831662
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon"
+      ],
+      "score": 0.053401418569310743
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_language"
+      ],
+      "score": 0.009038727160557092
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.1758447879613464
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.17552012181773757
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.17517891602436786
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17586567937952302
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_japan_language"
+      ],
+      "score": 0.17559766733376664
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.042425140425062347
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.04520697983165839
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "redundant_france_lyon"
+      ],
+      "score": 0.05221688119371409
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_japan_language"
+      ],
+      "score": 0.016163481416386016
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.04772089125814971
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.06827421779177467
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.025644672356674725
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.06631322956681757
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.028142541338624927
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.025320947554465623
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.17567017629174658
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.17580993416447283
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17602251405938196
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_japan_language"
+      ],
+      "score": 0.175899773222772
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.17520758574274187
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17592576083943512
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.17540627719253576
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17550018410178814
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.17509710901721431
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17516018534398542
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.04710844433728517
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.03742574855534797
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.016806894942825112
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.0455276848144075
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.025489214000847582
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.020110801326655714
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.04405143884976609
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.02419107691565553
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.02463666099648487
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.020955204707205077
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo"
+      ],
+      "score": 0.1757216448505794
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17601892287998533
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_japan_language"
+      ],
+      "score": 0.1755736615990841
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17607179219492902
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.1751759507056429
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17530472606762743
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.1754526494965984
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.17559857630329134
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17456321935872904
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17524899591393972
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.039943511984347146
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.029272044958966847
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.017960647092930493
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.039589299607307504
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.02369554901782045
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon"
+      ],
+      "score": 0.17610421712010815
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "missing_japan_language"
+      ],
+      "score": 0.1756755258027155
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17586342930518312
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.1755787726894712
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.17558927799227553
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.03241944269106817
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "conflict_monalisa_michelangelo",
+        "redundant_france_lyon",
+        "missing_japan_language"
+      ],
+      "score": 0.1756949419953338
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.1756949419953338
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "remaining_chunks": 5,
+        "score": 0.03241944269106817
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: redundant_france_lyon | Lyon",
+        "remaining_chunks": 4,
+        "score": 0.029272044958966847
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+        "remaining_chunks": 3,
+        "score": 0.016806894942825112
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "remaining_chunks": 2,
+        "score": 0.016163481416386016
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: missing_japan_language | Japanese language",
+        "remaining_chunks": 1,
+        "score": 0.02846378077038897
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "selected_chunks": 1,
+        "score": 0.17557990517598854
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: redundant_france_lyon | Lyon",
+        "selected_chunks": 2,
+        "score": 0.17586567937952302
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+        "selected_chunks": 3,
+        "score": 0.17550018410178814
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "selected_chunks": 4,
+        "score": 0.1754526494965984
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: missing_japan_language | Japanese language",
+        "selected_chunks": 5,
+        "score": 0.17558927799227553
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "selected_chunks": 6,
+        "score": 0.1756949419953338
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.1756949419953338
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "remaining_chunks": 5,
+        "score": 0.03241944269106817
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "remaining_chunks": 4,
+        "score": 0.02369554901782045
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "remaining_chunks": 3,
+        "score": 0.020955204707205077
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+        "remaining_chunks": 2,
+        "score": 0.025320947554465623
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_france_lyon | Lyon",
+        "remaining_chunks": 1,
+        "score": 0.009038727160557092
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_japan_language | Japanese language",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.1756949419953338
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "remaining_chunks": 5,
+        "score": 0.03241944269106817
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "remaining_chunks": 4,
+        "score": 0.039589299607307504
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "remaining_chunks": 3,
+        "score": 0.020955204707205077
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: redundant_france_lyon | Lyon",
+        "remaining_chunks": 2,
+        "score": 0.028142541338624927
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_monalisa_michelangelo | Michelangelo",
+        "remaining_chunks": 1,
+        "score": 0.009038727160557092
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_japan_language | Japanese language",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.1756949419953338
+      },
+      {
+        "step": 1,
+        "score": 0.1542205289471478
+      },
+      {
+        "step": 2,
+        "score": 0.12241379171429292
+      },
+      {
+        "step": 3,
+        "score": 0.09665511838464604
+      },
+      {
+        "step": 4,
+        "score": 0.07283213841826172
+      },
+      {
+        "step": 5,
+        "score": 0.05570687030017026
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who painted the Mona Lisa?",
+    "expanded_queries": [
+      "Who painted the Mona Lisa?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "dense": 0.7324,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "dense": 0.6384,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "dense": 0.5086,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 4,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "dense": 0.4689,
+        "page": 44,
+        "type": "body_text",
+        "section": "post_impressionist_art",
+        "flags": "",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_monalisa_smile | Portrait expression",
+        "dense": 0.4363,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "The portrait is especially famous for the sitter's subtle expression."
+      },
+      {
+        "rank": 6,
+        "source": "missing_van_gogh_art | Post-impressionist painting",
+        "dense": 0.4073,
+        "page": 44,
+        "type": "body_text",
+        "section": "post_impressionist_art",
+        "flags": "",
+        "preview": "Post-impressionist art includes vivid colour, expressive brushwork, and personal symbolism."
+      },
+      {
+        "rank": 7,
+        "source": "missing_van_gogh_museum | Museum distractor",
+        "dense": 0.4011,
+        "page": 44,
+        "type": "body_text",
+        "section": "post_impressionist_art",
+        "flags": "",
+        "preview": "The Van Gogh Museum in Amsterdam displays many works by Vincent van Gogh."
+      },
+      {
+        "rank": 8,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "dense": 0.3743,
+        "page": 5,
+        "type": "body_text",
+        "section": "marie_curie_awards",
+        "flags": "",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 9,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "dense": 0.373,
+        "page": 5,
+        "type": "body_text",
+        "section": "marie_curie_awards",
+        "flags": "",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "dense": 0.3623,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 11,
+        "source": "comp_primary_paint_distractor | Paint primary colours",
+        "dense": 0.3561,
+        "page": 22,
+        "type": "body_text",
+        "section": "primary_light_colours",
+        "flags": "",
+        "preview": "Traditional paint lessons often discuss red, yellow, and blue as primary colours."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "dense": 0.3491,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "keyword": 0.6523,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "keyword": 0.3865,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "keyword": 0.1281,
+        "page": 44,
+        "type": "body_text",
+        "section": "post_impressionist_art",
+        "flags": "",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.7324,
+        "keyword": 0.6523,
+        "rerank": 0.92,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona, painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.6384,
+        "keyword": 0.3865,
+        "rerank": 0.6818,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4689,
+        "keyword": 0.1281,
+        "rerank": 0.3779,
+        "section": "post_impressionist_art",
+        "query_hits": "painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.5086,
+        "keyword": 0.0,
+        "rerank": 0.3252,
+        "section": "mona_lisa",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_monalisa_smile | Portrait expression",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.4363,
+        "keyword": 0.0,
+        "rerank": 0.2591,
+        "section": "mona_lisa",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The portrait is especially famous for the sitter's subtle expression."
+      },
+      {
+        "rank": 6,
+        "source": "missing_van_gogh_art | Post-impressionist painting",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4073,
+        "keyword": 0.0,
+        "rerank": 0.2325,
+        "section": "post_impressionist_art",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Post-impressionist art includes vivid colour, expressive brushwork, and personal symbolism."
+      },
+      {
+        "rank": 7,
+        "source": "missing_van_gogh_museum | Museum distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4011,
+        "keyword": 0.0,
+        "rerank": 0.2269,
+        "section": "post_impressionist_art",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Van Gogh Museum in Amsterdam displays many works by Vincent van Gogh."
+      },
+      {
+        "rank": 8,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3743,
+        "keyword": 0.0,
+        "rerank": 0.2024,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 9,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.373,
+        "keyword": 0.0,
+        "rerank": 0.2011,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3623,
+        "keyword": 0.0,
+        "rerank": 0.1914,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 11,
+        "source": "comp_primary_paint_distractor | Paint primary colours",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3561,
+        "keyword": 0.0,
+        "rerank": 0.1857,
+        "section": "primary_light_colours",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Traditional paint lessons often discuss red, yellow, and blue as primary colours."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3491,
+        "keyword": 0.0,
+        "rerank": 0.1793,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 13,
+        "source": "missing_van_gogh_starry_style | Starry Night style",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.3372,
+        "keyword": 0.0,
+        "rerank": 0.1684,
+        "section": "post_impressionist_art",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Starry Night is known for swirling forms and a night sky composition."
+      },
+      {
+        "rank": 14,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.3328,
+        "keyword": 0.0,
+        "rerank": 0.1644,
+        "section": "japan_capital",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 15,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3303,
+        "keyword": 0.0,
+        "rerank": 0.1621,
+        "section": "english_novels",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_venus_planet | Closest planet Venus conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3191,
+        "keyword": 0.0,
+        "rerank": 0.1518,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken classroom answer says Venus is closest to the Sun."
+      },
+      {
+        "rank": 17,
+        "source": "comp_primary_blue | Blue primary light",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3175,
+        "keyword": 0.0,
+        "rerank": 0.1504,
+        "section": "primary_light_colours",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Blue is one of the additive primary colours of light."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_hamlet_macbeth_distractor | Macbeth distractor",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3152,
+        "keyword": 0.0,
+        "rerank": 0.1483,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Macbeth is another tragedy associated with Shakespeare."
+      },
+      {
+        "rank": 19,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3142,
+        "keyword": 0.0,
+        "rerank": 0.1473,
+        "section": "english_novels",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 20,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3071,
+        "keyword": 0.0,
+        "rerank": 0.1409,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 21,
+        "source": "missing_eiffel_architecture | French architecture",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.3036,
+        "keyword": 0.0,
+        "rerank": 0.1377,
+        "section": "paris_landmarks",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "French architecture includes Gothic, classical, nineteenth-century, and modern styles."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.3024,
+        "keyword": 0.0,
+        "rerank": 0.1366,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.2982,
+        "keyword": 0.0,
+        "rerank": 0.1328,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.2979,
+        "keyword": 0.0,
+        "rerank": 0.1325,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.7324,
+        "keyword": 0.6523,
+        "rerank": 0.92,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona, painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.6384,
+        "keyword": 0.3865,
+        "rerank": 0.6818,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4689,
+        "keyword": 0.1281,
+        "rerank": 0.3779,
+        "section": "post_impressionist_art",
+        "query_hits": "painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.5086,
+        "keyword": 0.0,
+        "rerank": 0.3252,
+        "section": "mona_lisa",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_monalisa_smile | Portrait expression",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.4363,
+        "keyword": 0.0,
+        "rerank": 0.2591,
+        "section": "mona_lisa",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The portrait is especially famous for the sitter's subtle expression."
+      },
+      {
+        "rank": 6,
+        "source": "missing_van_gogh_art | Post-impressionist painting",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4073,
+        "keyword": 0.0,
+        "rerank": 0.2325,
+        "section": "post_impressionist_art",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Post-impressionist art includes vivid colour, expressive brushwork, and personal symbolism."
+      },
+      {
+        "rank": 7,
+        "source": "missing_van_gogh_museum | Museum distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4011,
+        "keyword": 0.0,
+        "rerank": 0.2269,
+        "section": "post_impressionist_art",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Van Gogh Museum in Amsterdam displays many works by Vincent van Gogh."
+      },
+      {
+        "rank": 8,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3743,
+        "keyword": 0.0,
+        "rerank": 0.2024,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 9,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.373,
+        "keyword": 0.0,
+        "rerank": 0.2011,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3623,
+        "keyword": 0.0,
+        "rerank": 0.1914,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 11,
+        "source": "comp_primary_paint_distractor | Paint primary colours",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3561,
+        "keyword": 0.0,
+        "rerank": 0.1857,
+        "section": "primary_light_colours",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Traditional paint lessons often discuss red, yellow, and blue as primary colours."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3491,
+        "keyword": 0.0,
+        "rerank": 0.1793,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 13,
+        "source": "missing_van_gogh_starry_style | Starry Night style",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.3372,
+        "keyword": 0.0,
+        "rerank": 0.1684,
+        "section": "post_impressionist_art",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Starry Night is known for swirling forms and a night sky composition."
+      },
+      {
+        "rank": 14,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.3328,
+        "keyword": 0.0,
+        "rerank": 0.1644,
+        "section": "japan_capital",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 15,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3303,
+        "keyword": 0.0,
+        "rerank": 0.1621,
+        "section": "english_novels",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_venus_planet | Closest planet Venus conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3191,
+        "keyword": 0.0,
+        "rerank": 0.1518,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken classroom answer says Venus is closest to the Sun."
+      },
+      {
+        "rank": 17,
+        "source": "comp_primary_blue | Blue primary light",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3175,
+        "keyword": 0.0,
+        "rerank": 0.1504,
+        "section": "primary_light_colours",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Blue is one of the additive primary colours of light."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_hamlet_macbeth_distractor | Macbeth distractor",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3152,
+        "keyword": 0.0,
+        "rerank": 0.1483,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Macbeth is another tragedy associated with Shakespeare."
+      },
+      {
+        "rank": 19,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3142,
+        "keyword": 0.0,
+        "rerank": 0.1473,
+        "section": "english_novels",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 20,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3071,
+        "keyword": 0.0,
+        "rerank": 0.1409,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 21,
+        "source": "missing_eiffel_architecture | French architecture",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.3036,
+        "keyword": 0.0,
+        "rerank": 0.1377,
+        "section": "paris_landmarks",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "French architecture includes Gothic, classical, nineteenth-century, and modern styles."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.3024,
+        "keyword": 0.0,
+        "rerank": 0.1366,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.2982,
+        "keyword": 0.0,
+        "rerank": 0.1328,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.2979,
+        "keyword": 0.0,
+        "rerank": 0.1325,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.7324,
+        "keyword": 0.6523,
+        "rerank": 0.92,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona, painted",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.6384,
+        "keyword": 0.3865,
+        "rerank": 0.6818,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7466,
+        "novelty": 0.4321,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8025,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.4689,
+        "keyword": 0.1281,
+        "rerank": 0.3779,
+        "section": "post_impressionist_art",
+        "query_hits": "painted",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4232,
+        "novelty": 0.7607,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5305,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.5086,
+        "keyword": 0.0,
+        "rerank": 0.3252,
+        "section": "mona_lisa",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3673,
+        "novelty": 0.55,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4128,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_france_lyon | Lyon",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.28,
+        "keyword": 0.0,
+        "rerank": 0.1161,
+        "section": "france_cities",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1447,
+        "novelty": 0.7175,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4049,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 6,
+        "source": "missing_japan_language | Japanese language",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.2587,
+        "keyword": 0.0,
+        "rerank": 0.0966,
+        "section": "japan_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1241,
+        "novelty": 0.7676,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3942,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "lisa",
+        "mona",
+        "painted"
+      ],
+      "covered_query_terms": [
+        "lisa",
+        "mona",
+        "painted"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_monalisa_correct | Mona Lisa artist": [
+          "lisa",
+          "mona",
+          "painted"
+        ],
+        "conflict_monalisa_museum | Louvre display": [
+          "lisa",
+          "mona"
+        ],
+        "missing_van_gogh_sunflowers | Sunflowers distractor": [
+          "painted"
+        ]
+      },
+      "section_titles": [
+        "france_cities",
+        "japan_overview",
+        "mona_lisa",
+        "post_impressionist_art"
+      ],
+      "chunks_by_section": {
+        "mona_lisa": [
+          "conflict_monalisa_correct | Mona Lisa artist",
+          "conflict_monalisa_museum | Louvre display",
+          "conflict_monalisa_michelangelo | Michelangelo"
+        ],
+        "post_impressionist_art": [
+          "missing_van_gogh_sunflowers | Sunflowers distractor"
+        ],
+        "france_cities": [
+          "redundant_france_lyon | Lyon"
+        ],
+        "japan_overview": [
+          "missing_japan_language | Japanese language"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "retrieved_context_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 1.0,
+    "retrieved_context_f1": 1.0,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 1.0,
+    "retrieved_context_exact_match": 1.0,
+    "knowledge_source_class": "retrieval_enabled"
+  }
+}

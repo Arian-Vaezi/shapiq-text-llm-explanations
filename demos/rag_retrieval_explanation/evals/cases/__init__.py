@@ -1,1 +1,0 @@
-"""Bundled evaluation case data."""

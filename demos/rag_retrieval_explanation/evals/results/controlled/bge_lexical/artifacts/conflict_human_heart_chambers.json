@@ -1,0 +1,2371 @@
+{
+  "case": {
+    "case_id": "conflict_human_heart_chambers",
+    "pattern": "conflicting_evidence",
+    "question": "How many chambers does the human heart have?",
+    "gold_answer": "Four chambers.",
+    "gold_evidence_ids": [
+      "conflict_heart_chambers_four"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_heart_chambers_four",
+        "right": "conflict_heart_chambers_two",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_heart_chambers_four",
+        "right": "conflict_heart_chambers_three",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_heart_chambers_four",
+      "score": 0.92,
+      "title": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+      "text": "The human heart has four chambers."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_heart_chambers_two",
+      "score": 0.7063569174139838,
+      "title": "Retrieved 2: conflict_heart_chambers_two | Heart chambers conflict two",
+      "text": "An incorrect diagram labels the human heart as having two chambers."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_heart_chambers_three",
+      "score": 0.718673611007386,
+      "title": "Retrieved 3: conflict_heart_chambers_three | Heart chambers conflict three",
+      "text": "A false note claims the human heart has three chambers."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_heart_valves_distractor",
+      "score": 0.4526108055732811,
+      "title": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+      "text": "Heart valves help regulate blood flow between chambers and vessels."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_japan_islands",
+      "score": 0.2048520650023481,
+      "title": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "text": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_suez_mediterranean",
+      "score": 0.13417790483869013,
+      "title": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+      "text": "The Mediterranean Sea is connected to many ports and trade routes."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+      "attribution": 0.35412639563075765
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.2147164822649932
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_heart_chambers_two | Heart chambers conflict two",
+      "attribution": 0.08673490902409418
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_heart_chambers_three | Heart chambers conflict three",
+      "attribution": 0.08673490765426715
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+      "attribution": 0.08102059389257041
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+      "attribution": -0.014761853756517623
+    }
+  ],
+  "generated_attributions": [],
+  "interactions": [
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_two",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.15786949629339236,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_three",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.15786949979804868,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_two",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.15786949629339236,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_three",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.15786949979804868,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.14929807408243415,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.49439150023559736,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.006999994626878311,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "conflict_heart_chambers_three",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.1578694977214161,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.14929807762646913,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.04039150287998124,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.006999999349625142,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.14929807394651037,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": 0.0403914997949058,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.006999996439852031,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_valves_distractor",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.04039150906262386,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_valves_distractor",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.006999994375274393,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.02414286627556821,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four"
+      ],
+      "score": 0.9314285714285714
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.39664557450314175
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.39664557450314175
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.3795027173602846
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.36235986021742744
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.01714285714285714
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.9314285714285714
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.9314285714285714
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.9314285714285714
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_japan_islands"
+      ],
+      "score": 0.9485714285714286
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9485714285714286
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.39664557450314175
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.39664557450314175
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.9485714285714286
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.4137884316459989
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.39664557450314175
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.9485714285714286
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.4137884316459989
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.9314285714285714
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.39664557450314175
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.36235986021742744
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.8964285714285714
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.8964285714285714
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.8964285714285714
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.3616455745031417
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.37878843164599885
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.37878843164599885
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.37878843164599885
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.9135714285714286
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8964285714285714
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.8614285714285714
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.34378843164599887
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8785714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.8435714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8435714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8435714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8435714285714286
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8435714285714286
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8435714285714286
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.8085714285714286
+    }
+  ],
+  "generated_coalition_scores": [],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.8085714285714286
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "remaining_chunks": 5,
+        "score": 0.8435714285714286
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 4,
+        "score": 0.34378843164599887
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_heart_chambers_two | Heart chambers conflict two",
+        "remaining_chunks": 3,
+        "score": 0.37878843164599885
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: conflict_heart_chambers_three | Heart chambers conflict three",
+        "remaining_chunks": 2,
+        "score": 0.39664557450314175
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "remaining_chunks": 1,
+        "score": 0.01714285714285714
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "selected_chunks": 1,
+        "score": 0.9314285714285714
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "selected_chunks": 2,
+        "score": 0.9485714285714286
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: conflict_heart_chambers_two | Heart chambers conflict two",
+        "selected_chunks": 3,
+        "score": 0.9135714285714286
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: conflict_heart_chambers_three | Heart chambers conflict three",
+        "selected_chunks": 4,
+        "score": 0.8785714285714286
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "selected_chunks": 5,
+        "score": 0.8435714285714286
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "selected_chunks": 6,
+        "score": 0.8085714285714286
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.8085714285714286
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "remaining_chunks": 5,
+        "score": 0.8435714285714286
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: conflict_heart_chambers_three | Heart chambers conflict three",
+        "remaining_chunks": 4,
+        "score": 0.8785714285714286
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_heart_chambers_two | Heart chambers conflict two",
+        "remaining_chunks": 3,
+        "score": 0.8964285714285714
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "remaining_chunks": 2,
+        "score": 0.36235986021742744
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 1,
+        "score": 0.01714285714285714
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.8085714285714286
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "remaining_chunks": 5,
+        "score": 0.8435714285714286
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_heart_chambers_two | Heart chambers conflict two",
+        "remaining_chunks": 4,
+        "score": 0.8785714285714286
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_heart_chambers_three | Heart chambers conflict three",
+        "remaining_chunks": 3,
+        "score": 0.8964285714285714
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "remaining_chunks": 2,
+        "score": 0.36235986021742744
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 1,
+        "score": 0.01714285714285714
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.8085714285714279
+      },
+      {
+        "step": 1,
+        "score": 0.8435714285714293
+      },
+      {
+        "step": 2,
+        "score": 0.8245217003074565
+      },
+      {
+        "step": 3,
+        "score": 0.7505651009223718
+      },
+      {
+        "step": 4,
+        "score": 0.6251861089363564
+      },
+      {
+        "step": 5,
+        "score": 0.40244695909008527
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How many chambers does the human heart have?",
+    "expanded_queries": [
+      "How many chambers does the human heart have?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "dense": 0.8163,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "dense": 0.7298,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "dense": 0.7153,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "dense": 0.5953,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "dense": 0.49,
+        "page": 31,
+        "type": "body_text",
+        "section": "cell_biology",
+        "flags": "",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 6,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "dense": 0.4803,
+        "page": 34,
+        "type": "body_text",
+        "section": "central_dogma",
+        "flags": "",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 7,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "dense": 0.4638,
+        "page": 4,
+        "type": "body_text",
+        "section": "dna_structure",
+        "flags": "",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "dense": 0.4561,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 9,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "dense": 0.4516,
+        "page": 31,
+        "type": "body_text",
+        "section": "cell_biology",
+        "flags": "",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      },
+      {
+        "rank": 10,
+        "source": "comp_battery_anode | Battery anode",
+        "dense": 0.4513,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 11,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "dense": 0.4505,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 12,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "dense": 0.4482,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "keyword": 0.877,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "keyword": 0.5734,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "keyword": 0.4965,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "keyword": 0.2217,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "keyword": 0.1134,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 12,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.8163,
+        "keyword": 0.877,
+        "rerank": 0.92,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.7153,
+        "keyword": 0.5734,
+        "rerank": 0.7187,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.7298,
+        "keyword": 0.4965,
+        "rerank": 0.7064,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.5953,
+        "keyword": 0.2217,
+        "rerank": 0.4526,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.49,
+        "keyword": 0.0,
+        "rerank": 0.2152,
+        "section": "cell_biology",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 6,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.4516,
+        "keyword": 0.0,
+        "rerank": 0.2081,
+        "section": "cell_biology",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      },
+      {
+        "rank": 7,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.4803,
+        "keyword": 0.0,
+        "rerank": 0.2058,
+        "section": "central_dogma",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.4482,
+        "keyword": 0.0,
+        "rerank": 0.2049,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 9,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.4638,
+        "keyword": 0.0,
+        "rerank": 0.1899,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.4561,
+        "keyword": 0.0,
+        "rerank": 0.1825,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 11,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.4513,
+        "keyword": 0.0,
+        "rerank": 0.1778,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 12,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4505,
+        "keyword": 0.0,
+        "rerank": 0.1771,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4453,
+        "keyword": 0.0,
+        "rerank": 0.1721,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.4451,
+        "keyword": 0.0,
+        "rerank": 0.1719,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4449,
+        "keyword": 0.0,
+        "rerank": 0.1717,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4447,
+        "keyword": 0.0,
+        "rerank": 0.1715,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 17,
+        "source": "direct_dna_bases | DNA bases",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.444,
+        "keyword": 0.0,
+        "rerank": 0.1708,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA contains the bases adenine, thymine, cytosine, and guanine."
+      },
+      {
+        "rank": 18,
+        "source": "direct_dna_protein | Protein structure",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.442,
+        "keyword": 0.0,
+        "rerank": 0.1689,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Proteins can form alpha helices, beta sheets, and more complex folded structures."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.4402,
+        "keyword": 0.0,
+        "rerank": 0.1671,
+        "section": "fever_threshold",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 20,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4376,
+        "keyword": 0.0,
+        "rerank": 0.1647,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 21,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4345,
+        "keyword": 0.0,
+        "rerank": 0.1617,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 22,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.4304,
+        "keyword": 0.0,
+        "rerank": 0.1577,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4296,
+        "keyword": 0.0,
+        "rerank": 0.157,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4281,
+        "keyword": 0.0,
+        "rerank": 0.1554,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.8163,
+        "keyword": 0.877,
+        "rerank": 0.92,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.7153,
+        "keyword": 0.5734,
+        "rerank": 0.7187,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.7298,
+        "keyword": 0.4965,
+        "rerank": 0.7064,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.5953,
+        "keyword": 0.2217,
+        "rerank": 0.4526,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.49,
+        "keyword": 0.0,
+        "rerank": 0.2152,
+        "section": "cell_biology",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 6,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.4516,
+        "keyword": 0.0,
+        "rerank": 0.2081,
+        "section": "cell_biology",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      },
+      {
+        "rank": 7,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.4803,
+        "keyword": 0.0,
+        "rerank": 0.2058,
+        "section": "central_dogma",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.4482,
+        "keyword": 0.0,
+        "rerank": 0.2049,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 9,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.4638,
+        "keyword": 0.0,
+        "rerank": 0.1899,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.4561,
+        "keyword": 0.0,
+        "rerank": 0.1825,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 11,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.4513,
+        "keyword": 0.0,
+        "rerank": 0.1778,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 12,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4505,
+        "keyword": 0.0,
+        "rerank": 0.1771,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4453,
+        "keyword": 0.0,
+        "rerank": 0.1721,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.4451,
+        "keyword": 0.0,
+        "rerank": 0.1719,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4449,
+        "keyword": 0.0,
+        "rerank": 0.1717,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4447,
+        "keyword": 0.0,
+        "rerank": 0.1715,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 17,
+        "source": "direct_dna_bases | DNA bases",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.444,
+        "keyword": 0.0,
+        "rerank": 0.1708,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA contains the bases adenine, thymine, cytosine, and guanine."
+      },
+      {
+        "rank": 18,
+        "source": "direct_dna_protein | Protein structure",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.442,
+        "keyword": 0.0,
+        "rerank": 0.1689,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Proteins can form alpha helices, beta sheets, and more complex folded structures."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.4402,
+        "keyword": 0.0,
+        "rerank": 0.1671,
+        "section": "fever_threshold",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 20,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4376,
+        "keyword": 0.0,
+        "rerank": 0.1647,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 21,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4345,
+        "keyword": 0.0,
+        "rerank": 0.1617,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 22,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.4304,
+        "keyword": 0.0,
+        "rerank": 0.1577,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4296,
+        "keyword": 0.0,
+        "rerank": 0.157,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4281,
+        "keyword": 0.0,
+        "rerank": 0.1554,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.8163,
+        "keyword": 0.877,
+        "rerank": 0.92,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.7298,
+        "keyword": 0.4965,
+        "rerank": 0.7064,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7727,
+        "novelty": 0.3808,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8578,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.7153,
+        "keyword": 0.5734,
+        "rerank": 0.7187,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7858,
+        "novelty": 0.3,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8578,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.5953,
+        "keyword": 0.2217,
+        "rerank": 0.4526,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5028,
+        "novelty": 0.4714,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5984,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.4482,
+        "keyword": 0.0,
+        "rerank": 0.2049,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2392,
+        "novelty": 0.975,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5622,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 6,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.3749,
+        "keyword": 0.0,
+        "rerank": 0.1342,
+        "section": "canal_overview",
+        "query_hits": "many",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.164,
+        "novelty": 0.734,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4638,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "chambers",
+        "does",
+        "have",
+        "heart",
+        "human",
+        "many"
+      ],
+      "covered_query_terms": [
+        "chambers",
+        "heart",
+        "human",
+        "many"
+      ],
+      "missing_query_terms": [
+        "does",
+        "have"
+      ],
+      "terms_by_chunk": {
+        "conflict_heart_chambers_four | Heart chambers correct": [
+          "chambers",
+          "heart",
+          "human"
+        ],
+        "conflict_heart_chambers_two | Heart chambers conflict two": [
+          "chambers",
+          "heart",
+          "human"
+        ],
+        "conflict_heart_chambers_three | Heart chambers conflict three": [
+          "chambers",
+          "heart",
+          "human"
+        ],
+        "conflict_heart_valves_distractor | Heart valves distractor": [
+          "chambers",
+          "heart"
+        ],
+        "missing_japan_islands | Japanese archipelago": [
+          "many"
+        ],
+        "missing_suez_mediterranean | Mediterranean shipping": [
+          "many"
+        ]
+      },
+      "section_titles": [
+        "canal_overview",
+        "human_heart_chambers",
+        "japan_overview"
+      ],
+      "chunks_by_section": {
+        "human_heart_chambers": [
+          "conflict_heart_chambers_four | Heart chambers correct",
+          "conflict_heart_chambers_two | Heart chambers conflict two",
+          "conflict_heart_chambers_three | Heart chambers conflict three",
+          "conflict_heart_valves_distractor | Heart valves distractor"
+        ],
+        "japan_overview": [
+          "missing_japan_islands | Japanese archipelago"
+        ],
+        "canal_overview": [
+          "missing_suez_mediterranean | Mediterranean shipping"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {}
+}

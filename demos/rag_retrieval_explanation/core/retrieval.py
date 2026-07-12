@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import re
 from functools import lru_cache
+from typing import Any
 
 import numpy as np
 
@@ -228,7 +229,7 @@ def _prepare_embedding_texts(
 def cached_embedding_backend(
     model_id: str,
     device_name: str,
-) -> tuple[object, object, object]:
+) -> tuple[Any, Any, Any]:
     """Load and cache a Hugging Face embedding model."""
     try:
         import torch

@@ -8,7 +8,7 @@ import shutil
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, cast
 
 import pandas as pd
 from demos.rag_retrieval_explanation.core.evaluation import (
@@ -154,12 +154,12 @@ def _generation_conditions(
 def _qasper_failure_category(
     *,
     retrieval_recall: object,
-    generation: dict[str, object],
+    generation: dict[str, Any],
     generated_top_is_gold: object,
     f1_threshold: float,
 ) -> str:
     """Assign an interpretable external-validation failure bucket."""
-    recall = float(retrieval_recall or 0.0)
+    recall = float(cast("Any", retrieval_recall) or 0.0)
     gold_f1 = float(generation["gold_context_f1"])
     retrieved_f1 = float(generation["retrieved_context_f1"])
     if recall == 0.0:
@@ -339,6 +339,26 @@ def _write_report(summary: pd.DataFrame, output_dir: Path) -> None:
     (output_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def _can_reuse_case(
+    *,
+    case_id: str,
+    existing_rows: dict[str, dict[str, object]],
+    artifact_path: Path,
+) -> bool:
+    """Return whether a resumed case has both a summary row and matching artifact."""
+    if case_id not in existing_rows or not artifact_path.is_file():
+        return False
+    artifact = json.loads(artifact_path.read_text(encoding="utf-8"))
+    artifact_case_id = str(artifact.get("case", {}).get("case_id", ""))
+    if artifact_case_id != case_id:
+        msg = (
+            f"Resume artifact case mismatch in {artifact_path}: "
+            f"expected {case_id}, found {artifact_case_id or 'missing'}"
+        )
+        raise ValueError(msg)
+    return True
+
+
 def run_qasper(
     *,
     output_dir: Path,
@@ -369,7 +389,12 @@ def run_qasper(
         }
     rows = []
     for index, case in enumerate(selected_cases, start=1):
-        if case.case_id in existing_rows:
+        artifact_path = artifacts_dir / f"{case.case_id}.json"
+        if _can_reuse_case(
+            case_id=case.case_id,
+            existing_rows=existing_rows,
+            artifact_path=artifact_path,
+        ):
             print(f"[{index}/{len(selected_cases)}] Reusing {case.case_id}")  # noqa: T201
             rows.append(existing_rows[case.case_id])
             continue
@@ -382,7 +407,7 @@ def run_qasper(
             f1_threshold=f1_threshold,
         )
         rows.append(row)
-        (artifacts_dir / f"{case.case_id}.json").write_text(
+        artifact_path.write_text(
             json.dumps(artifacts, indent=2),
             encoding="utf-8",
         )

@@ -463,6 +463,8 @@ def run_benchmark(
     output_dir.mkdir(parents=True, exist_ok=True)
     artifacts_dir = output_dir / "artifacts"
     artifacts_dir.mkdir(exist_ok=True)
+    for stale_artifact in artifacts_dir.glob("*.json"):
+        stale_artifact.unlink()
     rows = []
     selected_cases = [
         case for case in benchmark.cases if case_ids is None or case.case_id in case_ids

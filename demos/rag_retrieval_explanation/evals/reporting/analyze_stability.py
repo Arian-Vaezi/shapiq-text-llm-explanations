@@ -13,17 +13,14 @@ from demos.rag_retrieval_explanation.evals.experiments.benchmark import (
     passage_id_from_title,
 )
 
-RUNS_DIR = Path(__file__).parents[1] / "runs"
-DEFAULT_OUTPUT_DIR = RUNS_DIR / "20260630_controlled_50_stability"
+REPOSITORY_ROOT = Path(__file__).parents[4]
+RESULTS_DIR = Path(__file__).parents[1] / "results"
+DEFAULT_OUTPUT_DIR = RESULTS_DIR / "derived" / "stability"
 DEFAULT_RUNS = {
-    "bge_lexical": RUNS_DIR / "20260626_232647_164955_controlled_50_bge_lexical",
-    "bge_target_ll": (RUNS_DIR / "20260626_232659_164956_controlled_50_bge_target_ll_e4b_cuda4"),
-    "bge_contrastive_ll": (
-        RUNS_DIR / "20260626_215332_164947_controlled_50_bge_contrastive_ll_e4b_cuda4"
-    ),
-    "tfidf_contrastive_ll": (
-        RUNS_DIR / "20260626_232708_164957_controlled_50_tfidf_contrastive_ll_e4b_cuda4"
-    ),
+    "bge_lexical": RESULTS_DIR / "controlled" / "bge_lexical",
+    "bge_target_ll": RESULTS_DIR / "controlled" / "bge_target_likelihood",
+    "bge_contrastive_ll": RESULTS_DIR / "controlled" / "bge_contrastive_likelihood",
+    "tfidf_contrastive_ll": RESULTS_DIR / "controlled" / "tfidf_contrastive_likelihood",
 }
 
 
@@ -90,7 +87,16 @@ def _compare_pair(
     target: str,
 ) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
-    common_cases = sorted(set(left_artifacts) & set(right_artifacts))
+    left_cases = set(left_artifacts)
+    right_cases = set(right_artifacts)
+    if left_cases != right_cases:
+        msg = (
+            f"Stability inputs have different case sets: "
+            f"missing from {left_name}={sorted(right_cases - left_cases)}, "
+            f"missing from {right_name}={sorted(left_cases - right_cases)}"
+        )
+        raise ValueError(msg)
+    common_cases = sorted(left_cases)
     for case_id in common_cases:
         left = left_artifacts[case_id]
         right = right_artifacts[case_id]
@@ -100,6 +106,8 @@ def _compare_pair(
         right_ids = set(_retrieved_ids(right))
         common_ids = set(left_scores) & set(right_scores)
         union_ids = set(left_scores) | set(right_scores)
+        left_top = _top_id(left_scores)
+        right_top = _top_id(right_scores)
         rows.append(
             {
                 "case_id": case_id,
@@ -112,7 +120,11 @@ def _compare_pair(
                     else None
                 ),
                 "common_retrieved_count": len(left_ids & right_ids),
-                "top_attribution_agrees": _top_id(left_scores) == _top_id(right_scores),
+                "top_attribution_agrees": (
+                    left_top == right_top
+                    if left_top is not None and right_top is not None
+                    else None
+                ),
                 "spearman_common": _spearman(left_scores, right_scores, ids=common_ids),
                 "spearman_union_zero_filled": _spearman(left_scores, right_scores, ids=union_ids),
             }
@@ -190,7 +202,9 @@ def run_stability(output_dir: Path = DEFAULT_OUTPUT_DIR) -> pd.DataFrame:
     )
     manifest = {
         "created_at": datetime.now(tz=UTC).isoformat(),
-        "source_runs": {name: str(path) for name, path in DEFAULT_RUNS.items()},
+        "source_runs": {
+            name: str(path.relative_to(REPOSITORY_ROOT)) for name, path in DEFAULT_RUNS.items()
+        },
         "metric": "Spearman rank correlation over absolute first-order Shapley values",
         "note": "No model calls are made; this is an artifact-only analysis.",
     }

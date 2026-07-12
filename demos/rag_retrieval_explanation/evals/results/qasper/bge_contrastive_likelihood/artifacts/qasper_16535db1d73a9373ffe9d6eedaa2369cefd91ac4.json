@@ -1,0 +1,1577 @@
+{
+  "case": {
+    "case_id": "qasper_16535db1d73a9373ffe9d6eedaa2369cefd91ac4",
+    "paper_id": "2004.03354",
+    "paper_title": "Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition",
+    "question_id": "16535db1d73a9373ffe9d6eedaa2369cefd91ac4",
+    "annotation_id": "f13dc63b177a898f80181adf3fcd40b4707363d0",
+    "question": "What in-domain text did they use?",
+    "gold_answer": "PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset)",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "2004.03354:paragraph:0003"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "2004.03354:paragraph:0003",
+      "score": 0.7985839575244263,
+      "title": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "text": "In Section SECREF4, we use the proposed method to domain-adapt BERT on PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset). We improve over general-domain BERT on eight out of eight biomedical NER tasks, using a fraction of the compute cost associated with BioBERT. In Section SECREF5, we show how to quickly adapt an existing Question Answering model to text about the Covid-19 pandemic, without any target-domain Language Model pretraining or finetuning."
+    },
+    {
+      "rank": 2,
+      "passage_id": "2004.03354:abstract:000",
+      "score": 0.8714617404957784,
+      "title": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+      "text": "Domain adaptation of Pretrained Language Models (PTLMs) is typically achieved by pretraining on in-domain text. While successful, this approach is expensive in terms of hardware, runtime and CO_2 emissions. Here, we propose a cheaper alternative: We train Word2Vec on in-domain text and align the resulting word vectors with the input space of a general-domain PTLM (here: BERT). We evaluate on eight biomedical Named Entity Recognition (NER) tasks and compare against the recently proposed BioBERT model (Lee et al., 2020). We cover over 50% of the BioBERT-BERT F1 delta, at 5% of BioBERT's CO_2 footprint and 2% of its cloud compute cost."
+    },
+    {
+      "rank": 3,
+      "passage_id": "2004.03354:paragraph:0001",
+      "score": 0.7943881602581984,
+      "title": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "text": "When applying PTLMs to specific domains, it can be useful to domain-adapt them. Domain adaptation of PTLMs has typically been achieved by pretraining on target-domain text. One such model is BioBERT BIBREF2, which was initialized from general-domain BERT and then pretrained on biomedical scientific publications. The domain adaptation is shown to be helpful for target-domain tasks such as biomedical Named Entity Recognition (NER) or Question Answering (QA). On the downside, the computational cost of pretraining can be considerable: BioBERTv1.0 was adapted for ten days on eight large GPUs (see Table TABREF1), which is expensive, environmentally unfriendly, prohibitive for small research labs and students, and may delay prototyping on emerging domains."
+    },
+    {
+      "rank": 4,
+      "passage_id": "2004.03354:paragraph:0002",
+      "score": 0.7153317388429135,
+      "title": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "text": "We therefore propose a fast, CPU-only domain-adaptation method for PTLMs: We train Word2Vec BIBREF3 on target-domain text and align the resulting word vectors with the wordpiece vectors of an existing general-domain PTLM. The PTLM thus gains domain-specific lexical knowledge in the form of additional word vectors, but its deeper layers remain unchanged. Since Word2Vec and the vector space alignment are efficient models, the process requires a fraction of the resources associated with pretraining the PTLM itself, and it can be done on CPU."
+    },
+    {
+      "rank": 5,
+      "passage_id": "2004.03354:paragraph:0006",
+      "score": 0.8311523207016293,
+      "title": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+      "text": "Domain adaptation of PTLMs is typically achieved by pretraining on unlabeled target-domain text. Some examples of such models are BioBERT BIBREF2, which was pretrained on the PubMed and/or PubMed Central (PMC) corpora, SciBERT BIBREF5, which was pretrained on papers from SemanticScholar, ClinicalBERT BIBREF6, BIBREF7 and ClinicalXLNet BIBREF8, which were pretrained on clinical patient notes, and AdaptaBERT BIBREF9, which was pretrained on Early Modern English text. In most cases, a domain-adapted PTLM is initialized from a general-domain PTLM (e.g., standard BERT), though BIBREF5 report better results with a model that was pretrained from scratch with a custom wordpiece vocabulary. In this paper, we focus on BioBERT, as its domain adaptation corpora are publicly available."
+    },
+    {
+      "rank": 6,
+      "passage_id": "2004.03354:paragraph:0021",
+      "score": 0.7054303945707738,
+      "title": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+      "text": "In this section, we use the proposed method to quickly adapt an existing general-domain QA model to an emerging target domain: Covid-19. Our baseline model is SQuADBERT (bert-large-uncased-whole-word-masking-finetuned-squad), a version of BERT that was finetuned on general-domain SQuAD BIBREF19. We evaluate on Deepset-AI Covid-QA, a SQuAD-style dataset with 1380 questions (see Appendix for details on data and preprocessing). We assume that there is no target-domain finetuning data, which is a realistic setup for a new domain."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "attribution": 0.1956999923374546
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "attribution": 0.01620148298288387
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+      "attribution": -0.009733180345177918
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+      "attribution": 0.008859699242491515
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+      "attribution": 0.008314223698475013
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "attribution": 0.0051695457786436715
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "attribution": 0.046628712840934866
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+      "attribution": 0.04346110914335743
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "attribution": 0.03777747498058747
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+      "attribution": 0.006645161298730615
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+      "attribution": 0.006567459791486241
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+      "attribution": 0.0027430609374065307
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:abstract:000",
+      "interaction": -0.014341493891499971
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0001",
+      "interaction": -0.02592073580673977
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0002",
+      "interaction": -0.016271280731576274
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": 0.027982481558207067
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.021503514082008887
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0001",
+      "interaction": -0.0032335011331626464
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0002",
+      "interaction": -7.866162734447945e-05
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": -0.008252012222463852
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.009057655995983975
+    },
+    {
+      "left": "2004.03354:paragraph:0001",
+      "right": "2004.03354:paragraph:0002",
+      "interaction": -0.006489898563808678
+    },
+    {
+      "left": "2004.03354:paragraph:0001",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": -0.020018891912599424
+    },
+    {
+      "left": "2004.03354:paragraph:0001",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.005993633540122834
+    },
+    {
+      "left": "2004.03354:paragraph:0002",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": -0.009944568852916945
+    },
+    {
+      "left": "2004.03354:paragraph:0002",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.004065926328972356
+    },
+    {
+      "left": "2004.03354:paragraph:0006",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.01336707854583368
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:abstract:000",
+      "interaction": 0.002314605621384047
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0001",
+      "interaction": -0.0007368604985023464
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0002",
+      "interaction": 0.0008737438719596904
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": 0.03928899791943444
+    },
+    {
+      "left": "2004.03354:paragraph:0003",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": 0.00035812930816212104
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0001",
+      "interaction": 0.003762655843745916
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0002",
+      "interaction": 0.00017576960612031425
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": 0.000542939079309804
+    },
+    {
+      "left": "2004.03354:abstract:000",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.00014608493548366977
+    },
+    {
+      "left": "2004.03354:paragraph:0001",
+      "right": "2004.03354:paragraph:0002",
+      "interaction": -6.907503548887075e-08
+    },
+    {
+      "left": "2004.03354:paragraph:0001",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": -0.0012967451729938512
+    },
+    {
+      "left": "2004.03354:paragraph:0001",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": 0.00035604260786073277
+    },
+    {
+      "left": "2004.03354:paragraph:0002",
+      "right": "2004.03354:paragraph:0006",
+      "interaction": 0.001209510636821861
+    },
+    {
+      "left": "2004.03354:paragraph:0002",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": -0.0009079836877433938
+    },
+    {
+      "left": "2004.03354:paragraph:0006",
+      "right": "2004.03354:paragraph:0021",
+      "interaction": 0.0010387417389387359
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2245117634160716
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.04204575222019802
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.026357692242532704
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "remaining_chunks": 3,
+        "score": 0.05479266887303014
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "remaining_chunks": 2,
+        "score": 0.02720940542734618
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.03552855498577279
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "selected_chunks": 1,
+        "score": 0.23252055520182247
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "selected_chunks": 2,
+        "score": 0.2257713554885089
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "selected_chunks": 3,
+        "score": 0.2255070438932445
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "selected_chunks": 4,
+        "score": 0.2225900961124584
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "selected_chunks": 5,
+        "score": 0.22583354558789603
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "selected_chunks": 6,
+        "score": 0.2245117634160716
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2245117634160716
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "remaining_chunks": 5,
+        "score": 0.22035851700975773
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "remaining_chunks": 4,
+        "score": 0.21739431387226327
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.06689132163389278
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.04370875323518686
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.053002716686676776
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2245117634160716
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.04204575222019802
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.020473172973278553
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "remaining_chunks": 3,
+        "score": 0.06689132163389278
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.04370875323518686
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "remaining_chunks": 1,
+        "score": 0.03552855498577279
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.2245117634160714
+      },
+      {
+        "step": 1,
+        "score": 0.19578538179201205
+      },
+      {
+        "step": 2,
+        "score": 0.15390959579110808
+      },
+      {
+        "step": 3,
+        "score": 0.12660901543336722
+      },
+      {
+        "step": 4,
+        "score": 0.08214038306900663
+      },
+      {
+        "step": 5,
+        "score": 0.07415395246381244
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What in-domain text did they use?",
+    "expanded_queries": [
+      "What in-domain text did they use?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "2004.03354:paragraph:0009 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method",
+        "dense": 0.6483,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method",
+        "flags": "",
+        "preview": "In the following, we assume access to a general-domain PTLM, as described in Section SECREF2, and a corpus of unlabeled target-domain text."
+      },
+      {
+        "rank": 2,
+        "source": "2004.03354:paragraph:0032 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "dense": 0.6392,
+        "page": 1,
+        "type": "body_text",
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "flags": "",
+        "preview": "General-domain BERT and BioBERTv1.0 were downloaded from:"
+      },
+      {
+        "rank": 3,
+        "source": "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "dense": 0.6307,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work ::: Domain-adapted PTLMs",
+        "flags": "",
+        "preview": "Domain adaptation of PTLMs is typically achieved by pretraining on unlabeled target-domain text. Some examples of such models are BioBERT BIBREF2, which was pretrained on the PubMed and/or PubMed Central (PMC) corpora, S"
+      },
+      {
+        "rank": 4,
+        "source": "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "dense": 0.6204,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In Section SECREF4, we use the proposed method to domain-adapt BERT on PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset). We improve over general-domain BERT on eight out of eight"
+      },
+      {
+        "rank": 5,
+        "source": "2004.03354:paragraph:0023 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA ::: Results and discussion",
+        "dense": 0.6102,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiment 2: Covid-19 QA ::: Results and discussion",
+        "flags": "",
+        "preview": "Table TABREF17 (bottom) shows that GreenCovidSQuADBERT outperforms general-domain SQuADBERT in all metrics. Most of the improvement can be achieved with just the small CORD-19 corpus, which is more specific to the target"
+      },
+      {
+        "rank": 6,
+        "source": "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "dense": 0.6088,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "When applying PTLMs to specific domains, it can be useful to domain-adapt them. Domain adaptation of PTLMs has typically been achieved by pretraining on target-domain text. One such model is BioBERT BIBREF2, which was in"
+      },
+      {
+        "rank": 7,
+        "source": "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "dense": 0.6084,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Domain adaptation of Pretrained Language Models (PTLMs) is typically achieved by pretraining on in-domain text. While successful, this approach is expensive in terms of hardware, runtime and CO_2 emissions. Here, we prop"
+      },
+      {
+        "rank": 8,
+        "source": "2004.03354:paragraph:0041 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Note on our reproduction experiments",
+        "dense": 0.5999,
+        "page": 1,
+        "type": "body_text",
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Note on our reproduction experiments",
+        "flags": "",
+        "preview": "We found it easier to reproduce or exceed BIBREF2's results for general-domain BERT, compared to their results for BioBERTv1.0 (see Figure FIGREF13, main paper). While this may be due to hyperparameters, it suggests that"
+      },
+      {
+        "rank": 9,
+        "source": "2004.03354:paragraph:0000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "dense": 0.5952,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Pretrained Language Models (PTLMs) such as BERT BIBREF1 have spearheaded advances on many NLP tasks. Usually, PTLMs are pretrained on unlabeled general-domain and/or mixed-domain text, such as Wikipedia, digital books or"
+      },
+      {
+        "rank": 10,
+        "source": "2004.03354:paragraph:0025 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "dense": 0.5888,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "On eight biomedical NER tasks, we cover over 50% of the BioBERT \u2013 BERT F1 delta, at 5% of BioBERT's domain adaptation CO$_2$ footprint and 2% of its cloud compute cost. We have also shown how to rapidly adapt an existing"
+      },
+      {
+        "rank": 11,
+        "source": "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "dense": 0.5852,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiment 2: Covid-19 QA",
+        "flags": "",
+        "preview": "In this section, we use the proposed method to quickly adapt an existing general-domain QA model to an emerging target domain: Covid-19. Our baseline model is SQuADBERT (bert-large-uncased-whole-word-masking-finetuned-sq"
+      },
+      {
+        "rank": 12,
+        "source": "2004.03354:paragraph:0024 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "dense": 0.5795,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "As a reaction to the trend towards high-resource models, we have proposed an inexpensive, CPU-only method for domain-adapting Pretrained Language Models: We train Word2Vec vectors on target-domain data and align them wit"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "2004.03354:paragraph:0009 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method",
+        "keyword": 0.2513,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method",
+        "flags": "",
+        "preview": "In the following, we assume access to a general-domain PTLM, as described in Section SECREF2, and a corpus of unlabeled target-domain text."
+      },
+      {
+        "rank": 2,
+        "source": "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "keyword": 0.2136,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Domain adaptation of Pretrained Language Models (PTLMs) is typically achieved by pretraining on in-domain text. While successful, this approach is expensive in terms of hardware, runtime and CO_2 emissions. Here, we prop"
+      },
+      {
+        "rank": 3,
+        "source": "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "keyword": 0.1736,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "When applying PTLMs to specific domains, it can be useful to domain-adapt them. Domain adaptation of PTLMs has typically been achieved by pretraining on target-domain text. One such model is BioBERT BIBREF2, which was in"
+      },
+      {
+        "rank": 4,
+        "source": "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "keyword": 0.1705,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work ::: Domain-adapted PTLMs",
+        "flags": "",
+        "preview": "Domain adaptation of PTLMs is typically achieved by pretraining on unlabeled target-domain text. Some examples of such models are BioBERT BIBREF2, which was pretrained on the PubMed and/or PubMed Central (PMC) corpora, S"
+      },
+      {
+        "rank": 5,
+        "source": "2004.03354:paragraph:0000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "keyword": 0.1699,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Pretrained Language Models (PTLMs) such as BERT BIBREF1 have spearheaded advances on many NLP tasks. Usually, PTLMs are pretrained on unlabeled general-domain and/or mixed-domain text, such as Wikipedia, digital books or"
+      },
+      {
+        "rank": 6,
+        "source": "2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "keyword": 0.1598,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We therefore propose a fast, CPU-only domain-adaptation method for PTLMs: We train Word2Vec BIBREF3 on target-domain text and align the resulting word vectors with the wordpiece vectors of an existing general-domain PTLM"
+      },
+      {
+        "rank": 7,
+        "source": "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "keyword": 0.1356,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiment 2: Covid-19 QA",
+        "flags": "",
+        "preview": "In this section, we use the proposed method to quickly adapt an existing general-domain QA model to an emerging target domain: Covid-19. Our baseline model is SQuADBERT (bert-large-uncased-whole-word-masking-finetuned-sq"
+      },
+      {
+        "rank": 8,
+        "source": "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "keyword": 0.134,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In Section SECREF4, we use the proposed method to domain-adapt BERT on PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset). We improve over general-domain BERT on eight out of eight"
+      },
+      {
+        "rank": 9,
+        "source": "2004.03354:paragraph:0032 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "keyword": 0.0969,
+        "page": 1,
+        "type": "body_text",
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "flags": "",
+        "preview": "General-domain BERT and BioBERTv1.0 were downloaded from:"
+      },
+      {
+        "rank": 10,
+        "source": "2004.03354:paragraph:0024 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "keyword": 0.0958,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "As a reaction to the trend towards high-resource models, we have proposed an inexpensive, CPU-only method for domain-adapting Pretrained Language Models: We train Word2Vec vectors on target-domain data and align them wit"
+      },
+      {
+        "rank": 11,
+        "source": "2004.03354:paragraph:0017 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER",
+        "keyword": 0.0883,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiment 1: Biomedical NER",
+        "flags": "",
+        "preview": "In this section, we use the proposed method to create GreenBioBERT, an inexpensive and environmentally friendly alternative to BioBERT. Recall that BioBERTv1.0 (biobert_v1.0_pubmed_pmc) was initialized from general-domai"
+      },
+      {
+        "rank": 12,
+        "source": "2004.03354:paragraph:0016 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method ::: Updating the tokenizer",
+        "keyword": 0.0833,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method ::: Updating the tokenizer",
+        "flags": "",
+        "preview": "To combine these complementary strengths, we use a 50/50 mixture of $\\mathcal {T}_\\mathrm {LM}$-tokenization and $\\hat{\\mathcal {T}}_\\mathrm {LM}$-tokenization when finetuning the PTLM on a task. At test time, we use bot"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6084,
+        "keyword": 0.2136,
+        "rerank": 0.8715,
+        "section": "Abstract",
+        "query_hits": "in-domain, text",
+        "reasons": "body/table evidence",
+        "preview": "Domain adaptation of Pretrained Language Models (PTLMs) is typically achieved by pretraining on in-domain text. While successful, this approach is expensive in terms of hardware, runtime and CO_2 emissions. Here, we prop"
+      },
+      {
+        "rank": 2,
+        "source": "2004.03354:paragraph:0009 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6483,
+        "keyword": 0.2513,
+        "rerank": 0.86,
+        "section": "Method",
+        "query_hits": "text",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In the following, we assume access to a general-domain PTLM, as described in Section SECREF2, and a corpus of unlabeled target-domain text."
+      },
+      {
+        "rank": 3,
+        "source": "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6307,
+        "keyword": 0.1705,
+        "rerank": 0.8312,
+        "section": "Related work ::: Domain-adapted PTLMs",
+        "query_hits": "text",
+        "reasons": "body/table evidence",
+        "preview": "Domain adaptation of PTLMs is typically achieved by pretraining on unlabeled target-domain text. Some examples of such models are BioBERT BIBREF2, which was pretrained on the PubMed and/or PubMed Central (PMC) corpora, S"
+      },
+      {
+        "rank": 4,
+        "source": "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6204,
+        "keyword": 0.134,
+        "rerank": 0.7986,
+        "section": "Introduction",
+        "query_hits": "text, use",
+        "reasons": "body/table evidence",
+        "preview": "In Section SECREF4, we use the proposed method to domain-adapt BERT on PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset). We improve over general-domain BERT on eight out of eight"
+      },
+      {
+        "rank": 5,
+        "source": "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6088,
+        "keyword": 0.1736,
+        "rerank": 0.7944,
+        "section": "Introduction",
+        "query_hits": "text",
+        "reasons": "body/table evidence",
+        "preview": "When applying PTLMs to specific domains, it can be useful to domain-adapt them. Domain adaptation of PTLMs has typically been achieved by pretraining on target-domain text. One such model is BioBERT BIBREF2, which was in"
+      },
+      {
+        "rank": 6,
+        "source": "2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5748,
+        "keyword": 0.1598,
+        "rerank": 0.7153,
+        "section": "Introduction",
+        "query_hits": "text",
+        "reasons": "body/table evidence",
+        "preview": "We therefore propose a fast, CPU-only domain-adaptation method for PTLMs: We train Word2Vec BIBREF3 on target-domain text and align the resulting word vectors with the wordpiece vectors of an existing general-domain PTLM"
+      },
+      {
+        "rank": 7,
+        "source": "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5852,
+        "keyword": 0.1356,
+        "rerank": 0.7054,
+        "section": "Experiment 2: Covid-19 QA",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we use the proposed method to quickly adapt an existing general-domain QA model to an emerging target domain: Covid-19. Our baseline model is SQuADBERT (bert-large-uncased-whole-word-masking-finetuned-sq"
+      },
+      {
+        "rank": 8,
+        "source": "2004.03354:paragraph:0000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5952,
+        "keyword": 0.1699,
+        "rerank": 0.6649,
+        "section": "Introduction",
+        "query_hits": "text",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pretrained Language Models (PTLMs) such as BERT BIBREF1 have spearheaded advances on many NLP tasks. Usually, PTLMs are pretrained on unlabeled general-domain and/or mixed-domain text, such as Wikipedia, digital books or"
+      },
+      {
+        "rank": 9,
+        "source": "2004.03354:paragraph:0032 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6392,
+        "keyword": 0.0969,
+        "rerank": 0.6289,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "General-domain BERT and BioBERTv1.0 were downloaded from:"
+      },
+      {
+        "rank": 10,
+        "source": "2004.03354:paragraph:0025 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5888,
+        "keyword": 0.0832,
+        "rerank": 0.6197,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "On eight biomedical NER tasks, we cover over 50% of the BioBERT \u2013 BERT F1 delta, at 5% of BioBERT's domain adaptation CO$_2$ footprint and 2% of its cloud compute cost. We have also shown how to rapidly adapt an existing"
+      },
+      {
+        "rank": 11,
+        "source": "2004.03354:paragraph:0041 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Note on our reproduction experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5999,
+        "keyword": 0.026,
+        "rerank": 0.5718,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Note on our reproduction experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We found it easier to reproduce or exceed BIBREF2's results for general-domain BERT, compared to their results for BioBERTv1.0 (see Figure FIGREF13, main paper). While this may be due to hyperparameters, it suggests that"
+      },
+      {
+        "rank": 12,
+        "source": "2004.03354:paragraph:0010 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method ::: Creating new input vectors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5543,
+        "keyword": 0.0507,
+        "rerank": 0.547,
+        "section": "Method ::: Creating new input vectors",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In a first step, we train Word2Vec on the target-domain corpus. In a second step, we take the intersection of $\\mathbb {L}_\\mathrm {LM}$ and $\\mathbb {L}_\\mathrm {W2V}$. In practice, the intersection mostly contains word"
+      },
+      {
+        "rank": 13,
+        "source": "2004.03354:paragraph:0007 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Word vectors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5191,
+        "keyword": 0.0666,
+        "rerank": 0.5312,
+        "section": "Related work ::: Word vectors",
+        "query_hits": "text, use",
+        "reasons": "body/table evidence",
+        "preview": "Word vectors are distributed representations of words that are trained on unlabeled text. Contrary to PTLMs, word vectors are non-contextual, i.e., a word type is always assigned the same vector, regardless of context. I"
+      },
+      {
+        "rank": 14,
+        "source": "2004.03354:paragraph:0023 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA ::: Results and discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6102,
+        "keyword": 0.0573,
+        "rerank": 0.5281,
+        "section": "Experiment 2: Covid-19 QA ::: Results and discussion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF17 (bottom) shows that GreenCovidSQuADBERT outperforms general-domain SQuADBERT in all metrics. Most of the improvement can be achieved with just the small CORD-19 corpus, which is more specific to the target"
+      },
+      {
+        "rank": 15,
+        "source": "2004.03354:paragraph:0024 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5795,
+        "keyword": 0.0958,
+        "rerank": 0.5174,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "As a reaction to the trend towards high-resource models, we have proposed an inexpensive, CPU-only method for domain-adapting Pretrained Language Models: We train Word2Vec vectors on target-domain data and align them wit"
+      },
+      {
+        "rank": 16,
+        "source": "2004.03354:paragraph:0020 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER ::: Results and discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5488,
+        "keyword": 0.0169,
+        "rerank": 0.4667,
+        "section": "Experiment 1: Biomedical NER ::: Results and discussion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF7 (bottom) shows entity-level precision, recall and F1. For ease of visualization, Figure FIGREF13 shows what portion of the BioBERT \u2013 BERT F1 delta is covered. We improve over general-domain BERT on all task"
+      },
+      {
+        "rank": 17,
+        "source": "2004.03354:paragraph:0017 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5292,
+        "keyword": 0.0883,
+        "rerank": 0.4457,
+        "section": "Experiment 1: Biomedical NER",
+        "query_hits": "use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we use the proposed method to create GreenBioBERT, an inexpensive and environmentally friendly alternative to BioBERT. Recall that BioBERTv1.0 (biobert_v1.0_pubmed_pmc) was initialized from general-domai"
+      },
+      {
+        "rank": 18,
+        "source": "2004.03354:paragraph:0031 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.511,
+        "keyword": 0.0827,
+        "rerank": 0.4355,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "query_hits": "text, use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We extract all abstracts and text bodies and apply the BERT basic tokenizer (a word tokenizer that standard BERT uses before wordpiece tokenization). Then, we train CBOW Word2Vec with negative sampling. We use default pa"
+      },
+      {
+        "rank": 19,
+        "source": "2004.03354:paragraph:0018 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER ::: Domain adaptation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5661,
+        "keyword": 0.0329,
+        "rerank": 0.4177,
+        "section": "Experiment 1: Biomedical NER ::: Domain adaptation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We train Word2Vec with vector size $d_\\mathrm {W2V} = d_\\mathrm {LM} = 768$ on PubMed+PMC (see Appendix for details). Then, we follow the procedure described in Section SECREF3 to update the wordpiece embedding layer and"
+      },
+      {
+        "rank": 20,
+        "source": "2004.03354:paragraph:0050 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5138,
+        "keyword": 0.0826,
+        "rerank": 0.4105,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Data",
+        "query_hits": "text",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "13.3% (95% CI 6.9-23.6%) # from main text"
+      },
+      {
+        "rank": 21,
+        "source": "2004.03354:paragraph:0056 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Preprocessing",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5284,
+        "keyword": 0.0,
+        "rerank": 0.4088,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Preprocessing",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We tokenize every question-context pair $(Q, C)$ with $\\mathcal {T} = \\mathcal {T}_\\mathrm {LM}$ or $\\mathcal {T} = \\hat{\\mathcal {T}}_\\mathrm {LM}$, which yields $(\\mathcal {T}(Q), \\mathcal {T}(C))$. Since $\\mathcal {T}"
+      },
+      {
+        "rank": 22,
+        "source": "2004.03354:paragraph:0033 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5778,
+        "keyword": 0.0,
+        "rerank": 0.4,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip"
+      },
+      {
+        "rank": 23,
+        "source": "2004.03354:paragraph:0022 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA ::: Domain adaptation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5229,
+        "keyword": 0.0,
+        "rerank": 0.3986,
+        "section": "Experiment 2: Covid-19 QA ::: Domain adaptation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We train Word2Vec with vector size $d_\\mathrm {W2V} = d_\\mathrm {LM} = 1024$ on CORD-19 (Covid-19 Open Research Dataset) and/or PubMed+PMC. The process takes less than an hour on CORD-19 and about one day on the combined"
+      },
+      {
+        "rank": 24,
+        "source": "2004.03354:paragraph:0027 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5651,
+        "keyword": 0.0,
+        "rerank": 0.3765,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We downloaded the PubMed, PMC and CORD-19 corpora from:"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6084,
+        "keyword": 0.2136,
+        "rerank": 0.8715,
+        "section": "Abstract",
+        "query_hits": "in-domain, text",
+        "reasons": "body/table evidence",
+        "preview": "Domain adaptation of Pretrained Language Models (PTLMs) is typically achieved by pretraining on in-domain text. While successful, this approach is expensive in terms of hardware, runtime and CO_2 emissions. Here, we prop"
+      },
+      {
+        "rank": 2,
+        "source": "2004.03354:paragraph:0009 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6483,
+        "keyword": 0.2513,
+        "rerank": 0.86,
+        "section": "Method",
+        "query_hits": "text",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In the following, we assume access to a general-domain PTLM, as described in Section SECREF2, and a corpus of unlabeled target-domain text."
+      },
+      {
+        "rank": 3,
+        "source": "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6307,
+        "keyword": 0.1705,
+        "rerank": 0.8312,
+        "section": "Related work ::: Domain-adapted PTLMs",
+        "query_hits": "text",
+        "reasons": "body/table evidence",
+        "preview": "Domain adaptation of PTLMs is typically achieved by pretraining on unlabeled target-domain text. Some examples of such models are BioBERT BIBREF2, which was pretrained on the PubMed and/or PubMed Central (PMC) corpora, S"
+      },
+      {
+        "rank": 4,
+        "source": "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6204,
+        "keyword": 0.134,
+        "rerank": 0.7986,
+        "section": "Introduction",
+        "query_hits": "text, use",
+        "reasons": "body/table evidence",
+        "preview": "In Section SECREF4, we use the proposed method to domain-adapt BERT on PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset). We improve over general-domain BERT on eight out of eight"
+      },
+      {
+        "rank": 5,
+        "source": "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6088,
+        "keyword": 0.1736,
+        "rerank": 0.7944,
+        "section": "Introduction",
+        "query_hits": "text",
+        "reasons": "body/table evidence",
+        "preview": "When applying PTLMs to specific domains, it can be useful to domain-adapt them. Domain adaptation of PTLMs has typically been achieved by pretraining on target-domain text. One such model is BioBERT BIBREF2, which was in"
+      },
+      {
+        "rank": 6,
+        "source": "2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5748,
+        "keyword": 0.1598,
+        "rerank": 0.7153,
+        "section": "Introduction",
+        "query_hits": "text",
+        "reasons": "body/table evidence",
+        "preview": "We therefore propose a fast, CPU-only domain-adaptation method for PTLMs: We train Word2Vec BIBREF3 on target-domain text and align the resulting word vectors with the wordpiece vectors of an existing general-domain PTLM"
+      },
+      {
+        "rank": 7,
+        "source": "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5852,
+        "keyword": 0.1356,
+        "rerank": 0.7054,
+        "section": "Experiment 2: Covid-19 QA",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we use the proposed method to quickly adapt an existing general-domain QA model to an emerging target domain: Covid-19. Our baseline model is SQuADBERT (bert-large-uncased-whole-word-masking-finetuned-sq"
+      },
+      {
+        "rank": 8,
+        "source": "2004.03354:paragraph:0000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5952,
+        "keyword": 0.1699,
+        "rerank": 0.6649,
+        "section": "Introduction",
+        "query_hits": "text",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pretrained Language Models (PTLMs) such as BERT BIBREF1 have spearheaded advances on many NLP tasks. Usually, PTLMs are pretrained on unlabeled general-domain and/or mixed-domain text, such as Wikipedia, digital books or"
+      },
+      {
+        "rank": 9,
+        "source": "2004.03354:paragraph:0032 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6392,
+        "keyword": 0.0969,
+        "rerank": 0.6289,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "General-domain BERT and BioBERTv1.0 were downloaded from:"
+      },
+      {
+        "rank": 10,
+        "source": "2004.03354:paragraph:0025 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5888,
+        "keyword": 0.0832,
+        "rerank": 0.6197,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "On eight biomedical NER tasks, we cover over 50% of the BioBERT \u2013 BERT F1 delta, at 5% of BioBERT's domain adaptation CO$_2$ footprint and 2% of its cloud compute cost. We have also shown how to rapidly adapt an existing"
+      },
+      {
+        "rank": 11,
+        "source": "2004.03354:paragraph:0041 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Note on our reproduction experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5999,
+        "keyword": 0.026,
+        "rerank": 0.5718,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Note on our reproduction experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We found it easier to reproduce or exceed BIBREF2's results for general-domain BERT, compared to their results for BioBERTv1.0 (see Figure FIGREF13, main paper). While this may be due to hyperparameters, it suggests that"
+      },
+      {
+        "rank": 12,
+        "source": "2004.03354:paragraph:0010 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Method ::: Creating new input vectors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5543,
+        "keyword": 0.0507,
+        "rerank": 0.547,
+        "section": "Method ::: Creating new input vectors",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In a first step, we train Word2Vec on the target-domain corpus. In a second step, we take the intersection of $\\mathbb {L}_\\mathrm {LM}$ and $\\mathbb {L}_\\mathrm {W2V}$. In practice, the intersection mostly contains word"
+      },
+      {
+        "rank": 13,
+        "source": "2004.03354:paragraph:0007 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Word vectors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5191,
+        "keyword": 0.0666,
+        "rerank": 0.5312,
+        "section": "Related work ::: Word vectors",
+        "query_hits": "text, use",
+        "reasons": "body/table evidence",
+        "preview": "Word vectors are distributed representations of words that are trained on unlabeled text. Contrary to PTLMs, word vectors are non-contextual, i.e., a word type is always assigned the same vector, regardless of context. I"
+      },
+      {
+        "rank": 14,
+        "source": "2004.03354:paragraph:0023 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA ::: Results and discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6102,
+        "keyword": 0.0573,
+        "rerank": 0.5281,
+        "section": "Experiment 2: Covid-19 QA ::: Results and discussion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF17 (bottom) shows that GreenCovidSQuADBERT outperforms general-domain SQuADBERT in all metrics. Most of the improvement can be achieved with just the small CORD-19 corpus, which is more specific to the target"
+      },
+      {
+        "rank": 15,
+        "source": "2004.03354:paragraph:0024 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5795,
+        "keyword": 0.0958,
+        "rerank": 0.5174,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "As a reaction to the trend towards high-resource models, we have proposed an inexpensive, CPU-only method for domain-adapting Pretrained Language Models: We train Word2Vec vectors on target-domain data and align them wit"
+      },
+      {
+        "rank": 16,
+        "source": "2004.03354:paragraph:0020 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER ::: Results and discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5488,
+        "keyword": 0.0169,
+        "rerank": 0.4667,
+        "section": "Experiment 1: Biomedical NER ::: Results and discussion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF7 (bottom) shows entity-level precision, recall and F1. For ease of visualization, Figure FIGREF13 shows what portion of the BioBERT \u2013 BERT F1 delta is covered. We improve over general-domain BERT on all task"
+      },
+      {
+        "rank": 17,
+        "source": "2004.03354:paragraph:0017 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5292,
+        "keyword": 0.0883,
+        "rerank": 0.4457,
+        "section": "Experiment 1: Biomedical NER",
+        "query_hits": "use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we use the proposed method to create GreenBioBERT, an inexpensive and environmentally friendly alternative to BioBERT. Recall that BioBERTv1.0 (biobert_v1.0_pubmed_pmc) was initialized from general-domai"
+      },
+      {
+        "rank": 18,
+        "source": "2004.03354:paragraph:0031 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.511,
+        "keyword": 0.0827,
+        "rerank": 0.4355,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "query_hits": "text, use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We extract all abstracts and text bodies and apply the BERT basic tokenizer (a word tokenizer that standard BERT uses before wordpiece tokenization). Then, we train CBOW Word2Vec with negative sampling. We use default pa"
+      },
+      {
+        "rank": 19,
+        "source": "2004.03354:paragraph:0018 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 1: Biomedical NER ::: Domain adaptation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5661,
+        "keyword": 0.0329,
+        "rerank": 0.4177,
+        "section": "Experiment 1: Biomedical NER ::: Domain adaptation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We train Word2Vec with vector size $d_\\mathrm {W2V} = d_\\mathrm {LM} = 768$ on PubMed+PMC (see Appendix for details). Then, we follow the procedure described in Section SECREF3 to update the wordpiece embedding layer and"
+      },
+      {
+        "rank": 20,
+        "source": "2004.03354:paragraph:0050 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5138,
+        "keyword": 0.0826,
+        "rerank": 0.4105,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Data",
+        "query_hits": "text",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "13.3% (95% CI 6.9-23.6%) # from main text"
+      },
+      {
+        "rank": 21,
+        "source": "2004.03354:paragraph:0056 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Preprocessing",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5284,
+        "keyword": 0.0,
+        "rerank": 0.4088,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 2: Covid-19 QA ::: Preprocessing",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We tokenize every question-context pair $(Q, C)$ with $\\mathcal {T} = \\mathcal {T}_\\mathrm {LM}$ or $\\mathcal {T} = \\hat{\\mathcal {T}}_\\mathrm {LM}$, which yields $(\\mathcal {T}(Q), \\mathcal {T}(C))$. Since $\\mathcal {T}"
+      },
+      {
+        "rank": 22,
+        "source": "2004.03354:paragraph:0033 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5778,
+        "keyword": 0.0,
+        "rerank": 0.4,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Experiment 1: Biomedical NER ::: Pretrained models",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip"
+      },
+      {
+        "rank": 23,
+        "source": "2004.03354:paragraph:0022 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA ::: Domain adaptation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5229,
+        "keyword": 0.0,
+        "rerank": 0.3986,
+        "section": "Experiment 2: Covid-19 QA ::: Domain adaptation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We train Word2Vec with vector size $d_\\mathrm {W2V} = d_\\mathrm {LM} = 1024$ on CORD-19 (Covid-19 Open Research Dataset) and/or PubMed+PMC. The process takes less than an hour on CORD-19 and about one day on the combined"
+      },
+      {
+        "rank": 24,
+        "source": "2004.03354:paragraph:0027 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5651,
+        "keyword": 0.0,
+        "rerank": 0.3765,
+        "section": "Inexpensive Domain Adaptation of Pretrained Language Models (Appendix) ::: Word2Vec training",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We downloaded the PubMed, PMC and CORD-19 corpora from:"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6204,
+        "keyword": 0.134,
+        "rerank": 0.7986,
+        "section": "Introduction",
+        "query_hits": "text, use",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9182,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3697,
+        "reasons": "body/table evidence",
+        "preview": "In Section SECREF4, we use the proposed method to domain-adapt BERT on PubMed+PMC (the data used for BioBERTv1.0) and/or CORD-19 (Covid-19 Open Research Dataset). We improve over general-domain BERT on eight out of eight"
+      },
+      {
+        "rank": 2,
+        "source": "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6084,
+        "keyword": 0.2136,
+        "rerank": 0.8715,
+        "section": "Abstract",
+        "query_hits": "in-domain, text",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7928,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.251,
+        "reasons": "body/table evidence",
+        "preview": "Domain adaptation of Pretrained Language Models (PTLMs) is typically achieved by pretraining on in-domain text. While successful, this approach is expensive in terms of hardware, runtime and CO_2 emissions. Here, we prop"
+      },
+      {
+        "rank": 3,
+        "source": "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6088,
+        "keyword": 0.1736,
+        "rerank": 0.7944,
+        "section": "Introduction",
+        "query_hits": "text",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9135,
+        "novelty": 0.4354,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2466,
+        "reasons": "body/table evidence",
+        "preview": "When applying PTLMs to specific domains, it can be useful to domain-adapt them. Domain adaptation of PTLMs has typically been achieved by pretraining on target-domain text. One such model is BioBERT BIBREF2, which was in"
+      },
+      {
+        "rank": 4,
+        "source": "2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5748,
+        "keyword": 0.1598,
+        "rerank": 0.7153,
+        "section": "Introduction",
+        "query_hits": "text",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8249,
+        "novelty": 0.4428,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1714,
+        "reasons": "body/table evidence",
+        "preview": "We therefore propose a fast, CPU-only domain-adaptation method for PTLMs: We train Word2Vec BIBREF3 on target-domain text and align the resulting word vectors with the wordpiece vectors of an existing general-domain PTLM"
+      },
+      {
+        "rank": 5,
+        "source": "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6307,
+        "keyword": 0.1705,
+        "rerank": 0.8312,
+        "section": "Related work ::: Domain-adapted PTLMs",
+        "query_hits": "text",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9548,
+        "novelty": 0.6908,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1578,
+        "reasons": "body/table evidence",
+        "preview": "Domain adaptation of PTLMs is typically achieved by pretraining on unlabeled target-domain text. Some examples of such models are BioBERT BIBREF2, which was pretrained on the PubMed and/or PubMed Central (PMC) corpora, S"
+      },
+      {
+        "rank": 6,
+        "source": "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5852,
+        "keyword": 0.1356,
+        "rerank": 0.7054,
+        "section": "Experiment 2: Covid-19 QA",
+        "query_hits": "use",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8138,
+        "novelty": 0.6495,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0308,
+        "reasons": "body/table evidence",
+        "preview": "In this section, we use the proposed method to quickly adapt an existing general-domain QA model to an emerging target domain: Covid-19. Our baseline model is SQuADBERT (bert-large-uncased-whole-word-masking-finetuned-sq"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "did",
+        "in-domain",
+        "text",
+        "they",
+        "use"
+      ],
+      "covered_query_terms": [
+        "in-domain",
+        "text",
+        "use"
+      ],
+      "missing_query_terms": [
+        "did",
+        "they"
+      ],
+      "terms_by_chunk": {
+        "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction": [
+          "text",
+          "use"
+        ],
+        "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract": [
+          "in-domain",
+          "text"
+        ],
+        "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction": [
+          "text"
+        ],
+        "2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction": [
+          "text"
+        ],
+        "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs": [
+          "text"
+        ],
+        "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA": [
+          "use"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Experiment 2: Covid-19 QA",
+        "Introduction",
+        "Related work ::: Domain-adapted PTLMs"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "2004.03354:paragraph:0003 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+          "2004.03354:paragraph:0001 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction",
+          "2004.03354:paragraph:0002 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Introduction"
+        ],
+        "Abstract": [
+          "2004.03354:abstract:000 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Abstract"
+        ],
+        "Related work ::: Domain-adapted PTLMs": [
+          "2004.03354:paragraph:0006 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Related work ::: Domain-adapted PTLMs"
+        ],
+        "Experiment 2: Covid-19 QA": [
+          "2004.03354:paragraph:0021 | Inexpensive Domain Adaptation of Pretrained Language Models: A Case Study on Biomedical Named Entity Recognition / Experiment 2: Covid-19 QA"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The retrieved context mentions the following in-domain texts:\n\n*   **PubMed+PMC**: This data was used for BioBERTv1.0.\n*   **CORD-19**: This is the Covid-19 Open Research Dataset.\n\nAdditionally, the text refers to adapting a Question Answering model to text about the **Covid-19 pandemic**.",
+    "retrieved_context_answer": "The context mentions several types of in-domain text used for domain adaptation or training:\n\n*   **Biomedical/Scientific Text:**\n    *   PubMed+PMC (used for BioBERTv1.0) [1].\n    *   Biomedical scientific publications (used to pretrain BioBERT) [3].\n    *   The PubMed and/or PubMed Central (PMC) corpora (used for BioBERT) [5].\n*   **",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.48387096774193544,
+    "retrieved_context_f1": 0.2903225806451613,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

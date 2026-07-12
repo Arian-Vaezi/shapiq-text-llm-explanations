@@ -1,0 +1,1580 @@
+{
+  "case": {
+    "case_id": "qasper_b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54",
+    "paper_id": "1912.01214",
+    "paper_title": "Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation",
+    "question_id": "b6f15fb6279b82e34a5bf4828b7b5ddabfdf1d54",
+    "annotation_id": "bbc549d0d6a598c0a93d0dde01d8cc6ffe316adc",
+    "question": "which multilingual approaches do they compare with?",
+    "gold_answer": "multilingual NMT (MNMT) BIBREF19",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1912.01214:paragraph:0035"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1912.01214:paragraph:0035",
+      "score": 0.9590133762368614,
+      "title": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+      "text": "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-lingual transfer without pretraining BIBREF16. The results show that our approaches consistently outperform other approaches across languages and datasets, especially surpass pivoting, which is a strong baseline in the zero-shot scenario that multilingual NMT systems often fail to beat BIBREF19, BIBREF20, BIBREF23. Pivoting translates source to pivot then to target in two steps, causing inefficient translation process. Our approaches use one encoder-decoder model to translate between any zero-shot directions, which is more efficient than pivoting. Regarding the comparison between transfer approaches, our cross-lingual pretraining based transfer outperforms transfer method that does not use pretraining by a large margin."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1912.01214:paragraph:0006",
+      "score": 0.7382940791309767,
+      "title": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+      "text": "Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the same level or even better when using our method."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1912.01214:paragraph:0040",
+      "score": 0.55008131108143,
+      "title": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+      "text": "Although it is challenging for one model to translate all zero-shot directions between multiple distant language pairs of MultiUN, MLM+BRLM-SA still achieves better performances on Es $\\rightarrow $ Ar and Es $\\rightarrow $ Ru than strong pivoting$_{\\rm m}$, which uses MNMT to translate source to pivot then to target in two separate steps with each step receiving supervised signal of parallel corpora. Our approaches surpass pivoting$_{\\rm m}$ in all zero-shot directions by adding back translation BIBREF33 to generate pseudo parallel sentences for all zero-shot directions based on our pretrained models such as MLM+BRLM-SA, and further training our universal encoder-decoder model with these pseudo data. BIBREF22 gu2019improved introduces back translation into MNMT, while we adopt it in our transfer approaches. Finally, our best MLM+BRLM-SA with back translation outperforms pivoting$_{\\rm m}$ by 2.4 BLEU points averagely, and outperforms MNMT BIBREF22 by 4.6 BLEU points averagely. Again, in supervised translation directions, MLM+BRLM-SA with back translation also achieves better performance than the original supervised Transformer."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1912.01214:paragraph:0010",
+      "score": 0.6249659053243488,
+      "title": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+      "text": "Multilingual NMT (MNMT) enables training a single model that supports translation from multiple source languages into multiple target languages, even those unseen language pairs BIBREF17, BIBREF18, BIBREF19, BIBREF20, BIBREF21. Aside from simpler deployment, MNMT benefits from transfer learning where low-resource language pairs are trained together with high-resource ones. However, BIBREF22 point out that MNMT for zero-shot translation easily fails, and is sensitive to the hyper-parameter setting. Also, MNMT usually performs worse than the pivot-based method in zero-shot translation setting BIBREF23."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1912.01214:paragraph:0019",
+      "score": 0.5664263212148626,
+      "title": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+      "text": "Specifically, MLM adopts the Cloze objective of BERT BIBREF29 and predicts the masked words that are randomly selected and replaced with [MASK] token on monolingual corpus. In practice, MLM takes different language monolingual corpora as input to find features shared across different languages. With this method, word pieces shared in all languages have been mapped into a shared space, which makes the sentence representations across different languages close BIBREF30."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1912.01214:abstract:000",
+      "score": 0.572827415352989,
+      "title": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+      "text": "Transfer learning between different language pairs has shown its effectiveness for Neural Machine Translation (NMT) in low-resource scenario. However, existing transfer methods involving a common target language are far from success in the extreme scenario of zero-shot translation, due to the language space mismatch problem between transferor (the parent model) and transferee (the child model) on the source side. To address this challenge, we propose an effective transfer learning approach based on cross-lingual pre-training. Our key idea is to make all source languages share the same feature space and thus enable a smooth transition for zero-shot translation. To this end, we introduce one monolingual pre-training method and two bilingual pre-training methods to obtain a universal encoder for different languages. Once the universal encoder is constructed, the parent model built on such encoder is trained with large-scale annotated data and then directly applied in zero-shot translation scenario. Experiments on two public datasets show that our approach significantly outperforms strong pivot-based baseline and various multilingual NMT approaches."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+      "attribution": 0.16286322366261877
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+      "attribution": 0.0846175650679789
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+      "attribution": 0.04598143893894906
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+      "attribution": 0.033094444294863835
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+      "attribution": 0.012465022602953395
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+      "attribution": 0.006629043781952027
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+      "attribution": 0.10470178552661845
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+      "attribution": 0.09912232646281781
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+      "attribution": -0.013799188238708607
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+      "attribution": 0.010890013693985932
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+      "attribution": 0.002584038988373218
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+      "attribution": -0.0011923730407826657
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0006",
+      "interaction": 0.00037365215978421514
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0040",
+      "interaction": -0.0769822697714097
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0010",
+      "interaction": -0.170020893757279
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.03369183973902502
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:abstract:000",
+      "interaction": -0.015481154226920438
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:paragraph:0040",
+      "interaction": -0.00792778271097395
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:paragraph:0010",
+      "interaction": -0.017217480171075557
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.027020124562454773
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:abstract:000",
+      "interaction": -0.028458354240489776
+    },
+    {
+      "left": "1912.01214:paragraph:0040",
+      "right": "1912.01214:paragraph:0010",
+      "interaction": -0.067165095752053
+    },
+    {
+      "left": "1912.01214:paragraph:0040",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.04143222409425346
+    },
+    {
+      "left": "1912.01214:paragraph:0040",
+      "right": "1912.01214:abstract:000",
+      "interaction": -0.022102944109794236
+    },
+    {
+      "left": "1912.01214:paragraph:0010",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.046334282372823346
+    },
+    {
+      "left": "1912.01214:paragraph:0010",
+      "right": "1912.01214:abstract:000",
+      "interaction": -0.0023962198681777586
+    },
+    {
+      "left": "1912.01214:paragraph:0019",
+      "right": "1912.01214:abstract:000",
+      "interaction": -0.027077289234422392
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0006",
+      "interaction": 0.001783086365971957
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0040",
+      "interaction": -0.017791500674512063
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0010",
+      "interaction": -0.023669287925832293
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.004088985465654986
+    },
+    {
+      "left": "1912.01214:paragraph:0035",
+      "right": "1912.01214:abstract:000",
+      "interaction": 0.03574380158609942
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:paragraph:0040",
+      "interaction": 0.010528696048672476
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:paragraph:0010",
+      "interaction": 0.017235513091452794
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.001449580221890628
+    },
+    {
+      "left": "1912.01214:paragraph:0006",
+      "right": "1912.01214:abstract:000",
+      "interaction": 0.020522247381644747
+    },
+    {
+      "left": "1912.01214:paragraph:0040",
+      "right": "1912.01214:paragraph:0010",
+      "interaction": 0.006910376708966909
+    },
+    {
+      "left": "1912.01214:paragraph:0040",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -0.00039289500905240714
+    },
+    {
+      "left": "1912.01214:paragraph:0040",
+      "right": "1912.01214:abstract:000",
+      "interaction": 0.014498686014633815
+    },
+    {
+      "left": "1912.01214:paragraph:0010",
+      "right": "1912.01214:paragraph:0019",
+      "interaction": -9.420777591721615e-05
+    },
+    {
+      "left": "1912.01214:paragraph:0010",
+      "right": "1912.01214:abstract:000",
+      "interaction": 0.012552083090451688
+    },
+    {
+      "left": "1912.01214:paragraph:0019",
+      "right": "1912.01214:abstract:000",
+      "interaction": -0.0035586557292071027
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3456507366149384
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "remaining_chunks": 5,
+        "score": 0.2807626200906441
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "remaining_chunks": 4,
+        "score": 0.13099243568057017
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "remaining_chunks": 3,
+        "score": 0.08122347321696466
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "remaining_chunks": 2,
+        "score": 0.03775489318769931
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.08287900961960637
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "selected_chunks": 1,
+        "score": 0.3606906259763939
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "selected_chunks": 2,
+        "score": 0.3149085176340324
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "selected_chunks": 3,
+        "score": 0.3225057101437617
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "selected_chunks": 4,
+        "score": 0.3305453436904445
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "selected_chunks": 5,
+        "score": 0.34302182047370977
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "selected_chunks": 6,
+        "score": 0.3456507366149384
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3456507366149384
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "remaining_chunks": 5,
+        "score": 0.2807626200906441
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.2611341945158887
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "remaining_chunks": 3,
+        "score": 0.17059369157966808
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.20411836675846806
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "remaining_chunks": 1,
+        "score": 0.21981067521643105
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3456507366149384
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "remaining_chunks": 5,
+        "score": 0.2807626200906441
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "remaining_chunks": 4,
+        "score": 0.24393627415594066
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "remaining_chunks": 3,
+        "score": 0.2213523000465868
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.2742209654112223
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "remaining_chunks": 1,
+        "score": 0.17698501402840128
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.3456507366149387
+      },
+      {
+        "step": 1,
+        "score": 0.333587824485888
+      },
+      {
+        "step": 2,
+        "score": 0.2992961912592233
+      },
+      {
+        "step": 3,
+        "score": 0.25549294531943906
+      },
+      {
+        "step": 4,
+        "score": 0.2189853350072047
+      },
+      {
+        "step": 5,
+        "score": 0.18990998669582762
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "which multilingual approaches do they compare with?",
+    "expanded_queries": [
+      "which multilingual approaches do they compare with?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1912.01214:paragraph:0032 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Datasets.",
+        "dense": 0.7092,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Setup ::: Datasets.",
+        "flags": "",
+        "preview": "For MultiUN corpus, we use four languages: English (En) is set as the pivot language, which has parallel data with other three languages which do not have parallel data between each other. The three languages are Arabic "
+      },
+      {
+        "rank": 2,
+        "source": "1912.01214:paragraph:0039 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "dense": 0.697,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "flags": "",
+        "preview": "Like experimental results on Europarl, MLM+BRLM-SA performs the best among all proposed cross-lingual pretraining based transfer approaches as shown in Table TABREF26. When comparing systems consisting of one encoder-dec"
+      },
+      {
+        "rank": 3,
+        "source": "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "dense": 0.6787,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results",
+        "flags": "",
+        "preview": "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-ling"
+      },
+      {
+        "rank": 4,
+        "source": "1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "dense": 0.6774,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "flags": "",
+        "preview": "Specifically, MLM adopts the Cloze objective of BERT BIBREF29 and predicts the masked words that are randomly selected and replaced with [MASK] token on monolingual corpus. In practice, MLM takes different language monol"
+      },
+      {
+        "rank": 5,
+        "source": "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "dense": 0.6724,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Multilingual NMT (MNMT) enables training a single model that supports translation from multiple source languages into multiple target languages, even those unseen language pairs BIBREF17, BIBREF18, BIBREF19, BIBREF20, BI"
+      },
+      {
+        "rank": 6,
+        "source": "1912.01214:paragraph:0038 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "dense": 0.6689,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "flags": "",
+        "preview": "MLM alone that does not use source$\\leftrightarrow $pivot parallel data performs much better than the cross-lingual transfer, and achieves comparable results to pivoting. When MLM is combined with TLM or the proposed BRL"
+      },
+      {
+        "rank": 7,
+        "source": "1912.01214:paragraph:0041 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Sentence Representation.",
+        "dense": 0.6678,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Analysis ::: Sentence Representation.",
+        "flags": "",
+        "preview": "We first evaluate the representational invariance across languages for all cross-lingual pre-training methods. Following BIBREF23, we adopt max-pooling operation to collect the sentence representation of each encoder lay"
+      },
+      {
+        "rank": 8,
+        "source": "1912.01214:paragraph:0036 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "dense": 0.6661,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "flags": "",
+        "preview": "Regarding comparison between the baselines in table TABREF19, we find that pivoting is the strongest baseline that has significant advantage over other two baselines. Cross-lingual transfer for languages without shared v"
+      },
+      {
+        "rank": 9,
+        "source": "1912.01214:paragraph:0031 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Datasets.",
+        "dense": 0.6658,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Setup ::: Datasets.",
+        "flags": "",
+        "preview": "The statistics of Europarl and MultiUN corpora are summarized in Table TABREF18. For Europarl corpus, we evaluate on French-English-Spanish (Fr-En-Es), German-English-French (De-En-Fr) and Romanian-English-German (Ro-En-"
+      },
+      {
+        "rank": 10,
+        "source": "1912.01214:paragraph:0030 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup",
+        "dense": 0.6635,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Setup",
+        "flags": "",
+        "preview": "We evaluate our cross-lingual pre-training based transfer approach against several strong baselines on two public datatsets, Europarl BIBREF31 and MultiUN BIBREF32, which contain multi-parallel evaluation data to assess "
+      },
+      {
+        "rank": 11,
+        "source": "1912.01214:paragraph:0018 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "dense": 0.6605,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "flags": "",
+        "preview": "Two existing cross-lingual pre-training methods, Masked Language Modeling (MLM) and Translation Language Modeling (TLM), have shown their effectiveness on XNLI cross-lingual classification task BIBREF11, BIBREF28, but th"
+      },
+      {
+        "rank": 12,
+        "source": "1912.01214:paragraph:0042 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "dense": 0.6543,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "flags": "",
+        "preview": "We further sample an English-Russian sentence pair from the MultiUN validation sets and visualize the cosine similarity between hidden states of the top encoder layer to further investigate the difference of all cross-li"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "keyword": 0.2205,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results",
+        "flags": "",
+        "preview": "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-ling"
+      },
+      {
+        "rank": 2,
+        "source": "1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "keyword": 0.2084,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the sam"
+      },
+      {
+        "rank": 3,
+        "source": "1912.01214:paragraph:0039 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "keyword": 0.0786,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "flags": "",
+        "preview": "Like experimental results on Europarl, MLM+BRLM-SA performs the best among all proposed cross-lingual pretraining based transfer approaches as shown in Table TABREF26. When comparing systems consisting of one encoder-dec"
+      },
+      {
+        "rank": 4,
+        "source": "1912.01214:paragraph:0007 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "keyword": 0.0491,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "In recent years, zero-shot translation in NMT has attracted widespread attention in academic research. Existing methods are mainly divided into four categories: pivot-based method, transfer learning, multilingual NMT, an"
+      },
+      {
+        "rank": 5,
+        "source": "1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "keyword": 0.043,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Transfer learning between different language pairs has shown its effectiveness for Neural Machine Translation (NMT) in low-resource scenario. However, existing transfer methods involving a common target language are far "
+      },
+      {
+        "rank": 6,
+        "source": "1912.01214:paragraph:0037 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "keyword": 0.0362,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "flags": "",
+        "preview": "Our best approach of MLM+BRLM-SA achieves the significant superior performance to all baselines in the zero-shot directions, improving by 0.9-4.8 BLEU points over the strong pivoting. Meanwhile, in the supervised directi"
+      },
+      {
+        "rank": 7,
+        "source": "1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "keyword": 0.0343,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "flags": "",
+        "preview": "Although it is challenging for one model to translate all zero-shot directions between multiple distant language pairs of MultiUN, MLM+BRLM-SA still achieves better performances on Es $\\rightarrow $ Ar and Es $\\rightarro"
+      },
+      {
+        "rank": 8,
+        "source": "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "keyword": 0.0283,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Multilingual NMT (MNMT) enables training a single model that supports translation from multiple source languages into multiple target languages, even those unseen language pairs BIBREF17, BIBREF18, BIBREF19, BIBREF20, BI"
+      },
+      {
+        "rank": 9,
+        "source": "1912.01214:paragraph:0044 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Conclusion",
+        "keyword": 0.0249,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we propose a cross-lingual pretraining based transfer approach for the challenging zero-shot translation task, in which source and target languages have no parallel data, while they both have parallel data"
+      },
+      {
+        "rank": 10,
+        "source": "1912.01214:paragraph:0033 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Experimental Details.",
+        "keyword": 0.02,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Setup ::: Experimental Details.",
+        "flags": "",
+        "preview": "We use traditional transfer learning, pivot-based method and multilingual NMT as our baselines. For the fair comparison, the Transformer-big model with 1024 embedding/hidden units, 4096 feed-forward filter size, 6 layers"
+      },
+      {
+        "rank": 11,
+        "source": "1912.01214:paragraph:0038 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "flags": "",
+        "preview": "MLM alone that does not use source$\\leftrightarrow $pivot parallel data performs much better than the cross-lingual transfer, and achieves comparable results to pivoting. When MLM is combined with TLM or the proposed BRL"
+      },
+      {
+        "rank": 12,
+        "source": "1912.01214:paragraph:0042 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "flags": "",
+        "preview": "We further sample an English-Russian sentence pair from the MultiUN validation sets and visualize the cosine similarity between hidden states of the top encoder layer to further investigate the difference of all cross-li"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6787,
+        "keyword": 0.2205,
+        "rerank": 0.959,
+        "section": "Experiments ::: Main Results",
+        "query_hits": "approaches, compare, multilingual",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-ling"
+      },
+      {
+        "rank": 2,
+        "source": "1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6415,
+        "keyword": 0.2084,
+        "rerank": 0.7383,
+        "section": "Introduction",
+        "query_hits": "approaches, multilingual",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the sam"
+      },
+      {
+        "rank": 3,
+        "source": "1912.01214:paragraph:0039 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.697,
+        "keyword": 0.0786,
+        "rerank": 0.6426,
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "query_hits": "approaches",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Like experimental results on Europarl, MLM+BRLM-SA performs the best among all proposed cross-lingual pretraining based transfer approaches as shown in Table TABREF26. When comparing systems consisting of one encoder-dec"
+      },
+      {
+        "rank": 4,
+        "source": "1912.01214:paragraph:0032 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Datasets.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7092,
+        "keyword": 0.0,
+        "rerank": 0.63,
+        "section": "Experiments ::: Setup ::: Datasets.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For MultiUN corpus, we use four languages: English (En) is set as the pivot language, which has parallel data with other three languages which do not have parallel data between each other. The three languages are Arabic "
+      },
+      {
+        "rank": 5,
+        "source": "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6724,
+        "keyword": 0.0283,
+        "rerank": 0.625,
+        "section": "Related Work",
+        "query_hits": "multilingual",
+        "reasons": "body/table evidence",
+        "preview": "Multilingual NMT (MNMT) enables training a single model that supports translation from multiple source languages into multiple target languages, even those unseen language pairs BIBREF17, BIBREF18, BIBREF19, BIBREF20, BI"
+      },
+      {
+        "rank": 6,
+        "source": "1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6213,
+        "keyword": 0.043,
+        "rerank": 0.5728,
+        "section": "Abstract",
+        "query_hits": "approaches, multilingual",
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning between different language pairs has shown its effectiveness for Neural Machine Translation (NMT) in low-resource scenario. However, existing transfer methods involving a common target language are far "
+      },
+      {
+        "rank": 7,
+        "source": "1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6774,
+        "keyword": 0.0,
+        "rerank": 0.5664,
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Specifically, MLM adopts the Cloze objective of BERT BIBREF29 and predicts the masked words that are randomly selected and replaced with [MASK] token on monolingual corpus. In practice, MLM takes different language monol"
+      },
+      {
+        "rank": 8,
+        "source": "1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6308,
+        "keyword": 0.0343,
+        "rerank": 0.5501,
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "query_hits": "approaches",
+        "reasons": "body/table evidence",
+        "preview": "Although it is challenging for one model to translate all zero-shot directions between multiple distant language pairs of MultiUN, MLM+BRLM-SA still achieves better performances on Es $\\rightarrow $ Ar and Es $\\rightarro"
+      },
+      {
+        "rank": 9,
+        "source": "1912.01214:paragraph:0038 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6689,
+        "keyword": 0.0,
+        "rerank": 0.5495,
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "MLM alone that does not use source$\\leftrightarrow $pivot parallel data performs much better than the cross-lingual transfer, and achieves comparable results to pivoting. When MLM is combined with TLM or the proposed BRL"
+      },
+      {
+        "rank": 10,
+        "source": "1912.01214:paragraph:0041 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Sentence Representation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6678,
+        "keyword": 0.0,
+        "rerank": 0.5472,
+        "section": "Experiments ::: Analysis ::: Sentence Representation.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We first evaluate the representational invariance across languages for all cross-lingual pre-training methods. Following BIBREF23, we adopt max-pooling operation to collect the sentence representation of each encoder lay"
+      },
+      {
+        "rank": 11,
+        "source": "1912.01214:paragraph:0031 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Datasets.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6658,
+        "keyword": 0.0,
+        "rerank": 0.5432,
+        "section": "Experiments ::: Setup ::: Datasets.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The statistics of Europarl and MultiUN corpora are summarized in Table TABREF18. For Europarl corpus, we evaluate on French-English-Spanish (Fr-En-Es), German-English-French (De-En-Fr) and Romanian-English-German (Ro-En-"
+      },
+      {
+        "rank": 12,
+        "source": "1912.01214:paragraph:0044 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6081,
+        "keyword": 0.0249,
+        "rerank": 0.5218,
+        "section": "Conclusion",
+        "query_hits": "approaches, they",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we propose a cross-lingual pretraining based transfer approach for the challenging zero-shot translation task, in which source and target languages have no parallel data, while they both have parallel data"
+      },
+      {
+        "rank": 13,
+        "source": "1912.01214:paragraph:0042 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6543,
+        "keyword": 0.0,
+        "rerank": 0.5202,
+        "section": "Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We further sample an English-Russian sentence pair from the MultiUN validation sets and visualize the cosine similarity between hidden states of the top encoder layer to further investigate the difference of all cross-li"
+      },
+      {
+        "rank": 14,
+        "source": "1912.01214:paragraph:0033 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Experimental Details.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6238,
+        "keyword": 0.02,
+        "rerank": 0.5166,
+        "section": "Experiments ::: Setup ::: Experimental Details.",
+        "query_hits": "multilingual",
+        "reasons": "body/table evidence",
+        "preview": "We use traditional transfer learning, pivot-based method and multilingual NMT as our baselines. For the fair comparison, the Transformer-big model with 1024 embedding/hidden units, 4096 feed-forward filter size, 6 layers"
+      },
+      {
+        "rank": 15,
+        "source": "1912.01214:paragraph:0021 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Bridge Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6506,
+        "keyword": 0.0,
+        "rerank": 0.5128,
+        "section": "Approach ::: Bridge Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Aside from MLM and TLM, we propose BRidge Language Modeling (BRLM) to further obtain word-level representation alignment between different languages. This method is inspired by the assumption that if the feature spaces o"
+      },
+      {
+        "rank": 16,
+        "source": "1912.01214:paragraph:0000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6498,
+        "keyword": 0.0,
+        "rerank": 0.5112,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Although Neural Machine Translation (NMT) has dominated recent research on translation tasks BIBREF0, BIBREF1, BIBREF2, NMT heavily relies on large-scale parallel data, resulting in poor performance on low-resource or ze"
+      },
+      {
+        "rank": 17,
+        "source": "1912.01214:paragraph:0007 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6508,
+        "keyword": 0.0491,
+        "rerank": 0.5102,
+        "section": "Related Work",
+        "query_hits": "multilingual",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In recent years, zero-shot translation in NMT has attracted widespread attention in academic research. Existing methods are mainly divided into four categories: pivot-based method, transfer learning, multilingual NMT, an"
+      },
+      {
+        "rank": 18,
+        "source": "1912.01214:paragraph:0034 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Experimental Details.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6482,
+        "keyword": 0.0,
+        "rerank": 0.508,
+        "section": "Experiments ::: Setup ::: Experimental Details.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Regarding MLM, TLM and BRLM, as mentioned in the pre-training phase of transfer protocol, we first pre-train MLM on monolingual data of both source and pivot languages, then leverage the parameters of MLM to initialize T"
+      },
+      {
+        "rank": 19,
+        "source": "1912.01214:paragraph:0009 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6267,
+        "keyword": 0.0,
+        "rerank": 0.4951,
+        "section": "Related Work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Transfer Learning is firstly introduced for NMT by BIBREF6, which leverages a high-resource parent model to initialize the low-resource child model. On this basis, BIBREF7 and BIBREF8 use shared vocabularies for source/t"
+      },
+      {
+        "rank": 20,
+        "source": "1912.01214:paragraph:0022 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Bridge Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6342,
+        "keyword": 0.0,
+        "rerank": 0.4802,
+        "section": "Approach ::: Bridge Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As illustrated in Figure FIGREF9, BRLM stacks shared encoder over both side sentences separately. In particular, we design two network structures for BRLM, which are divided into Hard Alignment (BRLM-HA) and Soft Alignme"
+      },
+      {
+        "rank": 21,
+        "source": "1912.01214:paragraph:0037 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5937,
+        "keyword": 0.0362,
+        "rerank": 0.4783,
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "query_hits": "approaches",
+        "reasons": "body/table evidence",
+        "preview": "Our best approach of MLM+BRLM-SA achieves the significant superior performance to all baselines in the zero-shot directions, improving by 0.9-4.8 BLEU points over the strong pivoting. Meanwhile, in the supervised directi"
+      },
+      {
+        "rank": 22,
+        "source": "1912.01214:paragraph:0011 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6249,
+        "keyword": 0.0,
+        "rerank": 0.4614,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Unsupervised NMT (UNMT) considers a harder setting, in which only large-scale monolingual corpora are available for training. Recently, many methods have been proposed to improve the performance of UNMT, including using "
+      },
+      {
+        "rank": 23,
+        "source": "1912.01214:paragraph:0025 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Bridge Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6209,
+        "keyword": 0.0,
+        "rerank": 0.4535,
+        "section": "Approach ::: Bridge Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In principle, MLM and TLM can learn some implicit alignment information during model training. However, the alignment process in MLM is inefficient since the shared word pieces only account for a small proportion of the "
+      },
+      {
+        "rank": 24,
+        "source": "1912.01214:paragraph:0020 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6175,
+        "keyword": 0.0,
+        "rerank": 0.4468,
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Since MLM objective is unsupervised and only requires monolingual data, TLM is designed to leverage parallel data when it is available. Actually, TLM is a simple extension of MLM, with the difference that TLM concatenate"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6787,
+        "keyword": 0.2205,
+        "rerank": 0.959,
+        "section": "Experiments ::: Main Results",
+        "query_hits": "approaches, compare, multilingual",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-ling"
+      },
+      {
+        "rank": 2,
+        "source": "1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6415,
+        "keyword": 0.2084,
+        "rerank": 0.7383,
+        "section": "Introduction",
+        "query_hits": "approaches, multilingual",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the sam"
+      },
+      {
+        "rank": 3,
+        "source": "1912.01214:paragraph:0039 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.697,
+        "keyword": 0.0786,
+        "rerank": 0.6426,
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "query_hits": "approaches",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Like experimental results on Europarl, MLM+BRLM-SA performs the best among all proposed cross-lingual pretraining based transfer approaches as shown in Table TABREF26. When comparing systems consisting of one encoder-dec"
+      },
+      {
+        "rank": 4,
+        "source": "1912.01214:paragraph:0032 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Datasets.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7092,
+        "keyword": 0.0,
+        "rerank": 0.63,
+        "section": "Experiments ::: Setup ::: Datasets.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For MultiUN corpus, we use four languages: English (En) is set as the pivot language, which has parallel data with other three languages which do not have parallel data between each other. The three languages are Arabic "
+      },
+      {
+        "rank": 5,
+        "source": "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6724,
+        "keyword": 0.0283,
+        "rerank": 0.625,
+        "section": "Related Work",
+        "query_hits": "multilingual",
+        "reasons": "body/table evidence",
+        "preview": "Multilingual NMT (MNMT) enables training a single model that supports translation from multiple source languages into multiple target languages, even those unseen language pairs BIBREF17, BIBREF18, BIBREF19, BIBREF20, BI"
+      },
+      {
+        "rank": 6,
+        "source": "1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6213,
+        "keyword": 0.043,
+        "rerank": 0.5728,
+        "section": "Abstract",
+        "query_hits": "approaches, multilingual",
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning between different language pairs has shown its effectiveness for Neural Machine Translation (NMT) in low-resource scenario. However, existing transfer methods involving a common target language are far "
+      },
+      {
+        "rank": 7,
+        "source": "1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6774,
+        "keyword": 0.0,
+        "rerank": 0.5664,
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Specifically, MLM adopts the Cloze objective of BERT BIBREF29 and predicts the masked words that are randomly selected and replaced with [MASK] token on monolingual corpus. In practice, MLM takes different language monol"
+      },
+      {
+        "rank": 8,
+        "source": "1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6308,
+        "keyword": 0.0343,
+        "rerank": 0.5501,
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "query_hits": "approaches",
+        "reasons": "body/table evidence",
+        "preview": "Although it is challenging for one model to translate all zero-shot directions between multiple distant language pairs of MultiUN, MLM+BRLM-SA still achieves better performances on Es $\\rightarrow $ Ar and Es $\\rightarro"
+      },
+      {
+        "rank": 9,
+        "source": "1912.01214:paragraph:0038 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6689,
+        "keyword": 0.0,
+        "rerank": 0.5495,
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "MLM alone that does not use source$\\leftrightarrow $pivot parallel data performs much better than the cross-lingual transfer, and achieves comparable results to pivoting. When MLM is combined with TLM or the proposed BRL"
+      },
+      {
+        "rank": 10,
+        "source": "1912.01214:paragraph:0041 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Sentence Representation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6678,
+        "keyword": 0.0,
+        "rerank": 0.5472,
+        "section": "Experiments ::: Analysis ::: Sentence Representation.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We first evaluate the representational invariance across languages for all cross-lingual pre-training methods. Following BIBREF23, we adopt max-pooling operation to collect the sentence representation of each encoder lay"
+      },
+      {
+        "rank": 11,
+        "source": "1912.01214:paragraph:0031 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Datasets.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6658,
+        "keyword": 0.0,
+        "rerank": 0.5432,
+        "section": "Experiments ::: Setup ::: Datasets.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The statistics of Europarl and MultiUN corpora are summarized in Table TABREF18. For Europarl corpus, we evaluate on French-English-Spanish (Fr-En-Es), German-English-French (De-En-Fr) and Romanian-English-German (Ro-En-"
+      },
+      {
+        "rank": 12,
+        "source": "1912.01214:paragraph:0044 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6081,
+        "keyword": 0.0249,
+        "rerank": 0.5218,
+        "section": "Conclusion",
+        "query_hits": "approaches, they",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we propose a cross-lingual pretraining based transfer approach for the challenging zero-shot translation task, in which source and target languages have no parallel data, while they both have parallel data"
+      },
+      {
+        "rank": 13,
+        "source": "1912.01214:paragraph:0042 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6543,
+        "keyword": 0.0,
+        "rerank": 0.5202,
+        "section": "Experiments ::: Analysis ::: Contextualized Word Representation.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We further sample an English-Russian sentence pair from the MultiUN validation sets and visualize the cosine similarity between hidden states of the top encoder layer to further investigate the difference of all cross-li"
+      },
+      {
+        "rank": 14,
+        "source": "1912.01214:paragraph:0033 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Experimental Details.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6238,
+        "keyword": 0.02,
+        "rerank": 0.5166,
+        "section": "Experiments ::: Setup ::: Experimental Details.",
+        "query_hits": "multilingual",
+        "reasons": "body/table evidence",
+        "preview": "We use traditional transfer learning, pivot-based method and multilingual NMT as our baselines. For the fair comparison, the Transformer-big model with 1024 embedding/hidden units, 4096 feed-forward filter size, 6 layers"
+      },
+      {
+        "rank": 15,
+        "source": "1912.01214:paragraph:0021 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Bridge Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6506,
+        "keyword": 0.0,
+        "rerank": 0.5128,
+        "section": "Approach ::: Bridge Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Aside from MLM and TLM, we propose BRidge Language Modeling (BRLM) to further obtain word-level representation alignment between different languages. This method is inspired by the assumption that if the feature spaces o"
+      },
+      {
+        "rank": 16,
+        "source": "1912.01214:paragraph:0000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6498,
+        "keyword": 0.0,
+        "rerank": 0.5112,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Although Neural Machine Translation (NMT) has dominated recent research on translation tasks BIBREF0, BIBREF1, BIBREF2, NMT heavily relies on large-scale parallel data, resulting in poor performance on low-resource or ze"
+      },
+      {
+        "rank": 17,
+        "source": "1912.01214:paragraph:0007 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6508,
+        "keyword": 0.0491,
+        "rerank": 0.5102,
+        "section": "Related Work",
+        "query_hits": "multilingual",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In recent years, zero-shot translation in NMT has attracted widespread attention in academic research. Existing methods are mainly divided into four categories: pivot-based method, transfer learning, multilingual NMT, an"
+      },
+      {
+        "rank": 18,
+        "source": "1912.01214:paragraph:0034 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Setup ::: Experimental Details.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6482,
+        "keyword": 0.0,
+        "rerank": 0.508,
+        "section": "Experiments ::: Setup ::: Experimental Details.",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Regarding MLM, TLM and BRLM, as mentioned in the pre-training phase of transfer protocol, we first pre-train MLM on monolingual data of both source and pivot languages, then leverage the parameters of MLM to initialize T"
+      },
+      {
+        "rank": 19,
+        "source": "1912.01214:paragraph:0009 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6267,
+        "keyword": 0.0,
+        "rerank": 0.4951,
+        "section": "Related Work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Transfer Learning is firstly introduced for NMT by BIBREF6, which leverages a high-resource parent model to initialize the low-resource child model. On this basis, BIBREF7 and BIBREF8 use shared vocabularies for source/t"
+      },
+      {
+        "rank": 20,
+        "source": "1912.01214:paragraph:0022 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Bridge Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6342,
+        "keyword": 0.0,
+        "rerank": 0.4802,
+        "section": "Approach ::: Bridge Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As illustrated in Figure FIGREF9, BRLM stacks shared encoder over both side sentences separately. In particular, we design two network structures for BRLM, which are divided into Hard Alignment (BRLM-HA) and Soft Alignme"
+      },
+      {
+        "rank": 21,
+        "source": "1912.01214:paragraph:0037 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5937,
+        "keyword": 0.0362,
+        "rerank": 0.4783,
+        "section": "Experiments ::: Main Results ::: Results on Europarl Dataset.",
+        "query_hits": "approaches",
+        "reasons": "body/table evidence",
+        "preview": "Our best approach of MLM+BRLM-SA achieves the significant superior performance to all baselines in the zero-shot directions, improving by 0.9-4.8 BLEU points over the strong pivoting. Meanwhile, in the supervised directi"
+      },
+      {
+        "rank": 22,
+        "source": "1912.01214:paragraph:0011 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6249,
+        "keyword": 0.0,
+        "rerank": 0.4614,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Unsupervised NMT (UNMT) considers a harder setting, in which only large-scale monolingual corpora are available for training. Recently, many methods have been proposed to improve the performance of UNMT, including using "
+      },
+      {
+        "rank": 23,
+        "source": "1912.01214:paragraph:0025 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Bridge Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6209,
+        "keyword": 0.0,
+        "rerank": 0.4535,
+        "section": "Approach ::: Bridge Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In principle, MLM and TLM can learn some implicit alignment information during model training. However, the alignment process in MLM is inefficient since the shared word pieces only account for a small proportion of the "
+      },
+      {
+        "rank": 24,
+        "source": "1912.01214:paragraph:0020 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6175,
+        "keyword": 0.0,
+        "rerank": 0.4468,
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Since MLM objective is unsupervised and only requires monolingual data, TLM is designed to leverage parallel data when it is available. Actually, TLM is a simple extension of MLM, with the difference that TLM concatenate"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6787,
+        "keyword": 0.2205,
+        "rerank": 0.959,
+        "section": "Experiments ::: Main Results",
+        "query_hits": "approaches, compare, multilingual",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.48,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 and TABREF26 report zero-shot results on Europarl and Multi-UN evaluation sets, respectively. We compare our approaches with related approaches of pivoting, multilingual NMT (MNMT) BIBREF19, and cross-ling"
+      },
+      {
+        "rank": 2,
+        "source": "1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6415,
+        "keyword": 0.2084,
+        "rerank": 0.7383,
+        "section": "Introduction",
+        "query_hits": "approaches, multilingual",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7489,
+        "novelty": 0.7418,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0079,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our proposed approach significantly improves zero-shot translation performance, consistently surpassing pivoting and multilingual approaches. Meanwhile, the performance on supervised translation direction remains the sam"
+      },
+      {
+        "rank": 3,
+        "source": "1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6308,
+        "keyword": 0.0343,
+        "rerank": 0.5501,
+        "section": "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "query_hits": "approaches",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5348,
+        "novelty": 0.6734,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9542,
+        "reasons": "body/table evidence",
+        "preview": "Although it is challenging for one model to translate all zero-shot directions between multiple distant language pairs of MultiUN, MLM+BRLM-SA still achieves better performances on Es $\\rightarrow $ Ar and Es $\\rightarro"
+      },
+      {
+        "rank": 4,
+        "source": "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6724,
+        "keyword": 0.0283,
+        "rerank": 0.625,
+        "section": "Related Work",
+        "query_hits": "multilingual",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.62,
+        "novelty": 0.7019,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8714,
+        "reasons": "body/table evidence",
+        "preview": "Multilingual NMT (MNMT) enables training a single model that supports translation from multiple source languages into multiple target languages, even those unseen language pairs BIBREF17, BIBREF18, BIBREF19, BIBREF20, BI"
+      },
+      {
+        "rank": 5,
+        "source": "1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6774,
+        "keyword": 0.0,
+        "rerank": 0.5664,
+        "section": "Approach ::: Masked and Translation Language Model Pretraining",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5534,
+        "novelty": 0.7389,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8593,
+        "reasons": "body/table evidence",
+        "preview": "Specifically, MLM adopts the Cloze objective of BERT BIBREF29 and predicts the masked words that are randomly selected and replaced with [MASK] token on monolingual corpus. In practice, MLM takes different language monol"
+      },
+      {
+        "rank": 6,
+        "source": "1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6213,
+        "keyword": 0.043,
+        "rerank": 0.5728,
+        "section": "Abstract",
+        "query_hits": "approaches, multilingual",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5607,
+        "novelty": 0.6789,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8572,
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning between different language pairs has shown its effectiveness for Neural Machine Translation (NMT) in low-resource scenario. However, existing transfer methods involving a common target language are far "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "approaches",
+        "compare",
+        "multilingual",
+        "they"
+      ],
+      "covered_query_terms": [
+        "approaches",
+        "compare",
+        "multilingual"
+      ],
+      "missing_query_terms": [
+        "they"
+      ],
+      "terms_by_chunk": {
+        "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results": [
+          "approaches",
+          "compare",
+          "multilingual"
+        ],
+        "1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction": [
+          "approaches",
+          "multilingual"
+        ],
+        "1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset.": [
+          "approaches"
+        ],
+        "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work": [
+          "multilingual"
+        ],
+        "1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract": [
+          "approaches",
+          "multilingual"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Approach ::: Masked and Translation Language Model Pretraining",
+        "Experiments ::: Main Results",
+        "Experiments ::: Main Results ::: Results on MultiUN Dataset.",
+        "Introduction",
+        "Related Work"
+      ],
+      "chunks_by_section": {
+        "Experiments ::: Main Results": [
+          "1912.01214:paragraph:0035 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results"
+        ],
+        "Introduction": [
+          "1912.01214:paragraph:0006 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Introduction"
+        ],
+        "Experiments ::: Main Results ::: Results on MultiUN Dataset.": [
+          "1912.01214:paragraph:0040 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Experiments ::: Main Results ::: Results on MultiUN Dataset."
+        ],
+        "Related Work": [
+          "1912.01214:paragraph:0010 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Related Work"
+        ],
+        "Approach ::: Masked and Translation Language Model Pretraining": [
+          "1912.01214:paragraph:0019 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Approach ::: Masked and Translation Language Model Pretraining"
+        ],
+        "Abstract": [
+          "1912.01214:abstract:000 | Cross-lingual Pre-training Based Transfer for Zero-shot Neural Machine Translation / Abstract"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "They compare their approaches with:\n\n*   Related approaches of pivoting\n*   Multilingual NMT (MNMT) BIBREF19\n*   Cross-lingual transfer without pretraining BIBREF16",
+    "retrieved_context_answer": "The approaches are compared with:\n\n*   Pivoting (or strong pivoting$_{\\rm m}$)\n*   Multilingual NMT (MNMT)\n*   Cross-lingual transfer without pretraining",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.34782608695652173,
+    "retrieved_context_f1": 0.2608695652173913,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

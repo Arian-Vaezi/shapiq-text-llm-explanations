@@ -1,0 +1,1577 @@
+{
+  "case": {
+    "case_id": "qasper_113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab",
+    "paper_id": "1708.01464",
+    "paper_title": "Massively Multilingual Neural Grapheme-to-Phoneme Conversion",
+    "question_id": "113d791df6fcfc9cecfb7b1bebaf32cc2e4402ab",
+    "annotation_id": "8a18acdd8e1d46dfe648242c0e79dfcf57c309cb",
+    "question": "how is model compactness measured?",
+    "gold_answer": "Using file size on disk",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1708.01464:paragraph:0044"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1708.01464:paragraph:0043",
+      "score": 0.8255379050530971,
+      "title": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+      "text": "In contrast to the larger-scale Adapted results, in the High Resource experiments none of the sequence-to-sequence approaches equal the performance of the wFST model in WER and PER, although LangID-High does come close. The LangID models do beat wFST in WER 100. A possible explanation is that a monolingual wFST model will never generate phonemes that are not part of the language's inventory. A multilingual model, on the other hand, could potentially generate phonemes from the inventories of any language it has been trained on."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1708.01464:paragraph:0004",
+      "score": 0.7272666003615603,
+      "title": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+      "text": "A different approach came from kim2012universal, who used supervised learning with an undirected graphical model to induce the grapheme\u2013phoneme mappings for languages written in the Latin alphabet. Given a short text in a language, the model predicts the language's orthographic rules. To create phonemic context features from the short text, the model na\u00efvely maps graphemes to IPA symbols written with the same character, and uses the features of these symbols to learn an approximation of the phonotactic constraints of the language. In their experiments, these phonotactic features proved to be more valuable than geographical and genetic features drawn from WALS BIBREF6 ."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1708.01464:paragraph:0018",
+      "score": 0.6031434059678492,
+      "title": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+      "text": "In order to find the best phoneme sequence, we use a neural encoder\u2013decoder model with attention BIBREF9 . The model consists of two main parts: the encoder compresses each source grapheme sequence INLINEFORM0 into a fixed-length vector. The decoder, conditioned on this fixed-length vector, generates the output phoneme sequence INLINEFORM1 ."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1708.01464:paragraph:0006",
+      "score": 0.6815873222466304,
+      "title": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+      "text": "Other work has also made use of multilingually-trained neural networks. Phoneme-level polyglot language models BIBREF8 train a single model on multiple languages and additionally condition on externally constructed typological data about the language. ostling2017continuous used a similar approach, in which a character-level neural language model is trained on a massively multilingual corpus. A language embedding vector is concatenated to the input at each time step. The language embeddings their system learned correlate closely to the genetic relationships between languages. However, neither of these models was applied to g2p."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1708.01464:paragraph:0045",
+      "score": 0.6398273107063667,
+      "title": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+      "text": "Finally, we report our models' results on unseen languages in Table TABREF28 . The unseen languages are any that are present in the test corpus but absent from the training data. Deri and Knight did not report results specifically on these languages. Although the NoLangID models sometimes do better on WER 100, even here the LangID models have a slight advantage in WER and PER. This is somewhat surprising because the LangID models have not learned embeddings for the language ID tokens of unseen languages. Perhaps negative associations are also being learned, driving the model towards predicting more common pronunciations for unseen languages."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1708.01464:paragraph:0026",
+      "score": 0.6072418785272865,
+      "title": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+      "text": "We present experiments with two versions of our sequence-to-sequence model. LangID prepends each training, validation, and test sample with an artificial token identifying the language of the sample. NoLangID omits this token. LangID and NoLangID have identical structure otherwise. To translate the test corpus, we used a beam width of 100. Although this is an unusually wide beam and had negligible performance effects, it was necessary to compute our error metrics."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+      "attribution": -0.07102254153884807
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+      "attribution": -0.051082277316192984
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+      "attribution": -0.03752776008453533
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+      "attribution": -0.028921138839955483
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+      "attribution": -0.010197215035925574
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+      "attribution": 0.005933155364374506
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+      "attribution": 0.008510502033020778
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+      "attribution": 0.007807780637861419
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+      "attribution": 0.00629107402298598
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+      "attribution": 0.004441379496253763
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+      "attribution": 0.004352206193261471
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+      "attribution": 0.003877845366552394
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0004",
+      "interaction": 0.01896300253040529
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0018",
+      "interaction": 0.00740957558141625
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0006",
+      "interaction": 0.026151297903936215
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": 0.04036531245372385
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": -0.00803949304529803
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0018",
+      "interaction": 0.005688940828213047
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0006",
+      "interaction": 0.012192603634797477
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": 0.028386110973472413
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": 0.009850442701423408
+    },
+    {
+      "left": "1708.01464:paragraph:0018",
+      "right": "1708.01464:paragraph:0006",
+      "interaction": 0.023244872201375513
+    },
+    {
+      "left": "1708.01464:paragraph:0018",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": 0.022006052451374516
+    },
+    {
+      "left": "1708.01464:paragraph:0018",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": 0.021139492857681227
+    },
+    {
+      "left": "1708.01464:paragraph:0006",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": 0.03432664481998162
+    },
+    {
+      "left": "1708.01464:paragraph:0006",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": 0.011228828989564508
+    },
+    {
+      "left": "1708.01464:paragraph:0045",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": 0.03429730682119919
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0004",
+      "interaction": -0.012476979528484778
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0018",
+      "interaction": -0.007630260513716815
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0006",
+      "interaction": -0.01009081447679551
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": -0.0087841228261636
+    },
+    {
+      "left": "1708.01464:paragraph:0043",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": -0.0031096130748739167
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0018",
+      "interaction": -0.004586575064519396
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0006",
+      "interaction": -0.006651744433980679
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": -0.00755661159834087
+    },
+    {
+      "left": "1708.01464:paragraph:0004",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": -0.0049320830045832395
+    },
+    {
+      "left": "1708.01464:paragraph:0018",
+      "right": "1708.01464:paragraph:0006",
+      "interaction": -0.005952505772227499
+    },
+    {
+      "left": "1708.01464:paragraph:0018",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": -0.005604282526693698
+    },
+    {
+      "left": "1708.01464:paragraph:0018",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": -0.006464346916159595
+    },
+    {
+      "left": "1708.01464:paragraph:0006",
+      "right": "1708.01464:paragraph:0045",
+      "interaction": -0.0075224175970441355
+    },
+    {
+      "left": "1708.01464:paragraph:0006",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": -0.005162230902323799
+    },
+    {
+      "left": "1708.01464:paragraph:0045",
+      "right": "1708.01464:paragraph:0026",
+      "interaction": -0.008555280731058964
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.19281777639505981
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "remaining_chunks": 5,
+        "score": -0.1667434864273235
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "remaining_chunks": 4,
+        "score": -0.15085701836147036
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "remaining_chunks": 3,
+        "score": -0.061562054166293956
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "remaining_chunks": 2,
+        "score": -0.042837841419456346
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "remaining_chunks": 1,
+        "score": -0.03877044479832498
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "selected_chunks": 1,
+        "score": -0.18545571898358504
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "selected_chunks": 2,
+        "score": -0.21287975690153021
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "selected_chunks": 3,
+        "score": -0.1993520825439074
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "selected_chunks": 4,
+        "score": -0.20369991508108132
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "selected_chunks": 5,
+        "score": -0.22252391145147682
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "selected_chunks": 6,
+        "score": -0.19281777639505981
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.19281777639505981
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "remaining_chunks": 5,
+        "score": -0.1586501250962135
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "remaining_chunks": 4,
+        "score": -0.13258571192269974
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "remaining_chunks": 3,
+        "score": -0.1350854225932126
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "remaining_chunks": 2,
+        "score": -0.042837841419456346
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "remaining_chunks": 1,
+        "score": -0.06842920773659156
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.19281777639505981
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "remaining_chunks": 5,
+        "score": -0.22252391145147682
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "remaining_chunks": 4,
+        "score": -0.20369991508108132
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "remaining_chunks": 3,
+        "score": -0.1993520825439074
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "remaining_chunks": 2,
+        "score": -0.21287975690153021
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "remaining_chunks": 1,
+        "score": -0.11901734814512938
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: 1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": -0.19281777639505998
+      },
+      {
+        "step": 1,
+        "score": -0.18469701995986113
+      },
+      {
+        "step": 2,
+        "score": -0.16896512876122236
+      },
+      {
+        "step": 3,
+        "score": -0.16305280397220534
+      },
+      {
+        "step": 4,
+        "score": -0.14245877583903901
+      },
+      {
+        "step": 5,
+        "score": -0.0991902100863801
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "how is model compactness measured?",
+    "expanded_queries": [
+      "how is model compactness measured?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1708.01464:paragraph:0044 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "dense": 0.5302,
+        "page": 1,
+        "type": "body_text",
+        "section": "High Resource Results",
+        "flags": "",
+        "preview": "Even if LangID-High does not present a more accurate result, it does present a more compact one: LangID-High is 15.4 MB, while the combined wFST high resource models are 197.5 MB."
+      },
+      {
+        "rank": 2,
+        "source": "1708.01464:paragraph:0035 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Baseline",
+        "dense": 0.5112,
+        "page": 1,
+        "type": "body_text",
+        "section": "Baseline",
+        "flags": "",
+        "preview": "Adapted results, where they apply various mapping strategies in order to adapt high resource models to other languages. The final adapted results they reported include most of the 85 languages with high resource results,"
+      },
+      {
+        "rank": 3,
+        "source": "1708.01464:paragraph:0020 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "dense": 0.4981,
+        "page": 1,
+        "type": "body_text",
+        "section": "Encoder\u2013Decoder Models",
+        "flags": "",
+        "preview": "We implemented all models with OpenNMT BIBREF11 . Our hyperparameters, which we determined by experimentation, are listed in Table TABREF8 ."
+      },
+      {
+        "rank": 4,
+        "source": "1708.01464:paragraph:0032 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Evaluation",
+        "dense": 0.4936,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "It would be interesting to compute error metrics that incorporate phoneme similarity, such as those proposed by hixon2011phonemic. PER weights all phoneme errors the same, even though some errors are more harmful than ot"
+      },
+      {
+        "rank": 5,
+        "source": "1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "dense": 0.4883,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results on Unseen Languages",
+        "flags": "",
+        "preview": "Finally, we report our models' results on unseen languages in Table TABREF28 . The unseen languages are any that are present in the test corpus but absent from the training data. Deri and Knight did not report results sp"
+      },
+      {
+        "rank": 6,
+        "source": "1708.01464:paragraph:0027 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Evaluation",
+        "dense": 0.4877,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "We use the following three evaluation metrics:"
+      },
+      {
+        "rank": 7,
+        "source": "1708.01464:paragraph:0002 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "dense": 0.4849,
+        "page": 1,
+        "type": "body_text",
+        "section": "Low Resource g2p",
+        "flags": "",
+        "preview": "Our approach is similar in goal to deri2016grapheme's model for adapting high resource g2p models for low resource languages. They trained weighted finite state transducer (wFST) models on a variety of high resource lang"
+      },
+      {
+        "rank": 8,
+        "source": "1708.01464:paragraph:0033 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Baseline",
+        "dense": 0.4818,
+        "page": 1,
+        "type": "body_text",
+        "section": "Baseline",
+        "flags": "",
+        "preview": "Results on LangID and NoLangID are compared to the system presented by deri2016grapheme, which is identified in our results as wFST. Their results can be divided into two parts:"
+      },
+      {
+        "rank": 9,
+        "source": "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "dense": 0.4768,
+        "page": 1,
+        "type": "body_text",
+        "section": "High Resource Results",
+        "flags": "",
+        "preview": "In contrast to the larger-scale Adapted results, in the High Resource experiments none of the sequence-to-sequence approaches equal the performance of the wFST model in WER and PER, although LangID-High does come close. "
+      },
+      {
+        "rank": 10,
+        "source": "1708.01464:paragraph:0003 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "dense": 0.4747,
+        "page": 1,
+        "type": "body_text",
+        "section": "Low Resource g2p",
+        "flags": "",
+        "preview": "Other low resource g2p systems have used a strategy of combining multiple models. schlippe2014combining trained several data-driven g2p systems on varying quantities of monolingual data and combined their outputs with a "
+      },
+      {
+        "rank": 11,
+        "source": "1708.01464:paragraph:0049 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "dense": 0.4713,
+        "page": 1,
+        "type": "body_text",
+        "section": "Phoneme Embeddings",
+        "flags": "",
+        "preview": "Perhaps the structure of the phoneme embedding space is what leads to our models' very good performance on WER 100. Even when the model's first predicted pronunciation is not correct, it tends to assign more probability "
+      },
+      {
+        "rank": 12,
+        "source": "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "dense": 0.4673,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We present experiments with two versions of our sequence-to-sequence model. LangID prepends each training, validation, and test sample with an artificial token identifying the language of the sample. NoLangID omits this "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "keyword": 0.1586,
+        "page": 1,
+        "type": "body_text",
+        "section": "High Resource Results",
+        "flags": "",
+        "preview": "In contrast to the larger-scale Adapted results, in the High Resource experiments none of the sequence-to-sequence approaches equal the performance of the wFST model in WER and PER, although LangID-High does come close. "
+      },
+      {
+        "rank": 2,
+        "source": "1708.01464:paragraph:0036 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training",
+        "keyword": 0.1442,
+        "page": 1,
+        "type": "body_text",
+        "section": "Training",
+        "flags": "",
+        "preview": "We train the LangID and NoLangID versions of our model each on three subsets of the Wiktionary data:"
+      },
+      {
+        "rank": 3,
+        "source": "1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "keyword": 0.1292,
+        "page": 1,
+        "type": "body_text",
+        "section": "Low Resource g2p",
+        "flags": "",
+        "preview": "A different approach came from kim2012universal, who used supervised learning with an undirected graphical model to induce the grapheme\u2013phoneme mappings for languages written in the Latin alphabet. Given a short text in "
+      },
+      {
+        "rank": 4,
+        "source": "1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "keyword": 0.1169,
+        "page": 1,
+        "type": "body_text",
+        "section": "Encoder\u2013Decoder Models",
+        "flags": "",
+        "preview": "In order to find the best phoneme sequence, we use a neural encoder\u2013decoder model with attention BIBREF9 . The model consists of two main parts: the encoder compresses each source grapheme sequence INLINEFORM0 into a fix"
+      },
+      {
+        "rank": 5,
+        "source": "1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "keyword": 0.1002,
+        "page": 1,
+        "type": "body_text",
+        "section": "Multilingual Neural NLP",
+        "flags": "",
+        "preview": "Other work has also made use of multilingually-trained neural networks. Phoneme-level polyglot language models BIBREF8 train a single model on multiple languages and additionally condition on externally constructed typol"
+      },
+      {
+        "rank": 6,
+        "source": "1708.01464:paragraph:0048 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "keyword": 0.0739,
+        "page": 1,
+        "type": "body_text",
+        "section": "Phoneme Embeddings",
+        "flags": "",
+        "preview": "In contrast to the language embeddings, the phoneme embeddings appear to show many regularities (see Table TABREF33 ). This is a sign that our multilingual model learns similar embeddings for phonemes that are written wi"
+      },
+      {
+        "rank": 7,
+        "source": "1708.01464:paragraph:0049 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "keyword": 0.0667,
+        "page": 1,
+        "type": "body_text",
+        "section": "Phoneme Embeddings",
+        "flags": "",
+        "preview": "Perhaps the structure of the phoneme embedding space is what leads to our models' very good performance on WER 100. Even when the model's first predicted pronunciation is not correct, it tends to assign more probability "
+      },
+      {
+        "rank": 8,
+        "source": "1708.01464:paragraph:0038 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training",
+        "keyword": 0.066,
+        "page": 1,
+        "type": "body_text",
+        "section": "Training",
+        "flags": "",
+        "preview": "LangID-Adapted and NoLangID-Adapted: Trained on data from any of the 229 languages for which they built adapted models. Because many of these languages had no training data at all, the model is actually only trained on d"
+      },
+      {
+        "rank": 9,
+        "source": "1708.01464:paragraph:0046 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Language ID Tokens",
+        "keyword": 0.0633,
+        "page": 1,
+        "type": "body_text",
+        "section": "Language ID Tokens",
+        "flags": "",
+        "preview": "Adding a language ID token always improves results in cases where an embedding has been learned for that token. The power of these embeddings is demonstrated by what happens when one feeds the same input word to the mode"
+      },
+      {
+        "rank": 10,
+        "source": "1708.01464:paragraph:0017 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Grapheme-to-Phoneme",
+        "keyword": 0.0596,
+        "page": 1,
+        "type": "body_text",
+        "section": "Grapheme-to-Phoneme",
+        "flags": "",
+        "preview": "Data-driven approaches are especially useful for problems in which the rules that govern them are complex and difficult to engineer by hand. g2p for languages with ambiguous orthographies is such a problem. Multilingual "
+      },
+      {
+        "rank": 11,
+        "source": "1708.01464:paragraph:0041 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Adapted Results",
+        "keyword": 0.058,
+        "page": 1,
+        "type": "body_text",
+        "section": "Adapted Results",
+        "flags": "",
+        "preview": "On the 229 languages for which deri2016grapheme presented their final results, the LangID version of our system outperforms the baseline by a wide margin. The best performance came with the version of our model that was "
+      },
+      {
+        "rank": 12,
+        "source": "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "keyword": 0.0559,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We present experiments with two versions of our sequence-to-sequence model. LangID prepends each training, validation, and test sample with an artificial token identifying the language of the sample. NoLangID omits this "
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4768,
+        "keyword": 0.1586,
+        "rerank": 0.8255,
+        "section": "High Resource Results",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "In contrast to the larger-scale Adapted results, in the High Resource experiments none of the sequence-to-sequence approaches equal the performance of the wFST model in WER and PER, although LangID-High does come close. "
+      },
+      {
+        "rank": 2,
+        "source": "1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.46,
+        "keyword": 0.1292,
+        "rerank": 0.7273,
+        "section": "Low Resource g2p",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "A different approach came from kim2012universal, who used supervised learning with an undirected graphical model to induce the grapheme\u2013phoneme mappings for languages written in the Latin alphabet. Given a short text in "
+      },
+      {
+        "rank": 3,
+        "source": "1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4635,
+        "keyword": 0.1002,
+        "rerank": 0.6816,
+        "section": "Multilingual Neural NLP",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Other work has also made use of multilingually-trained neural networks. Phoneme-level polyglot language models BIBREF8 train a single model on multiple languages and additionally condition on externally constructed typol"
+      },
+      {
+        "rank": 4,
+        "source": "1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4883,
+        "keyword": 0.0452,
+        "rerank": 0.6398,
+        "section": "Results on Unseen Languages",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Finally, we report our models' results on unseen languages in Table TABREF28 . The unseen languages are any that are present in the test corpus but absent from the training data. Deri and Knight did not report results sp"
+      },
+      {
+        "rank": 5,
+        "source": "1708.01464:paragraph:0049 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4713,
+        "keyword": 0.0667,
+        "rerank": 0.6379,
+        "section": "Phoneme Embeddings",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Perhaps the structure of the phoneme embedding space is what leads to our models' very good performance on WER 100. Even when the model's first predicted pronunciation is not correct, it tends to assign more probability "
+      },
+      {
+        "rank": 6,
+        "source": "1708.01464:paragraph:0002 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4849,
+        "keyword": 0.0416,
+        "rerank": 0.6244,
+        "section": "Low Resource g2p",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Our approach is similar in goal to deri2016grapheme's model for adapting high resource g2p models for low resource languages. They trained weighted finite state transducer (wFST) models on a variety of high resource lang"
+      },
+      {
+        "rank": 7,
+        "source": "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4673,
+        "keyword": 0.0559,
+        "rerank": 0.6072,
+        "section": "Experiments",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "We present experiments with two versions of our sequence-to-sequence model. LangID prepends each training, validation, and test sample with an artificial token identifying the language of the sample. NoLangID omits this "
+      },
+      {
+        "rank": 8,
+        "source": "1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4596,
+        "keyword": 0.1169,
+        "rerank": 0.6031,
+        "section": "Encoder\u2013Decoder Models",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In order to find the best phoneme sequence, we use a neural encoder\u2013decoder model with attention BIBREF9 . The model consists of two main parts: the encoder compresses each source grapheme sequence INLINEFORM0 into a fix"
+      },
+      {
+        "rank": 9,
+        "source": "1708.01464:paragraph:0042 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4607,
+        "keyword": 0.0543,
+        "rerank": 0.5876,
+        "section": "High Resource Results",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Having shown that our model exceeds the performance of the wFST-adaptation approach, we next compare it to the baseline models for just high resource languages. The wFST models here are purely monolingual \u2013 they do not u"
+      },
+      {
+        "rank": 10,
+        "source": "1708.01464:paragraph:0035 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Baseline",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5112,
+        "keyword": 0.0,
+        "rerank": 0.5822,
+        "section": "Baseline",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Adapted results, where they apply various mapping strategies in order to adapt high resource models to other languages. The final adapted results they reported include most of the 85 languages with high resource results,"
+      },
+      {
+        "rank": 11,
+        "source": "1708.01464:paragraph:0047 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Language Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4664,
+        "keyword": 0.0435,
+        "rerank": 0.5816,
+        "section": "Language Embeddings",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Because these language ID tokens are so useful, it would be good if they could be effectively estimated for unseen languages. ostling2017continuous found that the language vectors their models learned correlated well to "
+      },
+      {
+        "rank": 12,
+        "source": "1708.01464:paragraph:0036 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4268,
+        "keyword": 0.1442,
+        "rerank": 0.5721,
+        "section": "Training",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We train the LangID and NoLangID versions of our model each on three subsets of the Wiktionary data:"
+      },
+      {
+        "rank": 13,
+        "source": "1708.01464:paragraph:0041 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Adapted Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4447,
+        "keyword": 0.058,
+        "rerank": 0.5542,
+        "section": "Adapted Results",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "On the 229 languages for which deri2016grapheme presented their final results, the LangID version of our system outperforms the baseline by a wide margin. The best performance came with the version of our model that was "
+      },
+      {
+        "rank": 14,
+        "source": "1708.01464:paragraph:0032 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4936,
+        "keyword": 0.0,
+        "rerank": 0.5377,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "It would be interesting to compute error metrics that incorporate phoneme similarity, such as those proposed by hixon2011phonemic. PER weights all phoneme errors the same, even though some errors are more harmful than ot"
+      },
+      {
+        "rank": 15,
+        "source": "1708.01464:paragraph:0044 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5302,
+        "keyword": 0.0,
+        "rerank": 0.53,
+        "section": "High Resource Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Even if LangID-High does not present a more accurate result, it does present a more compact one: LangID-High is 15.4 MB, while the combined wFST high resource models are 197.5 MB."
+      },
+      {
+        "rank": 16,
+        "source": "1708.01464:paragraph:0046 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Language ID Tokens",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4256,
+        "keyword": 0.0633,
+        "rerank": 0.5162,
+        "section": "Language ID Tokens",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Adding a language ID token always improves results in cases where an embedding has been learned for that token. The power of these embeddings is demonstrated by what happens when one feeds the same input word to the mode"
+      },
+      {
+        "rank": 17,
+        "source": "1708.01464:paragraph:0048 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4511,
+        "keyword": 0.0739,
+        "rerank": 0.5004,
+        "section": "Phoneme Embeddings",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In contrast to the language embeddings, the phoneme embeddings appear to show many regularities (see Table TABREF33 ). This is a sign that our multilingual model learns similar embeddings for phonemes that are written wi"
+      },
+      {
+        "rank": 18,
+        "source": "1708.01464:paragraph:0003 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4747,
+        "keyword": 0.0,
+        "rerank": 0.4902,
+        "section": "Low Resource g2p",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Other low resource g2p systems have used a strategy of combining multiple models. schlippe2014combining trained several data-driven g2p systems on varying quantities of monolingual data and combined their outputs with a "
+      },
+      {
+        "rank": 19,
+        "source": "1708.01464:paragraph:0025 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4626,
+        "keyword": 0.0,
+        "rerank": 0.4596,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In addition to the raw IPA transcriptions extracted from Wiktionary, the corpus provides an automatically cleaned version of transcriptions. Cleaning is a necessary step because web-scraped data is often noisy and may be"
+      },
+      {
+        "rank": 20,
+        "source": "1708.01464:paragraph:0020 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4981,
+        "keyword": 0.0,
+        "rerank": 0.4491,
+        "section": "Encoder\u2013Decoder Models",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We implemented all models with OpenNMT BIBREF11 . Our hyperparameters, which we determined by experimentation, are listed in Table TABREF8 ."
+      },
+      {
+        "rank": 21,
+        "source": "1708.01464:paragraph:0017 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Grapheme-to-Phoneme",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4007,
+        "keyword": 0.0596,
+        "rerank": 0.4464,
+        "section": "Grapheme-to-Phoneme",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Data-driven approaches are especially useful for problems in which the rules that govern them are complex and difficult to engineer by hand. g2p for languages with ambiguous orthographies is such a problem. Multilingual "
+      },
+      {
+        "rank": 22,
+        "source": "1708.01464:paragraph:0023 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training Multilingual Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4525,
+        "keyword": 0.0,
+        "rerank": 0.4344,
+        "section": "Training Multilingual Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The artificial token is treated simply as an element of the grapheme sequence. This is similar to the approach taken by johnson2016google in their zero-shot NMT system. However, their source-side artificial tokens identi"
+      },
+      {
+        "rank": 23,
+        "source": "1708.01464:paragraph:0038 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.429,
+        "keyword": 0.066,
+        "rerank": 0.4299,
+        "section": "Training",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "LangID-Adapted and NoLangID-Adapted: Trained on data from any of the 229 languages for which they built adapted models. Because many of these languages had no training data at all, the model is actually only trained on d"
+      },
+      {
+        "rank": 24,
+        "source": "1708.01464:paragraph:0005 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4102,
+        "keyword": 0.0374,
+        "rerank": 0.4282,
+        "section": "Multilingual Neural NLP",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "In recent years, neural networks have emerged as a common way to use data from several languages in a single system. Google's zero-shot neural machine translation system BIBREF7 shares an encoder and decoder across all l"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4768,
+        "keyword": 0.1586,
+        "rerank": 0.8255,
+        "section": "High Resource Results",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "In contrast to the larger-scale Adapted results, in the High Resource experiments none of the sequence-to-sequence approaches equal the performance of the wFST model in WER and PER, although LangID-High does come close. "
+      },
+      {
+        "rank": 2,
+        "source": "1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.46,
+        "keyword": 0.1292,
+        "rerank": 0.7273,
+        "section": "Low Resource g2p",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "A different approach came from kim2012universal, who used supervised learning with an undirected graphical model to induce the grapheme\u2013phoneme mappings for languages written in the Latin alphabet. Given a short text in "
+      },
+      {
+        "rank": 3,
+        "source": "1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4635,
+        "keyword": 0.1002,
+        "rerank": 0.6816,
+        "section": "Multilingual Neural NLP",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Other work has also made use of multilingually-trained neural networks. Phoneme-level polyglot language models BIBREF8 train a single model on multiple languages and additionally condition on externally constructed typol"
+      },
+      {
+        "rank": 4,
+        "source": "1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4883,
+        "keyword": 0.0452,
+        "rerank": 0.6398,
+        "section": "Results on Unseen Languages",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Finally, we report our models' results on unseen languages in Table TABREF28 . The unseen languages are any that are present in the test corpus but absent from the training data. Deri and Knight did not report results sp"
+      },
+      {
+        "rank": 5,
+        "source": "1708.01464:paragraph:0049 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4713,
+        "keyword": 0.0667,
+        "rerank": 0.6379,
+        "section": "Phoneme Embeddings",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Perhaps the structure of the phoneme embedding space is what leads to our models' very good performance on WER 100. Even when the model's first predicted pronunciation is not correct, it tends to assign more probability "
+      },
+      {
+        "rank": 6,
+        "source": "1708.01464:paragraph:0002 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4849,
+        "keyword": 0.0416,
+        "rerank": 0.6244,
+        "section": "Low Resource g2p",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Our approach is similar in goal to deri2016grapheme's model for adapting high resource g2p models for low resource languages. They trained weighted finite state transducer (wFST) models on a variety of high resource lang"
+      },
+      {
+        "rank": 7,
+        "source": "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4673,
+        "keyword": 0.0559,
+        "rerank": 0.6072,
+        "section": "Experiments",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "We present experiments with two versions of our sequence-to-sequence model. LangID prepends each training, validation, and test sample with an artificial token identifying the language of the sample. NoLangID omits this "
+      },
+      {
+        "rank": 8,
+        "source": "1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4596,
+        "keyword": 0.1169,
+        "rerank": 0.6031,
+        "section": "Encoder\u2013Decoder Models",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In order to find the best phoneme sequence, we use a neural encoder\u2013decoder model with attention BIBREF9 . The model consists of two main parts: the encoder compresses each source grapheme sequence INLINEFORM0 into a fix"
+      },
+      {
+        "rank": 9,
+        "source": "1708.01464:paragraph:0042 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4607,
+        "keyword": 0.0543,
+        "rerank": 0.5876,
+        "section": "High Resource Results",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Having shown that our model exceeds the performance of the wFST-adaptation approach, we next compare it to the baseline models for just high resource languages. The wFST models here are purely monolingual \u2013 they do not u"
+      },
+      {
+        "rank": 10,
+        "source": "1708.01464:paragraph:0035 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Baseline",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5112,
+        "keyword": 0.0,
+        "rerank": 0.5822,
+        "section": "Baseline",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Adapted results, where they apply various mapping strategies in order to adapt high resource models to other languages. The final adapted results they reported include most of the 85 languages with high resource results,"
+      },
+      {
+        "rank": 11,
+        "source": "1708.01464:paragraph:0047 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Language Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4664,
+        "keyword": 0.0435,
+        "rerank": 0.5816,
+        "section": "Language Embeddings",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Because these language ID tokens are so useful, it would be good if they could be effectively estimated for unseen languages. ostling2017continuous found that the language vectors their models learned correlated well to "
+      },
+      {
+        "rank": 12,
+        "source": "1708.01464:paragraph:0036 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4268,
+        "keyword": 0.1442,
+        "rerank": 0.5721,
+        "section": "Training",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We train the LangID and NoLangID versions of our model each on three subsets of the Wiktionary data:"
+      },
+      {
+        "rank": 13,
+        "source": "1708.01464:paragraph:0041 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Adapted Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4447,
+        "keyword": 0.058,
+        "rerank": 0.5542,
+        "section": "Adapted Results",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "On the 229 languages for which deri2016grapheme presented their final results, the LangID version of our system outperforms the baseline by a wide margin. The best performance came with the version of our model that was "
+      },
+      {
+        "rank": 14,
+        "source": "1708.01464:paragraph:0032 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4936,
+        "keyword": 0.0,
+        "rerank": 0.5377,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "It would be interesting to compute error metrics that incorporate phoneme similarity, such as those proposed by hixon2011phonemic. PER weights all phoneme errors the same, even though some errors are more harmful than ot"
+      },
+      {
+        "rank": 15,
+        "source": "1708.01464:paragraph:0044 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5302,
+        "keyword": 0.0,
+        "rerank": 0.53,
+        "section": "High Resource Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Even if LangID-High does not present a more accurate result, it does present a more compact one: LangID-High is 15.4 MB, while the combined wFST high resource models are 197.5 MB."
+      },
+      {
+        "rank": 16,
+        "source": "1708.01464:paragraph:0046 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Language ID Tokens",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4256,
+        "keyword": 0.0633,
+        "rerank": 0.5162,
+        "section": "Language ID Tokens",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Adding a language ID token always improves results in cases where an embedding has been learned for that token. The power of these embeddings is demonstrated by what happens when one feeds the same input word to the mode"
+      },
+      {
+        "rank": 17,
+        "source": "1708.01464:paragraph:0048 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Phoneme Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4511,
+        "keyword": 0.0739,
+        "rerank": 0.5004,
+        "section": "Phoneme Embeddings",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In contrast to the language embeddings, the phoneme embeddings appear to show many regularities (see Table TABREF33 ). This is a sign that our multilingual model learns similar embeddings for phonemes that are written wi"
+      },
+      {
+        "rank": 18,
+        "source": "1708.01464:paragraph:0003 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4747,
+        "keyword": 0.0,
+        "rerank": 0.4902,
+        "section": "Low Resource g2p",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Other low resource g2p systems have used a strategy of combining multiple models. schlippe2014combining trained several data-driven g2p systems on varying quantities of monolingual data and combined their outputs with a "
+      },
+      {
+        "rank": 19,
+        "source": "1708.01464:paragraph:0025 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4626,
+        "keyword": 0.0,
+        "rerank": 0.4596,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In addition to the raw IPA transcriptions extracted from Wiktionary, the corpus provides an automatically cleaned version of transcriptions. Cleaning is a necessary step because web-scraped data is often noisy and may be"
+      },
+      {
+        "rank": 20,
+        "source": "1708.01464:paragraph:0020 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4981,
+        "keyword": 0.0,
+        "rerank": 0.4491,
+        "section": "Encoder\u2013Decoder Models",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We implemented all models with OpenNMT BIBREF11 . Our hyperparameters, which we determined by experimentation, are listed in Table TABREF8 ."
+      },
+      {
+        "rank": 21,
+        "source": "1708.01464:paragraph:0017 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Grapheme-to-Phoneme",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4007,
+        "keyword": 0.0596,
+        "rerank": 0.4464,
+        "section": "Grapheme-to-Phoneme",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Data-driven approaches are especially useful for problems in which the rules that govern them are complex and difficult to engineer by hand. g2p for languages with ambiguous orthographies is such a problem. Multilingual "
+      },
+      {
+        "rank": 22,
+        "source": "1708.01464:paragraph:0023 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training Multilingual Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4525,
+        "keyword": 0.0,
+        "rerank": 0.4344,
+        "section": "Training Multilingual Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The artificial token is treated simply as an element of the grapheme sequence. This is similar to the approach taken by johnson2016google in their zero-shot NMT system. However, their source-side artificial tokens identi"
+      },
+      {
+        "rank": 23,
+        "source": "1708.01464:paragraph:0038 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.429,
+        "keyword": 0.066,
+        "rerank": 0.4299,
+        "section": "Training",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "LangID-Adapted and NoLangID-Adapted: Trained on data from any of the 229 languages for which they built adapted models. Because many of these languages had no training data at all, the model is actually only trained on d"
+      },
+      {
+        "rank": 24,
+        "source": "1708.01464:paragraph:0005 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4102,
+        "keyword": 0.0374,
+        "rerank": 0.4282,
+        "section": "Multilingual Neural NLP",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "In recent years, neural networks have emerged as a common way to use data from several languages in a single system. Google's zero-shot neural machine translation system BIBREF7 shares an encoder and decoder across all l"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4768,
+        "keyword": 0.1586,
+        "rerank": 0.8255,
+        "section": "High Resource Results",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.24,
+        "reasons": "body/table evidence",
+        "preview": "In contrast to the larger-scale Adapted results, in the High Resource experiments none of the sequence-to-sequence approaches equal the performance of the wFST model in WER and PER, although LangID-High does come close. "
+      },
+      {
+        "rank": 2,
+        "source": "1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.46,
+        "keyword": 0.1292,
+        "rerank": 0.7273,
+        "section": "Low Resource g2p",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8838,
+        "novelty": 0.7478,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1047,
+        "reasons": "body/table evidence",
+        "preview": "A different approach came from kim2012universal, who used supervised learning with an undirected graphical model to induce the grapheme\u2013phoneme mappings for languages written in the Latin alphabet. Given a short text in "
+      },
+      {
+        "rank": 3,
+        "source": "1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4596,
+        "keyword": 0.1169,
+        "rerank": 0.6031,
+        "section": "Encoder\u2013Decoder Models",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.737,
+        "novelty": 0.7479,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0585,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In order to find the best phoneme sequence, we use a neural encoder\u2013decoder model with attention BIBREF9 . The model consists of two main parts: the encoder compresses each source grapheme sequence INLINEFORM0 into a fix"
+      },
+      {
+        "rank": 4,
+        "source": "1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4635,
+        "keyword": 0.1002,
+        "rerank": 0.6816,
+        "section": "Multilingual Neural NLP",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8298,
+        "novelty": 0.7263,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0553,
+        "reasons": "body/table evidence",
+        "preview": "Other work has also made use of multilingually-trained neural networks. Phoneme-level polyglot language models BIBREF8 train a single model on multiple languages and additionally condition on externally constructed typol"
+      },
+      {
+        "rank": 5,
+        "source": "1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4883,
+        "keyword": 0.0452,
+        "rerank": 0.6398,
+        "section": "Results on Unseen Languages",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7804,
+        "novelty": 0.688,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0074,
+        "reasons": "body/table evidence",
+        "preview": "Finally, we report our models' results on unseen languages in Table TABREF28 . The unseen languages are any that are present in the test corpus but absent from the training data. Deri and Knight did not report results sp"
+      },
+      {
+        "rank": 6,
+        "source": "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4673,
+        "keyword": 0.0559,
+        "rerank": 0.6072,
+        "section": "Experiments",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7418,
+        "novelty": 0.6995,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9759,
+        "reasons": "body/table evidence",
+        "preview": "We present experiments with two versions of our sequence-to-sequence model. LangID prepends each training, validation, and test sample with an artificial token identifying the language of the sample. NoLangID omits this "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "compactness",
+        "measured",
+        "model"
+      ],
+      "covered_query_terms": [
+        "model"
+      ],
+      "missing_query_terms": [
+        "compactness",
+        "measured"
+      ],
+      "terms_by_chunk": {
+        "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results": [
+          "model"
+        ],
+        "1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p": [
+          "model"
+        ],
+        "1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models": [
+          "model"
+        ],
+        "1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP": [
+          "model"
+        ],
+        "1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages": [
+          "model"
+        ],
+        "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments": [
+          "model"
+        ]
+      },
+      "section_titles": [
+        "Encoder\u2013Decoder Models",
+        "Experiments",
+        "High Resource Results",
+        "Low Resource g2p",
+        "Multilingual Neural NLP",
+        "Results on Unseen Languages"
+      ],
+      "chunks_by_section": {
+        "High Resource Results": [
+          "1708.01464:paragraph:0043 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results"
+        ],
+        "Low Resource g2p": [
+          "1708.01464:paragraph:0004 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Low Resource g2p"
+        ],
+        "Encoder\u2013Decoder Models": [
+          "1708.01464:paragraph:0018 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Encoder\u2013Decoder Models"
+        ],
+        "Multilingual Neural NLP": [
+          "1708.01464:paragraph:0006 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Multilingual Neural NLP"
+        ],
+        "Results on Unseen Languages": [
+          "1708.01464:paragraph:0045 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Results on Unseen Languages"
+        ],
+        "Experiments": [
+          "1708.01464:paragraph:0026 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / Experiments"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "The context is insufficient to answer the question.",
+    "gold_context_answer": "[2] 1708.01464:paragraph:0044 | Massively Multilingual Neural Grapheme-to-Phoneme Conversion / High Resource Results (type: body_text; section: High Resource Results)\nThe model size is a measure of model compactness. For example, LangID-High has a model size of 15.4 MB, while the combined wFST high resource models have a model",
+    "retrieved_context_answer": "The provided context does not contain information on how model compactness is measured.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.034482758620689655,
+    "retrieved_context_f1": 0.1111111111111111,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

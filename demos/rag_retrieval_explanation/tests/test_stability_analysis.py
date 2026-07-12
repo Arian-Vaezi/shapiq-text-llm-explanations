@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 from demos.rag_retrieval_explanation.evals.reporting.analyze_stability import (
     _absolute_attribution_scores,
+    _compare_pair,
     _spearman,
 )
 
@@ -34,4 +35,35 @@ def test_spearman_handles_missing_chunks_as_zero() -> None:
     right = {"a": 9.0, "b": 4.0}
 
     assert _spearman(left, right, ids={"a", "b"}) == pytest.approx(1.0)
-    assert _spearman(left, right, ids={"a", "b", "c"}) > 0.8
+    result = _spearman(left, right, ids={"a", "b", "c"})
+    assert result is not None
+    assert result > 0.8
+
+
+def test_empty_attributions_do_not_count_as_top_agreement() -> None:
+    """Two missing top attributions are undefined rather than an agreement."""
+    artifact = {"retrieved": [], "generated_attributions": []}
+
+    rows = _compare_pair(
+        left_name="left",
+        left_artifacts={"case": artifact},
+        right_name="right",
+        right_artifacts={"case": artifact},
+        target="generated",
+    )
+
+    assert rows[0]["top_attribution_agrees"] is None
+
+
+def test_stability_rejects_different_case_sets() -> None:
+    """Stability summaries must not silently compare incomplete runs."""
+    artifact = {"retrieved": [], "gold_attributions": []}
+
+    with pytest.raises(ValueError, match="different case sets"):
+        _compare_pair(
+            left_name="left",
+            left_artifacts={"case-a": artifact},
+            right_name="right",
+            right_artifacts={"case-b": artifact},
+            target="gold",
+        )

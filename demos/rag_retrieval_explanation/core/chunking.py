@@ -57,7 +57,7 @@ def extract_pdf_pages(pdf_bytes: bytes) -> list[PDFPage]:
         except ImportError as fallback_error:  # pragma: no cover - depends on optional extra
             msg = (
                 "PDF upload requires `pypdf` or `PyPDF2`. Install the demo requirements "
-                "with `uv pip install -r demos/rag_retrieval_explanation/requirements.txt`."
+                "with `uv sync --group rag_demo`."
             )
             raise RuntimeError(msg) from fallback_error
         _ = error

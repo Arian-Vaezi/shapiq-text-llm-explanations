@@ -5,14 +5,12 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import asdict
 from pathlib import Path
+from typing import Any, Literal, cast
 
 import numpy as np
 import pandas as pd
-
-import shapiq
-
-from ..core.chunking import chunk_pdf_pages, extract_pdf_pages
-from ..core.evaluation import (
+from demos.rag_retrieval_explanation.core.chunking import chunk_pdf_pages, extract_pdf_pages
+from demos.rag_retrieval_explanation.core.evaluation import (
     deletion_evaluation,
     insertion_evaluation,
     random_deletion_baseline,
@@ -20,12 +18,15 @@ from ..core.evaluation import (
     retrieval_score_deletion_baseline,
     summarize_faithfulness,
 )
-from ..core.generation import generate_answer_from_chunks
-from ..core.rag_game import RAGRetrievalGame
-from ..core.retrieval import retrieve_relevant_chunks_with_debug
-from ..core.sample_data import SAMPLE_TRACES
-from ..core.schemas import RetrievedChunk
-from ..core.value_functions import make_value_function
+from demos.rag_retrieval_explanation.core.generation import generate_answer_from_chunks
+from demos.rag_retrieval_explanation.core.rag_game import RAGRetrievalGame
+from demos.rag_retrieval_explanation.core.retrieval import retrieve_relevant_chunks_with_debug
+from demos.rag_retrieval_explanation.core.sample_data import SAMPLE_TRACES
+from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
+from demos.rag_retrieval_explanation.core.value_functions import make_value_function
+
+import shapiq
+
 from .schemas import RuntimeSettings
 
 DEMO_DIR = Path(__file__).resolve().parents[1]
@@ -69,6 +70,7 @@ ProgressCallback = Callable[[float, str], None]
 
 
 def default_settings() -> RuntimeSettings:
+    """Return dashboard defaults for local inference."""
     return RuntimeSettings(
         model_path=DEFAULT_GGUF_PATH,
         model_id="gemma4-e4b",
@@ -76,7 +78,8 @@ def default_settings() -> RuntimeSettings:
     )
 
 
-def trace_chunks(trace: dict[str, object]) -> list[RetrievedChunk]:
+def trace_chunks(trace: dict[str, Any]) -> list[RetrievedChunk]:
+    """Convert serialized trace chunks into domain objects."""
     return [
         RetrievedChunk(
             title=str(chunk["title"]),
@@ -95,17 +98,25 @@ def trace_chunks(trace: dict[str, object]) -> list[RetrievedChunk]:
     ]
 
 
-def make_approximator(index: str, n_players: int, max_order: int) -> object:
+def make_approximator(index: str, n_players: int, max_order: int) -> Any:  # noqa: ANN401
+    """Construct the configured shapiq approximation strategy."""
     if index == "SV":
         return shapiq.KernelSHAP(n=n_players, random_state=42)
     if index == "STII":
         return shapiq.PermutationSamplingSTII(n=n_players, max_order=max_order, random_state=42)
     if index == "FSII":
         return shapiq.RegressionFSII(n=n_players, max_order=max_order, random_state=42)
-    return shapiq.KernelSHAPIQ(n=n_players, index=index, max_order=max_order, random_state=42)
+    kernel_index = cast("Literal['k-SII', 'SII']", index)
+    return shapiq.KernelSHAPIQ(
+        n=n_players,
+        index=kernel_index,
+        max_order=max_order,
+        random_state=42,
+    )
 
 
 def first_order_rows(values: shapiq.InteractionValues, labels: list[str]) -> list[dict]:
+    """Serialize first-order values in descending magnitude."""
     rows = [
         {
             "player": interaction[0] + 1,
@@ -119,6 +130,7 @@ def first_order_rows(values: shapiq.InteractionValues, labels: list[str]) -> lis
 
 
 def strongest_pair(matrix: np.ndarray, labels: list[str]) -> tuple[str, float]:
+    """Return the strongest off-diagonal pairwise interaction."""
     if len(labels) < 2:
         return "No pair", 0.0
     pairs = (
@@ -211,16 +223,19 @@ def _run_one(
 
 def run_trace(
     run_name: str,
-    trace: dict[str, object],
+    trace: dict[str, Any],
     settings: RuntimeSettings,
     progress: ProgressCallback | None = None,
 ) -> dict:
+    """Run every configured explanation target for a prepared trace."""
     chunks = trace_chunks(trace)
     if not chunks:
-        raise ValueError("No retrieved chunks are available.")
+        msg = "No retrieved chunks are available."
+        raise ValueError(msg)
     invalid = [mode for mode in settings.value_modes if mode not in VALUE_FUNCTIONS]
     if invalid:
-        raise ValueError(f"Unknown value functions: {', '.join(invalid)}")
+        msg = f"Unknown value functions: {', '.join(invalid)}"
+        raise ValueError(msg)
     reference_answer = str(trace.get("reference_answer", "")).strip()
     generated_answer = str(trace.get("generated_answer", "")).strip()
     legacy_answer = str(trace.get("target_answer", "")).strip()
@@ -321,15 +336,20 @@ def run_comparison(
     # --- Phase 1: shared retrieval ---
     if source == "sample":
         if scenario_name not in SAMPLE_TRACES:
-            raise ValueError(f"Unknown sample scenario: {scenario_name}")
+            msg = f"Unknown sample scenario: {scenario_name}"
+            raise ValueError(msg)
         trace = SAMPLE_TRACES[scenario_name]
         actual_question = str(trace["question"])
         chunks = trace_chunks(trace)
-        retrieval_scores = [float(x) for x in trace.get("retrieval_scores", [])]
+        raw_scores = cast("list[Any]", trace.get("retrieval_scores", []))
+        retrieval_scores = [float(x) for x in raw_scores]
         retrieval_debug = trace.get("retrieval_debug")
         base_run_name = scenario_name
         chunks_data: list[dict] = [asdict(c) | {"flags": list(c.flags)} for c in chunks]
     else:
+        if pdf_bytes is None or question is None:
+            msg = "PDF comparison requires pdf_bytes and question."
+            raise ValueError(msg)
         pages = extract_pdf_pages(pdf_bytes)
         candidates = chunk_pdf_pages(
             pages, words_per_chunk=chunk_words, overlap_words=chunk_overlap
@@ -414,7 +434,7 @@ def run_comparison(
                 max_new_tokens=model_settings.max_new_tokens,
             )
 
-            model_trace = {
+            model_trace: dict[str, Any] = {
                 "source": source,
                 "question": actual_question,
                 "reference_answer": (
@@ -447,7 +467,7 @@ def run_comparison(
                 }
             )
 
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - isolate failures between compared models
             per_model_results.append(
                 {
                     "model_id": model_id,
@@ -471,8 +491,10 @@ def run_sample(
     settings: RuntimeSettings,
     progress: ProgressCallback | None = None,
 ) -> dict:
+    """Generate and explain an answer for one bundled scenario."""
     if scenario_name not in SAMPLE_TRACES:
-        raise ValueError(f"Unknown sample scenario: {scenario_name}")
+        msg = f"Unknown sample scenario: {scenario_name}"
+        raise ValueError(msg)
     trace = SAMPLE_TRACES[scenario_name]
     chunks = trace_chunks(trace)
     generated_answer = generate_answer_from_chunks(
@@ -507,6 +529,7 @@ def run_pdf(
     embedding_device: str = "auto",
     progress: ProgressCallback | None = None,
 ) -> dict:
+    """Retrieve, generate, and explain an answer for one PDF."""
     callback = progress or (lambda _value, _message: None)
     callback(0.05, "Parsing PDF")
     pages = extract_pdf_pages(pdf_bytes)
@@ -532,7 +555,7 @@ def run_pdf(
         n_threads=settings.n_threads,
         max_new_tokens=settings.max_new_tokens,
     )
-    trace = {
+    trace: dict[str, Any] = {
         "source": "pdf",
         "question": question,
         "reference_answer": reference_answer.strip(),

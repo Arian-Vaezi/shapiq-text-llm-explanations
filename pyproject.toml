@@ -168,6 +168,33 @@ exclude = [
     "SLF",  # private members are okay in tests
     "TRY",
 ]
+"demos/rag_retrieval_explanation/tests/**/*.py" = [
+    "S101", # pytest uses assertions
+    "D",    # test docstrings are optional
+    "E501", # descriptive test data may use long lines
+    "ANN",  # fixture annotations are optional
+    "ARG",  # fixtures may require unused arguments
+    "INP",  # tests are collected as a package
+    "N",    # test helper names prioritize readability
+    "PTH",  # path style is not part of the production API
+    "S",    # security rules are relaxed for test fixtures
+    "PT",   # existing pytest style is accepted
+    "NPY",
+    "SLF",  # tests may inspect private helpers
+    "TRY",
+]
+"demos/rag_retrieval_explanation/backend/services.py" = [
+    "PLC0415",  # defer registry imports to avoid eager model setup
+]
+"demos/rag_retrieval_explanation/core/chunking.py" = [
+    "PLC0415",  # PDF parsers are optional dependencies
+]
+"demos/rag_retrieval_explanation/core/model_backends.py" = [
+    "PLC0415",  # llama-cpp-python is an optional dependency
+]
+"demos/rag_retrieval_explanation/core/retrieval.py" = [
+    "PLC0415",  # dense retrieval dependencies are optional
+]
 "examples/**/*.py" = [
     "E402",  # Module level import not at top of file
     "T20",  # examples can have print statements
@@ -199,14 +226,15 @@ exclude = [
     "PTH",  # in script code we use a lot of os, which is okay
     "T201",  # scripts can have print statements
     "BLE001",  # scripts can have bare excepts
-    "TRY"
+    "TRY",
+    "PLC0415",  # scripts may defer optional heavyweight dependencies
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ty.src]
-include = ["src/shapiq"]
+include = ["src/shapiq", "demos/rag_retrieval_explanation"]
 exclude = ["tests", "docs", "benchmark", "scripts", "src/shapiq_games"]
 
 [tool.ty.environment]

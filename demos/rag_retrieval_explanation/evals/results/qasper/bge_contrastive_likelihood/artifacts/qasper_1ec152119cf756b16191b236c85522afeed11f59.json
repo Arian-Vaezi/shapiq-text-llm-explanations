@@ -1,0 +1,1601 @@
+{
+  "case": {
+    "case_id": "qasper_1ec152119cf756b16191b236c85522afeed11f59",
+    "paper_id": "1909.00512",
+    "paper_title": "How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings",
+    "question_id": "1ec152119cf756b16191b236c85522afeed11f59",
+    "annotation_id": "2b51036f1dd82e127006af1a267198c7f06b0e9b",
+    "question": "What experiments are proposed to test that upper layers produce context-specific embeddings?",
+    "gold_answer": "They measure self-similarity, intra-sentence similarity and maximum explainable variance of the embeddings in the upper layers.",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1909.00512:paragraph:0014"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1909.00512:abstract:000",
+      "score": 0.9714704177835827,
+      "title": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+      "text": "Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models such as ELMo and BERT? Are there infinitely many context-specific representations for each word, or are words essentially assigned one of a finite number of word-sense representations? For one, we find that the contextualized representations of all words are not isotropic in any layer of the contextualizing model. While representations of the same word in different contexts still have a greater cosine similarity than those of two different words, this self-similarity is much lower in upper layers. This suggests that upper layers of contextualizing models produce more context-specific representations, much like how upper layers of LSTMs produce more task-specific representations. In all layers of ELMo, BERT, and GPT-2, on average, less than 5% of the variance in a word's contextualized representations can be explained by a static embedding for that word, providing some justification for the success of contextualized representations."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1909.00512:paragraph:0004",
+      "score": 0.876617986596932,
+      "title": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+      "text": "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper layers. This suggests that, much like how upper layers of LSTMs produce more task-specific representations BIBREF4, upper layers of contextualizing models produce more context-specific representations."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1909.00512:paragraph:0029",
+      "score": 0.9369483291750501,
+      "title": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+      "text": "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sense. In image classification models, lower layers recognize more generic features such as edges while upper layers recognize more class-specific features BIBREF19. Similarly, upper layers of LSTMs trained on NLP tasks learn more task-specific representations BIBREF4. Therefore, it follows that upper layers of neural language models learn more context-specific representations, so as to predict the next word for a given context more accurately. Of all three models, representations in GPT-2 are the most context-specific, with those in GPT-2's last layer being almost maximally context-specific."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1909.00512:paragraph:0039",
+      "score": 0.8797258453952003,
+      "title": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+      "text": "The best-performing PC static embeddings belong to the first layer of BERT, although those from the other layers of BERT and ELMo also outperform GloVe and FastText on most benchmarks. For all three contextualizing models, PC static embeddings created from lower layers are more effective those created from upper layers. Those created using GPT-2 also perform markedly worse than their counterparts from ELMo and BERT. Given that upper layers are much more context-specific than lower layers, and given that GPT-2's representations are more context-specific than ELMo and BERT's (see Figure FIGREF24), this suggests that the PCs of highly context-specific representations are less effective on traditional benchmarks. Those derived from less context-specific representations, such as those from Layer 1 of BERT, are much more effective."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1909.00512:paragraph:0042",
+      "score": 0.8479967163824212,
+      "title": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+      "text": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. This increased context-specificity is always accompanied by increased anisotropy. However, context-specificity also manifests differently across the three models; the anisotropy-adjusted similarity between words in the same sentence is highest in ELMo but almost non-existent in GPT-2. We ultimately found that after adjusting for anisotropy, on average, less than 5% of the variance in a word's contextualized representations could be explained by a static embedding. This means that even in the best-case scenario, in all layers of all models, static word embeddings would be a poor replacement for contextualized ones. These insights help explain some of the remarkable success that contextualized representations have had on a diverse array of NLP tasks."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1909.00512:paragraph:0005",
+      "score": 0.6758343015887011,
+      "title": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+      "text": "Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, they become more dissimilar to each other in upper layers but are still more similar than randomly sampled words are on average; in GPT-2, however, words in the same sentence are no more similar to each other than two randomly chosen words."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+      "attribution": 0.009091212338488579
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+      "attribution": 0.006515295619849772
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+      "attribution": 0.001675849124400918
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+      "attribution": -0.0015844011300372377
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+      "attribution": 0.0015684121615949713
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+      "attribution": 2.2305907300834453e-05
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+      "attribution": 0.08451547535797954
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+      "attribution": 0.01631563067241245
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+      "attribution": 0.014610045733414323
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+      "attribution": 0.012695031967766678
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+      "attribution": 0.010873078089390772
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+      "attribution": 0.002914244677085489
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0004",
+      "interaction": -0.01532948339996634
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0029",
+      "interaction": 0.013972851959532302
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0039",
+      "interaction": 0.0019923923280317957
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": 0.009271924485947616
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": 0.0024252816504567462
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0029",
+      "interaction": 0.007441521730692722
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0039",
+      "interaction": 0.0012199803370002787
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": -0.0015647519924878394
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.006294590803198426
+    },
+    {
+      "left": "1909.00512:paragraph:0029",
+      "right": "1909.00512:paragraph:0039",
+      "interaction": 0.009585303695100215
+    },
+    {
+      "left": "1909.00512:paragraph:0029",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": 0.01771912297864643
+    },
+    {
+      "left": "1909.00512:paragraph:0029",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.004672267923290011
+    },
+    {
+      "left": "1909.00512:paragraph:0039",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": 0.012431158079508573
+    },
+    {
+      "left": "1909.00512:paragraph:0039",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.009706925418409193
+    },
+    {
+      "left": "1909.00512:paragraph:0042",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.0013230253899430028
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0004",
+      "interaction": -0.019388439713445914
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0029",
+      "interaction": -0.01747435276324728
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0039",
+      "interaction": -0.01272936871485819
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": -0.008733948867538881
+    },
+    {
+      "left": "1909.00512:abstract:000",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.002675932649269184
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0029",
+      "interaction": -0.009315524082516445
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0039",
+      "interaction": -0.008359513378348983
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": -0.005359395528887614
+    },
+    {
+      "left": "1909.00512:paragraph:0004",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": 0.0007423007937926239
+    },
+    {
+      "left": "1909.00512:paragraph:0029",
+      "right": "1909.00512:paragraph:0039",
+      "interaction": -0.015812834748891304
+    },
+    {
+      "left": "1909.00512:paragraph:0029",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": -0.010497617592785924
+    },
+    {
+      "left": "1909.00512:paragraph:0029",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.0007459576418226033
+    },
+    {
+      "left": "1909.00512:paragraph:0039",
+      "right": "1909.00512:paragraph:0042",
+      "interaction": -0.009558127752622367
+    },
+    {
+      "left": "1909.00512:paragraph:0039",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.0040625523545932156
+    },
+    {
+      "left": "1909.00512:paragraph:0042",
+      "right": "1909.00512:paragraph:0005",
+      "interaction": -0.00030925591159751826
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.017288674161882622
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.014048334980164667
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.018421622663441495
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "remaining_chunks": 3,
+        "score": -0.008771085900819486
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "remaining_chunks": 2,
+        "score": -0.02843016152880362
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "remaining_chunks": 1,
+        "score": -0.030492921934402617
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "selected_chunks": 1,
+        "score": 0.02281186705984317
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "selected_chunks": 2,
+        "score": 0.0010468646487942213
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "selected_chunks": 3,
+        "score": 0.013765729747212796
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "selected_chunks": 4,
+        "score": 0.020325837531376845
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "selected_chunks": 5,
+        "score": 0.011247167818967507
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "selected_chunks": 6,
+        "score": 0.017288674161882622
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.017288674161882622
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "remaining_chunks": 5,
+        "score": 0.01820569688454754
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "remaining_chunks": 4,
+        "score": -0.010367039994591987
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "remaining_chunks": 3,
+        "score": -0.013191111862241256
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "remaining_chunks": 2,
+        "score": -0.014062062994404934
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "remaining_chunks": 1,
+        "score": 0.02281186705984317
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.017288674161882622
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "remaining_chunks": 5,
+        "score": 0.0040025750113964476
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "remaining_chunks": 4,
+        "score": -0.003860337322043994
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "remaining_chunks": 3,
+        "score": -0.005741373664236771
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "remaining_chunks": 2,
+        "score": -0.02490249474927625
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 1: 1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.005233186115985888
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.017288674161882622
+      },
+      {
+        "step": 1,
+        "score": 0.011876746326853161
+      },
+      {
+        "step": 2,
+        "score": 0.003558874805178113
+      },
+      {
+        "step": 3,
+        "score": -0.004677958067022829
+      },
+      {
+        "step": 4,
+        "score": -0.012598975178408864
+      },
+      {
+        "step": 5,
+        "score": -0.005067537344562333
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What experiments are proposed to test that upper layers produce context-specific embeddings?",
+    "expanded_queries": [
+      "What experiments are proposed to test that upper layers produce context-specific embeddings?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "dense": 0.7362,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "flags": "",
+        "preview": "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sen"
+      },
+      {
+        "rank": 2,
+        "source": "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "dense": 0.7318,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models suc"
+      },
+      {
+        "rank": 3,
+        "source": "1909.00512:paragraph:0031 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "dense": 0.7183,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "flags": "",
+        "preview": "As noted earlier, contextualized representations are more context-specific in upper layers of ELMo, BERT, and GPT-2. However, how does this increased context-specificity manifest in the vector space? Do word representati"
+      },
+      {
+        "rank": 4,
+        "source": "1909.00512:paragraph:0011 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Related Work ::: Probing Tasks",
+        "dense": 0.7156,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work ::: Probing Tasks",
+        "flags": "",
+        "preview": "Prior analysis of contextualized word representations has largely been restricted to probing tasks BIBREF12, BIBREF5. This involves training linear models to predict syntactic (e.g., part-of-speech tag) and semantic (e.g"
+      },
+      {
+        "rank": 5,
+        "source": "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "dense": 0.7081,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. T"
+      },
+      {
+        "rank": 6,
+        "source": "1909.00512:paragraph:0001 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "dense": 0.7046,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The success of contextualized word representations suggests that despite being trained with only a language modelling task, they learn highly transferable and task-agnostic properties of language. In fact, linear probing"
+      },
+      {
+        "rank": 7,
+        "source": "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "dense": 0.7011,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "flags": "",
+        "preview": "The best-performing PC static embeddings belong to the first layer of BERT, although those from the other layers of BERT and ELMo also outperform GloVe and FastText on most benchmarks. For all three contextualizing model"
+      },
+      {
+        "rank": 8,
+        "source": "1909.00512:paragraph:0032 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "dense": 0.6989,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "flags": "",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, the intra-sentence similarity also rises. This suggests that, in practice, ELMo ends up extending the intuition behind Firth's BIBREF20 "
+      },
+      {
+        "rank": 9,
+        "source": "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "dense": 0.6957,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper laye"
+      },
+      {
+        "rank": 10,
+        "source": "1909.00512:paragraph:0006 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "dense": 0.6915,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "After adjusting for the effect of anisotropy, on average, less than 5% of the variance in a word's contextualized representations can be explained by their first principal component. This holds across all layers of all m"
+      },
+      {
+        "rank": 11,
+        "source": "1909.00512:paragraph:0000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "dense": 0.6904,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The application of deep learning methods to NLP is made possible by representing words as vectors in a low-dimensional continuous space. Traditionally, these word embeddings were static: each word had a single vector, re"
+      },
+      {
+        "rank": 12,
+        "source": "1909.00512:paragraph:0009 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Related Work ::: Contextualized Word Representations",
+        "dense": 0.6859,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work ::: Contextualized Word Representations",
+        "flags": "",
+        "preview": "Given the limitations of static word embeddings, recent work has tried to create context-sensitive word representations. ELMo BIBREF2, BERT BIBREF3, and GPT-2 BIBREF9 are deep neural language models that are fine-tuned t"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "keyword": 0.4546,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper laye"
+      },
+      {
+        "rank": 2,
+        "source": "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "keyword": 0.3478,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models suc"
+      },
+      {
+        "rank": 3,
+        "source": "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "keyword": 0.3288,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "flags": "",
+        "preview": "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sen"
+      },
+      {
+        "rank": 4,
+        "source": "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "keyword": 0.293,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "flags": "",
+        "preview": "The best-performing PC static embeddings belong to the first layer of BERT, although those from the other layers of BERT and ELMo also outperform GloVe and FastText on most benchmarks. For all three contextualizing model"
+      },
+      {
+        "rank": 5,
+        "source": "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "keyword": 0.2258,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. T"
+      },
+      {
+        "rank": 6,
+        "source": "1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "keyword": 0.1672,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, t"
+      },
+      {
+        "rank": 7,
+        "source": "1909.00512:paragraph:0032 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "keyword": 0.1628,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "flags": "",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, the intra-sentence similarity also rises. This suggests that, in practice, ELMo ends up extending the intuition behind Firth's BIBREF20 "
+      },
+      {
+        "rank": 8,
+        "source": "1909.00512:paragraph:0033 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In BERT, words in the same sentence are more dissimilar to one another in upper layers.",
+        "keyword": 0.1418,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: In BERT, words in the same sentence are more dissimilar to one another in upper layers.",
+        "flags": "",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, they drift away from one another, although there are exceptions (see layer 12 in Figure FIGREF25). However, in all layers, the average s"
+      },
+      {
+        "rank": 9,
+        "source": "1909.00512:paragraph:0028 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "keyword": 0.1125,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "flags": "",
+        "preview": "Recall from Definition 1 that the self-similarity of a word, in a given layer of a given model, is the average cosine similarity between its representations in different contexts, adjusted for anisotropy. If the self-sim"
+      },
+      {
+        "rank": 10,
+        "source": "1909.00512:paragraph:0031 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "keyword": 0.1062,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "flags": "",
+        "preview": "As noted earlier, contextualized representations are more context-specific in upper layers of ELMo, BERT, and GPT-2. However, how does this increased context-specificity manifest in the vector space? Do word representati"
+      },
+      {
+        "rank": 11,
+        "source": "1909.00512:paragraph:0030 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Stopwords (e.g., `the', `of', `to') have among the most context-specific representations.",
+        "keyword": 0.0724,
+        "page": 1,
+        "type": "body_text",
+        "section": "Findings ::: Context-Specificity ::: Stopwords (e.g., `the', `of', `to') have among the most context-specific representations.",
+        "flags": "",
+        "preview": "Across all layers, stopwords have among the lowest self-similarity of all words, implying that their contextualized representations are among the most context-specific. For example, the words with the lowest average self"
+      },
+      {
+        "rank": 12,
+        "source": "1909.00512:paragraph:0006 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "keyword": 0.0629,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "After adjusting for the effect of anisotropy, on average, less than 5% of the variance in a word's contextualized representations can be explained by their first principal component. This holds across all layers of all m"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7318,
+        "keyword": 0.3478,
+        "rerank": 0.9715,
+        "section": "Abstract",
+        "query_hits": "context-specific, embeddings, layers, produce, upper",
+        "reasons": "body/table evidence",
+        "preview": "Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models suc"
+      },
+      {
+        "rank": 2,
+        "source": "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7362,
+        "keyword": 0.3288,
+        "rerank": 0.9369,
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sen"
+      },
+      {
+        "rank": 3,
+        "source": "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7011,
+        "keyword": 0.293,
+        "rerank": 0.8797,
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "query_hits": "context-specific, embeddings, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "The best-performing PC static embeddings belong to the first layer of BERT, although those from the other layers of BERT and ELMo also outperform GloVe and FastText on most benchmarks. For all three contextualizing model"
+      },
+      {
+        "rank": 4,
+        "source": "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6957,
+        "keyword": 0.4546,
+        "rerank": 0.8766,
+        "section": "Introduction",
+        "query_hits": "context-specific, layers, produce, upper",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper laye"
+      },
+      {
+        "rank": 5,
+        "source": "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7081,
+        "keyword": 0.2258,
+        "rerank": 0.848,
+        "section": "Conclusion",
+        "query_hits": "context-specific, embeddings, layers, produce, upper",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. T"
+      },
+      {
+        "rank": 6,
+        "source": "1909.00512:paragraph:0031 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7183,
+        "keyword": 0.1062,
+        "rerank": 0.7576,
+        "section": "Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "As noted earlier, contextualized representations are more context-specific in upper layers of ELMo, BERT, and GPT-2. However, how does this increased context-specificity manifest in the vector space? Do word representati"
+      },
+      {
+        "rank": 7,
+        "source": "1909.00512:paragraph:0033 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In BERT, words in the same sentence are more dissimilar to one another in upper layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6771,
+        "keyword": 0.1418,
+        "rerank": 0.7063,
+        "section": "Findings ::: Context-Specificity ::: In BERT, words in the same sentence are more dissimilar to one another in upper layers.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, they drift away from one another, although there are exceptions (see layer 12 in Figure FIGREF25). However, in all layers, the average s"
+      },
+      {
+        "rank": 8,
+        "source": "1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6676,
+        "keyword": 0.1672,
+        "rerank": 0.6758,
+        "section": "Introduction",
+        "query_hits": "layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, t"
+      },
+      {
+        "rank": 9,
+        "source": "1909.00512:paragraph:0032 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6989,
+        "keyword": 0.1628,
+        "rerank": 0.6597,
+        "section": "Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, the intra-sentence similarity also rises. This suggests that, in practice, ELMo ends up extending the intuition behind Firth's BIBREF20 "
+      },
+      {
+        "rank": 10,
+        "source": "1909.00512:paragraph:0006 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6915,
+        "keyword": 0.0629,
+        "rerank": 0.6505,
+        "section": "Introduction",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "After adjusting for the effect of anisotropy, on average, less than 5% of the variance in a word's contextualized representations can be explained by their first principal component. This holds across all layers of all m"
+      },
+      {
+        "rank": 11,
+        "source": "1909.00512:paragraph:0001 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7046,
+        "keyword": 0.0467,
+        "rerank": 0.6334,
+        "section": "Introduction",
+        "query_hits": "context-specific",
+        "reasons": "body/table evidence",
+        "preview": "The success of contextualized word representations suggests that despite being trained with only a language modelling task, they learn highly transferable and task-agnostic properties of language. In fact, linear probing"
+      },
+      {
+        "rank": 12,
+        "source": "1909.00512:paragraph:0011 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Related Work ::: Probing Tasks",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7156,
+        "keyword": 0.0121,
+        "rerank": 0.6306,
+        "section": "Related Work ::: Probing Tasks",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Prior analysis of contextualized word representations has largely been restricted to probing tasks BIBREF12, BIBREF5. This involves training linear models to predict syntactic (e.g., part-of-speech tag) and semantic (e.g"
+      },
+      {
+        "rank": 13,
+        "source": "1909.00512:paragraph:0038 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6852,
+        "keyword": 0.0424,
+        "rerank": 0.6255,
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "As noted earlier, we can create static embeddings for each word by taking the first principal component (PC) of its contextualized representations in a given layer. In Table TABREF34, we plot the performance of these PC "
+      },
+      {
+        "rank": 14,
+        "source": "1909.00512:paragraph:0000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6904,
+        "keyword": 0.0489,
+        "rerank": 0.6092,
+        "section": "Introduction",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "The application of deep learning methods to NLP is made possible by representing words as vectors in a low-dimensional continuous space. Traditionally, these word embeddings were static: each word had a single vector, re"
+      },
+      {
+        "rank": 15,
+        "source": "1909.00512:paragraph:0027 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: (An)Isotropy ::: Contextualized representations are generally more anisotropic in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6717,
+        "keyword": 0.0533,
+        "rerank": 0.6081,
+        "section": "Findings ::: (An)Isotropy ::: Contextualized representations are generally more anisotropic in higher layers.",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "Isotropy has both theoretical and empirical benefits for static word embeddings. In theory, it allows for stronger \u201cself-normalization\u201d during training BIBREF18, and in practice, subtracting the mean vector from static e"
+      },
+      {
+        "rank": 16,
+        "source": "1909.00512:paragraph:0028 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6394,
+        "keyword": 0.1125,
+        "rerank": 0.5885,
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "query_hits": "context-specific, embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Recall from Definition 1 that the self-similarity of a word, in a given layer of a given model, is the average cosine similarity between its representations in different contexts, adjusted for anisotropy. If the self-sim"
+      },
+      {
+        "rank": 17,
+        "source": "1909.00512:paragraph:0009 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Related Work ::: Contextualized Word Representations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6859,
+        "keyword": 0.0279,
+        "rerank": 0.5871,
+        "section": "Related Work ::: Contextualized Word Representations",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Given the limitations of static word embeddings, recent work has tried to create context-sensitive word representations. ELMo BIBREF2, BERT BIBREF3, and GPT-2 BIBREF9 are deep neural language models that are fine-tuned t"
+      },
+      {
+        "rank": 18,
+        "source": "1909.00512:paragraph:0030 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Stopwords (e.g., `the', `of', `to') have among the most context-specific representations.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6443,
+        "keyword": 0.0724,
+        "rerank": 0.571,
+        "section": "Findings ::: Context-Specificity ::: Stopwords (e.g., `the', `of', `to') have among the most context-specific representations.",
+        "query_hits": "context-specific, layers",
+        "reasons": "body/table evidence",
+        "preview": "Across all layers, stopwords have among the lowest self-similarity of all words, implying that their contextualized representations are among the most context-specific. For example, the words with the lowest average self"
+      },
+      {
+        "rank": 19,
+        "source": "1909.00512:paragraph:0041 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6708,
+        "keyword": 0.0136,
+        "rerank": 0.5503,
+        "section": "Future Work",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Another direction for future work is generating static word representations from contextualized ones. While the latter offer superior performance, there are often challenges to deploying large models such as BERT in prod"
+      },
+      {
+        "rank": 20,
+        "source": "1909.00512:paragraph:0040 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6633,
+        "keyword": 0.0302,
+        "rerank": 0.5476,
+        "section": "Future Work",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Our findings offer some new directions for future work. For one, as noted earlier in the paper, BIBREF6 found that making static embeddings more isotropic \u2013 by subtracting their mean from each embedding \u2013 leads to surpri"
+      },
+      {
+        "rank": 21,
+        "source": "1909.00512:paragraph:0003 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6445,
+        "keyword": 0.0337,
+        "rerank": 0.5457,
+        "section": "Introduction",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "In all layers of all three models, the contextualized word representations of all words are not isotropic: they are not uniformly distributed with respect to direction. Instead, they are anisotropic, occupying a narrow c"
+      },
+      {
+        "rank": 22,
+        "source": "1909.00512:paragraph:0012 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Approach ::: Contextualizing Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6588,
+        "keyword": 0.0351,
+        "rerank": 0.5426,
+        "section": "Approach ::: Contextualizing Models",
+        "query_hits": "layers",
+        "reasons": "body/table evidence",
+        "preview": "The contextualizing models we study in this paper are ELMo, BERT, and GPT-2. We choose the base cased version of BERT because it is most comparable to GPT-2 with respect to number of layers and dimensionality. The models"
+      },
+      {
+        "rank": 23,
+        "source": "1909.00512:paragraph:0037 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: On average, less than 5% of the variance in a word's contextualized representations can be explained by a static embedding.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6648,
+        "keyword": 0.0178,
+        "rerank": 0.5422,
+        "section": "Findings ::: Static vs. Contextualized ::: On average, less than 5% of the variance in a word's contextualized representations can be explained by a static embedding.",
+        "query_hits": "layers",
+        "reasons": "body/table evidence",
+        "preview": "In no layer of ELMo, BERT, or GPT-2 can more than 5% of the variance in a word's contextualized representations be explained by a static embedding, on average. Though not visible in Figure FIGREF29, the raw MEV of many w"
+      },
+      {
+        "rank": 24,
+        "source": "1909.00512:paragraph:0018 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Approach ::: Measures of Contextuality ::: Definition 2",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6492,
+        "keyword": 0.0502,
+        "rerank": 0.5352,
+        "section": "Approach ::: Measures of Contextuality ::: Definition 2",
+        "query_hits": "context-specific",
+        "reasons": "body/table evidence",
+        "preview": "Put more simply, the intra-sentence similarity of a sentence is the average cosine similarity between its word representations and the sentence vector, which is just the mean of those word vectors. This measure captures "
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7318,
+        "keyword": 0.3478,
+        "rerank": 0.9715,
+        "section": "Abstract",
+        "query_hits": "context-specific, embeddings, layers, produce, upper",
+        "reasons": "body/table evidence",
+        "preview": "Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models suc"
+      },
+      {
+        "rank": 2,
+        "source": "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7362,
+        "keyword": 0.3288,
+        "rerank": 0.9369,
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sen"
+      },
+      {
+        "rank": 3,
+        "source": "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7011,
+        "keyword": 0.293,
+        "rerank": 0.8797,
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "query_hits": "context-specific, embeddings, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "The best-performing PC static embeddings belong to the first layer of BERT, although those from the other layers of BERT and ELMo also outperform GloVe and FastText on most benchmarks. For all three contextualizing model"
+      },
+      {
+        "rank": 4,
+        "source": "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6957,
+        "keyword": 0.4546,
+        "rerank": 0.8766,
+        "section": "Introduction",
+        "query_hits": "context-specific, layers, produce, upper",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper laye"
+      },
+      {
+        "rank": 5,
+        "source": "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7081,
+        "keyword": 0.2258,
+        "rerank": 0.848,
+        "section": "Conclusion",
+        "query_hits": "context-specific, embeddings, layers, produce, upper",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. T"
+      },
+      {
+        "rank": 6,
+        "source": "1909.00512:paragraph:0031 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7183,
+        "keyword": 0.1062,
+        "rerank": 0.7576,
+        "section": "Findings ::: Context-Specificity ::: Context-specificity manifests very differently in ELMo, BERT, and GPT-2.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "As noted earlier, contextualized representations are more context-specific in upper layers of ELMo, BERT, and GPT-2. However, how does this increased context-specificity manifest in the vector space? Do word representati"
+      },
+      {
+        "rank": 7,
+        "source": "1909.00512:paragraph:0033 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In BERT, words in the same sentence are more dissimilar to one another in upper layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6771,
+        "keyword": 0.1418,
+        "rerank": 0.7063,
+        "section": "Findings ::: Context-Specificity ::: In BERT, words in the same sentence are more dissimilar to one another in upper layers.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, they drift away from one another, although there are exceptions (see layer 12 in Figure FIGREF25). However, in all layers, the average s"
+      },
+      {
+        "rank": 8,
+        "source": "1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6676,
+        "keyword": 0.1672,
+        "rerank": 0.6758,
+        "section": "Introduction",
+        "query_hits": "layers, upper",
+        "reasons": "body/table evidence",
+        "preview": "Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, t"
+      },
+      {
+        "rank": 9,
+        "source": "1909.00512:paragraph:0032 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6989,
+        "keyword": 0.1628,
+        "rerank": 0.6597,
+        "section": "Findings ::: Context-Specificity ::: In ELMo, words in the same sentence are more similar to one another in upper layers.",
+        "query_hits": "context-specific, layers, upper",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "As word representations in a sentence become more context-specific in upper layers, the intra-sentence similarity also rises. This suggests that, in practice, ELMo ends up extending the intuition behind Firth's BIBREF20 "
+      },
+      {
+        "rank": 10,
+        "source": "1909.00512:paragraph:0006 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6915,
+        "keyword": 0.0629,
+        "rerank": 0.6505,
+        "section": "Introduction",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "After adjusting for the effect of anisotropy, on average, less than 5% of the variance in a word's contextualized representations can be explained by their first principal component. This holds across all layers of all m"
+      },
+      {
+        "rank": 11,
+        "source": "1909.00512:paragraph:0001 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7046,
+        "keyword": 0.0467,
+        "rerank": 0.6334,
+        "section": "Introduction",
+        "query_hits": "context-specific",
+        "reasons": "body/table evidence",
+        "preview": "The success of contextualized word representations suggests that despite being trained with only a language modelling task, they learn highly transferable and task-agnostic properties of language. In fact, linear probing"
+      },
+      {
+        "rank": 12,
+        "source": "1909.00512:paragraph:0011 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Related Work ::: Probing Tasks",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7156,
+        "keyword": 0.0121,
+        "rerank": 0.6306,
+        "section": "Related Work ::: Probing Tasks",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Prior analysis of contextualized word representations has largely been restricted to probing tasks BIBREF12, BIBREF5. This involves training linear models to predict syntactic (e.g., part-of-speech tag) and semantic (e.g"
+      },
+      {
+        "rank": 13,
+        "source": "1909.00512:paragraph:0038 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6852,
+        "keyword": 0.0424,
+        "rerank": 0.6255,
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "As noted earlier, we can create static embeddings for each word by taking the first principal component (PC) of its contextualized representations in a given layer. In Table TABREF34, we plot the performance of these PC "
+      },
+      {
+        "rank": 14,
+        "source": "1909.00512:paragraph:0000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6904,
+        "keyword": 0.0489,
+        "rerank": 0.6092,
+        "section": "Introduction",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "The application of deep learning methods to NLP is made possible by representing words as vectors in a low-dimensional continuous space. Traditionally, these word embeddings were static: each word had a single vector, re"
+      },
+      {
+        "rank": 15,
+        "source": "1909.00512:paragraph:0027 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: (An)Isotropy ::: Contextualized representations are generally more anisotropic in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6717,
+        "keyword": 0.0533,
+        "rerank": 0.6081,
+        "section": "Findings ::: (An)Isotropy ::: Contextualized representations are generally more anisotropic in higher layers.",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "Isotropy has both theoretical and empirical benefits for static word embeddings. In theory, it allows for stronger \u201cself-normalization\u201d during training BIBREF18, and in practice, subtracting the mean vector from static e"
+      },
+      {
+        "rank": 16,
+        "source": "1909.00512:paragraph:0028 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6394,
+        "keyword": 0.1125,
+        "rerank": 0.5885,
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "query_hits": "context-specific, embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Recall from Definition 1 that the self-similarity of a word, in a given layer of a given model, is the average cosine similarity between its representations in different contexts, adjusted for anisotropy. If the self-sim"
+      },
+      {
+        "rank": 17,
+        "source": "1909.00512:paragraph:0009 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Related Work ::: Contextualized Word Representations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6859,
+        "keyword": 0.0279,
+        "rerank": 0.5871,
+        "section": "Related Work ::: Contextualized Word Representations",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Given the limitations of static word embeddings, recent work has tried to create context-sensitive word representations. ELMo BIBREF2, BERT BIBREF3, and GPT-2 BIBREF9 are deep neural language models that are fine-tuned t"
+      },
+      {
+        "rank": 18,
+        "source": "1909.00512:paragraph:0030 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Stopwords (e.g., `the', `of', `to') have among the most context-specific representations.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6443,
+        "keyword": 0.0724,
+        "rerank": 0.571,
+        "section": "Findings ::: Context-Specificity ::: Stopwords (e.g., `the', `of', `to') have among the most context-specific representations.",
+        "query_hits": "context-specific, layers",
+        "reasons": "body/table evidence",
+        "preview": "Across all layers, stopwords have among the lowest self-similarity of all words, implying that their contextualized representations are among the most context-specific. For example, the words with the lowest average self"
+      },
+      {
+        "rank": 19,
+        "source": "1909.00512:paragraph:0041 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6708,
+        "keyword": 0.0136,
+        "rerank": 0.5503,
+        "section": "Future Work",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Another direction for future work is generating static word representations from contextualized ones. While the latter offer superior performance, there are often challenges to deploying large models such as BERT in prod"
+      },
+      {
+        "rank": 20,
+        "source": "1909.00512:paragraph:0040 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6633,
+        "keyword": 0.0302,
+        "rerank": 0.5476,
+        "section": "Future Work",
+        "query_hits": "embeddings",
+        "reasons": "body/table evidence",
+        "preview": "Our findings offer some new directions for future work. For one, as noted earlier in the paper, BIBREF6 found that making static embeddings more isotropic \u2013 by subtracting their mean from each embedding \u2013 leads to surpri"
+      },
+      {
+        "rank": 21,
+        "source": "1909.00512:paragraph:0003 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6445,
+        "keyword": 0.0337,
+        "rerank": 0.5457,
+        "section": "Introduction",
+        "query_hits": "embeddings, layers",
+        "reasons": "body/table evidence",
+        "preview": "In all layers of all three models, the contextualized word representations of all words are not isotropic: they are not uniformly distributed with respect to direction. Instead, they are anisotropic, occupying a narrow c"
+      },
+      {
+        "rank": 22,
+        "source": "1909.00512:paragraph:0012 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Approach ::: Contextualizing Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6588,
+        "keyword": 0.0351,
+        "rerank": 0.5426,
+        "section": "Approach ::: Contextualizing Models",
+        "query_hits": "layers",
+        "reasons": "body/table evidence",
+        "preview": "The contextualizing models we study in this paper are ELMo, BERT, and GPT-2. We choose the base cased version of BERT because it is most comparable to GPT-2 with respect to number of layers and dimensionality. The models"
+      },
+      {
+        "rank": 23,
+        "source": "1909.00512:paragraph:0037 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: On average, less than 5% of the variance in a word's contextualized representations can be explained by a static embedding.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6648,
+        "keyword": 0.0178,
+        "rerank": 0.5422,
+        "section": "Findings ::: Static vs. Contextualized ::: On average, less than 5% of the variance in a word's contextualized representations can be explained by a static embedding.",
+        "query_hits": "layers",
+        "reasons": "body/table evidence",
+        "preview": "In no layer of ELMo, BERT, or GPT-2 can more than 5% of the variance in a word's contextualized representations be explained by a static embedding, on average. Though not visible in Figure FIGREF29, the raw MEV of many w"
+      },
+      {
+        "rank": 24,
+        "source": "1909.00512:paragraph:0018 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Approach ::: Measures of Contextuality ::: Definition 2",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6492,
+        "keyword": 0.0502,
+        "rerank": 0.5352,
+        "section": "Approach ::: Measures of Contextuality ::: Definition 2",
+        "query_hits": "context-specific",
+        "reasons": "body/table evidence",
+        "preview": "Put more simply, the intra-sentence similarity of a sentence is the average cosine similarity between its word representations and the sentence vector, which is just the mean of those word vectors. This measure captures "
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7318,
+        "keyword": 0.3478,
+        "rerank": 0.9715,
+        "section": "Abstract",
+        "query_hits": "context-specific, embeddings, layers, produce, upper",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.32,
+        "reasons": "body/table evidence",
+        "preview": "Replacing static word embeddings with contextualized word representations has yielded significant improvements on many NLP tasks. However, just how contextual are the contextualized representations produced by models suc"
+      },
+      {
+        "rank": 2,
+        "source": "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6957,
+        "keyword": 0.4546,
+        "rerank": 0.8766,
+        "section": "Introduction",
+        "query_hits": "context-specific, layers, produce, upper",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9043,
+        "novelty": 0.6413,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2675,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Occurrences of the same word in different contexts have non-identical vector representations. Where vector similarity is defined as cosine similarity, these representations are more dissimilar to each other in upper laye"
+      },
+      {
+        "rank": 3,
+        "source": "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7362,
+        "keyword": 0.3288,
+        "rerank": 0.9369,
+        "section": "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "query_hits": "context-specific, layers, upper",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9652,
+        "novelty": 0.6519,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2413,
+        "reasons": "body/table evidence",
+        "preview": "In all three models, the higher the layer, the lower the self-similarity is on average. In other words, the higher the layer, the more context-specific the contextualized representations. This finding makes intuitive sen"
+      },
+      {
+        "rank": 4,
+        "source": "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7011,
+        "keyword": 0.293,
+        "rerank": 0.8797,
+        "section": "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "query_hits": "context-specific, embeddings, layers, upper",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9075,
+        "novelty": 0.6647,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1935,
+        "reasons": "body/table evidence",
+        "preview": "The best-performing PC static embeddings belong to the first layer of BERT, although those from the other layers of BERT and ELMo also outperform GloVe and FastText on most benchmarks. For all three contextualizing model"
+      },
+      {
+        "rank": 5,
+        "source": "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7081,
+        "keyword": 0.2258,
+        "rerank": 0.848,
+        "section": "Conclusion",
+        "query_hits": "context-specific, embeddings, layers, produce, upper",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8755,
+        "novelty": 0.5963,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1564,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we investigated how contextual contextualized word representations truly are. For one, we found that upper layers of ELMo, BERT, and GPT-2 produce more context-specific representations than lower layers. T"
+      },
+      {
+        "rank": 6,
+        "source": "1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6676,
+        "keyword": 0.1672,
+        "rerank": 0.6758,
+        "section": "Introduction",
+        "query_hits": "layers, upper",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7018,
+        "novelty": 0.4329,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1042,
+        "reasons": "body/table evidence",
+        "preview": "Context-specificity manifests very differently in ELMo, BERT, and GPT-2. In ELMo, representations of words in the same sentence grow more similar to each other as context-specificity increases in upper layers; in BERT, t"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "context-specific",
+        "embeddings",
+        "experiments",
+        "layers",
+        "produce",
+        "proposed",
+        "test",
+        "upper"
+      ],
+      "covered_query_terms": [
+        "context-specific",
+        "embeddings",
+        "layers",
+        "produce",
+        "upper"
+      ],
+      "missing_query_terms": [
+        "experiments",
+        "proposed",
+        "test"
+      ],
+      "terms_by_chunk": {
+        "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract": [
+          "context-specific",
+          "embeddings",
+          "layers",
+          "produce",
+          "upper"
+        ],
+        "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction": [
+          "context-specific",
+          "layers",
+          "produce",
+          "upper"
+        ],
+        "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.": [
+          "context-specific",
+          "layers",
+          "upper"
+        ],
+        "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.": [
+          "context-specific",
+          "embeddings",
+          "layers",
+          "upper"
+        ],
+        "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion": [
+          "context-specific",
+          "embeddings",
+          "layers",
+          "produce",
+          "upper"
+        ],
+        "1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction": [
+          "layers",
+          "upper"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Conclusion",
+        "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.",
+        "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.",
+        "Introduction"
+      ],
+      "chunks_by_section": {
+        "Abstract": [
+          "1909.00512:abstract:000 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Abstract"
+        ],
+        "Introduction": [
+          "1909.00512:paragraph:0004 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction",
+          "1909.00512:paragraph:0005 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Introduction"
+        ],
+        "Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers.": [
+          "1909.00512:paragraph:0029 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Context-Specificity ::: Contextualized word representations are more context-specific in higher layers."
+        ],
+        "Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks.": [
+          "1909.00512:paragraph:0039 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Findings ::: Static vs. Contextualized ::: Principal components of contextualized representations in lower layers outperform GloVe and FastText on many benchmarks."
+        ],
+        "Conclusion": [
+          "1909.00512:paragraph:0042 | How Contextual are Contextualized Word Representations? Comparing the Geometry of BERT, ELMo, and GPT-2 Embeddings / Conclusion"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "The context mentions that three different metrics are used to measure how contextual a word representation is: self-similarity, intra-sentence similarity, and maximum explainable variance. However, it does not specify what experiments are proposed to test that upper layers produce context-specific embeddings.",
+    "retrieved_context_answer": "The retrieved context describes findings and observations regarding the context-specificity of word representations across different layers of models like BERT, ELMo, and GPT-2, but it does not explicitly detail specific *experiments proposed* to test this.\n\nThe context states several findings that suggest upper layers produce more context-specific embeddings:\n*   Representations of the same word in different contexts have a greater cosine similarity than those of two different words, but this self-similarity is much lower in",
+    "closed_book_f1": 0.06896551724137931,
+    "gold_context_f1": 0.45161290322580644,
+    "retrieved_context_f1": 0.22916666666666669,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

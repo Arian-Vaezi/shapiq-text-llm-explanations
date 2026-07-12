@@ -2,11 +2,17 @@
 
 from __future__ import annotations
 
+import json
+
+import pytest
 from demos.rag_retrieval_explanation.evals.experiments.qasper import (
     _map_evidence,
     _paper_passages,
     qasper_candidates,
     select_qasper_cases,
+)
+from demos.rag_retrieval_explanation.evals.experiments.run_qasper_eval import (
+    _can_reuse_case,
 )
 
 
@@ -85,3 +91,26 @@ def test_qasper_selection_skips_yes_no_annotations() -> None:
     else:
         msg = "Expected yes/no-only row to be excluded"
         raise AssertionError(msg)
+
+
+def test_resume_requires_matching_artifact(tmp_path) -> None:
+    """A summary row alone must not cause an incomplete QASPER case to be reused."""
+    artifact_path = tmp_path / "case.json"
+    existing: dict[str, dict[str, object]] = {"case-1": {"case_id": "case-1"}}
+
+    assert not _can_reuse_case(
+        case_id="case-1",
+        existing_rows=existing,
+        artifact_path=artifact_path,
+    )
+
+    artifact_path.write_text(
+        json.dumps({"case": {"case_id": "different-case"}}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="Resume artifact case mismatch"):
+        _can_reuse_case(
+            case_id="case-1",
+            existing_rows=existing,
+            artifact_path=artifact_path,
+        )

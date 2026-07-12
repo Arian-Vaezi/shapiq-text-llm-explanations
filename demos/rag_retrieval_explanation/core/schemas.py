@@ -72,7 +72,7 @@ class PDFPage:
 
 @dataclass(frozen=True)
 class RetrievalDebugInfo:
-    """Transparent retrieval diagnostics shown in the Streamlit UI."""
+    """Transparent retrieval diagnostics returned to the research dashboard."""
 
     query_intent: str
     original_query: str

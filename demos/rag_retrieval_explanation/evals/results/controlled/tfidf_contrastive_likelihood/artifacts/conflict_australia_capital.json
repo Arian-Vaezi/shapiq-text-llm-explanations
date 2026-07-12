@@ -1,0 +1,3360 @@
+{
+  "case": {
+    "case_id": "conflict_australia_capital",
+    "pattern": "conflicting_evidence",
+    "question": "What is the capital city of Australia?",
+    "gold_answer": "Canberra is the capital city of Australia.",
+    "gold_evidence_ids": [
+      "conflict_australia_correct"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_australia_correct",
+        "right": "conflict_australia_sydney",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_australia_correct",
+      "score": 0.85,
+      "title": "Retrieved 1: conflict_australia_correct | Federal capital",
+      "text": "Canberra is the capital city of Australia and the seat of the federal government."
+    },
+    {
+      "rank": 2,
+      "passage_id": "direct_tokyo_evidence",
+      "score": 0.5797913257331306,
+      "title": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+      "text": "Tokyo is the capital city of Japan."
+    },
+    {
+      "rank": 3,
+      "passage_id": "redundant_france_a",
+      "score": 0.5686281112257812,
+      "title": "Retrieved 3: redundant_france_a | French national capital",
+      "text": "Paris is the capital city of France."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_japan_tokyo_distractor",
+      "score": 0.5797913257331306,
+      "title": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+      "text": "Tokyo is the capital city of Japan."
+    },
+    {
+      "rank": 5,
+      "passage_id": "direct_canada_provinces",
+      "score": 0.4564233232392075,
+      "title": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+      "text": "Each Canadian province and territory has its own capital city."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_australia_sydney",
+      "score": 0.4125622495392035,
+      "title": "Retrieved 6: conflict_australia_sydney | Sydney",
+      "text": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_australia_correct | Federal capital",
+      "attribution": 0.1101244358317121
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_australia_sydney | Sydney",
+      "attribution": -0.018132457010005945
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+      "attribution": 0.009102626791846431
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+      "attribution": -0.004772144466968315
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_france_a | French national capital",
+      "attribution": 0.0007211053723650042
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+      "attribution": -0.00016679715636834513
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_australia_correct | Federal capital",
+      "attribution": 0.13919056349265596
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_australia_sydney | Sydney",
+      "attribution": -0.009898683294946255
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+      "attribution": 0.005294820348572869
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+      "attribution": -0.0036808588477160484
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+      "attribution": -0.0011621658589436408
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_france_a | French national capital",
+      "attribution": 0.0001465976100976169
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_australia_correct",
+      "right": "conflict_australia_sydney",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.020959773674002872,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_australia_correct",
+      "right": "conflict_australia_sydney",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.019312373569743767,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_australia_correct",
+      "right": "direct_tokyo_evidence",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.0020078946681943762,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "redundant_france_a",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.003160405785561175,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "conflict_japan_tokyo_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.002085896018425052,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "direct_canada_provinces",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.016899771843536585,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "conflict_australia_sydney",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.020959773674002872,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "redundant_france_a",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": 0.019086963627830446,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "conflict_japan_tokyo_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": 0.016144190936002428,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "direct_canada_provinces",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.00810618219449375,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "conflict_australia_sydney",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.015024017819580076,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_france_a",
+      "right": "conflict_japan_tokyo_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.01861489653787109,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_france_a",
+      "right": "direct_canada_provinces",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": 0.009521214565381941,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_france_a",
+      "right": "conflict_australia_sydney",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": 0.02521896127802321,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_japan_tokyo_distractor",
+      "right": "direct_canada_provinces",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.009212601056748843,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_japan_tokyo_distractor",
+      "right": "conflict_australia_sydney",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": 0.02192696011872123,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_canada_provinces",
+      "right": "conflict_australia_sydney",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": 0.0059339650524557535,
+      "sign": "positive"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_australia_correct",
+      "right": "direct_tokyo_evidence",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.002218096824822984,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "redundant_france_a",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.0047400441509060295,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "conflict_japan_tokyo_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.006012476153407286,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "direct_canada_provinces",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.009188123107578864,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_australia_correct",
+      "right": "conflict_australia_sydney",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.019312373569743767,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "redundant_france_a",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": 0.0066190495918876545,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "conflict_japan_tokyo_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": 0.007287060634206904,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "direct_canada_provinces",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.0013088449900066697,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_evidence",
+      "right": "conflict_australia_sydney",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.009389294764268367,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_france_a",
+      "right": "conflict_japan_tokyo_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.0059725027646884915,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_france_a",
+      "right": "direct_canada_provinces",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": 0.0011631213423954432,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_france_a",
+      "right": "conflict_australia_sydney",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": 0.009619008946541002,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_japan_tokyo_distractor",
+      "right": "direct_canada_provinces",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.003267581484136727,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_japan_tokyo_distractor",
+      "right": "conflict_australia_sydney",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": 0.007693267759797159,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_canada_provinces",
+      "right": "conflict_australia_sydney",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.0003408920271627978,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_australia_correct"
+      ],
+      "score": 0.10331018240500833
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence"
+      ],
+      "score": -0.049352316881853875
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_france_a"
+      ],
+      "score": -0.05874166846384382
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.06716394140656928
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "direct_canada_provinces"
+      ],
+      "score": -0.012214316272765813
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_sydney"
+      ],
+      "score": -0.09226722052571723
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence"
+      ],
+      "score": 0.10210153020517032
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a"
+      ],
+      "score": 0.10053767365568334
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.09898743469102611
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_canada_provinces"
+      ],
+      "score": 0.09318761591760705
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09662732688199094
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a"
+      ],
+      "score": -0.014682838577069424
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.014404541738831489
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "direct_canada_provinces"
+      ],
+      "score": 0.001975630372983206
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.03536205591095343
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.00842418517506155
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.003032781242734539
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.02596007322323629
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.010643185563432578
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.02419675280832989
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.011987698123316237
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a"
+      ],
+      "score": 0.09837004886449674
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.09557859144284964
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "direct_canada_provinces"
+      ],
+      "score": 0.09792306067836642
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.0910168724473277
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.09860092540000953
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.09518778939389383
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09471248072553484
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.08962068952702773
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09046483238010439
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.08959570244526027
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.0063405065182874365
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.024005866456880964
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.013332945567761767
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.024348044548723302
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.014474608118786148
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.02912965109733623
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.02311332114394038
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.002131955816185638
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.007415585320802942
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.00911288367674179
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.09508338706956798
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.09671738287413156
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09159758637377957
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.09675798895515952
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.08861732512978748
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09002999346853091
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.09166438045041347
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09151448237505344
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09287644422340036
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09213218595758343
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.016353226176423985
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.002420749227273311
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.004458890368398083
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.027188754105223756
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.026090669843053083
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.10008031052900046
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09321689331994021
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09605616468415024
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.0863368062537132
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.0898756250505296
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.007411011669954004
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.09687676954641844
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_australia_correct"
+      ],
+      "score": 0.12775218458858562
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence"
+      ],
+      "score": -0.02373198285191047
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_france_a"
+      ],
+      "score": -0.020417833340656943
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.030977621264611066
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "direct_canada_provinces"
+      ],
+      "score": 0.002212122550380502
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_sydney"
+      ],
+      "score": -0.04549162116652117
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence"
+      ],
+      "score": 0.13088839273927833
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a"
+      ],
+      "score": 0.13132783676812487
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.13148505167079627
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_canada_provinces"
+      ],
+      "score": 0.12997147540981757
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.131294336789322
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a"
+      ],
+      "score": -0.005469595752523926
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.008948473212398111
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "direct_canada_provinces"
+      ],
+      "score": 0.0015742428736507108
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.018726555863686045
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.007183549204875905
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.004770983490969827
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.01185839980811304
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.006101320312577929
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.021894154502811847
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.009941712859034224
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a"
+      ],
+      "score": 0.12885476941610963
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.12955495754867086
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "direct_canada_provinces"
+      ],
+      "score": 0.12913882834117696
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13093666269699533
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.12973015829224865
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.1291942327045792
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13124200977789646
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.12941816399668093
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13149405197360164
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.1304791771090229
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": -0.003515796531967874
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.009835672986088673
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.015563167731193872
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.008248042821633161
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.01703038398861928
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.016720033806752188
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.011149837578741884
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.01901225067887874
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.01534733711416919
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.019171579669940098
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor"
+      ],
+      "score": 0.12718912585716968
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces"
+      ],
+      "score": 0.12887078925041429
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13100743203697618
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.12956479921015018
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13090266736608813
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.12967212436700803
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.1291323319430615
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13024195370094915
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.12946871330257004
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13028072096909293
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.003470082000549324
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.007656303584290314
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.00040499857151499175
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.024445013412114247
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.02263132566839593
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces"
+      ],
+      "score": 0.129708841082405
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.13146761776666782
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.1306350053971237
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.1316744678311499
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.1312361026885419
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": -0.007040497204707397
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_australia_correct",
+        "direct_tokyo_evidence",
+        "redundant_france_a",
+        "conflict_japan_tokyo_distractor",
+        "direct_canada_provinces",
+        "conflict_australia_sydney"
+      ],
+      "score": 0.12989027353460625
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09687676954641844
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_australia_correct | Federal capital",
+        "remaining_chunks": 5,
+        "score": -0.007411011669954004
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: conflict_australia_sydney | Sydney",
+        "remaining_chunks": 4,
+        "score": 0.016353226176423985
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+        "remaining_chunks": 3,
+        "score": -0.0063405065182874365
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+        "remaining_chunks": 2,
+        "score": -0.014682838577069424
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: redundant_france_a | French national capital",
+        "remaining_chunks": 1,
+        "score": -0.049352316881853875
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_australia_correct | Federal capital",
+        "selected_chunks": 1,
+        "score": 0.10331018240500833
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: conflict_australia_sydney | Sydney",
+        "selected_chunks": 2,
+        "score": 0.09662732688199094
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+        "selected_chunks": 3,
+        "score": 0.08959570244526027
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+        "selected_chunks": 4,
+        "score": 0.09213218595758343
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: redundant_france_a | French national capital",
+        "selected_chunks": 5,
+        "score": 0.0898756250505296
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+        "selected_chunks": 6,
+        "score": 0.09687676954641844
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09687676954641844
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_australia_correct | Federal capital",
+        "remaining_chunks": 5,
+        "score": -0.007411011669954004
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+        "remaining_chunks": 4,
+        "score": -0.026090669843053083
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+        "remaining_chunks": 3,
+        "score": -0.007415585320802942
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: redundant_france_a | French national capital",
+        "remaining_chunks": 2,
+        "score": -0.011987698123316237
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+        "remaining_chunks": 1,
+        "score": -0.09226722052571723
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_australia_sydney | Sydney",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09687676954641844
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_australia_correct | Federal capital",
+        "remaining_chunks": 5,
+        "score": -0.007411011669954004
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: redundant_france_a | French national capital",
+        "remaining_chunks": 4,
+        "score": -0.027188754105223756
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: direct_tokyo_evidence | Japan national capital",
+        "remaining_chunks": 3,
+        "score": -0.00911288367674179
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: direct_canada_provinces | Provincial capitals",
+        "remaining_chunks": 2,
+        "score": -0.02419675280832989
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_japan_tokyo_distractor | Japan capital distractor",
+        "remaining_chunks": 1,
+        "score": -0.09226722052571723
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_australia_sydney | Sydney",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.09687676954641852
+      },
+      {
+        "step": 1,
+        "score": 0.07714183682917898
+      },
+      {
+        "step": 2,
+        "score": 0.05576283462479937
+      },
+      {
+        "step": 3,
+        "score": 0.0405651524250652
+      },
+      {
+        "step": 4,
+        "score": 0.01368036376038783
+      },
+      {
+        "step": 5,
+        "score": -0.03023466606628069
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the capital city of Australia?",
+    "expanded_queries": [
+      "What is the capital city of Australia?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_australia_correct | Federal capital",
+        "keyword": 0.5668,
+        "page": 13,
+        "type": "body_text",
+        "section": "australian_cities",
+        "flags": "",
+        "preview": "Canberra is the capital city of Australia and the seat of the federal government."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "keyword": 0.3923,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "keyword": 0.3923,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_france_a | French national capital",
+        "keyword": 0.3842,
+        "page": 18,
+        "type": "body_text",
+        "section": "france_cities",
+        "flags": "",
+        "preview": "Paris is the capital city of France."
+      },
+      {
+        "rank": 5,
+        "source": "direct_canada_provinces | Provincial capitals",
+        "keyword": 0.3026,
+        "page": 2,
+        "type": "body_text",
+        "section": "canadian_cities",
+        "flags": "",
+        "preview": "Each Canadian province and territory has its own capital city."
+      },
+      {
+        "rank": 6,
+        "source": "direct_canada_evidence | Canadian federal capital",
+        "keyword": 0.2623,
+        "page": 2,
+        "type": "body_text",
+        "section": "canadian_cities",
+        "flags": "",
+        "preview": "Ottawa is the capital city of Canada and the seat of the federal government."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_australia_sydney | Sydney",
+        "keyword": 0.2489,
+        "page": 13,
+        "type": "body_text",
+        "section": "australian_cities",
+        "flags": "",
+        "preview": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_australia_states | State capitals",
+        "keyword": 0.226,
+        "page": 13,
+        "type": "body_text",
+        "section": "australian_cities",
+        "flags": "",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 9,
+        "source": "direct_canada_toronto | Toronto",
+        "keyword": 0.1597,
+        "page": 2,
+        "type": "body_text",
+        "section": "canadian_cities",
+        "flags": "",
+        "preview": "Toronto is Canada's most populous city and the capital of Ontario."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "keyword": 0.104,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 11,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "keyword": 0.0851,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 12,
+        "source": "missing_japan_tokyo | Tokyo",
+        "keyword": 0.0808,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_australia_correct | Federal capital",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5668,
+        "rerank": 0.85,
+        "section": "australian_cities",
+        "query_hits": "australia, capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Canberra is the capital city of Australia and the seat of the federal government."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3923,
+        "rerank": 0.5798,
+        "section": "japan_capital",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3923,
+        "rerank": 0.5798,
+        "section": "japan_currency",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_france_a | French national capital",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3842,
+        "rerank": 0.5686,
+        "section": "france_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is the capital city of France."
+      },
+      {
+        "rank": 5,
+        "source": "direct_canada_provinces | Provincial capitals",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3026,
+        "rerank": 0.4564,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Each Canadian province and territory has its own capital city."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_australia_sydney | Sydney",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2489,
+        "rerank": 0.4126,
+        "section": "australian_cities",
+        "query_hits": "australia, capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+      },
+      {
+        "rank": 7,
+        "source": "direct_canada_evidence | Canadian federal capital",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2623,
+        "rerank": 0.401,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Ottawa is the capital city of Canada and the seat of the federal government."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_australia_states | State capitals",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.226,
+        "rerank": 0.3511,
+        "section": "australian_cities",
+        "query_hits": "australia, capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 9,
+        "source": "direct_canada_toronto | Toronto",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1597,
+        "rerank": 0.2598,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Toronto is Canada's most populous city and the capital of Ontario."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.104,
+        "rerank": 0.1531,
+        "section": "world_oceans",
+        "query_hits": "australia",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 11,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0851,
+        "rerank": 0.1272,
+        "section": "japan_capital",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 12,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0808,
+        "rerank": 0.1211,
+        "section": "japan_overview",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_france_b | Seat of French government",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0806,
+        "rerank": 0.1209,
+        "section": "france_cities",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "France's capital and national seat of government is Paris."
+      },
+      {
+        "rank": 14,
+        "source": "direct_tokyo_osaka | Osaka distractor",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0746,
+        "rerank": 0.1127,
+        "section": "japan_capital",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Osaka is a large Japanese city and an important commercial centre."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_france_lyon | Lyon",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0733,
+        "rerank": 0.1109,
+        "section": "france_cities",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_france_marseille | Marseille",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0733,
+        "rerank": 0.1108,
+        "section": "france_cities",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marseille is a large port city on France's Mediterranean coast."
+      },
+      {
+        "rank": 17,
+        "source": "direct_canada_montreal | Montreal",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0685,
+        "rerank": 0.1043,
+        "section": "canadian_cities",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Montreal is a major city in Quebec and an important cultural and commercial centre."
+      },
+      {
+        "rank": 18,
+        "source": "conflict_australia_melbourne | Melbourne",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0661,
+        "rerank": 0.1009,
+        "section": "australian_cities",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Melbourne is the capital of Victoria and served as the temporary seat of federal government."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 24,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_australia_correct | Federal capital",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5668,
+        "rerank": 0.85,
+        "section": "australian_cities",
+        "query_hits": "australia, capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Canberra is the capital city of Australia and the seat of the federal government."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3923,
+        "rerank": 0.5798,
+        "section": "japan_capital",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3923,
+        "rerank": 0.5798,
+        "section": "japan_currency",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_france_a | French national capital",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3842,
+        "rerank": 0.5686,
+        "section": "france_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is the capital city of France."
+      },
+      {
+        "rank": 5,
+        "source": "direct_canada_provinces | Provincial capitals",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3026,
+        "rerank": 0.4564,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Each Canadian province and territory has its own capital city."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_australia_sydney | Sydney",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2489,
+        "rerank": 0.4126,
+        "section": "australian_cities",
+        "query_hits": "australia, capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+      },
+      {
+        "rank": 7,
+        "source": "direct_canada_evidence | Canadian federal capital",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2623,
+        "rerank": 0.401,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Ottawa is the capital city of Canada and the seat of the federal government."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_australia_states | State capitals",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.226,
+        "rerank": 0.3511,
+        "section": "australian_cities",
+        "query_hits": "australia, capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 9,
+        "source": "direct_canada_toronto | Toronto",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1597,
+        "rerank": 0.2598,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Toronto is Canada's most populous city and the capital of Ontario."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.104,
+        "rerank": 0.1531,
+        "section": "world_oceans",
+        "query_hits": "australia",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 11,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0851,
+        "rerank": 0.1272,
+        "section": "japan_capital",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 12,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0808,
+        "rerank": 0.1211,
+        "section": "japan_overview",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_france_b | Seat of French government",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0806,
+        "rerank": 0.1209,
+        "section": "france_cities",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "France's capital and national seat of government is Paris."
+      },
+      {
+        "rank": 14,
+        "source": "direct_tokyo_osaka | Osaka distractor",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0746,
+        "rerank": 0.1127,
+        "section": "japan_capital",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Osaka is a large Japanese city and an important commercial centre."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_france_lyon | Lyon",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0733,
+        "rerank": 0.1109,
+        "section": "france_cities",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_france_marseille | Marseille",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0733,
+        "rerank": 0.1108,
+        "section": "france_cities",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marseille is a large port city on France's Mediterranean coast."
+      },
+      {
+        "rank": 17,
+        "source": "direct_canada_montreal | Montreal",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0685,
+        "rerank": 0.1043,
+        "section": "canadian_cities",
+        "query_hits": "city",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Montreal is a major city in Quebec and an important cultural and commercial centre."
+      },
+      {
+        "rank": 18,
+        "source": "conflict_australia_melbourne | Melbourne",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0661,
+        "rerank": 0.1009,
+        "section": "australian_cities",
+        "query_hits": "capital",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Melbourne is the capital of Victoria and served as the temporary seat of federal government."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 24,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_australia_correct | Federal capital",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5668,
+        "rerank": 0.85,
+        "section": "australian_cities",
+        "query_hits": "australia, capital, city",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Canberra is the capital city of Australia and the seat of the federal government."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3923,
+        "rerank": 0.5798,
+        "section": "japan_capital",
+        "query_hits": "capital, city",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6894,
+        "novelty": 0.5885,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7753,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_france_a | French national capital",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3842,
+        "rerank": 0.5686,
+        "section": "france_cities",
+        "query_hits": "capital, city",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6766,
+        "novelty": 0.4944,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7511,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is the capital city of France."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3923,
+        "rerank": 0.5798,
+        "section": "japan_currency",
+        "query_hits": "capital, city",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6894,
+        "novelty": 0.25,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7279,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 5,
+        "source": "direct_canada_provinces | Provincial capitals",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3026,
+        "rerank": 0.4564,
+        "section": "canadian_cities",
+        "query_hits": "capital, city",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5476,
+        "novelty": 0.7083,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6701,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Each Canadian province and territory has its own capital city."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_australia_sydney | Sydney",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2489,
+        "rerank": 0.4126,
+        "section": "australian_cities",
+        "query_hits": "australia, capital, city",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4972,
+        "novelty": 0.385,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6215,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "australia",
+        "capital",
+        "city"
+      ],
+      "covered_query_terms": [
+        "australia",
+        "capital",
+        "city"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_australia_correct | Federal capital": [
+          "australia",
+          "capital",
+          "city"
+        ],
+        "direct_tokyo_evidence | Japan national capital": [
+          "capital",
+          "city"
+        ],
+        "redundant_france_a | French national capital": [
+          "capital",
+          "city"
+        ],
+        "conflict_japan_tokyo_distractor | Japan capital distractor": [
+          "capital",
+          "city"
+        ],
+        "direct_canada_provinces | Provincial capitals": [
+          "capital",
+          "city"
+        ],
+        "conflict_australia_sydney | Sydney": [
+          "australia",
+          "capital",
+          "city"
+        ]
+      },
+      "section_titles": [
+        "australian_cities",
+        "canadian_cities",
+        "france_cities",
+        "japan_capital",
+        "japan_currency"
+      ],
+      "chunks_by_section": {
+        "australian_cities": [
+          "conflict_australia_correct | Federal capital",
+          "conflict_australia_sydney | Sydney"
+        ],
+        "japan_capital": [
+          "direct_tokyo_evidence | Japan national capital"
+        ],
+        "france_cities": [
+          "redundant_france_a | French national capital"
+        ],
+        "japan_currency": [
+          "conflict_japan_tokyo_distractor | Japan capital distractor"
+        ],
+        "canadian_cities": [
+          "direct_canada_provinces | Provincial capitals"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Canberra is the capital city of Australia and the seat of the federal government.",
+    "retrieved_context_answer": "Canberra is the capital city of Australia and it is the seat of the federal government.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.6666666666666666,
+    "retrieved_context_f1": 0.6086956521739131,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "retrieval_failure"
+  }
+}

@@ -1,4 +1,4 @@
-"""Sample traces for the Streamlit retrieval-explanation demo."""
+"""Sample traces for the RAG retrieval-explanation dashboard."""
 
 from __future__ import annotations
 

@@ -10,7 +10,7 @@ import threading
 from dataclasses import dataclass
 from functools import cached_property, lru_cache
 from pathlib import Path
-from typing import Protocol
+from typing import Any, Protocol, cast
 
 import numpy as np
 
@@ -35,7 +35,7 @@ class LlamaModel(Protocol):
     def eval(self, tokens: list[int]) -> None:
         """Evaluate tokens and retain logits."""
 
-    def create_completion(self, **kwargs: object) -> dict[str, object]:
+    def create_completion(self, **kwargs: object) -> dict[str, Any]:
         """Generate one completion."""
 
     def close(self) -> None:
@@ -83,7 +83,19 @@ def cached_llama_cpp_model(
         verbose=False,
     )
     atexit.register(model.close)
-    return model
+    return cast("LlamaModel", model)
+
+
+@lru_cache(maxsize=4)
+def cached_llama_cpp_lock(
+    model_path: str,
+    n_ctx: int,
+    n_gpu_layers: int,
+    n_threads: int,
+) -> threading.RLock:
+    """Return the process-wide lock for one cached llama.cpp model."""
+    del model_path, n_ctx, n_gpu_layers, n_threads
+    return threading.RLock()
 
 
 class LlamaCppBackend:
@@ -99,12 +111,17 @@ class LlamaCppBackend:
         max_new_tokens: int = 96,
     ) -> None:
         """Store llama.cpp loading and generation settings."""
-        self.model_path = str(Path(model_path).expanduser())
+        self.model_path = str(Path(model_path).expanduser().resolve())
         self.n_ctx = n_ctx
         self.n_gpu_layers = n_gpu_layers
         self.n_threads = n_threads or max(1, (os.cpu_count() or 2) // 2)
         self.max_new_tokens = max_new_tokens
-        self._lock = threading.RLock()
+        self._lock = cached_llama_cpp_lock(
+            self.model_path,
+            self.n_ctx,
+            self.n_gpu_layers,
+            self.n_threads,
+        )
 
     @cached_property
     def model(self) -> LlamaModel:

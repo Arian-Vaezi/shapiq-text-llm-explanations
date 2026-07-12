@@ -9,19 +9,17 @@ import json
 from dataclasses import dataclass
 from html import escape
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
-RUNS_DIR = Path(__file__).parents[1] / "runs"
+RESULTS_DIR = Path(__file__).parents[1] / "results"
 REPORT_PATH = Path(__file__).parents[2] / "eval_report.html"
 
-LEXICAL_RUN = RUNS_DIR / "20260626_232647_164955_controlled_50_bge_lexical"
-TARGET_LL_RUN = RUNS_DIR / "20260626_232659_164956_controlled_50_bge_target_ll_e4b_cuda4"
-CONTRASTIVE_RUN = RUNS_DIR / "20260626_215332_164947_controlled_50_bge_contrastive_ll_e4b_cuda4"
-TFIDF_CONTRASTIVE_RUN = (
-    RUNS_DIR / "20260626_232708_164957_controlled_50_tfidf_contrastive_ll_e4b_cuda4"
-)
-QASPER_RUN = RUNS_DIR / "20260626_224021_164961_qasper_50_bge_contrastive_ll_e4b_cuda4"
-ARTEMIS_RUN = RUNS_DIR / "20260617_artemis_bge_contrastive_ll_e4b_layers20"
+LEXICAL_RUN = RESULTS_DIR / "controlled" / "bge_lexical"
+TARGET_LL_RUN = RESULTS_DIR / "controlled" / "bge_target_likelihood"
+CONTRASTIVE_RUN = RESULTS_DIR / "controlled" / "bge_contrastive_likelihood"
+TFIDF_CONTRASTIVE_RUN = RESULTS_DIR / "controlled" / "tfidf_contrastive_likelihood"
+QASPER_RUN = RESULTS_DIR / "qasper" / "bge_contrastive_likelihood"
+ARTEMIS_RUN = RESULTS_DIR / "artemis" / "bge_contrastive_likelihood"
 
 INTERACTION_START_MARKER = "    <!-- BEGIN GENERATED INTERACTION DETAILS -->"
 INTERACTION_END_MARKER = "    <!-- END GENERATED INTERACTION DETAILS -->"
@@ -83,7 +81,7 @@ def _fmt(value: object, *, digits: int = 3, signed: bool = False) -> str:
     if value is None or value == "":
         return "n/a"
     try:
-        number = float(value)
+        number = float(cast("Any", value))
     except (TypeError, ValueError):
         return _html(value)
     prefix = "+" if signed else ""
@@ -93,7 +91,8 @@ def _fmt(value: object, *, digits: int = 3, signed: bool = False) -> str:
 def _case_order(run_dir: Path) -> list[str]:
     summary_path = run_dir / "summary.csv"
     if not summary_path.exists():
-        return []
+        msg = f"Missing result summary: {summary_path}"
+        raise FileNotFoundError(msg)
     with summary_path.open(encoding="utf-8") as handle:
         return [row["case_id"] for row in csv.DictReader(handle)]
 
@@ -101,7 +100,8 @@ def _case_order(run_dir: Path) -> list[str]:
 def _summary_by_case(run_dir: Path) -> dict[str, dict[str, str]]:
     summary_path = run_dir / "summary.csv"
     if not summary_path.exists():
-        return {}
+        msg = f"Missing result summary: {summary_path}"
+        raise FileNotFoundError(msg)
     with summary_path.open(encoding="utf-8") as handle:
         return {row["case_id"]: row for row in csv.DictReader(handle)}
 
@@ -109,7 +109,8 @@ def _summary_by_case(run_dir: Path) -> dict[str, dict[str, str]]:
 def _summary_rows(run_dir: Path) -> list[dict[str, str]]:
     summary_path = run_dir / "summary.csv"
     if not summary_path.exists():
-        return []
+        msg = f"Missing result summary: {summary_path}"
+        raise FileNotFoundError(msg)
     with summary_path.open(encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
@@ -124,12 +125,58 @@ def _load_artifacts(run_dir: Path) -> list[dict[str, Any]]:
     for path in sorted(artifacts_dir.glob("*.json")):
         with path.open(encoding="utf-8") as handle:
             artifact = json.load(handle)
-        by_case[str(artifact["case"]["case_id"])] = artifact
+        case_id = str(artifact["case"]["case_id"])
+        if case_id in by_case:
+            msg = f"Duplicate artifact case ID {case_id!r} in {artifacts_dir}"
+            raise ValueError(msg)
+        by_case[case_id] = artifact
 
     ordered_ids = _case_order(run_dir)
-    ordered = [by_case[case_id] for case_id in ordered_ids if case_id in by_case]
-    remaining = [by_case[case_id] for case_id in sorted(by_case) if case_id not in ordered_ids]
-    return [*ordered, *remaining]
+    summary_ids = set(ordered_ids)
+    artifact_ids = set(by_case)
+    if len(summary_ids) != len(ordered_ids):
+        msg = f"Duplicate case IDs in {run_dir / 'summary.csv'}"
+        raise ValueError(msg)
+    if summary_ids != artifact_ids:
+        msg = (
+            f"Summary/artifact mismatch in {run_dir}: "
+            f"missing artifacts={sorted(summary_ids - artifact_ids)}, "
+            f"extra artifacts={sorted(artifact_ids - summary_ids)}"
+        )
+        raise ValueError(msg)
+    return [by_case[case_id] for case_id in ordered_ids]
+
+
+def _load_manifest(run_dir: Path) -> dict[str, Any]:
+    """Load one published run manifest."""
+    manifest_path = run_dir / "manifest.json"
+    if not manifest_path.exists():
+        msg = f"Missing result manifest: {manifest_path}"
+        raise FileNotFoundError(msg)
+    return json.loads(manifest_path.read_text(encoding="utf-8"))
+
+
+def _model_display_name(model_path: object) -> str:
+    """Return a compact model label from a recorded model filename."""
+    filename = Path(str(model_path)).name
+    if "gemma-4-E4B" in filename:
+        return "Gemma 4 E4B"
+    if "gemma-4-E2B" in filename:
+        return "Gemma 4 E2B"
+    return filename or "recorded local model"
+
+
+def _hardware_description(manifest: dict[str, Any]) -> str:
+    """Describe recorded embedding and llama.cpp execution settings."""
+    device = str(
+        manifest.get("embedding_device_resolved")
+        or manifest.get("embedding_device_requested")
+        or "unknown device"
+    ).upper()
+    layers = manifest.get("n_gpu_layers")
+    if isinstance(layers, int):
+        return f"BGE embeddings on {device}; {layers} llama.cpp layers offloaded to {device}"
+    return f"BGE embeddings on {device}; llama.cpp offload not recorded"
 
 
 def _correct_count(rows: list[dict[str, Any]]) -> int:
@@ -156,7 +203,7 @@ def _status_badge(row: dict[str, Any]) -> str:
 def _observed_sign(value: object) -> str:
     if value is None:
         return "n/a"
-    number = float(value)
+    number = float(cast("Any", value))
     if number > 0:
         return "positive"
     if number < 0:
@@ -196,7 +243,7 @@ def _as_float(value: object) -> float | None:
     if value is None or value == "":
         return None
     try:
-        return float(value)
+        return float(cast("Any", value))
     except (TypeError, ValueError):
         return None
 
@@ -860,6 +907,7 @@ def render_failure_details(run_dir: Path = QASPER_RUN) -> str:
     """Render collapsible per-question failure-diagnosis details."""
     artifacts = _load_artifacts(run_dir)
     summary = _summary_by_case(run_dir)
+    manifest = _load_manifest(run_dir)
     ordered_rows = [summary[str(artifact["case"]["case_id"])] for artifact in artifacts]
     class_counts: dict[str, int] = {}
     for row in ordered_rows:
@@ -868,6 +916,15 @@ def render_failure_details(run_dir: Path = QASPER_RUN) -> str:
     count_text = " - ".join(
         f"{count} {_class_label(label)}" for label, count in sorted(class_counts.items())
     )
+    gold_hit_rows = _gold_hit_rows(ordered_rows)
+    top_gold_hits = sum(
+        row.get("top_attribution_is_gold", "").lower() == "true" for row in gold_hit_rows
+    )
+    generation_failures = class_counts.get("generation_or_model_failure", 0)
+    retrieval_recall = _fmt(_mean(ordered_rows, "retrieval_recall_at_k"))
+    model_name = _model_display_name(manifest.get("model_path"))
+    hardware = _hardware_description(manifest)
+    threshold = _fmt(_as_float(manifest.get("f1_threshold")))
     case_html = "".join(
         _render_failure_case(artifact, summary[str(artifact["case"]["case_id"])])
         for artifact in artifacts
@@ -880,13 +937,15 @@ def render_failure_details(run_dir: Path = QASPER_RUN) -> str:
             "      <p>Each QASPER case below shows the actual closed-book, gold-context, "
             "and retrieved-context answers used by the knowledge-source classifier, "
             "plus retrieval hits and Shapley attribution over the retrieved passages.</p>",
-            '      <p class="metric-warning">49 of 50 QASPER cases are diagnosed as '
-            "<strong>generation/model failure</strong>: the model (Gemma E4B, run with "
-            "partial Metal offload) fails to produce a short extractive answer from "
+            f'      <p class="metric-warning">{generation_failures} of {len(ordered_rows)} '
+            "QASPER cases are diagnosed as <strong>generation/model failure</strong>: "
+            f"the model ({_html(model_name)}; {_html(hardware)}) fails to produce a short "
+            "extractive answer from "
             "academic text even when the correct passage is retrieved. This is a "
             "generation-quality bottleneck, not a Shapley failure — retrieval recall "
-            "is 0.549 and attribution correctly identifies the gold passage as "
-            "top-ranked in 28/35 gold-hit cases. The token-F1 threshold (0.65) is "
+            f"is {retrieval_recall} and attribution correctly identifies the gold passage as "
+            f"top-ranked in {top_gold_hits}/{len(gold_hit_rows)} gold-hit cases. The token-F1 "
+            f"threshold ({threshold}) is "
             "calibrated for single-sentence extractive answers; virtually all "
             "QASPER responses fall below it due to multi-sentence answer complexity, "
             "and this near-universal flagging is itself the diagnostic finding.</p>",

@@ -1,4 +1,4 @@
-"""Verify that paper tables are traceable to saved evaluation artifacts."""
+"""Verify that reported metrics are traceable to published evaluation results."""
 
 from __future__ import annotations
 
@@ -10,25 +10,21 @@ from typing import Any
 
 import pandas as pd
 
-RUNS_DIR = Path(__file__).parents[1] / "runs"
-DEFAULT_OUTPUT = RUNS_DIR / "report_verification.json"
+from .build_eval_report import _load_artifacts
+
+RESULTS_DIR = Path(__file__).parents[1] / "results"
+DEFAULT_OUTPUT = RESULTS_DIR / "report_verification.json"
 TOLERANCE = 0.0005
 
 CONTROLLED_RUNS = {
-    "BGE-base + lexical": RUNS_DIR / "20260626_232647_164955_controlled_50_bge_lexical",
-    "BGE-base + target LL": (
-        RUNS_DIR / "20260626_232659_164956_controlled_50_bge_target_ll_e4b_cuda4"
-    ),
-    "BGE-base + contrastive LL": (
-        RUNS_DIR / "20260626_215332_164947_controlled_50_bge_contrastive_ll_e4b_cuda4"
-    ),
-    "TF--IDF + contrastive LL": (
-        RUNS_DIR / "20260626_232708_164957_controlled_50_tfidf_contrastive_ll_e4b_cuda4"
-    ),
+    "BGE-base + lexical": RESULTS_DIR / "controlled" / "bge_lexical",
+    "BGE-base + target LL": RESULTS_DIR / "controlled" / "bge_target_likelihood",
+    "BGE-base + contrastive LL": RESULTS_DIR / "controlled" / "bge_contrastive_likelihood",
+    "TF--IDF + contrastive LL": RESULTS_DIR / "controlled" / "tfidf_contrastive_likelihood",
 }
-QASPER_RUN = RUNS_DIR / "20260626_224021_164961_qasper_50_bge_contrastive_ll_e4b_cuda4"
-CONTROLLED_STABILITY_SUMMARY = RUNS_DIR / "20260630_controlled_50_stability"
-CONTROLLED_INTERACTION_SUMMARY = RUNS_DIR / "20260627_controlled_50_interaction_summary"
+QASPER_RUN = RESULTS_DIR / "qasper" / "bge_contrastive_likelihood"
+CONTROLLED_STABILITY_SUMMARY = RESULTS_DIR / "derived" / "stability"
+CONTROLLED_INTERACTION_SUMMARY = RESULTS_DIR / "derived" / "interactions"
 
 
 @dataclass(frozen=True)
@@ -229,7 +225,9 @@ def _stability_metrics() -> dict[tuple[str, str, str], float]:
         "tfidf_contrastive_ll": "TF--IDF contrastive LL",
     }
     metrics = {}
-    for (left, right, target), group in frame.groupby(["left_run", "right_run", "target"]):
+    for (left, right, target), group in frame.groupby(  # ty: ignore[not-iterable]
+        ["left_run", "right_run", "target"]
+    ):
         target_label = "Generated" if target == "generated" else "Gold"
         row = f"{name_lookup[left]} vs {name_lookup[right]} / {target_label}"
         metrics[("Table 3", row, "Retrieved Jaccard")] = _round3(_mean(group, "retrieved_jaccard"))
@@ -264,6 +262,11 @@ def _interaction_metrics() -> dict[tuple[str, str, str], float]:
 def _curve_warnings() -> list[str]:
     warnings = []
     for run_dir in [*CONTROLLED_RUNS.values(), QASPER_RUN]:
+        try:
+            _load_artifacts(run_dir)
+        except (FileNotFoundError, KeyError, ValueError, json.JSONDecodeError) as error:
+            warnings.append(str(error))
+            continue
         artifact_files = sorted((run_dir / "artifacts").glob("*.json"))
         if not artifact_files:
             warnings.append(f"No artifacts found in {run_dir}")
@@ -282,7 +285,7 @@ def _curve_warnings() -> list[str]:
 
 
 def verify_report_results() -> dict[str, Any]:
-    """Recompute paper table values and compare them with reported numbers."""
+    """Recompute published metrics and compare them with reported numbers."""
     computed = {}
     computed.update(_controlled_metrics())
     computed.update(_qasper_metrics())
@@ -308,10 +311,15 @@ def verify_report_results() -> dict[str, Any]:
                 ),
             }
         )
+    warnings = _curve_warnings()
     return {
-        "status": ("ok" if all(check["status"] == "ok" for check in checks) else "needs_attention"),
+        "status": (
+            "ok"
+            if all(check["status"] == "ok" for check in checks) and not warnings
+            else "needs_attention"
+        ),
         "checks": checks,
-        "warnings": _curve_warnings(),
+        "warnings": warnings,
     }
 
 
@@ -326,7 +334,7 @@ def main() -> int:
     print(f"Wrote report verification to {args.output}")  # noqa: T201
     for warning in result["warnings"]:
         print(f"WARNING: {warning}")  # noqa: T201
-    if mismatches:
+    if mismatches or result["warnings"]:
         print(json.dumps(mismatches, indent=2))  # noqa: T201
         return 1
     return 0

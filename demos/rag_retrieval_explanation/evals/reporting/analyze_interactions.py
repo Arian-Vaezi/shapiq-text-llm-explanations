@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pandas as pd
 
-RUNS_DIR = Path(__file__).parents[1] / "runs"
-DEFAULT_OUTPUT_DIR = RUNS_DIR / "controlled_interaction_summary"
+RESULTS_DIR = Path(__file__).parents[1] / "results"
+DEFAULT_OUTPUT_DIR = RESULTS_DIR / "derived" / "interactions"
 RELATIONS = ("complementary", "redundant", "conflicting", "overall")
 
 
@@ -74,7 +74,8 @@ def aggregate_interaction_runs(
     for setting, run_dir in runs.items():
         summary_path = run_dir / "summary.csv"
         if not summary_path.exists():
-            continue
+            msg = f"Missing interaction input summary: {summary_path}"
+            raise FileNotFoundError(msg)
         frame = pd.read_csv(summary_path)
         target_specs = [("Gold/reference answer", "")]
         if "generated_interaction_total_pairs" in frame.columns:
@@ -141,6 +142,9 @@ def main() -> int:
     runs = dict(args.run)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     rows = aggregate_interaction_runs(runs)
+    if not rows:
+        msg = "No interaction rows were produced; provide at least one complete --run input."
+        raise ValueError(msg)
     dict_rows = [asdict(row) for row in rows]
     pd.DataFrame(dict_rows).to_csv(args.output_dir / "summary.csv", index=False)
     (args.output_dir / "summary.json").write_text(

@@ -46,11 +46,9 @@ sys.path.insert(0, str(_DEMO_DIR))
 from backend.model_registry import (  # noqa: E402
     MODEL_REGISTRY,
     MODELS_DIR,
-    get_model_status,
     list_models,
     list_models_by_family,
 )
-
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -77,14 +75,16 @@ def _print_model_table(models: list[dict]) -> None:
     for m in models:
         avail = "✓ yes" if m["available"] else "✗ missing"
         size = _format_size(Path(str(m["path"]))) if m["available"] else ""
-        print(f"{m['id']:<{col_id}}{m['display_name']:<{col_name}}{m['family']:<14}{avail:<12}{size}")
+        print(
+            f"{m['id']:<{col_id}}{m['display_name']:<{col_name}}{m['family']:<14}{avail:<12}{size}"
+        )
 
 
 def _download_model(model_id: str, *, force: bool = False) -> bool:
     """Download one model. Returns True on success, False if skipped or failed."""
     if model_id not in MODEL_REGISTRY:
         print(f"  ERROR: '{model_id}' is not a registered model ID.", file=sys.stderr)
-        print(f"  Run --list to see valid IDs.", file=sys.stderr)
+        print("  Run --list to see valid IDs.", file=sys.stderr)
         return False
 
     entry = MODEL_REGISTRY[model_id]
@@ -121,7 +121,7 @@ def _download_model(model_id: str, *, force: bool = False) -> bool:
             local_dir=str(MODELS_DIR),
             force_download=force,
         )
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         print(f"  ERROR downloading {model_id}: {exc}", file=sys.stderr)
         return False
 
@@ -175,6 +175,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    """Run the model registry download command-line interface."""
     parser = _build_parser()
     args = parser.parse_args()
 

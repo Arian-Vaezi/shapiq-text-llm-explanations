@@ -73,6 +73,14 @@ def test_qwen3_prompt_disables_thinking_mode() -> None:
     assert prompt.endswith("<|im_start|>assistant\n")
 
 
+def test_backends_for_same_model_share_lock() -> None:
+    """Backends sharing a cached model must also serialize access with one lock."""
+    first = LlamaCppBackend("shared.gguf", n_ctx=32, n_gpu_layers=2, n_threads=1)
+    second = LlamaCppBackend("shared.gguf", n_ctx=32, n_gpu_layers=2, n_threads=1)
+
+    assert first._lock is second._lock
+
+
 def test_target_log_likelihood_uses_target_token_logits() -> None:
     """Likelihood should average next-token log probabilities for the target."""
     backend, fake = backend_with_fake_model()

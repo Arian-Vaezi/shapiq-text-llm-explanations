@@ -1,4 +1,4 @@
-"""Reusable RAG retrieval attribution game for the Streamlit demo.
+"""Reusable RAG retrieval attribution game for the local research demo.
 
 The game treats retrieved chunks as players. A coalition selects which chunks
 are visible to the answer scorer.
@@ -60,13 +60,9 @@ def lexical_grounding_score(
 ) -> float:
     """Lightweight support score for local demos.
 
-    DEMO SCAFFOLD: this intentionally avoids model downloads/API keys. It
-    scores how much of the target answer is supported by the selected context,
-    with a small question-overlap bonus and a length penalty for noisy context.
-
-    FINAL DEMO: replace this with a real value function, such as target-answer
-    log-likelihood, entailment/groundedness score, or answer confidence from a
-    RAG pipeline.
+    This transparent baseline avoids model inference. It scores how much of the
+    target answer is supported by the selected context, with a small
+    question-overlap bonus and a length penalty for noisy context.
     """
     if not selected_chunks:
         return 0.0
@@ -147,12 +143,7 @@ class RAGRetrievalGame(Game):
         return self.scorer(self.question, self.target_answer, selected_chunks)
 
     def build_prompt(self, selected_chunks: list[RetrievedChunk]) -> str:
-        """Build the prompt that a future model-backed scorer could evaluate.
-
-        The current lexical scorer does not call this prompt. It is shown in the
-        Streamlit UI so the demo audience can see what each coalition would mean
-        in a real RAG prompt: only the selected chunks are visible.
-        """
+        """Build an inspectable grounded prompt for the selected coalition."""
         context_blocks = [
             f"[{idx}] {chunk.title}\n{chunk.text}"
             for idx, chunk in enumerate(selected_chunks, start=1)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 from demos.rag_retrieval_explanation.backend.schemas import RunResponse
 from demos.rag_retrieval_explanation.backend.services import (
     default_settings,
@@ -39,9 +40,5 @@ def test_sample_run_returns_dashboard_contract(monkeypatch) -> None:
 def test_sample_run_rejects_unknown_scenario() -> None:
     settings = default_settings()
 
-    try:
+    with pytest.raises(ValueError, match="Unknown sample scenario"):
         run_sample("missing", settings)
-    except ValueError as error:
-        assert "Unknown sample scenario" in str(error)
-    else:
-        raise AssertionError("Expected ValueError")

@@ -8,9 +8,9 @@ RAG_FRONTEND    := demos/rag_retrieval_explanation/frontend
 RAG_MODEL_DIR   := models/llm
 RAG_MODEL       := $(RAG_MODEL_DIR)/Qwen3-8B-Q4_K_M.gguf
 RAG_MODEL_URL   := https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/main/Qwen3-8B-Q4_K_M.gguf
-RAG_E4B_MODEL   := $(RAG_MODEL_DIR)/gemma-4-E4B-it-Q4_K_M.gguf
-RAG_CONTROLLED_BGE_LEXICAL_RUN := demos/rag_retrieval_explanation/evals/runs/20260626_232647_164955_controlled_50_bge_lexical
-RAG_CONTROLLED_INTERACTION_SUMMARY := demos/rag_retrieval_explanation/evals/runs/20260627_controlled_50_interaction_summary
+RAG_EVALS       := demos/rag_retrieval_explanation/evals
+RAG_RESULTS     := $(RAG_EVALS)/results
+RAG_RUNS        := $(RAG_EVALS)/runs
 
 # ---------------------------------------------------------------------------
 # Targets
@@ -31,16 +31,20 @@ help:
 	@echo "  make download-rag-model              Download the default local GGUF model"
 	@echo ""
 	@echo "Tests:"
-	@echo "  make test                            Run retrieval policy unit tests"
+	@echo "  make test                            Run the complete RAG demo test suite"
+	@echo ""
+	@echo "Evaluation:"
 	@echo "  make eval-controlled                 Run corpus retrieval + gold attribution eval"
 	@echo "  make eval-controlled-model           Add model knowledge-source experiments"
 	@echo "  make eval-controlled-bge-lexical     Run controlled BGE + lexical eval"
-	@echo "  make eval-interactions-controlled    Recompute controlled RQ2 interaction table"
-	@echo "  make eval-report-html                Rebuild static HTML report details"
-	@echo "  make eval-stability                  Analyze controlled attribution stability"
+	@echo "  make eval-interactions-controlled    Rebuild interaction results from published runs"
+	@echo "  make eval-stability                  Rebuild stability results from published runs"
 	@echo "  make eval-qasper-smoke               Run the first five frozen QASPER cases"
-	@echo "  make eval-qasper                     Run the frozen 30-case QASPER eval"
-	@echo "  make verify-report-results           Recompute paper tables from saved runs"
+	@echo "  make eval-qasper                     Run the frozen 50-case QASPER eval"
+	@echo ""
+	@echo "Report:"
+	@echo "  make eval-report-html                Rebuild the static HTML report"
+	@echo "  make verify-report-results           Verify reported metrics from published results"
 	@echo ""
 	@echo "Code quality:"
 	@echo "  make lint                            Run pre-commit on all files"
@@ -87,10 +91,15 @@ eval-controlled-model:
 	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval --model-path $(RAG_MODEL)
 
 eval-controlled-bge-lexical:
-	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval --method "Dense embeddings" --embedding-model models/embedding/bge-base-en-v1.5 --embedding-device mps --value-function lexical --output-dir $(RAG_CONTROLLED_BGE_LEXICAL_RUN)
+	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval --method "Dense embeddings" --embedding-model models/embedding/bge-base-en-v1.5 --embedding-device mps --value-function lexical --output-dir $(RAG_RUNS)/controlled_bge_lexical
 
 eval-interactions-controlled:
-	uv run python -m demos.rag_retrieval_explanation.evals.reporting.analyze_interactions --run "BGE-base + lexical=$(RAG_CONTROLLED_BGE_LEXICAL_RUN)" --output-dir $(RAG_CONTROLLED_INTERACTION_SUMMARY)
+	uv run python -m demos.rag_retrieval_explanation.evals.reporting.analyze_interactions \
+		--run "BGE-base + lexical=$(RAG_RESULTS)/controlled/bge_lexical" \
+		--run "BGE-base + target LL=$(RAG_RESULTS)/controlled/bge_target_likelihood" \
+		--run "BGE-base + contrastive LL=$(RAG_RESULTS)/controlled/bge_contrastive_likelihood" \
+		--run "TF-IDF + contrastive LL=$(RAG_RESULTS)/controlled/tfidf_contrastive_likelihood" \
+		--output-dir $(RAG_RESULTS)/derived/interactions
 
 eval-report-html:
 	uv run python -m demos.rag_retrieval_explanation.evals.reporting.build_eval_report

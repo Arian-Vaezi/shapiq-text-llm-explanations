@@ -33,6 +33,12 @@ def test_exact_match_uses_normalized_text() -> None:
     assert exact_match("Paris", "Paris France") == 0.0
 
 
+def test_interaction_aggregation_rejects_missing_summary(tmp_path) -> None:
+    """A missing requested run must fail instead of producing an empty report."""
+    with pytest.raises(FileNotFoundError, match="Missing interaction input summary"):
+        aggregate_interaction_runs({"missing": tmp_path / "missing-run"})
+
+
 def test_exact_shapley_on_additive_two_player_game() -> None:
     chunks = [_chunk("A"), _chunk("B")]
 

@@ -1,0 +1,3416 @@
+{
+  "case": {
+    "case_id": "redundant_largest_animal",
+    "pattern": "redundant_evidence",
+    "question": "What is the largest animal known to have lived on Earth?",
+    "gold_answer": "The blue whale.",
+    "gold_evidence_ids": [
+      "redundant_blue_whale_a",
+      "redundant_blue_whale_b",
+      "redundant_blue_whale_c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_blue_whale_a",
+        "right": "redundant_blue_whale_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_blue_whale_a",
+        "right": "redundant_blue_whale_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_blue_whale_b",
+        "right": "redundant_blue_whale_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_blue_whale_a",
+      "score": 0.88,
+      "title": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+      "text": "The blue whale is the largest animal known to have lived on Earth."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_france_lyon",
+      "score": 0.07270364951177638,
+      "title": "Retrieved 2: redundant_france_lyon | Lyon",
+      "text": "Lyon is a major French city known for commerce and gastronomy."
+    },
+    {
+      "rank": 3,
+      "passage_id": "missing_japan_tokyo",
+      "score": 0.05894190450206992,
+      "title": "Retrieved 3: missing_japan_tokyo | Tokyo",
+      "text": "Tokyo is Japan's capital and its largest metropolitan area."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_mars_planet",
+      "score": 0.061915900000933694,
+      "title": "Retrieved 4: missing_mars_planet | The red planet",
+      "text": "Mars is a rocky planet known for iron-rich minerals that give its surface a reddish colour."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_eiffel_paris",
+      "score": 0.06726590702500833,
+      "title": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+      "text": "Paris is known for museums, boulevards, cafes, bridges, and major landmarks."
+    },
+    {
+      "rank": 6,
+      "passage_id": "redundant_sahara_antarctica_distractor",
+      "score": 0.04891942499877984,
+      "title": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "text": "Antarctica is the largest desert overall when cold polar deserts are included."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+      "attribution": 0.26625135544582945
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_mars_planet | The red planet",
+      "attribution": -0.020914979880152576
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": 0.02081878158839822
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_france_lyon | Lyon",
+      "attribution": 0.009575676587307493
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_japan_tokyo | Tokyo",
+      "attribution": 0.00876051220079373
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+      "attribution": 0.008623153423585711
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+      "attribution": 0.1366006866960423
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_mars_planet | The red planet",
+      "attribution": -0.010863465884190257
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": 0.006459393384406123
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_japan_tokyo | Tokyo",
+      "attribution": 0.002190080217056558
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_france_lyon | Lyon",
+      "attribution": 0.0012802394979117167
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+      "attribution": 0.0011617045631613938
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_left_and_right"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_left_and_right"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_france_lyon",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.0039291519620649525,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "missing_japan_tokyo",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.0010788560892219193,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "missing_mars_planet",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.054716263328758945,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "missing_eiffel_paris",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.004219432675936037,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.026945085806079936,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_japan_tokyo",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.04152909630986475,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_mars_planet",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.047038279767611185,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_eiffel_paris",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.03414946329983165,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.034010400231819005,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "missing_mars_planet",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.03939405476139788,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "missing_eiffel_paris",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.03037447915616841,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.029974560682343394,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_planet",
+      "right": "missing_eiffel_paris",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.03160292931281052,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_planet",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.030987295867818523,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_eiffel_paris",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.026428464003386727,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_france_lyon",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.0034466121498819974,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "missing_japan_tokyo",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.0009999770717104028,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "missing_mars_planet",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.025319790731748285,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "missing_eiffel_paris",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.0028301406524438638,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.00748419251493288,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_japan_tokyo",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.010048690187437034,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_mars_planet",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.010308242347905311,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "missing_eiffel_paris",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.008733981297254523,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_france_lyon",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.01003768358231008,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "missing_mars_planet",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.009248257337482333,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "missing_eiffel_paris",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.009260800324217945,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.008868008842004048,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_planet",
+      "right": "missing_eiffel_paris",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.008385435879159096,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_planet",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.008693213197568233,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_eiffel_paris",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.008957793188493253,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.3155914353980688
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_france_lyon"
+      ],
+      "score": 0.15737216421566902
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo"
+      ],
+      "score": 0.14536980897977625
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_planet"
+      ],
+      "score": 0.09638786670070265
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_eiffel_paris"
+      ],
+      "score": 0.13184302348667654
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1580963706566163
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon"
+      ],
+      "score": 0.2939481083565011
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.2908592950824225
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet"
+      ],
+      "score": 0.28659623146256696
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.2914921068262698
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2887400456979575
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.09430410555994795
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet"
+      ],
+      "score": -0.015028478533978318
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.10338074208368042
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0988713172585749
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": 0.003691308190904463
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.10036421439492016
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0941057117706966
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.02335040720738657
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.05142441353440619
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1039953625995984
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.2882784408552176
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet"
+      ],
+      "score": 0.2874347798978384
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.2829404392245528
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2844395308261546
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": 0.28919859290794325
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.2870540798697566
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28694768978392904
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.284098914446677
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.285926507015144
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2816679215014962
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": -0.027240991370110823
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.0071810910206124845
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.07749327096309822
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.009212166564637359
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.012184352984075164
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.09047782956751449
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.025231904228402435
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.001923193983878968
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.09442970263772188
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0011154394718736471
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": 0.28717766668956957
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.2829814406167619
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28413277570191886
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.28722379607813264
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28536169662953914
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2838254417560361
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.287113133213755
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28570614412249073
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28601704813161954
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28282777812825066
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.04461809872924505
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.027848420907813087
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.022044425160846814
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.021833236051025384
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0064846813356003175
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.28336393796058124
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28804624691514014
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.29103293190576107
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2879380278998258
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2885404254943006
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.05103668627478436
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2931144991762219
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.13688110738948367
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_france_lyon"
+      ],
+      "score": 0.03560776158554935
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo"
+      ],
+      "score": 0.036383023492298494
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_planet"
+      ],
+      "score": 0.011110771201293779
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_eiffel_paris"
+      ],
+      "score": 0.032412112032746854
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.04392645073645707
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon"
+      ],
+      "score": 0.136753438614577
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.13676889503903067
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet"
+      ],
+      "score": 0.13691848191958933
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.1368985700562435
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13694382793164817
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.025141007408446825
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet"
+      ],
+      "score": -0.015939778057529774
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.0243164917360269
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.026233396214612514
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": -0.009994114309499702
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.02345508899677251
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.030727381376962626
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.007879692560886942
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.005423005350053911
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.028342045314502018
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.1369180644757807
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet"
+      ],
+      "score": 0.1368940961086319
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.13695467340016831
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13697447370459748
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": 0.13697220542530553
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.13693787349964537
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13691981304868384
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.13690575350581635
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1369681965583346
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1370103871124786
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": -0.016294146505026585
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.008867138695908106
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.017460478009856284
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.016429586978972066
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.006356329000326233
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.020245771492441222
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.017945713827266452
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.008314096446495334
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.022496819154395276
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.013721372726924197
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet"
+      ],
+      "score": 0.13697184313966593
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.13688604611468047
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1368632426408899
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.1370171207214539
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13694913647330742
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13701158420424042
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.13701592363754656
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13692178215749395
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13697393025062043
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13692334168152154
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": -0.024127891815301505
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.0172400352252442
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.002282961239197745
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.019143517337317284
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.012890298278782408
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris"
+      ],
+      "score": 0.1369430796995299
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13692439710255955
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13703322599308787
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1368713952400552
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13690286279559682
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": -0.02516479636211061
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_france_lyon",
+        "missing_japan_tokyo",
+        "missing_mars_planet",
+        "missing_eiffel_paris",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13682863846985627
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2931144991762219
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 5,
+        "score": -0.05103668627478436
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: missing_mars_planet | The red planet",
+        "remaining_chunks": 4,
+        "score": 0.022044425160846814
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 3,
+        "score": -0.0071810910206124845
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: redundant_france_lyon | Lyon",
+        "remaining_chunks": 2,
+        "score": 0.10036421439492016
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: missing_japan_tokyo | Tokyo",
+        "remaining_chunks": 1,
+        "score": 0.13184302348667654
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "selected_chunks": 1,
+        "score": 0.3155914353980688
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: missing_mars_planet | The red planet",
+        "selected_chunks": 2,
+        "score": 0.28659623146256696
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "selected_chunks": 3,
+        "score": 0.285926507015144
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: redundant_france_lyon | Lyon",
+        "selected_chunks": 4,
+        "score": 0.28536169662953914
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: missing_japan_tokyo | Tokyo",
+        "selected_chunks": 5,
+        "score": 0.28804624691514014
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+        "selected_chunks": 6,
+        "score": 0.2931144991762219
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2931144991762219
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 5,
+        "score": -0.05103668627478436
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_france_lyon | Lyon",
+        "remaining_chunks": 4,
+        "score": 0.0064846813356003175
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+        "remaining_chunks": 3,
+        "score": 0.001923193983878968
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_mars_planet | The red planet",
+        "remaining_chunks": 2,
+        "score": 0.0941057117706966
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: missing_japan_tokyo | Tokyo",
+        "remaining_chunks": 1,
+        "score": 0.1580963706566163
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2931144991762219
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 5,
+        "score": -0.05103668627478436
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 4,
+        "score": -0.04461809872924505
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: missing_japan_tokyo | Tokyo",
+        "remaining_chunks": 3,
+        "score": -0.009212166564637359
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: missing_eiffel_paris | Paris tourism",
+        "remaining_chunks": 2,
+        "score": -0.015028478533978318
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: redundant_france_lyon | Lyon",
+        "remaining_chunks": 1,
+        "score": 0.09638786670070265
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: missing_mars_planet | The red planet",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.29311449917622184
+      },
+      {
+        "step": 1,
+        "score": 0.23707814941786942
+      },
+      {
+        "step": 2,
+        "score": 0.17514552241861395
+      },
+      {
+        "step": 3,
+        "score": 0.15033019433554887
+      },
+      {
+        "step": 4,
+        "score": 0.12521630685479962
+      },
+      {
+        "step": 5,
+        "score": 0.17072603773265815
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the largest animal known to have lived on Earth?",
+    "expanded_queries": [
+      "What is the largest animal known to have lived on Earth?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "keyword": 0.8248,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "keyword": 0.1634,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "keyword": 0.14,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.1131,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_a | Largest ocean",
+        "keyword": 0.1115,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "keyword": 0.0847,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.0733,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_france_lyon | Lyon",
+        "keyword": 0.0663,
+        "page": 18,
+        "type": "body_text",
+        "section": "france_cities",
+        "flags": "",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "keyword": 0.0615,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "missing_eiffel_paris | Paris tourism",
+        "keyword": 0.0606,
+        "page": 9,
+        "type": "body_text",
+        "section": "paris_landmarks",
+        "flags": "",
+        "preview": "Paris is known for museums, boulevards, cafes, bridges, and major landmarks."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "keyword": 0.059,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_sahara_a | Sahara direct",
+        "keyword": 0.0584,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "The Sahara is the largest hot desert in the world."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.8248,
+        "rerank": 0.88,
+        "section": "largest_animals",
+        "query_hits": "animal, earth, have, known, largest, lived",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1634,
+        "rerank": 0.1945,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.14,
+        "rerank": 0.1724,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1131,
+        "rerank": 0.147,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1115,
+        "rerank": 0.1455,
+        "section": "world_oceans",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0847,
+        "rerank": 0.1201,
+        "section": "sahara_desert",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0733,
+        "rerank": 0.0793,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_france_lyon | Lyon",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0663,
+        "rerank": 0.0727,
+        "section": "france_cities",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0615,
+        "rerank": 0.0682,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "missing_eiffel_paris | Paris tourism",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0606,
+        "rerank": 0.0673,
+        "section": "paris_landmarks",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is known for museums, boulevards, cafes, bridges, and major landmarks."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.059,
+        "rerank": 0.0658,
+        "section": "mona_lisa",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0584,
+        "rerank": 0.0652,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_sahara_b | Largest hot desert wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0565,
+        "rerank": 0.0635,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Among hot deserts, the Sahara is the largest by area."
+      },
+      {
+        "rank": 14,
+        "source": "missing_van_gogh_starry_style | Starry Night style",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0558,
+        "rerank": 0.0628,
+        "section": "post_impressionist_art",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Starry Night is known for swirling forms and a night sky composition."
+      },
+      {
+        "rank": 15,
+        "source": "missing_mars_planet | The red planet",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0549,
+        "rerank": 0.0619,
+        "section": "mars_overview",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is a rocky planet known for iron-rich minerals that give its surface a reddish colour."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.052,
+        "rerank": 0.0592,
+        "section": "giant_planets",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 17,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0518,
+        "rerank": 0.0589,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 18,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0501,
+        "rerank": 0.0573,
+        "section": "space_telescope_notes",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0494,
+        "rerank": 0.0567,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0458,
+        "rerank": 0.0533,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 21,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0455,
+        "rerank": 0.0531,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 22,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0436,
+        "rerank": 0.0513,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_australia_sydney | Sydney",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0433,
+        "rerank": 0.051,
+        "section": "australian_cities",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0421,
+        "rerank": 0.0498,
+        "section": "solar_system_center",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.8248,
+        "rerank": 0.88,
+        "section": "largest_animals",
+        "query_hits": "animal, earth, have, known, largest, lived",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1634,
+        "rerank": 0.1945,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.14,
+        "rerank": 0.1724,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1131,
+        "rerank": 0.147,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1115,
+        "rerank": 0.1455,
+        "section": "world_oceans",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0847,
+        "rerank": 0.1201,
+        "section": "sahara_desert",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0733,
+        "rerank": 0.0793,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_france_lyon | Lyon",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0663,
+        "rerank": 0.0727,
+        "section": "france_cities",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0615,
+        "rerank": 0.0682,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "missing_eiffel_paris | Paris tourism",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0606,
+        "rerank": 0.0673,
+        "section": "paris_landmarks",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is known for museums, boulevards, cafes, bridges, and major landmarks."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.059,
+        "rerank": 0.0658,
+        "section": "mona_lisa",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0584,
+        "rerank": 0.0652,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_sahara_b | Largest hot desert wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0565,
+        "rerank": 0.0635,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Among hot deserts, the Sahara is the largest by area."
+      },
+      {
+        "rank": 14,
+        "source": "missing_van_gogh_starry_style | Starry Night style",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0558,
+        "rerank": 0.0628,
+        "section": "post_impressionist_art",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Starry Night is known for swirling forms and a night sky composition."
+      },
+      {
+        "rank": 15,
+        "source": "missing_mars_planet | The red planet",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0549,
+        "rerank": 0.0619,
+        "section": "mars_overview",
+        "query_hits": "known",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is a rocky planet known for iron-rich minerals that give its surface a reddish colour."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.052,
+        "rerank": 0.0592,
+        "section": "giant_planets",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 17,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0518,
+        "rerank": 0.0589,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 18,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0501,
+        "rerank": 0.0573,
+        "section": "space_telescope_notes",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0494,
+        "rerank": 0.0567,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0458,
+        "rerank": 0.0533,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 21,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0455,
+        "rerank": 0.0531,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 22,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0436,
+        "rerank": 0.0513,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_australia_sydney | Sydney",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0433,
+        "rerank": 0.051,
+        "section": "australian_cities",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sydney is Australia's largest city and is sometimes incorrectly assumed to be the national capital."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0421,
+        "rerank": 0.0498,
+        "section": "solar_system_center",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.8248,
+        "rerank": 0.88,
+        "section": "largest_animals",
+        "query_hits": "animal, earth, have, known, largest, lived",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_france_lyon | Lyon",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0663,
+        "rerank": 0.0727,
+        "section": "france_cities",
+        "query_hits": "known",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.103,
+        "novelty": 0.7476,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4133,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 3,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0518,
+        "rerank": 0.0589,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0877,
+        "novelty": 0.7421,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3993,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 4,
+        "source": "missing_mars_planet | The red planet",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0549,
+        "rerank": 0.0619,
+        "section": "mars_overview",
+        "query_hits": "known",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.091,
+        "novelty": 0.7,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3963,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is a rocky planet known for iron-rich minerals that give its surface a reddish colour."
+      },
+      {
+        "rank": 5,
+        "source": "missing_eiffel_paris | Paris tourism",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0606,
+        "rerank": 0.0673,
+        "section": "paris_landmarks",
+        "query_hits": "known",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.097,
+        "novelty": 0.6382,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3927,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is known for museums, boulevards, cafes, bridges, and major landmarks."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0412,
+        "rerank": 0.0489,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0766,
+        "novelty": 0.7214,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3869,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "animal",
+        "earth",
+        "have",
+        "known",
+        "largest",
+        "lived"
+      ],
+      "covered_query_terms": [
+        "animal",
+        "earth",
+        "have",
+        "known",
+        "largest",
+        "lived"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_blue_whale_a | Blue whale direct": [
+          "animal",
+          "earth",
+          "have",
+          "known",
+          "largest",
+          "lived"
+        ],
+        "redundant_france_lyon | Lyon": [
+          "known"
+        ],
+        "missing_japan_tokyo | Tokyo": [
+          "largest"
+        ],
+        "missing_mars_planet | The red planet": [
+          "known"
+        ],
+        "missing_eiffel_paris | Paris tourism": [
+          "known"
+        ],
+        "redundant_sahara_antarctica_distractor | Antarctic desert distractor": [
+          "largest"
+        ]
+      },
+      "section_titles": [
+        "france_cities",
+        "japan_overview",
+        "largest_animals",
+        "mars_overview",
+        "paris_landmarks",
+        "sahara_desert"
+      ],
+      "chunks_by_section": {
+        "largest_animals": [
+          "redundant_blue_whale_a | Blue whale direct"
+        ],
+        "france_cities": [
+          "redundant_france_lyon | Lyon"
+        ],
+        "japan_overview": [
+          "missing_japan_tokyo | Tokyo"
+        ],
+        "mars_overview": [
+          "missing_mars_planet | The red planet"
+        ],
+        "paris_landmarks": [
+          "missing_eiffel_paris | Paris tourism"
+        ],
+        "sahara_desert": [
+          "redundant_sahara_antarctica_distractor | Antarctic desert distractor"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The blue whale is the largest animal known to have lived on Earth.",
+    "retrieved_context_answer": "The blue whale is the largest animal known to have lived on Earth.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.375,
+    "retrieved_context_f1": 0.375,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

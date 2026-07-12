@@ -57,6 +57,8 @@ class ComparisonResponse(BaseModel):
 
 
 class AttributionPoint(BaseModel):
+    """One first-order chunk attribution."""
+
     player: int
     chunk: str
     attribution: float
@@ -64,12 +66,16 @@ class AttributionPoint(BaseModel):
 
 
 class CurvePoint(BaseModel):
+    """One point on a deletion or insertion curve."""
+
     step: int
     score: float
     label: str
 
 
 class FaithfulnessResponse(BaseModel):
+    """Compact faithfulness diagnostics for an explanation."""
+
     full_score: float
     score_without_top: float
     score_with_top_only: float
@@ -78,6 +84,8 @@ class FaithfulnessResponse(BaseModel):
 
 
 class ExplanationResultResponse(BaseModel):
+    """Attribution and faithfulness results for one value function."""
+
     value_name: str
     value_description: str
     value_formula: str
@@ -98,6 +106,8 @@ class ExplanationResultResponse(BaseModel):
 
 
 class ChunkResponse(BaseModel):
+    """Retrieved chunk returned to the dashboard."""
+
     title: str
     text: str
     page_number: int | None = None
@@ -120,6 +130,8 @@ class AnswerTargetResponse(BaseModel):
 
 
 class RunResponse(BaseModel):
+    """Complete result of one retrieval explanation run."""
+
     run_name: str
     source: str
     answer_target_type: Literal["reference_answer", "generated_answer"]
