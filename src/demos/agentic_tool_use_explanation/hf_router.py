@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import threading
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
@@ -132,6 +133,7 @@ class LocalHFRouter:
         self.requested_dtype = dtype
         self.generation_kwargs = dict(generation_kwargs or {})
         self.tokenizer_id = model_name
+        self.tokenizer_lock = threading.RLock()
 
         try:
             import torch
@@ -200,8 +202,9 @@ class LocalHFRouter:
             )
             raise RuntimeError(msg) from error
 
-        if getattr(self.tokenizer, "pad_token", None) is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
+        with self.tokenizer_lock:
+            if getattr(self.tokenizer, "pad_token", None) is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
         self.model.eval()
 
     def choose_tool(
@@ -220,6 +223,14 @@ class LocalHFRouter:
         decision = self.parse_native_response(raw_response, debug_prompt=debug_prompt)
         decision.generation_parameters = generation_parameters
         return decision
+
+    def _tokenizer_access_lock(self) -> threading.RLock:
+        """Return this cached router's shared tokenizer/model lock."""
+        lock = getattr(self, "tokenizer_lock", None)
+        if lock is None:  # Compatibility with lightweight subclasses in tests.
+            lock = threading.RLock()
+            self.tokenizer_lock = lock
+        return lock
 
     @classmethod
     def build_router_prompt(
@@ -482,25 +493,26 @@ class LocalHFRouter:
         return NO_TOOL_NAME
 
     def _generate_raw_response(self, router_prompt: str) -> tuple[str, str]:
-        model_prompt = self._format_model_prompt(router_prompt)
-        input_device = self._input_device()
-        inputs = self.tokenizer(model_prompt, return_tensors="pt")
-        inputs = {key: value.to(input_device) for key, value in inputs.items()}
-        prompt_token_count = int(inputs["input_ids"].shape[-1])
+        with self._tokenizer_access_lock():
+            model_prompt = self._format_model_prompt(router_prompt)
+            input_device = self._input_device()
+            inputs = self.tokenizer(model_prompt, return_tensors="pt")
+            inputs = {key: value.to(input_device) for key, value in inputs.items()}
+            prompt_token_count = int(inputs["input_ids"].shape[-1])
 
-        generation_kwargs: dict[str, Any] = {
-            "max_new_tokens": self.max_new_tokens,
-            "do_sample": False,
-        }
-        generation_kwargs.update(self.generation_kwargs)
-        if "pad_token_id" not in generation_kwargs and self.tokenizer.eos_token_id is not None:
-            generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
+            generation_kwargs: dict[str, Any] = {
+                "max_new_tokens": self.max_new_tokens,
+                "do_sample": False,
+            }
+            generation_kwargs.update(self.generation_kwargs)
+            if "pad_token_id" not in generation_kwargs and self.tokenizer.eos_token_id is not None:
+                generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
 
-        with self._torch.inference_mode():
-            output_ids = self.model.generate(**inputs, **generation_kwargs)
-        new_token_ids = output_ids[0, prompt_token_count:]
-        raw_response = self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip()
-        return model_prompt, raw_response
+            with self._torch.inference_mode():
+                output_ids = self.model.generate(**inputs, **generation_kwargs)
+            new_token_ids = output_ids[0, prompt_token_count:]
+            raw_response = self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip()
+            return model_prompt, raw_response
 
     def _generate_native_tool_response(
         self,
@@ -508,54 +520,61 @@ class LocalHFRouter:
         *,
         system_prompt: str,
     ) -> tuple[str, str, dict[str, Any]]:
-        model_prompt = self._format_native_tool_prompt(user_request, system_prompt=system_prompt)
-        input_device = self._input_device()
-        inputs = self.tokenizer(model_prompt, return_tensors="pt")
-        inputs = {key: value.to(input_device) for key, value in inputs.items()}
-        prompt_token_count = int(inputs["input_ids"].shape[-1])
+        with self._tokenizer_access_lock():
+            model_prompt = self._format_native_tool_prompt(
+                user_request, system_prompt=system_prompt
+            )
+            input_device = self._input_device()
+            inputs = self.tokenizer(model_prompt, return_tensors="pt")
+            inputs = {key: value.to(input_device) for key, value in inputs.items()}
+            prompt_token_count = int(inputs["input_ids"].shape[-1])
 
-        generation_kwargs: dict[str, Any] = {
-            "max_new_tokens": self.max_new_tokens,
-            "do_sample": False,
-        }
-        generation_kwargs.update(self.generation_kwargs)
-        if generation_kwargs.get("do_sample") is False:
-            for sampling_key in ("temperature", "top_p", "top_k"):
-                generation_kwargs.pop(sampling_key, None)
-        if "pad_token_id" not in generation_kwargs and self.tokenizer.eos_token_id is not None:
-            generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
+            generation_kwargs: dict[str, Any] = {
+                "max_new_tokens": self.max_new_tokens,
+                "do_sample": False,
+            }
+            generation_kwargs.update(self.generation_kwargs)
+            if generation_kwargs.get("do_sample") is False:
+                for sampling_key in ("temperature", "top_p", "top_k"):
+                    generation_kwargs.pop(sampling_key, None)
+            if "pad_token_id" not in generation_kwargs and self.tokenizer.eos_token_id is not None:
+                generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
 
-        with self._torch.inference_mode():
-            output_ids = self.model.generate(**inputs, **generation_kwargs)
-        new_token_ids = output_ids[0, prompt_token_count:]
-        raw_response = self.tokenizer.decode(new_token_ids, skip_special_tokens=False).strip()
-        return model_prompt, raw_response, dict(generation_kwargs)
+            with self._torch.inference_mode():
+                output_ids = self.model.generate(**inputs, **generation_kwargs)
+            new_token_ids = output_ids[0, prompt_token_count:]
+            raw_response = self.tokenizer.decode(new_token_ids, skip_special_tokens=False).strip()
+            return model_prompt, raw_response, dict(generation_kwargs)
 
     def _format_native_tool_prompt(self, user_request: str, *, system_prompt: str) -> str:
-        return build_native_tool_call_prompt(
-            self.tokenizer,
-            system_prompt=system_prompt,
-            user_request=user_request,
-            tool_schemas=get_executable_tool_schemas(),
-        )
+        with self._tokenizer_access_lock():
+            return build_native_tool_call_prompt(
+                self.tokenizer,
+                system_prompt=system_prompt,
+                user_request=user_request,
+                tool_schemas=get_executable_tool_schemas(),
+            )
 
     def _format_model_prompt(self, router_prompt: str) -> str:
         messages = [
             {"role": "system", "content": "You are a strict tool router. Return JSON only."},
             {"role": "user", "content": router_prompt},
         ]
-        apply_chat_template = getattr(self.tokenizer, "apply_chat_template", None)
-        if callable(apply_chat_template):
-            try:
-                return str(
-                    apply_chat_template(
-                        messages,
-                        tokenize=False,
-                        add_generation_prompt=True,
+        with self._tokenizer_access_lock():
+            apply_chat_template = getattr(self.tokenizer, "apply_chat_template", None)
+            if callable(apply_chat_template):
+                try:
+                    return str(
+                        apply_chat_template(
+                            messages,
+                            tokenize=False,
+                            add_generation_prompt=True,
+                        )
                     )
-                )
-            except Exception:  # noqa: BLE001
-                LOGGER.debug("Falling back after chat-template formatting failed.", exc_info=True)
+                except Exception:  # noqa: BLE001
+                    LOGGER.debug(
+                        "Falling back after chat-template formatting failed.", exc_info=True
+                    )
         return (
             "System:\nYou are a strict tool router. Return JSON only.\n\n"
             f"User:\n{router_prompt}\n\n"
@@ -762,11 +781,13 @@ class HFArgumentExtractor:
         model: object,
         tokenizer: object,
         device: str,
+        tokenizer_lock: threading.RLock | None = None,
         max_new_tokens: int = 128,
     ) -> None:
         self.model = model
         self.tokenizer = tokenizer
         self.device = device
+        self.tokenizer_lock = tokenizer_lock or threading.RLock()
         self.max_new_tokens = max_new_tokens
 
     def extract_arguments(
@@ -815,24 +836,25 @@ class HFArgumentExtractor:
         )
 
     def _generate(self, prompt: str) -> str:
-        model_prompt = self._format_model_prompt(prompt)
-        inputs = self.tokenizer(model_prompt, return_tensors="pt")
-        inputs = {key: value.to(self.device) for key, value in inputs.items()}
-        prompt_token_count = int(inputs["input_ids"].shape[-1])
+        with self.tokenizer_lock:
+            model_prompt = self._format_model_prompt(prompt)
+            inputs = self.tokenizer(model_prompt, return_tensors="pt")
+            inputs = {key: value.to(self.device) for key, value in inputs.items()}
+            prompt_token_count = int(inputs["input_ids"].shape[-1])
 
-        generation_kwargs: dict[str, Any] = {
-            "max_new_tokens": self.max_new_tokens,
-            "do_sample": False,
-        }
-        if getattr(self.tokenizer, "eos_token_id", None) is not None:
-            generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
+            generation_kwargs: dict[str, Any] = {
+                "max_new_tokens": self.max_new_tokens,
+                "do_sample": False,
+            }
+            if getattr(self.tokenizer, "eos_token_id", None) is not None:
+                generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
 
-        import torch
+            import torch
 
-        with torch.inference_mode():
-            output_ids = self.model.generate(**inputs, **generation_kwargs)
-        new_token_ids = output_ids[0, prompt_token_count:]
-        return str(self.tokenizer.decode(new_token_ids, skip_special_tokens=True)).strip()
+            with torch.inference_mode():
+                output_ids = self.model.generate(**inputs, **generation_kwargs)
+            new_token_ids = output_ids[0, prompt_token_count:]
+            return str(self.tokenizer.decode(new_token_ids, skip_special_tokens=True)).strip()
 
     def _format_model_prompt(self, prompt: str) -> str:
         messages = [
@@ -842,18 +864,21 @@ class HFArgumentExtractor:
             },
             {"role": "user", "content": prompt},
         ]
-        apply_chat_template = getattr(self.tokenizer, "apply_chat_template", None)
-        if callable(apply_chat_template):
-            try:
-                return str(
-                    apply_chat_template(
-                        messages,
-                        tokenize=False,
-                        add_generation_prompt=True,
+        with self.tokenizer_lock:
+            apply_chat_template = getattr(self.tokenizer, "apply_chat_template", None)
+            if callable(apply_chat_template):
+                try:
+                    return str(
+                        apply_chat_template(
+                            messages,
+                            tokenize=False,
+                            add_generation_prompt=True,
+                        )
                     )
-                )
-            except Exception:  # noqa: BLE001
-                LOGGER.debug("Falling back after chat-template formatting failed.", exc_info=True)
+                except Exception:  # noqa: BLE001
+                    LOGGER.debug(
+                        "Falling back after chat-template formatting failed.", exc_info=True
+                    )
         return (
             "System:\nYou are a strict tool-argument extractor. Return JSON only.\n\n"
             f"User:\n{prompt}\n\n"

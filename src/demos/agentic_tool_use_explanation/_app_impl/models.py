@@ -312,7 +312,8 @@ def load_local_hf_router(
     )
     _hf_lifecycle_log("[HF LOAD] LocalHFRouter loaded", f"model_name={model_name}")
     if DEBUG_HF_LIFECYCLE:
-        first_param = next(router.model.parameters())
+        with router.tokenizer_lock:
+            first_param = next(router.model.parameters())
         _hf_lifecycle_log(
             "[HF MODEL]",
             f"device={first_param.device}",
@@ -365,10 +366,12 @@ def load_logprob_scorer(
         device=device,
         dtype=dtype,
         max_pairs_per_batch=max_pairs_per_batch,
+        tokenizer_lock=threading.RLock(),
     )
     _hf_lifecycle_log("[HF LOAD] CalibratedToolLogOddsScorer loaded", f"model_id={model_id}")
     if DEBUG_HF_LIFECYCLE:
-        first_param = next(scorer.model.parameters())
+        with scorer.tokenizer_lock:
+            first_param = next(scorer.model.parameters())
         _hf_lifecycle_log(
             "[HF MODEL]",
             f"device={first_param.device}",
@@ -408,6 +411,7 @@ def build_native_hf_scorer_from_router(
         actual_quantization_mode=getattr(router, "actual_quantization_mode", quantization_mode),
         dtype=getattr(router, "dtype", selected_config.dtype if selected_config else "auto"),
         max_pairs_per_batch=max_pairs_per_batch,
+        tokenizer_lock=getattr(router, "tokenizer_lock", None) or threading.RLock(),
     )
 
 
@@ -442,6 +446,7 @@ def build_native_direct_answer_scorer_from_router(
         actual_quantization_mode=getattr(router, "actual_quantization_mode", quantization_mode),
         dtype=getattr(router, "dtype", selected_config.dtype if selected_config else "auto"),
         max_pairs_per_batch=max_pairs_per_batch,
+        tokenizer_lock=getattr(router, "tokenizer_lock", None) or threading.RLock(),
         direct_answer_target=direct_answer_target,
     )
 

@@ -1,6 +1,6 @@
 """Agent execution and full-run reference-answer helpers."""
 
-# ruff: noqa: F405, I001
+# ruff: noqa: F405
 
 from __future__ import annotations
 
@@ -81,6 +81,9 @@ def build_complete_agent_callable(
                     tokenizer=primary_scorer.tokenizer,
                     device=primary_scorer.device,
                 )
+                scorer_tokenizer_lock = getattr(primary_scorer, "tokenizer_lock", None)
+                if scorer_tokenizer_lock is not None:
+                    argument_extractor.tokenizer_lock = scorer_tokenizer_lock
                 _hf_lifecycle_log(
                     "[HF ARGUMENTS] HFArgumentExtractor reusing scorer model/tokenizer",
                     f"model_id={logprob_model_id}",

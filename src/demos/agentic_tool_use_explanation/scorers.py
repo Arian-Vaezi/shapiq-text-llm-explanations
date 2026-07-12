@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import re
 import sys
+import threading
 import warnings
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -987,6 +988,15 @@ class LLMToolScorer:
         return clamp_score(float(scores[0]))
 
 
+def _tokenizer_lock_for(owner: object) -> threading.RLock:
+    """Return an object's shared tokenizer lock, adding one for legacy test doubles."""
+    lock = getattr(owner, "tokenizer_lock", None)
+    if lock is None:
+        lock = threading.RLock()
+        owner.tokenizer_lock = lock
+    return lock
+
+
 class CalibratedToolLogOddsScorer:
     """Score tool decisions with calibrated multiclass target-vs-all log-odds.
 
@@ -1020,6 +1030,7 @@ class CalibratedToolLogOddsScorer:
         routing_label_separator: str = ROUTING_LABEL_SEPARATOR,
         calibration_user_requests: tuple[str, ...] = CALIBRATION_USER_REQUESTS,
         max_pairs_per_batch: int | None = None,
+        tokenizer_lock: threading.RLock | None = None,
     ) -> None:
         self.model_id = model_id
         self.device = device
@@ -1027,6 +1038,7 @@ class CalibratedToolLogOddsScorer:
         self.routing_labels = dict(routing_labels)
         self.routing_label_separator = routing_label_separator
         self.calibration_user_requests = tuple(calibration_user_requests)
+        self.tokenizer_lock = tokenizer_lock or threading.RLock()
         self.last_debug_outputs: list[dict[str, object]] = []
         self.tokenizer_label_diagnostics: dict[str, RoutingLabelTokenization] | None = None
         # Keyed by the full protocol identity (see _protocol_key): model id,
@@ -1066,10 +1078,11 @@ class CalibratedToolLogOddsScorer:
             max_pairs_per_batch = 1 if self.device in {"cuda", "mps"} else 4
         self.max_pairs_per_batch = max_pairs_per_batch
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
-        if self.tokenizer.pad_token is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-        self.tokenizer.padding_side = "right"
+        with _tokenizer_lock_for(self):
+            self.tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
+            if self.tokenizer.pad_token is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+            self.tokenizer.padding_side = "right"
 
         # ``dtype=`` (not the deprecated ``torch_dtype=``) matches both the
         # current transformers API and the verified-working load pattern;
@@ -1087,7 +1100,8 @@ class CalibratedToolLogOddsScorer:
         self.model.to(self.device)
         self.model.eval()
 
-        self._validate_tokenizer_labels()
+        with _tokenizer_lock_for(self):
+            self._validate_tokenizer_labels()
 
     def _validate_tokenizer_labels(self) -> None:
         """Validate routing-label tokenization once and warn if labels are multi-token."""
@@ -1541,21 +1555,22 @@ class CalibratedToolLogOddsScorer:
         are scored by their exact teacher-forced sequence log-likelihood.
         """
         torch = self._torch
-        prompt_inputs = self.tokenizer(
-            prompts,
-            return_tensors="pt",
-            add_special_tokens=False,
-            padding=True,
-        )
-        full_inputs = self.tokenizer(
-            [
-                prompt + continuation
-                for prompt, continuation in zip(prompts, continuations, strict=True)
-            ],
-            return_tensors="pt",
-            add_special_tokens=False,
-            padding=True,
-        )
+        with _tokenizer_lock_for(self):
+            prompt_inputs = self.tokenizer(
+                prompts,
+                return_tensors="pt",
+                add_special_tokens=False,
+                padding=True,
+            )
+            full_inputs = self.tokenizer(
+                [
+                    prompt + continuation
+                    for prompt, continuation in zip(prompts, continuations, strict=True)
+                ],
+                return_tensors="pt",
+                add_special_tokens=False,
+                padding=True,
+            )
         prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
         full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
         for row_index, prompt in enumerate(prompts):
@@ -1584,9 +1599,9 @@ class CalibratedToolLogOddsScorer:
 
         input_ids = full_inputs["input_ids"].to(self.device)
         attention_mask = full_inputs["attention_mask"].to(self.device)
-        self.model.eval()
         try:
-            with torch.inference_mode():
+            with _tokenizer_lock_for(self), torch.inference_mode():
+                self.model.eval()
                 logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
                 # Compute logprobs in float32 even when the model runs in fp16, so
                 # the log-sum-exp used by the routing payoff stays numerically stable.
@@ -1662,6 +1677,7 @@ class _NativeContinuationScorer:
         actual_quantization_mode: str | None,
         dtype: str,
         max_pairs_per_batch: int | None,
+        tokenizer_lock: threading.RLock | None,
     ) -> None:
         self.model_id = model_id
         self.tokenizer_id = tokenizer_id or model_id
@@ -1671,6 +1687,7 @@ class _NativeContinuationScorer:
         self.tokenizer = tokenizer
         self.device = device
         self.dtype = dtype
+        self.tokenizer_lock = tokenizer_lock or threading.RLock()
 
         import torch
 
@@ -1701,12 +1718,15 @@ class _NativeContinuationScorer:
             self.model = AutoModelForCausalLM.from_pretrained(model_id, **model_kwargs)
             self.model.to(self.device)
         elif self.device is None:
-            self.device = str(next(self.model.parameters()).device)
+            with _tokenizer_lock_for(self):
+                self.device = str(next(self.model.parameters()).device)
 
-        if getattr(self.tokenizer, "pad_token", None) is None:
-            self.tokenizer.pad_token = self.tokenizer.eos_token
-        self.tokenizer.padding_side = "right"
-        self.model.eval()
+        with _tokenizer_lock_for(self):
+            if getattr(self.tokenizer, "pad_token", None) is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+            self.tokenizer.padding_side = "right"
+        with _tokenizer_lock_for(self):
+            self.model.eval()
         if max_pairs_per_batch is None:
             max_pairs_per_batch = 1 if self.device in {"cuda", "mps"} else 4
         if max_pairs_per_batch < 1:
@@ -1716,8 +1736,9 @@ class _NativeContinuationScorer:
 
     def _continuation_token_count(self, prompt: str, continuation: str) -> int | None:
         try:
-            prompt_ids = _tokenize_to_ids(self.tokenizer, prompt)
-            full_ids = _tokenize_to_ids(self.tokenizer, prompt + continuation)
+            with _tokenizer_lock_for(self):
+                prompt_ids = _tokenize_to_ids(self.tokenizer, prompt)
+                full_ids = _tokenize_to_ids(self.tokenizer, prompt + continuation)
         except (AttributeError, TypeError):
             return None
         return max(0, len(full_ids) - len(prompt_ids))
@@ -1748,21 +1769,22 @@ class _NativeContinuationScorer:
         continuations: list[str],
     ) -> list[float]:
         torch = self._torch
-        prompt_inputs = self.tokenizer(
-            prompts,
-            return_tensors="pt",
-            add_special_tokens=False,
-            padding=True,
-        )
-        full_inputs = self.tokenizer(
-            [
-                prompt + continuation
-                for prompt, continuation in zip(prompts, continuations, strict=True)
-            ],
-            return_tensors="pt",
-            add_special_tokens=False,
-            padding=True,
-        )
+        with _tokenizer_lock_for(self):
+            prompt_inputs = self.tokenizer(
+                prompts,
+                return_tensors="pt",
+                add_special_tokens=False,
+                padding=True,
+            )
+            full_inputs = self.tokenizer(
+                [
+                    prompt + continuation
+                    for prompt, continuation in zip(prompts, continuations, strict=True)
+                ],
+                return_tensors="pt",
+                add_special_tokens=False,
+                padding=True,
+            )
         prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
         full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
         # Continuation length is derived from the robust full-sequence boundary
@@ -1783,7 +1805,7 @@ class _NativeContinuationScorer:
         input_ids = full_inputs["input_ids"].to(self.device)
         attention_mask = full_inputs["attention_mask"].to(self.device)
         try:
-            with torch.inference_mode():
+            with _tokenizer_lock_for(self), torch.inference_mode():
                 logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
                 logits = logits.to(torch.float32)
                 token_log_probs = self._next_token_log_probs(
@@ -1855,6 +1877,7 @@ class NativeToolCallScorer(_NativeContinuationScorer):
         actual_quantization_mode: str | None = None,
         dtype: str = "auto",
         max_pairs_per_batch: int | None = None,
+        tokenizer_lock: threading.RLock | None = None,
         tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
     ) -> None:
         super().__init__(
@@ -1867,6 +1890,7 @@ class NativeToolCallScorer(_NativeContinuationScorer):
             actual_quantization_mode=actual_quantization_mode,
             dtype=dtype,
             max_pairs_per_batch=max_pairs_per_batch,
+            tokenizer_lock=tokenizer_lock,
         )
         self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
         self.last_debug_outputs: list[dict[str, object]] = []
@@ -1890,21 +1914,22 @@ class NativeToolCallScorer(_NativeContinuationScorer):
         self.last_debug_outputs = []
         model_prompts = []
         continuations = []
-        for prompt in prompts:
-            system_prompt, user_request = split_coalition_prompt(prompt)
-            model_prompt = build_native_tool_call_prompt(
-                self.tokenizer,
-                system_prompt=system_prompt,
-                user_request=user_request,
-                tool_schemas=self.tool_schemas,
-            )
-            continuation = self._target_continuation(
-                system_prompt=system_prompt,
-                user_request=user_request,
-                target_tool=target_tool,
-            )
-            model_prompts.append(model_prompt)
-            continuations.append(continuation)
+        with _tokenizer_lock_for(self):
+            for prompt in prompts:
+                system_prompt, user_request = split_coalition_prompt(prompt)
+                model_prompt = build_native_tool_call_prompt(
+                    self.tokenizer,
+                    system_prompt=system_prompt,
+                    user_request=user_request,
+                    tool_schemas=self.tool_schemas,
+                )
+                continuation = self._target_continuation(
+                    system_prompt=system_prompt,
+                    user_request=user_request,
+                    target_tool=target_tool,
+                )
+                model_prompts.append(model_prompt)
+                continuations.append(continuation)
 
         continuation_token_counts = [
             self._continuation_token_count(model_prompt, continuation)
@@ -1954,17 +1979,18 @@ class NativeToolCallScorer(_NativeContinuationScorer):
         """Return the native chat-template input used before the scored continuation."""
         del tool_descriptions
         system_prompt, user_request = split_coalition_prompt(prompt)
-        continuation = self._target_continuation(
-            system_prompt=system_prompt,
-            user_request=user_request,
-            target_tool=target_tool,
-        )
-        model_prompt = build_native_tool_call_prompt(
-            self.tokenizer,
-            system_prompt=system_prompt,
-            user_request=user_request,
-            tool_schemas=self.tool_schemas,
-        )
+        with _tokenizer_lock_for(self):
+            continuation = self._target_continuation(
+                system_prompt=system_prompt,
+                user_request=user_request,
+                target_tool=target_tool,
+            )
+            model_prompt = build_native_tool_call_prompt(
+                self.tokenizer,
+                system_prompt=system_prompt,
+                user_request=user_request,
+                tool_schemas=self.tool_schemas,
+            )
         return f"{model_prompt}{continuation}"
 
     def _target_continuation(
@@ -1974,13 +2000,14 @@ class NativeToolCallScorer(_NativeContinuationScorer):
         user_request: str,
         target_tool: str,
     ) -> str:
-        return build_native_tool_call_continuation(
-            self.tokenizer,
-            system_prompt=system_prompt,
-            user_request=user_request,
-            target_tool=target_tool,
-            tool_schemas=self.tool_schemas,
-        )
+        with _tokenizer_lock_for(self):
+            return build_native_tool_call_continuation(
+                self.tokenizer,
+                system_prompt=system_prompt,
+                user_request=user_request,
+                target_tool=target_tool,
+                tool_schemas=self.tool_schemas,
+            )
 
 
 class NativeDirectAnswerScorer(_NativeContinuationScorer):
@@ -2011,6 +2038,7 @@ class NativeDirectAnswerScorer(_NativeContinuationScorer):
         actual_quantization_mode: str | None = None,
         dtype: str = "auto",
         max_pairs_per_batch: int | None = None,
+        tokenizer_lock: threading.RLock | None = None,
         direct_answer_target: str,
         tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
     ) -> None:
@@ -2024,12 +2052,14 @@ class NativeDirectAnswerScorer(_NativeContinuationScorer):
             actual_quantization_mode=actual_quantization_mode,
             dtype=dtype,
             max_pairs_per_batch=max_pairs_per_batch,
+            tokenizer_lock=tokenizer_lock,
         )
         if not direct_answer_target or not direct_answer_target.strip():
             msg = "NativeDirectAnswerScorer requires a non-empty direct_answer_target."
             raise ValueError(msg)
         self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
-        target_token_ids = tuple(_tokenize_to_ids(self.tokenizer, direct_answer_target))
+        with _tokenizer_lock_for(self):
+            target_token_ids = tuple(_tokenize_to_ids(self.tokenizer, direct_answer_target))
         if not target_token_ids:
             msg = "Frozen direct-answer target tokenized to zero continuation tokens."
             raise ValueError(msg)
@@ -2086,12 +2116,13 @@ class NativeDirectAnswerScorer(_NativeContinuationScorer):
                 results[index], debug_entries[index] = cached
                 continue
             system_prompt, user_request = split_coalition_prompt(prompt)
-            model_prompt = build_native_direct_answer_prompt(
-                self.tokenizer,
-                system_prompt=system_prompt,
-                user_request=user_request,
-                tool_schemas=self.tool_schemas,
-            )
+            with _tokenizer_lock_for(self):
+                model_prompt = build_native_direct_answer_prompt(
+                    self.tokenizer,
+                    system_prompt=system_prompt,
+                    user_request=user_request,
+                    tool_schemas=self.tool_schemas,
+                )
             pending_prompts.append(prompt)
             pending_model_prompts.append(model_prompt)
             pending_indices.append(index)
@@ -2163,12 +2194,13 @@ class NativeDirectAnswerScorer(_NativeContinuationScorer):
             msg = "NativeDirectAnswerScorer is valid only for target_tool='no_tool'."
             raise ValueError(msg)
         system_prompt, user_request = split_coalition_prompt(prompt)
-        model_prompt = build_native_direct_answer_prompt(
-            self.tokenizer,
-            system_prompt=system_prompt,
-            user_request=user_request,
-            tool_schemas=self.tool_schemas,
-        )
+        with _tokenizer_lock_for(self):
+            model_prompt = build_native_direct_answer_prompt(
+                self.tokenizer,
+                system_prompt=system_prompt,
+                user_request=user_request,
+                tool_schemas=self.tool_schemas,
+            )
         return f"{model_prompt}{self.frozen_target.text}"
 
 
