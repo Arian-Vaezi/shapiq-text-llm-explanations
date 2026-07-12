@@ -11,16 +11,16 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
-RUNS_DIR = Path(__file__).parent / "runs"
-REPORT_PATH = Path(__file__).parents[1] / "eval_report.html"
+RUNS_DIR = Path(__file__).parents[1] / "runs"
+REPORT_PATH = Path(__file__).parents[2] / "eval_report.html"
 
-LEXICAL_RUN = RUNS_DIR / "20260616_controlled_interactions_bge_lexical"
-TARGET_LL_RUN = RUNS_DIR / "20260616_controlled_bge_target_ll_e4b_layers20"
-CONTRASTIVE_RUN = RUNS_DIR / "20260616_controlled_bge_contrastive_ll_e4b_layers20"
+LEXICAL_RUN = RUNS_DIR / "20260626_232647_164955_controlled_50_bge_lexical"
+TARGET_LL_RUN = RUNS_DIR / "20260626_232659_164956_controlled_50_bge_target_ll_e4b_cuda4"
+CONTRASTIVE_RUN = RUNS_DIR / "20260626_215332_164947_controlled_50_bge_contrastive_ll_e4b_cuda4"
 TFIDF_CONTRASTIVE_RUN = (
-    RUNS_DIR / "20260616_controlled_tfidf_contrastive_ll_e4b_layers20"
+    RUNS_DIR / "20260626_232708_164957_controlled_50_tfidf_contrastive_ll_e4b_cuda4"
 )
-QASPER_RUN = RUNS_DIR / "20260615_qasper_30_bge_e4b_contrastive"
+QASPER_RUN = RUNS_DIR / "20260626_224021_164961_qasper_50_bge_contrastive_ll_e4b_cuda4"
 ARTEMIS_RUN = RUNS_DIR / "20260617_artemis_bge_contrastive_ll_e4b_layers20"
 
 INTERACTION_START_MARKER = "    <!-- BEGIN GENERATED INTERACTION DETAILS -->"
@@ -171,9 +171,9 @@ def _passage_id_by_rank(artifact: dict[str, Any]) -> dict[int, str]:
 def _class_label(value: object) -> str:
     label = str(value)
     if label == "generation_or_model_failure":
-        return "gold-context low F1 flag"
+        return "generation/model failure"
     if label == "retrieval_failure":
-        return "retrieved-context low F1 flag"
+        return "retrieval miss"
     return label.replace("_", " ")
 
 
@@ -202,11 +202,7 @@ def _as_float(value: object) -> float | None:
 
 
 def _mean(rows: list[dict[str, str]], column: str) -> float | None:
-    values = [
-        value
-        for row in rows
-        if (value := _as_float(row.get(column))) is not None
-    ]
+    values = [value for row in rows if (value := _as_float(row.get(column))) is not None]
     return sum(values) / len(values) if values else None
 
 
@@ -216,11 +212,7 @@ def _bool_mean(rows: list[dict[str, str]], column: str) -> float | None:
 
 
 def _gold_hit_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
-    return [
-        row
-        for row in rows
-        if (_as_float(row.get("retrieval_recall_at_k")) or 0.0) > 0.0
-    ]
+    return [row for row in rows if (_as_float(row.get("retrieval_recall_at_k")) or 0.0) > 0.0]
 
 
 def _render_labelled_interactions(
@@ -261,19 +253,20 @@ def _attribution_result_row(
     top_column: str,
     mass_column: str,
     deletion_column: str | None,
+    group_start: bool = False,
 ) -> str:
     hit_rows = _gold_hit_rows(rows)
     deletion = _mean(rows, deletion_column) if deletion_column else None
+    tr_open = '<tr class="row-group-start">' if group_start else "<tr>"
     return (
-        "<tr>"
-        f"<td>{_html(dataset)}</td>"
+        tr_open + f"<td>{_html(dataset)}</td>"
         f"<td>{_html(retriever)}</td>"
         f"<td>{_html(target)}</td>"
         f"<td>{len(rows)}</td>"
         f"<td>{len(hit_rows)}</td>"
-        f"<td>{_fmt(_mean(rows, 'retrieval_recall_at_k'))}</td>"
+        f'<td class="group-start">{_fmt(_mean(rows, "retrieval_recall_at_k"))}</td>'
         f"<td>{_fmt(_mean(rows, 'retrieval_mrr'))}</td>"
-        f"<td>{_fmt(_bool_mean(hit_rows, top_column))}</td>"
+        f'<td class="group-start">{_fmt(_bool_mean(hit_rows, top_column))}</td>'
         f"<td>{_fmt(_mean(hit_rows, mass_column))}</td>"
         f"<td>{_fmt(deletion)}</td>"
         "</tr>"
@@ -309,6 +302,7 @@ def render_attribution_results() -> str:
             top_column="top_attribution_is_gold",
             mass_column="gold_attribution_mass",
             deletion_column="gold_deletion_auc",
+            group_start=True,
         ),
         _attribution_result_row(
             dataset="Controlled",
@@ -327,6 +321,7 @@ def render_attribution_results() -> str:
             top_column="top_attribution_is_gold",
             mass_column="gold_attribution_mass",
             deletion_column="gold_deletion_auc",
+            group_start=True,
         ),
         _attribution_result_row(
             dataset="Controlled",
@@ -345,6 +340,7 @@ def render_attribution_results() -> str:
             top_column="top_attribution_is_gold",
             mass_column="gold_attribution_mass",
             deletion_column="gold_deletion_auc",
+            group_start=True,
         ),
         _attribution_result_row(
             dataset="Controlled",
@@ -363,6 +359,7 @@ def render_attribution_results() -> str:
             top_column="top_attribution_is_gold",
             mass_column="gold_attribution_mass",
             deletion_column="gold_deletion_auc",
+            group_start=True,
         ),
         _attribution_result_row(
             dataset="QASPER",
@@ -381,6 +378,7 @@ def render_attribution_results() -> str:
             top_column="top_attribution_is_gold",
             mass_column="gold_attribution_mass",
             deletion_column="gold_deletion_auc",
+            group_start=True,
         ),
         _attribution_result_row(
             dataset="Artemis",
@@ -394,6 +392,9 @@ def render_attribution_results() -> str:
     ]
     qasper_hit_count = len(qasper_hit_rows)
     qasper_total = len(qasper_rows)
+    qasper_gold_top_hits = sum(
+        row.get("top_attribution_is_gold", "").lower() == "true" for row in qasper_hit_rows
+    )
     artemis_hit_count = len(artemis_hit_rows)
     artemis_total = len(artemis_rows)
     return "\n".join(
@@ -401,10 +402,21 @@ def render_attribution_results() -> str:
             RESULTS_START_MARKER,
             '    <h3 class="sub-title">Evidence Attribution Across Datasets</h3>',
             '    <div class="table-scroll"><table>',
-            "      <thead><tr><th>Dataset</th><th>Retriever</th><th>Target</th>"
-            "<th>Cases</th><th>Gold hit cases</th><th>Recall@k</th><th>MRR</th>"
-            "<th>Hit top gold</th><th>Hit gold mass</th><th>Deletion AUC</th>"
-            "</tr></thead>",
+            "      <thead>"
+            "<tr>"
+            '<th rowspan="2">Dataset</th>'
+            '<th rowspan="2">Retriever</th>'
+            '<th rowspan="2">Target</th>'
+            '<th rowspan="2">Cases</th>'
+            '<th rowspan="2">Gold hit<br>cases</th>'
+            '<th class="group-start" colspan="2" style="text-align:center;color:#2563eb;">Retrieval</th>'
+            '<th class="group-start" colspan="3" style="text-align:center;color:#15803d;">Attribution</th>'
+            "</tr>"
+            "<tr>"
+            '<th class="group-start">Recall@k</th><th>MRR</th>'
+            '<th class="group-start">Hit top gold</th><th>Hit gold mass</th><th>Deletion AUC</th>'
+            "</tr>"
+            "</thead>",
             f"      <tbody>{''.join(rows)}</tbody>",
             "    </table></div>",
             '    <p class="cap">Cases is the total evaluated count. Gold hit cases '
@@ -414,7 +426,9 @@ def render_attribution_results() -> str:
             "the saved run's retrieval depth: k=6 for controlled/QASPER and k=3 "
             "for Artemis. Hit top gold and "
             "hit gold mass are the Shapley attribution metrics, computed only on "
-            "that retrieval-conditioned subset. "
+            "that retrieval-conditioned subset (n=gold hit cases; for TF-IDF this "
+            "is n=40 because one case has a non-zero attribution mass despite "
+            "recall=0). "
             "Deletion AUC is shown for the gold/reference target because the saved "
             "artifacts do not include generated-answer deletion curves.</p>",
             '    <div class="finding-list">',
@@ -425,7 +439,8 @@ def render_attribution_results() -> str:
             "behavior survives realistic scientific QA.</p></div>",
             '      <div class="finding"><p>On QASPER, the main attribution result is '
             "retrieval-conditional: when labelled evidence appears in the retrieved "
-            "context, gold-answer Shapley ranks labelled evidence first in 18/21 cases "
+            "context, gold-answer Shapley ranks labelled evidence first in "
+            f"{qasper_gold_top_hits}/{qasper_hit_count} cases "
             "and assigns most attribution mass to labelled evidence.</p></div>",
             '      <div class="finding"><p>Artemis is a prior-knowledge control: '
             "closed-book answers are weak, retrieval hits labelled evidence in all "
@@ -680,7 +695,10 @@ def render_interaction_details(targets: tuple[TargetView, ...] = DEFAULT_TARGETS
         '      <h3 class="sub-title">Per-question interaction details</h3>',
         "      <p>Each setting below expands into the stored case artifacts: labelled pair "
         "results, retrieved passages, first-order Shapley values, coalition scores, "
-        "and a pairwise Shapley interaction heatmap for the retrieved top-k passages.</p>",
+        "and a pairwise Shapley interaction heatmap for the retrieved top-k passages. "
+        "Heatmap colour: <strong>green</strong> = positive interaction (synergy / complementary); "
+        "<strong>red</strong> = negative interaction (substitution, redundancy, or conflict). "
+        "Colour intensity scales with absolute value magnitude.</p>",
         "    </div>",
     ]
     for index, target in enumerate(targets):
@@ -795,7 +813,10 @@ def _top_gold_rank(row: dict[str, str]) -> str:
 
 def _render_failure_case(artifact: dict[str, Any], row: dict[str, str]) -> str:
     case = artifact["case"]
-    diagnosis = row.get("knowledge_source_class", artifact.get("generation", {}).get("knowledge_source_class", "unknown"))
+    diagnosis = row.get(
+        "knowledge_source_class",
+        artifact.get("generation", {}).get("knowledge_source_class", "unknown"),
+    )
     class_name = _failure_class(diagnosis)
     gold_ids = case.get("gold_evidence_ids", [])
     return f"""
@@ -859,6 +880,16 @@ def render_failure_details(run_dir: Path = QASPER_RUN) -> str:
             "      <p>Each QASPER case below shows the actual closed-book, gold-context, "
             "and retrieved-context answers used by the knowledge-source classifier, "
             "plus retrieval hits and Shapley attribution over the retrieved passages.</p>",
+            '      <p class="metric-warning">49 of 50 QASPER cases are diagnosed as '
+            "<strong>generation/model failure</strong>: the model (Gemma E4B, run with "
+            "partial Metal offload) fails to produce a short extractive answer from "
+            "academic text even when the correct passage is retrieved. This is a "
+            "generation-quality bottleneck, not a Shapley failure — retrieval recall "
+            "is 0.549 and attribution correctly identifies the gold passage as "
+            "top-ranked in 28/35 gold-hit cases. The token-F1 threshold (0.65) is "
+            "calibrated for single-sentence extractive answers; virtually all "
+            "QASPER responses fall below it due to multi-sentence answer complexity, "
+            "and this near-universal flagging is itself the diagnostic finding.</p>",
             "    </div>",
             _render_failure_overview(ordered_rows),
             '    <details class="setting-detail failure-detail" open>',

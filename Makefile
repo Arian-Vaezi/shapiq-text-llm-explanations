@@ -1,4 +1,4 @@
-.PHONY: app api frontend frontend-build test eval-controlled eval-controlled-model eval-controlled-bge-lexical eval-interactions-controlled eval-report-html eval-stability eval-qasper-smoke eval-qasper verify-report-results paper setup-rag-local install-rag-local download-rag-model lint precommit help
+.PHONY: app api frontend frontend-build test eval-controlled eval-controlled-model eval-controlled-bge-lexical eval-interactions-controlled eval-report-html eval-stability eval-qasper-smoke eval-qasper verify-report-results setup-rag-local install-rag-local download-rag-model lint precommit help
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -9,8 +9,8 @@ RAG_MODEL_DIR   := models/llm
 RAG_MODEL       := $(RAG_MODEL_DIR)/Qwen3-8B-Q4_K_M.gguf
 RAG_MODEL_URL   := https://huggingface.co/Qwen/Qwen3-8B-GGUF/resolve/main/Qwen3-8B-Q4_K_M.gguf
 RAG_E4B_MODEL   := $(RAG_MODEL_DIR)/gemma-4-E4B-it-Q4_K_M.gguf
-RAG_CONTROLLED_BGE_LEXICAL_RUN := demos/rag_retrieval_explanation/evals/runs/20260616_controlled_interactions_bge_lexical
-RAG_CONTROLLED_INTERACTION_SUMMARY := demos/rag_retrieval_explanation/evals/runs/20260616_controlled_interaction_summary
+RAG_CONTROLLED_BGE_LEXICAL_RUN := demos/rag_retrieval_explanation/evals/runs/20260626_232647_164955_controlled_50_bge_lexical
+RAG_CONTROLLED_INTERACTION_SUMMARY := demos/rag_retrieval_explanation/evals/runs/20260627_controlled_50_interaction_summary
 
 # ---------------------------------------------------------------------------
 # Targets
@@ -41,7 +41,6 @@ help:
 	@echo "  make eval-qasper-smoke               Run the first five frozen QASPER cases"
 	@echo "  make eval-qasper                     Run the frozen 30-case QASPER eval"
 	@echo "  make verify-report-results           Recompute paper tables from saved runs"
-	@echo "  make paper                           Build the living LaTeX manuscript"
 	@echo ""
 	@echo "Code quality:"
 	@echo "  make lint                            Run pre-commit on all files"
@@ -79,37 +78,34 @@ download-rag-model:
 	fi
 
 test:
-	uv run pytest tests/test_rag_retrieval_policy.py tests/test_rag_llama_cpp_backend.py tests/test_rag_web_backend.py tests/test_rag_controlled_eval.py tests/test_rag_qasper_eval.py tests/test_rag_stability_analysis.py tests/test_rag_evaluation_protocol.py
+	uv run pytest demos/rag_retrieval_explanation/tests
 
 eval-controlled:
-	uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval
+	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval
 
 eval-controlled-model:
-	uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval --model-path $(RAG_MODEL)
+	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval --model-path $(RAG_MODEL)
 
 eval-controlled-bge-lexical:
-	uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval --method "Dense embeddings" --embedding-model models/embedding/bge-base-en-v1.5 --embedding-device mps --value-function lexical --output-dir $(RAG_CONTROLLED_BGE_LEXICAL_RUN)
+	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval --method "Dense embeddings" --embedding-model models/embedding/bge-base-en-v1.5 --embedding-device mps --value-function lexical --output-dir $(RAG_CONTROLLED_BGE_LEXICAL_RUN)
 
 eval-interactions-controlled:
-	uv run python -m demos.rag_retrieval_explanation.evals.analyze_interactions --run "BGE-base + lexical=$(RAG_CONTROLLED_BGE_LEXICAL_RUN)" --output-dir $(RAG_CONTROLLED_INTERACTION_SUMMARY)
+	uv run python -m demos.rag_retrieval_explanation.evals.reporting.analyze_interactions --run "BGE-base + lexical=$(RAG_CONTROLLED_BGE_LEXICAL_RUN)" --output-dir $(RAG_CONTROLLED_INTERACTION_SUMMARY)
 
 eval-report-html:
-	uv run python -m demos.rag_retrieval_explanation.evals.build_eval_report
+	uv run python -m demos.rag_retrieval_explanation.evals.reporting.build_eval_report
 
 eval-stability:
-	uv run python -m demos.rag_retrieval_explanation.evals.analyze_stability
+	uv run python -m demos.rag_retrieval_explanation.evals.reporting.analyze_stability
 
 eval-qasper-smoke:
-	uv run python -m demos.rag_retrieval_explanation.evals.run_qasper_eval --limit 5
+	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_qasper_eval --limit 5
 
 eval-qasper:
-	uv run python -m demos.rag_retrieval_explanation.evals.run_qasper_eval
+	uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_qasper_eval
 
 verify-report-results:
-	uv run python -m demos.rag_retrieval_explanation.evals.verify_report_results
-
-paper:
-	TEXMFVAR=/tmp/shapiq-texmf-var latexmk -pdf -interaction=nonstopmode -halt-on-error -cd paper/main.tex
+	uv run python -m demos.rag_retrieval_explanation.evals.reporting.verify_report_results
 
 # --- Code quality ---
 

@@ -9,17 +9,20 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from demos.rag_retrieval_explanation.evals.experiments.benchmark import (
+    passage_id_from_title,
+)
 
-from .benchmark import passage_id_from_title
-
-RUNS_DIR = Path(__file__).parent / "runs"
-DEFAULT_OUTPUT_DIR = RUNS_DIR / "20260616_controlled_stability"
+RUNS_DIR = Path(__file__).parents[1] / "runs"
+DEFAULT_OUTPUT_DIR = RUNS_DIR / "20260630_controlled_50_stability"
 DEFAULT_RUNS = {
-    "bge_lexical": RUNS_DIR / "20260616_controlled_interactions_bge_lexical",
-    "bge_target_ll": RUNS_DIR / "20260616_controlled_bge_target_ll_e4b_layers20",
-    "bge_contrastive_ll": RUNS_DIR / "20260616_controlled_bge_contrastive_ll_e4b_layers20",
+    "bge_lexical": RUNS_DIR / "20260626_232647_164955_controlled_50_bge_lexical",
+    "bge_target_ll": (RUNS_DIR / "20260626_232659_164956_controlled_50_bge_target_ll_e4b_cuda4"),
+    "bge_contrastive_ll": (
+        RUNS_DIR / "20260626_215332_164947_controlled_50_bge_contrastive_ll_e4b_cuda4"
+    ),
     "tfidf_contrastive_ll": (
-        RUNS_DIR / "20260616_controlled_tfidf_contrastive_ll_e4b_layers20"
+        RUNS_DIR / "20260626_232708_164957_controlled_50_tfidf_contrastive_ll_e4b_cuda4"
     ),
 }
 
@@ -146,10 +149,8 @@ def _write_report(summary: pd.DataFrame, output_dir: Path) -> None:
                 "",
                 f"- Cases: {len(group)}",
                 f"- Mean retrieved-set Jaccard: {_mean(group, 'retrieved_jaccard')}",
-                f"- Top-attribution agreement: "
-                f"{_mean_boolean(group, 'top_attribution_agrees')}",
-                f"- Mean Spearman on common retrieved chunks: "
-                f"{_mean(group, 'spearman_common')}",
+                f"- Top-attribution agreement: {_mean_boolean(group, 'top_attribution_agrees')}",
+                f"- Mean Spearman on common retrieved chunks: {_mean(group, 'spearman_common')}",
                 f"- Mean Spearman on union with missing chunks as zero: "
                 f"{_mean(group, 'spearman_union_zero_filled')}",
                 "",

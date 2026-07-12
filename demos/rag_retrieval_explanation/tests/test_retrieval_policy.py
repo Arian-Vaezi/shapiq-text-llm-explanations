@@ -1,19 +1,12 @@
-"""Regression tests for the generic demo RAG context-selection policy."""
+"""Regression tests for the demo's RAG context-selection policy."""
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-DEMO_DIR = Path(__file__).resolve().parents[1] / "demos" / "rag_retrieval_explanation"
-if str(DEMO_DIR) not in sys.path:
-    sys.path.insert(0, str(DEMO_DIR))
-
-from rag_pipeline import (  # noqa: E402
-    CandidateChunk,
+from demos.rag_retrieval_explanation.core.retrieval import (
     classify_query_intent,
     retrieve_relevant_chunks_with_debug,
 )
+from demos.rag_retrieval_explanation.core.schemas import CandidateChunk
 
 
 def policy_fixture_chunks() -> list[CandidateChunk]:

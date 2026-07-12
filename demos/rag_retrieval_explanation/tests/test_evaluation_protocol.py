@@ -1,4 +1,4 @@
-"""Focused tests for the RAG evidence-evaluation protocol."""
+"""Focused tests for the demo's evidence-evaluation protocol."""
 
 from __future__ import annotations
 
@@ -12,13 +12,13 @@ from demos.rag_retrieval_explanation.core.evaluation import (
 )
 from demos.rag_retrieval_explanation.core.rag_game import RAGRetrievalGame
 from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
-from demos.rag_retrieval_explanation.evals.analyze_interactions import (
-    aggregate_interaction_runs,
-)
-from demos.rag_retrieval_explanation.evals.metrics import (
+from demos.rag_retrieval_explanation.evals.experiments.metrics import (
     exact_match,
     interaction_diagnostics,
     normalized_auc,
+)
+from demos.rag_retrieval_explanation.evals.reporting.analyze_interactions import (
+    aggregate_interaction_runs,
 )
 
 import shapiq

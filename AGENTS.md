@@ -16,19 +16,17 @@ rm -rf docs/source/generated docs/source/auto_examples && uv run sphinx-build -b
 uv run pre-commit run --all-files
 ```
 
-## demos/rag_retrieval_explanation structure (post-refactor)
+## demos/rag_retrieval_explanation structure
 
 The demo was refactored (June 2026). Key structural facts:
 
-- **`core/`** is the canonical module directory. `evaluation.py`, `rag_game.py`,
-  `rag_pipeline.py`, `value_functions.py`, `model_backends.py`, `sample_data.py`
-  at the demo root are **backward-compat shims** that re-export from `core/`.
-  Do not edit them directly — edit `core/` instead.
+- **`core/`** is the only implementation directory for the Python RAG pipeline.
+  Import directly from its focused modules; the former demo-root compatibility
+  shims were removed because there are no external callers to preserve.
 - **`core/schemas.py`** is the single source of truth for all domain dataclasses
   (`RetrievedChunk`, `CandidateChunk`, `RankedChunk`, `PDFPage`, `RetrievalDebugInfo`).
-- **`core/rag_pipeline.py`** is itself a shim re-exporting from `core/chunking.py`,
-  `core/retrieval.py`, and `core/generation.py`. Edit those three files, not
-  `core/rag_pipeline.py` directly.
+- Import pipeline operations directly from `core/chunking.py`, `core/retrieval.py`,
+  and `core/generation.py`; there is no aggregate `rag_pipeline.py` module.
 
 ## Project-specific surprises to remember
 
@@ -42,14 +40,5 @@ The demo was refactored (June 2026). Key structural facts:
   PDF path uses TF-IDF and does not require Hugging Face.
 - `demos/rag_retrieval_explanation/eval_report.html` is a static report with a
   generated detail block. Rebuild the per-question interaction panels with
-  `uv run python -m demos.rag_retrieval_explanation.evals.build_eval_report`
+  `uv run python -m demos.rag_retrieval_explanation.evals.reporting.build_eval_report`
   instead of hand-editing the generated block.
-
-## Living research paper
-
-- `paper/main.tex` is the living manuscript for the RAG Shapley study.
-- Any change to the benchmark, evaluation metrics, research questions,
-  experimental settings, or reported results must update `paper/main.tex` and
-  `paper/research_log.tex` in the same change.
-- Numerical claims must name or link the generated evaluation run that produced
-  them. Keep unmeasured results explicitly marked as `TBD`.

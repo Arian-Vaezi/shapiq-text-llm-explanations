@@ -154,7 +154,7 @@ redundant, and 10 conflicting labelled interaction pairs.
 support on this controlled set. `make eval-interactions-controlled` recomputes the
 RQ2 table with interaction coverage and conditional sign recovery separated.
 `make eval-qasper-smoke` runs the first five frozen QASPER validation cases;
-`make eval-qasper` runs the full 30-case external validation.
+`make eval-qasper` runs the full 50-case external validation.
 `make verify-report-results` recomputes the paper tables from saved run
 artifacts and warns when older artifacts lack newly added raw faithfulness
 curves.
@@ -163,7 +163,7 @@ Model-backed controlled interaction runs use the same runner and benchmark path,
 but are slower because each coalition requires local likelihood scoring:
 
 ```bash
-uv run python -m demos.rag_retrieval_explanation.evals.run_controlled_eval \
+uv run python -m demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval \
   --method "Dense embeddings" \
   --embedding-model models/embedding/bge-base-en-v1.5 \
   --value-function target_likelihood \
@@ -176,9 +176,6 @@ Replace `target_likelihood` with `contrastive_likelihood` for contrastive LL.
 Use `--method "TF-IDF"` for the TF-IDF + contrastive LL setting. If native
 llama.cpp inference fails or is interrupted, keep the run directory out of the
 reported tables until `summary.csv` and all per-case artifacts are complete.
-
-The living paper draft is in `paper/main.tex` and can be built with
-`make paper`.
 
 ## Directory Structure
 

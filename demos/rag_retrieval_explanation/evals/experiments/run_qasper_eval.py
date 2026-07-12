@@ -60,7 +60,7 @@ if TYPE_CHECKING:
     import numpy as np
     from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
 
-RUNS_DIR = Path(__file__).parent / "runs"
+RUNS_DIR = Path(__file__).parents[1] / "runs"
 DEFAULT_MODEL_PATH = Path("models/llm/gemma-4-E4B-it-Q4_K_M.gguf")
 DEFAULT_EMBEDDING_PATH = Path("models/embedding/bge-base-en-v1.5")
 

@@ -8,7 +8,7 @@ from pathlib import Path
 
 from demos.rag_retrieval_explanation.core.schemas import CandidateChunk, RetrievedChunk
 
-DEFAULT_BENCHMARK_PATH = Path(__file__).parent / "cases" / "controlled_benchmark.json"
+DEFAULT_BENCHMARK_PATH = Path(__file__).parents[1] / "cases" / "controlled_benchmark.json"
 PASSAGE_ID_SEPARATOR = " | "
 
 

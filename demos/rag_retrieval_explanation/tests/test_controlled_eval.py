@@ -1,4 +1,4 @@
-"""Tests for the end-to-end controlled RAG evaluation."""
+"""Tests for the demo's end-to-end controlled RAG evaluation."""
 
 from __future__ import annotations
 
@@ -13,15 +13,15 @@ from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
 from demos.rag_retrieval_explanation.core.value_functions import (
     ContrastiveLikelihoodValue,
 )
-from demos.rag_retrieval_explanation.evals.benchmark import (
+from demos.rag_retrieval_explanation.evals.experiments.benchmark import (
     benchmark_candidates,
     load_benchmark,
 )
-from demos.rag_retrieval_explanation.evals.metrics import (
+from demos.rag_retrieval_explanation.evals.experiments.metrics import (
     classify_knowledge_source,
     token_f1,
 )
-from demos.rag_retrieval_explanation.evals.run_controlled_eval import evaluate_case
+from demos.rag_retrieval_explanation.evals.experiments.run_controlled_eval import evaluate_case
 
 if TYPE_CHECKING:
     from demos.rag_retrieval_explanation.core.model_backends import LlamaCppBackend

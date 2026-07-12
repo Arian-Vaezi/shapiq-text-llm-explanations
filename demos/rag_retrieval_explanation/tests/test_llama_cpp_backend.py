@@ -1,18 +1,10 @@
-"""Tests for the local llama.cpp backend without loading a real GGUF model."""
+"""Tests for the demo's llama.cpp backend without loading a real GGUF model."""
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
 import numpy as np
 import pytest
-
-DEMO_DIR = Path(__file__).resolve().parents[1] / "demos" / "rag_retrieval_explanation"
-if str(DEMO_DIR) not in sys.path:
-    sys.path.insert(0, str(DEMO_DIR))
-
-from core.model_backends import LlamaCppBackend  # noqa: E402
+from demos.rag_retrieval_explanation.core.model_backends import LlamaCppBackend
 
 
 class FakeLlama:

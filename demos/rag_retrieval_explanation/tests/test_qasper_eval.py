@@ -1,8 +1,8 @@
-"""Tests for QASPER ingestion and external evaluation."""
+"""Tests for the demo's QASPER ingestion and external evaluation."""
 
 from __future__ import annotations
 
-from demos.rag_retrieval_explanation.evals.qasper import (
+from demos.rag_retrieval_explanation.evals.experiments.qasper import (
     _map_evidence,
     _paper_passages,
     qasper_candidates,

@@ -58,7 +58,7 @@ from .metrics import (
 if TYPE_CHECKING:
     from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
 
-RUNS_DIR = Path(__file__).parent / "runs"
+RUNS_DIR = Path(__file__).parents[1] / "runs"
 VALUE_FUNCTION_CHOICES = ("lexical", "target_likelihood", "contrastive_likelihood")
 
 

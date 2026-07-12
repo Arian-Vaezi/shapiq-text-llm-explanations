@@ -1,9 +1,9 @@
-"""Tests for controlled artifact-only stability analysis."""
+"""Tests for the demo's controlled artifact-only stability analysis."""
 
 from __future__ import annotations
 
 import pytest
-from demos.rag_retrieval_explanation.evals.analyze_stability import (
+from demos.rag_retrieval_explanation.evals.reporting.analyze_stability import (
     _absolute_attribution_scores,
     _spearman,
 )

@@ -1,4 +1,4 @@
-"""Metrics for end-to-end controlled retrieval and attribution evaluation."""
+"""Metrics shared by the reproducible retrieval experiments."""
 
 from __future__ import annotations
 
@@ -117,9 +117,7 @@ def interaction_diagnostics(
 ) -> dict[str, int | float | None]:
     """Summarize labelled interaction recovery with denominator visibility."""
     total = len(rows)
-    evaluable = [
-        row for row in rows if row.get("interaction_sign_correct") is not None
-    ]
+    evaluable = [row for row in rows if row.get("interaction_sign_correct") is not None]
     correct = sum(bool(row["interaction_sign_correct"]) for row in evaluable)
     diagnostics: dict[str, int | float | None] = {
         "interaction_total_pairs": total,
@@ -136,13 +134,11 @@ def interaction_diagnostics(
         relation_evaluable = [
             row for row in labelled if row.get("interaction_sign_correct") is not None
         ]
-        relation_correct = sum(
-            bool(row["interaction_sign_correct"]) for row in relation_evaluable
-        )
+        relation_correct = sum(bool(row["interaction_sign_correct"]) for row in relation_evaluable)
         diagnostics[f"interaction_{relation}_total_pairs"] = len(labelled)
         diagnostics[f"interaction_{relation}_evaluable_pairs"] = len(relation_evaluable)
-        diagnostics[f"interaction_{relation}_skipped_pairs"] = (
-            len(labelled) - len(relation_evaluable)
+        diagnostics[f"interaction_{relation}_skipped_pairs"] = len(labelled) - len(
+            relation_evaluable
         )
         diagnostics[f"interaction_{relation}_coverage"] = (
             len(relation_evaluable) / len(labelled) if labelled else None

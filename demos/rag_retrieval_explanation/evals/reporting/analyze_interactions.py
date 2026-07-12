@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pandas as pd
 
-RUNS_DIR = Path(__file__).parent / "runs"
+RUNS_DIR = Path(__file__).parents[1] / "runs"
 DEFAULT_OUTPUT_DIR = RUNS_DIR / "controlled_interaction_summary"
 RELATIONS = ("complementary", "redundant", "conflicting", "overall")
 

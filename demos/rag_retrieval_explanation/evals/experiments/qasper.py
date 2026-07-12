@@ -20,8 +20,8 @@ DATASET_ID = "allenai/qasper"
 DATASET_CONFIG = "qasper"
 DEFAULT_SPLIT = "validation"
 DEFAULT_CASE_COUNT = 50
-DEFAULT_CACHE_PATH = Path(__file__).parent / "cache" / "qasper_validation.json"
-DEFAULT_SELECTION_PATH = Path(__file__).parent / "cases" / "qasper_validation_50.json"
+DEFAULT_CACHE_PATH = Path(__file__).parents[1] / "cache" / "qasper_validation.json"
+DEFAULT_SELECTION_PATH = Path(__file__).parents[1] / "cases" / "qasper_validation_50.json"
 DATASET_ROWS_URL = "https://datasets-server.huggingface.co/rows"
 DATASET_INFO_URL = "https://huggingface.co/api/datasets/allenai/qasper"
 
