@@ -2,10 +2,11 @@
 
 Streamlit framework for the **Agentic tool-use explanations** demo.
 
-This demo treats system prompt rules and user-request phrases as players in a
-cooperative game. For each coalition of prompt segments, the app scores how
-strongly the visible text supports calling a target tool, then uses shapiq to
-estimate first-order attributions and second-order interactions.
+This demo treats user-request phrases as players in a cooperative game while
+keeping the system prompt and tool schemas fixed. For each coalition of user
+segments, the app scores how strongly the visible text supports the identity of
+the tool selected by the full-context agent run, then uses shapiq to estimate
+first-order attributions and second-order interactions.
 
 The current interface is intentionally compact for development-stage demos:
 scenario/input first, a short router summary, a minimal explanation setup, and
@@ -63,22 +64,19 @@ This does not install a real LLM backend. Do not install `torch` or
 
 ## Current UI Flow
 
-1. Select either an example request or a custom request.
-2. Run inference to select the target tool. If no inference result is available,
-   the selected explanation scorer is used as a fallback target selector.
-3. Pick a scoring method. The default is the Mock model scorer; keyword
-   comparison is hidden unless selected or enabled in more options.
-4. Run the explanation.
-5. Inspect the Summary, Attribution, and Interactions tabs.
-6. Use advanced/debug controls only when you need prompt segments,
-   value-function details, scoring prompt previews, or keyword comparison.
+1. Select HF Local or API Agent mode and enter a request.
+2. Run the full pipeline. The full-context agent run selects the target tool.
+3. The XAI stage freezes that Agent Result tool as the explanation target.
+4. Inspect the summary, SV attribution, and k-SII interaction results.
+5. Use Developer settings only when you need alternate scorers, prompt previews,
+   value-function details, or raw backend diagnostics.
 
-The UI currently exposes three scoring methods:
+The presentation path uses a mixed-fidelity value-function architecture:
 
-1. Mock model scorer for lightweight deterministic demo behavior.
-2. Keyword baseline for a transparent lexical baseline.
-3. Calibrated multiclass tool log-odds (HF local) for local Hugging Face
-   likelihood-based scoring.
+1. Executable tool calls use a canonical native tool-identity continuation
+   likelihood value function.
+2. Direct-answer (`no_tool`) cases use the legacy A/B/C/D forced-choice
+   surrogate, explicitly labeled as a surrogate rather than native evidence.
 
 ## What The App Shows
 
@@ -86,9 +84,10 @@ The UI currently exposes three scoring methods:
   segments.
 - A custom-request mode with a user-input box, suggested tool, short
   reason, and per-tool scores.
-- Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or `no_tool`.
-- Optional calibrated multiclass tool log-odds (HF local) scorer backend,
-  loaded lazily only after it is selected and the explanation is run.
+- Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or
+  the internal direct-answer decision `no_tool`.
+- HF Local native tool-identity scoring with inference/XAI model consistency
+  checks.
 - A compact setup panel for the coalition value function.
 - Summary metrics for target-tool support after running the explanation.
 - First-order attribution ranking: which segment most pushes the tool decision.
@@ -110,8 +109,29 @@ model-backed version, the segmentation can be replaced or extended with:
 
 ## Scoring Methods
 
-The demo keeps several scoring implementations side by side, though the UI only
-exposes the presentation-ready methods listed above:
+The demo keeps several scoring implementations side by side. The default
+HF-local presentation path is the native tool-identity scorer:
+
+- Full-context native inference determines the selected tool `t`.
+- The selected tool is frozen as the XAI target.
+- For each coalition, the scorer constructs `y_t`, a template-derived
+  canonical native-format continuation for tool `t`, with the same selected
+  tokenizer and native chat template used by inference.
+- `y_t` is truncated at the tool identity and excludes free-form argument
+  tokens. This isolates tool-identity evidence from argument-generation
+  variability.
+- The explanation targets which user-request segments increase or decrease
+  support for the selected tool identity, not argument generation or raw
+  response reproduction.
+
+The native tool-identity value function is:
+
+```text
+h_t(S) = mean_k log P_theta(y_{t,k} | x_S, y_{t,<k})
+v_t(S) = h_t(S) - h_t(empty)
+```
+
+Other implementations remain available for development and comparison:
 
 - `LexicalToolScorer` is a fast keyword baseline.
 - `LLMToolScorer` is a generation-based numeric judge. It remains in code for
@@ -122,46 +142,34 @@ exposes the presentation-ready methods listed above:
   prompt, and combining the results into a target-vs-all multiclass log-odds
   value normalized against the true empty coalition.
 
-The selected scorer first evaluates the full fixed context and full user request
-for every candidate decision. The highest-scoring candidate becomes the tool to
-explain, and the same scorer then evaluates masked user-segment coalitions:
+The primary pipeline freezes the full-context Agent Result before evaluating
+coalitions:
 
 ```text
 full fixed context + full user request
--> selected scorer evaluates all candidate tools
--> highest-scoring candidate becomes the explanation target
--> the same scorer evaluates masked coalitions
+-> native inference selects a tool
+-> selected tool identity becomes the explanation target
+-> value function evaluates masked user-segment coalitions
 ```
 
-The setup preview does not execute any tools. It only selects which tool the
-agent should use for the current full prompt. The preview returns:
-
-```python
-{
-    "tool": "weather_tool",
-    "reason": "Matched rain, berlin, tomorrow; the question asks about weather.",
-    "scores": {
-        "weather_tool": 0.82,
-        "calculator_tool": 0.05,
-        "web_search_tool": 0.10,
-        "no_tool": 0.03,
-    },
-}
-```
+Developer-only fallback target selection can still ask a selected scorer to
+choose a target when no Agent Result exists, but that is not the presentation
+path.
 
 This lets the UI and shapiq explanation flow be developed without API keys, GPU
 dependencies, or Hugging Face model downloads.
 
-## Optional Calibrated Multiclass Tool Log-Odds Scorer (HF Local)
+## Legacy A/B/C/D Forced-Choice Scorer (HF Local)
 
-The default scoring method is the **Mock model scorer** so the demo stays fast and
-usable on a clean local machine. The optional **Calibrated multiclass tool
-log-odds (HF local)** scorer (`CalibratedToolLogOddsScorer`) uses a local
-Hugging Face causal language model.
+The legacy **Calibrated multiclass tool log-odds (HF local)** scorer
+(`CalibratedToolLogOddsScorer`) uses a local Hugging Face causal language model.
+It is retained for developer comparison and for the direct-answer branch as a
+clearly labeled surrogate.
 
-For each coalition, the LLM is queried with a fixed constrained-classification
-routing prompt (see `ROUTING_LABELS` and `build_routing_classification_prompt`
-in `scorers.py`): choose exactly one routing decision code (`A`/`B`/`C`/`D` for
+For each coalition, the LLM is queried with a fixed artificial
+constrained-classification routing prompt (see `ROUTING_LABELS` and
+`build_routing_classification_prompt` in `scorers.py`): choose exactly one
+routing decision code (`A`/`B`/`C`/`D` for
 `weather_tool`/`calculator_tool`/`web_search_tool`/`no_tool`), each rendered
 with its canonical description from `tool_schemas.py`/`TOOLS` (not a second
 hard-coded description dictionary) -- so editing a tool's description changes
@@ -174,28 +182,30 @@ empty coalition so that `V(empty_coalition) == 0`. shapiq then uses these
 coalition values to compute segment attributions and pairwise interactions.
 
 Unlike a naive target-vs-`no_tool` contrast, `no_tool` is treated as one
-routing alternative among all candidates, not a fixed reference -- so a
-candidate outscoring `no_tool` is never mistaken for genuine support when a
-third candidate is actually strongest. The same canonical routing-classification
-prompt builder (`build_routing_classification_prompt`) is shared by HF local
-classification routing, HF local logprob scoring, calibration scoring, and
-coalition scoring, so token boundaries and any residual template prior stay
-identical across all four.
+artificial routing alternative among all candidates, not a fixed reference -- so
+a candidate outscoring `no_tool` is never mistaken for genuine support when a
+third candidate is actually strongest. `NoTool`/`no_tool` is not an executable
+tool and is never emitted by the native agent; it exists only as an internal
+direct-answer label and as an artificial candidate in this legacy probe. The
+same canonical routing-classification prompt builder
+(`build_routing_classification_prompt`) is shared by HF local classification
+routing, HF local logprob scoring, calibration scoring, and coalition scoring,
+so token boundaries and any residual template prior stay identical across all
+four.
 
-**The target tool being explained is always produced by this same protocol.**
+**This branch does not have the same fidelity as native tool-call scoring.**
 `hf_router.LocalHFClassificationRouter` wraps an already-loaded
 `CalibratedToolLogOddsScorer` and selects a tool by scoring every routing-label
-continuation for the full (unmasked) request and taking the argmax --
-`scorer.score_full_request_labels(...)`, the same method the coalition value
-function itself calls. When this scorer mode is selected, the Streamlit UI
-ignores the Inference tab's selected tool (from Groq/Gemini/the structured-JSON
-`LocalHFRouter`) and instead redetermines the target from this classifier's own
-argmax at run time, so the tool being explained and the classifier producing
-the coalition values are never different models. This is intentionally
-separate from `LocalHFRouter` in `hf_router.py`, which still uses its own
-structured JSON protocol to run the real Inference tab agent end to end
-(selecting a tool and extracting call arguments such as location/date) -- that
-router is for execution, not for what this scorer mode explains.
+continuation for the full (unmasked) request and taking the argmax. This path
+remains available as a developer ablation; direct-answer explanations use it as
+a retained legacy surrogate.
+
+## HF Local Model Consistency
+
+The implementation supports multiple HF Local models. Inference and XAI are
+required to use the same model, tokenizer, chat template, device, and runtime
+configuration. Developer diagnostics report both inference and scorer identity
+so stale or cross-model explanations are blocked instead of silently displayed.
 
 Run the app with:
 

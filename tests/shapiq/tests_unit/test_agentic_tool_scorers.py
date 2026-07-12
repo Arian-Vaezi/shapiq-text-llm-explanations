@@ -5,6 +5,7 @@ from __future__ import annotations
 import inspect
 import math
 import sys
+import types
 from copy import deepcopy
 from pathlib import Path
 
@@ -15,6 +16,13 @@ DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_expla
 sys.path.insert(0, str(DEMO_DIR))
 
 import app as app_module  # noqa: E402
+from hf_router import (  # noqa: E402
+    DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
+    LocalHFRouter,
+    clean_direct_answer,
+    is_internal_sentinel_only,
+    normalize_native_tool_output,
+)
 from scorers import (  # noqa: E402
     CALIBRATION_USER_REQUESTS,
     ROUTING_LABELS,
@@ -23,8 +31,11 @@ from scorers import (  # noqa: E402
     LexicalToolScorer,
     LLMToolScorer,
     MockLLM,
+    NativeToolCallScorer,
     RoutingLabelTokenization,
     build_coalition_prompt,
+    build_native_tool_call_continuation,
+    build_native_tool_call_prompt,
     build_routing_classification_prompt,
     build_tool_calling_prompt,
     split_coalition_prompt,
@@ -143,6 +154,140 @@ class BrokenTokenizer:
         raise RuntimeError(msg)
 
 
+class NativeTemplateTokenizer:
+    """Small tokenizer that renders native prompts and assistant tool calls."""
+
+    pad_token = "<pad>"
+    eos_token = "</s>"
+    eos_token_id = 0
+    padding_side = "right"
+
+    def __init__(self) -> None:
+        self.calls: list[dict[str, object]] = []
+
+    def apply_chat_template(
+        self,
+        messages: list[dict[str, object]],
+        *,
+        tools: tuple[dict[str, object], ...],
+        tokenize: bool,
+        add_generation_prompt: bool,
+    ) -> str:
+        self.calls.append(
+            {
+                "messages": messages,
+                "tools": tools,
+                "tokenize": tokenize,
+                "add_generation_prompt": add_generation_prompt,
+            }
+        )
+        rendered = "".join(
+            f"<{message['role']}>{message.get('content', '')}" for message in messages
+        )
+        last_message = messages[-1]
+        if "tool_calls" in last_message:
+            tool_call = last_message["tool_calls"][0]
+            rendered += f"<tool_call>{tool_call['function']['name']}"
+        if add_generation_prompt:
+            rendered += "<assistant>"
+        return rendered
+
+
+class CharacterTensorTokenizer(NativeTemplateTokenizer):
+    """Tokenizer that maps characters to tensor ids for teacher-forcing tests."""
+
+    def __call__(
+        self,
+        texts: list[str],
+        *,
+        return_tensors: str,
+        add_special_tokens: bool,
+        padding: bool,
+    ) -> dict[str, object]:
+        del return_tensors, add_special_tokens, padding
+        import torch
+
+        rows = [[ord(character) for character in text] for text in texts]
+        max_len = max(len(row) for row in rows)
+        input_ids = torch.zeros((len(rows), max_len), dtype=torch.long)
+        attention_mask = torch.zeros((len(rows), max_len), dtype=torch.long)
+        for row_index, row in enumerate(rows):
+            input_ids[row_index, : len(row)] = torch.tensor(row, dtype=torch.long)
+            attention_mask[row_index, : len(row)] = 1
+        return {"input_ids": input_ids, "attention_mask": attention_mask}
+
+
+class ControlledLogitModel:
+    """Fake causal LM that assigns known log-probabilities by sequence position."""
+
+    def __init__(self, desired_logprobs_by_position: dict[int, float]) -> None:
+        self.desired_logprobs_by_position = desired_logprobs_by_position
+
+    def eval(self) -> None:
+        return None
+
+    def __call__(self, *, input_ids, attention_mask):
+        del attention_mask
+        import torch
+
+        vocab_size = 256
+        logits = torch.full(
+            (input_ids.shape[0], input_ids.shape[1], vocab_size),
+            -1000.0,
+            dtype=torch.float32,
+        )
+        for row_index in range(input_ids.shape[0]):
+            for position in range(input_ids.shape[1] - 1):
+                target_token = int(input_ids[row_index, position + 1])
+                desired = self.desired_logprobs_by_position.get(position, -0.1)
+                competitor_probability = math.log1p(-math.exp(desired))
+                logits[row_index, position, target_token] = desired
+                logits[row_index, position, 1] = competitor_probability
+        return types.SimpleNamespace(logits=logits)
+
+
+class TensorLike:
+    """Tiny object with the tensor methods used by LocalHFRouter generation."""
+
+    shape = (1, 3)
+
+    def to(self, device):
+        del device
+        return self
+
+    def __getitem__(self, item):
+        del item
+        return [1, 2, 3]
+
+
+class GenerationTokenizer(NativeTemplateTokenizer):
+    """Tokenizer fake for LocalHFRouter._generate_native_tool_response."""
+
+    eos_token_id = 0
+
+    def __call__(self, prompt: str, *, return_tensors: str) -> dict[str, TensorLike]:
+        del prompt, return_tensors
+        return {"input_ids": TensorLike()}
+
+    def decode(self, token_ids, *, skip_special_tokens: bool) -> str:
+        del token_ids, skip_special_tokens
+        return "A complete direct answer."
+
+
+class RecordingGenerateModel:
+    """Model fake that records generation kwargs."""
+
+    def __init__(self) -> None:
+        self.kwargs: dict[str, object] | None = None
+
+    def parameters(self):
+        return iter([types.SimpleNamespace(device="cpu")])
+
+    def generate(self, **kwargs):
+        self.kwargs = kwargs
+        return TensorLike()
+
+
 def test_canonical_tool_schema_contents() -> None:
     validate_tool_configuration()
     schema_by_name = {schema["function"]["name"]: schema for schema in EXECUTABLE_TOOL_SCHEMAS}
@@ -207,6 +352,343 @@ def test_build_tool_calling_prompt_keeps_empty_user_message() -> None:
     assert call["messages"][0] == {"role": "system", "content": "You are a tool router."}
     assert call["messages"][1] == {"role": "user", "content": ""}
     assert call["tools"] == get_executable_tool_schemas()
+
+
+def test_build_native_tool_call_prompt_uses_structured_schemas_and_instruction() -> None:
+    tokenizer = NativeTemplateTokenizer()
+
+    prompt = build_native_tool_call_prompt(
+        tokenizer,
+        system_prompt="Route carefully.",
+        user_request="Who won the latest Formula 1 race?",
+    )
+
+    assert prompt.endswith("<assistant>")
+    call = tokenizer.calls[0]
+    assert call["tools"] == get_executable_tool_schemas()
+    assert call["tokenize"] is False
+    assert call["add_generation_prompt"] is True
+    system_message = call["messages"][0]
+    assert "If an external tool is required" in system_message["content"]
+    assert "without emitting a <tool_call> block" in system_message["content"]
+
+
+def test_native_prompt_does_not_tell_model_to_use_no_tool() -> None:
+    tokenizer = NativeTemplateTokenizer()
+
+    build_native_tool_call_prompt(
+        tokenizer,
+        system_prompt="Answer stable conceptual explanations directly without calling a tool.",
+        user_request="Explain precision and recall.",
+    )
+
+    system_content = str(tokenizer.calls[0]["messages"][0]["content"])
+    assert "Use no_tool" not in system_content
+    assert "stable conceptual questions" in system_content
+    assert "answer the user directly in natural language" in system_content
+    assert "Never output the literal strings no_tool" in system_content
+    assert "NoTool" in system_content
+
+
+def test_no_tool_is_not_registered_as_executable_schema() -> None:
+    executable_names = {schema["function"]["name"] for schema in get_executable_tool_schemas()}
+
+    assert "no_tool" not in executable_names
+
+
+def test_build_native_tool_call_continuation_uses_chat_template_through_tool_name() -> None:
+    tokenizer = NativeTemplateTokenizer()
+
+    continuation = build_native_tool_call_continuation(
+        tokenizer,
+        system_prompt="Route carefully.",
+        user_request="Will it rain in Berlin tomorrow?",
+        target_tool="weather_tool",
+    )
+
+    assert continuation == "<tool_call>weather_tool"
+    assert tokenizer.calls[-1]["add_generation_prompt"] is False
+    assert tokenizer.calls[-1]["tools"] == get_executable_tool_schemas()
+
+
+def test_native_hf_router_parses_valid_tool_call_and_arguments() -> None:
+    raw_response = (
+        '<tool_call>{"name": "weather_tool", "arguments": {"location": "Berlin"}}</tool_call>'
+    )
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "weather_tool"
+    assert decision.tool_arguments == {"location": "Berlin"}
+    assert decision.parse_error is None
+
+
+def test_native_hf_router_parses_multiline_tool_call_with_trailing_im_end() -> None:
+    raw_response = (
+        "<tool_call>\n"
+        '{"name": "web_search_tool", "arguments": {"query": "role of CEO"}}\n'
+        "</tool_call><|im_end|>"
+    )
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "web_search_tool"
+    assert decision.tool_arguments == {"query": "role of CEO"}
+    assert decision.parse_error is None
+    assert decision.raw_response_original == raw_response
+    assert decision.normalized_response_used_for_parsing == raw_response.removesuffix("<|im_end|>")
+    assert decision.extracted_tool_call_json == (
+        '{"name": "web_search_tool", "arguments": {"query": "role of CEO"}}'
+    )
+    assert decision.extracted_tool_call_json.endswith("}}")
+
+
+def test_native_hf_router_parses_multiple_argument_fields() -> None:
+    raw_response = (
+        "<tool_call>\n"
+        "{\n"
+        '  "name": "weather_tool",\n'
+        '  "arguments": {\n'
+        '    "location": "Berlin",\n'
+        '    "date": "tomorrow"\n'
+        "  }\n"
+        "}\n"
+        "</tool_call>"
+    )
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "weather_tool"
+    assert decision.tool_arguments == {
+        "location": "Berlin",
+        "date": "tomorrow",
+    }
+    assert decision.parse_error is None
+
+
+def test_native_hf_router_parses_nested_argument_value_without_truncation() -> None:
+    raw_response = (
+        "<tool_call>\n"
+        '{"name": "web_search_tool", "arguments": {"query": "CEO role", '
+        '"filters": {"region": "global", "types": ["overview", "definition"]}}}\n'
+        "</tool_call>"
+    )
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "web_search_tool"
+    assert decision.tool_arguments == {
+        "query": "CEO role",
+        "filters": {
+            "region": "global",
+            "types": ["overview", "definition"],
+        },
+    }
+    assert decision.parse_error is None
+    assert decision.extracted_tool_call_json is not None
+    assert '"filters": {"region": "global", "types": ["overview", "definition"]}' in (
+        decision.extracted_tool_call_json
+    )
+
+
+def test_native_hf_router_parses_tool_call_with_whitespace_around_json() -> None:
+    raw_response = (
+        '  <tool_call> \n  {"name": "calculator_tool", '
+        '"arguments": {"expression": "238 * 47"}} \n </tool_call>  '
+    )
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "calculator_tool"
+    assert decision.tool_arguments == {"expression": "238 * 47"}
+
+
+def test_normalize_native_tool_output_only_strips_known_trailing_artifacts() -> None:
+    raw_response = "  answer <|not_special|>  <|im_end|>  "
+
+    assert normalize_native_tool_output(raw_response) == "answer <|not_special|>"
+
+
+def test_native_hf_router_maps_direct_answer_to_no_tool_and_preserves_text() -> None:
+    raw_response = "Precision measures exactness; recall measures coverage."
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "no_tool"
+    assert decision.tool_arguments == {}
+    assert decision.agent_response == raw_response
+    assert decision.parse_error is None
+    assert decision.direct_answer == raw_response
+
+
+@pytest.mark.parametrize(
+    "raw_response",
+    [
+        "No_tool\n\nPrecision and recall are different metrics.",
+        "no_tool\nPhotosynthesis converts light into chemical energy.",
+        "no tool\r\nA CEO sets strategy and leads executives.",
+        "NoTool\nA model is a simplified representation.",
+    ],
+)
+def test_native_hf_router_cleans_leading_direct_answer_sentinel(raw_response: str) -> None:
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "no_tool"
+    assert decision.parse_error is None
+    assert decision.direct_answer is not None
+    assert not decision.direct_answer.lower().startswith(("no_tool", "notool", "no tool"))
+    assert decision.removed_direct_answer_sentinel is True
+
+
+def test_direct_answer_cleanup_preserves_middle_no_tool_text() -> None:
+    raw_response = "The literal string no_tool is an internal label in this demo."
+
+    cleaned, removed = clean_direct_answer(raw_response)
+
+    assert cleaned == raw_response
+    assert removed is False
+
+
+@pytest.mark.parametrize("raw_response", ["No_tool", "no_tool", "NoTool", "no tool"])
+def test_native_hf_router_rejects_sentinel_only_output(raw_response: str) -> None:
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert is_internal_sentinel_only(raw_response) is True
+    assert decision.selected_tool is None
+    assert decision.direct_answer is None
+    assert decision.parse_error is not None
+    assert "internal routing label" in decision.parse_error
+
+
+def test_native_hf_router_does_not_keyword_fallback_when_native_parse_fails() -> None:
+    raw_response = "I might need weather_tool, but I am answering directly."
+
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool == "no_tool"
+    assert decision.tool_arguments == {}
+
+
+@pytest.mark.parametrize(
+    ("raw_response", "message"),
+    [
+        ('<tool_call>{"name": "web_search_tool" }', "incomplete"),
+        ('<tool_call>{"name": "web_search_tool", bad json}</tool_call>', "JSON"),
+        ('<tool_call>{"name": "calendar_tool", "arguments": {}}</tool_call>', "unknown"),
+        (
+            '<tool_call>{"name": "web_search_tool", "arguments": {"query": "role of CEO"}'
+            "</tool_call>",
+            "JSON",
+        ),
+        (
+            '<tool_call>{"name": "web_search_tool", "arguments": "role of CEO"}</tool_call>',
+            "arguments",
+        ),
+        (
+            '<tool_call>{"name": "weather_tool", "arguments": {}}</tool_call>'
+            '<tool_call>{"name": "web_search_tool", "arguments": {}}</tool_call>',
+            "multiple",
+        ),
+    ],
+)
+def test_native_hf_router_tool_call_parse_failures_are_not_no_tool(
+    raw_response: str,
+    message: str,
+) -> None:
+    decision = LocalHFRouter.parse_native_response(raw_response)
+
+    assert decision.selected_tool is None
+    assert decision.tool_arguments == {}
+    assert decision.direct_answer is None
+    assert decision.parse_error is not None
+    assert message.lower() in decision.parse_error.lower()
+    if message in {"JSON", "unknown", "arguments"}:
+        assert decision.extracted_tool_call_json is not None
+
+
+def test_app_parse_failure_blocks_xai_target() -> None:
+    inference_result = types.SimpleNamespace(
+        selected_tool=None,
+        parse_error="Native tool-call JSON could not be parsed.",
+    )
+
+    assert app_module.has_untrusted_native_parse_result(inference_result) is True
+
+
+def test_sentinel_only_output_blocks_xai_target() -> None:
+    decision = LocalHFRouter.parse_native_response("No_tool")
+
+    assert app_module.has_untrusted_native_parse_result(decision) is True
+
+
+def test_native_hf_generation_is_deterministic_and_uses_larger_budget() -> None:
+    import torch
+
+    router = LocalHFRouter.__new__(LocalHFRouter)
+    router.tokenizer = GenerationTokenizer()
+    router.model = RecordingGenerateModel()
+    router.device = "cpu"
+    router.max_new_tokens = DEFAULT_NATIVE_HF_MAX_NEW_TOKENS
+    router.generation_kwargs = {"temperature": 0.7, "top_p": 0.9, "top_k": 20}
+    router._torch = torch
+
+    _debug_prompt, _raw_response, generation_parameters = router._generate_native_tool_response(
+        "Explain precision and recall.",
+        system_prompt="Answer stable conceptual explanations directly.",
+    )
+
+    assert generation_parameters["do_sample"] is False
+    assert generation_parameters["max_new_tokens"] == 512
+    assert "temperature" not in generation_parameters
+    assert "top_p" not in generation_parameters
+    assert "top_k" not in generation_parameters
+
+
+def test_primary_hf_routing_does_not_instantiate_classification_router(monkeypatch) -> None:
+    class FakeRouterDecision:
+        def __init__(self) -> None:
+            self.selected_tool = "web_search_tool"
+            self.tool_arguments = {"query": "latest Formula 1 race winner"}
+            self.agent_response = "I would use web_search_tool."
+            self.raw_response = "<tool_call>web_search_tool"
+            self.debug_prompt = "native prompt"
+            self.parse_error = None
+
+    class FakeRouter:
+        def choose_tool(self, user_request, tool_descriptions, *, system_prompt=""):
+            del user_request, tool_descriptions, system_prompt
+            return FakeRouterDecision()
+
+    def fake_load_local_hf_router(
+        model_name,
+        max_new_tokens,
+        *,
+        trust_remote_code,
+        quantization_mode="none",
+        device="auto",
+        dtype="auto",
+    ):
+        del model_name, max_new_tokens, trust_remote_code, quantization_mode, device, dtype
+        return FakeRouter()
+
+    def exploding_classification_router(*args, **kwargs):
+        del args, kwargs
+        msg = "Primary HF routing must not instantiate LocalHFClassificationRouter."
+        raise AssertionError(msg)
+
+    monkeypatch.setattr(app_module, "load_local_hf_router", fake_load_local_hf_router)
+    monkeypatch.setattr(app_module, "LocalHFClassificationRouter", exploding_classification_router)
+
+    agent_callable = app_module.build_complete_agent_callable(
+        inference_backend="HF local",
+        inference_model_name="fake-native-model",
+        system_prompt="Route to the correct tool.",
+        tool_context="- web_search_tool: current facts",
+    )
+
+    result = agent_callable("Who won the latest Formula 1 race?")
+
+    assert result.selected_tool == "web_search_tool"
 
 
 def test_split_coalition_prompt_preserves_empty_user_request() -> None:
@@ -1077,6 +1559,126 @@ def test_app_load_logprob_scorer_has_no_post_cache_mutation() -> None:
     assert ".max_pairs_per_batch = " not in source
 
 
+def test_qwen3_is_selectable_and_builds_single_hf_config() -> None:
+    config = app_module.selected_hf_model_config("Qwen/Qwen3-4B-Instruct-2507")
+
+    assert "Qwen/Qwen3-4B-Instruct-2507" in app_module.HF_LOCAL_MODEL_OPTIONS
+    assert config.model_id == "Qwen/Qwen3-4B-Instruct-2507"
+    assert config.tokenizer_id == "Qwen/Qwen3-4B-Instruct-2507"
+    assert config.model_family == "qwen3"
+    assert config.quantization_mode == "none"
+    assert config.device == "auto"
+    assert config.dtype == "auto"
+    assert config.supports_native_tools is True
+
+
+def test_hf_config_cache_key_varies_by_model_and_quantization() -> None:
+    qwen25 = app_module.selected_hf_model_config("Qwen/Qwen2.5-3B-Instruct")
+    qwen3 = app_module.selected_hf_model_config("Qwen/Qwen3-4B-Instruct-2507")
+    qwen3_quantized = app_module.SelectedHFModelConfig(
+        model_id=qwen3.model_id,
+        model_family=qwen3.model_family,
+        quantization_mode="4bit",
+        device=qwen3.device,
+        dtype=qwen3.dtype,
+        supports_native_tools=qwen3.supports_native_tools,
+    )
+
+    assert qwen25.cache_key(scorer_mode="native") != qwen3.cache_key(scorer_mode="native")
+    assert qwen3.cache_key(scorer_mode="native") != qwen3_quantized.cache_key(scorer_mode="native")
+
+
+def test_cached_hf_loaders_include_model_runtime_identity() -> None:
+    router_signature = inspect.signature(app_module.load_local_hf_router.__wrapped__)
+    scorer_signature = inspect.signature(app_module.load_logprob_scorer.__wrapped__)
+
+    for parameter_name in ("quantization_mode", "device", "dtype"):
+        assert parameter_name in router_signature.parameters
+        assert parameter_name in scorer_signature.parameters
+    assert "tokenizer_id" in scorer_signature.parameters
+
+
+def test_native_scorer_from_router_preserves_selected_qwen3_identity() -> None:
+    class FakeModel:
+        def eval(self):
+            return None
+
+    class FakeTokenizer:
+        eos_token = "<eos>"
+        pad_token = None
+
+    router = types.SimpleNamespace(
+        model_name="Qwen/Qwen3-4B-Instruct-2507",
+        tokenizer_id="Qwen/Qwen3-4B-Instruct-2507",
+        requested_quantization_mode="none",
+        actual_quantization_mode="none",
+        device="cpu",
+        dtype="float32",
+        model=FakeModel(),
+        tokenizer=FakeTokenizer(),
+    )
+    config = app_module.selected_hf_model_config("Qwen/Qwen3-4B-Instruct-2507")
+
+    scorer = app_module.build_native_hf_scorer_from_router(
+        router,
+        max_pairs_per_batch=1,
+        selected_config=config,
+    )
+    diagnostics = app_module.validate_hf_inference_xai_consistency(
+        selected_config=config,
+        router=router,
+        scorer=scorer,
+    )
+
+    assert scorer.model is router.model
+    assert scorer.tokenizer is router.tokenizer
+    assert scorer.model_id == "Qwen/Qwen3-4B-Instruct-2507"
+    assert scorer.tokenizer_id == "Qwen/Qwen3-4B-Instruct-2507"
+    assert diagnostics["match"] is True
+    assert diagnostics["model_family"] == "qwen3"
+
+
+@pytest.mark.parametrize(
+    ("scorer_override", "message"),
+    [
+        ({"model_id": "Qwen/Qwen2.5-3B-Instruct"}, "same model"),
+        ({"tokenizer_id": "Qwen/Qwen2.5-3B-Instruct"}, "same tokenizer"),
+        ({"actual_quantization_mode": "4bit"}, "same quantization"),
+        ({"device": "mps"}, "same device"),
+    ],
+)
+def test_hf_consistency_guard_blocks_runtime_mismatch(
+    scorer_override: dict[str, str],
+    message: str,
+) -> None:
+    config = app_module.selected_hf_model_config("Qwen/Qwen3-4B-Instruct-2507")
+    router = types.SimpleNamespace(
+        model_name=config.model_id,
+        tokenizer_id=config.tokenizer_id,
+        requested_quantization_mode=config.quantization_mode,
+        actual_quantization_mode=config.quantization_mode,
+        device="cpu",
+        dtype="float32",
+    )
+    scorer_values = {
+        "model_id": config.model_id,
+        "tokenizer_id": config.tokenizer_id,
+        "requested_quantization_mode": config.quantization_mode,
+        "actual_quantization_mode": config.quantization_mode,
+        "device": "cpu",
+        "dtype": "float32",
+    }
+    scorer_values.update(scorer_override)
+    scorer = types.SimpleNamespace(**scorer_values)
+
+    with pytest.raises(RuntimeError, match=message):
+        app_module.validate_hf_inference_xai_consistency(
+            selected_config=config,
+            router=router,
+            scorer=scorer,
+        )
+
+
 def test_app_logprob_scorer_branch_never_loads_structured_json_router() -> None:
     """Invariant for the macOS/MPS crash investigation: exactly one Qwen model.
 
@@ -1146,7 +1748,16 @@ def test_app_combined_hf_local_calibrated_mode_skips_structured_router(monkeypat
         msg = "load_local_hf_router must not be called in calibrated HF-local mode"
         raise AssertionError(msg)
 
-    def fake_load_logprob_scorer(model_id, *, max_pairs_per_batch):
+    def fake_load_logprob_scorer(
+        model_id,
+        *,
+        max_pairs_per_batch,
+        device=None,
+        dtype="auto",
+        quantization_mode="none",
+        tokenizer_id=None,
+    ):
+        del device, dtype, quantization_mode, tokenizer_id
         captured_load["model_id"] = model_id
         captured_load["max_pairs_per_batch"] = max_pairs_per_batch
         return fake_scorer
@@ -1202,9 +1813,17 @@ def test_app_hf_local_legacy_mode_still_uses_structured_router(monkeypatch) -> N
             del user_request, tool_descriptions
             return FakeRouterDecision()
 
-    def fake_load_local_hf_router(model_name, max_new_tokens, *, trust_remote_code):
+    def fake_load_local_hf_router(
+        model_name,
+        max_new_tokens,
+        *,
+        trust_remote_code,
+        quantization_mode="none",
+        device="auto",
+        dtype="auto",
+    ):
         calls.append(model_name)
-        del max_new_tokens, trust_remote_code
+        del max_new_tokens, trust_remote_code, quantization_mode, device, dtype
         return FakeRouter()
 
     monkeypatch.setattr(app_module, "load_local_hf_router", fake_load_local_hf_router)
@@ -1221,6 +1840,309 @@ def test_app_hf_local_legacy_mode_still_uses_structured_router(monkeypatch) -> N
     assert calls == ["Qwen/Qwen3-4B-Instruct-2507"]
     assert result.selected_tool == "weather_tool"
     assert result.tool_arguments == {"location": "Berlin"}
+
+
+def make_fake_native_scorer(
+    *,
+    tokenizer: object | None = None,
+    desired_logprobs_by_position: dict[int, float] | None = None,
+    max_pairs_per_batch: int = 4,
+) -> NativeToolCallScorer:
+    import torch
+
+    scorer = NativeToolCallScorer.__new__(NativeToolCallScorer)
+    scorer.model_id = "fake-native-model"
+    scorer.tokenizer_id = "fake-native-model"
+    scorer.requested_quantization_mode = "none"
+    scorer.actual_quantization_mode = "none"
+    scorer.tokenizer = tokenizer or CharacterTensorTokenizer()
+    scorer.model = ControlledLogitModel(desired_logprobs_by_position or {})
+    scorer.device = "cpu"
+    scorer.dtype = "auto"
+    scorer.tool_schemas = get_executable_tool_schemas()
+    scorer.last_debug_outputs = []
+    scorer._score_cache = {}
+    scorer._torch = torch
+    scorer.max_pairs_per_batch = max_pairs_per_batch
+    return scorer
+
+
+def test_native_tool_call_scorer_rejects_no_tool() -> None:
+    scorer = make_fake_native_scorer(tokenizer=NativeTemplateTokenizer())
+
+    with pytest.raises(ValueError, match="not no_tool"):
+        scorer.score_batch(
+            ["System\n\nAvailable tools:\n- x\n\nUser request:\nExplain precision.\n\nAssistant:"],
+            target_tool="no_tool",
+            tool_descriptions=TOOL_DESCRIPTIONS,
+        )
+
+
+def test_native_tool_call_scorer_has_no_routing_label_dependency() -> None:
+    source = inspect.getsource(NativeToolCallScorer)
+
+    assert "ROUTING_LABELS" not in source
+    assert "routing_labels" not in source
+
+
+def test_native_tool_call_scorer_uses_teacher_forced_mean_logprob() -> None:
+    scorer = make_fake_native_scorer(
+        desired_logprobs_by_position={
+            1: -0.2,
+            2: -0.4,
+        }
+    )
+
+    scores = scorer._sequence_mean_logprobs_batch(["ab"], ["cd"])
+
+    assert scores == pytest.approx([(-0.2 + -0.4) / 2], abs=1e-6)
+
+
+def test_native_tool_call_scorer_batches_and_returns_finite_scores(monkeypatch) -> None:
+    scorer = make_fake_native_scorer(tokenizer=NativeTemplateTokenizer(), max_pairs_per_batch=2)
+    batch_sizes = []
+
+    def fake_batch(prompts: list[str], continuations: list[str]) -> list[float]:
+        batch_sizes.append(len(prompts))
+        assert len(prompts) == len(continuations)
+        return [-0.5 for _ in prompts]
+
+    monkeypatch.setattr(scorer, "_sequence_mean_logprobs_batch", fake_batch)
+    prompts = [
+        build_coalition_prompt(
+            f"Request {index}",
+            system_prompt="Route.",
+            tool_context="- weather_tool: weather",
+        )
+        for index in range(5)
+    ]
+
+    scores = scorer.score_batch(
+        prompts,
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+
+    assert batch_sizes == [2, 2, 1]
+    assert scores == [-0.5] * 5
+    assert all(math.isfinite(score) for score in scores)
+
+
+def test_native_tool_call_scorer_empty_subtraction_is_game_normalization(monkeypatch) -> None:
+    scorer = make_fake_native_scorer(tokenizer=NativeTemplateTokenizer())
+
+    def fake_score_batch(prompts, *, target_tool, tool_descriptions):
+        del target_tool, tool_descriptions
+        return [0.0 if "User request:\n\nAssistant:" in prompt else -0.25 for prompt in prompts]
+
+    monkeypatch.setattr(scorer, "score_batch", fake_score_batch)
+    game = ToolUseGame(
+        target_tool="weather_tool",
+        user_segments=["Will it rain", "in Berlin tomorrow?"],
+        system_prompt="Route.",
+        scorer=scorer,
+        tool_descriptions=TOOL_DESCRIPTIONS,
+        normalize=True,
+    )
+
+    empty = np.zeros((1, game.n_players), dtype=bool)
+    full = np.ones((1, game.n_players), dtype=bool)
+
+    assert game(empty)[0] == pytest.approx(0.0)
+    assert game(full)[0] == pytest.approx(-0.25)
+
+
+def test_no_tool_selects_legacy_surrogate_branch_and_metadata() -> None:
+    assert "surrogate" in app_module.NO_TOOL_SURROGATE_SCORER_LABEL.lower()
+    assert "surrogate" in app_module.NO_TOOL_SURROGATE_HELP.lower()
+    assert "not executable" in app_module.NO_TOOL_SURROGATE_HELP
+    assert "not native" in app_module.NO_TOOL_SURROGATE_HELP
+    assert (
+        app_module.hf_value_function_label_for_target(
+            "no_tool",
+            app_module.NATIVE_HF_SCORER_LABEL,
+        )
+        == app_module.NO_TOOL_SURROGATE_SCORER_LABEL
+    )
+    assert app_module.value_function_metadata(app_module.NO_TOOL_SURROGATE_SCORER_LABEL) == (
+        "legacy_abcd_no_tool_probe",
+        "surrogate_ablation",
+    )
+
+
+def test_executable_tool_keeps_native_branch_and_metadata() -> None:
+    assert "tool-identity" in app_module.NATIVE_HF_SCORER_LABEL
+    assert "actual generated continuation" not in app_module.NATIVE_HF_SCORER_HELP
+    assert "canonical native-format continuation" in app_module.NATIVE_HF_SCORER_HELP
+    assert "excludes free-form argument tokens" in app_module.NATIVE_HF_SCORER_HELP
+    assert (
+        app_module.hf_value_function_label_for_target(
+            "web_search_tool",
+            app_module.NATIVE_HF_SCORER_LABEL,
+        )
+        == app_module.NATIVE_HF_SCORER_LABEL
+    )
+    assert app_module.value_function_metadata(app_module.NATIVE_HF_SCORER_LABEL) == (
+        "native_target_tool_continuation_likelihood",
+        "native_tool_call",
+    )
+
+
+def test_native_scorer_debug_metadata_describes_canonical_tool_identity() -> None:
+    scorer = make_fake_native_scorer()
+
+    scores = scorer.score_batch(
+        [
+            build_coalition_prompt(
+                "Will it rain in Berlin tomorrow?",
+                system_prompt="Route.",
+                tool_context="- weather_tool: weather",
+            )
+        ],
+        target_tool="weather_tool",
+        tool_descriptions=TOOL_DESCRIPTIONS,
+    )
+    debug = scorer.last_debug_outputs[0]
+
+    assert len(scores) == 1
+    assert debug["target_source"] == "full-context native inference"
+    assert debug["continuation_type"] == "canonical native template"
+    assert debug["continuation_scope"] == "tool identity only"
+    assert debug["arguments_included"] == "no"
+    assert "tool-identity" in str(debug["score_description"])
+    assert "free-form arguments are excluded" in str(debug["score_description"])
+
+
+def test_documentation_wording_matches_canonical_continuation_design() -> None:
+    readme_text = (DEMO_DIR / "README.md").read_text()
+    normalized_readme = " ".join(readme_text.split())
+
+    forbidden_phrases = [
+        "actual generated continuation",
+        "real ChatML tokens produced by the full-context inference",
+        "exact full generated tool call",
+        "exact generated tool call",
+    ]
+    for phrase in forbidden_phrases:
+        assert phrase not in readme_text
+    assert "template-derived canonical native-format continuation" in normalized_readme
+    assert "truncated at the tool identity" in normalized_readme
+    assert "excludes free-form argument tokens" in normalized_readme
+    assert "not argument generation or raw response reproduction" in normalized_readme
+    assert "same model, tokenizer, chat template, device, and runtime" in normalized_readme
+
+
+def test_agent_result_web_search_card_is_agent_action_without_probabilities() -> None:
+    result = types.SimpleNamespace(
+        selected_tool="web_search_tool",
+        tool_arguments={"query": "latest Formula 1 race winner and team"},
+    )
+
+    html = app_module.render_agent_result_card(
+        result,
+        backend="HF local",
+        model="Qwen/Qwen3-4B-Instruct-2507",
+    )
+
+    assert "🌐 Agent selected <code>web_search_tool</code>" in html
+    assert "current or externally retrieved information" in html
+    assert "query" in html
+    assert "latest Formula 1 race winner and team" in html
+    assert "Tool call prepared" in html
+    assert "Qwen/Qwen3-4B-Instruct-2507 · HF Local" in html
+    assert "Model routed to" not in html
+    assert "Native local HF tool-call decision" not in html
+    assert "No calibrated probability distribution is shown" not in html
+    assert "probability-row" not in html
+
+
+def test_agent_result_weather_card_renders_icon_and_arguments() -> None:
+    result = types.SimpleNamespace(
+        selected_tool="weather_tool",
+        tool_arguments={"location": "Berlin", "date": "tomorrow"},
+    )
+
+    html = app_module.render_agent_result_card(result, backend="HF local", model="Qwen")
+
+    assert "🌦️ Agent selected <code>weather_tool</code>" in html
+    assert "weather information for a specific place or time" in html
+    assert "location" in html
+    assert "Berlin" in html
+    assert "date" in html
+    assert "tomorrow" in html
+
+
+def test_agent_result_calculator_card_renders_expression_argument() -> None:
+    result = types.SimpleNamespace(
+        selected_tool="calculator_tool",
+        tool_arguments={"expression": "238 * 47"},
+    )
+
+    html = app_module.render_agent_result_card(result, backend="HF local", model="Qwen")
+
+    assert "🧮 Agent selected <code>calculator_tool</code>" in html
+    assert "exact numerical calculation" in html
+    assert "expression" in html
+    assert "238 * 47" in html
+
+
+def test_agent_result_direct_answer_hides_internal_no_tool_label() -> None:
+    result = types.SimpleNamespace(
+        selected_tool="no_tool",
+        cleaned_direct_answer="Photosynthesis converts light energy into chemical energy.",
+        tool_arguments={},
+    )
+
+    html = app_module.render_agent_result_card(result, backend="HF local", model="Qwen")
+
+    assert "💬 Agent answered directly" in html
+    assert "No external tool was called." in html
+    assert "Photosynthesis converts light energy" in html
+    assert "no_tool" not in html
+    assert "NoTool" not in html
+    assert "Arguments" not in html
+    assert "Tool call prepared" not in html
+
+
+def test_agent_result_parse_failure_is_not_direct_answer() -> None:
+    result = types.SimpleNamespace(
+        selected_tool=None,
+        parse_error="Native tool-call JSON could not be parsed.",
+        raw_response="<tool_call>{bad json}</tool_call>",
+    )
+
+    html = app_module.render_agent_result_card(result, backend="HF local", model="Qwen")
+
+    assert "⚠️ Native tool-call parsing failed" in html
+    assert "could not be parsed safely" in html
+    assert "not treated as a direct answer" in html
+    assert "Agent answered directly" not in html
+    assert "no_tool" not in html
+
+
+def test_agent_result_execution_status_reflects_available_tool_output() -> None:
+    prepared = types.SimpleNamespace(selected_tool="weather_tool", tool_arguments={})
+    executed = types.SimpleNamespace(
+        selected_tool="weather_tool",
+        tool_arguments={},
+        raw_trace={"tool_output": "Weather lookup completed."},
+    )
+
+    prepared_html = app_module.render_agent_result_card(
+        prepared,
+        backend="HF local",
+        model="Qwen",
+    )
+    executed_html = app_module.render_agent_result_card(
+        executed,
+        backend="Groq",
+        model="llama-3.1-8b-instant",
+    )
+
+    assert "Tool call prepared" in prepared_html
+    assert "Tool executed successfully" in executed_html
+    assert "Weather lookup completed." in executed_html
+    assert "llama-3.1-8b-instant · Groq" in executed_html
 
 
 def test_lexical_tool_scorer_returns_one_score_per_prompt() -> None:

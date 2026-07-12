@@ -17,18 +17,39 @@ if TYPE_CHECKING:
 try:
     from demos.agentic_tool_use_explanation.tool_schemas import (
         EXECUTABLE_TOOL_SCHEMAS,
+        NO_TOOL_NAME,
         get_executable_tool_schemas,
         render_tool_schemas_text,
     )
 except ModuleNotFoundError:
     from tool_schemas import (
         EXECUTABLE_TOOL_SCHEMAS,
+        NO_TOOL_NAME,
         get_executable_tool_schemas,
         render_tool_schemas_text,
     )
 
 DEFAULT_HF_MODEL_ID = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 DEFAULT_LOGPROB_MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
+NATIVE_TOOL_ROUTING_INSTRUCTION = (
+    "You are a tool-routing assistant.\n\n"
+    "Use weather_tool only for weather, rain, temperature, forecast, or city-and-date "
+    "weather requests.\n"
+    "Use calculator_tool only for exact arithmetic, totals, percentages, numeric "
+    "expressions, or deterministic calculations.\n"
+    "Use web_search_tool only when the request requires current, latest, recent, "
+    "live, changing, or externally retrieved information.\n\n"
+    "For stable conceptual questions, definitions, explanations, educational "
+    "questions, and general knowledge: do not call any tool; answer the user "
+    "directly in natural language.\n"
+    "Do not call web_search_tool for definitions, explanations, or stable "
+    "conceptual questions.\n\n"
+    "Never output the literal strings no_tool, No_tool, NoTool, or no tool. "
+    "These are internal application labels and are not valid user-facing responses.\n\n"
+    "If an external tool is required, emit exactly one valid tool call using the "
+    "provided tool schema. Otherwise, provide a complete natural-language answer "
+    "without emitting a <tool_call> block."
+)
 
 # Fixed routing-label mapping for the constrained classification protocol used by
 # the HF local router and the calibrated logprob scorer. Single-letter decision
@@ -198,9 +219,8 @@ def build_tool_calling_prompt(
     """Build model input with native structured tools when available.
 
     The input context uses structured tool schemas through ``tools=`` whenever
-    the tokenizer supports it. Candidate outputs are still scored as
-    standardized textual decision continuations; native structured tool-call
-    continuation scoring is future work.
+    the tokenizer supports it. Older non-native scorers may still use the text
+    fallback; strict native scoring uses :func:`build_native_tool_call_prompt`.
     """
     messages = [
         {"role": "system", "content": system_prompt},
@@ -224,6 +244,120 @@ def build_tool_calling_prompt(
         user_request=user_request,
         tool_schemas=schemas,
     )
+
+
+def build_native_tool_call_messages(
+    *,
+    system_prompt: str,
+    user_request: str,
+) -> list[dict[str, object]]:
+    """Return the canonical messages shared by native HF inference and scoring."""
+    system_text = system_prompt.strip()
+    if system_text:
+        system_text = f"{system_text}\n\n{NATIVE_TOOL_ROUTING_INSTRUCTION}"
+    else:
+        system_text = NATIVE_TOOL_ROUTING_INSTRUCTION
+    return [
+        {"role": "system", "content": system_text},
+        {"role": "user", "content": user_request.strip()},
+    ]
+
+
+def build_native_tool_call_prompt(
+    tokenizer: object,
+    *,
+    system_prompt: str,
+    user_request: str,
+    tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+) -> str:
+    """Build the strict native HF tool-calling prompt with structured schemas."""
+    schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
+    return str(
+        tokenizer.apply_chat_template(
+            build_native_tool_call_messages(
+                system_prompt=system_prompt,
+                user_request=user_request,
+            ),
+            tools=schemas,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+    )
+
+
+def build_native_tool_call_continuation(
+    tokenizer: object,
+    *,
+    system_prompt: str,
+    user_request: str,
+    target_tool: str,
+    tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+) -> str:
+    """Render the canonical native tool-identity continuation through the tool name.
+
+    The returned continuation is computed by asking the tokenizer chat template
+    to render the same system/user messages plus an assistant ``tool_calls``
+    message for ``target_tool``. The scorer keeps only the assistant
+    continuation prefix through the rendered tool name and deliberately excludes
+    free-form argument text, isolating tool-identity evidence from argument
+    generation variability.
+    """
+    executable_names = {
+        str(schema["function"]["name"])
+        for schema in tool_schemas
+        if isinstance(schema.get("function"), Mapping)
+    }
+    if target_tool == NO_TOOL_NAME:
+        msg = "NativeToolCallScorer is valid only for executable tools, not no_tool."
+        raise ValueError(msg)
+    if target_tool not in executable_names:
+        msg = f"Target tool {target_tool!r} is not an executable native tool."
+        raise ValueError(msg)
+
+    schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
+    messages = build_native_tool_call_messages(
+        system_prompt=system_prompt,
+        user_request=user_request,
+    )
+    prompt = str(
+        tokenizer.apply_chat_template(
+            messages,
+            tools=schemas,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+    )
+    full = str(
+        tokenizer.apply_chat_template(
+            [
+                *messages,
+                {
+                    "role": "assistant",
+                    "tool_calls": [
+                        {
+                            "type": "function",
+                            "function": {
+                                "name": target_tool,
+                                "arguments": {},
+                            },
+                        }
+                    ],
+                },
+            ],
+            tools=schemas,
+            tokenize=False,
+            add_generation_prompt=False,
+        )
+    )
+    if not full.startswith(prompt):
+        msg = "Tokenizer chat template did not preserve the native prompt as a prefix."
+        raise ValueError(msg)
+    continuation = full[len(prompt) :]
+    name_end = continuation.find(target_tool)
+    if name_end < 0:
+        msg = f"Rendered native tool-call continuation did not contain {target_tool!r}."
+        raise ValueError(msg)
+    return continuation[: name_end + len(target_tool)]
 
 
 def _build_tool_calling_prompt_fallback(
@@ -1304,6 +1438,306 @@ class CalibratedToolLogOddsScorer:
             torch.cuda.empty_cache()
         elif self.device == "mps" and hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
             torch.mps.empty_cache()
+
+
+class NativeToolCallScorer:
+    """Score canonical native tool-identity continuation support for one frozen tool.
+
+    The model input always uses the tokenizer's structured tool template. For
+    executable tools, full-context native inference first freezes the target
+    tool identity. The scorer then constructs a canonical native-format
+    assistant continuation with that same tokenizer/template and keeps only the
+    prefix through the target tool name, intentionally excluding free-form
+    arguments. ``no_tool`` is intentionally rejected here; direct-answer cases
+    use the clearly labeled legacy A/B/C/D surrogate branch. Scores are mean
+    continuation-token log-probabilities, so tool names with different token
+    lengths are less distorted by sequence length.
+    """
+
+    def __init__(
+        self,
+        *,
+        model: object | None = None,
+        tokenizer: object | None = None,
+        device: str | None = None,
+        model_id: str = DEFAULT_LOGPROB_MODEL_ID,
+        tokenizer_id: str | None = None,
+        quantization_mode: str = "none",
+        actual_quantization_mode: str | None = None,
+        dtype: str = "auto",
+        max_pairs_per_batch: int | None = None,
+        tool_schemas: Sequence[Mapping[str, object]] = EXECUTABLE_TOOL_SCHEMAS,
+    ) -> None:
+        self.model_id = model_id
+        self.tokenizer_id = tokenizer_id or model_id
+        self.requested_quantization_mode = quantization_mode
+        self.actual_quantization_mode = actual_quantization_mode or quantization_mode
+        self.model = model
+        self.tokenizer = tokenizer
+        self.device = device
+        self.dtype = dtype
+        self.tool_schemas = tuple(_copy_schema(schema) for schema in tool_schemas)
+        self.last_debug_outputs: list[dict[str, object]] = []
+        self._score_cache: dict[tuple[str, str], float] = {}
+
+        import torch
+
+        self._torch = torch
+        if quantization_mode != "none":
+            msg = (
+                f"NativeToolCallScorer does not currently support quantization mode "
+                f"{quantization_mode!r}. Use 'none' so teacher-forced logits are computed "
+                "on the same supported model configuration as inference."
+            )
+            raise RuntimeError(msg)
+        if self.model is None or self.tokenizer is None:
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+
+            if self.device is None or self.device == "auto":
+                if torch.cuda.is_available():
+                    self.device = "cuda"
+                elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                    self.device = "mps"
+                else:
+                    self.device = "cpu"
+            model_kwargs: dict[str, Any] = {"low_cpu_mem_usage": True}
+            if dtype != "auto":
+                model_kwargs["dtype"] = getattr(torch, dtype)
+            elif self.device in {"cuda", "mps"}:
+                model_kwargs["dtype"] = torch.float16
+            self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_id, use_fast=True)
+            self.model = AutoModelForCausalLM.from_pretrained(model_id, **model_kwargs)
+            self.model.to(self.device)
+        elif self.device is None:
+            self.device = str(next(self.model.parameters()).device)
+
+        if getattr(self.tokenizer, "pad_token", None) is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+        self.tokenizer.padding_side = "right"
+        self.model.eval()
+        if max_pairs_per_batch is None:
+            max_pairs_per_batch = 1 if self.device in {"cuda", "mps"} else 4
+        if max_pairs_per_batch < 1:
+            msg = "max_pairs_per_batch must be positive."
+            raise ValueError(msg)
+        self.max_pairs_per_batch = max_pairs_per_batch
+
+    def score_batch(
+        self,
+        prompts: list[str],
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> list[float]:
+        """Return canonical native tool-identity support for each coalition prompt."""
+        if target_tool == NO_TOOL_NAME:
+            msg = "NativeToolCallScorer is valid only for executable tools, not no_tool."
+            raise ValueError(msg)
+        if target_tool not in tool_descriptions:
+            msg = f"Target tool {target_tool!r} is not available."
+            raise ValueError(msg)
+
+        self.last_debug_outputs = []
+        model_prompts = []
+        continuations = []
+        for prompt in prompts:
+            system_prompt, user_request = split_coalition_prompt(prompt)
+            model_prompt = build_native_tool_call_prompt(
+                self.tokenizer,
+                system_prompt=system_prompt,
+                user_request=user_request,
+                tool_schemas=self.tool_schemas,
+            )
+            continuation = self._target_continuation(
+                system_prompt=system_prompt,
+                user_request=user_request,
+                target_tool=target_tool,
+            )
+            model_prompts.append(model_prompt)
+            continuations.append(continuation)
+
+        continuation_token_counts = [
+            self._continuation_token_count(model_prompt, continuation)
+            for model_prompt, continuation in zip(model_prompts, continuations, strict=True)
+        ]
+        scores = self._sequence_mean_logprobs_batched(model_prompts, continuations)
+        for prompt, continuation, token_count, score in zip(
+            prompts,
+            continuations,
+            continuation_token_counts,
+            scores,
+            strict=True,
+        ):
+            self.last_debug_outputs.append(
+                {
+                    "score_kind": "native_tool_call_mean_logprob",
+                    "score_description": (
+                        "Mean log-probability of the canonical native tool-identity "
+                        "continuation; free-form arguments are excluded."
+                    ),
+                    "model_id": self.model_id,
+                    "tokenizer_id": self.tokenizer_id,
+                    "requested_quantization": self.requested_quantization_mode,
+                    "actual_quantization": self.actual_quantization_mode,
+                    "device": self.device,
+                    "dtype": self.dtype,
+                    "target_tool": target_tool,
+                    "target_source": "full-context native inference",
+                    "continuation_type": "canonical native template",
+                    "continuation_scope": "tool identity only",
+                    "arguments_included": "no",
+                    "continuation_token_count": token_count,
+                    "candidate_continuations": {target_tool: continuation},
+                    "final_score": score,
+                    "prompt_preview": prompt[:240],
+                }
+            )
+        return scores
+
+    def build_scoring_prompt(
+        self,
+        prompt: str,
+        *,
+        target_tool: str,
+        tool_descriptions: dict[str, str],
+    ) -> str:
+        """Return the native chat-template input used before the scored continuation."""
+        del tool_descriptions
+        system_prompt, user_request = split_coalition_prompt(prompt)
+        continuation = self._target_continuation(
+            system_prompt=system_prompt,
+            user_request=user_request,
+            target_tool=target_tool,
+        )
+        model_prompt = build_native_tool_call_prompt(
+            self.tokenizer,
+            system_prompt=system_prompt,
+            user_request=user_request,
+            tool_schemas=self.tool_schemas,
+        )
+        return f"{model_prompt}{continuation}"
+
+    def _target_continuation(
+        self,
+        *,
+        system_prompt: str,
+        user_request: str,
+        target_tool: str,
+    ) -> str:
+        return build_native_tool_call_continuation(
+            self.tokenizer,
+            system_prompt=system_prompt,
+            user_request=user_request,
+            target_tool=target_tool,
+            tool_schemas=self.tool_schemas,
+        )
+
+    def _continuation_token_count(self, prompt: str, continuation: str) -> int | None:
+        try:
+            prompt_ids = _tokenize_to_ids(self.tokenizer, prompt)
+            full_ids = _tokenize_to_ids(self.tokenizer, prompt + continuation)
+        except (AttributeError, TypeError):
+            return None
+        return max(0, len(full_ids) - len(prompt_ids))
+
+    def _sequence_mean_logprobs_batched(
+        self,
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        if len(prompts) != len(continuations):
+            msg = "Prompts and continuations must have the same length."
+            raise ValueError(msg)
+        scores: list[float] = []
+        for start in range(0, len(prompts), self.max_pairs_per_batch):
+            stop = start + self.max_pairs_per_batch
+            scores.extend(
+                self._sequence_mean_logprobs_batch(
+                    prompts[start:stop],
+                    continuations[start:stop],
+                )
+            )
+            self._release_device_cache()
+        return scores
+
+    def _sequence_mean_logprobs_batch(
+        self,
+        prompts: list[str],
+        continuations: list[str],
+    ) -> list[float]:
+        torch = self._torch
+        prompt_inputs = self.tokenizer(
+            prompts,
+            return_tensors="pt",
+            add_special_tokens=False,
+            padding=True,
+        )
+        full_inputs = self.tokenizer(
+            [
+                prompt + continuation
+                for prompt, continuation in zip(prompts, continuations, strict=True)
+            ],
+            return_tensors="pt",
+            add_special_tokens=False,
+            padding=True,
+        )
+        prompt_lengths = prompt_inputs["attention_mask"].sum(dim=-1).tolist()
+        full_lengths = full_inputs["attention_mask"].sum(dim=-1).tolist()
+        continuation_lengths = [
+            int(full_len - prompt_len)
+            for prompt_len, full_len in zip(prompt_lengths, full_lengths, strict=True)
+        ]
+        if any(length <= 0 for length in continuation_lengths):
+            msg = "Native target continuation must add at least one token."
+            raise ValueError(msg)
+
+        input_ids = full_inputs["input_ids"].to(self.device)
+        attention_mask = full_inputs["attention_mask"].to(self.device)
+        try:
+            with torch.inference_mode():
+                logits = self.model(input_ids=input_ids, attention_mask=attention_mask).logits
+                logits = logits.to(torch.float32)
+                token_log_probs = self._next_token_log_probs(
+                    logits,
+                    input_ids,
+                )
+                scores = []
+                for row_index, (prompt_len, continuation_len) in enumerate(
+                    zip(prompt_lengths, continuation_lengths, strict=True)
+                ):
+                    start = int(prompt_len - 1)
+                    stop = start + int(continuation_len)
+                    score = float(token_log_probs[row_index, start:stop].mean().item())
+                    if not math.isfinite(score):
+                        msg = "Native continuation score must be finite."
+                        raise ValueError(msg)
+                    scores.append(score)
+                return scores
+        finally:
+            del input_ids, attention_mask, full_inputs, prompt_inputs
+            if "logits" in locals():
+                del logits
+            if "token_log_probs" in locals():
+                del token_log_probs
+            self._release_device_cache()
+
+    def _release_device_cache(self) -> None:
+        torch = self._torch
+        if self.device == "cuda" and torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        elif self.device == "mps" and hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
+            torch.mps.empty_cache()
+
+    @staticmethod
+    def _next_token_log_probs(logits: object, token_ids: object) -> object:
+        """Return log probabilities for observed next-token labels."""
+        shifted_logits = logits[:, :-1, :]
+        shifted_token_ids = token_ids[:, 1:]
+        target_logits = shifted_logits.gather(
+            dim=-1,
+            index=shifted_token_ids.unsqueeze(-1),
+        ).squeeze(-1)
+        return target_logits - shifted_logits.logsumexp(dim=-1)
 
 
 def _softmax_probabilities(

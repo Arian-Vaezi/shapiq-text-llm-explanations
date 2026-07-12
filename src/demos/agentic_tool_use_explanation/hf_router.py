@@ -4,23 +4,40 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
 
 try:
-    from demos.agentic_tool_use_explanation.scorers import CalibratedToolLogOddsScorer, ToolChoice
+    from demos.agentic_tool_use_explanation.scorers import (
+        CalibratedToolLogOddsScorer,
+        ToolChoice,
+        build_native_tool_call_prompt,
+    )
 except ModuleNotFoundError:
-    from scorers import CalibratedToolLogOddsScorer, ToolChoice
+    from scorers import CalibratedToolLogOddsScorer, ToolChoice, build_native_tool_call_prompt
 
 try:
-    from demos.agentic_tool_use_explanation.tool_schemas import NO_TOOL_NAME
+    from demos.agentic_tool_use_explanation.tool_schemas import (
+        NO_TOOL_NAME,
+        get_executable_tool_schemas,
+    )
 except ModuleNotFoundError:
-    from tool_schemas import NO_TOOL_NAME
+    from tool_schemas import NO_TOOL_NAME, get_executable_tool_schemas
 
 DEFAULT_LOCAL_HF_ROUTER_MODEL_ID = "Qwen/Qwen3-4B-Instruct-2507"
 
 LOGGER = logging.getLogger(__name__)
+DEFAULT_NATIVE_HF_MAX_NEW_TOKENS = 512
+_SENTINEL_PREFIX_RE = re.compile(
+    r"^\s*(?:no_tool|notool|no tool)\s*(?:\r?\n)+",
+    flags=re.IGNORECASE,
+)
+_SENTINEL_ONLY_RE = re.compile(
+    r"^\s*(?:no_tool|notool|no tool)\s*$",
+    flags=re.IGNORECASE,
+)
 
 ALLOWED_TOOLS: tuple[str, ...] = (
     "calculator_tool",
@@ -42,10 +59,54 @@ class RouterDecision:
     """Structured local-router decision."""
 
     agent_response: str
-    selected_tool: str
+    selected_tool: str | None
     tool_arguments: dict[str, Any]
     raw_response: str
     debug_prompt: str | None = None
+    parse_error: str | None = None
+    direct_answer: str | None = None
+    raw_response_original: str | None = None
+    normalized_response_used_for_parsing: str | None = None
+    extracted_tool_call_json: str | None = None
+    cleaned_direct_answer: str | None = None
+    removed_direct_answer_sentinel: bool = False
+    generation_parameters: dict[str, Any] | None = None
+
+
+class NativeToolCallParseError(ValueError):
+    """Raised when native output contains malformed tool-call structure."""
+
+    def __init__(self, message: str, *, extracted_tool_call_json: str | None = None) -> None:
+        super().__init__(message)
+        self.extracted_tool_call_json = extracted_tool_call_json
+
+
+@dataclass(frozen=True)
+class ParsedNativeToolCall:
+    """Validated native tool-call payload."""
+
+    name: str
+    arguments: dict[str, Any]
+    extracted_json: str
+
+
+def normalize_native_tool_output(raw_response: str) -> str:
+    """Remove only known trailing generation artifacts before native parsing."""
+    normalized = raw_response.strip()
+    while normalized.endswith("<|im_end|>"):
+        normalized = normalized[: -len("<|im_end|>")].rstrip()
+    return normalized
+
+
+def clean_direct_answer(text: str) -> tuple[str, bool]:
+    """Remove a leading standalone internal sentinel from direct answers only."""
+    cleaned = _SENTINEL_PREFIX_RE.sub("", text, count=1).strip()
+    return cleaned, cleaned != text.strip()
+
+
+def is_internal_sentinel_only(text: str) -> bool:
+    """Return True when the model emitted only an internal direct-answer sentinel."""
+    return bool(_SENTINEL_ONLY_RE.fullmatch(text))
 
 
 class LocalHFRouter:
@@ -54,15 +115,23 @@ class LocalHFRouter:
     def __init__(
         self,
         model_name: str = DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
-        max_new_tokens: int = 256,
+        max_new_tokens: int = DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
         *,
         trust_remote_code: bool = False,
+        quantization_mode: str = "none",
+        device: str | None = "auto",
+        dtype: str = "auto",
         generation_kwargs: Mapping[str, Any] | None = None,
     ) -> None:
         self.model_name = model_name
         self.max_new_tokens = max_new_tokens
         self.trust_remote_code = trust_remote_code
+        self.requested_quantization_mode = quantization_mode
+        self.actual_quantization_mode = "none"
+        self.requested_device = device or "auto"
+        self.requested_dtype = dtype
         self.generation_kwargs = dict(generation_kwargs or {})
+        self.tokenizer_id = model_name
 
         try:
             import torch
@@ -75,6 +144,13 @@ class LocalHFRouter:
             raise RuntimeError(msg) from error
 
         self._torch = torch
+        if quantization_mode != "none":
+            msg = (
+                f"Local HF native routing does not currently support quantization mode "
+                f"{quantization_mode!r}. Use 'none' so routing and XAI scoring remain "
+                "on the same supported model configuration."
+            )
+            raise RuntimeError(msg)
         # Resolve a single concrete device up front -- the same pattern used by
         # CalibratedToolLogOddsScorer -- instead of accelerate's device_map="auto"
         # dispatch. device_map="auto" is CUDA/multi-GPU oriented; on an
@@ -82,16 +158,28 @@ class LocalHFRouter:
         # placement instead of the simple, verified-working single-device
         # `.to("mps")` move, and is not needed here since this router is a
         # single dense causal LM sized to fit on one device.
-        if torch.cuda.is_available():
-            device = "cuda"
+        if self.requested_device not in {"auto", "cuda", "mps", "cpu"}:
+            msg = f"Unsupported local HF device setting: {self.requested_device!r}."
+            raise RuntimeError(msg)
+        if self.requested_device == "auto":
+            if torch.cuda.is_available():
+                resolved_device = "cuda"
+            elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                resolved_device = "mps"
+            else:
+                resolved_device = "cpu"
+        else:
+            resolved_device = self.requested_device
+        if dtype != "auto":
+            model_dtype = getattr(torch, dtype)
+        elif resolved_device == "cuda":
             model_dtype = torch.bfloat16
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
-            device = "mps"
+        elif resolved_device == "mps":
             model_dtype = torch.float16
         else:
-            device = "cpu"
             model_dtype = torch.float32
-        self.device = device
+        self.device = resolved_device
+        self.dtype = str(model_dtype).removeprefix("torch.")
         try:
             self.tokenizer = AutoTokenizer.from_pretrained(
                 model_name,
@@ -103,7 +191,7 @@ class LocalHFRouter:
                 low_cpu_mem_usage=True,
                 trust_remote_code=trust_remote_code,
             )
-            self.model.to(device)
+            self.model.to(resolved_device)
         except Exception as error:
             msg = (
                 f"Could not load local HuggingFace router model {model_name!r}. "
@@ -120,11 +208,18 @@ class LocalHFRouter:
         self,
         user_request: str,
         tool_descriptions: Mapping[str, str],
+        *,
+        system_prompt: str = "",
     ) -> RouterDecision:
-        """Choose the best demo tool for one user request."""
-        router_prompt = self.build_router_prompt(user_request, tool_descriptions)
-        debug_prompt, raw_response = self._generate_raw_response(router_prompt)
-        return self.parse_response(raw_response, debug_prompt=debug_prompt)
+        """Choose the best demo tool with the model's native tool-call format."""
+        del tool_descriptions
+        debug_prompt, raw_response, generation_parameters = self._generate_native_tool_response(
+            user_request,
+            system_prompt=system_prompt,
+        )
+        decision = self.parse_native_response(raw_response, debug_prompt=debug_prompt)
+        decision.generation_parameters = generation_parameters
+        return decision
 
     @classmethod
     def build_router_prompt(
@@ -192,6 +287,147 @@ class LocalHFRouter:
             raw_response=raw_response,
             debug_prompt=debug_prompt,
         )
+
+    @classmethod
+    def parse_native_response(
+        cls,
+        raw_response: str,
+        *,
+        debug_prompt: str | None = None,
+    ) -> RouterDecision:
+        """Parse a model-native tool-call response into the demo decision shape."""
+        normalized_response = normalize_native_tool_output(raw_response)
+        try:
+            parsed_tool_call = cls._parse_native_tool_call(normalized_response)
+        except NativeToolCallParseError as error:
+            return RouterDecision(
+                agent_response="",
+                selected_tool=None,
+                tool_arguments={},
+                raw_response=raw_response,
+                debug_prompt=debug_prompt,
+                parse_error=str(error),
+                direct_answer=None,
+                raw_response_original=raw_response,
+                normalized_response_used_for_parsing=normalized_response,
+                extracted_tool_call_json=getattr(error, "extracted_tool_call_json", None),
+            )
+
+        if parsed_tool_call is None:
+            if is_internal_sentinel_only(normalized_response):
+                return RouterDecision(
+                    agent_response="",
+                    selected_tool=None,
+                    tool_arguments={},
+                    raw_response=raw_response,
+                    debug_prompt=debug_prompt,
+                    parse_error=(
+                        "The model emitted only an internal routing label instead of a "
+                        "natural-language answer."
+                    ),
+                    direct_answer=None,
+                    raw_response_original=raw_response,
+                    normalized_response_used_for_parsing=normalized_response,
+                    extracted_tool_call_json=None,
+                    cleaned_direct_answer=None,
+                    removed_direct_answer_sentinel=False,
+                )
+            direct_answer, removed_sentinel = clean_direct_answer(normalized_response)
+            if not direct_answer:
+                return RouterDecision(
+                    agent_response="",
+                    selected_tool=None,
+                    tool_arguments={},
+                    raw_response=raw_response,
+                    debug_prompt=debug_prompt,
+                    parse_error="The model did not emit a usable natural-language answer.",
+                    direct_answer=None,
+                    raw_response_original=raw_response,
+                    normalized_response_used_for_parsing=normalized_response,
+                    extracted_tool_call_json=None,
+                    cleaned_direct_answer=None,
+                    removed_direct_answer_sentinel=removed_sentinel,
+                )
+            return RouterDecision(
+                agent_response=direct_answer,
+                selected_tool=NO_TOOL_NAME,
+                tool_arguments={},
+                raw_response=raw_response,
+                debug_prompt=debug_prompt,
+                parse_error=None,
+                direct_answer=direct_answer,
+                raw_response_original=raw_response,
+                normalized_response_used_for_parsing=normalized_response,
+                extracted_tool_call_json=None,
+                cleaned_direct_answer=direct_answer,
+                removed_direct_answer_sentinel=removed_sentinel,
+            )
+
+        return RouterDecision(
+            agent_response=f"I would use {parsed_tool_call.name} for this request.",
+            selected_tool=parsed_tool_call.name,
+            tool_arguments=parsed_tool_call.arguments,
+            raw_response=raw_response,
+            debug_prompt=debug_prompt,
+            parse_error=None,
+            direct_answer=None,
+            raw_response_original=raw_response,
+            normalized_response_used_for_parsing=normalized_response,
+            extracted_tool_call_json=parsed_tool_call.extracted_json,
+        )
+
+    @classmethod
+    def _parse_native_tool_call(cls, raw_response: str) -> ParsedNativeToolCall | None:
+        text = raw_response.strip()
+        if not text:
+            return None
+
+        opening_count = len(re.findall(r"<tool_call\s*>", text))
+        closing_count = text.count("</tool_call>")
+        if opening_count == 0 and closing_count == 0:
+            return None
+        if opening_count != closing_count:
+            msg = "Model output contained an incomplete <tool_call> block."
+            raise NativeToolCallParseError(msg)
+        if opening_count > 1:
+            msg = "Model output contained multiple <tool_call> blocks; only one is supported."
+            raise NativeToolCallParseError(msg)
+
+        tool_call_match = re.search(
+            r"<tool_call\s*>\s*(.*?)\s*</tool_call>",
+            text,
+            re.DOTALL,
+        )
+        if tool_call_match is None:
+            msg = "Model output contained tool-call markers but no parseable block."
+            raise NativeToolCallParseError(msg)
+
+        json_text = tool_call_match.group(1).strip()
+        try:
+            payload = json.loads(json_text)
+        except json.JSONDecodeError as error:
+            msg = f"Native tool-call JSON could not be parsed: {error.msg}."
+            raise NativeToolCallParseError(msg, extracted_tool_call_json=json_text) from error
+        if not isinstance(payload, Mapping):
+            msg = "Native tool-call payload must be a JSON object."
+            raise NativeToolCallParseError(msg, extracted_tool_call_json=json_text)
+
+        name = payload.get("name")
+        if not isinstance(name, str):
+            msg = "Native tool-call payload must contain a string 'name'."
+            raise NativeToolCallParseError(msg, extracted_tool_call_json=json_text)
+        executable_tools = {
+            str(schema["function"]["name"]) for schema in get_executable_tool_schemas()
+        }
+        if name not in executable_tools:
+            msg = f"Native tool-call payload referenced unknown tool {name!r}."
+            raise NativeToolCallParseError(msg, extracted_tool_call_json=json_text)
+
+        arguments = payload.get("arguments", {})
+        if not isinstance(arguments, Mapping):
+            msg = "Native tool-call 'arguments' must be a JSON object when present."
+            raise NativeToolCallParseError(msg, extracted_tool_call_json=json_text)
+        return ParsedNativeToolCall(name=name, arguments=dict(arguments), extracted_json=json_text)
 
     @classmethod
     def _parse_json_payload(cls, raw_response: str) -> dict[str, Any] | None:
@@ -266,6 +502,43 @@ class LocalHFRouter:
         raw_response = self.tokenizer.decode(new_token_ids, skip_special_tokens=True).strip()
         return model_prompt, raw_response
 
+    def _generate_native_tool_response(
+        self,
+        user_request: str,
+        *,
+        system_prompt: str,
+    ) -> tuple[str, str, dict[str, Any]]:
+        model_prompt = self._format_native_tool_prompt(user_request, system_prompt=system_prompt)
+        input_device = self._input_device()
+        inputs = self.tokenizer(model_prompt, return_tensors="pt")
+        inputs = {key: value.to(input_device) for key, value in inputs.items()}
+        prompt_token_count = int(inputs["input_ids"].shape[-1])
+
+        generation_kwargs: dict[str, Any] = {
+            "max_new_tokens": self.max_new_tokens,
+            "do_sample": False,
+        }
+        generation_kwargs.update(self.generation_kwargs)
+        if generation_kwargs.get("do_sample") is False:
+            for sampling_key in ("temperature", "top_p", "top_k"):
+                generation_kwargs.pop(sampling_key, None)
+        if "pad_token_id" not in generation_kwargs and self.tokenizer.eos_token_id is not None:
+            generation_kwargs["pad_token_id"] = self.tokenizer.eos_token_id
+
+        with self._torch.inference_mode():
+            output_ids = self.model.generate(**inputs, **generation_kwargs)
+        new_token_ids = output_ids[0, prompt_token_count:]
+        raw_response = self.tokenizer.decode(new_token_ids, skip_special_tokens=False).strip()
+        return model_prompt, raw_response, dict(generation_kwargs)
+
+    def _format_native_tool_prompt(self, user_request: str, *, system_prompt: str) -> str:
+        return build_native_tool_call_prompt(
+            self.tokenizer,
+            system_prompt=system_prompt,
+            user_request=user_request,
+            tool_schemas=get_executable_tool_schemas(),
+        )
+
     def _format_model_prompt(self, router_prompt: str) -> str:
         messages = [
             {"role": "system", "content": "You are a strict tool router. Return JSON only."},
@@ -324,17 +597,23 @@ def select_tool_from_scores(
     score before recomputing the argmax.
     """
     if mode not in HF_SELECTION_MODES:
-        raise ValueError(f"Unknown HF selection mode {mode!r}; expected one of {HF_SELECTION_MODES!r}.")
+        msg = f"Unknown HF selection mode {mode!r}; expected one of {HF_SELECTION_MODES!r}."
+        raise ValueError(msg)
     if raw_scores.keys() != calibrated_scores.keys():
-        raise ValueError("Raw and calibrated scores must contain identical candidates.")
+        msg = "Raw and calibrated scores must contain identical candidates."
+        raise ValueError(msg)
     if not raw_scores:
-        raise ValueError("At least one routing candidate is required.")
+        msg = "At least one routing candidate is required."
+        raise ValueError(msg)
     if raw_margin_threshold < 0:
-        raise ValueError("raw_margin_threshold must be non-negative.")
+        msg = "raw_margin_threshold must be non-negative."
+        raise ValueError(msg)
     if not 0.0 <= calibration_strength <= 1.0:
-        raise ValueError("calibration_strength must be between 0 and 1.")
+        msg = "calibration_strength must be between 0 and 1."
+        raise ValueError(msg)
     if mode == "no_tool_boost" and no_tool_boost_delta < 0:
-        raise ValueError("no_tool_boost_delta must be non-negative.")
+        msg = "no_tool_boost_delta must be non-negative."
+        raise ValueError(msg)
 
     raw = dict(raw_scores)
     calibrated = dict(calibrated_scores)
@@ -357,7 +636,8 @@ def select_tool_from_scores(
         decision_scores = raw if raw_margin >= raw_margin_threshold else calibrated
     else:
         if "no_tool" not in calibrated:
-            raise ValueError("no_tool_boost mode requires a 'no_tool' candidate.")
+            msg = "no_tool_boost mode requires a 'no_tool' candidate."
+            raise ValueError(msg)
         decision_scores = dict(calibrated)
         decision_scores["no_tool"] += no_tool_boost_delta
     return max(decision_scores, key=decision_scores.get), decision_scores

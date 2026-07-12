@@ -53,6 +53,7 @@ from final_answer_similarity_scorer import (
 from gemini_agent import run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import (
+    DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
     HFArgumentExtractor,
     LocalHFClassificationRouter,
     LocalHFRouter,
@@ -77,6 +78,7 @@ from scorers import (
     LexicalToolScorer,
     LLMToolScorer,
     MockLLM,
+    NativeToolCallScorer,
     ToolChoice,
     build_coalition_prompt as canonical_coalition_prompt,
     join_user_request_segments,
@@ -107,34 +109,109 @@ TOOL_ICONS = {
     "calculator_tool": "🧮",
     "web_search_tool": "🌐",
     "no_tool": "💬",
+    "parse_failure": "⚠️",
+}
+TOOL_ROUTE_EXPLANATIONS = {
+    "web_search_tool": "This request requires current or externally retrieved information.",
+    "weather_tool": "This request requires weather information for a specific place or time.",
+    "calculator_tool": "This request requires an exact numerical calculation.",
 }
 FINAL_ANSWER_SIMILARITY_LABEL = "Final answer semantic similarity"
-LOGPROB_SCORER_LABEL = "Calibrated multiclass tool log-odds (HF local)"
-# Shared session-state key for the Explanation tab's "Scoring method" selectbox,
-# read from the Inference tab too so "HF local" inference can detect that the
-# calibrated log-odds scorer is selected and route through the same selected HF
-# model instance instead of the separate structured-JSON router.
+NATIVE_HF_SCORER_LABEL = "Canonical native tool-identity continuation likelihood"
+NATIVE_HF_SCORER_SHORT_LABEL = "Native tool-identity likelihood"
+NO_TOOL_SURROGATE_SCORER_LABEL = "Legacy A/B/C/D no-tool probe — surrogate ablation"
+LOGPROB_SCORER_LABEL = "Calibrated A/B/C/D classification (Developer ablation)"
+# Shared session-state key for the Explanation tab's "Scoring method" selectbox.
 SCORER_BACKEND_SESSION_KEY = "agentic_explanation_scorer_backend"
-HF_LOCAL_MODEL_OPTIONS = ["Qwen/Qwen2.5-1.5B-Instruct", "Qwen/Qwen2.5-3B-Instruct"]
-# Single canonical session-state key for the "HF local" backend's model dropdown,
-# read from both the Inference tab (router/calibrated inference) and the
-# Explanation tab (calibrated log-odds scorer settings, read-only there) so the
-# two can never silently diverge onto two different loaded model instances.
+# Single canonical session-state key for the "HF local" backend's model dropdown.
 HF_MODEL_ID_SESSION_KEY = "agentic_hf_model_id"
 SAME_HF_MODEL_EXPLANATION = (
-    "In calibrated HF-local mode, inference and explanation use the same selected "
-    "HF model/tokenizer instance."
+    "In HF-local mode, inference and explanation use the same selected HF model/tokenizer instance."
+)
+NATIVE_HF_SCORER_HELP = (
+    "Scores each retained-segment coalition by teacher-forced log-probability of a "
+    "canonical native-format continuation for the frozen Agent Result tool identity. "
+    "The continuation is derived from the selected tokenizer's chat template, stops "
+    "at the tool name, and excludes free-form argument tokens."
+)
+NO_TOOL_SURROGATE_HELP = (
+    "This direct-answer explanation uses the legacy A/B/C/D forced-choice surrogate. "
+    "`NoTool` is an artificial candidate for that probe only: it is not executable, "
+    "not native, and is never emitted by the native agent."
 )
 LOGPROB_SCORER_HELP = (
-    "Scores each retained-segment coalition by the local router model's calibrated "
-    "log-odds for the target tool against all other available routing decisions. "
-    "The score is model-internal routing preference, not trajectory correctness "
-    "or tool-execution success."
+    "Developer ablation: rewrites routing into artificial A/B/C/D labels and scores "
+    "calibrated log-odds for the target label. This is not the primary native "
+    "tool-calling pipeline."
 )
+NATIVE_HF_CONTINUATION_DIAGNOSTICS = {
+    "Target source": "full-context native inference",
+    "Continuation type": "canonical native template",
+    "Continuation scope": "tool identity only",
+    "Arguments included": "no",
+}
 # Temporary HF model-lifecycle tracing for the "two Qwen models resident at
 # once" / MPS crash investigation. Set to True only for local debugging; keep
 # False in normal runs. Remove once the investigation is closed out.
 DEBUG_HF_LIFECYCLE = False
+EXECUTABLE_TOOL_NAMES = tuple(
+    schema["function"]["name"] for schema in get_executable_tool_schemas()
+)
+
+
+@dataclass(frozen=True)
+class SelectedHFModelConfig:
+    """Single source of truth for the selected local HF model pipeline."""
+
+    model_id: str
+    model_family: str
+    quantization_mode: str
+    device: str
+    dtype: str
+    supports_native_tools: bool
+
+    @property
+    def tokenizer_id(self) -> str:
+        return self.model_id
+
+    def cache_key(self, *, scorer_mode: str) -> tuple[str, str, str, str, str, str]:
+        return (
+            self.model_id,
+            self.tokenizer_id,
+            self.quantization_mode,
+            self.device,
+            self.dtype,
+            scorer_mode,
+        )
+
+
+HF_LOCAL_MODEL_CONFIGS: dict[str, SelectedHFModelConfig] = {
+    "Qwen/Qwen2.5-1.5B-Instruct": SelectedHFModelConfig(
+        model_id="Qwen/Qwen2.5-1.5B-Instruct",
+        model_family="qwen2.5",
+        quantization_mode="none",
+        device="auto",
+        dtype="auto",
+        supports_native_tools=True,
+    ),
+    "Qwen/Qwen2.5-3B-Instruct": SelectedHFModelConfig(
+        model_id="Qwen/Qwen2.5-3B-Instruct",
+        model_family="qwen2.5",
+        quantization_mode="none",
+        device="auto",
+        dtype="auto",
+        supports_native_tools=True,
+    ),
+    "Qwen/Qwen3-4B-Instruct-2507": SelectedHFModelConfig(
+        model_id="Qwen/Qwen3-4B-Instruct-2507",
+        model_family="qwen3",
+        quantization_mode="none",
+        device="auto",
+        dtype="auto",
+        supports_native_tools=True,
+    ),
+}
+HF_LOCAL_MODEL_OPTIONS = list(HF_LOCAL_MODEL_CONFIGS)
 
 
 def _hf_lifecycle_log(*parts: object) -> None:
@@ -154,7 +231,7 @@ MOCK_SYSTEM_SEGMENTS = [
     "Use weather_tool for weather, rain, temperature, forecast, or city-date questions.",
     "Use calculator_tool for exact arithmetic, totals, percentages, and numeric expressions.",
     "Use web_search_tool when the answer depends on current, latest, recent, or live information.",
-    "Use no_tool for stable conceptual explanations that do not require external data.",
+    "Answer stable conceptual explanations directly without calling an external tool.",
 ]
 TEXT_PLOT_PACKAGE = "_agentic_text_plot"
 ASSET_DIR = Path(__file__).parent / "assets"
@@ -174,13 +251,25 @@ def load_local_hf_router(
     max_new_tokens: int,
     *,
     trust_remote_code: bool,
+    quantization_mode: str = "none",
+    device: str = "auto",
+    dtype: str = "auto",
 ) -> LocalHFRouter:
     """Load and cache the optional local HuggingFace router."""
-    _hf_lifecycle_log("[HF LOAD] entering load_local_hf_router", f"model_name={model_name}")
+    _hf_lifecycle_log(
+        "[HF LOAD] entering load_local_hf_router",
+        f"model_name={model_name}",
+        f"quantization={quantization_mode}",
+        f"device={device}",
+        f"dtype={dtype}",
+    )
     router = LocalHFRouter(
         model_name=model_name,
         max_new_tokens=max_new_tokens,
         trust_remote_code=trust_remote_code,
+        quantization_mode=quantization_mode,
+        device=device,
+        dtype=dtype,
     )
     _hf_lifecycle_log("[HF LOAD] LocalHFRouter loaded", f"model_name={model_name}")
     if DEBUG_HF_LIFECYCLE:
@@ -201,6 +290,8 @@ def load_logprob_scorer(
     max_pairs_per_batch: int,
     device: str | None = None,
     dtype: str = "auto",
+    quantization_mode: str = "none",
+    tokenizer_id: str | None = None,
 ) -> CalibratedToolLogOddsScorer:
     """Load and cache the optional local HuggingFace calibrated log-odds scorer.
 
@@ -209,7 +300,23 @@ def load_logprob_scorer(
     size loads (or reuses) a distinct cached scorer instead of reaching into a
     shared cached object and changing its configuration in place.
     """
-    _hf_lifecycle_log("[HF LOAD] entering load_logprob_scorer", f"model_id={model_id}")
+    _hf_lifecycle_log(
+        "[HF LOAD] entering load_logprob_scorer",
+        f"model_id={model_id}",
+        f"tokenizer_id={tokenizer_id or model_id}",
+        f"quantization={quantization_mode}",
+        f"device={device}",
+        f"dtype={dtype}",
+    )
+    if quantization_mode != "none":
+        msg = (
+            f"Calibrated log-odds scorer does not currently support quantization mode "
+            f"{quantization_mode!r}."
+        )
+        raise RuntimeError(msg)
+    if tokenizer_id is not None and tokenizer_id != model_id:
+        msg = "Calibrated log-odds scorer requires tokenizer_id to match model_id."
+        raise RuntimeError(msg)
     scorer = CalibratedToolLogOddsScorer(
         model_id=model_id,
         device=device,
@@ -226,6 +333,152 @@ def load_logprob_scorer(
             f"model_id={model_id}",
         )
     return scorer
+
+
+def build_native_hf_scorer_from_router(
+    router: LocalHFRouter,
+    *,
+    max_pairs_per_batch: int,
+    selected_config: SelectedHFModelConfig | None = None,
+) -> NativeToolCallScorer:
+    """Wrap an already-cached local HF router as the native coalition scorer."""
+    model_id = getattr(router, "model_name", None) or (
+        selected_config.model_id if selected_config is not None else DEFAULT_LOGPROB_MODEL_ID
+    )
+    tokenizer_id = getattr(router, "tokenizer_id", None) or model_id
+    quantization_mode = getattr(
+        router,
+        "requested_quantization_mode",
+        selected_config.quantization_mode if selected_config is not None else "none",
+    )
+    return NativeToolCallScorer(
+        model=router.model,
+        tokenizer=router.tokenizer,
+        device=router.device,
+        model_id=model_id,
+        tokenizer_id=tokenizer_id,
+        quantization_mode=quantization_mode,
+        actual_quantization_mode=getattr(router, "actual_quantization_mode", quantization_mode),
+        dtype=getattr(router, "dtype", selected_config.dtype if selected_config else "auto"),
+        max_pairs_per_batch=max_pairs_per_batch,
+    )
+
+
+def hf_value_function_label_for_target(target_tool: str | None, requested_label: str) -> str:
+    """Return the HF-local value-function label for a frozen Agent Result target."""
+    if target_tool == "no_tool" and requested_label == NATIVE_HF_SCORER_LABEL:
+        return NO_TOOL_SURROGATE_SCORER_LABEL
+    return requested_label
+
+
+def value_function_metadata(label: str) -> tuple[str, str]:
+    """Return ``(value_function_type, value_function_fidelity)`` for result metadata."""
+    if label == NATIVE_HF_SCORER_LABEL:
+        return "native_target_tool_continuation_likelihood", "native_tool_call"
+    if label == NO_TOOL_SURROGATE_SCORER_LABEL:
+        return "legacy_abcd_no_tool_probe", "surrogate_ablation"
+    if label == LOGPROB_SCORER_LABEL:
+        return "legacy_abcd_forced_choice_probe", "developer_ablation"
+    return label.lower().replace(" ", "_"), "diagnostic"
+
+
+def selected_hf_model_config(model_id: str) -> SelectedHFModelConfig:
+    """Return the canonical local-HF config for a selectable model id."""
+    try:
+        return HF_LOCAL_MODEL_CONFIGS[model_id]
+    except KeyError:
+        model_family = (
+            "qwen3" if "Qwen3" in model_id else "qwen2.5" if "Qwen2.5" in model_id else "unknown"
+        )
+        return SelectedHFModelConfig(
+            model_id=model_id,
+            model_family=model_family,
+            quantization_mode="none",
+            device="auto",
+            dtype="auto",
+            supports_native_tools=True,
+        )
+
+
+def hf_runtime_identity(
+    component: object,
+    *,
+    fallback_config: SelectedHFModelConfig,
+) -> dict[str, object]:
+    """Extract comparable HF runtime identity from a router or scorer."""
+    return {
+        "model_id": getattr(component, "model_name", getattr(component, "model_id", None))
+        or fallback_config.model_id,
+        "tokenizer_id": getattr(component, "tokenizer_id", None) or fallback_config.tokenizer_id,
+        "requested_quantization": getattr(
+            component,
+            "requested_quantization_mode",
+            fallback_config.quantization_mode,
+        ),
+        "actual_quantization": getattr(component, "actual_quantization_mode", None)
+        or getattr(component, "requested_quantization_mode", fallback_config.quantization_mode),
+        "device": getattr(component, "device", fallback_config.device),
+        "dtype": getattr(component, "dtype", fallback_config.dtype),
+    }
+
+
+def hf_consistency_error_message(
+    *,
+    message: str,
+    key: str,
+    inference_value: object,
+    scorer_value: object,
+) -> str:
+    """Format a clear HF inference/scorer mismatch error."""
+    return f"{message} Inference {key}={inference_value!r}; scorer {key}={scorer_value!r}."
+
+
+def validate_hf_inference_xai_consistency(
+    *,
+    selected_config: SelectedHFModelConfig,
+    router: object,
+    scorer: object,
+) -> dict[str, object]:
+    """Block XAI if the native router and scorer do not explain the same HF runtime."""
+    inference_identity = hf_runtime_identity(router, fallback_config=selected_config)
+    scorer_identity = hf_runtime_identity(scorer, fallback_config=selected_config)
+    comparisons = (
+        ("model_id", "Inference and XAI scorer must use the same model."),
+        ("tokenizer_id", "Inference and XAI scorer must use the same tokenizer."),
+        ("actual_quantization", "Inference and XAI scorer must use the same quantization."),
+        ("device", "Inference and XAI scorer must use the same device."),
+    )
+    for key, message in comparisons:
+        if inference_identity[key] != scorer_identity[key]:
+            error_message = hf_consistency_error_message(
+                message=message,
+                key=key,
+                inference_value=inference_identity[key],
+                scorer_value=scorer_identity[key],
+            )
+            raise RuntimeError(error_message)
+    return {
+        "inference": inference_identity,
+        "scorer": scorer_identity,
+        "model_family": selected_config.model_family,
+        "supports_native_tools": selected_config.supports_native_tools,
+        "match": True,
+    }
+
+
+def has_untrusted_native_parse_result(inference_result: object | None) -> bool:
+    """Return True when native parser failure leaves no trustworthy XAI target."""
+    return bool(getattr(inference_result, "parse_error", None))
+
+
+def require_selected_hf_config(
+    selected_config: SelectedHFModelConfig | None,
+) -> SelectedHFModelConfig:
+    """Return the selected HF config or fail before native-HF XAI starts."""
+    if selected_config is None:
+        msg = "Native HF scorer requires an HF-local model configuration."
+        raise RuntimeError(msg)
+    return selected_config
 
 
 @st.cache_resource(show_spinner="Loading segmentation model...")
@@ -414,6 +667,29 @@ section[data-testid="stSidebar"] {
     background: #f3efe2;
     border-radius: 4px;
     padding: 0.05rem 0.35rem;
+}
+.agent-flow-line {
+    color: #8a8372;
+    font-size: 0.8rem;
+    margin: 0.65rem 0;
+}
+.agent-status-pill {
+    background: #eaf4f1;
+    border: 1px solid #bfd4c8;
+    border-radius: 999px;
+    color: #1f554c;
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin: 0.45rem 0 0.25rem 0;
+    padding: 0.2rem 0.65rem;
+}
+.agent-model-line {
+    border-top: 1px solid #ede7d8;
+    color: #6d6658;
+    font-size: 0.82rem;
+    margin-top: 0.85rem;
+    padding-top: 0.65rem;
 }
 .probability-row {
     align-items: center;
@@ -1431,6 +1707,7 @@ def build_interpretation_notes(
     pair_label: str,
     pair_value: float,
     full_score: float,
+    empty_score: float,
 ) -> list[str]:
     """Create plain-language interpretation bullets for the current run."""
     if attribution_frame.empty:
@@ -1467,10 +1744,16 @@ def build_interpretation_notes(
             "the selected index treats the pair as redundant, saturating, or partly conflicting."
         )
 
+    delta = float(full_score) - float(empty_score)
+    if delta > DELTA_STATUS_THRESHOLD:
+        direction = "increases"
+    elif delta < -DELTA_STATUS_THRESHOLD:
+        direction = "decreases"
+    else:
+        direction = "barely changes"
     notes.append(
-        f"The full-prompt target-tool support score is {full_score:.3f}. "
-        "This is still lexical/mock scoring scaffolding until a real local "
-        "tool-router scorer is integrated."
+        f"The full request {direction} selected-tool support relative to the empty "
+        f"request ({full_score:.3f} vs {empty_score:.3f})."
     )
     return notes
 
@@ -1645,7 +1928,8 @@ def build_complete_agent_callable(
     inference_model_name: str,
     system_prompt: str,
     tool_context: str,
-    hf_max_new_tokens: int = 256,
+    hf_model_config: SelectedHFModelConfig | None = None,
+    hf_max_new_tokens: int = DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
     hf_trust_remote_code: bool = False,
     calibrated_hf_mode: bool = False,
     logprob_model_id: str = DEFAULT_LOGPROB_MODEL_ID,
@@ -1658,16 +1942,12 @@ def build_complete_agent_callable(
     it can be re-run once per Shapley coalition by
     ``final_answer_similarity_scorer.FinalAnswerSimilarityScorer``.
 
-    ``calibrated_hf_mode`` selects the calibrated HF-local path: when
-    ``inference_backend == "HF local"`` and the Explanation tab's scorer is set
-    to ``LOGPROB_SCORER_LABEL``, inference must use the exact same
-    ``CalibratedToolLogOddsScorer`` model/tokenizer instance (via
-    ``LocalHFClassificationRouter`` for routing and ``HFArgumentExtractor`` for
-    arguments) instead of loading a separate structured-JSON ``LocalHFRouter``.
-    Either way, ``inference_model_name`` is always the single ``HF_MODEL_ID_SESSION_KEY``
-    dropdown selection from the Inference tab -- there is no second, independently
-    editable model id for the structured-JSON path.
+    HF Local uses model-native structured tool schemas through the tokenizer's
+    chat template. The selected HF model id is always the single
+    ``HF_MODEL_ID_SESSION_KEY`` dropdown selection from the Inference tab.
     """
+    if inference_backend == "HF local":
+        hf_model_config = hf_model_config or selected_hf_model_config(inference_model_name)
 
     def run(user_request: str) -> object:
         if inference_backend == "Groq":
@@ -1691,6 +1971,14 @@ def build_complete_agent_callable(
                 primary_scorer = load_logprob_scorer(
                     logprob_model_id,
                     max_pairs_per_batch=logprob_max_pairs_per_batch,
+                    device=hf_model_config.device if hf_model_config is not None else None,
+                    dtype=hf_model_config.dtype if hf_model_config is not None else "auto",
+                    quantization_mode=(
+                        hf_model_config.quantization_mode if hf_model_config is not None else "none"
+                    ),
+                    tokenizer_id=(
+                        hf_model_config.tokenizer_id if hf_model_config is not None else None
+                    ),
                 )
                 classification_router = LocalHFClassificationRouter(primary_scorer)
                 _hf_lifecycle_log(
@@ -1746,14 +2034,24 @@ def build_complete_agent_callable(
                 )
         try:
             _hf_lifecycle_log(
-                "[HF LOAD] using structured LocalHFRouter", f"model_name={inference_model_name}"
+                "[HF LOAD] using native LocalHFRouter", f"model_name={inference_model_name}"
             )
             hf_router = load_local_hf_router(
                 inference_model_name,
                 int(hf_max_new_tokens),
                 trust_remote_code=bool(hf_trust_remote_code),
+                quantization_mode=(
+                    hf_model_config.quantization_mode if hf_model_config is not None else "none"
+                ),
+                device=hf_model_config.device if hf_model_config is not None else "auto",
+                dtype=hf_model_config.dtype if hf_model_config is not None else "auto",
             )
-            return hf_router.choose_tool(user_request, TOOLS)
+            try:
+                return hf_router.choose_tool(user_request, TOOLS, system_prompt=system_prompt)
+            except TypeError as error:
+                if "system_prompt" not in str(error):
+                    raise
+                return hf_router.choose_tool(user_request, TOOLS)
         except Exception as error:  # noqa: BLE001
             return types.SimpleNamespace(
                 selected_tool=None,
@@ -1898,6 +2196,139 @@ def build_kv_table_html(items: dict[str, object]) -> str:
         for key, value in items.items()
     )
     return f"<div class='kv-table'>{rows}</div>"
+
+
+def backend_display_name(backend: object) -> str:
+    """Return compact user-facing backend text for Agent Result metadata."""
+    backend_text = str(backend or "").strip()
+    if backend_text.lower() == "hf local":
+        return "HF Local"
+    return backend_text or "Unknown backend"
+
+
+def agent_model_line_html(*, model: object, backend: object) -> str:
+    """Render compact model/backend metadata for the Agent Result card."""
+    return (
+        "<div class='agent-model-line'>"
+        f"{escape(str(model or 'Unknown model'))} · {escape(backend_display_name(backend))}"
+        "</div>"
+    )
+
+
+def tool_execution_state(inference_result: object) -> tuple[str, object | None]:
+    """Return truthful tool execution status and optional output for display."""
+    raw_trace = getattr(inference_result, "raw_trace", None)
+    if isinstance(raw_trace, dict) and "tool_output" in raw_trace:
+        return "Tool executed successfully", raw_trace.get("tool_output")
+    return "Tool call prepared", None
+
+
+def render_tool_arguments_html(tool_arguments: object) -> str:
+    """Render parsed tool arguments prominently without falling back to raw JSON."""
+    arguments = dict(tool_arguments) if isinstance(tool_arguments, dict) else {}
+    if not arguments:
+        return "<p class='result-meta-row'>No parsed arguments were prepared.</p>"
+    return (
+        "<p class='result-meta-row' style='margin-top:0.7rem;'><strong>Arguments</strong></p>"
+        f"{build_kv_table_html(arguments)}"
+    )
+
+
+def render_tool_decision_card(
+    inference_result: object,
+    *,
+    backend: object,
+    model: object,
+) -> str:
+    """Render an executable-tool Agent Result card."""
+    selected_tool = str(getattr(inference_result, "selected_tool", "") or "")
+    icon = TOOL_ICONS.get(selected_tool, "?")
+    route_explanation = TOOL_ROUTE_EXPLANATIONS.get(
+        selected_tool,
+        "The agent prepared an external tool call for this request.",
+    )
+    status_label, tool_output = tool_execution_state(inference_result)
+    output_html = (
+        (
+            "<p class='result-meta-row' style='margin-top:0.7rem;'>"
+            "<strong>Execution result</strong></p>"
+            f"<div class='agent-response-block'>{escape(str(tool_output))}</div>"
+        )
+        if tool_output is not None
+        else ""
+    )
+    flow_html = (
+        "<div class='agent-flow-line'>"
+        f"User request &rarr; {escape(selected_tool)} &rarr; {escape(status_label)}"
+        "</div>"
+    )
+    return f"""
+        <div class="result-card">
+            <div class="result-card-header">
+                {icon} Agent selected <code>{escape(selected_tool)}</code>
+            </div>
+            <div class="result-card-subtitle">{escape(route_explanation)}</div>
+            {flow_html}
+            {render_tool_arguments_html(getattr(inference_result, "tool_arguments", {}))}
+            {output_html}
+            {agent_model_line_html(model=model, backend=backend)}
+        </div>
+    """
+
+
+def render_direct_answer_card(
+    inference_result: object,
+    *,
+    backend: object,
+    model: object,
+) -> str:
+    """Render a direct-answer Agent Result card without exposing the internal no_tool label."""
+    answer = (
+        getattr(inference_result, "cleaned_direct_answer", "")
+        or getattr(inference_result, "direct_answer", "")
+        or getattr(inference_result, "agent_response", "")
+        or getattr(inference_result, "assistant_answer", "")
+        or getattr(inference_result, "final_answer", "")
+        or getattr(inference_result, "raw_response", "")
+        or ""
+    )
+    return f"""
+        <div class="result-card">
+            <div class="result-card-header">💬 Agent answered directly</div>
+            <div class="result-card-subtitle">No external tool was called.</div>
+            <div class="agent-flow-line">User request &rarr; Direct answer</div>
+            <div class="agent-response-block">{escape(str(answer))}</div>
+            {agent_model_line_html(model=model, backend=backend)}
+        </div>
+    """
+
+
+def render_parse_failure_card(parse_error: object) -> str:
+    """Render native parser failures as explicit untrusted results."""
+    return f"""
+        <div class="error-card">
+            <h3>⚠️ Native tool-call parsing failed</h3>
+            <p>The model produced a tool-call structure, but it could not be parsed safely.
+            The result was not treated as a direct answer.</p>
+            <p>{escape(str(parse_error))}</p>
+        </div>
+    """
+
+
+def render_agent_result_card(
+    inference_result: object,
+    *,
+    backend: object,
+    model: object,
+) -> str:
+    """Render the main Agent Result card without developer-only routing details."""
+    parse_error = getattr(inference_result, "parse_error", None)
+    if parse_error:
+        return render_parse_failure_card(parse_error)
+    selected_tool = getattr(inference_result, "selected_tool", None)
+    if selected_tool == "no_tool":
+        return render_direct_answer_card(inference_result, backend=backend, model=model)
+    return render_tool_decision_card(inference_result, backend=backend, model=model)
 
 
 def build_player_chip_html(segment: ToolUseSegment, *, max_chars: int = 30) -> str:
@@ -2127,11 +2558,12 @@ def main() -> None:
             HF_LOCAL_MODEL_OPTIONS,
             key=HF_MODEL_ID_SESSION_KEY,
             help=(
-                "Local HF model used for both routing and the calibrated log-odds "
-                "explanation scorer."
+                "Local HF model used for both native tool-call inference and explanation scorer."
             ),
         )
+        selected_hf_config = selected_hf_model_config(inference_model_name)
     else:
+        selected_hf_config = None
         inference_model_name = st.text_input(
             "Groq model",
             value="llama-3.1-8b-instant",
@@ -2206,6 +2638,9 @@ def main() -> None:
         tool_context,
         inference_backend,
         inference_model_name,
+        selected_hf_config.cache_key(scorer_mode="inference")
+        if selected_hf_config is not None
+        else None,
         explanation_mode,
     )
     if st.session_state.get("agentic_inference_signature") != current_inference_signature:
@@ -2241,7 +2676,11 @@ def main() -> None:
     # on a stale default (e.g. after the user switches HF models with Developer mode
     # off) -- otherwise the explanation step's classifier can disagree with the agent
     # step's, which used `inference_model_name` directly.
-    logprob_model_id = st.session_state.get(HF_MODEL_ID_SESSION_KEY, DEFAULT_LOGPROB_MODEL_ID)
+    logprob_model_id = (
+        selected_hf_config.model_id
+        if selected_hf_config is not None
+        else st.session_state.get(HF_MODEL_ID_SESSION_KEY, DEFAULT_LOGPROB_MODEL_ID)
+    )
     max_pairs_per_batch = 1
     router_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
     soft_vote_model_id = DEFAULT_GROQ_ROUTER_MODEL_ID
@@ -2260,9 +2699,9 @@ def main() -> None:
     show_scoring_prompt_preview = False
 
     forced_default_scorer = (
-        LOGPROB_SCORER_LABEL
+        NATIVE_HF_SCORER_LABEL
         if inference_backend == "HF local"
-        else ("Groq soft-vote scorer" if has_groq_inference_result else LOGPROB_SCORER_LABEL)
+        else ("Groq soft-vote scorer" if has_groq_inference_result else NATIVE_HF_SCORER_LABEL)
     )
 
     if not developer_mode:
@@ -2311,7 +2750,7 @@ def main() -> None:
                 value=False,
                 key="agentic_show_developer_scorers",
             )
-            scorer_options = [LOGPROB_SCORER_LABEL, FINAL_ANSWER_SIMILARITY_LABEL]
+            scorer_options = [NATIVE_HF_SCORER_LABEL, FINAL_ANSWER_SIMILARITY_LABEL]
             if inference_backend == "Groq" or has_groq_inference_result:
                 scorer_options.append("Groq soft-vote scorer")
                 scorer_options.append("Groq deterministic router")
@@ -2322,7 +2761,7 @@ def main() -> None:
                     "Developer scorers are intended for debugging and should not be used for "
                     "final demo results."
                 )
-                scorer_options.extend(["Keyword scorer", "Mock model scorer"])
+                scorer_options.extend([LOGPROB_SCORER_LABEL, "Keyword scorer", "Mock model scorer"])
             if scorer_backend_key not in st.session_state:
                 st.session_state[scorer_backend_key] = forced_default_scorer
             if st.session_state[scorer_backend_key] not in scorer_options:
@@ -2332,22 +2771,35 @@ def main() -> None:
                 scorer_options,
                 key=scorer_backend_key,
             )
-            if scorer_backend == LOGPROB_SCORER_LABEL:
+            if scorer_backend == NATIVE_HF_SCORER_LABEL:
                 # `logprob_model_id` is already set above from HF_MODEL_ID_SESSION_KEY,
                 # unconditional on Developer mode -- just display it here.
                 st.caption(f"Inherited from HF model selection: `{logprob_model_id}`")
                 st.caption(SAME_HF_MODEL_EXPLANATION)
                 max_pairs_per_batch = st.number_input(
-                    "HF pair batch size",
+                    "HF continuation batch size",
                     min_value=1,
                     max_value=16,
                     value=1,
                     step=1,
                     key="agentic_logprob_pair_batch_size",
                     help=(
-                        "Number of prompt/candidate pairs scored per local-model forward pass. "
+                        "Number of prompt/continuation pairs scored per local-model forward pass. "
                         "Use 1 on Colab T4 to avoid CUDA out-of-memory errors."
                     ),
+                )
+                st.caption(NATIVE_HF_SCORER_HELP)
+            elif scorer_backend == LOGPROB_SCORER_LABEL:
+                # A/B/C/D ablation. LocalHFClassificationRouter may be used only by
+                # explicit developer-mode inference, never by the primary native scorer.
+                st.caption(f"Inherited from HF model selection: `{logprob_model_id}`")
+                max_pairs_per_batch = st.number_input(
+                    "HF A/B/C/D pair batch size",
+                    min_value=1,
+                    max_value=16,
+                    value=1,
+                    step=1,
+                    key="agentic_logprob_pair_batch_size",
                 )
                 st.caption(LOGPROB_SCORER_HELP)
             elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
@@ -2488,7 +2940,8 @@ def main() -> None:
             inference_model_name=inference_model_name,
             system_prompt=system_prompt,
             tool_context=tool_context,
-            hf_max_new_tokens=256,
+            hf_model_config=selected_hf_config,
+            hf_max_new_tokens=DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
             hf_trust_remote_code=False,
             calibrated_hf_mode=calibrated_hf_mode,
             logprob_model_id=inference_model_name
@@ -2526,7 +2979,7 @@ def main() -> None:
         st.session_state.has_run = False
         st.session_state.result = None
         st.session_state.result_signature = None
-        st.session_state.pending_run = True
+        st.session_state.pending_run = not bool(getattr(inference_result, "parse_error", None))
         st.rerun()
 
     # ------------------------------------------------------------------
@@ -2555,11 +3008,10 @@ def main() -> None:
             )
         else:
             inference_error = getattr(inference_result, "error", None)
+            parse_error = getattr(inference_result, "parse_error", None)
             selected_tool = getattr(inference_result, "selected_tool", None)
             result_backend = getattr(inference_result, "backend", inference_backend)
             result_model = getattr(inference_result, "model", inference_model_name)
-            selected_tool_display = escape(str(selected_tool or "No tool selected"))
-            selected_tool_icon = TOOL_ICONS.get(selected_tool, "?")
 
             if inference_error:
                 st.markdown(
@@ -2571,89 +3023,22 @@ def main() -> None:
                     """,
                     unsafe_allow_html=True,
                 )
-            elif result_backend == "HF local":
-                tool_scores = getattr(inference_result, "tool_scores", None)
-                if tool_scores:
-                    probabilities = softmax_dict(tool_scores)
-                    ranked_tools = sorted(
-                        TOOLS, key=lambda name: probabilities.get(name, 0.0), reverse=True
-                    )
-                    probability_rows_html = "".join(
-                        build_probability_bar_html(
-                            tool_name,
-                            probabilities.get(tool_name, 0.0),
-                            is_selected=tool_name == selected_tool,
-                        )
-                        for tool_name in ranked_tools
-                    )
-                else:
-                    probability_rows_html = (
-                        "<p class='result-meta-row'>No calibrated probability distribution "
-                        "is available for this run.</p>"
-                    )
-                st.markdown(
-                    f"""
-                    <div class="result-card">
-                        <div class="result-card-header">
-                            {selected_tool_icon} Model routed to: <code>{selected_tool_display}</code>
-                        </div>
-                        <div class="result-card-subtitle">Local HF router decision</div>
-                        {probability_rows_html}
-                        <p class="result-meta-row" style="margin-top:0.7rem;">
-                            Decision and explanation use the same local HF model and
-                            calibrated log-odds scorer.
-                        </p>
-                        <div class="result-meta-row">
-                            Model: <code>{escape(str(result_model))}</code>
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
             else:
-                tool_arguments = getattr(inference_result, "tool_arguments", {}) or {}
-                kv_html = build_kv_table_html(tool_arguments) or (
-                    "<p class='result-meta-row'>No structured tool arguments returned.</p>"
-                )
-                assistant_message = (
-                    getattr(inference_result, "agent_response", "")
-                    or getattr(inference_result, "assistant_answer", "")
-                    or getattr(inference_result, "final_answer", "")
-                    or f"I recommend `{selected_tool}` for this request."
-                )
                 st.markdown(
-                    f"""
-                    <div class="result-card">
-                        <div class="result-card-header">
-                            {selected_tool_icon} Groq selected: <code>{selected_tool_display}</code>
-                        </div>
-                        <div class="result-card-subtitle">Black-box API agent trajectory</div>
-                        <div class="result-meta-row">Backend: <code>Groq</code></div>
-                        <div class="result-meta-row">
-                            Model: <code>{escape(str(result_model))}</code>
-                        </div>
-                        <div class="result-meta-row">
-                            Selected tool: <code>{selected_tool_display}</code>
-                        </div>
-                        <p class="result-meta-row" style="margin-top:0.7rem;">
-                            <strong>Tool arguments</strong>
-                        </p>
-                        {kv_html}
-                        <p class="result-meta-row" style="margin-top:0.7rem;">
-                            <strong>Agent response</strong>
-                        </p>
-                        <div class="agent-response-block">
-                            {escape(str(assistant_message))}
-                        </div>
-                    </div>
-                    """,
+                    render_agent_result_card(
+                        inference_result,
+                        backend=result_backend,
+                        model=result_model,
+                    ),
                     unsafe_allow_html=True,
                 )
 
             if developer_mode:
-                with st.expander("Raw backend diagnostics", expanded=False):
+                with st.expander("Developer diagnostics", expanded=False):
                     st.write(f"Backend: `{result_backend}`")
                     st.write(f"Model: `{result_model}`")
+                    st.write(f"Internal route label: `{selected_tool}`")
+                    st.write(f"Parser status: `{'error' if parse_error else 'ok'}`")
                     st.markdown("**Raw tool arguments**")
                     st.json(getattr(inference_result, "tool_arguments", {}))
                     raw_trace = getattr(inference_result, "raw_trace", None)
@@ -2668,11 +3053,55 @@ def main() -> None:
                     if raw_response:
                         st.markdown("**Raw response**")
                         st.code(str(raw_response), language="text")
+                    normalized_response = getattr(
+                        inference_result,
+                        "normalized_response_used_for_parsing",
+                        None,
+                    )
+                    if normalized_response:
+                        st.markdown("**Normalized response used for parsing**")
+                        st.code(str(normalized_response), language="text")
+                    extracted_tool_call_json = getattr(
+                        inference_result,
+                        "extracted_tool_call_json",
+                        None,
+                    )
+                    if extracted_tool_call_json:
+                        st.markdown("**Extracted tool-call JSON**")
+                        st.code(str(extracted_tool_call_json), language="json")
+                    cleaned_direct_answer = getattr(
+                        inference_result,
+                        "cleaned_direct_answer",
+                        None,
+                    )
+                    if cleaned_direct_answer:
+                        st.markdown("**Cleaned direct answer**")
+                        st.code(str(cleaned_direct_answer), language="text")
+                    st.write(
+                        "Removed direct-answer sentinel: "
+                        f"`{getattr(inference_result, 'removed_direct_answer_sentinel', False)}`"
+                    )
+                    generation_parameters = getattr(
+                        inference_result,
+                        "generation_parameters",
+                        None,
+                    )
+                    if generation_parameters:
+                        st.markdown("**Generation parameters**")
+                        st.json(generation_parameters)
 
     # ------------------------------------------------------------------
     # 5. Tab 2: XAI Explanation
     # ------------------------------------------------------------------
     with xai_tab:
+        current_inference_result = st.session_state.get("agentic_inference_result")
+        if has_untrusted_native_parse_result(current_inference_result):
+            st.error(
+                "Model output contained a tool-call structure, but it could not be "
+                "parsed safely. The result is not treated as no_tool, and XAI is "
+                "blocked because there is no trustworthy target tool."
+            )
+            return
         try:
             if segmenter_choice == "Linguistic (spaCy chunking)":
                 segmenter = load_linguistic_segmenter()
@@ -2749,6 +3178,9 @@ def main() -> None:
             trace_name,
             inference_backend,
             inference_model_name,
+            selected_hf_config.cache_key(scorer_mode=str(scorer_backend))
+            if selected_hf_config is not None
+            else None,
             user_request,
             signature_target,
             scorer_backend,
@@ -2786,6 +3218,9 @@ def main() -> None:
                     trace_name,
                     inference_backend,
                     inference_model_name,
+                    selected_hf_config.cache_key(scorer_mode=str(scorer_backend))
+                    if selected_hf_config is not None
+                    else None,
                     user_request,
                     "__pending_target__",
                     scorer_backend,
@@ -2829,10 +3264,46 @@ def main() -> None:
 
         if run:
             lexical_scorer = LexicalToolScorer()
-            if scorer_backend == "Keyword scorer":
+            effective_scorer_backend = (
+                hf_value_function_label_for_target(target_tool, scorer_backend)
+                if inference_backend == "HF local"
+                else scorer_backend
+            )
+            if effective_scorer_backend == "Keyword scorer":
                 primary_scorer = lexical_scorer
                 primary_label = "Keyword scorer"
-            elif scorer_backend == LOGPROB_SCORER_LABEL:
+                native_hf_consistency = None
+            elif effective_scorer_backend == NATIVE_HF_SCORER_LABEL:
+                try:
+                    selected_native_hf_config = require_selected_hf_config(selected_hf_config)
+                    hf_router = load_local_hf_router(
+                        selected_native_hf_config.model_id,
+                        DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
+                        trust_remote_code=False,
+                        quantization_mode=selected_native_hf_config.quantization_mode,
+                        device=selected_native_hf_config.device,
+                        dtype=selected_native_hf_config.dtype,
+                    )
+                    primary_scorer = build_native_hf_scorer_from_router(
+                        hf_router,
+                        max_pairs_per_batch=int(max_pairs_per_batch),
+                        selected_config=selected_native_hf_config,
+                    )
+                    native_hf_consistency = validate_hf_inference_xai_consistency(
+                        selected_config=selected_native_hf_config,
+                        router=hf_router,
+                        scorer=primary_scorer,
+                    )
+                except Exception as error:  # noqa: BLE001
+                    st.error(
+                        "Could not prepare the native HF tool-call scorer. Install/check "
+                        "`transformers` and `torch`, try a smaller causal language model, "
+                        f"or check your environment. Details: {error}"
+                    )
+                    return
+                primary_label = NATIVE_HF_SCORER_LABEL
+                target_source = "Agent Result"
+            elif effective_scorer_backend in {LOGPROB_SCORER_LABEL, NO_TOOL_SURROGATE_SCORER_LABEL}:
                 # No explicit st.spinner() wrapper here: load_logprob_scorer's own
                 # @st.cache_resource(show_spinner="Preparing local HF scorer...") already
                 # shows a friendly progress message on a real (non-cached) load.
@@ -2840,6 +3311,14 @@ def main() -> None:
                     primary_scorer = load_logprob_scorer(
                         logprob_model_id,
                         max_pairs_per_batch=int(max_pairs_per_batch),
+                        device=selected_hf_config.device if selected_hf_config else None,
+                        dtype=selected_hf_config.dtype if selected_hf_config else "auto",
+                        quantization_mode=(
+                            selected_hf_config.quantization_mode if selected_hf_config else "none"
+                        ),
+                        tokenizer_id=selected_hf_config.tokenizer_id
+                        if selected_hf_config
+                        else None,
                     )
                 except Exception as error:  # noqa: BLE001
                     st.error(
@@ -2848,20 +3327,14 @@ def main() -> None:
                         f"or check your environment. Details: {error}"
                     )
                     return
-                primary_label = LOGPROB_SCORER_LABEL
-                _hf_lifecycle_log(
-                    "[HF ROUTING] LocalHFClassificationRouter reusing scorer instance",
-                    f"model_id={logprob_model_id}",
-                )
-                classification_router = LocalHFClassificationRouter(primary_scorer)
-                classifier_choice = classification_router.choose_tool(
-                    user_request,
-                    system_prompt=system_prompt,
-                    tool_descriptions=TOOLS,
-                )
-                target_tool = classifier_choice.tool
-                target_source = "HF classifier argmax (A/B/C/D)"
-            elif scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
+                primary_label = effective_scorer_backend
+                # Developer ablation only: LocalHFClassificationRouter remains available
+                # through build_complete_agent_callable(calibrated_hf_mode=True), but this
+                # XAI stage must not reroute and overwrite the Agent Result target.
+                if using_inferred_tool:
+                    target_source = "Agent Result"
+                native_hf_consistency = None
+            elif effective_scorer_backend == FINAL_ANSWER_SIMILARITY_LABEL:
                 # No explicit st.spinner() wrapper here: load_final_answer_embedder's own
                 # @st.cache_resource(show_spinner="Loading embedding model...") already
                 # shows a friendly progress message on a real (non-cached) load.
@@ -2878,7 +3351,8 @@ def main() -> None:
                     inference_model_name=inference_model_name,
                     system_prompt=system_prompt,
                     tool_context=tool_context,
-                    hf_max_new_tokens=256,
+                    hf_model_config=selected_hf_config,
+                    hf_max_new_tokens=DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
                     hf_trust_remote_code=False,
                 )
                 inference_result_is_current = (
@@ -2910,7 +3384,8 @@ def main() -> None:
                     empty_prompt=empty_prompt,
                 )
                 primary_label = FINAL_ANSWER_SIMILARITY_LABEL
-            elif scorer_backend == "Groq deterministic router":
+                native_hf_consistency = None
+            elif effective_scorer_backend == "Groq deterministic router":
                 if not os.getenv("GROQ_API_KEY"):
                     st.error(
                         "GROQ_API_KEY is not set. Add it to the environment to use the Groq "
@@ -2919,7 +3394,8 @@ def main() -> None:
                     return
                 primary_scorer = GroqDeterministicRouterScorer(model_name=router_model_id)
                 primary_label = "Groq deterministic router"
-            elif scorer_backend == "Groq soft-vote scorer":
+                native_hf_consistency = None
+            elif effective_scorer_backend == "Groq soft-vote scorer":
                 if not os.getenv("GROQ_API_KEY"):
                     st.error(
                         "GROQ_API_KEY is not set. Add it to the environment to use the Groq "
@@ -2934,7 +3410,8 @@ def main() -> None:
                     seed=soft_vote_seed,
                 )
                 primary_label = "Groq soft-vote scorer"
-            elif scorer_backend == "Trajectory match: tool + normalized args":
+                native_hf_consistency = None
+            elif effective_scorer_backend == "Trajectory match: tool + normalized args":
                 if not os.getenv("GROQ_API_KEY"):
                     st.error(
                         "GROQ_API_KEY is not set. Add it to the environment to use the "
@@ -2961,9 +3438,11 @@ def main() -> None:
                     trajectory_provider=trajectory_provider,
                 )
                 primary_label = "Trajectory match: tool + normalized args"
+                native_hf_consistency = None
             else:
                 primary_scorer = LLMToolScorer(llm=MockLLM())
                 primary_label = "Mock model scorer"
+                native_hf_consistency = None
 
             fallback_choice = None
             if target_tool is None:
@@ -2989,7 +3468,8 @@ def main() -> None:
             )[0]
             logprob_full_diagnostics = (
                 dict(primary_scorer.last_debug_outputs[0])
-                if primary_label == LOGPROB_SCORER_LABEL and primary_scorer.last_debug_outputs
+                if primary_label in {LOGPROB_SCORER_LABEL, NO_TOOL_SURROGATE_SCORER_LABEL}
+                and primary_scorer.last_debug_outputs
                 else None
             )
             empty_score = primary_scorer.score_batch(
@@ -3064,6 +3544,7 @@ def main() -> None:
                     pair_label,
                     pair_value,
                     full_score,
+                    empty_score,
                 )
 
             top = attribution_frame.iloc[0] if not attribution_frame.empty else None
@@ -3148,11 +3629,15 @@ def main() -> None:
                 target_tool=target_tool,
                 tool_descriptions=TOOLS,
             )
+            value_function_type, value_function_fidelity = value_function_metadata(primary_label)
             st.session_state.has_run = True
             result_signature = (
                 trace_name,
                 inference_backend,
                 inference_model_name,
+                selected_hf_config.cache_key(scorer_mode=str(primary_label))
+                if selected_hf_config is not None
+                else None,
                 user_request,
                 target_tool,
                 scorer_backend,
@@ -3182,6 +3667,9 @@ def main() -> None:
                 if fallback_choice is None
                 else fallback_choice.scores,
                 "primary_label": primary_label,
+                "scorer_label": primary_label,
+                "value_function_type": value_function_type,
+                "value_function_fidelity": value_function_fidelity,
                 "sv_algorithm_label": sv_algorithm_label,
                 "ksii_algorithm_label": ksii_algorithm_label,
                 "full_score": full_score,
@@ -3202,6 +3690,8 @@ def main() -> None:
                 "lexical_result": lexical_result,
                 "scoring_prompt": scoring_prompt_preview,
                 "logprob_full_diagnostics": logprob_full_diagnostics,
+                "native_hf_consistency": native_hf_consistency,
+                "hf_selected_model_config": selected_hf_config,
                 "final_answer_scorer_meta": (
                     {
                         "embedding_model_id": final_answer_embedding_model_id,
@@ -3219,6 +3709,9 @@ def main() -> None:
             st.error("No explanation result is available. Click Run full pipeline to compute one.")
             return
         primary_label = result["primary_label"]
+        scorer_label = result.get("scorer_label", primary_label)
+        value_function_type = result.get("value_function_type", "")
+        value_function_fidelity = result.get("value_function_fidelity", "")
         sv_algorithm_label = result["sv_algorithm_label"]
         ksii_algorithm_label = result["ksii_algorithm_label"]
         full_score = result["full_score"]
@@ -3240,6 +3733,8 @@ def main() -> None:
         lexical_result = result["lexical_result"]
         final_answer_scorer_meta = result.get("final_answer_scorer_meta")
         logprob_full_diagnostics = result.get("logprob_full_diagnostics")
+        native_hf_consistency = result.get("native_hf_consistency")
+        hf_selected_model_config = result.get("hf_selected_model_config")
         is_final_answer_result = primary_label == FINAL_ANSWER_SIMILARITY_LABEL
         target_tool = result["target_tool"]
         target_source = result["target_source"]
@@ -3270,11 +3765,6 @@ def main() -> None:
         # already unpacked above -- no new computation is introduced here.
         # ================================================================
 
-        metric_target_value = (
-            "Final-answer semantic similarity"
-            if is_final_answer_result
-            else (target_tool or "Pending")
-        )
         # The calibrated log-odds scorer normalizes its Shapley game value against the
         # empty coalition by construction (V(empty) = h(empty) - h(empty) == 0), so the
         # normalized baseline is always trivially zero for this scorer specifically. Show
@@ -3291,13 +3781,19 @@ def main() -> None:
             explained_increase = raw_full_score - raw_empty_score
             empty_label, empty_display = "Raw empty score h(&empty;)", f"{raw_empty_score:.3f}"
             full_label, full_display = "Raw full score h(N)", f"{raw_full_score:.3f}"
-            delta_label = "Explained increase h(N)-h(&empty;)"
+            delta_label = "Support change h(N)-h(&empty;)"
             empty_short_label, full_short_label = "Baseline H(&empty;)", "Full H(N)"
+        elif primary_label == NATIVE_HF_SCORER_LABEL:
+            explained_increase = float(full_score) - float(empty_score)
+            empty_label, empty_display = "Empty native score h(&empty;)", f"{empty_score:.3f}"
+            full_label, full_display = "Full native score h(N)", f"{full_score:.3f}"
+            delta_label = "Native value v(N)=h(N)-h(&empty;)"
+            empty_short_label, full_short_label = "Native h(&empty;)", "Native h(N)"
         else:
             explained_increase = float(full_score) - float(empty_score)
             empty_label, empty_display = "Baseline V(&empty;)", f"{empty_score:.3f}"
             full_label, full_display = "Full V(N)", f"{full_score:.3f}"
-            delta_label = "Explained increase V(N)-V(&empty;)"
+            delta_label = "Support change V(N)-V(&empty;)"
             empty_short_label, full_short_label = "Baseline V(&empty;)", "Full V(N)"
 
         # Computed once here and reused below by the explanation card, the k-SII mini-table,
@@ -3311,11 +3807,18 @@ def main() -> None:
         short_labels = [short_player_label(segment) for segment in user_segments]
 
         if top_row is not None:
+            top_attribution = float(top_row["attribution"])
+            main_evidence_label = (
+                "Strongest supporting segment"
+                if top_attribution >= 0
+                else "Strongest opposing segment"
+            )
             main_evidence_chip_html = (
                 f"<span class='evidence-chip'>{escape(str(top_row['segment']))}: "
                 f"“{escape(truncate_label(str(top_row['text']), max_length=48))}”</span>"
             )
         else:
+            main_evidence_label = "Segment evidence"
             main_evidence_chip_html = "<span class='evidence-chip'>No segment evidence</span>"
 
         if top_pairs:
@@ -3338,24 +3841,37 @@ def main() -> None:
         elif abs(pair_value) < 0.03:
             xai_summary_interpretation = "No dominant pairwise interaction was detected."
         elif pair_value > 0:
-            xai_summary_interpretation = "These segments reinforce the selected tool decision."
+            if explained_increase >= 0:
+                xai_summary_interpretation = (
+                    "These segments add complementary evidence for the selected tool."
+                )
+            else:
+                xai_summary_interpretation = (
+                    "These segments interact positively, but the full request lowers "
+                    "selected-tool support overall."
+                )
         else:
-            xai_summary_interpretation = "These segments carry partly overlapping evidence."
+            xai_summary_interpretation = "These segments carry redundant or counteracting evidence."
 
         # ---- 0. Decision explained: compact "why <tool>?" summary card ----
         xai_summary_icon = TOOL_ICONS.get(target_tool, "?")
+        summary_title = (
+            f"Why did the model call {target_tool}?"
+            if target_tool in EXECUTABLE_TOOL_NAMES
+            else "Why did the model answer directly?"
+        )
         st.markdown(
             f"""
             <div class="xai-summary-card">
                 <div class="xai-summary-left">
                     <span class="xai-summary-icon">{xai_summary_icon}</span>
-                    <span class="xai-summary-title">Why
-                        <span class="target-highlight">{escape(str(metric_target_value))}</span>?
+                    <span class="xai-summary-title">
+                        <span class="target-highlight">{escape(summary_title)}</span>
                     </span>
                 </div>
                 <div class="xai-summary-main">
                     <div class="evidence-row">
-                        <span class="evidence-row-label">Main evidence</span>
+                        <span class="evidence-row-label">{escape(main_evidence_label)}</span>
                         {main_evidence_chip_html}
                     </div>
                     <div class="evidence-row">
@@ -3376,7 +3892,7 @@ def main() -> None:
                         <span class="xai-metric-value">{full_display}</span>
                     </div>
                     <div class="xai-metric delta">
-                        <span class="xai-metric-label" title="{delta_label}">&Delta; Increase</span>
+                        <span class="xai-metric-label" title="{delta_label}">&Delta; Support</span>
                         <span class="xai-metric-value">{explained_increase:+.3f}</span>
                     </div>
                 </div>
@@ -3389,6 +3905,13 @@ def main() -> None:
             """,
             unsafe_allow_html=True,
         )
+        if primary_label == NATIVE_HF_SCORER_LABEL:
+            st.caption(
+                "Log-probability values are at most zero; values closer to zero indicate "
+                "stronger native continuation support."
+            )
+        elif primary_label == NO_TOOL_SURROGATE_SCORER_LABEL:
+            st.warning(NO_TOOL_SURROGATE_HELP)
 
         # ---- Setup chips: compact, user-facing run metadata only ----
         if using_exact_computation:
@@ -3406,6 +3929,10 @@ def main() -> None:
                 <span class="setup-chip"><strong>Indices:</strong> SV + k-SII</span>
                 <span class="setup-chip">
                     <strong>{coalition_chip_label}:</strong> {coalition_chip_value}
+                </span>
+                <span class="setup-chip">
+                    <strong>VF:</strong>
+                    {escape(NATIVE_HF_SCORER_SHORT_LABEL if scorer_label == NATIVE_HF_SCORER_LABEL else str(scorer_label))}
                 </span>
             </div>
             """,
@@ -3630,7 +4157,7 @@ def main() -> None:
                 )
                 st.caption(
                     f"SV efficiency check: sum(SV)={sv_sum:.3f}, "
-                    f"explained increase={explained_increase:.3f}, "
+                    f"support change={explained_increase:.3f}, "
                     f"residual={sv_residual:.6g} ({sv_efficiency_status})"
                 )
                 diag = interaction_order_diagnostics(
@@ -3684,6 +4211,8 @@ def main() -> None:
                     st.write("Players: user-request segments")
                     st.write("Fixed context: system prompt + tool definitions")
                     st.write("Value function: selected-tool support under the chosen scorer")
+                    st.write(f"Value function type: `{value_function_type}`")
+                    st.write(f"Value function fidelity: `{value_function_fidelity}`")
                     if not using_exact_computation:
                         st.write(f"Budget: `{budget}`")
                     st.write("Full coalition prompt:")
@@ -3692,6 +4221,44 @@ def main() -> None:
                     st.code(empty_prompt, language="text")
 
             with st.expander("Raw backend diagnostics", expanded=False):
+                if native_hf_consistency is not None:
+                    st.markdown("**HF native inference/XAI consistency**")
+                    inference_identity = native_hf_consistency["inference"]
+                    scorer_identity = native_hf_consistency["scorer"]
+                    st.write(
+                        "Inference/XAI model match: "
+                        f"`{'yes' if native_hf_consistency['match'] else 'no'}`"
+                    )
+                    st.write(f"Inference model ID: `{inference_identity['model_id']}`")
+                    st.write(f"Scorer model ID: `{scorer_identity['model_id']}`")
+                    st.write(f"Inference tokenizer ID: `{inference_identity['tokenizer_id']}`")
+                    st.write(f"Scorer tokenizer ID: `{scorer_identity['tokenizer_id']}`")
+                    st.write(f"Model family: `{native_hf_consistency['model_family']}`")
+                    st.write(
+                        f"Requested quantization: `{inference_identity['requested_quantization']}`"
+                    )
+                    st.write(f"Actual quantization: `{inference_identity['actual_quantization']}`")
+                    st.write(f"Device: `{inference_identity['device']}`")
+                    st.write(f"Dtype / compute dtype: `{inference_identity['dtype']}`")
+                    st.write(
+                        "Native tool template source: `selected tokenizer.apply_chat_template`"
+                    )
+                    for (
+                        diagnostic_name,
+                        diagnostic_value,
+                    ) in NATIVE_HF_CONTINUATION_DIAGNOSTICS.items():
+                        st.write(f"{diagnostic_name}: `{diagnostic_value}`")
+                    st.write(f"Scorer mode: `{primary_label}`")
+                    if isinstance(hf_selected_model_config, SelectedHFModelConfig):
+                        st.write(
+                            "Cache key: "
+                            f"`{hf_selected_model_config.cache_key(scorer_mode=str(primary_label))}`"
+                        )
+                    st.write(f"Target tool: `{target_tool}`")
+                    if llm_debug_outputs:
+                        token_count = llm_debug_outputs[0].get("continuation_token_count")
+                        st.write(f"Continuation token count: `{token_count}`")
+
                 if llm_debug_outputs:
                     st.markdown("**Model output diagnostics**")
                     displayed_debug_outputs = llm_debug_outputs[:10]
@@ -3709,7 +4276,11 @@ def main() -> None:
                         "used_fallback",
                         "fallback_score",
                         "target_tool",
+                        "target_source",
                         "target_label",
+                        "continuation_type",
+                        "continuation_scope",
+                        "arguments_included",
                         "candidate_tools",
                         "candidate_labels",
                         "candidate_continuations",
@@ -3727,6 +4298,13 @@ def main() -> None:
                         "normalized_score",
                         "execution_status",
                         "execution_error",
+                        "model_id",
+                        "tokenizer_id",
+                        "requested_quantization",
+                        "actual_quantization",
+                        "device",
+                        "dtype",
+                        "continuation_token_count",
                     ]
                     st.dataframe(
                         debug_frame[[column for column in debug_columns if column in debug_frame]],
@@ -3734,20 +4312,25 @@ def main() -> None:
                         hide_index=True,
                     )
 
-                if primary_label == LOGPROB_SCORER_LABEL and logprob_full_diagnostics is not None:
-                    st.markdown("**Calibrated multiclass tool log-odds (full user request)**")
+                if (
+                    primary_label in {LOGPROB_SCORER_LABEL, NO_TOOL_SURROGATE_SCORER_LABEL}
+                    and logprob_full_diagnostics is not None
+                ):
+                    st.markdown("**Legacy A/B/C/D probe diagnostics (full user request)**")
                     argmax_tool = logprob_full_diagnostics.get("argmax_tool")
                     is_router_argmax = argmax_tool == target_tool
-                    calibrated_probability = logprob_full_diagnostics[
-                        "calibrated_probabilities"
-                    ].get(target_tool)
-                    st.caption(LOGPROB_SCORER_HELP)
+                    diagnostic_softmax = logprob_full_diagnostics["calibrated_probabilities"].get(
+                        target_tool
+                    )
+                    st.caption(
+                        NO_TOOL_SURROGATE_HELP
+                        if primary_label == NO_TOOL_SURROGATE_SCORER_LABEL
+                        else LOGPROB_SCORER_HELP
+                    )
                     logprob_metric_left, logprob_metric_mid, logprob_metric_right = st.columns(3)
                     logprob_metric_left.metric(
-                        "Calibrated probability",
-                        f"{calibrated_probability:.3f}"
-                        if calibrated_probability is not None
-                        else "n/a",
+                        "Diagnostic softmax score",
+                        f"{diagnostic_softmax:.3f}" if diagnostic_softmax is not None else "n/a",
                     )
                     logprob_metric_mid.metric(
                         "Target-vs-all log-odds",
