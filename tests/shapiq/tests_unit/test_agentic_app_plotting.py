@@ -7,8 +7,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 import shapiq
+from shapiq.plot.sentence import interaction_matrix_from_explanation
 
 DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_explanation"
 sys.path.insert(0, str(DEMO_DIR))
@@ -395,3 +397,142 @@ def test_top_pairwise_interactions_respects_n_limit() -> None:
 
 def test_attribution_tab_mentions_interactions_tab() -> None:
     assert any(isinstance(c, str) and "Interactions tab" in c for c in app.main.__code__.co_consts)
+
+
+def _three_player_ksii_explanation() -> shapiq.InteractionValues:
+    """A small k-SII explanation with distinct singleton and pairwise values."""
+    return shapiq.InteractionValues(
+        n_players=3,
+        values=np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0, (1,): 1, (2,): 2, (0, 1): 3, (0, 2): 4, (1, 2): 5},
+    )
+
+
+def test_pairwise_matrix_from_explanation_includes_main_effects_on_diagonal() -> None:
+    """The combined matrix used for display must show order-1 main effects on the diagonal."""
+    explanation = _three_player_ksii_explanation()
+
+    matrix = app.pairwise_matrix_from_explanation(explanation, 3)
+
+    assert list(np.diag(matrix.to_numpy())) == [1.0, 2.0, 3.0]
+
+
+def test_pairwise_matrix_from_explanation_pairwise_values_symmetric() -> None:
+    explanation = _three_player_ksii_explanation()
+
+    matrix = app.pairwise_matrix_from_explanation(explanation, 3).to_numpy()
+
+    assert matrix[0, 1] == matrix[1, 0] == 4.0
+    assert matrix[0, 2] == matrix[2, 0] == 5.0
+    assert matrix[1, 2] == matrix[2, 1] == 6.0
+
+
+def test_pairwise_matrix_from_explanation_missing_interactions_stay_zero() -> None:
+    """Interactions absent from the lookup (never computed/zero) must read as 0.0, not crash."""
+    explanation = shapiq.InteractionValues(
+        n_players=3,
+        values=np.array([1.0]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0},
+    )
+
+    matrix = app.pairwise_matrix_from_explanation(explanation, 3).to_numpy()
+
+    assert matrix[0, 0] == 1.0
+    assert matrix[1, 1] == 0.0
+    assert matrix[2, 2] == 0.0
+    assert matrix[0, 1] == matrix[1, 0] == 0.0
+    assert matrix[0, 2] == matrix[2, 0] == 0.0
+    assert matrix[1, 2] == matrix[2, 1] == 0.0
+
+
+def test_pairwise_matrix_from_explanation_player_count_mismatch_raises() -> None:
+    explanation = _three_player_ksii_explanation()
+
+    with pytest.raises(ValueError, match="n_players must match"):
+        app.pairwise_matrix_from_explanation(explanation, 4)
+
+
+def test_pairwise_only_matrix_from_explanation_has_zero_diagonal() -> None:
+    """The diagonal-free variant (internal ranking use) never shows main effects."""
+    explanation = _three_player_ksii_explanation()
+
+    matrix = app.pairwise_only_matrix_from_explanation(explanation, 3).to_numpy()
+
+    assert list(np.diag(matrix)) == [0.0, 0.0, 0.0]
+    # off-diagonal values are unaffected by dropping the main effects
+    assert matrix[0, 1] == matrix[1, 0] == 4.0
+
+
+def test_fallback_matrix_matches_heatmap_matrix() -> None:
+    """The fallback/full matrix table must show identical values to the visual heatmap."""
+    explanation = _three_player_ksii_explanation()
+
+    fallback_matrix = app.pairwise_matrix_from_explanation(explanation, 3).to_numpy()
+    heatmap_matrix = interaction_matrix_from_explanation(explanation, 3)
+
+    assert np.allclose(fallback_matrix, heatmap_matrix)
+
+
+def test_strongest_pair_ignores_diagonal_main_effects() -> None:
+    """A large main effect on the diagonal must never be reported as the strongest pair."""
+    explanation = shapiq.InteractionValues(
+        n_players=3,
+        values=np.array([100.0, 100.0, 100.0, 0.1, 0.2, -0.3]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0, (1,): 1, (2,): 2, (0, 1): 3, (0, 2): 4, (1, 2): 5},
+    )
+    matrix = app.pairwise_matrix_from_explanation(explanation, 3)
+    labels = ["U1", "U2", "U3"]
+
+    pair_label, pair_value = app.strongest_pair(matrix, labels)
+
+    assert pair_label == "U2 + U3"
+    assert pair_value == -0.3
+
+
+def test_top_pairwise_interactions_ignores_diagonal_main_effects() -> None:
+    """Ranking must never surface a diagonal main effect as a pairwise interaction."""
+    explanation = shapiq.InteractionValues(
+        n_players=3,
+        values=np.array([100.0, 100.0, 100.0, 0.1, 0.2, -0.3]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0, (1,): 1, (2,): 2, (0, 1): 3, (0, 2): 4, (1, 2): 5},
+    )
+    matrix = app.pairwise_matrix_from_explanation(explanation, 3)
+    segments = [
+        app.ToolUseSegment(source="user", label=f"U{i + 1}", text=f"text {i}") for i in range(3)
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments)
+
+    assert len(result) == 3
+    assert all(abs(row["value"]) <= 0.3 for row in result)
+
+
+def test_ksii_heatmap_card_uses_corrected_terminology() -> None:
+    """The heatmap title/caption must use the main-and-pairwise wording, not the old
+    pairwise-only phrasing that mischaracterized the diagonal as redundant.
+    """
+    consts = app.main.__code__.co_consts
+    assert any(
+        isinstance(c, str) and "Main and pairwise effects" in c and "k-SII" in c for c in consts
+    )
+    assert any(isinstance(c, str) and "Diagonal:" in c and "Off-diagonal:" in c for c in consts)

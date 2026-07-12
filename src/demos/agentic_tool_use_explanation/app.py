@@ -154,6 +154,22 @@ LOGPROB_SCORER_HELP = (
     "calibrated log-odds for the target label. This is not the primary native "
     "tool-calling pipeline."
 )
+# ---- Unified "Method note" shown at the foot of the summary card ---------------
+# Every value-function fidelity gets the *same* note format
+# ("Method note — <fidelity name>: <description>"), so a reader comparing runs
+# across scorer backends sees one consistent voice instead of three differently
+# worded/placed asides (a plain caption for one branch, a warning box for
+# another, nothing at all for a third).
+NATIVE_TOOL_IDENTITY_METHOD_NOTE = ("Native tool-identity VF", NATIVE_HF_SCORER_HELP)
+NATIVE_DIRECT_ANSWER_METHOD_NOTE = ("Native direct-answer VF", NATIVE_DIRECT_ANSWER_SCORER_HELP)
+LEGACY_ABCD_METHOD_NOTE = (
+    "Legacy A/B/C/D ablation (developer-only)",
+    "Rewrites routing into artificial A/B/C/D labels and scores calibrated "
+    "log-odds for the target label (or the artificial `NoTool` candidate when "
+    "explaining a no-tool/direct-answer decision). This is not the primary native "
+    "tool-calling pipeline; none of the A/B/C/D candidates are executable or ever "
+    "emitted by the native agent.",
+)
 NATIVE_HF_CONTINUATION_DIAGNOSTICS = {
     "Target source": "full-context native inference",
     "Continuation type": "canonical native template",
@@ -1102,6 +1118,65 @@ section[data-testid="stSidebar"] {
     color: #197a52;
     font-size: 1.3rem;
 }
+.xai-metric.delta.negative {
+    background: #fbeceb;
+    border-color: #b3261e;
+}
+.xai-metric.delta.negative .xai-metric-label {
+    color: #8a271f;
+}
+.xai-metric.delta.negative .xai-metric-value {
+    color: #b3261e;
+}
+/* ---- Δ Support magnitude tier badge: low/moderate/high, direction-aware --- */
+.delta-tier-badge {
+    border-radius: 999px;
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-top: 0.35rem;
+    padding: 0.14rem 0.55rem;
+    text-transform: uppercase;
+}
+.delta-tier-badge.low {
+    background: #f0ece0;
+    color: #6d6658;
+}
+.delta-tier-badge.moderate {
+    background: #fdf1de;
+    color: #9a6a1a;
+}
+.delta-tier-badge.high.support {
+    background: #eaf4f1;
+    color: #197a52;
+}
+.delta-tier-badge.high.opposition {
+    background: #fbeceb;
+    color: #b3261e;
+}
+/* ---- Sign arrows: never rely on color alone for direction ------------ */
+.dir-arrow {
+    font-weight: 800;
+}
+.dir-arrow.up {
+    color: #197a52;
+}
+.dir-arrow.down {
+    color: #b3261e;
+}
+/* ---- Light-weight confidence-% caption next to a log-prob value ------ */
+.log-score-confidence {
+    color: #8a8372;
+    font-size: 0.72rem;
+    font-weight: 500;
+    margin-top: 0.15rem;
+    text-transform: none;
+}
+.log-score-rounded {
+    cursor: help;
+    text-decoration: underline dotted #b8b0a0;
+}
 /* ---- Secondary compact score recap, spans the full card width -------- */
 .xai-score-flow {
     color: #6d6658;
@@ -1115,6 +1190,36 @@ section[data-testid="stSidebar"] {
     color: #1f554c;
     font-weight: 800;
     margin-left: 0.5rem;
+}
+.xai-score-flow .delta-highlight.negative {
+    color: #b3261e;
+}
+.xai-score-flow .native-metric-note {
+    color: #8a8372;
+    font-size: 0.78rem;
+    margin-left: 0.4rem;
+    white-space: nowrap;
+}
+/* ---- Native H(&empty;)/H(N) recap nested inside the Δ Support card, below
+   its tier badge, instead of as a standalone element elsewhere in the card -- */
+.xai-metric.delta .delta-native-note {
+    display: block;
+    grid-column: auto;
+    margin-top: 0.5rem;
+}
+/* ---- Unified Method note, shared by every fidelity branch's footer note -- */
+.method-note {
+    background: #fbfaf6;
+    border: 1px solid #ede7d8;
+    border-radius: 8px;
+    color: #6d6658;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin: 0.3rem 0 1rem 0;
+    padding: 0.55rem 0.75rem;
+}
+.method-note strong {
+    color: #403d37;
 }
 /* ---- Setup chips: compact user-facing run metadata ------------------ */
 .setup-chip-row {
@@ -1434,6 +1539,104 @@ def format_attribution(value: float, digits: int = 3) -> str:
     return f"{value:.{digits}f}"
 
 
+# A native h(empty)/h(N) log-probability this close to zero rounds to "0.0000" at
+# 4 decimal places, which reads as "exactly zero" even though it never is (a
+# teacher-forced log-probability is only exactly 0 in the limit). Below this
+# magnitude we show "≈0.0000" plus a tooltip instead of a misleading exact zero.
+NEAR_ZERO_LOG_SCORE_THRESHOLD = 0.0005
+NEAR_ZERO_LOG_SCORE_TOOLTIP = "Nonzero value, rounded to 0.0000 for display."
+
+# Rough, non-statistical Δ Support magnitude bands for the native log-probability
+# value function. Calibrated against real measured deltas from this demo's own
+# sample scenarios (Qwen2.5-1.5B-Instruct, native tool-identity/direct-answer
+# scorer): F1/web-search +0.67, calculator +0.93, weather +1.13, photosynthesis
+# direct-answer +1.14. Only meant to give a reader a quick sense of "is this Δ
+# big or small", not a formal effect-size measure.
+DELTA_SUPPORT_LOW_MAX = 0.4
+DELTA_SUPPORT_MODERATE_MAX = 0.9
+
+
+def format_log_score(value: float) -> tuple[str, bool]:
+    """Format a native log-probability score at 4 decimals.
+
+    Returns ``(display_text, is_rounded_near_zero)``. When ``|value|`` is below
+    ``NEAR_ZERO_LOG_SCORE_THRESHOLD`` the display text is "≈0.0000" instead of a
+    bare "0.0000"/"-0.0000", so a genuinely nonzero value is never misread as
+    exactly zero.
+    """
+    if not math.isfinite(value):
+        return "n/a", False
+    if abs(value) < NEAR_ZERO_LOG_SCORE_THRESHOLD:
+        return "≈0.0000", True
+    return f"{value:.4f}", False
+
+
+def log_prob_to_confidence_caption(value: float) -> str:
+    """Convert a natural-log continuation log-probability into a plain-language %.
+
+    Display-only: ``exp(log_prob)`` recovers the underlying probability, shown as
+    a rough confidence percentage for non-technical readers. Clamped to
+    ``[0, 1]`` before converting to guard against tiny floating-point overshoot
+    past 0.0 for values extremely close to zero.
+    """
+    if not math.isfinite(value):
+        return ""
+    probability = min(max(math.exp(min(value, 0.0)), 0.0), 1.0)
+    return f"≈{probability * 100:.1f}% confidence"
+
+
+def build_log_score_display(value: float) -> tuple[str, str]:
+    """Return ``(value_html, confidence_caption)`` for one native log-prob value.
+
+    ``value_html`` is the 4-decimal value from :func:`format_log_score`, wrapped
+    with a dotted-underline + tooltip when it rounds to "≈0.0000" so a genuinely
+    nonzero value is never misread as exactly zero. ``confidence_caption`` is the
+    plain-language "≈NN.N% confidence" string for embedding as light secondary
+    text next to it (in a big metric card or a compact summary line alike).
+    """
+    display, rounded_near_zero = format_log_score(value)
+    if rounded_near_zero:
+        value_html = (
+            f"<span class='log-score-rounded' title='{NEAR_ZERO_LOG_SCORE_TOOLTIP}'>"
+            f"{display}</span>"
+        )
+    else:
+        value_html = display
+    return value_html, log_prob_to_confidence_caption(value)
+
+
+def delta_support_tier(delta: float) -> tuple[str, str]:
+    """Classify a Δ Support value into a coarse low/moderate/high magnitude tier.
+
+    Returns ``(label, css_class)``, e.g. ``("High support", "high")`` or
+    ``("Moderate opposition", "moderate")``. Direction (support vs. opposition)
+    comes from the sign of ``delta``; the tier comes from ``|delta|`` alone.
+    """
+    magnitude = abs(delta)
+    if magnitude < DELTA_SUPPORT_LOW_MAX:
+        tier_css, tier_word = "low", "Low"
+    elif magnitude < DELTA_SUPPORT_MODERATE_MAX:
+        tier_css, tier_word = "moderate", "Moderate"
+    else:
+        tier_css, tier_word = "high", "High"
+    direction_word = "support" if delta >= 0 else "opposition"
+    return f"{tier_word} {direction_word}", tier_css
+
+
+def direction_arrow_html(value: float, *, css_class: str = "dir-arrow") -> str:
+    """Render a colored ↑/↓ arrow marking the sign of ``value``, or "" if zero.
+
+    Positive/negative colors already exist as the only signal in several charts;
+    this adds a shape-based cue (arrow direction) so sign is never color-alone,
+    e.g. for black-and-white printing or color-vision-deficient readers.
+    """
+    if value > 0:
+        return f"<span class='{css_class} up'>↑</span>"
+    if value < 0:
+        return f"<span class='{css_class} down'>↓</span>"
+    return ""
+
+
 def attribution_ranking_frame(
     attribution_frame: pd.DataFrame,
     *,
@@ -1740,10 +1943,47 @@ def pairwise_matrix_from_explanation(
     explanation: shapiq.InteractionValues,
     n_players: int,
 ) -> pd.DataFrame:
-    """Extract second-order values as a dense matrix."""
-    if explanation.max_order < 2:
-        return pd.DataFrame([[0.0] * n_players for _ in range(n_players)])
-    return pd.DataFrame(explanation.get_n_order_values(2))
+    """Build the combined k-SII matrix: order-1 main effects on the diagonal,
+    order-2 pairwise interactions off the diagonal.
+
+    ``explanation`` must be the *unfiltered* k-SII explanation (containing
+    both order-1 and order-2 interactions) -- passing an order-2-only
+    explanation (e.g. from ``explanation.get_n_order(order=2)``) would
+    silently zero out the diagonal, since its singleton interactions have
+    already been stripped out.
+
+    Delegates to the shared
+    ``shapiq.plot.sentence.interaction_matrix_from_explanation`` (loaded via
+    :func:`load_sentence_plot_module`) so this fallback/full-matrix path and
+    the visual heatmap (:func:`sentence_interaction_heatmap`) always agree on
+    identical values. Use :func:`pairwise_only_matrix_from_explanation` for a
+    diagonal-free variant meant for internal ranking only -- do not use a
+    zero-diagonal matrix as a fallback for anything displayed to the user.
+    """
+    module = load_sentence_plot_module()
+    matrix = module.interaction_matrix_from_explanation(
+        explanation, n_players, include_main_effects=True
+    )
+    return pd.DataFrame(matrix)
+
+
+def pairwise_only_matrix_from_explanation(
+    explanation: shapiq.InteractionValues,
+    n_players: int,
+) -> pd.DataFrame:
+    """Build a pure order-2 pairwise matrix with a zero diagonal.
+
+    For internal use only (e.g. the lexical-scorer comparison's
+    ``strongest_pair`` ranking), where no main effects are needed or
+    displayed. Do not use this as a fallback for the displayed combined
+    heatmap -- use :func:`pairwise_matrix_from_explanation` for anything shown
+    to the user.
+    """
+    module = load_sentence_plot_module()
+    matrix = module.interaction_matrix_from_explanation(
+        explanation, n_players, include_main_effects=False
+    )
+    return pd.DataFrame(matrix)
 
 
 def interaction_order_diagnostics(
@@ -1778,7 +2018,13 @@ def interaction_order_diagnostics(
 
 
 def strongest_pair(matrix: pd.DataFrame, labels: list[str]) -> tuple[str, float]:
-    """Return the strongest non-diagonal second-order interaction."""
+    """Return the strongest off-diagonal (``i < j``) pairwise interaction.
+
+    ``matrix`` may be the combined main-effect + pairwise matrix from
+    :func:`pairwise_matrix_from_explanation` (diagonal populated) or the
+    diagonal-free variant -- either way, only cells with ``i < j`` are
+    inspected, so a populated diagonal never leaks into the ranking.
+    """
     if matrix.shape[0] < 2:
         return "No pair", 0.0
     best_pair = (0, 1)
@@ -1905,14 +2151,19 @@ def polish_bar(
             continue
         x_pos = width + (0.015 if width >= 0 else -0.015)
         ha = "left" if width >= 0 else "right"
+        # Direction is marked with both an arrow glyph and a color (never color
+        # alone), so sign reads correctly in black-and-white print or for
+        # color-vision-deficient readers -- the bar fill itself keeps the
+        # shapiq library's own red/blue convention untouched.
+        arrow, label_color = ("↑", "#197a52") if width >= 0 else ("↓", "#b3261e")
         ax.text(
             x_pos,
             patch.get_y() + patch.get_height() / 2,
-            f"{width:.2f}",
+            f"{arrow} {width:.2f}",
             va="center",
             ha=ha,
             fontsize=7,
-            color="#403d37",
+            color=label_color,
         )
 
     fig.tight_layout()
@@ -2294,6 +2545,23 @@ def build_probability_bar_html(tool_name: str, probability: float, *, is_selecte
     )
 
 
+def flatten_markdown_html(html: str) -> str:
+    """Collapse a human-indented multi-line HTML template into markdown-safe text.
+
+    Streamlit's markdown renderer treats a blank line followed by a
+    4+-space-indented line as the start of an indented code block, rendering
+    that HTML literally (as visible source text) instead of parsing it. This
+    happens whenever an f-string placeholder that sits alone on its own
+    template line evaluates to an empty string (e.g. an optional card section
+    that isn't shown this run) -- the line becomes whitespace-only, which
+    counts as a blank line, and the next (still-indented) line trips the
+    code-block rule. Stripping each line's leading/trailing whitespace and
+    dropping now-empty lines removes any such gap; this is safe because
+    whitespace between HTML block elements is not meaningful.
+    """
+    return "\n".join(line.strip() for line in html.strip().splitlines() if line.strip())
+
+
 def build_kv_table_html(items: dict[str, object]) -> str:
     """Render a compact two-column key/value table as HTML (e.g. tool arguments).
 
@@ -2377,7 +2645,7 @@ def render_tool_decision_card(
         f"User request &rarr; {escape(selected_tool)} &rarr; {escape(status_label)}"
         "</div>"
     )
-    return f"""
+    return flatten_markdown_html(f"""
         <div class="result-card">
             <div class="result-card-header">
                 {icon} Agent selected <code>{escape(selected_tool)}</code>
@@ -2388,7 +2656,7 @@ def render_tool_decision_card(
             {output_html}
             {agent_model_line_html(model=model, backend=backend)}
         </div>
-    """
+    """)
 
 
 def render_direct_answer_card(
@@ -2407,7 +2675,7 @@ def render_direct_answer_card(
         or getattr(inference_result, "raw_response", "")
         or ""
     )
-    return f"""
+    return flatten_markdown_html(f"""
         <div class="result-card">
             <div class="result-card-header">💬 Agent answered directly</div>
             <div class="result-card-subtitle">No external tool was called.</div>
@@ -2415,19 +2683,19 @@ def render_direct_answer_card(
             <div class="agent-response-block">{escape(str(answer))}</div>
             {agent_model_line_html(model=model, backend=backend)}
         </div>
-    """
+    """)
 
 
 def render_parse_failure_card(parse_error: object) -> str:
     """Render native parser failures as explicit untrusted results."""
-    return f"""
+    return flatten_markdown_html(f"""
         <div class="error-card">
             <h3>⚠️ Native tool-call parsing failed</h3>
             <p>The model produced a tool-call structure, but it could not be parsed safely.
             The result was not treated as a direct answer.</p>
             <p>{escape(str(parse_error))}</p>
         </div>
-    """
+    """)
 
 
 def render_agent_result_card(
@@ -2477,7 +2745,8 @@ def build_sv_mini_table_html(rows: pd.DataFrame) -> str:
         f"<span class='cell-segment'>{escape(str(row['segment']))}</span>"
         f"<span class='cell-text' title='{escape(str(row['text']))}'>"
         f"{escape(truncate_label(str(row['text']), max_length=42))}</span>"
-        f"<span class='cell-value'>{format_attribution(float(row['attribution']))}</span>"
+        f"<span class='cell-value'>{direction_arrow_html(float(row['attribution']))} "
+        f"{format_attribution(float(row['attribution']))}</span>"
         "</div>"
         for _, row in rows.iterrows()
     )
@@ -2523,6 +2792,106 @@ def build_player_legend_html(segments: list[ToolUseSegment], *, max_chars: int =
         for segment in segments
     )
     return f"<div class='player-legend'>{rows}</div>"
+
+
+def build_delta_metric_html(
+    delta_label: str,
+    explained_increase: float,
+    *,
+    show_tier: bool = False,
+    note_html: str = "",
+) -> str:
+    """Render the Δ Support metric card: the summary card's largest, most prominent
+    element regardless of value-function branch, with a direction arrow (not just
+    color) so sign is never color-alone.
+
+    ``show_tier`` adds a low/moderate/high magnitude tier badge underneath. This
+    is only meaningful where the tier thresholds were calibrated (the native
+    log-probability value functions) -- other value functions live on a different
+    numeric scale, so callers for those branches should leave it ``False``.
+
+    ``note_html`` is an optional pre-rendered supplementary line placed below the
+    tier badge (e.g. the native H(&empty;)/H(N) recap from
+    :func:`build_native_metric_summary_line_html`), so that recap lives inside
+    this card instead of as a separate element elsewhere in the summary card.
+
+    ``delta_label`` is a fixed, code-authored string that may itself contain HTML
+    entities (e.g. ``"...h(&empty;)"``), matching the existing convention for this
+    card's labels -- it is not escaped, the same as the pre-existing label markup.
+    """
+    sign_class = "negative" if explained_increase < 0 else ""
+    arrow_html = direction_arrow_html(explained_increase)
+    tier_html = ""
+    if show_tier:
+        tier_label, tier_css = delta_support_tier(explained_increase)
+        direction_css = "support" if explained_increase >= 0 else "opposition"
+        tier_html = (
+            f"<span class='delta-tier-badge {tier_css} {direction_css}'>{escape(tier_label)}</span>"
+        )
+    return (
+        f"<div class='xai-metric delta {sign_class}'>"
+        f"<span class='xai-metric-label' title='{delta_label}'>&Delta; Support</span>"
+        f"<span class='xai-metric-value'>{arrow_html} {explained_increase:+.3f}</span>"
+        f"{tier_html}"
+        f"{note_html}"
+        "</div>"
+    )
+
+
+def build_native_big_metric_card_html(*, short_label: str, label: str, value: float) -> str:
+    """Render one full-size H(&empty;)/H(N) metric card (Developer-mode-only detail
+    view for the native tool-identity/direct-answer value functions), including the
+    4-decimal near-zero-safe value and its plain-language confidence-% caption.
+
+    ``short_label``/``label`` are fixed, code-authored strings that may contain HTML
+    entities (e.g. ``"Native h(&empty;)"``) -- not escaped, matching the existing
+    convention for this card's labels.
+    """
+    value_html, confidence_caption = build_log_score_display(value)
+    confidence_html = (
+        f"<span class='log-score-confidence'>{escape(confidence_caption)}</span>"
+        if confidence_caption
+        else ""
+    )
+    return (
+        "<div class='xai-metric'>"
+        f"<span class='xai-metric-label' title='{label}'>{short_label}</span>"
+        f"<span class='xai-metric-value'>{value_html}</span>"
+        f"{confidence_html}"
+        "</div>"
+    )
+
+
+def build_native_metric_summary_line_html(
+    *,
+    empty_short_label: str,
+    empty_score: float,
+    full_short_label: str,
+    full_score: float,
+) -> str:
+    """Render the compact H(&empty;)/H(N) recap for the native value functions, as
+    a supplementary note nested inside the Δ Support card (below its tier badge)
+    via :func:`build_delta_metric_html`'s ``note_html`` -- not a standalone
+    element elsewhere in the summary card.
+
+    Does not repeat the Δ value itself: the card's own ``xai-metric-value``
+    directly above already shows it, so this note only adds the H(&empty;)/H(N)
+    detail behind that Δ.
+
+    ``empty_short_label``/``full_short_label`` are fixed, code-authored strings
+    that may contain HTML entities -- not escaped, matching the existing
+    convention for this card's labels.
+    """
+    empty_value_html, empty_confidence = build_log_score_display(empty_score)
+    full_value_html, full_confidence = build_log_score_display(full_score)
+    return (
+        "<div class='xai-score-flow delta-native-note'>"
+        f"{empty_short_label} <strong>{empty_value_html}</strong>"
+        f"<span class='native-metric-note'>{escape(empty_confidence)}</span>"
+        f" &rarr; {full_short_label} <strong>{full_value_html}</strong>"
+        f"<span class='native-metric-note'>{escape(full_confidence)}</span>"
+        "</div>"
+    )
 
 
 def build_interaction_interpretation(
@@ -3696,7 +4065,10 @@ def main() -> None:
                 first_order_sv = sv_explanation.get_n_order(order=1)
                 attribution_frame = values_to_frame(first_order_sv, user_segments)
                 pairwise_ksii = ksii_explanation.get_n_order(order=2)
-                pairwise_matrix = pairwise_matrix_from_explanation(pairwise_ksii, game.n_players)
+                # Uses the full (unfiltered) ksii_explanation, not pairwise_ksii above --
+                # the combined matrix needs its order-1 singleton entries for the
+                # diagonal, which get_n_order(order=2) strips out.
+                pairwise_matrix = pairwise_matrix_from_explanation(ksii_explanation, game.n_players)
                 pair_label, pair_value = strongest_pair(pairwise_matrix, labels)
                 notes = build_interpretation_notes(
                     attribution_frame,
@@ -3749,7 +4121,9 @@ def main() -> None:
                         lexical_first_order_sv = lexical_sv_explanation.get_n_order(order=1)
                         lexical_frame = values_to_frame(lexical_first_order_sv, user_segments)
                         lexical_pairwise_ksii = lexical_ksii_explanation.get_n_order(order=2)
-                        lexical_matrix = pairwise_matrix_from_explanation(
+                        # Only used for strongest_pair's off-diagonal ranking below, never
+                        # displayed -- the diagonal-free variant is enough here.
+                        lexical_matrix = pairwise_only_matrix_from_explanation(
                             lexical_pairwise_ksii,
                             lexical_game.n_players,
                         )
@@ -3885,7 +4259,9 @@ def main() -> None:
             pairwise_ksii = ksii_explanation.get_n_order(order=2)
         pairwise_matrix = result.get("pairwise_matrix")
         if pairwise_matrix is None:
-            pairwise_matrix = pairwise_matrix_from_explanation(pairwise_ksii, len(user_segments))
+            # Full (unfiltered) ksii_explanation, not pairwise_ksii -- see the
+            # matching comment at the primary computation call site above.
+            pairwise_matrix = pairwise_matrix_from_explanation(ksii_explanation, len(user_segments))
         pair_label = result["pair_label"]
         pair_value = result["pair_value"]
         compare_with_lexical = result["compare_with_lexical"]
@@ -3936,6 +4312,10 @@ def main() -> None:
             if is_final_answer_result
             else _extract_raw_log_odds_summary(logprob_full_diagnostics)
         )
+        is_native_branch = primary_label in {
+            NATIVE_HF_SCORER_LABEL,
+            NATIVE_DIRECT_ANSWER_SCORER_LABEL,
+        }
         if raw_log_odds_summary is not None:
             raw_full_score, raw_empty_score = raw_log_odds_summary
             explained_increase = raw_full_score - raw_empty_score
@@ -3943,10 +4323,9 @@ def main() -> None:
             full_label, full_display = "Raw full score h(N)", f"{raw_full_score:.3f}"
             delta_label = "Support change h(N)-h(&empty;)"
             empty_short_label, full_short_label = "Baseline H(&empty;)", "Full H(N)"
-        elif primary_label in {NATIVE_HF_SCORER_LABEL, NATIVE_DIRECT_ANSWER_SCORER_LABEL}:
+        elif is_native_branch:
             explained_increase = float(full_score) - float(empty_score)
-            empty_label, empty_display = "Empty native score h(&empty;)", f"{empty_score:.3f}"
-            full_label, full_display = "Full native score h(N)", f"{full_score:.3f}"
+            empty_label, full_label = "Empty native score h(&empty;)", "Full native score h(N)"
             delta_label = "Native value v(N)=h(N)-h(&empty;)"
             empty_short_label, full_short_label = "Native h(&empty;)", "Native h(N)"
         else:
@@ -4020,8 +4399,79 @@ def main() -> None:
             if target_tool in EXECUTABLE_TOOL_NAMES
             else "What supports this direct-answer continuation?"
         )
+
+        # Δ Support is always the largest, most prominent metric. For the native
+        # log-probability value functions specifically, H(&empty;)/H(N) are demoted
+        # to a small-text recap nested inside the Δ Support card itself, below its
+        # tier badge (Developer mode additionally reveals the full detail cards) --
+        # other value functions keep their existing 3-card layout and separate
+        # full-width recap line unchanged, since the 4-decimal/confidence-%/tier
+        # treatment below is only calibrated for native log-probabilities.
+        if is_native_branch:
+            native_note_html = build_native_metric_summary_line_html(
+                empty_short_label=empty_short_label,
+                empty_score=float(empty_score),
+                full_short_label=full_short_label,
+                full_score=float(full_score),
+            )
+            score_flow_html = ""
+            if developer_mode:
+                metrics_section_html = (
+                    "<div class='xai-summary-metrics'>"
+                    + build_native_big_metric_card_html(
+                        short_label=empty_short_label,
+                        label=empty_label,
+                        value=float(empty_score),
+                    )
+                    + build_native_big_metric_card_html(
+                        short_label=full_short_label, label=full_label, value=float(full_score)
+                    )
+                    + build_delta_metric_html(
+                        delta_label,
+                        explained_increase,
+                        show_tier=True,
+                        note_html=native_note_html,
+                    )
+                    + "</div>"
+                )
+            else:
+                metrics_section_html = (
+                    "<div class='xai-summary-metrics'>"
+                    + build_delta_metric_html(
+                        delta_label,
+                        explained_increase,
+                        show_tier=True,
+                        note_html=native_note_html,
+                    )
+                    + "</div>"
+                )
+        else:
+            metrics_section_html = (
+                "<div class='xai-summary-metrics'>"
+                "<div class='xai-metric'>"
+                f"<span class='xai-metric-label' title='{empty_label}'>{empty_short_label}</span>"
+                f"<span class='xai-metric-value'>{empty_display}</span>"
+                "</div>"
+                "<div class='xai-metric'>"
+                f"<span class='xai-metric-label' title='{full_label}'>{full_short_label}</span>"
+                f"<span class='xai-metric-value'>{full_display}</span>"
+                "</div>"
+                + build_delta_metric_html(delta_label, explained_increase, show_tier=False)
+                + "</div>"
+            )
+            score_flow_sign_class = " negative" if explained_increase < 0 else ""
+            score_flow_html = (
+                "<div class='xai-score-flow'>"
+                f"Baseline <strong>{empty_display}</strong>"
+                f" &rarr; Full <strong>{full_display}</strong>"
+                f"<span class='delta-highlight{score_flow_sign_class}'>"
+                f"{direction_arrow_html(explained_increase)} "
+                f"&Delta; {explained_increase:+.3f}</span>"
+                "</div>"
+            )
+
         st.markdown(
-            f"""
+            flatten_markdown_html(f"""
             <div class="xai-summary-card">
                 <div class="xai-summary-left">
                     <span class="xai-summary-icon">{xai_summary_icon}</span>
@@ -4040,38 +4490,12 @@ def main() -> None:
                     </div>
                     <p class="xai-summary-interpretation">{escape(xai_summary_interpretation)}</p>
                 </div>
-                <div class="xai-summary-metrics">
-                    <div class="xai-metric">
-                        <span class="xai-metric-label" title="{empty_label}">
-                            {empty_short_label}
-                        </span>
-                        <span class="xai-metric-value">{empty_display}</span>
-                    </div>
-                    <div class="xai-metric">
-                        <span class="xai-metric-label" title="{full_label}">{full_short_label}</span>
-                        <span class="xai-metric-value">{full_display}</span>
-                    </div>
-                    <div class="xai-metric delta">
-                        <span class="xai-metric-label" title="{delta_label}">&Delta; Support</span>
-                        <span class="xai-metric-value">{explained_increase:+.3f}</span>
-                    </div>
-                </div>
-                <div class="xai-score-flow">
-                    Baseline <strong>{empty_display}</strong>
-                    &rarr; Full <strong>{full_display}</strong>
-                    <span class="delta-highlight">&Delta; {explained_increase:+.3f}</span>
-                </div>
+                {metrics_section_html}
+                {score_flow_html}
             </div>
-            """,
+            """),
             unsafe_allow_html=True,
         )
-        if primary_label in {NATIVE_HF_SCORER_LABEL, NATIVE_DIRECT_ANSWER_SCORER_LABEL}:
-            st.caption(
-                "Log-probability values are at most zero; values closer to zero indicate "
-                "stronger native continuation support."
-            )
-        elif primary_label == NO_TOOL_SURROGATE_SCORER_LABEL:
-            st.warning(NO_TOOL_SURROGATE_HELP)
 
         # ---- Setup chips: compact, user-facing run metadata only ----
         if using_exact_computation:
@@ -4171,8 +4595,10 @@ def main() -> None:
 
         # ---- 2 & 3. SV | k-SII evidence, two balanced cards side by side ----
         st.caption(
-            "SV explains which segments matter individually. k-SII explains which segment "
-            "pairs matter together."
+            "SV (left) is a standalone attribution: one value per segment. k-SII (right) "
+            "is a separate explanation with its own main effects (diagonal) and pairwise "
+            "interactions (off-diagonal) -- SV and k-SII values are not directly comparable "
+            "or interchangeable."
         )
         token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
             load_text_plotters()
@@ -4227,9 +4653,12 @@ def main() -> None:
             st.markdown(
                 """
                 <div class="evidence-card-header">
-                    <div class="evidence-card-title">Pairwise interactions — k-SII</div>
-                    <div class="evidence-card-caption">Red means reinforcing; blue means
-                    redundant or suppressing.</div>
+                    <div class="evidence-card-title">Main and pairwise effects — k-SII</div>
+                    <div class="evidence-card-caption">Diagonal: individual k-SII main
+                    effects. Off-diagonal: pairwise k-SII interactions. Red indicates
+                    positive effects; blue indicates negative effects. For off-diagonal
+                    cells, positive values indicate reinforcement, while negative values
+                    indicate redundancy or suppression.</div>
                 </div>
                 """,
                 unsafe_allow_html=True,

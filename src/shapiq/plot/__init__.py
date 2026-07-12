@@ -8,7 +8,12 @@ from .bar import bar_plot
 from .beeswarm import beeswarm_plot
 from .force import force_plot
 from .network import network_plot
-from .sentence import sentence_interaction_heatmap, sentence_plot, token_attribution_bar_plot
+from .sentence import (
+    interaction_matrix_from_explanation,
+    sentence_interaction_heatmap,
+    sentence_plot,
+    token_attribution_bar_plot,
+)
 from .si_graph import si_graph_plot
 from .stacked_bar import stacked_bar_plot
 from .upset import upset_plot
@@ -24,6 +29,7 @@ __all__ = [
     "waterfall_plot",
     "sentence_plot",
     "sentence_interaction_heatmap",
+    "interaction_matrix_from_explanation",
     "upset_plot",
     "beeswarm_plot",
     # utils

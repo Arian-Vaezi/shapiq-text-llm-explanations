@@ -7,7 +7,12 @@ import numpy as np
 import pytest
 
 from shapiq.interaction_values import InteractionValues
-from shapiq.plot import sentence_interaction_heatmap, sentence_plot, token_attribution_bar_plot
+from shapiq.plot import (
+    interaction_matrix_from_explanation,
+    sentence_interaction_heatmap,
+    sentence_plot,
+    token_attribution_bar_plot,
+)
 
 
 def _text_values() -> tuple[list[str], InteractionValues]:
@@ -168,5 +173,96 @@ def test_token_attribution_bar_plot_zero_values():
     assert isinstance(fig, plt.Figure)
     assert isinstance(ax, plt.Axes)
     assert ax.get_xlim() == (-1.0, 1.0)
+
+    plt.close(fig)
+
+
+def _ksii_values() -> InteractionValues:
+    """A small 3-player k-SII explanation with distinct singleton and pairwise values."""
+    return InteractionValues(
+        n_players=3,
+        values=np.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0, (1,): 1, (2,): 2, (0, 1): 3, (0, 2): 4, (1, 2): 5},
+    )
+
+
+def test_interaction_matrix_from_explanation_diagonal_holds_main_effects():
+    """The diagonal must hold each player's order-1 main effect, by default."""
+    iv = _ksii_values()
+
+    matrix = interaction_matrix_from_explanation(iv, 3)
+
+    assert list(np.diag(matrix)) == [1.0, 2.0, 3.0]
+
+
+def test_interaction_matrix_from_explanation_pairwise_values_are_symmetric():
+    iv = _ksii_values()
+
+    matrix = interaction_matrix_from_explanation(iv, 3)
+
+    assert matrix[0, 1] == matrix[1, 0] == 4.0
+    assert matrix[0, 2] == matrix[2, 0] == 5.0
+    assert matrix[1, 2] == matrix[2, 1] == 6.0
+
+
+def test_interaction_matrix_from_explanation_missing_interactions_are_zero():
+    """Interactions absent from the lookup must read as 0.0 instead of raising."""
+    iv = InteractionValues(
+        n_players=3,
+        values=np.array([1.0]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0},
+    )
+
+    matrix = interaction_matrix_from_explanation(iv, 3)
+
+    assert matrix[1, 1] == 0.0
+    assert matrix[2, 2] == 0.0
+    assert matrix[0, 1] == matrix[1, 0] == 0.0
+    assert matrix[0, 2] == matrix[2, 0] == 0.0
+    assert matrix[1, 2] == matrix[2, 1] == 0.0
+
+
+def test_interaction_matrix_from_explanation_include_main_effects_false():
+    """With ``include_main_effects=False``, the diagonal stays zero regardless of the
+    explanation's own singleton values.
+    """
+    iv = _ksii_values()
+
+    matrix = interaction_matrix_from_explanation(iv, 3, include_main_effects=False)
+
+    assert list(np.diag(matrix)) == [0.0, 0.0, 0.0]
+    # off-diagonal values are unaffected
+    assert matrix[0, 1] == matrix[1, 0] == 4.0
+
+
+def test_interaction_matrix_from_explanation_player_count_mismatch_raises():
+    iv = _ksii_values()
+
+    with pytest.raises(ValueError, match="n_players must match"):
+        interaction_matrix_from_explanation(iv, 4)
+
+
+def test_sentence_interaction_heatmap_uses_shared_matrix_helper():
+    """The heatmap's drawn image must be pixel-identical to the shared matrix helper's
+    output, so any other consumer building the same matrix agrees with what's plotted.
+    """
+    iv = _ksii_values()
+    words = ["a", "b", "c"]
+
+    fig, ax = sentence_interaction_heatmap(iv, words, show=False)
+
+    drawn_matrix = ax.images[0].get_array()
+    expected_matrix = interaction_matrix_from_explanation(iv, 3)
+    assert np.allclose(drawn_matrix, expected_matrix)
 
     plt.close(fig)
