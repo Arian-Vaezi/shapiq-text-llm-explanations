@@ -17,6 +17,7 @@ DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_expla
 sys.path.insert(0, str(DEMO_DIR))
 
 import app  # noqa: E402
+from _app_impl import shapley  # noqa: E402
 from coalition_evaluation import (  # noqa: E402
     CoalitionAttemptResult,
     CoalitionEvaluationIncompleteError,
@@ -186,7 +187,7 @@ def test_one_bad_coalition_aborts_whole_explanation(monkeypatch) -> None:
         msg = "compute_exact_interactions must not be called"
         raise AssertionError(msg)
 
-    monkeypatch.setattr(app, "compute_exact_interactions", spy_compute_exact_interactions)
+    monkeypatch.setattr(shapley, "compute_exact_interactions", spy_compute_exact_interactions)
 
     second_game = make_toy_game(MostlyGoodScorer())
     with pytest.raises(CoalitionEvaluationIncompleteError):

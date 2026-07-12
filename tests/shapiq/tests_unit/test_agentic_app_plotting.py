@@ -17,6 +17,7 @@ sys.path.insert(0, str(DEMO_DIR))
 
 import app  # noqa: E402
 import sample_data  # noqa: E402
+from _app_impl import plotting  # noqa: E402
 from tool_game import ToolUseGame, ToolUseSegment  # noqa: E402
 from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
 
@@ -26,7 +27,7 @@ def test_load_text_plotters_handles_import_error(monkeypatch) -> None:
         msg = "optional compiled extension unavailable"
         raise ImportError(msg)
 
-    monkeypatch.setattr(app, "load_sentence_plot_module", fail_load_sentence_plot_module)
+    monkeypatch.setattr(plotting, "load_sentence_plot_module", fail_load_sentence_plot_module)
 
     bar_plot, heatmap_plot, error = app.load_text_plotters()
 

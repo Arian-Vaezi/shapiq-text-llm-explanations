@@ -17,6 +17,10 @@ DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_expla
 sys.path.insert(0, str(DEMO_DIR))
 
 import app as app_module  # noqa: E402
+from _app_impl import (  # noqa: E402
+    game as app_game,
+    ui as app_ui,
+)
 from hf_router import (  # noqa: E402
     DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
     LocalHFRouter,
@@ -681,8 +685,8 @@ def test_primary_hf_routing_does_not_instantiate_classification_router(monkeypat
         msg = "Primary HF routing must not instantiate LocalHFClassificationRouter."
         raise AssertionError(msg)
 
-    monkeypatch.setattr(app_module, "load_local_hf_router", fake_load_local_hf_router)
-    monkeypatch.setattr(app_module, "LocalHFClassificationRouter", exploding_classification_router)
+    monkeypatch.setattr(app_game, "load_local_hf_router", fake_load_local_hf_router)
+    monkeypatch.setattr(app_game, "LocalHFClassificationRouter", exploding_classification_router)
 
     agent_callable = app_module.build_complete_agent_callable(
         inference_backend="HF local",
@@ -1560,7 +1564,7 @@ def test_app_load_logprob_scorer_has_no_post_cache_mutation() -> None:
     assert "max_pairs_per_batch" in signature.parameters
     assert signature.parameters["max_pairs_per_batch"].default is inspect.Parameter.empty
 
-    source = inspect.getsource(app_module)
+    source = inspect.getsource(app_ui)
     assert ".max_pairs_per_batch = " not in source
 
 
@@ -1695,7 +1699,7 @@ def test_app_logprob_scorer_branch_never_loads_structured_json_router() -> None:
     inside that branch, or two independent Qwen models would be constructed
     (and held resident simultaneously) for what should be a single-model path.
     """
-    source = inspect.getsource(app_module)
+    source = inspect.getsource(app_ui)
     branch_start = source.index("elif scorer_backend == LOGPROB_SCORER_LABEL:")
     next_branch = source.index("elif scorer_backend ==", branch_start + 1)
     branch_source = source[branch_start:next_branch]
@@ -1769,9 +1773,9 @@ def test_app_combined_hf_local_calibrated_mode_skips_structured_router(monkeypat
 
     captured_load: dict[str, object] = {}
 
-    monkeypatch.setattr(app_module, "load_local_hf_router", exploding_load_local_hf_router)
-    monkeypatch.setattr(app_module, "load_logprob_scorer", fake_load_logprob_scorer)
-    monkeypatch.setattr(app_module, "HFArgumentExtractor", FakeArgumentExtractor)
+    monkeypatch.setattr(app_game, "load_local_hf_router", exploding_load_local_hf_router)
+    monkeypatch.setattr(app_game, "load_logprob_scorer", fake_load_logprob_scorer)
+    monkeypatch.setattr(app_game, "HFArgumentExtractor", FakeArgumentExtractor)
 
     agent_callable = app_module.build_complete_agent_callable(
         inference_backend="HF local",
@@ -1831,7 +1835,7 @@ def test_app_hf_local_legacy_mode_still_uses_structured_router(monkeypatch) -> N
         del max_new_tokens, trust_remote_code, quantization_mode, device, dtype
         return FakeRouter()
 
-    monkeypatch.setattr(app_module, "load_local_hf_router", fake_load_local_hf_router)
+    monkeypatch.setattr(app_game, "load_local_hf_router", fake_load_local_hf_router)
 
     agent_callable = app_module.build_complete_agent_callable(
         inference_backend="HF local",
