@@ -62,6 +62,7 @@ from hf_router import (
 )
 from linguistic_segmenter import LinguisticSegmenter
 from matplotlib.patches import Rectangle
+from persistence import write_config_snapshot_safely
 from router_scorers import (
     DEFAULT_GROQ_ROUTER_MODEL_ID,
     DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES,
@@ -318,6 +319,10 @@ def load_local_hf_router(
             f"dtype={first_param.dtype}",
             f"model_id={model_name}",
         )
+    write_config_snapshot_safely(
+        hf_model_id=model_name,
+        device=getattr(router, "device", device),
+    )
     return router
 
 
@@ -370,6 +375,10 @@ def load_logprob_scorer(
             f"dtype={first_param.dtype}",
             f"model_id={model_id}",
         )
+    write_config_snapshot_safely(
+        hf_model_id=model_id,
+        device=getattr(scorer, "device", device),
+    )
     return scorer
 
 

@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from persistence import build_pairwise_interactions, write_result_export_safely
+
 # Mechanical re-export chain preserves the monolith's shared global namespace.
 from .cards import *  # noqa: F403
 
@@ -1308,6 +1310,40 @@ def main() -> None:
                     else None
                 ),
             }
+            inference_result = st.session_state.get("agentic_inference_result")
+            routing_diagnostics = logprob_full_diagnostics or {}
+            raw_scores = routing_diagnostics.get("raw_log_scores") or getattr(
+                inference_result,
+                "raw_scores",
+                {},
+            )
+            calibrated_scores = routing_diagnostics.get("calibrated_scores") or getattr(
+                inference_result,
+                "tool_scores",
+                {},
+            )
+            write_result_export_safely(
+                warning_callback=st.warning,
+                hf_model_id=inference_model_name,
+                user_request=user_request,
+                system_prompt=system_prompt,
+                player_segments=user_segments,
+                raw_scores=raw_scores,
+                calibrated_scores=calibrated_scores,
+                selected_tool=getattr(inference_result, "selected_tool", target_tool),
+                raw_argmax=routing_diagnostics.get("argmax_tool")
+                or (max(raw_scores, key=raw_scores.get) if raw_scores else None),
+                calibrated_argmax=(
+                    max(calibrated_scores, key=calibrated_scores.get) if calibrated_scores else None
+                ),
+                target_tool=target_tool,
+                baseline_h_empty=empty_score,
+                full_h_n=full_score,
+                pairwise_interactions=build_pairwise_interactions(
+                    player_segments=user_segments,
+                    pairwise_matrix=pairwise_matrix,
+                ),
+            )
 
         result = st.session_state.result
         if result is None:
