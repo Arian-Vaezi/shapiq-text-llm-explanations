@@ -1007,7 +1007,7 @@ elif page == "🧩 Explanation Explorer":
                 "Player": short_labels,
                 "Shapley Value": player_values,
                 "Safety Impact": [
-                    "🚨 Jailbreak Contributing" if v < 0 else "🛡️ Safety Restoring"
+                    "🛡️ Pushing towards refusal" if v < 0 else "🚨 Pushing towards compliance"
                     for v in player_values
                 ],
             }
