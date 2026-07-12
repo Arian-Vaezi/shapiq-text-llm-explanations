@@ -137,6 +137,11 @@ def main() -> None:
             example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
             st.session_state["agentic_pending_example_request"] = example_request
 
+    def format_try_example_option(name: str) -> str:
+        if name == example_placeholder:
+            return example_placeholder
+        return " ".join(SAMPLE_TRACES[name]["user_segments"])
+
     example_options = [example_placeholder, *list(SAMPLE_TRACES)]
 
     with st.container(key="agentic_input_bar"):
@@ -157,9 +162,7 @@ def main() -> None:
             st.selectbox(
                 "Try example",
                 example_options,
-                format_func=lambda name: (
-                    name if name == example_placeholder else scenario_prompt_label(name)
-                ),
+                format_func=format_try_example_option,
                 key="agentic_try_example_select",
                 on_change=apply_selected_example,
                 label_visibility="collapsed",
