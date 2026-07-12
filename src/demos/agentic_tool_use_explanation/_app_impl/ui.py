@@ -1,6 +1,6 @@
 """Main Streamlit user interface."""
 
-# ruff: noqa: F405, I001, PLC0415
+# ruff: noqa: F405, PLC0415
 
 from __future__ import annotations
 
@@ -131,8 +131,16 @@ def main() -> None:
     # bordered/shadowed container (see the mode-selector comment above for
     # why st.container(key=...) is what actually makes this one visual bar).
     # ------------------------------------------------------------------
+    def apply_selected_example() -> None:
+        selected = st.session_state.get("agentic_try_example_select")
+        if selected and selected != example_placeholder:
+            example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
+            st.session_state["agentic_pending_example_request"] = example_request
+
+    example_options = [example_placeholder, *list(SAMPLE_TRACES)]
+
     with st.container(key="agentic_input_bar"):
-        input_col, example_col, button_col = st.columns([3, 1.3, 1.4], vertical_alignment="bottom")
+        input_col, button_col = st.columns([4.3, 1.4], vertical_alignment="center")
         with input_col:
             st.markdown('<div class="input-bar-label">User request</div>', unsafe_allow_html=True)
             st.text_area(
@@ -145,20 +153,6 @@ def main() -> None:
                     "It does not call the selected tool."
                 ),
             )
-        user_request = st.session_state["agentic_request_text"]
-        trace = build_mock_trace(user_request)
-        system_segments = build_segments(trace["system_segments"], "system")
-        system_prompt = build_system_prompt(system_segments)
-        tool_context = format_tool_context(TOOLS)
-
-        def apply_selected_example() -> None:
-            selected = st.session_state.get("agentic_try_example_select")
-            if selected and selected != example_placeholder:
-                example_request = " ".join(SAMPLE_TRACES[selected]["user_segments"])
-                st.session_state["agentic_pending_example_request"] = example_request
-
-        example_options = [example_placeholder, *list(SAMPLE_TRACES)]
-        with example_col:
             st.markdown('<div class="input-bar-label">Try example</div>', unsafe_allow_html=True)
             st.selectbox(
                 "Try example",
@@ -171,7 +165,6 @@ def main() -> None:
                 label_visibility="collapsed",
             )
         with button_col:
-            st.markdown('<div class="input-bar-label">&nbsp;</div>', unsafe_allow_html=True)
             run_full_pipeline_clicked = st.button(
                 "▶ Run full pipeline",
                 type="primary",
@@ -179,6 +172,11 @@ def main() -> None:
                 use_container_width=True,
                 help="Runs the agent, then prepares the shapiq explanation for the selected tool.",
             )
+        user_request = st.session_state["agentic_request_text"]
+        trace = build_mock_trace(user_request)
+        system_segments = build_segments(trace["system_segments"], "system")
+        system_prompt = build_system_prompt(system_segments)
+        tool_context = format_tool_context(TOOLS)
     if st.session_state.get("agentic_pending_example_request") is not None:
         st.rerun()
 
