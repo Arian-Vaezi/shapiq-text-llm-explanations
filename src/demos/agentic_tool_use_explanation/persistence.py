@@ -90,9 +90,9 @@ def write_config_snapshot_safely(**kwargs: object) -> Path | None:
         return None
 
 
-def _request_slug(user_request: str, max_length: int = 30) -> str:
-    slug = re.sub(r"[^a-z0-9]+", "_", user_request.lower()).strip("_")
-    return slug[:max_length].rstrip("_") or "request"
+def _session_id_short(session_id: str, max_length: int = 8) -> str:
+    short_id = re.sub(r"[^a-zA-Z0-9]+", "", session_id)
+    return short_id[:max_length] or "session"
 
 
 def build_pairwise_interactions(
@@ -173,14 +173,45 @@ def build_result_payload(
 
 def write_result_export(
     *,
+    session_id: str,
+    session_started_at: datetime.datetime,
     export_dir: Path = EXPORT_DIR,
     **payload_kwargs: Any,
 ) -> Path:
-    """Build and write one completed pipeline result export."""
-    payload, created_at = build_result_payload(**payload_kwargs)
-    slug = _request_slug(str(payload["request"]["user_request"]))  # type: ignore[index]
-    filename = f"result_{created_at.strftime('%Y%m%d_%H%M%S')}_{slug}.json"
-    return _write_json(payload, export_dir / filename)
+    """Append one completed pipeline result to its Streamlit session export."""
+    run_payload, recorded_at = build_result_payload(**payload_kwargs)
+    session_started_at = _timestamp(session_started_at)
+    filename = (
+        f"session_{session_started_at.strftime('%Y%m%d_%H%M%S')}_"
+        f"{_session_id_short(session_id)}.json"
+    )
+    path = export_dir / filename
+    if path.exists():
+        with path.open(encoding="utf-8") as file:
+            session_payload = json.load(file)
+        if session_payload.get("session_id") != session_id:
+            message = f"Session export {path.name} belongs to a different session."
+            raise ValueError(message)
+        runs = session_payload.get("runs")
+        if not isinstance(runs, list):
+            message = f"Session export {path.name} has an invalid runs field."
+            raise ValueError(message)
+    else:
+        session_payload = {
+            "session_id": session_id,
+            "session_started_at": session_started_at.isoformat(timespec="milliseconds"),
+            "runs": [],
+        }
+        runs = session_payload["runs"]
+
+    runs.append(
+        {
+            "run_index": len(runs),
+            "recorded_at": recorded_at.isoformat(timespec="milliseconds"),
+            **run_payload,
+        }
+    )
+    return _write_json(session_payload, path)
 
 
 def write_result_export_safely(

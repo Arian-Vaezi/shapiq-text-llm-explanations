@@ -4,6 +4,9 @@
 
 from __future__ import annotations
 
+import datetime
+import uuid
+
 from persistence import build_pairwise_interactions, write_result_export_safely
 
 # Mechanical re-export chain preserves the monolith's shared global namespace.
@@ -71,6 +74,11 @@ def main() -> None:
         st.session_state["agentic_inference_signature"] = None
     if "agentic_request_text" not in st.session_state:
         st.session_state["agentic_request_text"] = DEFAULT_MOCK_QUERY
+    if "agentic_export_session_id" not in st.session_state:
+        st.session_state["agentic_export_session_id"] = str(uuid.uuid4())
+        st.session_state["agentic_export_session_started_at"] = datetime.datetime.now(
+            tz=datetime.UTC
+        )
 
     example_placeholder = "Choose an example..."
     pending_example_request = st.session_state.pop("agentic_pending_example_request", None)
@@ -1324,6 +1332,8 @@ def main() -> None:
             )
             write_result_export_safely(
                 warning_callback=st.warning,
+                session_id=st.session_state["agentic_export_session_id"],
+                session_started_at=st.session_state["agentic_export_session_started_at"],
                 hf_model_id=inference_model_name,
                 user_request=user_request,
                 system_prompt=system_prompt,
