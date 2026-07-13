@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--max-pairs-per-batch", type=int, default=None)
-    parser.add_argument("--selection-mode", choices=HF_SELECTION_MODES, default="no_tool_boost")
+    parser.add_argument("--selection-mode", choices=HF_SELECTION_MODES, default="calibrated")
     parser.add_argument("--raw-margin-threshold", type=float, default=1.0)
     parser.add_argument("--calibration-strength", type=float, default=1.0)
     parser.add_argument("--no-tool-boost-delta", type=float, default=0.75)
