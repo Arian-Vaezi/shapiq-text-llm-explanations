@@ -2149,6 +2149,21 @@ def test_agent_result_execution_status_reflects_available_tool_output() -> None:
         tool_arguments={},
         raw_trace={"tool_output": "Weather lookup completed."},
     )
+    unsafe_output = types.SimpleNamespace(
+        selected_tool="weather_tool",
+        tool_arguments={},
+        raw_trace={"tool_output": "<script>alert('unsafe')</script>"},
+    )
+    empty_output = types.SimpleNamespace(
+        selected_tool="weather_tool",
+        tool_arguments={},
+        raw_trace={"tool_output": "   "},
+    )
+    direct_answer = types.SimpleNamespace(
+        selected_tool="no_tool",
+        cleaned_direct_answer="A direct answer.",
+        raw_trace={"tool_output": "must not be shown"},
+    )
 
     prepared_html = app_module.render_agent_result_card(
         prepared,
@@ -2160,11 +2175,33 @@ def test_agent_result_execution_status_reflects_available_tool_output() -> None:
         backend="Groq",
         model="llama-3.1-8b-instant",
     )
+    unsafe_html = app_module.render_agent_result_card(
+        unsafe_output,
+        backend="Groq",
+        model="llama-3.1-8b-instant",
+    )
+    empty_html = app_module.render_agent_result_card(
+        empty_output,
+        backend="Groq",
+        model="llama-3.1-8b-instant",
+    )
+    direct_answer_html = app_module.render_agent_result_card(
+        direct_answer,
+        backend="HF local",
+        model="Qwen",
+    )
 
     assert "Tool call prepared" in prepared_html
+    assert "agent-tool-output" not in prepared_html
     assert "Tool executed successfully" in executed_html
     assert "Weather lookup completed." in executed_html
+    assert "agent-tool-output" in executed_html
     assert "llama-3.1-8b-instant · Groq" in executed_html
+    assert "&lt;script&gt;alert(&#x27;unsafe&#x27;)&lt;/script&gt;" in unsafe_html
+    assert "<script>" not in unsafe_html
+    assert "agent-tool-output" not in empty_html
+    assert "must not be shown" not in direct_answer_html
+    assert "agent-tool-output" not in direct_answer_html
 
 
 def test_lexical_tool_scorer_returns_one_score_per_prompt() -> None:

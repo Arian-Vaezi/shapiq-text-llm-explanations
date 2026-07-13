@@ -12,6 +12,8 @@ from persistence import build_pairwise_interactions, write_result_export_safely
 # Mechanical re-export chain preserves the monolith's shared global namespace.
 from .cards import *  # noqa: F403
 
+MAIN_TAB_LABELS = ("1. Agent Result", "2. XAI Explanation")
+
 
 def main() -> None:
     st.markdown(CSS, unsafe_allow_html=True)
@@ -550,7 +552,7 @@ def main() -> None:
     # ------------------------------------------------------------------
     # 3. Two tabs, feeling like two stages of one pipeline
     # ------------------------------------------------------------------
-    agent_tab, xai_tab = st.tabs(["1. Agent Result", "2. XAI Explanation"])
+    agent_tab, xai_tab = st.tabs(MAIN_TAB_LABELS)
 
     # ------------------------------------------------------------------
     # 4. Tab 1: Agent Result

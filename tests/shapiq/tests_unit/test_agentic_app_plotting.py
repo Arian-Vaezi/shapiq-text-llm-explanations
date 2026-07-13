@@ -17,7 +17,7 @@ sys.path.insert(0, str(DEMO_DIR))
 
 import app  # noqa: E402
 import sample_data  # noqa: E402
-from _app_impl import plotting  # noqa: E402
+from _app_impl import plotting, ui  # noqa: E402
 from tool_game import ToolUseGame, ToolUseSegment  # noqa: E402
 from tool_schemas import TOOL_DESCRIPTIONS  # noqa: E402
 
@@ -397,7 +397,9 @@ def test_top_pairwise_interactions_respects_n_limit() -> None:
 
 
 def test_attribution_tab_mentions_interactions_tab() -> None:
-    assert any(isinstance(c, str) and "Interactions tab" in c for c in app.main.__code__.co_consts)
+    """Interactions now live in the XAI tab instead of a separate main tab."""
+    assert ui.MAIN_TAB_LABELS == ("1. Agent Result", "2. XAI Explanation")
+    assert "MAIN_TAB_LABELS" in ui.main.__code__.co_names
 
 
 def _three_player_ksii_explanation() -> shapiq.InteractionValues:

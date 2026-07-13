@@ -36,6 +36,48 @@ CALIBRATION_STRENGTHS = (0.0, 0.25, 0.5, 0.75, 1.0)
 NO_TOOL_BOOST_DELTAS = (0.25, 0.5, 0.75, 1.0, 1.5, 2.0)
 
 
+class InvalidTestSetTypeError(TypeError):
+    """Raised when the hold-out test-set root is not a JSON list."""
+
+    def __init__(self) -> None:
+        super().__init__("Test set must be a JSON list.")
+
+
+class InvalidSampleTypeError(TypeError):
+    """Raised when a hold-out sample is not a JSON object."""
+
+    def __init__(self, index: int) -> None:
+        super().__init__(f"Sample at index {index} must be an object.")
+
+
+class InvalidSampleIdError(ValueError):
+    """Raised when a hold-out sample id is missing or invalid."""
+
+    def __init__(self, index: int) -> None:
+        super().__init__(f"Sample at index {index} has an invalid id.")
+
+
+class DuplicateSampleIdError(ValueError):
+    """Raised when a hold-out sample id occurs more than once."""
+
+    def __init__(self, sample_id: str) -> None:
+        super().__init__(f"Duplicate sample id: {sample_id!r}.")
+
+
+class InvalidSampleRequestError(ValueError):
+    """Raised when a hold-out sample request is missing or invalid."""
+
+    def __init__(self, sample_id: str) -> None:
+        super().__init__(f"Sample {sample_id!r} has an invalid request.")
+
+
+class InvalidGroundTruthError(ValueError):
+    """Raised when a hold-out sample has an unsupported ground-truth tool."""
+
+    def __init__(self, sample_id: str) -> None:
+        super().__init__(f"Sample {sample_id!r} has an invalid ground_truth.")
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -56,23 +98,23 @@ def load_samples(path: Path) -> list[dict[str, Any]]:
     with path.open(encoding="utf-8") as file:
         payload = json.load(file)
     if not isinstance(payload, list):
-        raise ValueError("Test set must be a JSON list.")
+        raise InvalidTestSetTypeError
     seen_ids: set[str] = set()
     samples: list[dict[str, Any]] = []
     for index, item in enumerate(payload):
         if not isinstance(item, Mapping):
-            raise ValueError(f"Sample at index {index} must be an object.")
+            raise InvalidSampleTypeError(index)
         sample_id = item.get("id")
         request = item.get("request")
         ground_truth = item.get("ground_truth")
         if not isinstance(sample_id, str) or not sample_id:
-            raise ValueError(f"Sample at index {index} has an invalid id.")
+            raise InvalidSampleIdError(index)
         if sample_id in seen_ids:
-            raise ValueError(f"Duplicate sample id: {sample_id!r}.")
+            raise DuplicateSampleIdError(sample_id)
         if not isinstance(request, str) or not request.strip():
-            raise ValueError(f"Sample {sample_id!r} has an invalid request.")
+            raise InvalidSampleRequestError(sample_id)
         if ground_truth not in TOOL_NAMES:
-            raise ValueError(f"Sample {sample_id!r} has an invalid ground_truth.")
+            raise InvalidGroundTruthError(sample_id)
         seen_ids.add(sample_id)
         samples.append(
             {
@@ -87,9 +129,7 @@ def load_samples(path: Path) -> list[dict[str, Any]]:
 
 def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     """Build aggregate metrics for complete or partial results."""
-    confusion_matrix = {
-        truth: {prediction: 0 for prediction in TOOL_NAMES} for truth in TOOL_NAMES
-    }
+    confusion_matrix = {truth: dict.fromkeys(TOOL_NAMES, 0) for truth in TOOL_NAMES}
     for result in results:
         confusion_matrix[result["ground_truth"]][result["selected_tool"]] += 1
 
@@ -138,9 +178,7 @@ def strategy_metrics(results: list[dict[str, Any]], predictions: list[str]) -> d
         )
     key_samples = {}
     for sample_id in ("n08", "n09", "s05", "s09"):
-        matching = [
-            index for index, result in enumerate(results) if result["id"] == sample_id
-        ]
+        matching = [index for index, result in enumerate(results) if result["id"] == sample_id]
         key_samples[sample_id] = correctness[matching[0]] if matching else None
     return {
         "correct": sum(correctness),
@@ -177,9 +215,7 @@ def build_strategy_sweep(results: list[dict[str, Any]]) -> dict[str, Any]:
     """Evaluate candidate gates/scales offline from the single inference pass."""
     if not results or any("raw_scores" not in result for result in results):
         return {}
-    baseline = strategy_metrics(
-        results, predictions_for_strategy(results, mode="calibrated")
-    )
+    baseline = strategy_metrics(results, predictions_for_strategy(results, mode="calibrated"))
     margin_gate = {
         str(threshold): strategy_metrics(
             results,
@@ -240,7 +276,9 @@ def print_summary(summary: dict[str, Any]) -> None:
     """Print the requested readable evaluation summary."""
     results = summary["results"]
     correct = sum(bool(result["correct"]) for result in results)
-    print(f"Overall accuracy: {correct}/{len(results)} ({format_accuracy(summary['overall_accuracy'])})")
+    print(
+        f"Overall accuracy: {correct}/{len(results)} ({format_accuracy(summary['overall_accuracy'])})"
+    )
     print("Accuracy by boundary status:")
     for key in ("False", "True"):
         rows = [result for result in results if str(result["is_boundary"]) == key]
@@ -256,7 +294,10 @@ def print_summary(summary: dict[str, Any]) -> None:
     print(" " * (label_width + 2) + " ".join(f"{name:>{cell_width}}" for name in TOOL_NAMES))
     for truth in TOOL_NAMES:
         values = summary["confusion_matrix"][truth]
-        print(f"{truth:<{label_width}}  " + " ".join(f"{values[name]:>{cell_width}}" for name in TOOL_NAMES))
+        print(
+            f"{truth:<{label_width}}  "
+            + " ".join(f"{values[name]:>{cell_width}}" for name in TOOL_NAMES)
+        )
 
     print("Per-category accuracy:")
     for tool_name in TOOL_NAMES:
@@ -345,7 +386,10 @@ def main() -> None:
             )
             elapsed = time.perf_counter() - started
             verdict = "correct" if correct else "incorrect"
-            print(f"[{index:02d}/{len(samples):02d}] {sample['id']} {elapsed:.1f}s {verdict}", flush=True)
+            print(
+                f"[{index:02d}/{len(samples):02d}] {sample['id']} {elapsed:.1f}s {verdict}",
+                flush=True,
+            )
             if index % 5 == 0:
                 write_results(args.output, results)
     except BaseException:

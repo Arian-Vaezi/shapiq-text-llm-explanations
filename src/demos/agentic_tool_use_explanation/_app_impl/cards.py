@@ -152,6 +152,19 @@ def render_tool_arguments_html(tool_arguments: object) -> str:
     )
 
 
+def render_tool_output_html(tool_output: object | None) -> str:
+    """Render a non-empty tool result as escaped Agent Result content."""
+    if tool_output is None:
+        return ""
+    output_text = str(tool_output).strip()
+    if not output_text:
+        return ""
+    return (
+        "<p class='result-meta-row' style='margin-top:0.7rem;'><strong>Tool output</strong></p>"
+        f"<div class='agent-response-block agent-tool-output'>{escape(output_text)}</div>"
+    )
+
+
 def render_tool_decision_card(
     inference_result: object,
     *,
@@ -179,6 +192,7 @@ def render_tool_decision_card(
             <div class="result-card-subtitle">{escape(route_explanation)}</div>
             {flow_html}
             {render_tool_arguments_html(getattr(inference_result, "tool_arguments", {}))}
+            {render_tool_output_html(tool_output)}
             {agent_model_line_html(model=model, backend=backend)}
         </div>
     """)

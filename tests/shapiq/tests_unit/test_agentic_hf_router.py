@@ -83,25 +83,41 @@ def test_invalid_selected_tool_falls_back_to_no_tool() -> None:
 def test_choose_tool_can_use_monkeypatched_generation_without_loading_model() -> None:
     class FakeRouter(LocalHFRouter):
         def __init__(self) -> None:
-            self.seen_prompt = ""
+            self.seen_user_request = ""
+            self.seen_system_prompt = ""
 
-        def _generate_raw_response(self, router_prompt: str) -> tuple[str, str]:
-            self.seen_prompt = router_prompt
+        def _generate_native_tool_response(
+            self,
+            user_request: str,
+            *,
+            system_prompt: str,
+        ) -> tuple[str, str, dict[str, object]]:
+            self.seen_user_request = user_request
+            self.seen_system_prompt = system_prompt
             return (
-                f"formatted::{router_prompt}",
-                '{"agent_response":"I would use weather.",'
-                '"selected_tool":"weather_tool",'
-                '"tool_arguments":{"location":"Berlin","date":"tomorrow"}}',
+                f"native::{system_prompt}::{user_request}",
+                '<tool_call>{"name":"weather_tool",'
+                '"arguments":{"location":"Berlin","date":"tomorrow"}}</tool_call>',
+                {"do_sample": False},
             )
 
     router = FakeRouter()
-    result = router.choose_tool("Will it rain in Berlin tomorrow?", TOOL_DESCRIPTIONS)
+    result = router.choose_tool(
+        "Will it rain in Berlin tomorrow?",
+        TOOL_DESCRIPTIONS,
+        system_prompt="Use native tool calling.",
+    )
 
     assert result.selected_tool == "weather_tool"
     assert result.tool_arguments == {"location": "Berlin", "date": "tomorrow"}
-    assert result.debug_prompt.startswith("formatted::")
-    assert "weather_tool" in router.seen_prompt
-    assert "Return only valid JSON" in router.seen_prompt
+    assert result.debug_prompt == (
+        "native::Use native tool calling.::Will it rain in Berlin tomorrow?"
+    )
+    assert result.generation_parameters == {"do_sample": False}
+    assert router.seen_user_request == "Will it rain in Berlin tomorrow?"
+    assert router.seen_system_prompt == "Use native tool calling."
+    assert not hasattr(router, "model")
+    assert not hasattr(router, "tokenizer")
 
 
 def test_local_hf_classification_router_picks_argmax_via_scorer_labels() -> None:
