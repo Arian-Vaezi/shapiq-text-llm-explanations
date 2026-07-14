@@ -8,6 +8,7 @@ from __future__ import annotations
 from .game import *  # noqa: F403
 
 SV_EFFICIENCY_TOLERANCE = 1e-6
+XAI_SUMMARY_EFFECT_TOLERANCE = 1e-12
 
 
 def _as_finite_float(value: object) -> float | None:
@@ -293,28 +294,33 @@ def build_sv_mini_table_html(rows: pd.DataFrame) -> str:
 
 
 def build_ksii_mini_table_html(rows: list[dict[str, object]]) -> str:
-    """Render a compact Pair/Text/k-SII/Type mini-table as HTML rows, with a colored type pill.
+    """Render a compact Pair/Text/k-SII/Interaction table without changing its values.
 
-    Presentation-only: the caller passes an already-ranked list of pairwise-interaction
-    rows (from ``top_pairwise_interactions``, sliced or not by the caller); this only
-    formats it, it does not rank, select, or compute k-SII values.
+    Presentation-only: rows are ordered by descending absolute k-SII magnitude here so
+    the table remains correct even if a caller passes an unsorted subset.
     """
     header = (
         "<div class='mini-table-row ksii-row header'>"
-        "<span>Pair</span><span>Text</span><span>k-SII</span><span>Type</span></div>"
+        "<span>Pair</span><span>Text</span><span>k-SII</span><span>Interaction</span></div>"
     )
+    sorted_rows = sorted(rows, key=lambda row: abs(float(row["value"])), reverse=True)
+
+    def signed_value_html(value: float) -> str:
+        return f"&minus;{abs(value):.3f}" if value < 0 else f"+{value:.3f}"
+
     body_rows = "".join(
         "<div class='mini-table-row ksii-row'>"
-        f"<span class='cell-segment'>{escape(str(row['segment_i']))} + "
+        f"<span class='cell-segment'>{escape(str(row['segment_i']))} &times; "
         f"{escape(str(row['segment_j']))}</span>"
-        f"<span class='cell-text' title='{escape(str(row['text_i']))} + "
-        f"{escape(str(row['text_j']))}'>"
-        f"{escape(truncate_label(str(row['text_i']), max_length=18))} + "
-        f"{escape(truncate_label(str(row['text_j']), max_length=18))}</span>"
-        f"<span class='cell-value'>{format_attribution(float(row['value']))}</span>"
-        f"<span class='type-pill {escape(str(row['type']))}'>{escape(str(row['type']))}</span>"
+        f"<span class='cell-text' title='&ldquo;{escape(str(row['text_i']))}&rdquo; "
+        f"&times; &ldquo;{escape(str(row['text_j']))}&rdquo;'>"
+        f"&ldquo;{escape(truncate_label(str(row['text_i']), max_length=18))}&rdquo; &times; "
+        f"&ldquo;{escape(truncate_label(str(row['text_j']), max_length=18))}&rdquo;</span>"
+        f"<span class='cell-value'>{signed_value_html(float(row['value']))}</span>"
+        f"<span class='interaction-pill {escape(str(row['interaction']).lower())}'>"
+        f"{escape(str(row['interaction']))}</span>"
         "</div>"
-        for row in rows
+        for row in sorted_rows
     )
     return f"<div class='mini-table'>{header}{body_rows}</div>"
 
@@ -331,6 +337,163 @@ def build_player_legend_html(segments: list[ToolUseSegment], *, max_chars: int =
         for segment in segments
     )
     return f"<div class='player-legend'>{rows}</div>"
+
+
+def _strongest_summary_pair(
+    pairwise_matrix: pd.DataFrame,
+    user_segments: list[ToolUseSegment],
+) -> dict[str, object] | None:
+    """Return the strongest positive pair, or strongest pair by magnitude as fallback."""
+    n_players = pairwise_matrix.shape[0]
+    if n_players < 2:
+        return None
+    pairs = top_pairwise_interactions(
+        pairwise_matrix,
+        user_segments,
+        n=n_players * (n_players - 1) // 2,
+    )
+    positive_pairs = [pair for pair in pairs if float(pair["value"]) > 0]
+    if positive_pairs:
+        return max(positive_pairs, key=lambda pair: float(pair["value"]))
+    return max(pairs, key=lambda pair: abs(float(pair["value"])), default=None)
+
+
+def render_xai_summary_section(
+    *,
+    selected_tool: object,
+    model_name: object,
+    backend_name: object,
+    score_change: float,
+    attribution_frame: pd.DataFrame,
+    pairwise_matrix: pd.DataFrame,
+    user_segments: list[ToolUseSegment],
+) -> str:
+    """Render the top XAI summary from already-computed explanation outputs."""
+    tool_text = str(selected_tool or "Unknown tool")
+    model_text = str(model_name or "Unknown model")
+    backend_text = backend_display_name(backend_name)
+
+    if attribution_frame.empty:
+        segment_finding_html = (
+            "<div class='xai-top-finding xai-top-finding-segment is-neutral is-disabled'>"
+            "<div class='xai-top-finding-line'>"
+            "<strong>Most influential segment</strong>"
+            "<span>No segment attribution available</span>"
+            "</div></div>"
+        )
+    else:
+        attribution_values = attribution_frame["attribution"].astype(float)
+        strongest_index = attribution_values.abs().idxmax()
+        strongest_row = attribution_frame.loc[strongest_index]
+        strongest_value = float(strongest_row["attribution"])
+        strongest_text = str(strongest_row["text"])
+        if strongest_value > XAI_SUMMARY_EFFECT_TOLERANCE:
+            segment_label = "Strongest supporting segment"
+            segment_effect_class = "is-positive"
+        elif strongest_value < -XAI_SUMMARY_EFFECT_TOLERANCE:
+            segment_label = "Strongest opposing segment"
+            segment_effect_class = "is-negative"
+        else:
+            segment_label = "Most influential segment"
+            segment_effect_class = "is-neutral"
+        segment_finding_html = (
+            f"<div class='xai-top-finding xai-top-finding-segment {segment_effect_class}'>"
+            "<div class='xai-top-finding-line'>"
+            f"<strong>{segment_label}</strong>"
+            f"<span>{escape(str(strongest_row['segment']))} &middot; "
+            f"SV {strongest_value:+.3f}</span>"
+            "</div>"
+            f"<div class='xai-top-segment-text' title='{escape(strongest_text)}'>"
+            f"&ldquo;{escape(truncate_label(strongest_text, max_length=120))}&rdquo;"
+            "</div></div>"
+        )
+
+    strongest_pair_row = _strongest_summary_pair(pairwise_matrix, user_segments)
+    if strongest_pair_row is None:
+        pair_finding_html = (
+            "<div class='xai-top-finding xai-top-finding-pair is-disabled'>"
+            "<div class='xai-top-finding-line'>"
+            "<strong>Strongest pairwise interaction</strong>"
+            "<span>Unavailable for fewer than two segments</span>"
+            "</div></div>"
+        )
+    else:
+        pair_value = float(strongest_pair_row["value"])
+        pair_text_i = str(strongest_pair_row["text_i"])
+        pair_text_j = str(strongest_pair_row["text_j"])
+        pair_finding_html = (
+            "<div class='xai-top-finding xai-top-finding-pair'>"
+            "<div class='xai-top-finding-line'>"
+            "<strong>Strongest pairwise interaction</strong>"
+            f"<span>{escape(str(strongest_pair_row['segment_i']))} &times; "
+            f"{escape(str(strongest_pair_row['segment_j']))} &middot; "
+            f"k-SII {pair_value:+.3f}</span>"
+            "</div>"
+            "<div class='xai-top-pair-text'>"
+            f"<span title='{escape(pair_text_i)}'>&ldquo;"
+            f"{escape(truncate_label(pair_text_i, max_length=48))}&rdquo;</span>"
+            "<span class='xai-top-pair-times' aria-hidden='true'>&times;</span>"
+            f"<span title='{escape(pair_text_j)}'>&ldquo;"
+            f"{escape(truncate_label(pair_text_j, max_length=48))}&rdquo;</span>"
+            "</div></div>"
+        )
+
+    if score_change < -XAI_SUMMARY_EFFECT_TOLERANCE:
+        effect_label = "Net opposing effect"
+        effect_class = "is-negative"
+    elif score_change > XAI_SUMMARY_EFFECT_TOLERANCE:
+        effect_label = "Net supporting effect"
+        effect_class = "is-positive"
+    else:
+        effect_label = "Neutral net effect"
+        effect_class = "is-neutral"
+
+    return flatten_markdown_html(f"""
+        <section class="xai-top-summary">
+            <h2 class="xai-top-title">
+                How do request segments affect support for
+                <span class="xai-top-tool-question">
+                    <span class="xai-top-tool-pill">{escape(tool_text)}</span>?
+                </span>
+            </h2>
+            <p class="xai-top-subtitle">
+                Shapley attribution of the teacher-forced target-tool continuation score
+                across masked requests.
+            </p>
+            <div class="xai-top-card">
+                <div class="xai-top-column xai-top-target-column">
+                    <div class="xai-top-heading">Explanation target</div>
+                    <div class="xai-top-detail-row">
+                        <span>Selected tool</span>
+                        <span class="xai-top-tool-pill">{escape(tool_text)}</span>
+                    </div>
+                    <div class="xai-top-detail-row">
+                        <span>Baseline</span>
+                        <strong>empty user request</strong>
+                    </div>
+                    <div class="xai-top-detail-row">
+                        <span>Scoring model</span>
+                        <strong>{escape(model_text)} &middot; {escape(backend_text)}</strong>
+                    </div>
+                </div>
+                <div class="xai-top-column xai-top-findings-column">
+                    <div class="xai-top-heading">Key findings</div>
+                    {segment_finding_html}
+                    {pair_finding_html}
+                </div>
+                <div class="xai-top-column xai-top-score-column">
+                    <div class="xai-top-score-card {effect_class}">
+                        <div class="xai-top-score-heading">Target-tool score change</div>
+                        <div class="xai-top-score-value">{score_change:+.3f}</div>
+                        <div class="xai-top-score-formula">
+                            h(full request) &minus; h(empty request)
+                        </div>
+                        <div class="xai-top-effect-label">{escape(effect_label)}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    """)
 
 
 def build_delta_metric_html(
@@ -454,8 +617,8 @@ def build_interaction_interpretation(
             "could be evaluated."
         )
     strongest = top_pairs[0]
-    pair_text = f"“{escape(str(strongest['text_i']))}” + “{escape(str(strongest['text_j']))}”"
-    pair_label_html = escape(pair_label)
+    pair_text = f"“{escape(str(strongest['text_i']))}” &times; “{escape(str(strongest['text_j']))}”"
+    pair_label_html = escape(pair_label).replace(" + ", " &times; ")
     if abs(pair_value) < 0.03:
         return (
             f"<strong>No dominant pairwise interaction was detected</strong> (strongest pair "
@@ -464,16 +627,12 @@ def build_interaction_interpretation(
         )
     if pair_value > 0:
         return (
-            f"<strong>Strongest complementary interaction: {pair_label_html}</strong> -- "
-            f"{pair_text} contribute more support together (k-SII = {pair_value:+.3f}) than "
-            "the sum of their individual effects would predict: the two segments reinforce "
-            "each other."
+            f"<strong>Strongest positive interaction: {pair_label_html}</strong> -- "
+            f"{pair_text} have k-SII = {pair_value:+.3f}."
         )
     return (
-        f"<strong>Strongest redundant interaction: {pair_label_html}</strong> -- "
-        f"{pair_text} contribute less support together (k-SII = {pair_value:+.3f}) than "
-        "the sum of their individual effects would predict: the segments carry overlapping "
-        "evidence."
+        f"<strong>Strongest negative interaction: {pair_label_html}</strong> -- "
+        f"{pair_text} have k-SII = {pair_value:+.3f}."
     )
 
 

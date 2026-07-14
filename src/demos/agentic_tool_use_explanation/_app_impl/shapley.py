@@ -7,6 +7,8 @@ from __future__ import annotations
 # Mechanical re-export chain preserves the monolith's shared global namespace.
 from .formatting import *  # noqa: F403
 
+PAIRWISE_WEAK_TOLERANCE = 0.03
+
 
 def budget_for_demo(n_players: int) -> int:
     """Sampling budget for the official shapiq approximator used above the exact limit."""
@@ -257,6 +259,12 @@ def top_pairwise_interactions(
     for i in range(n_players):
         for j in range(i + 1, n_players):
             value = float(pairwise_matrix.iloc[i, j])
+            if abs(value) < PAIRWISE_WEAK_TOLERANCE:
+                interaction_label = "Weak"
+            elif value > 0:
+                interaction_label = "Positive"
+            else:
+                interaction_label = "Negative"
             rows.append(
                 {
                     "segment_i": user_segments[i].label,
@@ -264,7 +272,7 @@ def top_pairwise_interactions(
                     "text_i": user_segments[i].text,
                     "text_j": user_segments[j].text,
                     "value": value,
-                    "type": "complementary" if value > 0 else "redundant",
+                    "interaction": interaction_label,
                 }
             )
     rows.sort(key=lambda r: abs(float(r["value"])), reverse=True)
@@ -310,7 +318,7 @@ def build_interpretation_notes(
     else:
         notes.append(
             f"The strongest pair is `{pair_label}` ({pair_value:.3f}). Negative interaction means "
-            "the selected index treats the pair as redundant, saturating, or partly conflicting."
+            "the selected index assigns a negative interaction to the pair."
         )
 
     delta = float(full_score) - float(empty_score)

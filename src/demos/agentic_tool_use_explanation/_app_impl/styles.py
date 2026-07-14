@@ -406,7 +406,231 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     line-height: 1.4;
     margin: 0;
 }
-/* ---- XAI summary card: compact "why <tool>?" explanation ------------ */
+/* ---- XAI top summary: target, evidence, and score change ------------- */
+.xai-top-summary {
+    margin: 0.25rem 0 1.1rem 0;
+}
+.xai-top-title {
+    color: #1f1f1f;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin: 0;
+}
+.xai-top-tool-question {
+    white-space: nowrap;
+}
+.xai-top-title .xai-top-tool-pill {
+    font-size: 0.82em;
+    vertical-align: 0.04em;
+}
+.xai-top-subtitle {
+    color: #6d6658;
+    font-size: 0.92rem;
+    margin: 0.25rem 0 0.85rem 0;
+}
+.xai-top-tool-pill {
+    background: #e5f1ed;
+    border-radius: 8px;
+    color: #19745b;
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    padding: 0.12rem 0.55rem;
+}
+.xai-top-card {
+    background: #ffffff;
+    border: 1px solid #ded6c4;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(45, 41, 35, 0.05);
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.35fr) minmax(0, 0.9fr);
+    padding: 1.1rem 1.25rem;
+}
+.xai-top-column {
+    min-width: 0;
+    padding: 0 1.15rem;
+}
+.xai-top-column:first-child {
+    padding-left: 0;
+}
+.xai-top-column + .xai-top-column {
+    border-left: 1px solid #ddd6c7;
+}
+.xai-top-heading,
+.xai-top-score-heading {
+    color: #787267;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.xai-top-heading {
+    margin-bottom: 0.65rem;
+}
+.xai-top-detail-row {
+    align-items: baseline;
+    color: #403d37;
+    display: grid;
+    font-size: 0.84rem;
+    gap: 0.65rem;
+    grid-template-columns: minmax(6.4rem, auto) minmax(0, 1fr);
+    margin: 0.45rem 0;
+}
+.xai-top-detail-row > span:first-child {
+    color: #787267;
+    font-weight: 700;
+}
+.xai-top-detail-row strong {
+    font-weight: 500;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.xai-top-finding {
+    border-radius: 10px;
+    color: #403d37;
+    margin: 0.45rem 0;
+    padding: 0.62rem 0.75rem;
+}
+.xai-top-finding-segment.is-positive {
+    background: #e5f1ed;
+}
+.xai-top-finding-segment.is-negative {
+    background: #fbe9e7;
+}
+.xai-top-finding-segment.is-neutral {
+    background: #f2f0e9;
+}
+.xai-top-finding-pair {
+    background: #f5eddd;
+}
+.xai-top-finding.is-disabled {
+    color: #817a6d;
+    opacity: 0.8;
+}
+.xai-top-finding-line {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.65rem;
+    justify-content: space-between;
+}
+.xai-top-finding-line strong {
+    color: #655e52;
+    font-size: 0.82rem;
+}
+.xai-top-finding-segment.is-positive .xai-top-finding-line strong {
+    color: #19745b;
+}
+.xai-top-finding-segment.is-negative .xai-top-finding-line strong {
+    color: #b33b2e;
+}
+.xai-top-finding-segment.is-neutral .xai-top-finding-line strong {
+    color: #655e52;
+}
+.xai-top-finding-pair .xai-top-finding-line strong {
+    color: #a96a13;
+}
+.xai-top-finding-line span {
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+.xai-top-segment-text {
+    font-size: 0.83rem;
+    line-height: 1.4;
+    margin-top: 0.38rem;
+    overflow-wrap: anywhere;
+}
+.xai-top-pair-text {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 0.83rem;
+    gap: 0.25rem 0.45rem;
+    line-height: 1.4;
+    margin-top: 0.38rem;
+    overflow-wrap: anywhere;
+}
+.xai-top-pair-text > span:not(.xai-top-pair-times) {
+    min-width: 0;
+}
+.xai-top-pair-times {
+    color: #817a6d;
+    flex: 0 0 auto;
+    font-weight: 700;
+}
+.xai-top-score-column {
+    display: flex;
+    padding-right: 0;
+}
+.xai-top-score-card {
+    align-items: center;
+    background: #f2f0e9;
+    border: 1.5px solid #a8a090;
+    border-radius: 14px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    padding: 0.75rem;
+    text-align: center;
+}
+.xai-top-score-heading {
+    color: #655e52;
+}
+.xai-top-score-value {
+    color: #655e52;
+    font-size: 1.8rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-top: 0.55rem;
+}
+.xai-top-score-formula {
+    color: #787267;
+    font-size: 0.78rem;
+    margin-top: 0.3rem;
+}
+.xai-top-effect-label {
+    color: #655e52;
+    font-size: 0.84rem;
+    font-weight: 800;
+    margin-top: 0.35rem;
+}
+.xai-top-score-card.is-positive {
+    background: #e5f1ed;
+    border-color: #2d7f68;
+}
+.xai-top-score-card.is-positive .xai-top-score-heading,
+.xai-top-score-card.is-positive .xai-top-score-value,
+.xai-top-score-card.is-positive .xai-top-effect-label {
+    color: #19745b;
+}
+.xai-top-score-card.is-negative {
+    background: #fbe9e7;
+    border-color: #cf3e31;
+}
+.xai-top-score-card.is-negative .xai-top-score-heading,
+.xai-top-score-card.is-negative .xai-top-score-value,
+.xai-top-score-card.is-negative .xai-top-effect-label {
+    color: #b33b2e;
+}
+.xai-top-score-card.is-neutral {
+    background: #f2f0e9;
+    border-color: #a8a090;
+}
+.xai-top-score-card.is-neutral .xai-top-score-heading,
+.xai-top-score-card.is-neutral .xai-top-score-value,
+.xai-top-score-card.is-neutral .xai-top-effect-label {
+    color: #655e52;
+}
+/* ---- Legacy XAI metric styles retained for developer-only helpers ---- */
 .xai-summary-card {
     background: #ffffff;
     border: 1px solid #ded6c4;
@@ -779,21 +1003,26 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     font-weight: 700;
     text-align: right;
 }
-.type-pill {
+.interaction-pill {
     border-radius: 999px;
     display: inline-block;
     font-size: 0.7rem;
     font-weight: 700;
     padding: 0.08rem 0.55rem;
     text-align: center;
+    white-space: nowrap;
 }
-.type-pill.complementary {
+.interaction-pill.positive {
     background: #eaf4f1;
     color: #197a52;
 }
-.type-pill.redundant {
+.interaction-pill.negative {
     background: #eaf1f7;
     color: #2b5f8a;
+}
+.interaction-pill.weak {
+    background: #f0ece0;
+    color: #6d6658;
 }
 .player-legend {
     background: #fffdf8;
@@ -878,9 +1107,13 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     .floating-robot-wrap {
         display: none;
     }
+    .xai-top-title {
+        font-size: 1.8rem;
+    }
     .scenario-panel,
     .mock-chat,
-    .xai-summary-card {
+    .xai-summary-card,
+    .xai-top-card {
         grid-template-columns: 1fr;
     }
     .scenario-hint,
@@ -888,6 +1121,25 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     .xai-summary-metrics {
         border-left: 0;
         padding-left: 0;
+    }
+    .xai-top-column,
+    .xai-top-column:first-child {
+        padding: 0.9rem 0;
+    }
+    .xai-top-column:first-child {
+        padding-top: 0;
+    }
+    .xai-top-column:last-child {
+        padding-bottom: 0;
+    }
+    .xai-top-column + .xai-top-column {
+        border-left: 0;
+        border-top: 1px solid #ddd6c7;
+    }
+}
+@media (max-width: 560px) {
+    .xai-top-title {
+        font-size: 1.5rem;
     }
 }
 </style>

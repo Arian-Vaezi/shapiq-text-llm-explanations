@@ -4,11 +4,22 @@
 
 from __future__ import annotations
 
+import numpy as np
+
 # Mechanical re-export chain preserves the monolith's shared global namespace.
 from .shapley import *  # noqa: F403
 
 # Preserve entrypoint-relative path semantics in mechanically moved functions.
 __file__ = str(Path(__file__).parent.parent / "app.py")
+
+HEATMAP_LARGE_ANNOTATION_MAX_PLAYERS = 6
+HEATMAP_ANNOTATION_MAX_PLAYERS = 10
+HEATMAP_LARGE_ANNOTATION_FONTSIZE = 8.0
+HEATMAP_MEDIUM_ANNOTATION_FONTSIZE = 5.5
+HEATMAP_DARK_CELL_THRESHOLD = 0.55
+BAR_ANNOTATION_FONTSIZE = 6.5
+BAR_ANNOTATION_OFFSET_FRACTION = 0.02
+BAR_ANNOTATION_GUTTER_FACTOR = 1.18
 
 
 def polish_bar(
@@ -31,17 +42,32 @@ def polish_bar(
     if title:
         ax.set_title(title, loc="left", fontsize=9, pad=5)
     ax.set_xlabel(xlabel, fontsize=8)
-    ax.tick_params(axis="both", labelsize=7)
+    ax.tick_params(axis="x", labelsize=7)
+    ax.tick_params(axis="y", labelsize=6.5)
     ax.grid(axis="x", color="#d7dfdf", alpha=0.65, linewidth=0.8)
     ax.set_axisbelow(True)
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
+    visible_widths = [patch.get_width() for patch in ax.patches if abs(patch.get_width()) >= 0.01]
+    if visible_widths:
+        left_limit, right_limit = ax.get_xlim()
+        axis_extent = max(
+            abs(left_limit),
+            abs(right_limit),
+            *(abs(width) for width in visible_widths),
+        )
+        padded_extent = axis_extent * BAR_ANNOTATION_GUTTER_FACTOR
+        ax.set_xlim(-padded_extent, padded_extent)
+        annotation_offset = axis_extent * BAR_ANNOTATION_OFFSET_FRACTION
+    else:
+        annotation_offset = 0.0
+
     for patch in ax.patches:
         width = patch.get_width()
         if abs(width) < 0.01:
             continue
-        x_pos = width + (0.015 if width >= 0 else -0.015)
+        x_pos = width + (annotation_offset if width >= 0 else -annotation_offset)
         ha = "left" if width >= 0 else "right"
         # Direction is marked with both an arrow glyph and a color (never color
         # alone), so sign reads correctly in black-and-white print or for
@@ -51,14 +77,16 @@ def polish_bar(
         ax.text(
             x_pos,
             patch.get_y() + patch.get_height() / 2,
-            f"{arrow} {width:.2f}",
+            f"{arrow} {width:+.2f}",
             va="center",
             ha=ha,
-            fontsize=7,
+            fontsize=BAR_ANNOTATION_FONTSIZE,
             color=label_color,
+            clip_on=True,
         )
 
-    fig.tight_layout()
+    fig.tight_layout(pad=0.8)
+    fig.subplots_adjust(left=max(fig.subplotpars.left, 0.24))
     return fig
 
 
@@ -83,6 +111,44 @@ def polish_heatmap(
         ax.set_title(title, loc="left", fontsize=9, pad=5)
     ax.tick_params(axis="x", labelrotation=30, labelsize=6.5)
     ax.tick_params(axis="y", labelsize=6.5)
+
+    n_players = len(segments)
+    if ax.images:
+        image = ax.images[0]
+        matrix = np.asarray(np.ma.getdata(image.get_array()), dtype=float)
+        if matrix.shape == (n_players, n_players):
+            max_abs_value = float(np.max(np.abs(matrix))) if matrix.size else 0.0
+            color_limit = max_abs_value if max_abs_value > 0 else 1.0
+            image.set_clim(-color_limit, color_limit)
+            image.set_data(matrix)
+
+            annotation_fontsize = None
+            if n_players <= HEATMAP_LARGE_ANNOTATION_MAX_PLAYERS:
+                annotation_fontsize = HEATMAP_LARGE_ANNOTATION_FONTSIZE
+            elif n_players <= HEATMAP_ANNOTATION_MAX_PLAYERS:
+                annotation_fontsize = HEATMAP_MEDIUM_ANNOTATION_FONTSIZE
+
+            for annotation in list(ax.texts):
+                x_position, y_position = annotation.get_position()
+                column = int(round(x_position))
+                row = int(round(y_position))
+                is_matrix_annotation = (
+                    0 <= row < n_players
+                    and 0 <= column < n_players
+                    and abs(x_position - column) < 1e-9
+                    and abs(y_position - row) < 1e-9
+                )
+                if not is_matrix_annotation:
+                    continue
+                if annotation_fontsize is None:
+                    annotation.remove()
+                    continue
+                intensity = abs(float(matrix[row, column])) / color_limit
+                annotation.set_color(
+                    "white" if intensity >= HEATMAP_DARK_CELL_THRESHOLD else "#1f1f1f"
+                )
+                annotation.set_fontsize(annotation_fontsize)
+                annotation.set_clip_on(True)
 
     if segments:
         ax.add_patch(

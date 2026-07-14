@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
@@ -58,6 +59,95 @@ def test_fallback_attribution_chart_uses_streamlit_bar_chart(monkeypatch) -> Non
     assert list(chart_frame.index) == ["U1", "S1"]
     assert list(chart_frame.columns) == ["attribution"]
     assert use_container_width is True
+
+
+def test_polish_bar_keeps_signed_annotations_inside_plot_away_from_labels() -> None:
+    fig, ax = plt.subplots()
+    ax.barh([0, 1], [-0.41, 0.34], color=["blue", "red"])
+    ax.set_yticks([0, 1], labels=["U1: Will", "U2: it rain tomorrow"])
+
+    app.polish_bar(fig, ax)
+    fig.canvas.draw()
+
+    negative_annotation = next(text for text in ax.texts if "-0.41" in text.get_text())
+    positive_annotation = next(text for text in ax.texts if "+0.34" in text.get_text())
+    axes_bounds = ax.get_window_extent()
+    renderer = fig.canvas.get_renderer()
+
+    assert negative_annotation.get_position()[0] < -0.41
+    assert negative_annotation.get_ha() == "right"
+    assert negative_annotation.get_color() == "#b3261e"
+    assert negative_annotation.get_fontsize() == plotting.BAR_ANNOTATION_FONTSIZE
+    assert negative_annotation.get_clip_on() is True
+    assert negative_annotation.get_window_extent(renderer).x0 >= axes_bounds.x0
+    assert positive_annotation.get_position()[0] > 0.34
+    assert positive_annotation.get_ha() == "left"
+    assert positive_annotation.get_color() == "#197a52"
+    assert positive_annotation.get_window_extent(renderer).x1 <= axes_bounds.x1
+    assert [label.get_text() for label in ax.get_yticklabels()] == [
+        "U1: Will",
+        "U2: it rain tomorrow",
+    ]
+    plt.close(fig)
+
+
+def _annotated_heatmap(n_players: int) -> tuple[object, object, np.ndarray]:
+    """Build a small symmetric matplotlib heatmap for presentation-only tests."""
+    player_numbers = np.arange(n_players, dtype=float)
+    matrix = np.add.outer(player_numbers, player_numbers) - n_players
+    fig, ax = plt.subplots()
+    ax.imshow(matrix, cmap="coolwarm", vmin=-1.0, vmax=2.0)
+    for row in range(n_players):
+        for column in range(n_players):
+            ax.text(column, row, f"{matrix[row, column]:+.3f}")
+    segments = [
+        app.ToolUseSegment(source="user", label=f"U{index + 1}", text=f"text {index + 1}")
+        for index in range(n_players)
+    ]
+    app.polish_heatmap(fig, ax, segments)
+    return fig, ax, matrix
+
+
+def test_polish_heatmap_uses_large_adaptive_annotations_for_six_players() -> None:
+    fig, ax, _ = _annotated_heatmap(6)
+
+    assert len(ax.texts) == 6 * 6
+    assert {text.get_fontsize() for text in ax.texts} == {
+        plotting.HEATMAP_LARGE_ANNOTATION_FONTSIZE
+    }
+    plt.close(fig)
+
+
+def test_polish_heatmap_uses_smaller_adaptive_annotations_for_eight_players() -> None:
+    fig, ax, _ = _annotated_heatmap(8)
+
+    assert len(ax.texts) == 8 * 8
+    assert {text.get_fontsize() for text in ax.texts} == {
+        plotting.HEATMAP_MEDIUM_ANNOTATION_FONTSIZE
+    }
+    plt.close(fig)
+
+
+def test_polish_heatmap_disables_annotations_above_ten_players() -> None:
+    fig, ax, _ = _annotated_heatmap(11)
+
+    assert len(ax.texts) == 0
+    plt.close(fig)
+
+
+def test_polish_heatmap_preserves_all_nine_cells_without_lower_triangle_mask() -> None:
+    fig, ax, original_matrix = _annotated_heatmap(3)
+    displayed_matrix = ax.images[0].get_array()
+    expected_limit = float(np.max(np.abs(original_matrix)))
+
+    assert len(ax.texts) == 9
+    np.testing.assert_array_equal(np.ma.getdata(displayed_matrix), original_matrix)
+    assert not np.ma.getmaskarray(displayed_matrix).any()
+    assert np.ma.getdata(displayed_matrix)[1, 0] == original_matrix[1, 0]
+    assert np.ma.getdata(displayed_matrix)[2, 0] == original_matrix[2, 0]
+    assert np.ma.getdata(displayed_matrix)[2, 1] == original_matrix[2, 1]
+    assert ax.images[0].get_clim() == (-expected_limit, expected_limit)
+    plt.close(fig)
 
 
 class RecordingScorer:
@@ -385,7 +475,7 @@ def test_top_pairwise_interactions_has_segment_text_and_labels() -> None:
     assert row["text_j"] == "tomorrow morning"
 
 
-def test_top_pairwise_interactions_complementary_for_positive_value() -> None:
+def test_top_pairwise_interactions_labels_positive_value_without_mechanism_claim() -> None:
     matrix = pd.DataFrame([[0.0, 0.3], [0.3, 0.0]])
     segments = [
         app.ToolUseSegment(source="user", label="U1", text="a"),
@@ -394,10 +484,10 @@ def test_top_pairwise_interactions_complementary_for_positive_value() -> None:
 
     result = app.top_pairwise_interactions(matrix, segments)
 
-    assert result[0]["type"] == "complementary"
+    assert result[0]["interaction"] == "Positive"
 
 
-def test_top_pairwise_interactions_redundant_for_negative_value() -> None:
+def test_top_pairwise_interactions_labels_negative_value_without_mechanism_claim() -> None:
     matrix = pd.DataFrame([[0.0, -0.2], [-0.2, 0.0]])
     segments = [
         app.ToolUseSegment(source="user", label="U1", text="a"),
@@ -406,7 +496,45 @@ def test_top_pairwise_interactions_redundant_for_negative_value() -> None:
 
     result = app.top_pairwise_interactions(matrix, segments)
 
-    assert result[0]["type"] == "redundant"
+    assert result[0]["interaction"] == "Negative"
+
+
+def test_top_pairwise_interactions_labels_approximately_zero_value_as_weak() -> None:
+    matrix = pd.DataFrame([[0.0, 0.01], [0.01, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="a"),
+        app.ToolUseSegment(source="user", label="U2", text="b"),
+    ]
+
+    result = app.top_pairwise_interactions(matrix, segments)
+
+    assert result[0]["interaction"] == "Weak"
+
+
+def test_ksii_mini_table_uses_neutral_terminology_and_signed_sorted_values() -> None:
+    matrix = pd.DataFrame([[0.0, 0.01, 0.906], [0.01, 0.0, -0.45], [0.906, -0.45, 0.0]])
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="text 1"),
+        app.ToolUseSegment(source="user", label="U2", text="text 2"),
+        app.ToolUseSegment(source="user", label="U3", text="text 3"),
+    ]
+    rows = list(reversed(app.top_pairwise_interactions(matrix, segments)))
+
+    html = app.build_ksii_mini_table_html(rows)
+
+    assert "<span>Interaction</span>" in html
+    assert "<span>Type</span>" not in html
+    assert "U1 &times; U3" in html
+    assert "&ldquo;text 1&rdquo; &times; &ldquo;text 3&rdquo;" in html
+    assert "+0.906" in html
+    assert "&minus;0.450" in html
+    assert "+0.010" in html
+    assert "Positive" in html
+    assert "Negative" in html
+    assert "Weak" in html
+    assert "complementary" not in html
+    assert "redundant" not in html
+    assert html.index("+0.906") < html.index("&minus;0.450") < html.index("+0.010")
 
 
 def test_top_pairwise_interactions_respects_n_limit() -> None:
@@ -418,6 +546,121 @@ def test_top_pairwise_interactions_respects_n_limit() -> None:
     result = app.top_pairwise_interactions(matrix, segments, n=2)
 
     assert len(result) == 2
+
+
+def test_render_xai_summary_uses_largest_absolute_sv_and_strongest_positive_pair() -> None:
+    attribution_frame = pd.DataFrame(
+        [
+            {"segment": "U1", "text": "check the latest rate", "attribution": 0.4},
+            {"segment": "U2", "text": "an interest rate is", "attribution": -1.325},
+            {"segment": "U3", "text": "then check", "attribution": -0.2},
+        ]
+    )
+    pairwise_matrix = pd.DataFrame(
+        [
+            [99.0, -2.0, 0.804],
+            [-2.0, 88.0, 0.2],
+            [0.804, 0.2, 77.0],
+        ]
+    )
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="check the latest rate"),
+        app.ToolUseSegment(source="user", label="U2", text="an interest rate is"),
+        app.ToolUseSegment(source="user", label="U3", text="then <check>"),
+    ]
+
+    html = app.render_xai_summary_section(
+        selected_tool="web_search_tool",
+        model_name="Qwen/example",
+        backend_name="HF local",
+        score_change=-1.544,
+        attribution_frame=attribution_frame,
+        pairwise_matrix=pairwise_matrix,
+        user_segments=segments,
+    )
+
+    assert "How do request segments affect support for" in html
+    assert "Strongest opposing segment" in html
+    assert "xai-top-finding-segment is-negative" in html
+    assert "U2 &middot; SV -1.325" in html
+    assert "&ldquo;an interest rate is&rdquo;" in html
+    assert "U1 &times; U3 &middot; k-SII +0.804" in html
+    assert "title='check the latest rate'" in html
+    assert "&ldquo;check the latest rate&rdquo;" in html
+    assert "title='then &lt;check&gt;'" in html
+    assert "&ldquo;then &lt;check&gt;&rdquo;" in html
+    assert "U1 &times; U2" not in html
+    assert "Net opposing effect" in html
+    assert "xai-top-score-card is-negative" in html
+    assert "Qwen/example &middot; HF Local" in html
+
+
+def test_render_xai_summary_labels_all_positive_svs_as_supporting() -> None:
+    attribution_frame = pd.DataFrame(
+        [
+            {"segment": "U1", "text": "weather", "attribution": 0.2},
+            {"segment": "U2", "text": "tomorrow", "attribution": 0.8},
+        ]
+    )
+    segments = [
+        app.ToolUseSegment(source="user", label="U1", text="weather"),
+        app.ToolUseSegment(source="user", label="U2", text="tomorrow"),
+    ]
+
+    html = app.render_xai_summary_section(
+        selected_tool="weather_tool",
+        model_name="model",
+        backend_name="backend",
+        score_change=1.0,
+        attribution_frame=attribution_frame,
+        pairwise_matrix=pd.DataFrame([[0.0, 0.1], [0.1, 0.0]]),
+        user_segments=segments,
+    )
+
+    assert "Strongest supporting segment" in html
+    assert "Strongest opposing segment" not in html
+    assert "U2 &middot; SV +0.800" in html
+    assert "xai-top-finding-segment is-positive" in html
+
+
+def test_render_xai_summary_handles_one_player_and_escapes_dynamic_text() -> None:
+    attribution_frame = pd.DataFrame([{"segment": "U1", "text": "<unsafe>", "attribution": 0.0}])
+    segments = [app.ToolUseSegment(source="user", label="U1", text="<unsafe>")]
+
+    html = app.render_xai_summary_section(
+        selected_tool="tool<script>",
+        model_name="model&name",
+        backend_name="backend<local>",
+        score_change=1e-13,
+        attribution_frame=attribution_frame,
+        pairwise_matrix=pd.DataFrame([[0.0]]),
+        user_segments=segments,
+    )
+
+    assert "tool&lt;script&gt;" in html
+    assert "model&amp;name &middot; backend&lt;local&gt;" in html
+    assert "&ldquo;&lt;unsafe&gt;&rdquo;" in html
+    assert "Most influential segment" in html
+    assert "xai-top-finding-segment is-neutral" in html
+    assert "Unavailable for fewer than two segments" in html
+    assert "Neutral net effect" in html
+    assert "xai-top-score-card is-neutral" in html
+
+
+def test_render_xai_summary_labels_positive_score_change_as_supporting() -> None:
+    html = app.render_xai_summary_section(
+        selected_tool="weather_tool",
+        model_name="model",
+        backend_name="backend",
+        score_change=0.25,
+        attribution_frame=pd.DataFrame(),
+        pairwise_matrix=pd.DataFrame(),
+        user_segments=[],
+    )
+
+    assert "Net supporting effect" in html
+    assert "+0.250" in html
+    assert "xai-top-score-card is-positive" in html
 
 
 def test_attribution_tab_mentions_interactions_tab() -> None:
@@ -579,4 +822,16 @@ def test_ksii_heatmap_card_uses_corrected_terminology() -> None:
     assert any(
         isinstance(c, str) and "Main and pairwise effects" in c and "k-SII" in c for c in consts
     )
-    assert any(isinstance(c, str) and "Diagonal:" in c and "Off-diagonal:" in c for c in consts)
+    assert any(
+        isinstance(c, str)
+        and "Diagonal: main effects" in c
+        and "Off-diagonal: pairwise interactions" in c
+        for c in consts
+    )
+    assert any(
+        isinstance(c, str)
+        and "Segment contributions — Shapley values" in c
+        and "Positive supports the target tool; negative opposes it." in c
+        for c in consts
+    )
+    assert not any(isinstance(c, str) and "redundancy or suppression" in c for c in consts)

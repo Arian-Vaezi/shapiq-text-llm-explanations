@@ -1420,43 +1420,22 @@ def main() -> None:
         # already unpacked above -- no new computation is introduced here.
         # ================================================================
 
-        # The calibrated log-odds scorer normalizes its Shapley game value against the
-        # empty coalition by construction (V(empty) = h(empty) - h(empty) == 0), so the
-        # normalized baseline is always trivially zero for this scorer specifically. Show
-        # its raw, non-normalized h(∅)/h(N) log-odds instead -- otherwise this card would
-        # always read 0.000 for HF Local mode's default scorer regardless of the actual
-        # routing evidence.
+        # The calibrated log-odds scorer normalizes its game against the empty coalition.
+        # Its debug record preserves the corresponding raw h(empty)/h(full) values, so use
+        # their already-computed difference for the summary instead of displaying the
+        # normalized zero baseline as though it were the underlying continuation score.
         raw_log_odds_summary = (
             None
             if is_final_answer_result
             else _extract_raw_log_odds_summary(logprob_full_diagnostics)
         )
-        is_native_branch = primary_label in {
-            NATIVE_HF_SCORER_LABEL,
-            NATIVE_DIRECT_ANSWER_SCORER_LABEL,
-        }
         if raw_log_odds_summary is not None:
             raw_full_score, raw_empty_score = raw_log_odds_summary
             explained_increase = raw_full_score - raw_empty_score
-            empty_label, empty_display = "Raw empty score h(&empty;)", f"{raw_empty_score:.3f}"
-            full_label, full_display = "Raw full score h(N)", f"{raw_full_score:.3f}"
-            delta_label = "Support change h(N)-h(&empty;)"
-            empty_short_label, full_short_label = "Baseline H(&empty;)", "Full H(N)"
-        elif is_native_branch:
-            explained_increase = float(full_score) - float(empty_score)
-            empty_label, full_label = "Empty native score h(&empty;)", "Full native score h(N)"
-            delta_label = "Native value v(N)=h(N)-h(&empty;)"
-            empty_short_label, full_short_label = "Native h(&empty;)", "Native h(N)"
         else:
             explained_increase = float(full_score) - float(empty_score)
-            empty_label, empty_display = "Baseline V(&empty;)", f"{empty_score:.3f}"
-            full_label, full_display = "Full V(N)", f"{full_score:.3f}"
-            delta_label = "Support change V(N)-V(&empty;)"
-            empty_short_label, full_short_label = "Baseline V(&empty;)", "Full V(N)"
 
-        # Computed once here and reused below by the explanation card, the k-SII mini-table,
-        # and the interpretation card, instead of being recomputed per section.
-        top_row = attribution_frame.iloc[0] if not attribution_frame.empty else None
+        # Reused below by the k-SII mini-table and interpretation card.
         top_pairs = (
             top_pairwise_interactions(pairwise_matrix, user_segments)
             if pairwise_matrix.shape[0] >= 2
@@ -1464,155 +1443,17 @@ def main() -> None:
         )
         short_labels = [short_player_label(segment) for segment in user_segments]
 
-        if top_row is not None:
-            top_attribution = float(top_row["attribution"])
-            main_evidence_label = (
-                "Strongest supporting segment"
-                if top_attribution >= 0
-                else "Strongest opposing segment"
-            )
-            main_evidence_chip_html = (
-                f"<span class='evidence-chip'>{escape(str(top_row['segment']))}: "
-                f"“{escape(truncate_label(str(top_row['text']), max_length=48))}”</span>"
-            )
-        else:
-            main_evidence_label = "Segment evidence"
-            main_evidence_chip_html = "<span class='evidence-chip'>No segment evidence</span>"
-
-        if top_pairs:
-            strongest_pair_row = top_pairs[0]
-            interaction_evidence_chip_html = (
-                f"<span class='evidence-chip'>"
-                f"{escape(str(strongest_pair_row['segment_i']))} + "
-                f"{escape(str(strongest_pair_row['segment_j']))}: "
-                f"“{escape(truncate_label(str(strongest_pair_row['text_i']), max_length=24))}” + "
-                f"“{escape(truncate_label(str(strongest_pair_row['text_j']), max_length=24))}”"
-                "</span>"
-            )
-        else:
-            interaction_evidence_chip_html = "<span class='evidence-chip'>No pair available</span>"
-
-        # Suggested interpretation logic, reusing the already-computed strongest-pair
-        # value/label (result["pair_value"]/result["pair_label"]) -- no recomputation.
-        if not top_pairs or pair_label == "No pair":
-            xai_summary_interpretation = "Only one segment was found for this request."
-        elif abs(pair_value) < 0.03:
-            xai_summary_interpretation = "No dominant pairwise interaction was detected."
-        elif pair_value > 0:
-            if explained_increase >= 0:
-                xai_summary_interpretation = (
-                    "These segments add complementary evidence for the selected tool."
-                )
-            else:
-                xai_summary_interpretation = (
-                    "These segments interact positively, but the full request lowers "
-                    "selected-tool support overall."
-                )
-        else:
-            xai_summary_interpretation = "These segments carry redundant or counteracting evidence."
-
-        # ---- 0. Decision explained: compact "why <tool>?" summary card ----
-        xai_summary_icon = TOOL_ICONS.get(target_tool, "?")
-        summary_title = (
-            f"Why did the model call {target_tool}?"
-            if target_tool in EXECUTABLE_TOOL_NAMES
-            else "What supports this direct-answer continuation?"
-        )
-
-        # Δ Support is always the largest, most prominent metric. For the native
-        # log-probability value functions specifically, H(&empty;)/H(N) are demoted
-        # to a small-text recap nested inside the Δ Support card itself, below its
-        # tier badge (Developer mode additionally reveals the full detail cards) --
-        # other value functions keep their existing 3-card layout and separate
-        # full-width recap line unchanged, since the 4-decimal/confidence-%/tier
-        # treatment below is only calibrated for native log-probabilities.
-        if is_native_branch:
-            native_note_html = build_native_metric_summary_line_html(
-                empty_short_label=empty_short_label,
-                empty_score=float(empty_score),
-                full_short_label=full_short_label,
-                full_score=float(full_score),
-            )
-            score_flow_html = ""
-            if developer_mode:
-                metrics_section_html = (
-                    "<div class='xai-summary-metrics'>"
-                    + build_native_big_metric_card_html(
-                        short_label=empty_short_label,
-                        label=empty_label,
-                        value=float(empty_score),
-                    )
-                    + build_native_big_metric_card_html(
-                        short_label=full_short_label, label=full_label, value=float(full_score)
-                    )
-                    + build_delta_metric_html(
-                        delta_label,
-                        explained_increase,
-                        show_tier=True,
-                        note_html=native_note_html,
-                    )
-                    + "</div>"
-                )
-            else:
-                metrics_section_html = (
-                    "<div class='xai-summary-metrics'>"
-                    + build_delta_metric_html(
-                        delta_label,
-                        explained_increase,
-                        show_tier=True,
-                        note_html=native_note_html,
-                    )
-                    + "</div>"
-                )
-        else:
-            metrics_section_html = (
-                "<div class='xai-summary-metrics'>"
-                "<div class='xai-metric'>"
-                f"<span class='xai-metric-label' title='{empty_label}'>{empty_short_label}</span>"
-                f"<span class='xai-metric-value'>{empty_display}</span>"
-                "</div>"
-                "<div class='xai-metric'>"
-                f"<span class='xai-metric-label' title='{full_label}'>{full_short_label}</span>"
-                f"<span class='xai-metric-value'>{full_display}</span>"
-                "</div>"
-                + build_delta_metric_html(delta_label, explained_increase, show_tier=False)
-                + "</div>"
-            )
-            score_flow_sign_class = " negative" if explained_increase < 0 else ""
-            score_flow_html = (
-                "<div class='xai-score-flow'>"
-                f"Baseline <strong>{empty_display}</strong>"
-                f" &rarr; Full <strong>{full_display}</strong>"
-                f"<span class='delta-highlight{score_flow_sign_class}'>"
-                f"{direction_arrow_html(explained_increase)} "
-                f"&Delta; {explained_increase:+.3f}</span>"
-                "</div>"
-            )
-
+        # ---- 0. Technically scoped explanation summary ----
         st.markdown(
-            flatten_markdown_html(f"""
-            <div class="xai-summary-card">
-                <div class="xai-summary-left">
-                    <span class="xai-summary-icon">{xai_summary_icon}</span>
-                    <span class="xai-summary-title">
-                        <span class="target-highlight">{escape(summary_title)}</span>
-                    </span>
-                </div>
-                <div class="xai-summary-main">
-                    <div class="evidence-row">
-                        <span class="evidence-row-label">{escape(main_evidence_label)}</span>
-                        {main_evidence_chip_html}
-                    </div>
-                    <div class="evidence-row">
-                        <span class="evidence-row-label">Interaction evidence</span>
-                        {interaction_evidence_chip_html}
-                    </div>
-                    <p class="xai-summary-interpretation">{escape(xai_summary_interpretation)}</p>
-                </div>
-                {metrics_section_html}
-                {score_flow_html}
-            </div>
-            """),
+            render_xai_summary_section(
+                selected_tool=target_tool,
+                model_name=inference_model_name,
+                backend_name=inference_backend,
+                score_change=explained_increase,
+                attribution_frame=attribution_frame,
+                pairwise_matrix=pairwise_matrix,
+                user_segments=user_segments,
+            ),
             unsafe_allow_html=True,
         )
 
@@ -1713,12 +1554,6 @@ def main() -> None:
                     )
 
         # ---- 2 & 3. SV | k-SII evidence, two balanced cards side by side ----
-        st.caption(
-            "SV (left) is a standalone attribution: one value per segment. k-SII (right) "
-            "is a separate explanation with its own main effects (diagonal) and pairwise "
-            "interactions (off-diagonal) -- SV and k-SII values are not directly comparable "
-            "or interchangeable."
-        )
         token_attribution_bar_plot, sentence_interaction_heatmap, plot_import_error = (
             load_text_plotters()
         )
@@ -1732,9 +1567,10 @@ def main() -> None:
             st.markdown(
                 """
                 <div class="evidence-card-header">
-                    <div class="evidence-card-title">Individual effects — SV</div>
-                    <div class="evidence-card-caption">Positive bars push toward the
-                    selected tool; negative bars push away.</div>
+                    <div class="evidence-card-title">Segment contributions — Shapley values</div>
+                    <div class="evidence-card-caption">
+                        Positive supports the target tool; negative opposes it.
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
@@ -1773,12 +1609,10 @@ def main() -> None:
                 """
                 <div class="evidence-card-header">
                     <div class="evidence-card-title">Main and pairwise effects — k-SII</div>
-                    <div class="evidence-card-caption">Diagonal: individual k-SII main
-                    effects. Off-diagonal: pairwise k-SII interactions. Cell labels show
-                    the exact effect values. Red indicates positive effects; blue
-                    indicates negative effects. For off-diagonal cells, positive values
-                    indicate reinforcement, while negative values indicate redundancy or
-                    suppression.</div>
+                    <div class="evidence-card-caption">
+                        Diagonal: main effects &middot; Off-diagonal: pairwise interactions<br>
+                        Blue: negative &middot; Red: positive
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True,
