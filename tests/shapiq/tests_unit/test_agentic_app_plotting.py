@@ -119,6 +119,30 @@ def test_compute_interaction_explanation_uses_real_exact_computer_below_limit() 
     assert "4 / 4 coalitions" in algorithm_label  # 2 ** n_players == 4
 
 
+def test_compute_interaction_explanation_caps_order_for_one_player() -> None:
+    scorer = RecordingScorer()
+    game = ToolUseGame(
+        target_tool="no_tool",
+        user_segments=["How does binary search work?"],
+        system_prompt="Answer stable conceptual questions directly.",
+        scorer=scorer,
+        tool_descriptions=app.TOOLS,
+        normalize=False,
+    )
+
+    explanation, algorithm_label = app.compute_interaction_explanation(
+        game=game,
+        index="k-SII",
+        max_order=2,
+        budget=None,
+    )
+
+    assert explanation.n_players == 1
+    assert explanation.max_order == 1
+    assert "ExactComputer" in algorithm_label
+    assert "2 / 2 coalitions" in algorithm_label
+
+
 def test_values_to_frame_accepts_real_interaction_values() -> None:
     explanation = shapiq.InteractionValues(
         values=np.asarray([0.0, 0.3, -0.1, 0.2]),
@@ -456,6 +480,23 @@ def test_pairwise_matrix_from_explanation_missing_interactions_stay_zero() -> No
     assert matrix[0, 1] == matrix[1, 0] == 0.0
     assert matrix[0, 2] == matrix[2, 0] == 0.0
     assert matrix[1, 2] == matrix[2, 1] == 0.0
+
+
+def test_pairwise_matrix_from_one_player_explanation_contains_main_effect() -> None:
+    explanation = shapiq.InteractionValues(
+        n_players=1,
+        values=np.array([0.75]),
+        index="k-SII",
+        min_order=1,
+        max_order=2,
+        estimated=False,
+        baseline_value=0.0,
+        interaction_lookup={(0,): 0},
+    )
+
+    matrix = app.pairwise_matrix_from_explanation(explanation, 1)
+
+    assert matrix.to_numpy().tolist() == [[0.75]]
 
 
 def test_pairwise_matrix_from_explanation_player_count_mismatch_raises() -> None:

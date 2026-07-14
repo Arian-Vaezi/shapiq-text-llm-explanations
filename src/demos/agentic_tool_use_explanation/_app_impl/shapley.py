@@ -67,6 +67,7 @@ def compute_interaction_explanation(
             coalitions could not be resolved to a real score (after retries for
             transient failures). ``ExactComputer`` is never invoked in that case.
     """
+    effective_max_order = min(max_order, game.n_players)
     if game.n_players <= MAX_EXACT_DEMO_PLAYERS:
         # Skip re-evaluation if this game was already precomputed by an earlier call
         # (e.g. computing SV and k-SII from the same game): every one of the
@@ -77,7 +78,7 @@ def compute_interaction_explanation(
         explanation, metadata = compute_exact_interactions(
             game=game,
             index=index,
-            max_order=max_order,
+            max_order=effective_max_order,
         )
         algorithm_label = (
             f"shapiq ExactComputer (exact evaluation: {metadata.coalition_count} / "
@@ -94,7 +95,7 @@ def compute_interaction_explanation(
             "refusing to approximate against an uninitialized placeholder."
         )
         raise RuntimeError(msg)
-    approximator = make_approximator(index, game.n_players, max_order)
+    approximator = make_approximator(index, game.n_players, effective_max_order)
     explanation = approximator.approximate(budget=budget, game=game)
     return explanation, f"Official shapiq approximation: {type(approximator).__name__}"
 
@@ -159,6 +160,14 @@ def pairwise_matrix_from_explanation(
     diagonal-free variant meant for internal ranking only -- do not use a
     zero-diagonal matrix as a fallback for anything displayed to the user.
     """
+    if n_players != explanation.n_players:
+        msg = (
+            "n_players must match the explanation's player count: "
+            f"{n_players} != {explanation.n_players}."
+        )
+        raise ValueError(msg)
+    if n_players == 1:
+        return pd.DataFrame([[float(explanation[(0,)])]])
     module = load_sentence_plot_module()
     matrix = module.interaction_matrix_from_explanation(
         explanation, n_players, include_main_effects=True
