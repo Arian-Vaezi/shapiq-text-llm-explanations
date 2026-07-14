@@ -119,6 +119,7 @@ def main() -> None:
     inference_backend = "HF local" if explanation_mode == "HF Local" else "Groq"
 
     if inference_backend == "HF local":
+        initialize_hf_model_session_state(st.session_state)
         inference_model_name = st.selectbox(
             "HF model",
             HF_LOCAL_MODEL_OPTIONS,

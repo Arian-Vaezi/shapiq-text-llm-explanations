@@ -92,7 +92,7 @@ from semantic_segmenter import SemanticSegmenter
 from tool_schemas import get_executable_tool_schemas
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, MutableMapping
 
     import matplotlib.pyplot as plt
 
@@ -132,6 +132,7 @@ LOGPROB_SCORER_LABEL = "Calibrated A/B/C/D classification (Developer ablation)"
 SCORER_BACKEND_SESSION_KEY = "agentic_explanation_scorer_backend"
 # Single canonical session-state key for the "HF local" backend's model dropdown.
 HF_MODEL_ID_SESSION_KEY = "agentic_hf_model_id"
+DEFAULT_HF_LOCAL_MODEL_ID = "Qwen/Qwen2.5-3B-Instruct"
 SAME_HF_MODEL_EXPLANATION = (
     "In HF-local mode, inference and explanation use the same selected HF model/tokenizer instance."
 )
@@ -251,6 +252,12 @@ HF_LOCAL_MODEL_CONFIGS: dict[str, SelectedHFModelConfig] = {
     ),
 }
 HF_LOCAL_MODEL_OPTIONS = list(HF_LOCAL_MODEL_CONFIGS)
+
+
+def initialize_hf_model_session_state(session_state: MutableMapping[str, object]) -> None:
+    """Set the HF-local default without replacing an existing user selection."""
+    if HF_MODEL_ID_SESSION_KEY not in session_state:
+        session_state[HF_MODEL_ID_SESSION_KEY] = DEFAULT_HF_LOCAL_MODEL_ID
 
 
 def _hf_lifecycle_log(*parts: object) -> None:

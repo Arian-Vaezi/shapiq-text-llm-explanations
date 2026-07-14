@@ -1581,6 +1581,26 @@ def test_qwen3_is_selectable_and_builds_single_hf_config() -> None:
     assert config.supports_native_tools is True
 
 
+def test_fresh_session_defaults_to_qwen25_3b() -> None:
+    session_state: dict[str, object] = {}
+
+    app_module.initialize_hf_model_session_state(session_state)
+
+    assert app_module.DEFAULT_HF_LOCAL_MODEL_ID == "Qwen/Qwen2.5-3B-Instruct"
+    assert session_state[app_module.HF_MODEL_ID_SESSION_KEY] == app_module.DEFAULT_HF_LOCAL_MODEL_ID
+
+
+def test_existing_hf_model_selection_is_preserved() -> None:
+    selected_model = "Qwen/Qwen3-4B-Instruct-2507"
+    session_state: dict[str, object] = {
+        app_module.HF_MODEL_ID_SESSION_KEY: selected_model,
+    }
+
+    app_module.initialize_hf_model_session_state(session_state)
+
+    assert session_state[app_module.HF_MODEL_ID_SESSION_KEY] == selected_model
+
+
 def test_hf_config_cache_key_varies_by_model_and_quantization() -> None:
     qwen25 = app_module.selected_hf_model_config("Qwen/Qwen2.5-3B-Instruct")
     qwen3 = app_module.selected_hf_model_config("Qwen/Qwen3-4B-Instruct-2507")
