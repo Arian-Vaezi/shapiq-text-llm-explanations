@@ -496,11 +496,14 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     margin: 0.45rem 0;
     padding: 0.62rem 0.75rem;
 }
+/* Positive/negative tints derived from shapiq's own RED/BLUE plot palette
+   (see shapiq.plot._config), so support/oppose color-coding agrees with the
+   bar plot and heatmap: red = support, blue = oppose. */
 .xai-top-finding-segment.is-positive {
-    background: #e5f1ed;
+    background: #ffe2eb;
 }
 .xai-top-finding-segment.is-negative {
-    background: #fbe9e7;
+    background: #e4f1fc;
 }
 .xai-top-finding-segment.is-neutral {
     background: #f2f0e9;
@@ -524,10 +527,10 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     font-size: 0.82rem;
 }
 .xai-top-finding-segment.is-positive .xai-top-finding-line strong {
-    color: #19745b;
+    color: #ff0d57;
 }
 .xai-top-finding-segment.is-negative .xai-top-finding-line strong {
-    color: #b33b2e;
+    color: #1e88e5;
 }
 .xai-top-finding-segment.is-neutral .xai-top-finding-line strong {
     color: #655e52;
@@ -604,22 +607,22 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     margin-top: 0.35rem;
 }
 .xai-top-score-card.is-positive {
-    background: #e5f1ed;
-    border-color: #2d7f68;
+    background: #ffe2eb;
+    border-color: #ff0d57;
 }
 .xai-top-score-card.is-positive .xai-top-score-heading,
 .xai-top-score-card.is-positive .xai-top-score-value,
 .xai-top-score-card.is-positive .xai-top-effect-label {
-    color: #19745b;
+    color: #ff0d57;
 }
 .xai-top-score-card.is-negative {
-    background: #fbe9e7;
-    border-color: #cf3e31;
+    background: #e4f1fc;
+    border-color: #1e88e5;
 }
 .xai-top-score-card.is-negative .xai-top-score-heading,
 .xai-top-score-card.is-negative .xai-top-score-value,
 .xai-top-score-card.is-negative .xai-top-effect-label {
-    color: #b33b2e;
+    color: #1e88e5;
 }
 .xai-top-score-card.is-neutral {
     background: #f2f0e9;
@@ -798,10 +801,10 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     font-weight: 800;
 }
 .dir-arrow.up {
-    color: #197a52;
+    color: #ff0d57;
 }
 .dir-arrow.down {
-    color: #b3261e;
+    color: #1e88e5;
 }
 /* ---- Light-weight confidence-% caption next to a log-prob value ------ */
 .log-score-confidence {
@@ -1013,12 +1016,12 @@ body:has(.st-key-agentic_try_example_select [aria-expanded="true"])
     white-space: nowrap;
 }
 .interaction-pill.positive {
-    background: #eaf4f1;
-    color: #197a52;
+    background: #ffe2eb;
+    color: #ff0d57;
 }
 .interaction-pill.negative {
-    background: #eaf1f7;
-    color: #2b5f8a;
+    background: #e4f1fc;
+    color: #1e88e5;
 }
 .interaction-pill.weak {
     background: #f0ece0;

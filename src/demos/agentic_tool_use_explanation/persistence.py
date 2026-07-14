@@ -131,9 +131,23 @@ def build_result_payload(
     baseline_h_empty: object,
     full_h_n: object,
     pairwise_interactions: Sequence[Mapping[str, object]],
+    value_function_type: str,
+    value_function_fidelity: str,
+    primary_label: str,
     now: datetime.datetime | None = None,
 ) -> tuple[dict[str, object], datetime.datetime]:
-    """Build one JSON-native routing and XAI result envelope."""
+    """Build one JSON-native routing and XAI result envelope.
+
+    ``value_function_type``/``value_function_fidelity`` (see
+    ``_app_impl.models.value_function_metadata``) and ``primary_label`` (the
+    scorer backend label shown in the UI, e.g. ``NATIVE_HF_SCORER_LABEL`` or
+    ``LOGPROB_SCORER_LABEL``) identify which value function produced
+    ``baseline_h_empty``/``full_h_n``/``delta`` below -- without them, a
+    reader of an exported ``exports/session_*.json`` file cannot tell native
+    log-probability scores apart from legacy A/B/C/D calibrated log-odds
+    scores, which are on different numerical scales and are not
+    interchangeable.
+    """
     created_at = _timestamp(now)
     defaults = routing_defaults()
     empty_value = float(baseline_h_empty)
@@ -145,6 +159,14 @@ def build_result_payload(
         "timestamp": created_at.isoformat(),
         "config": {
             "hf_model_id": hf_model_id,
+            "value_function_type": value_function_type,
+            "value_function_fidelity": value_function_fidelity,
+            "primary_scorer_label": primary_label,
+            # `selection_mode`/`no_tool_boost_delta` describe the legacy A/B/C/D
+            # (CalibratedToolLogOddsScorer) routing-selection policy; they are
+            # only meaningful when `primary_scorer_label` names that scorer
+            # (e.g. LOGPROB_SCORER_LABEL). They are still written unconditionally
+            # for every run for backward-compatible export shape.
             "selection_mode": defaults["selection_mode"],
             "no_tool_boost_delta": defaults["no_tool_boost_delta"],
         },

@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import numpy as np
 
+from shapiq.plot._config import BLUE, RED
+
 # Mechanical re-export chain preserves the monolith's shared global namespace.
 from .shapley import *  # noqa: F403
 
@@ -71,9 +73,12 @@ def polish_bar(
         ha = "left" if width >= 0 else "right"
         # Direction is marked with both an arrow glyph and a color (never color
         # alone), so sign reads correctly in black-and-white print or for
-        # color-vision-deficient readers -- the bar fill itself keeps the
-        # shapiq library's own red/blue convention untouched.
-        arrow, label_color = ("↑", "#197a52") if width >= 0 else ("↓", "#b3261e")
+        # color-vision-deficient readers. The label color reuses the same
+        # shapiq red/blue convention as the bar fill itself (red = positive/
+        # support, blue = negative/oppose), so the annotation never disagrees
+        # with the bar it is labeling.
+        arrow = "↑" if width >= 0 else "↓"
+        label_color = RED.hex if width >= 0 else BLUE.hex
         ax.text(
             x_pos,
             patch.get_y() + patch.get_height() / 2,

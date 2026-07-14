@@ -120,7 +120,7 @@ def test_editing_custom_request_clears_stale_inferred_tool() -> None:
 def test_switching_hf_model_clears_stale_inferred_tool_and_explanation() -> None:
     """Switching the HF Local model must invalidate the previous agent + XAI result.
 
-    Regression test: switching HF Local models (e.g. 1.5B -> 3B) with Developer mode
+    Regression test: switching HF Local models (e.g. 3B -> 1.5B) with Developer mode
     OFF used to leave a stale XAI explanation computed for the *old* model's target
     tool, because ``logprob_model_id`` silently stayed on ``DEFAULT_LOGPROB_MODEL_ID``
     unless Developer mode was on, and neither the inference signature nor the
@@ -133,12 +133,13 @@ def test_switching_hf_model_clears_stale_inferred_tool_and_explanation() -> None
     assert not at.exception
 
     hf_model_box = next(box for box in at.selectbox if box.label == "HF model")
-    assert hf_model_box.value == "Qwen/Qwen2.5-1.5B-Instruct"
+    assert hf_model_box.value == "Qwen/Qwen2.5-3B-Instruct"
 
-    # Simulate a completed HF-local run with the 1.5B model: an agent result plus a
-    # cached XAI explanation result, both pointing at `calculator_tool`. The XAI
-    # `result` is deliberately a minimal stand-in (not a full explanation payload) --
-    # switching the model must invalidate it before anything tries to render it.
+    # Simulate a completed HF-local run with the (default) 3B model: an agent result
+    # plus a cached XAI explanation result, both pointing at `calculator_tool`. The
+    # XAI `result` is deliberately a minimal stand-in (not a full explanation
+    # payload) -- switching the model must invalidate it before anything tries to
+    # render it.
     at.session_state["agentic_inferred_tool"] = "calculator_tool"
     at.session_state["agentic_inference_result"] = SimpleNamespace(
         selected_tool="calculator_tool",
@@ -148,15 +149,15 @@ def test_switching_hf_model_clears_stale_inferred_tool_and_explanation() -> None
         error=None,
         available=True,
         backend="HF local",
-        model="Qwen/Qwen2.5-1.5B-Instruct",
+        model="Qwen/Qwen2.5-3B-Instruct",
     )
     at.session_state["agentic_inference_backend"] = "HF local"
-    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-1.5B-Instruct"
+    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-3B-Instruct"
     at.session_state["has_run"] = True
     at.session_state["result"] = {"target_tool": "calculator_tool"}
-    at.session_state["result_signature"] = "fake-signature-for-1.5b-calculator_tool"
+    at.session_state["result_signature"] = "fake-signature-for-3b-calculator_tool"
 
-    hf_model_box.select("Qwen/Qwen2.5-3B-Instruct").run()
+    hf_model_box.select("Qwen/Qwen2.5-1.5B-Instruct").run()
 
     assert not at.exception
     assert at.session_state["agentic_inferred_tool"] is None
@@ -167,8 +168,8 @@ def test_switching_hf_model_clears_stale_inferred_tool_and_explanation() -> None
     assert at.session_state["result"] is None
     # `result_signature` is eagerly re-synced to the current (pending) settings as soon
     # as the XAI tab re-renders in the same run -- it does not stay `None` -- but it must
-    # no longer be the stale signature from the old (1.5B, calculator_tool) result.
-    assert at.session_state["result_signature"] != "fake-signature-for-1.5b-calculator_tool"
+    # no longer be the stale signature from the old (3B, calculator_tool) result.
+    assert at.session_state["result_signature"] != "fake-signature-for-3b-calculator_tool"
 
 
 def _fake_no_tool_inference_result() -> SimpleNamespace:
@@ -198,11 +199,12 @@ def test_switching_hf_model_invalidates_frozen_direct_answer_target() -> None:
     assert not at.exception
 
     hf_model_box = next(box for box in at.selectbox if box.label == "HF model")
+    assert hf_model_box.value == "Qwen/Qwen2.5-3B-Instruct"
     at.session_state["agentic_inference_result"] = _fake_no_tool_inference_result()
     at.session_state["agentic_inference_backend"] = "HF local"
-    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-1.5B-Instruct"
+    at.session_state["agentic_inference_model"] = "Qwen/Qwen2.5-3B-Instruct"
 
-    hf_model_box.select("Qwen/Qwen2.5-3B-Instruct").run()
+    hf_model_box.select("Qwen/Qwen2.5-1.5B-Instruct").run()
 
     assert not at.exception
     assert at.session_state["agentic_inference_result"] is None

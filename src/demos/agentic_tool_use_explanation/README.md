@@ -88,6 +88,13 @@ decrease support for the selected tool identity, not argument generation or
 raw response reproduction. It does not directly compare direct answering
 against every available tool.
 
+The "API Agent" mode (Groq backend) uses a different family of value
+functions -- binary tool-match, soft-vote selection frequency, or
+trajectory/argument similarity -- rather than the teacher-forced
+log-probability scorer used by the default HF Local mode. These are not on
+the same numerical scale and should not be compared directly across
+backends.
+
 ## HF Local Model Consistency
 
 The implementation supports multiple HF Local models. Inference and XAI are

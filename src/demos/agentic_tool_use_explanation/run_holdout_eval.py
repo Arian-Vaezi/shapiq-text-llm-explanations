@@ -17,7 +17,6 @@ try:
         build_system_prompt,
     )
     from demos.agentic_tool_use_explanation.hf_router import (
-        DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
         DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
         LocalHFRouter,
         RouterDecision,
@@ -25,7 +24,6 @@ try:
 except ModuleNotFoundError:
     from app import MOCK_SYSTEM_SEGMENTS, TOOLS, build_segments, build_system_prompt
     from hf_router import (
-        DEFAULT_LOCAL_HF_ROUTER_MODEL_ID,
         DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,
         LocalHFRouter,
         RouterDecision,
@@ -37,6 +35,11 @@ PARSE_FAILURE_LABEL = "parse_failure"
 PREDICTION_NAMES = (*TOOL_NAMES, PARSE_FAILURE_LABEL)
 DEFAULT_TESTSET = Path(__file__).with_name("holdout_samples.json")
 DEFAULT_OUTPUT = Path(__file__).with_name("holdout_eval_results.json")
+# Local default, mirroring run_representative_xai.py's DEFAULT_MODEL_NAME, so this
+# CLI's default model always matches the project's primary/default local HF model
+# instead of drifting from hf_router.DEFAULT_LOCAL_HF_ROUTER_MODEL_ID (which is not
+# the demo's default model).
+DEFAULT_HOLDOUT_MODEL_ID = "Qwen/Qwen2.5-3B-Instruct"
 
 
 class InvalidTestSetTypeError(TypeError):
@@ -85,7 +88,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--testset", type=Path, default=DEFAULT_TESTSET)
-    parser.add_argument("--model-id", default=DEFAULT_LOCAL_HF_ROUTER_MODEL_ID)
+    parser.add_argument("--model-id", default=DEFAULT_HOLDOUT_MODEL_ID)
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--dtype", default="auto")
     parser.add_argument(

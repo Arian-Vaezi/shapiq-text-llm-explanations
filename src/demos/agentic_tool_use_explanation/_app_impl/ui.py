@@ -1356,6 +1356,9 @@ def main() -> None:
                     player_segments=user_segments,
                     pairwise_matrix=pairwise_matrix,
                 ),
+                value_function_type=value_function_type,
+                value_function_fidelity=value_function_fidelity,
+                primary_label=primary_label,
             )
 
         result = st.session_state.result
@@ -1983,11 +1986,29 @@ def main() -> None:
 
                 if lexical_result is not None:
                     st.markdown("**Scorer comparison**")
+                    # `raw_log_odds_summary` (computed above for the summary card) is
+                    # non-None exactly when the primary scorer's debug record exposes
+                    # raw h(∅)/h(N) log-odds -- currently only CalibratedToolLogOddsScorer,
+                    # whose normalized Shapley game value is 0 at the empty coalition by
+                    # construction. Showing that normalized `empty_score` here would
+                    # always read 0.000 regardless of the actual routing evidence, so
+                    # this table substitutes the same raw values the summary card already
+                    # uses instead of introducing a second, differently-derived number.
+                    if raw_log_odds_summary is not None:
+                        primary_full_score, primary_empty_score = raw_log_odds_summary
+                        st.caption(
+                            f"`{primary_label}` normalizes its Shapley game value so "
+                            "V(∅) = 0 by construction. The full_score/empty_score below "
+                            "are the raw, non-normalized h(N)/h(∅) log-odds instead of "
+                            "the normalized game value."
+                        )
+                    else:
+                        primary_full_score, primary_empty_score = full_score, empty_score
                     comparison_rows = [
                         {
                             "scorer": primary_label,
-                            "full_score": full_score,
-                            "empty_score": empty_score,
+                            "full_score": primary_full_score,
+                            "empty_score": primary_empty_score,
                             "top_segment": result["top_label"],
                             "top_attribution": result["top_score"],
                             "strongest_pair": pair_label,

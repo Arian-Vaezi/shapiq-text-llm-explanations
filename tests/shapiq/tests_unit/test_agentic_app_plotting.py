@@ -74,15 +74,18 @@ def test_polish_bar_keeps_signed_annotations_inside_plot_away_from_labels() -> N
     axes_bounds = ax.get_window_extent()
     renderer = fig.canvas.get_renderer()
 
+    # Annotation colors must match shapiq's own RED/BLUE bar-fill convention
+    # (red = positive/support, blue = negative/oppose) -- see plotting.py's
+    # import of shapiq.plot._config.RED/BLUE.
     assert negative_annotation.get_position()[0] < -0.41
     assert negative_annotation.get_ha() == "right"
-    assert negative_annotation.get_color() == "#b3261e"
+    assert negative_annotation.get_color() == "#1e88e5"
     assert negative_annotation.get_fontsize() == plotting.BAR_ANNOTATION_FONTSIZE
     assert negative_annotation.get_clip_on() is True
     assert negative_annotation.get_window_extent(renderer).x0 >= axes_bounds.x0
     assert positive_annotation.get_position()[0] > 0.34
     assert positive_annotation.get_ha() == "left"
-    assert positive_annotation.get_color() == "#197a52"
+    assert positive_annotation.get_color() == "#ff0d57"
     assert positive_annotation.get_window_extent(renderer).x1 <= axes_bounds.x1
     assert [label.get_text() for label in ax.get_yticklabels()] == [
         "U1: Will",

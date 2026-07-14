@@ -15,6 +15,11 @@ DEMO_DIR = Path(__file__).parents[3] / "src" / "demos" / "agentic_tool_use_expla
 sys.path.insert(0, str(DEMO_DIR))
 
 import persistence  # noqa: E402
+from _app_impl.models import (  # noqa: E402
+    LOGPROB_SCORER_LABEL,
+    NATIVE_HF_SCORER_LABEL,
+    value_function_metadata,
+)
 from hf_router import select_tool_from_scores  # noqa: E402
 from scorers import CALIBRATION_USER_REQUESTS  # noqa: E402
 
@@ -61,6 +66,8 @@ def _mock_result_kwargs(*, native_mode: bool = False) -> dict[str, object]:
         "no_tool": np.float64(-0.25),
     }
     exported_scores = {} if native_mode else scores
+    primary_label = NATIVE_HF_SCORER_LABEL if native_mode else LOGPROB_SCORER_LABEL
+    value_function_type, value_function_fidelity = value_function_metadata(primary_label)
     return {
         "hf_model_id": "mock/model",
         "user_request": "Will it rain in Berlin tomorrow morning?",
@@ -77,6 +84,9 @@ def _mock_result_kwargs(*, native_mode: bool = False) -> dict[str, object]:
         "baseline_h_empty": np.float32(-0.5),
         "full_h_n": np.float64(1.5),
         "pairwise_interactions": pairs,
+        "value_function_type": value_function_type,
+        "value_function_fidelity": value_function_fidelity,
+        "primary_label": primary_label,
     }
 
 
@@ -120,6 +130,15 @@ def test_session_export_accumulates_calibrated_and_native_runs(tmp_path: Path) -
     )
     assert native_run["routing_decision"]["raw_scores"] == {}
     assert native_run["routing_decision"]["calibrated_scores"] == {}
+    # Each run records which value function produced its baseline_h_empty/full_h_n/
+    # delta, so a reader of the exported file can never confuse a native
+    # log-probability run with a legacy A/B/C/D calibrated log-odds run.
+    assert calibrated_run["config"]["primary_scorer_label"] == LOGPROB_SCORER_LABEL
+    assert calibrated_run["config"]["value_function_type"] == "legacy_abcd_forced_choice_probe"
+    assert native_run["config"]["primary_scorer_label"] == NATIVE_HF_SCORER_LABEL
+    assert (
+        native_run["config"]["value_function_type"] == "native_target_tool_continuation_likelihood"
+    )
     assert calibrated_run["xai_explanation"]["delta"] == 2.0
     assert calibrated_run["xai_explanation"]["pairwise_interactions"][0]["k_sii"] == 0.25
     assert calibrated_run["request"]["player_segments"] == [
