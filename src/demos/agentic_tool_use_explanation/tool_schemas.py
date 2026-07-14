@@ -122,6 +122,63 @@ def derive_tool_descriptions(
 
 TOOL_DESCRIPTIONS: dict[str, str] = derive_tool_descriptions()
 
+# Canonical argument keys follow EXECUTABLE_TOOL_SCHEMAS above. Different real
+# agent backends (Groq, local HF routers) have been observed to use slightly
+# different argument names for the same value -- e.g. a model guessing "city"
+# instead of the schema's "location". This is the single shared alias table:
+# both router_scorers.TrajectoryArgumentMatchScorer (comparing two trajectories
+# for a coalition value function) and groq_agent's demo tool-output templates
+# (rendering a user-visible "Tool output" string) key-normalize through it, so
+# neither one silently drifts from the other.
+DEFAULT_ARGUMENT_ALIASES: dict[str, dict[str, str]] = {
+    "weather_tool": {
+        "date_or_time": "date",
+        "time": "date",
+        "when": "date",
+        "place": "location",
+        "city": "location",
+    },
+    "calculator_tool": {
+        "expr": "expression",
+        "equation": "expression",
+        "calculation": "expression",
+    },
+    "web_search_tool": {
+        "search_query": "query",
+        "q": "query",
+        "search": "query",
+    },
+    "no_tool": {},
+}
+
+
+def canonicalize_tool_arguments(
+    tool_name: str,
+    arguments: Mapping[str, object],
+    alias_map: Mapping[str, str],
+) -> dict[str, object]:
+    """Map alias argument keys to canonical keys, raising ValueError on conflicting aliases.
+
+    A canonical key already present in ``arguments`` is never overwritten by an
+    alias mapping to the same canonical key that appears later; a genuine
+    conflict (two different keys mapping to the same canonical key with
+    different values) raises rather than silently picking one, since that
+    means the source data is ambiguous.
+    """
+    canonical: dict[str, object] = {}
+    for key, value in arguments.items():
+        ckey = alias_map.get(key, key)
+        if ckey in canonical:
+            if canonical[ckey] != value:
+                msg = (
+                    f"Conflicting values for canonical argument {ckey!r} in {tool_name!r}: "
+                    f"{canonical[ckey]!r} vs {value!r}"
+                )
+                raise ValueError(msg)
+        else:
+            canonical[ckey] = value
+    return canonical
+
 
 def get_executable_tool_schemas() -> tuple[dict[str, object], ...]:
     """Return deep copies of executable tool schemas for model input."""

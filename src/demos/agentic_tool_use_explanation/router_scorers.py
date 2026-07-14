@@ -44,14 +44,18 @@ except ModuleNotFoundError:
 try:
     from demos.agentic_tool_use_explanation.tool_schemas import (
         DECISION_NAMES,
+        DEFAULT_ARGUMENT_ALIASES,
         EXECUTABLE_TOOL_SCHEMAS,
         NO_TOOL_NAME,
+        canonicalize_tool_arguments as _canonicalize_arguments,
     )
 except ModuleNotFoundError:
     from tool_schemas import (
         DECISION_NAMES,
+        DEFAULT_ARGUMENT_ALIASES,
         EXECUTABLE_TOOL_SCHEMAS,
         NO_TOOL_NAME,
+        canonicalize_tool_arguments as _canonicalize_arguments,
     )
 
 DEFAULT_GROQ_ROUTER_MODEL_ID = "llama-3.1-8b-instant"
@@ -60,31 +64,6 @@ DEFAULT_GROQ_SOFT_VOTE_TEMPERATURE = 0.3
 DEFAULT_GROQ_SOFT_VOTE_MAX_RETRIES = 2
 DEFAULT_TOOL_MATCH_WEIGHT = 0.5
 DEFAULT_ARG_MATCH_WEIGHT = 0.5
-
-# Canonical argument keys follow tool_schemas.EXECUTABLE_TOOL_SCHEMAS. Different
-# real agent backends (Groq, local HF routers) have been observed to use
-# slightly different argument names for the same value -- e.g. groq_agent.py
-# already reads either "date_or_time" or "date" for weather_tool.
-DEFAULT_ARGUMENT_ALIASES: dict[str, dict[str, str]] = {
-    "weather_tool": {
-        "date_or_time": "date",
-        "time": "date",
-        "when": "date",
-        "place": "location",
-        "city": "location",
-    },
-    "calculator_tool": {
-        "expr": "expression",
-        "equation": "expression",
-        "calculation": "expression",
-    },
-    "web_search_tool": {
-        "search_query": "query",
-        "q": "query",
-        "search": "query",
-    },
-    "no_tool": {},
-}
 
 
 @dataclass
@@ -595,31 +574,6 @@ _UNICODE_ARITH_TABLE = str.maketrans({"\u00d7": "*", "\u00f7": "/", "\u2212": "-
 def _normalize_arithmetic_operators(expression: str) -> str:
     """Replace Unicode arithmetic symbols with ASCII equivalents before evaluation."""
     return expression.translate(_UNICODE_ARITH_TABLE)
-
-
-def _canonicalize_arguments(
-    tool_name: str,
-    arguments: Mapping[str, object],
-    alias_map: Mapping[str, str],
-) -> dict[str, object]:
-    """Map alias argument keys to canonical keys, raising ValueError on conflicting aliases.
-
-    Applied symmetrically to both reference and coalition trajectories so that
-    alias-key differences never create false mismatches.
-    """
-    canonical: dict[str, object] = {}
-    for key, value in arguments.items():
-        ckey = alias_map.get(key, key)
-        if ckey in canonical:
-            if canonical[ckey] != value:
-                msg = (
-                    f"Conflicting values for canonical argument {ckey!r} in {tool_name!r}: "
-                    f"{canonical[ckey]!r} vs {value!r}"
-                )
-                raise ValueError(msg)
-        else:
-            canonical[ckey] = value
-    return canonical
 
 
 def _required_args_for_tool(tool_name: str) -> frozenset[str]:

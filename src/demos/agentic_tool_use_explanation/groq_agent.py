@@ -17,9 +17,13 @@ except ModuleNotFoundError:
     from agent_failure import AgentFailureKind, classify_agent_exception
 
 try:
-    from demos.agentic_tool_use_explanation.tool_schemas import NO_TOOL_NAME
+    from demos.agentic_tool_use_explanation.tool_schemas import (
+        DEFAULT_ARGUMENT_ALIASES,
+        NO_TOOL_NAME,
+        canonicalize_tool_arguments,
+    )
 except ModuleNotFoundError:
-    from tool_schemas import NO_TOOL_NAME
+    from tool_schemas import DEFAULT_ARGUMENT_ALIASES, NO_TOOL_NAME, canonicalize_tool_arguments
 
 
 @dataclass
@@ -218,7 +222,38 @@ def _valid_decision_names(tool_schemas: Sequence[Mapping[str, object]]) -> set[s
     return _tool_names(tool_schemas) | {NO_TOOL_NAME}
 
 
+def _normalize_tool_arguments(
+    tool_name: str, arguments: Mapping[str, object]
+) -> Mapping[str, object]:
+    """Map alias argument keys (e.g. "city") to canonical keys (e.g. "location").
+
+    Groq is prompted for tool_arguments via a free-text JSON shape with no
+    per-tool parameter schema attached, so it can guess a plausible-but-wrong
+    key name for the same value (e.g. "city" instead of "location", "expr"
+    instead of "expression"). This resolves those known aliases via the
+    shared ``tool_schemas.DEFAULT_ARGUMENT_ALIASES`` table -- the same table
+    ``router_scorers.TrajectoryArgumentMatchScorer`` uses -- before the demo
+    tool-output templates below read specific keys, so a recognized alias
+    populates the real value instead of silently falling through to
+    placeholder text.
+
+    Falls back to the original, unmodified arguments on a conflicting-alias
+    ``ValueError`` (e.g. Groq returned both "location" and "city" with
+    different values): this is best-effort demo-tool-output presentation, not
+    a routing decision, and must never crash inference over a malformed
+    argument dict.
+    """
+    alias_map = DEFAULT_ARGUMENT_ALIASES.get(tool_name, {})
+    if not alias_map:
+        return arguments
+    try:
+        return canonicalize_tool_arguments(tool_name, arguments, alias_map)
+    except ValueError:
+        return arguments
+
+
 def _run_demo_tool(tool_name: str, arguments: Mapping[str, object]) -> str:
+    arguments = _normalize_tool_arguments(tool_name, arguments)
     if tool_name == "weather_tool":
         location = str(arguments.get("location", "the requested location"))
         date_or_time = arguments.get("date_or_time", arguments.get("date", "the requested time"))
@@ -237,6 +272,7 @@ def _build_assistant_answer(
     tool_name: str,
     arguments: Mapping[str, object],
 ) -> str:
+    arguments = _normalize_tool_arguments(tool_name, arguments)
     if tool_name == "calculator_tool":
         expression = str(arguments.get("expression", ""))
         result = _safe_eval_arithmetic(expression)
@@ -251,7 +287,10 @@ def _build_assistant_answer(
             f"at {date_or_time}."
         )
     if tool_name == "web_search_tool":
-        query = str(arguments.get("query", user_request))
+        # Fallback unified with `_run_demo_tool`'s web_search_tool branch above
+        # ("the request", not the full `user_request` text) so both demo-tool
+        # presentation paths degrade the same way when "query" is missing.
+        query = str(arguments.get("query", "the request"))
         return f"I would use web search to retrieve current information for: {query}."
     if tool_name == "no_tool":
         return f"I can answer directly: {user_request}"

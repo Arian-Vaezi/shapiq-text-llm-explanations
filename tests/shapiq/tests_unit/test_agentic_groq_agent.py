@@ -263,3 +263,116 @@ def test_groq_inference_prompt_lists_no_tool_as_a_valid_value(monkeypatch) -> No
 
     prompt_text = " ".join(message["content"] for message in captured["messages"])
     assert "no_tool" in prompt_text
+
+
+def test_groq_weather_tool_normalizes_aliased_location_key(monkeypatch) -> None:
+    """A model guessing "city" instead of "location" must still populate the real value.
+
+    Regression test: Groq's JSON-mode prompt never communicates each tool's exact
+    argument key names, so the model can plausibly guess "city" instead of the
+    schema's "location". Without alias normalization, "location" is missing.
+    """
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    result = run_groq_tool_inference(
+        "Will it rain in Berlin tomorrow?",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=fake_client_factory(
+            '{"selected_tool":"weather_tool","tool_arguments":{"city":"Berlin"}}',
+        ),
+    )
+
+    assert result.error is None
+    assert "Berlin" in result.raw_trace["tool_output"]
+    assert "the requested location" not in result.raw_trace["tool_output"]
+    assert "Berlin" in result.assistant_answer
+    assert "the requested location" not in result.assistant_answer
+
+
+def test_groq_calculator_tool_normalizes_aliased_expression_key(monkeypatch) -> None:
+    """A model guessing "expr" instead of "expression" must still evaluate the real value."""
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    result = run_groq_tool_inference(
+        "Calculate 2 + 3",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=fake_client_factory(
+            '{"selected_tool":"calculator_tool","tool_arguments":{"expr":"2 + 3"}}',
+        ),
+    )
+
+    assert result.error is None
+    assert "5" in result.raw_trace["tool_output"]
+    assert "unable to evaluate demo expression" not in result.raw_trace["tool_output"]
+    assert "5" in result.assistant_answer
+
+
+def test_groq_web_search_tool_normalizes_aliased_query_key(monkeypatch) -> None:
+    """A model guessing "q" instead of "query" must still populate the real value."""
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    result = run_groq_tool_inference(
+        "Who won the latest Formula 1 race?",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=fake_client_factory(
+            '{"selected_tool":"web_search_tool",'
+            '"tool_arguments":{"q":"latest Formula 1 race winner"}}',
+        ),
+    )
+
+    assert result.error is None
+    assert "latest Formula 1 race winner" in result.raw_trace["tool_output"]
+    assert "'the request'" not in result.raw_trace["tool_output"]
+    assert "latest Formula 1 race winner" in result.assistant_answer
+
+
+def test_groq_weather_tool_falls_back_when_no_alias_matches(monkeypatch) -> None:
+    """An unrecognized key (not in the alias table) still degrades to placeholder text."""
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    result = run_groq_tool_inference(
+        "Will it rain in Berlin tomorrow?",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=fake_client_factory(
+            '{"selected_tool":"weather_tool","tool_arguments":{"town":"Berlin"}}',
+        ),
+    )
+
+    assert result.error is None
+    assert "the requested location" in result.raw_trace["tool_output"]
+    assert "Berlin" not in result.raw_trace["tool_output"]
+
+
+def test_groq_web_search_tool_fallback_is_consistent_between_tool_output_and_answer(
+    monkeypatch,
+) -> None:
+    """`_run_demo_tool` and `_build_assistant_answer` must use the same query fallback."""
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+
+    result = run_groq_tool_inference(
+        "Who won the latest Formula 1 race, and which team were they driving for?",
+        EXECUTABLE_TOOL_SCHEMAS,
+        "groq-test",
+        system_prompt=FIXED_SYSTEM_PROMPT,
+        tool_context=FIXED_TOOL_CONTEXT,
+        client_factory=fake_client_factory(
+            '{"selected_tool":"web_search_tool","tool_arguments":{}}',
+        ),
+    )
+
+    assert result.error is None
+    assert "the request" in result.raw_trace["tool_output"]
+    assert "the request" in result.assistant_answer
+    assert "which team were they driving for" not in result.assistant_answer
