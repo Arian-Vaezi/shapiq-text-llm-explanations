@@ -119,8 +119,8 @@ SUMMARY_FIELDS = (
 )
 
 
-def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
-    """Parse the real batch CLI without initializing model dependencies."""
+def build_parser() -> argparse.ArgumentParser:
+    """Build the shared batch CLI without initializing model dependencies."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-name", default=DEFAULT_MODEL_NAME)
     parser.add_argument("--device", default=DEFAULT_DEVICE)
@@ -133,7 +133,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=DEFAULT_MAX_PAIRS_PER_BATCH,
     )
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
-    return parser.parse_args(argv)
+    return parser
+
+
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse the real batch CLI without initializing model dependencies."""
+    return build_parser().parse_args(argv)
 
 
 def output_paths(output_dir: Path) -> OutputPaths:
@@ -371,6 +376,7 @@ def run_experiment(
     configuration: BatchConfiguration,
     output_dir: Path,
     cases: Sequence[RepresentativeCase] = REPRESENTATIVE_CASES,
+    case_selection_description: str = CASE_SELECTION_DESCRIPTION,
     metadata: Mapping[str, object] | None = None,
     now: Callable[[], datetime.datetime] = _utc_now,
     monotonic: Callable[[], float] = time.perf_counter,
@@ -391,7 +397,7 @@ def run_experiment(
         "device": configuration.device,
         "configuration": {**asdict(configuration), **dependencies.metadata},
         "source_set": SOURCE_SET,
-        "case_selection_description": CASE_SELECTION_DESCRIPTION,
+        "case_selection_description": case_selection_description,
         "completed_case_count": 0,
         "failed_case_count": 0,
         "runs": [],
