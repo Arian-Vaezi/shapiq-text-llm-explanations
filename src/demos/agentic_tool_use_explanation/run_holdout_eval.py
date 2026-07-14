@@ -33,7 +33,7 @@ except ModuleNotFoundError:
 TOOL_NAMES = ("weather_tool", "calculator_tool", "web_search_tool", "no_tool")
 PARSE_FAILURE_LABEL = "parse_failure"
 PREDICTION_NAMES = (*TOOL_NAMES, PARSE_FAILURE_LABEL)
-DEFAULT_TESTSET = Path(__file__).with_name("holdout_samples.json")
+DEFAULT_TESTSET = Path(__file__).parent / "results" / "holdout" / "holdout_samples.json"
 DEFAULT_OUTPUT = Path(__file__).with_name("holdout_eval_results.json")
 # Local default, mirroring run_representative_xai.py's DEFAULT_MODEL_NAME, so this
 # CLI's default model always matches the project's primary/default local HF model

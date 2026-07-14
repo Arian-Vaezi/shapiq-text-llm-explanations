@@ -19,8 +19,8 @@ from run_representative_xai import (
 )
 
 DEMO_DIR = Path(__file__).resolve().parent
-HOLDOUT_PATH = DEMO_DIR / "holdout_samples.json"
-PRIOR_RESULTS_PATH = DEMO_DIR / "holdout_eval_results_3b.json"
+HOLDOUT_PATH = DEMO_DIR / "results" / "holdout" / "holdout_samples.json"
+PRIOR_RESULTS_PATH = DEMO_DIR / "results" / "holdout" / "holdout_eval_results_3b.json"
 DEFAULT_OUTPUT_DIR = Path("outputs/representative_xai_20")
 CASE_SELECTION_DESCRIPTION = (
     "Twenty cases (five per category) selected before XAI from the existing 40-prompt "
