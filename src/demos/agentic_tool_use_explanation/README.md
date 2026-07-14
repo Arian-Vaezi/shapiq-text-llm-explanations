@@ -1,264 +1,92 @@
-# Explaining Tool Selection Demo
+# Agentic Tool-Use Explanation
 
-Streamlit framework for the **Agentic tool-use explanations** demo.
+This demo explains which parts of a user request support or oppose an agent's
+tool selection. It combines native Hugging Face tool-calling, request
+segmentation, and Shapley attribution in an interactive Streamlit application.
 
-This demo treats user-request phrases as players in a cooperative game while
-keeping the system prompt and tool schemas fixed. For each coalition of user
-segments, the app scores how strongly the visible text supports the identity of
-the tool selected by the full-context agent run, then uses shapiq to estimate
-first-order attributions and second-order interactions.
+The supported outcomes are:
 
-The current interface is intentionally compact for development-stage demos:
-scenario/input first, a short router summary, a minimal explanation setup, and
-results only after running the explanation.
+* `weather_tool`
+* `calculator_tool`
+* `web_search_tool`
+* direct answer (`no_tool`)
 
-The demo intentionally reuses package visualization functions implemented for
-sentence/text players:
+## Start here
 
-- `token_attribution_bar_plot`
-- `sentence_interaction_heatmap`
+Run the Streamlit application and select one of the provided example requests.
 
-## Run
+The app first performs a full-context agent run. The resulting tool or direct
+answer is then frozen as the explanation target. Shapley values and pairwise
+k-SII interactions show how the user-request segments support or oppose that
+target.
 
-From the repository root:
+The explanation is post-hoc: it characterizes observable model behavior under
+coalition masking, but does not recover the model's internal routing mechanism.
 
-```bash
-uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
-```
-
-The embedding segmenter needs no additional setup. For full linguistic
-segmentation, install the English spaCy model locally:
-
-```bash
-python -m spacy download en_core_web_sm
-```
-
-Then open:
+## Project structure
 
 ```text
-http://localhost:8501
+agentic_tool_use_explanation/
+├── app.py                        Streamlit entry point
+├── _app_impl/                    Application flow and UI
+│   └── plotting.py               Attribution and interaction plots
+├── hf_router.py                  Native Hugging Face inference
+├── scorers.py                    Coalition value functions
+├── semantic_segmenter.py         Embedding-based user-request segmentation
+├── linguistic_segmenter.py       spaCy-based user-request segmentation
+├── tool_game.py                  shapiq cooperative game
+├── tool_schemas.py               Tool definitions
+├── run_holdout_eval.py           Offline evaluation
+└── README.md
 ```
 
-`localhost` only works on the machine running Streamlit. Other users need to run
-the command on their own machine, or use the displayed Network URL if they are on
-the same local network.
-
-If port `8501` is already in use, change `--server.port` to another port such as
-`8502` and open that local URL instead.
-
-If your environment has unwritable Matplotlib/fontconfig cache directories, set
-`MPLCONFIGDIR` and `XDG_CACHE_HOME` to writable paths before starting Streamlit.
-
-### Minimal Local Environment
-
-This branch has been tested with a local `.venv` using Python 3.12. To recreate
-the minimal environment needed for the current Streamlit demo:
-
-```bash
-/Users/yililalo/.local/bin/python3.12 -m venv .venv
-.venv/bin/python -m pip install streamlit pandas matplotlib scipy tqdm scikit-learn sparse-transform galois colour networkx
-```
-
-This does not install a real LLM backend. Do not install `torch` or
-`transformers` unless you are working on the later Gemma integration.
-
-## Current UI Flow
-
-1. Select HF Local or API Agent mode and enter a request.
-2. Run the full pipeline. The full-context agent run selects the target tool.
-3. The XAI stage freezes that Agent Result tool as the explanation target.
-4. Inspect the summary, SV attribution, and k-SII interaction results.
-5. Use Developer settings only when you need alternate scorers, prompt previews,
-   value-function details, or raw backend diagnostics.
-
-The presentation path uses one unified HF-native continuation-likelihood family
-for both branches:
-
-1. Executable tool calls use a canonical tool-identity continuation
-   likelihood value function.
-2. Direct-answer (`no_tool`) cases use a canonical direct-answer continuation
-   likelihood value function.
-
-Both use the same model, tokenizer, chat template, coalition masking,
-teacher-forced sequence-likelihood implementation, and empty-request baseline.
-They differ only in the frozen target continuation. The direct-answer value
-function explains support for a specific answer fragment; it does not
-directly measure the contrast between answering and calling a tool. The
-legacy A/B/C/D forced-choice scorer remains in the codebase only as a
-historical/developer ablation -- it is no longer selected automatically for
-either branch.
-
-## What The App Shows
-
-- An example-request mode with fixed system prompt segments and user request
-  segments.
-- A custom-request mode with a user-input box, suggested tool, short
-  reason, and per-tool scores.
-- Tool selection: `weather_tool`, `calculator_tool`, `web_search_tool`, or
-  the internal direct-answer decision `no_tool`.
-- HF Local native tool-identity scoring with inference/XAI model consistency
-  checks.
-- A compact setup panel for the coalition value function.
-- Summary metrics for target-tool support after running the explanation.
-- First-order attribution ranking: which segment most pushes the tool decision.
-- Segment interaction heatmap: which system/user segments interact under the selected shapiq index.
-- System/user block outlines on the heatmap, so the hierarchy of prompt parts is visible at a glance.
-- Advanced/debug sections for prompt segments, scoring prompts, value-function
-  details, and keyword comparison.
-
-## Segmentation
-
-The current demo uses manually curated prompt segments. This makes the demo
-stable and easy to explain, because each player has a clear meaning. For a final
-model-backed version, the segmentation can be replaced or extended with:
-
-- sentence splitting,
-- word/token splitting,
-- message-role splitting (`system`, `user`, tool schema),
-- tool-schema splitting by tool description and parameter descriptions.
-
-## Scoring Methods
-
-The demo keeps several scoring implementations side by side. The default
-HF-local presentation path is the native tool-identity scorer:
-
-- Full-context native inference determines the selected tool `t`.
-- The selected tool is frozen as the XAI target.
-- For each coalition, the scorer constructs `y_t`, a template-derived
-  canonical native-format continuation for tool `t`, with the same selected
-  tokenizer and native chat template used by inference.
-- `y_t` is truncated at the tool identity and excludes free-form argument
-  tokens. This isolates tool-identity evidence from argument-generation
-  variability.
-- The explanation targets which user-request segments increase or decrease
-  support for the selected tool identity, not argument generation or raw
-  response reproduction.
-
-The native tool-identity value function is:
+The main data flow is:
 
 ```text
-h_t(S) = mean_k log P_theta(y_{t,k} | x_S, y_{t,<k})
+full request
+    → native agent inference
+    → frozen explanation target
+    → request segmentation
+    → coalition scoring
+    → Shapley values and k-SII interactions
+    → bar plot and interaction heatmap
+```
+
+## Explanation scope
+
+Only user-request segments are treated as players.
+
+The following remain fixed across all coalitions:
+
+* system prompt;
+* available tool schemas;
+* model and tokenizer;
+* chat template;
+* frozen target continuation.
+
+Segments outside a coalition are removed while the original order of the
+remaining segments is preserved.
+
+For a selected tool (t), the local Hugging Face value function scores a
+canonical native tool-identity continuation. For each coalition, the scorer
+constructs a template-derived canonical native-format continuation for tool
+(t), built with the same selected tokenizer and native chat template used by
+inference. This continuation is truncated at the tool identity and excludes
+free-form argument tokens, isolating tool-identity evidence from
+argument-generation variability:
+
+```text
+h_t(S) = mean log P_theta(y_t | x_S)
 v_t(S) = h_t(S) - h_t(empty)
 ```
 
-### Native Direct-Answer Continuation Scorer
+For direct-answer cases, the same mechanism is applied to a frozen answer
+fragment.
 
-`no_tool` Agent Results are scored by `NativeDirectAnswerScorer`, the formal
-default for trusted HF-local direct-answer cases, replacing the legacy A/B/C/D
-surrogate that was previously substituted in automatically:
-
-- Full-context native inference produces a direct answer for the `no_tool`
-  case. The direct answer is frozen once, before any coalition is scored --
-  never regenerated per coalition, never re-run through native routing, and
-  never produced by calling `generate()` during coalition scoring.
-- `build_canonical_direct_answer_target` extracts a deterministic, bounded
-  first-sentence fragment from that answer (respecting common abbreviations
-  and decimal numbers, extending into subsequent text only if the first
-  sentence is very short, and truncating to a maximum token budget). This is
-  a pure, non-semantic function -- no model calls, no NLP/embedding heuristics.
-- The frozen fragment is teacher-forced at exactly the same native
-  assistant-continuation boundary used by tool-identity scoring (system
-  prompt + coalition user request + executable tool schemas + assistant
-  generation boundary), reusing the identical chat-template prompt builder.
-- `NativeToolCallScorer` and `NativeDirectAnswerScorer` share one lower-level
-  teacher-forced sequence-scoring implementation (tokenization, batched
-  forward passes, next-token log-probability extraction, continuation-mean
-  scoring, device-cache cleanup, finite-score validation); they differ only in
-  which continuation text is frozen and scored.
-
-The direct-answer value function is:
-
-```text
-h_direct(S) = mean_k log P_theta(y_{direct,k} | x_S, y_{direct,<k})
-v_direct(S) = h_direct(S) - h_direct(empty)
-```
-
-**Scope of this explanation.** The direct-answer scorer explains *which
-request segments support or oppose this specific direct-answer continuation*.
-It does not directly estimate *why the model chose no tool rather than
-calling a tool* -- that would require a contrastive formulation such as
-`v_contrastive(S) = h_direct(S) - h_tool_foil(S)`, which is documented here as
-future work and is not implemented. Do not describe this scorer's output as a
-"no-tool probability", "no-tool decision likelihood", or "probability of
-answering directly"; use terminology such as *canonical direct-answer
-continuation likelihood* or *direct-answer continuation support* instead.
-Mean log-probability mitigates length effects within one target continuation,
-but different target continuations (a tool name vs. a direct-answer fragment)
-are not automatically calibrated to a shared magnitude scale -- native
-tool-identity and native direct-answer scores are not numerically comparable
-merely because they share the same computational family.
-
-Other implementations remain available for development and comparison:
-
-- `LexicalToolScorer` is a fast keyword baseline.
-- `LLMToolScorer` is a generation-based numeric judge. It remains in code for
-  experiments, but is hidden from the Streamlit scoring-method dropdown.
-- `CalibratedToolLogOddsScorer` avoids numeric parsing by scoring a fixed
-  routing-label decision code (`A`/`B`/`C`/`D`) for every candidate tool with
-  model likelihood, calibrating each candidate against a content-free probe
-  prompt, and combining the results into a target-vs-all multiclass log-odds
-  value normalized against the true empty coalition.
-
-The primary pipeline freezes the full-context Agent Result before evaluating
-coalitions:
-
-```text
-full fixed context + full user request
--> native inference selects a tool
--> selected tool identity becomes the explanation target
--> value function evaluates masked user-segment coalitions
-```
-
-Developer-only fallback target selection can still ask a selected scorer to
-choose a target when no Agent Result exists, but that is not the presentation
-path.
-
-This lets the UI and shapiq explanation flow be developed without API keys, GPU
-dependencies, or Hugging Face model downloads.
-
-## Legacy A/B/C/D Forced-Choice Scorer (HF Local) -- Historical / Developer Ablation
-
-The legacy **Calibrated multiclass tool log-odds (HF local)** scorer
-(`CalibratedToolLogOddsScorer`) uses a local Hugging Face causal language model.
-It is **not primary** and is retained only as a historical/developer ablation,
-manually selectable in Developer Mode. It is no longer substituted in
-automatically for either the executable-tool or the direct-answer branch --
-see "Native Direct-Answer Continuation Scorer" above for the current formal
-default. Its scores are not numerically comparable to the native continuation
-methods.
-
-For each coalition, the LLM is queried with a fixed artificial
-constrained-classification routing prompt (see `ROUTING_LABELS` and
-`build_routing_classification_prompt` in `scorers.py`): choose exactly one
-routing decision code (`A`/`B`/`C`/`D` for
-`weather_tool`/`calculator_tool`/`web_search_tool`/`no_tool`), each rendered
-with its canonical description from `tool_schemas.py`/`TOOLS` (not a second
-hard-coded description dictionary) -- so editing a tool's description changes
-this prompt, and changes the calibration cache key. Every candidate's
-decision-code continuation is scored with model log-likelihood, calibrated
-against a content-free probe prompt (`CALIBRATION_USER_REQUEST =
-"[NO USER REQUEST]"`) to remove any fixed per-label prior, and combined into a
-target-vs-all multiclass log-odds. The result is normalized against the true
-empty coalition so that `V(empty_coalition) == 0`. shapiq then uses these
-coalition values to compute segment attributions and pairwise interactions.
-
-Unlike a naive target-vs-`no_tool` contrast, `no_tool` is treated as one
-artificial routing alternative among all candidates, not a fixed reference -- so
-a candidate outscoring `no_tool` is never mistaken for genuine support when a
-third candidate is actually strongest. `NoTool`/`no_tool` is not an executable
-tool and is never emitted by the native agent; it exists only as an internal
-direct-answer label and as an artificial candidate in this legacy probe. The
-same canonical routing-classification prompt builder
-(`build_routing_classification_prompt`) is shared by HF local classification
-routing, HF local logprob scoring, calibration scoring, and coalition scoring,
-so token boundaries and any residual template prior stay identical across all
-four.
-
-**This branch does not have the same fidelity as native continuation scoring.**
-`hf_router.LocalHFClassificationRouter` wraps an already-loaded
-`CalibratedToolLogOddsScorer` and selects a tool by scoring every routing-label
-continuation for the full (unmasked) request and taking the argmax. This path
-remains available only as a manually selected developer ablation.
+The resulting explanation targets which user-request segments increase or
+decrease support for the selected tool identity, not argument generation or
+raw response reproduction. It does not directly compare direct answering
+against every available tool.
 
 ## HF Local Model Consistency
 
@@ -267,64 +95,101 @@ required to use the same model, tokenizer, chat template, device, and runtime
 configuration. Developer diagnostics report both inference and scorer identity
 so stale or cross-model explanations are blocked instead of silently displayed.
 
-Run the app with:
+## Setup
+
+Run commands from the repository root:
+
+```bash
+uv sync
+```
+
+For linguistic segmentation, install the English spaCy model:
+
+```bash
+uv run python -m spacy download en_core_web_sm
+```
+
+Hugging Face models are downloaded on first use and cached locally.
+
+The default local model is:
+
+```text
+Qwen/Qwen2.5-3B-Instruct
+```
+
+A GPU is recommended for coalition evaluation.
+
+## Run the application
 
 ```bash
 uv run streamlit run src/demos/agentic_tool_use_explanation/app.py
 ```
 
-Suggested first model:
+Open the URL printed by Streamlit, normally:
 
 ```text
-TinyLlama/TinyLlama-1.1B-Chat-v1.0
+http://localhost:8501
 ```
 
-Suggested first logprob model:
+The standard workflow is:
 
-```text
-Qwen/Qwen2.5-1.5B-Instruct
+1. Select or enter a request.
+2. Run the full-context agent.
+3. Inspect the selected tool or direct answer.
+4. Inspect the request segmentation.
+5. Run the explanation.
+6. Review the Shapley attribution bar plot and pairwise interaction heatmap.
+
+## Interpreting the results
+
+The attribution bar plot shows the individual contribution of each request
+segment:
+
+* positive values support the frozen target;
+* negative values oppose the frozen target.
+
+The interaction heatmap shows main and pairwise k-SII effects:
+
+* diagonal cells contain individual main effects;
+* positive off-diagonal values indicate reinforcement;
+* negative off-diagonal values indicate redundancy or suppression.
+
+Attributions depend on the selected model, prompt template, segmentation, and
+masking strategy.
+
+## Run the evaluation
+
+The offline evaluation script runs representative and holdout requests without
+the Streamlit interface:
+
+```bash
+uv run python src/demos/agentic_tool_use_explanation/run_holdout_eval.py
 ```
 
-## Optional Groq Soft-Vote Scorer
+Stored results are model- and configuration-specific and should not be treated
+as universal routing benchmarks.
 
-The **Groq soft-vote scorer** is a black-box value function for API-only
-routers. For each coalition prompt, it samples the Groq router `N` times and
-returns the empirical frequency with which the target tool is selected. This is
-not calibrated; it is a behavioral soft-vote score under fixed decoding
-settings.
+## Verify the demo
 
-Gemma model ids can be tried manually if the machine has enough memory and the
-required Hugging Face access.
+Run the relevant tests:
 
-Colab-style scorer wiring:
-
-```python
-from demos.agentic_tool_use_explanation.scorers import CalibratedToolLogOddsScorer
-from demos.agentic_tool_use_explanation.tool_game import ToolUseGame
-
-scorer = CalibratedToolLogOddsScorer(model_id="Qwen/Qwen2.5-1.5B-Instruct")
-game = ToolUseGame(
-    target_tool="weather_tool",
-    segments=segments,
-    scorer=scorer,
-    tool_descriptions=tool_descriptions,
-)
+```bash
+uv run pytest tests -k "agentic or tool_use"
 ```
 
-For the final project demo, pass a richer model-backed scorer into `ToolUseGame`
-such as:
+Run code-quality checks:
 
-- target tool-name log-likelihood from a tool-calling LLM,
-- soft-vote score from sampled tool-router decisions,
-- structured tool-call selection frequency from an agent trace,
-- calibrated target-vs-all multiclass log-odds across every routing decision
-  (not a fixed contrast against `no_tool` alone).
+```bash
+uv run pre-commit run --all-files
+```
 
-## Demo Story
+## Limitations
 
-Use scenarios such as weather, calculator, web search, no-tool, and ambiguous
-recency requests to show:
-
-1. Which user phrases trigger tool use.
-2. Which system rules push or suppress tool use.
-3. Which system-rule/user-phrase interactions explain the final decision.
+* Coalition masking can produce requests that differ from naturally occurring
+  inputs.
+* Results depend on how the request is segmented into players.
+* The explanation is conditional on the target selected from the full request.
+* Exact Shapley computation scales exponentially with the number of players.
+* Direct-answer and tool-identity continuation scores are not automatically
+  calibrated to the same numerical scale.
+* The method explains model support, not the model's hidden causal mechanism.
