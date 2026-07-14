@@ -1,32 +1,3 @@
-"""HFModelWrapper — unified wrapper for causal language models.
-
-Supports:
-    - TinyLlama/TinyLlama-1.1B-Chat-v1.0
-    - google/gemma-3-1b-it
-    - Qwen/Qwen3.5-9B  (requires load_in_4bit=True on 8GB GPUs)
-
-Key design decisions:
-    - True batching with left-padding for causal LMs
-      (right-padding breaks autoregressive scoring)
-    - float16 on CUDA/MPS, float32 on CPU
-    - Device auto-detection with graceful fallback
-    - score_continuations() is the only method SentimentDecoderGame needs
-    - Optional 4-bit quantization (bitsandbytes) for large models on
-      memory-constrained GPUs. Defaults to OFF — does not change app.py
-      behavior for TinyLlama / Gemma 3 1B, which already fit in fp16.
-
-QUANTIZATION
-------------
-Qwen/Qwen3.5-9B needs ~18GB in fp16 — too large for an 8GB GPU.
-Loading with load_in_4bit=True via bitsandbytes reduces this to ~5-6GB,
-fitting comfortably with headroom for batching.
-
-    model = HFModelWrapper("Qwen/Qwen3.5-9B", load_in_4bit=True)
-
-This requires the bitsandbytes package:
-    uv pip install bitsandbytes
-"""
-
 from __future__ import annotations
 
 import torch
@@ -35,40 +6,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 class HFModelWrapper:
-    """Wrapper for causal language models with batched continuation scoring.
-
-    Parameters
-    ----------
-    model_name:
-        HuggingFace model identifier.
-    device:
-        Inference device. If None, auto-selects CUDA > MPS > CPU.
-    hf_token:
-        HuggingFace token for gated models (e.g. Gemma).
-    batch_size:
-        Number of prompts per forward pass. Defaults to 32.
-    load_in_4bit:
-        Whether to load the model in 4-bit quantization via bitsandbytes.
-        Defaults to False — required for large models (e.g. Qwen3.5-9B)
-        on memory-constrained GPUs (≤8GB). Has no effect on small models
-        like TinyLlama or Gemma 3 1B; leave False for those.
-
-    Examples
-    --------
-    >>> # Small model — app default, unchanged behavior
-    >>> model = HFModelWrapper("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
-
-    >>> # Large model on 8GB GPU — needs quantization
-    >>> model = HFModelWrapper("Qwen/Qwen3.5-9B", load_in_4bit=True)
-
-    >>> scores = model.score_continuations(
-    ...     prompts=["The film is great", "The film is terrible"],
-    ...     continuation=" This is positive.",
-    ... )
-    >>> scores.shape
-    (2,)
-    """
-
+    
     def __init__(
         self,
         model_name: str,
@@ -182,26 +120,7 @@ class HFModelWrapper:
         prompts: list[str],
         continuation: str,
     ) -> np.ndarray:
-        """Compute log P(continuation | prompt) for a batch of prompts.
-
-        Uses true batching with LEFT padding — critical for causal LMs.
-        Right-padding would corrupt the autoregressive scores because the
-        model would attend to padding tokens before the actual content.
-
-        The score is the sum of log-probabilities of all continuation tokens
-        given the prompt tokens:
-
-            score(prompt) = Σ_{t ∈ continuation} log P(token_t | prompt + tokens_before_t)
-
-        Args:
-            prompts: List of context strings to score against.
-            continuation: The string whose likelihood we measure.
-                          Should start with a space e.g. " This is positive."
-
-        Returns:
-            np.ndarray of shape (len(prompts),) with log-likelihood scores.
-            Higher = model finds the continuation more likely given the prompt.
-        """
+     
         if not prompts:
             return np.array([], dtype=float)
 
@@ -273,16 +192,7 @@ class HFModelWrapper:
         prompts: list[str],
         continuations: list[str],
     ) -> np.ndarray:
-        """Score all prompts against all continuations efficiently.
-
-        Args:
-            prompts: List of context strings.
-            continuations: List of continuation strings to score against.
-
-        Returns:
-            np.ndarray of shape (len(continuations), len(prompts)).
-            result[i, j] = log P(continuations[i] | prompts[j])
-        """
+     
         results = []
         for continuation in continuations:
             all_scores = []

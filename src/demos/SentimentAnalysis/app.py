@@ -1,24 +1,3 @@
-"""
-app.py
-=======
-Streamlit web application for the Sentiment Analysis demo.
-
-This file contains ONLY the UI logic — layout, styling, and event routing.
-All computation logic lives in sentiment_analysis.py.
-
-Two pipelines are supported:
-  - Encoder : BERT-family classifier with [MASK] imputation
-  - Decoder : Causal LM with contrastive log-odds value function
-
-To run:
-    streamlit run app.py
-
-Related files:
-    sentiment_analysis.py    <- core pipeline logic (encoder + decoder)
-    EncoderTextImputer.py    <- Game subclass for encoder models
-    SentimentDecoderGame.py  <- decoder value function
-"""
-
 from __future__ import annotations
 
 import sys

@@ -1,17 +1,3 @@
-"""results_app.py — Precomputed results explorer for multilingual sentiment experiments.
-
-Reads from:
-    results/summary.json        — all 24 sentence results
-    results/figures/            — pre-generated PNGs from build_diagrams.py
-                                  naming: {run_key}_{sentence|network|heatmap}.png
-
-No GPU, no model weights, instant startup.
-
-Run:
-    cd src/demos/SentimentAnalysis
-    streamlit run results_app.py
-"""
-
 from __future__ import annotations
 
 import json
@@ -122,13 +108,23 @@ if page == "📖 Story":
     st.divider()
     st.markdown("""
 <div class="finding">
- <b>Finding 1 
+    <b>Finding 1  Encoder predictions were more consistent</b><br>
+    XLM-RoBERTa handled clear positive and negative sentiment more reliably,
+    while Qwen sometimes classified obviously negative sentences as positive.
 </div>
+
 <div class="finding">
-<b>Finding 2 
+    <b>Finding 2  Interactions explain negation better</b><br>
+    Expressions such as <i>“not bad,” “pas mauvais,”</i> and
+    <i>“nicht schlecht”</i> become positive through the interaction between
+    the negation and the negative adjective.
 </div>
+
 <div class="finding">
-<b>Finding 3 
+    <b>Finding 3  Sarcasm was the most difficult phenomenon</b><br>
+    Both models were often influenced by positive surface words and missed
+    the intended negative meaning, although the interaction values still
+    revealed conflicting word combinations.
 </div>
 """, unsafe_allow_html=True)
 
@@ -396,3 +392,71 @@ elif page == "🔍 Explorer":
         #    st.caption("Timing (s): " + " · ".join(f"{k}: {v:.2f}" for k, v in r["timing"].items()))
         #st.caption(f"`run_key`: `{rk}`")
         st.caption(f"Model: `{r['model_id']}`")
+# ══════════════════════════════════════════════════════════════════════════
+# Instant Analysis launcher
+# ──────────────────────────────────────────────────────────────────────────
+# Launches the dynamic app (app.py) as a second Streamlit server on
+# LIVE_PORT and links to it. The link opens in a new browser tab, so the
+# precomputed results stay open in this one.
+#
+# Behaviour:
+#   - If the live app is already running  -> show only the link button.
+#   - If not                              -> show a start button that
+#     spawns it, then show the link.
+#
+# Note: local-demo pattern only. For a deployed version (e.g. HF Spaces),
+# use Streamlit's native multipage layout instead of subprocess.
+# ══════════════════════════════════════════════════════════════════════════
+
+import socket
+import subprocess
+import sys
+
+LIVE_APP  = THIS_DIR / "app.py"
+LIVE_PORT = 8502  # results app: 8501 · live app: 8502
+
+
+def is_port_in_use(port: int) -> bool:
+    """Return True if a server is already listening on localhost:port."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        return sock.connect_ex(("localhost", port)) == 0
+
+
+def launch_live_app() -> None:
+    """Spawn app.py as an independent Streamlit server on LIVE_PORT."""
+    subprocess.Popen(
+        [
+            sys.executable, "-m", "streamlit", "run", str(LIVE_APP),
+            "--server.port", str(LIVE_PORT),
+            "--server.headless", "true",
+        ],
+        cwd=str(THIS_DIR),
+    )
+
+
+def render_instant_analysis_launcher() -> None:
+    """Render the launcher section in the sidebar."""
+    st.divider()
+    st.markdown("### ⚡ Instant Analysis")
+    st.caption("Live SV / k-SII computation on any sentence you type.")
+
+    if is_port_in_use(LIVE_PORT):
+        st.link_button(
+            "Open Instant Analysis ↗",
+            f"http://localhost:{LIVE_PORT}",
+            use_container_width=True,
+        )
+    else:
+        if st.button("🚀 Start Instant Analysis", use_container_width=True):
+            launch_live_app()
+            st.success("Starting — give it ~5 seconds, then click below.")
+            st.link_button(
+                "Open Instant Analysis ↗",
+                f"http://localhost:{LIVE_PORT}",
+                use_container_width=True,
+            )
+
+
+# Call inside your sidebar block:
+with st.sidebar:
+    render_instant_analysis_launcher()

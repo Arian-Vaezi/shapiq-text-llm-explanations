@@ -1,24 +1,3 @@
-"""Encoder-only text imputer for sentiment-analysis demos.
-
-This imputer works with any BERT-family encoder sentiment classifier such as:
-
-    - lvwerra/distilbert-imdb
-    - distilbert-base-uncased-finetuned-sst-2-english
-    - cardiffnlp/twitter-roberta-base-sentiment-latest
-
-It treats words as players. For each coalition, absent words are replaced with
-the model's mask token ([MASK] for BERT/DistilBERT, <mask> for RoBERTa).
-
-The value function is:
-
-    v(S) = P(POSITIVE | masked_text) - P(NEGATIVE | masked_text)
-
-Interpretation:
-    +1  -> strongly positive
-     0  -> uncertain / balanced
-    -1  -> strongly negative
-"""
-
 from __future__ import annotations
 
 import numpy as np
@@ -28,53 +7,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 
 class EncoderTextImputer(Game):
-    """Word-level text imputer for encoder sentiment models.
-
-    Supports two construction modes:
-
-    Mode 1 — load from model_name (first time):
-        imputer = EncoderTextImputer(
-            model_name="lvwerra/distilbert-imdb",
-            input_text="This film is not bad at all",
-        )
-
-    Mode 2 — reuse preloaded weights (fast, for app use):
-        imputer = EncoderTextImputer(
-            model_name="lvwerra/distilbert-imdb",
-            input_text="This film is not bad at all",
-            preloaded_model=model,        # already on device
-            preloaded_tokenizer=tokenizer,
-        )
-
-    In Mode 2, no model loading happens — the imputer is ready instantly.
-    Only v(∅) is computed (one forward pass) to set the normalization baseline.
-
-    Parameters
-    ----------
-    model_name:
-        HuggingFace model identifier.
-    input_text:
-        The sentence to explain.
-    preloaded_model:
-        Optional already-loaded AutoModelForSequenceClassification.
-        If provided, model_name is only used for identification.
-    preloaded_tokenizer:
-        Optional already-loaded AutoTokenizer.
-        Must be provided together with preloaded_model.
-    device:
-        Device for inference ("cpu", "cuda", "mps").
-        Ignored if preloaded_model is provided (uses model's device).
-        If None, auto-selects GPU if available, else CPU.
-    batch_size:
-        Number of masked texts per model call. Defaults to 32.
-    positive_label:
-        Positive sentiment label string. Defaults to "POSITIVE".
-    negative_label:
-        Negative sentiment label string. Defaults to "NEGATIVE".
-    verbose:
-        Whether to show shapiq progress bar. Defaults to False.
-    """
-
+   
     def __init__(
         self,
         model_name: str,
@@ -187,21 +120,7 @@ class EncoderTextImputer(Game):
     # ── Masking ───────────────────────────────────────────────────────────────
 
     def coalition_to_text(self, coalition: np.ndarray) -> str:
-        """Convert one coalition vector into a masked sentence.
-
-        Args:
-            coalition: Boolean array of shape (n_players,).
-                True  = word is present.
-                False = word is replaced with mask_token.
-
-        Returns:
-            Masked sentence string.
-
-        Example:
-            Words:     ["This", "film", "is", "not", "bad", "at", "all"]
-            Coalition: [F, F, F, T, T, F, F]
-            Output:    "[MASK] [MASK] [MASK] not bad [MASK] [MASK]"
-        """
+ 
         coalition = np.asarray(coalition, dtype=bool)
         if coalition.shape != (self.n_players,):
             raise ValueError(
