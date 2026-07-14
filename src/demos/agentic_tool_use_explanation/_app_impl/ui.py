@@ -1615,7 +1615,6 @@ def main() -> None:
                     <div class="evidence-card-title">Main and pairwise effects — k-SII</div>
                     <div class="evidence-card-caption">
                         Diagonal: main effects &middot; Off-diagonal: pairwise interactions<br>
-                        Blue: negative &middot; Red: positive
                     </div>
                 </div>
                 """,

@@ -94,6 +94,31 @@ def test_polish_bar_keeps_signed_annotations_inside_plot_away_from_labels() -> N
     plt.close(fig)
 
 
+def test_polish_bar_does_not_clip_annotation_text_for_large_values() -> None:
+    """Regression test: an SV >= 1.0 must not have its annotation clipped.
+
+    Reproduces the photosynthesis no_tool case (U1 SV +1.207): the fixed
+    BAR_ANNOTATION_GUTTER_FACTOR percentage-of-value gutter left enough xlim
+    margin for small values but not enough physical/pixel room for a larger
+    value's annotation text, silently truncating it (e.g. "+1.21" rendered as
+    "+1.") under clip_on=True.
+    """
+    fig, ax = plt.subplots()
+    ax.barh([0, 1, 2], [1.207, 0.04, 0.03], color=["red", "red", "red"])
+    ax.set_yticks([0, 1, 2], labels=["U1", "U2", "U3"])
+
+    app.polish_bar(fig, ax)
+    fig.canvas.draw()
+
+    axes_bounds = ax.get_window_extent()
+    renderer = fig.canvas.get_renderer()
+    large_annotation = next(text for text in ax.texts if "+1.21" in text.get_text())
+
+    assert large_annotation.get_text() == "↑ +1.21"
+    assert large_annotation.get_window_extent(renderer).x1 <= axes_bounds.x1
+    plt.close(fig)
+
+
 def _annotated_heatmap(n_players: int) -> tuple[object, object, np.ndarray]:
     """Build a small symmetric matplotlib heatmap for presentation-only tests."""
     player_numbers = np.arange(n_players, dtype=float)

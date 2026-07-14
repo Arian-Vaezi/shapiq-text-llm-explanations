@@ -59,12 +59,17 @@ def polish_bar(
             abs(right_limit),
             *(abs(width) for width in visible_widths),
         )
-        padded_extent = axis_extent * BAR_ANNOTATION_GUTTER_FACTOR
-        ax.set_xlim(-padded_extent, padded_extent)
+        # Provisional gutter: a cheap percentage-of-value estimate, sufficient for
+        # typical Shapley magnitudes. Not guaranteed to fit the annotation text for
+        # every value -- see _expand_xlim_to_fit_annotations below, which measures
+        # the real rendered text and widens this further only if actually needed.
+        provisional_extent = axis_extent * BAR_ANNOTATION_GUTTER_FACTOR
+        ax.set_xlim(-provisional_extent, provisional_extent)
         annotation_offset = axis_extent * BAR_ANNOTATION_OFFSET_FRACTION
     else:
         annotation_offset = 0.0
 
+    annotations: list[tuple[plt.Text, str]] = []
     for patch in ax.patches:
         width = patch.get_width()
         if abs(width) < 0.01:
@@ -79,7 +84,7 @@ def polish_bar(
         # with the bar it is labeling.
         arrow = "↑" if width >= 0 else "↓"
         label_color = RED.hex if width >= 0 else BLUE.hex
-        ax.text(
+        text = ax.text(
             x_pos,
             patch.get_y() + patch.get_height() / 2,
             f"{arrow} {width:+.2f}",
@@ -89,10 +94,48 @@ def polish_bar(
             color=label_color,
             clip_on=True,
         )
+        annotations.append((text, ha))
+
+    if annotations:
+        _expand_xlim_to_fit_annotations(fig, ax, annotations)
 
     fig.tight_layout(pad=0.8)
     fig.subplots_adjust(left=max(fig.subplotpars.left, 0.24))
     return fig
+
+
+def _expand_xlim_to_fit_annotations(
+    fig: plt.Figure,
+    ax: plt.Axes,
+    annotations: list[tuple[plt.Text, str]],
+    *,
+    safety_factor: float = 1.02,
+) -> None:
+    """Widen xlim just enough that every annotation's actual rendered extent fits.
+
+    The percentage-based gutter set by the caller is a cheap estimate, not a
+    guarantee: it can undershoot once an annotation's fixed point-size text no
+    longer fits inside a percentage of a large bar's own value (e.g. a Shapley
+    value >= ~1.0 gets visibly truncated under ``clip_on=True`` while smaller
+    values render fine). This measures each annotation's real window extent
+    after a draw and expands xlim only as far as actually needed -- never more,
+    never less -- so text is never silently clipped regardless of magnitude,
+    and plots that already fit are left with their existing xlim unchanged.
+    """
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    inverse_transform = ax.transData.inverted()
+    _, current_right = ax.get_xlim()
+    max_extent_needed = current_right
+    for text, ha in annotations:
+        window_extent = text.get_window_extent(renderer)
+        far_x_pixels = window_extent.x1 if ha == "left" else window_extent.x0
+        ((far_x_data, _unused_y),) = inverse_transform.transform([(far_x_pixels, window_extent.y0)])
+        max_extent_needed = max(max_extent_needed, abs(far_x_data))
+
+    final_extent = max_extent_needed * safety_factor
+    ax.set_xlim(-final_extent, final_extent)
+    fig.canvas.draw()
 
 
 def polish_heatmap(
