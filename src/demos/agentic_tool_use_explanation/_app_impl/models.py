@@ -52,7 +52,6 @@ from final_answer_similarity_scorer import (
     SentenceTransformerAnswerEmbedder,
     extract_final_answer,
 )
-from gemini_agent import run_gemini_tool_inference
 from groq_agent import run_groq_tool_inference
 from hf_router import (
     DEFAULT_NATIVE_HF_MAX_NEW_TOKENS,

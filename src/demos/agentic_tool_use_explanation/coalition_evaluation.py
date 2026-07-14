@@ -1,7 +1,7 @@
 """Typed, retrying coalition evaluation for the agentic tool-use demo.
 
-Coalition value functions in this demo call out to real providers (Groq, Gemini, a
-local HF router) or local embedding models. Those calls can fail transiently (rate
+Coalition value functions in this demo call out to real providers (Groq, a local
+HF router) or local embedding models. Those calls can fail transiently (rate
 limits, timeouts, temporary 5xx) or fail semantically (no final answer, malformed
 output, non-finite score). Before this module existed, a failed coalition could be
 silently replaced by a fallback placeholder score (e.g. ``fallback_raw_score`` in

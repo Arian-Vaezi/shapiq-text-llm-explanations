@@ -65,7 +65,7 @@ def make_fake_agent(
     ``failing_requests`` simulates the agent raising (e.g. a network exception).
     ``erroring_requests`` simulates the agent returning a result object with
     ``.error`` set and no usable answer text (e.g. a missing API key), which is
-    how the real Groq/Gemini/HF-local backends report failure without raising.
+    how the real Groq/HF-local backends report failure without raising.
     """
     erroring_requests = erroring_requests or {}
     calls: list[str] = []
@@ -572,9 +572,9 @@ def test_existing_scorer_imports_are_unaffected() -> None:
 def make_wrapped_failure_agent(failure_kind: AgentFailureKind | None, error_text: str):
     """Build an agent_callable returning an opaque result with .error/.failure_kind set.
 
-    Mirrors the shape groq_agent.run_groq_tool_inference / gemini_agent.run_gemini_tool_inference
-    actually return: they catch the real provider exception internally and embed it as
-    .error text plus a structured .failure_kind, rather than letting it propagate.
+    Mirrors the shape groq_agent.run_groq_tool_inference actually returns: it catches
+    the real provider exception internally and embeds it as .error text plus a
+    structured .failure_kind, rather than letting it propagate.
     """
 
     def agent(user_request: str) -> object:

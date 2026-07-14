@@ -44,14 +44,6 @@ def build_complete_agent_callable(
                 system_prompt=system_prompt,
                 tool_context=tool_context,
             )
-        if inference_backend == "Gemini":
-            return run_gemini_tool_inference(
-                user_request,
-                get_executable_tool_schemas(),
-                inference_model_name,
-                system_prompt=system_prompt,
-                tool_context=tool_context,
-            )
         if calibrated_hf_mode:
             try:
                 primary_scorer = load_logprob_scorer(

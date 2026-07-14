@@ -1,9 +1,8 @@
 """Structured failure classification shared by agent wrappers and coalition evaluation.
 
-``groq_agent.run_groq_tool_inference`` and ``gemini_agent.run_gemini_tool_inference``
-both catch provider exceptions internally and embed them into an opaque result object
-(``GroqInferenceResult.error`` / ``GeminiInferenceResult.error``) instead of letting
-them propagate. That means a caller several layers up (e.g.
+``groq_agent.run_groq_tool_inference`` catches provider exceptions internally and
+embeds them into an opaque result object (``GroqInferenceResult.error``) instead of
+letting them propagate. That means a caller several layers up (e.g.
 ``final_answer_similarity_scorer.FinalAnswerSimilarityScorer``) cannot see the
 original exception type to decide whether a failure is worth retrying.
 
@@ -56,8 +55,8 @@ def classify_agent_exception(exc: BaseException) -> AgentFailureKind:
 
     Checks the ``groq`` SDK's typed exception hierarchy first (when importable),
     then falls back to :func:`classify_agent_error_text` on ``str(exc)`` -- which
-    also covers test doubles and providers (e.g. Gemini in this environment) that
-    do not expose a typed exception hierarchy here.
+    also covers test doubles and providers that do not expose a typed exception
+    hierarchy here.
     """
     try:
         import groq

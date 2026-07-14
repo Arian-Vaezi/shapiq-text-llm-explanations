@@ -22,10 +22,11 @@ except ModuleNotFoundError:
 try:
     from demos.agentic_tool_use_explanation.tool_schemas import (
         NO_TOOL_NAME,
+        derive_tool_descriptions,
         get_executable_tool_schemas,
     )
 except ModuleNotFoundError:
-    from tool_schemas import NO_TOOL_NAME, get_executable_tool_schemas
+    from tool_schemas import NO_TOOL_NAME, derive_tool_descriptions, get_executable_tool_schemas
 
 DEFAULT_LOCAL_HF_ROUTER_MODEL_ID = "Qwen/Qwen3-4B-Instruct-2507"
 
@@ -47,12 +48,12 @@ ALLOWED_TOOLS: tuple[str, ...] = (
     NO_TOOL_NAME,
 )
 
-ROUTER_TOOL_DESCRIPTIONS: dict[str, str] = {
-    "calculator_tool": "exact arithmetic or mathematical calculations",
-    "weather_tool": "weather forecasts or current weather",
-    "web_search_tool": "current, latest, recent, live, or external information",
-    NO_TOOL_NAME: "stable information that does not require an external lookup",
-}
+# Derived from the canonical tool schemas (tool_schemas.py is the single source of
+# truth for tool descriptions across the demo) instead of a second, independently
+# maintained wording that could silently drift out of sync with it.
+# derive_tool_descriptions() already includes NO_TOOL_NAME, so no separate
+# hardcoded entry is needed here.
+ROUTER_TOOL_DESCRIPTIONS: dict[str, str] = derive_tool_descriptions()
 
 
 @dataclass

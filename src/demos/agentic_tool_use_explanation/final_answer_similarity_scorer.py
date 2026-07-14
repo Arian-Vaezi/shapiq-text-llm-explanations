@@ -11,16 +11,15 @@ This measures semantic fidelity to the full-run behavior, not guaranteed
 factual correctness: a coalition can score highly while still being factually
 wrong, as long as its answer resembles the full-run answer.
 
-Limitation -- not always a "post-tool" answer: for the Groq and Gemini
-backends (``groq_agent.py`` / ``gemini_agent.py``), ``weather_tool`` and
-``web_search_tool`` final answers are template sentences such as "I would use
-the weather tool to retrieve the forecast for ..." that do *not* actually
-consume the demo tool's (fake) output -- only ``calculator_tool`` answers are
-grounded in a real computed result. This scorer measures fidelity to whatever
-final answer the configured backend actually produces, which for those two
-tools is closer to "would-call" phrasing than a genuinely tool-grounded
-answer. See ``groq_agent._build_assistant_answer`` /
-``gemini_agent._build_assistant_answer``.
+Limitation -- not always a "post-tool" answer: for the Groq backend
+(``groq_agent.py``), ``weather_tool`` and ``web_search_tool`` final answers
+are template sentences such as "I would use the weather tool to retrieve the
+forecast for ..." that do *not* actually consume the demo tool's (fake)
+output -- only ``calculator_tool`` answers are grounded in a real computed
+result. This scorer measures fidelity to whatever final answer the
+configured backend actually produces, which for those two tools is closer to
+"would-call" phrasing than a genuinely tool-grounded answer. See
+``groq_agent._build_assistant_answer``.
 """
 
 from __future__ import annotations
@@ -64,7 +63,7 @@ def extract_final_answer(inference_result: object) -> str:
 
     Different real-agent backends expose the final answer under different
     attribute names (``agent_response`` for the local HF router; ``assistant_answer``
-    or ``final_answer`` for Groq and Gemini). This checks them in the same order the
+    or ``final_answer`` for Groq). This checks them in the same order the
     Inference tab uses to build the displayed assistant message, so the reference
     answer and every coalition answer are extracted consistently regardless of
     backend.
@@ -270,8 +269,8 @@ class FinalAnswerSimilarityScorer:
           transient-vs-semantic classification at the coalition-evaluation boundary
           sees the real exception type (e.g. ``groq.RateLimitError``);
         * if the agent instead returns a result object with ``.error`` set (the
-          shape ``groq_agent``/``gemini_agent`` use to report a caught provider
-          failure without raising), that result's ``failure_kind`` -- a structured
+          shape ``groq_agent`` uses to report a caught provider failure without
+          raising), that result's ``failure_kind`` -- a structured
           :class:`agent_failure.AgentFailureKind`, not a string match against the
           error message -- decides whether this raises
           :class:`agent_failure.CoalitionTransientFailureError` (retryable) or

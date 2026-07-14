@@ -62,9 +62,9 @@ DEFAULT_TOOL_MATCH_WEIGHT = 0.5
 DEFAULT_ARG_MATCH_WEIGHT = 0.5
 
 # Canonical argument keys follow tool_schemas.EXECUTABLE_TOOL_SCHEMAS. Different
-# real agent backends (Groq, Gemini, local HF routers) have been observed to use
-# slightly different argument names for the same value -- e.g. groq_agent.py and
-# gemini_agent.py both already read either "date_or_time" or "date" for weather_tool.
+# real agent backends (Groq, local HF routers) have been observed to use
+# slightly different argument names for the same value -- e.g. groq_agent.py
+# already reads either "date_or_time" or "date" for weather_tool.
 DEFAULT_ARGUMENT_ALIASES: dict[str, dict[str, str]] = {
     "weather_tool": {
         "date_or_time": "date",
@@ -419,7 +419,7 @@ class GroqSoftVoteToolScorer:
 class ToolTrajectory:
     """A real agent decision: the selected tool plus the arguments it called with.
 
-    This is the shape an actual tool-calling agent (Groq/Gemini native function
+    This is the shape an actual tool-calling agent (Groq native function
     calling, a LangChain ``AgentExecutor`` step, or ``hf_router.RouterDecision``)
     produces -- unlike the router-prompt scorers above, which only ever ask for
     a bare ``selected_tool`` string with no arguments.
