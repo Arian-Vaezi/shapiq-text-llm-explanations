@@ -23,6 +23,15 @@ dependencies = [
     "networkx",
     "colour",
     "pillow",
+    "gradio>=6.14.0",
+    "transformers>=5.3.0",
+    "torch>=2.10.0",
+    "accelerate>=1.13.0",
+    "sentence-transformers>=5.5.1",
+    "google-genai>=2.8.0",
+    "python-dotenv>=1.2.2",
+    "streamlit>=1.58.0",
+    "groq>=1.4.0",
 ]
 authors = [
     {name = "Maximilian Muschalik", email = "Maximilian.Muschalik@lmu.de"},
@@ -71,7 +80,7 @@ write_to = "src/shapiq/_version.py"
 
 [tool.setuptools.packages.find]
 where = ["./src"]
-include = ["shapiq*", "lazy_dispatch"]
+include = ["shapiq*", "lazy_dispatch", "demos*"]
 
 [tool.setuptools.dynamic]
 readme = {file = ["README.md", "CHANGELOG.md"], content-type = "text/markdown"}
@@ -168,6 +177,24 @@ exclude = [
     "SLF",  # private members are okay in tests
     "TRY",
 ]
+"examples/**/*.py" = [
+    "E402",  # Module level import not at top of file
+    "T20",  # examples can have print statements
+    "I002",  # examples do not have to import required modules
+    "D",  # docstrings are not required in examples
+    "SLF001",  # private members are okay in examples
+    "ANN001",  # type annotations are not required in examples
+    "INP",  # examples are an implicit namespace package
+]
+"src/demos/SentimentAnalysis/__init__.py" = [
+    "N999",  # SentimentAnalysis is a demo folder name, not an importable public package
+]
+"src/demos/**/*.py" = [
+    "T20",   # demos can have print statements
+    "D",     # docstrings are not required in demos
+    "INP",   # demos can be an implicit namespace package
+    "N999",  # demos can have camelCase module/file names
+]
 "demos/rag_retrieval_explanation/tests/**/*.py" = [
     "S101", # pytest uses assertions
     "D",    # test docstrings are optional
@@ -194,15 +221,6 @@ exclude = [
 ]
 "demos/rag_retrieval_explanation/core/retrieval.py" = [
     "PLC0415",  # dense retrieval dependencies are optional
-]
-"examples/**/*.py" = [
-    "E402",  # Module level import not at top of file
-    "T20",  # examples can have print statements
-    "I002",  # examples do not have to import required modules
-    "D",  # docstrings are not required in examples
-    "SLF001",  # private members are okay in examples
-    "ANN001",  # type annotations are not required in examples
-    "INP",  # examples are an implicit namespace package
 ]
 "docs/source/*.py" = [
     "A001",  # some conf.py variables shadow builtins which is okay here
@@ -235,7 +253,20 @@ convention = "google"
 
 [tool.ty.src]
 include = ["src/shapiq", "demos/rag_retrieval_explanation"]
-exclude = ["tests", "docs", "benchmark", "scripts", "src/shapiq_games"]
+exclude = [
+    "tests",
+    "docs",
+    "benchmark",
+    "scripts",
+    "src/shapiq_games",
+    "src/shapiq/explainer/",
+    "src/shapiq/game.py",
+    "src/shapiq/game_theory/",
+    "src/shapiq/imputer/",
+    "src/shapiq/interaction_values.py",
+    "src/shapiq/plot/",
+    "src/shapiq/tree/",
+]
 
 [tool.ty.environment]
 python-version = "3.12"
@@ -315,4 +346,38 @@ dev = [
     {include-group = "test"},
     {include-group = "lint"},
     {include-group = "all_ml"},
+]
+
+# ---------------------------------------------------------------------------
+# GPU support: pull a CUDA build of torch matched to the platform's driver.
+# Scoped with sys_platform markers so macOS keeps the default PyPI wheels
+# (there are no CUDA wheels for macOS).
+#   - Windows dev boxes:  cu126
+#   - Linux GPU clusters: cu128. The default PyPI Linux wheel is now built for
+#     CUDA 13.0, which is too new for drivers like LRZ HLAI's CUDA 12.9 (torch
+#     then reports cuda_available=False and silently runs on CPU). A cu128 build
+#     runs on any 12.8+ driver. CI is GPU-less, but CUDA wheels run fine on CPU,
+#     so this is safe there too.
+# ---------------------------------------------------------------------------
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu126", marker = "sys_platform == 'win32'" },
+    { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+# torchvision's compiled ops (e.g. torchvision::nms) must be built against the exact
+# same torch build, or importing it fails with "operator torchvision::nms does not
+# exist". transformers imports torchvision eagerly, so a mismatch breaks even text-only
+# use. Pin it to the same cu128 index as torch on Linux so uv installs a matched pair.
+torchvision = [
+    { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
 ]
