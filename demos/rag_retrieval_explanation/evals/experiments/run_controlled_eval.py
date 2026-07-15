@@ -12,6 +12,8 @@ from typing import TYPE_CHECKING, Protocol, cast
 
 import numpy as np
 import pandas as pd
+
+import shapiq
 from demos.rag_retrieval_explanation.core.evaluation import (
     deletion_evaluation,
     deletion_evaluation_from_order,
@@ -33,8 +35,6 @@ from demos.rag_retrieval_explanation.core.value_functions import (
     LexicalGroundingValue,
     TargetLikelihoodValue,
 )
-
-import shapiq
 
 from .benchmark import (
     DEFAULT_BENCHMARK_PATH,

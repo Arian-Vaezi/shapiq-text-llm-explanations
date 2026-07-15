@@ -11,6 +11,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 import pandas as pd
+
+import shapiq
 from demos.rag_retrieval_explanation.core.evaluation import (
     deletion_evaluation,
     deletion_evaluation_from_order,
@@ -30,8 +32,6 @@ from demos.rag_retrieval_explanation.core.retrieval import (
 from demos.rag_retrieval_explanation.core.value_functions import (
     ContrastiveLikelihoodValue,
 )
-
-import shapiq
 
 from .benchmark import passage_id_from_title
 from .metrics import (
@@ -58,6 +58,7 @@ from .run_controlled_eval import _first_order_frame
 
 if TYPE_CHECKING:
     import numpy as np
+
     from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
 
 RUNS_DIR = Path(__file__).parents[1] / "runs"

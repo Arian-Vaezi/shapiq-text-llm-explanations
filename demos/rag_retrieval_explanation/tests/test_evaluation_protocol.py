@@ -5,6 +5,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 import pytest
+
+import shapiq
 from demos.rag_retrieval_explanation.core.evaluation import (
     deletion_evaluation_from_order,
     insertion_evaluation,
@@ -20,8 +22,6 @@ from demos.rag_retrieval_explanation.evals.experiments.metrics import (
 from demos.rag_retrieval_explanation.evals.reporting.analyze_interactions import (
     aggregate_interaction_runs,
 )
-
-import shapiq
 
 
 def _chunk(title: str) -> RetrievedChunk:

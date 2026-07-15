@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 import pytest
+
 from demos.rag_retrieval_explanation.evals.reporting.build_eval_report import (
     _hardware_description,
     _load_artifacts,

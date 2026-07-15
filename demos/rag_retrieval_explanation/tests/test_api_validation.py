@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from demos.rag_retrieval_explanation.backend.api import MAX_PDF_BYTES, app
 from fastapi.testclient import TestClient
+
+from demos.rag_retrieval_explanation.backend.api import MAX_PDF_BYTES, app
 
 CLIENT = TestClient(app)
 BASE_FORM = {

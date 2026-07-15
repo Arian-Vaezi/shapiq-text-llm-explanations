@@ -9,6 +9,8 @@ from typing import Any, Literal, cast
 
 import numpy as np
 import pandas as pd
+
+import shapiq
 from demos.rag_retrieval_explanation.core.chunking import chunk_pdf_pages, extract_pdf_pages
 from demos.rag_retrieval_explanation.core.evaluation import (
     deletion_evaluation,
@@ -24,8 +26,6 @@ from demos.rag_retrieval_explanation.core.retrieval import retrieve_relevant_chu
 from demos.rag_retrieval_explanation.core.sample_data import SAMPLE_TRACES
 from demos.rag_retrieval_explanation.core.schemas import RetrievedChunk
 from demos.rag_retrieval_explanation.core.value_functions import make_value_function
-
-import shapiq
 
 from .schemas import RuntimeSettings
 

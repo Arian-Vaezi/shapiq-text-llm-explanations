@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+
 from demos.rag_retrieval_explanation.core.model_backends import LlamaCppBackend
 
 

@@ -6,11 +6,12 @@ import json
 from pathlib import Path
 from typing import Annotated
 
-from demos.rag_retrieval_explanation.core.sample_data import SAMPLE_TRACES
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+
+from demos.rag_retrieval_explanation.core.sample_data import SAMPLE_TRACES
 
 from .model_registry import DEFAULT_MODEL_ID, MODEL_REGISTRY, get_model_status
 from .schemas import (

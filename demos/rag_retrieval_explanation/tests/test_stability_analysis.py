@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+
 from demos.rag_retrieval_explanation.evals.reporting.analyze_stability import (
     _absolute_attribution_scores,
     _compare_pair,

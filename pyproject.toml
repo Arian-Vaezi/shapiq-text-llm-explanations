@@ -252,7 +252,11 @@ exclude = [
 convention = "google"
 
 [tool.ty.src]
-include = ["src/shapiq", "demos/rag_retrieval_explanation"]
+# The RAG demo is intentionally not ty-gated: its optional deps (pypdf,
+# llama-cpp-python, fastapi, ...) are not installed in the lint CI job, so ty
+# cannot resolve them. Demos sit in the same "not type-checked" category as
+# tests/benchmark/scripts/shapiq_games below. ruff still lints/formats the demo.
+include = ["src/shapiq"]
 exclude = [
     "tests",
     "docs",

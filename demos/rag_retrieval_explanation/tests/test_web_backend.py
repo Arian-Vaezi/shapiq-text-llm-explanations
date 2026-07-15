@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import pytest
+
 from demos.rag_retrieval_explanation.backend.schemas import RunResponse
 from demos.rag_retrieval_explanation.backend.services import (
     default_settings,
