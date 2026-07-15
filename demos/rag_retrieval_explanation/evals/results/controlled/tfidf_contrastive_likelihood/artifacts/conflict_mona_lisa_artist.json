@@ -1,0 +1,3346 @@
+{
+  "case": {
+    "case_id": "conflict_mona_lisa_artist",
+    "pattern": "conflicting_evidence",
+    "question": "Who painted the Mona Lisa?",
+    "gold_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "gold_evidence_ids": [
+      "conflict_monalisa_correct"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_monalisa_correct",
+        "right": "conflict_monalisa_michelangelo",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_monalisa_correct",
+      "score": 0.85,
+      "title": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+      "text": "Leonardo da Vinci painted the Mona Lisa."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_monalisa_museum",
+      "score": 0.5021882983730142,
+      "title": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+      "text": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+    },
+    {
+      "rank": 3,
+      "passage_id": "missing_van_gogh_sunflowers",
+      "score": 0.1631651363034889,
+      "title": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+      "text": "Vincent van Gogh painted several versions of Sunflowers."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_suez_shipping",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "text": "Major shipping canals can shorten sea routes between regions."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_penicillin_medicine",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "text": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_mars_surface",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 6: missing_mars_surface | Martian surface",
+      "text": "Mars has volcanoes, impact craters, valleys, and polar ice caps."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+      "attribution": 0.15417194434306583
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+      "attribution": 0.009388915284835216
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+      "attribution": 0.005374710038985999
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+      "attribution": 0.003908450504102229
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "attribution": 0.002472969512353725
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "attribution": 0.0006961810471543496
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+      "attribution": 0.15417194434306583
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+      "attribution": 0.009388915284835216
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+      "attribution": 0.005374710038985999
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+      "attribution": 0.003908450504102229
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "attribution": 0.002472969512353725
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "attribution": 0.0006961810471543496
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_michelangelo",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_michelangelo",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_museum",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.004434535103994663,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.010131363188356215,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_suez_shipping",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.004086676126310876,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.0017117782778014482,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_mars_surface",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.001005417749840756,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.012744834563750316,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_suez_shipping",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.0029714969750055595,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.003582684872706782,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_mars_surface",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.008097305203110623,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_suez_shipping",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.005078908887611912,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.006971424013323516,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_mars_surface",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.013591090816901087,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.007546181718287275,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_mars_surface",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.010289234043593286,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_penicillin_medicine",
+      "right": "missing_mars_surface",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.007538434995284777,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "conflict_monalisa_museum",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.004434535103994663,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.010131363188356215,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_suez_shipping",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.004086676126310876,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.0017117782778014482,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_monalisa_correct",
+      "right": "missing_mars_surface",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.001005417749840756,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_van_gogh_sunflowers",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.012744834563750316,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_suez_shipping",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.0029714969750055595,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.003582684872706782,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_monalisa_museum",
+      "right": "missing_mars_surface",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.008097305203110623,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_suez_shipping",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.005078908887611912,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.006971424013323516,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_van_gogh_sunflowers",
+      "right": "missing_mars_surface",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.013591090816901087,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.007546181718287275,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_mars_surface",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.010289234043593286,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_penicillin_medicine",
+      "right": "missing_mars_surface",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.007538434995284777,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct"
+      ],
+      "score": 0.17565641744859573
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.03177193167008818
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.04840263491424379
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_suez_shipping"
+      ],
+      "score": 0.021710668420731105
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.02387809950508213
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_surface"
+      ],
+      "score": 0.040412265411640225
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.1758885652099038
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.1756040103055515
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping"
+      ],
+      "score": 0.17600022024268436
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17588078307903598
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_mars_surface"
+      ],
+      "score": 0.17594325935549027
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.046841443276948835
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping"
+      ],
+      "score": 0.04110752161858133
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.050999703259464124
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_mars_surface"
+      ],
+      "score": 0.034537985163248464
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.048028727921758496
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.0518913401598593
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.037490131909336255
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.026939742370739816
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.01942441789405025
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.03168322605211449
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.17573554232393152
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping"
+      ],
+      "score": 0.17608293023004506
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17599775287244723
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760307939340141
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.17597946269594522
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17592061977394335
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.17589197312585647
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17612003910691987
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.17604896511720658
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17605511343615465
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.03658284395223943
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.030575418875973925
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.023838968949261186
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.02567813709584077
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.028466179867667196
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.0331759756295924
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.03704898908940357
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.023352250921189532
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.03231451027170207
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.01365204490708316
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.1761249859196784
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1759683525547019
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.17598784412835278
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17607140422943102
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760938164262943
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760798235827329
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17607389741414847
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.1759939016665445
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.176026094403695
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760242798533217
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.014662709556410136
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.027638976279640515
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.023573149977721086
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.016680604667149934
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.016952927900708903
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17612238852158135
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.17606201880047145
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17610164810428008
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1761281576021354
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17607209605655882
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.010129615276737836
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17601317051226528
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct"
+      ],
+      "score": 0.17565641744859573
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.03177193167008818
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.04840263491424379
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_suez_shipping"
+      ],
+      "score": 0.021710668420731105
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.02387809950508213
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_surface"
+      ],
+      "score": 0.040412265411640225
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum"
+      ],
+      "score": 0.1758885652099038
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.1756040103055515
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping"
+      ],
+      "score": 0.17600022024268436
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17588078307903598
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_mars_surface"
+      ],
+      "score": 0.17594325935549027
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.046841443276948835
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping"
+      ],
+      "score": 0.04110752161858133
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.050999703259464124
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_mars_surface"
+      ],
+      "score": 0.034537985163248464
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.048028727921758496
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.0518913401598593
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.037490131909336255
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.026939742370739816
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.01942441789405025
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.03168322605211449
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers"
+      ],
+      "score": 0.17573554232393152
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping"
+      ],
+      "score": 0.17608293023004506
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17599775287244723
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760307939340141
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.17597946269594522
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17592061977394335
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.17589197312585647
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17612003910691987
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.17604896511720658
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17605511343615465
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.03658284395223943
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.030575418875973925
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.023838968949261186
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.02567813709584077
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.028466179867667196
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.0331759756295924
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.03704898908940357
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.023352250921189532
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.03231451027170207
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.01365204490708316
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping"
+      ],
+      "score": 0.1761249859196784
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1759683525547019
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_mars_surface"
+      ],
+      "score": 0.17598784412835278
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17607140422943102
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760938164262943
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760798235827329
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17607389741414847
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.1759939016665445
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.176026094403695
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1760242798533217
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.014662709556410136
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.027638976279640515
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.023573149977721086
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.016680604667149934
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.016952927900708903
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.17612238852158135
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.17606201880047145
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17610164810428008
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1761281576021354
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17607209605655882
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.010129615276737836
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_monalisa_correct",
+        "conflict_monalisa_museum",
+        "missing_van_gogh_sunflowers",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17601317051226528
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17601317051226528
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "remaining_chunks": 5,
+        "score": 0.010129615276737836
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "remaining_chunks": 4,
+        "score": 0.016680604667149934
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "remaining_chunks": 3,
+        "score": 0.01365204490708316
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "remaining_chunks": 2,
+        "score": 0.026939742370739816
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 1,
+        "score": 0.021710668420731105
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "selected_chunks": 1,
+        "score": 0.17565641744859573
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "selected_chunks": 2,
+        "score": 0.1756040103055515
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "selected_chunks": 3,
+        "score": 0.17573554232393152
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "selected_chunks": 4,
+        "score": 0.17598784412835278
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "selected_chunks": 5,
+        "score": 0.17610164810428008
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "selected_chunks": 6,
+        "score": 0.17601317051226528
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17601317051226528
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "remaining_chunks": 5,
+        "score": 0.010129615276737836
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "remaining_chunks": 4,
+        "score": 0.016952927900708903
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "remaining_chunks": 3,
+        "score": 0.01365204490708316
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 2,
+        "score": 0.03168322605211449
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 1,
+        "score": 0.040412265411640225
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17601317051226528
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_monalisa_correct | Mona Lisa artist",
+        "remaining_chunks": 5,
+        "score": 0.010129615276737836
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 4,
+        "score": 0.027638976279640515
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_monalisa_museum | Louvre display",
+        "remaining_chunks": 3,
+        "score": 0.023352250921189532
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 2,
+        "score": 0.037490131909336255
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "remaining_chunks": 1,
+        "score": 0.04840263491424379
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: missing_van_gogh_sunflowers | Sunflowers distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.1760131705122651
+      },
+      {
+        "step": 1,
+        "score": 0.15120019313455668
+      },
+      {
+        "step": 2,
+        "score": 0.1190785749170392
+      },
+      {
+        "step": 3,
+        "score": 0.09693970451451932
+      },
+      {
+        "step": 4,
+        "score": 0.07322408198319455
+      },
+      {
+        "step": 5,
+        "score": 0.05661823978123355
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who painted the Mona Lisa?",
+    "expanded_queries": [
+      "Who painted the Mona Lisa?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "keyword": 0.6523,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "keyword": 0.3865,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "keyword": 0.1281,
+        "page": 44,
+        "type": "body_text",
+        "section": "post_impressionist_art",
+        "flags": "",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.6523,
+        "rerank": 0.85,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona, painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3865,
+        "rerank": 0.5022,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1281,
+        "rerank": 0.1632,
+        "section": "post_impressionist_art",
+        "query_hits": "painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.6523,
+        "rerank": 0.85,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona, painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3865,
+        "rerank": 0.5022,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1281,
+        "rerank": 0.1632,
+        "section": "post_impressionist_art",
+        "query_hits": "painted",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_monalisa_correct | Mona Lisa artist",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.6523,
+        "rerank": 0.85,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona, painted",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Leonardo da Vinci painted the Mona Lisa."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_monalisa_museum | Louvre display",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3865,
+        "rerank": 0.5022,
+        "section": "mona_lisa",
+        "query_hits": "lisa, mona",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6002,
+        "novelty": 0.4321,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6767,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mona Lisa is displayed at the Louvre Museum in Paris."
+      },
+      {
+        "rank": 3,
+        "source": "missing_van_gogh_sunflowers | Sunflowers distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1281,
+        "rerank": 0.1632,
+        "section": "post_impressionist_art",
+        "query_hits": "painted",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2105,
+        "novelty": 0.7607,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3476,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Vincent van Gogh painted several versions of Sunflowers."
+      },
+      {
+        "rank": 4,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 5,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "antibiotics_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 6,
+        "source": "missing_mars_surface | Martian surface",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "mars_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars has volcanoes, impact craters, valleys, and polar ice caps."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "lisa",
+        "mona",
+        "painted"
+      ],
+      "covered_query_terms": [
+        "lisa",
+        "mona",
+        "painted"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_monalisa_correct | Mona Lisa artist": [
+          "lisa",
+          "mona",
+          "painted"
+        ],
+        "conflict_monalisa_museum | Louvre display": [
+          "lisa",
+          "mona"
+        ],
+        "missing_van_gogh_sunflowers | Sunflowers distractor": [
+          "painted"
+        ]
+      },
+      "section_titles": [
+        "antibiotics_overview",
+        "canal_overview",
+        "mars_overview",
+        "mona_lisa",
+        "post_impressionist_art"
+      ],
+      "chunks_by_section": {
+        "mona_lisa": [
+          "conflict_monalisa_correct | Mona Lisa artist",
+          "conflict_monalisa_museum | Louvre display"
+        ],
+        "post_impressionist_art": [
+          "missing_van_gogh_sunflowers | Sunflowers distractor"
+        ],
+        "canal_overview": [
+          "missing_suez_shipping | Shipping canal distractor"
+        ],
+        "antibiotics_overview": [
+          "missing_penicillin_medicine | Antibiotic medicines"
+        ],
+        "mars_overview": [
+          "missing_mars_surface | Martian surface"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "retrieved_context_answer": "Leonardo da Vinci painted the Mona Lisa.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 1.0,
+    "retrieved_context_f1": 1.0,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 1.0,
+    "retrieved_context_exact_match": 1.0,
+    "knowledge_source_class": "retrieval_enabled"
+  }
+}

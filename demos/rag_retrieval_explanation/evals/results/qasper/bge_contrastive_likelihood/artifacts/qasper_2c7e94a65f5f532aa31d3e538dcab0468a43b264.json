@@ -1,0 +1,1566 @@
+{
+  "case": {
+    "case_id": "qasper_2c7e94a65f5f532aa31d3e538dcab0468a43b264",
+    "paper_id": "1909.02027",
+    "paper_title": "An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction",
+    "question_id": "2c7e94a65f5f532aa31d3e538dcab0468a43b264",
+    "annotation_id": "8ae507d5fd72264c5e26b804f802e7fe35a3acb3",
+    "question": "How was the dataset annotated?",
+    "gold_answer": "intents are annotated manually with guidance from queries collected using a scoping crowdsourcing task",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1909.02027:paragraph:0007"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1909.02027:paragraph:0028",
+      "score": 0.9206626272995563,
+      "title": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+      "text": "Table TABREF20 compares our dataset with other short-query intent classification datasets. The Snips BIBREF0 dataset and the dataset presented in BIBREF10 are the most similar to the in-scope part of our work, with the same type of conversational agent requests. Like our work, both of these datasets were bootstrapped using crowdsourcing. However, the Snips dataset has only a small number of intents and an enormous number of examples of each. Snips does present a low-data variation, with 70 training queries per intent, in which performance drops slightly. The dataset presented in BIBREF10 has a large number of intent classes, yet also contains a wide range of samples per intent class (ranging from 24 to 5,981 queries per intent, and so is not constrained in all cases)."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1909.02027:abstract:000",
+      "score": 0.6721274475144848,
+      "title": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+      "text": "Task-oriented dialog systems need to know when a query falls outside their range of supported intents, but current text classification corpora only define label sets that cover every example. We introduce a new dataset that includes queries that are out-of-scope---i.e., queries that do not fall into any of the system's supported intents. This poses a new challenge because models cannot assume that every query at inference time belongs to a system-supported intent class. Our dataset also covers 150 intent classes over 10 domains, capturing the breadth that a production task-oriented agent must handle. We evaluate a range of benchmark classifiers on our dataset along with several different out-of-scope identification schemes. We find that while the classifiers perform well on in-scope intent classification, they struggle to identify out-of-scope queries. Our dataset and evaluation fill an important gap in the field, offering a way of more rigorously and realistically benchmarking text classification in task-driven dialog systems."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1909.02027:paragraph:0005",
+      "score": 0.6149424858475926,
+      "title": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+      "text": "We evaluate a range of benchmark classifiers and out-of-scope handling methods on our dataset. BERT BIBREF1 yields the best in-scope accuracy, scoring 96% or above even when we limit the training data or introduce class imbalance. However, all methods struggle with identifying out-of-scope queries. Even when a large number of out-of-scope examples are provided for training, there is a major performance gap, with the best system scoring 66% out-of-scope recall. Our results show that while current models work on known classes, they have difficulty on out-of-scope queries, particularly when data is not plentiful. This dataset will enable future work to address this key gap in the research and development of dialog systems. All data introduced in this paper can be found at https://github.com/clinc/oos-eval."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1909.02027:paragraph:0001",
+      "score": 0.5758928150423737,
+      "title": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+      "text": "Tools for developing such systems start by guiding developers to collect training data for intent classification: the task of identifying which of a fixed set of actions the user wishes to take based on their query. Relatively few public datasets exist for evaluating performance on this task, and those that do exist typically cover only a very small number of intents (e.g. BIBREF0, which has 7 intents). Furthermore, such resources do not facilitate analysis of out-of-scope queries: queries that users may reasonably make, but fall outside of the scope of the system-supported intents."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1909.02027:paragraph:0027",
+      "score": 0.54028066285814,
+      "title": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+      "text": "In most other analyses and datasets, the idea of out-of-scope data is not considered, and instead the output classes are intended to cover all possible queries (e.g., TREC BIBREF7). Recent work by BIBREF8 considers a similar problem they call out-of-distribution detection. They use other datasets or classes excluded during training to form the out-of-distribution samples. This means that the out-of-scope samples are from a small set of coherent classes that differ substantially from the in-distribution samples. Similar experiments were conducted for evaluating unknown intent discovery models in BIBREF9. In contrast, our out-of-scope queries cover a broad range of phenomena and are similar in style and often similar in topic to in-scope queries, representing things a user might say given partial knowledge of the capabilities of a system."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1909.02027:paragraph:0024",
+      "score": 0.5571891885799611,
+      "title": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+      "text": "Table TABREF14 presents results for all models across the four variations of the dataset. First, BERT is consistently the best approach for in-scope, followed by MLP. Second, out-of-scope query performance is much lower than in-scope across all methods. Training on less data (Small and Imbalanced) yields models that perform slightly worse on in-scope queries. The trend is mostly the opposite when evaluating out-of-scope, where recall increases under the Small and Imbalanced training conditions. Under these two conditions, the size of the in-scope training set was decreased, while the number of out-of-scope training queries remained constant. This indicates that out-of-scope performance can be increased by increasing the relative number of out-of-scope training queries. We do just that in the OOS+ setting\u2014where the models were trained on the full training set as well as 150 additional out-of-scope queries\u2014and see that performance on out-of-scope increases substantially, yet still remains low relative to in-scope accuracy."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+      "attribution": 0.054320910337940155
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+      "attribution": -0.00963270590445512
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+      "attribution": -0.00962796503581274
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+      "attribution": 0.00753682084616569
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+      "attribution": -0.0037556700724536178
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+      "attribution": 0.0024477863549666186
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+      "attribution": 0.17027735291957277
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+      "attribution": 0.005616797293778853
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+      "attribution": -0.004404818722315479
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+      "attribution": 0.0034653526755755947
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+      "attribution": 0.002279302188573676
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+      "attribution": 0.0017953758144259285
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:abstract:000",
+      "interaction": 0.009745389605936792
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0005",
+      "interaction": 0.011594122777808687
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0001",
+      "interaction": 0.013273761876946493
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.008891076279150525
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": 0.005095146057433207
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0005",
+      "interaction": -0.005732627986732008
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0001",
+      "interaction": 0.005854711033508641
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.00915027851622225
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.008023519944439625
+    },
+    {
+      "left": "1909.02027:paragraph:0005",
+      "right": "1909.02027:paragraph:0001",
+      "interaction": -0.00781262634899692
+    },
+    {
+      "left": "1909.02027:paragraph:0005",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.005962887583314734
+    },
+    {
+      "left": "1909.02027:paragraph:0005",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.0025404671119131274
+    },
+    {
+      "left": "1909.02027:paragraph:0001",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.0059702565363233245
+    },
+    {
+      "left": "1909.02027:paragraph:0001",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": 0.00158829088570925
+    },
+    {
+      "left": "1909.02027:paragraph:0027",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.007212382807108579
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:abstract:000",
+      "interaction": 0.003902763477429699
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0005",
+      "interaction": 0.001868084999150198
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0001",
+      "interaction": -0.0009735793964906254
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": 0.013055235013911818
+    },
+    {
+      "left": "1909.02027:paragraph:0028",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": 0.0016305864710252419
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0005",
+      "interaction": -0.001051767661507481
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0001",
+      "interaction": -0.008393838232248893
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.0048554133363808115
+    },
+    {
+      "left": "1909.02027:abstract:000",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.006823342444954338
+    },
+    {
+      "left": "1909.02027:paragraph:0005",
+      "right": "1909.02027:paragraph:0001",
+      "interaction": -0.0062253110414073306
+    },
+    {
+      "left": "1909.02027:paragraph:0005",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.006938394011330121
+    },
+    {
+      "left": "1909.02027:paragraph:0005",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.001720835495940482
+    },
+    {
+      "left": "1909.02027:paragraph:0001",
+      "right": "1909.02027:paragraph:0027",
+      "interaction": -0.0019801999902864455
+    },
+    {
+      "left": "1909.02027:paragraph:0001",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.011803916022892814
+    },
+    {
+      "left": "1909.02027:paragraph:0027",
+      "right": "1909.02027:paragraph:0024",
+      "interaction": -0.004248462459407528
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.04128917674278865
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "remaining_chunks": 5,
+        "score": -0.03350560718808149
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "remaining_chunks": 4,
+        "score": -0.037849745124929224
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "remaining_chunks": 3,
+        "score": -0.02265403307830738
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "remaining_chunks": 2,
+        "score": -0.0061059538831230165
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "remaining_chunks": 1,
+        "score": 0.020889721375211723
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "selected_chunks": 1,
+        "score": 0.04397744032127615
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "selected_chunks": 2,
+        "score": 0.024147456042311943
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "selected_chunks": 3,
+        "score": 0.03195730611943748
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "selected_chunks": 4,
+        "score": 0.029892783643525767
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "selected_chunks": 5,
+        "score": 0.027705781545370733
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "selected_chunks": 6,
+        "score": 0.04128917674278865
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.04128917674278865
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "remaining_chunks": 5,
+        "score": -0.03350560718808149
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "remaining_chunks": 4,
+        "score": -0.03165015943324129
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "remaining_chunks": 3,
+        "score": -0.033761162788720434
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.024088109009859027
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "remaining_chunks": 1,
+        "score": 0.04532990279758309
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.04128917674278865
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "remaining_chunks": 5,
+        "score": -0.03350560718808149
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "remaining_chunks": 4,
+        "score": -0.03165015943324129
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "remaining_chunks": 3,
+        "score": -0.023403607015849814
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "remaining_chunks": 2,
+        "score": -0.004833935088829122
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.009065439161665023
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.041289176742788716
+      },
+      {
+        "step": 1,
+        "score": 0.02582469736028674
+      },
+      {
+        "step": 2,
+        "score": 0.013729662749688584
+      },
+      {
+        "step": 3,
+        "score": 0.002095925473315862
+      },
+      {
+        "step": 4,
+        "score": 0.0014651241704181537
+      },
+      {
+        "step": 5,
+        "score": 0.02237617032695707
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How was the dataset annotated?",
+    "expanded_queries": [
+      "How was the dataset annotated?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1909.02027:paragraph:0013 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation",
+        "dense": 0.6032,
+        "page": 1,
+        "type": "body_text",
+        "section": "Benchmark Evaluation",
+        "flags": "",
+        "preview": "To quantify the challenges that our new dataset presents, we evaluated the performance of a range of classifier models and out-of-scope prediction schemes."
+      },
+      {
+        "rank": 2,
+        "source": "1909.02027:paragraph:0032 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "dense": 0.5967,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "All datasets introduced in this paper can be found at https://github.com/clinc/oos-eval."
+      },
+      {
+        "rank": 3,
+        "source": "1909.02027:paragraph:0030 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "dense": 0.5934,
+        "page": 1,
+        "type": "body_text",
+        "section": "Prior Work",
+        "flags": "",
+        "preview": "The Dialog State Tracking Challenge (DSTC) datasets are another related resource. Specifically, DSTC 1 BIBREF12, DSTC 2 BIBREF13, and DSTC 3 BIBREF14 contain \u201cchatbot style\" queries, but the datasets are focused on state"
+      },
+      {
+        "rank": 4,
+        "source": "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "dense": 0.5906,
+        "page": 1,
+        "type": "body_text",
+        "section": "Prior Work",
+        "flags": "",
+        "preview": "Table TABREF20 compares our dataset with other short-query intent classification datasets. The Snips BIBREF0 dataset and the dataset presented in BIBREF10 are the most similar to the in-scope part of our work, with the s"
+      },
+      {
+        "rank": 5,
+        "source": "1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "dense": 0.5859,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Tools for developing such systems start by guiding developers to collect training data for intent classification: the task of identifying which of a fixed set of actions the user wishes to take based on their query. Rela"
+      },
+      {
+        "rank": 6,
+        "source": "1909.02027:paragraph:0029 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "dense": 0.5827,
+        "page": 1,
+        "type": "body_text",
+        "section": "Prior Work",
+        "flags": "",
+        "preview": "BIBREF11 created datasets with constrained training data, but with very few intents, presenting a very different type of challenge. We also include the TREC query classification datasets BIBREF7, which have a large set o"
+      },
+      {
+        "rank": 7,
+        "source": "1909.02027:paragraph:0011 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Data Preprocessing and Partitioning",
+        "dense": 0.5805,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset ::: Data Preprocessing and Partitioning",
+        "flags": "",
+        "preview": "In an effort to reduce bias in the in-scope data, we placed all queries from a given crowd worker in a single split (train, validation, or test). This avoids the potential issue of similar queries from a crowd worker end"
+      },
+      {
+        "rank": 8,
+        "source": "1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "dense": 0.5746,
+        "page": 1,
+        "type": "body_text",
+        "section": "Prior Work",
+        "flags": "",
+        "preview": "In most other analyses and datasets, the idea of out-of-scope data is not considered, and instead the output classes are intended to cover all possible queries (e.g., TREC BIBREF7). Recent work by BIBREF8 considers a sim"
+      },
+      {
+        "rank": 9,
+        "source": "1909.02027:paragraph:0008 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Out-of-Scope Data Collection",
+        "dense": 0.5484,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset ::: Out-of-Scope Data Collection",
+        "flags": "",
+        "preview": "Out-of-scope queries were collected in two ways. First, using worker mistakes: queries written for one of the 150 intents that did not actually match any of the intents. Second, using scoping and scenario tasks with prom"
+      },
+      {
+        "rank": 10,
+        "source": "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "dense": 0.5478,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We evaluate a range of benchmark classifiers and out-of-scope handling methods on our dataset. BERT BIBREF1 yields the best in-scope accuracy, scoring 96% or above even when we limit the training data or introduce class "
+      },
+      {
+        "rank": 11,
+        "source": "1909.02027:paragraph:0006 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset",
+        "dense": 0.5475,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset",
+        "flags": "",
+        "preview": "We introduce a new crowdsourced dataset of 23,700 queries, including 22,500 in-scope queries covering 150 intents, which can be grouped into 10 general domains. The dataset also includes 1,200 out-of-scope queries. Table"
+      },
+      {
+        "rank": 12,
+        "source": "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "dense": 0.5434,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Results with oos-train",
+        "flags": "",
+        "preview": "Table TABREF14 presents results for all models across the four variations of the dataset. First, BERT is consistently the best approach for in-scope, followed by MLP. Second, out-of-scope query performance is much lower "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "keyword": 0.2347,
+        "page": 1,
+        "type": "body_text",
+        "section": "Prior Work",
+        "flags": "",
+        "preview": "Table TABREF20 compares our dataset with other short-query intent classification datasets. The Snips BIBREF0 dataset and the dataset presented in BIBREF10 are the most similar to the in-scope part of our work, with the s"
+      },
+      {
+        "rank": 2,
+        "source": "1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "keyword": 0.1712,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Task-oriented dialog systems need to know when a query falls outside their range of supported intents, but current text classification corpora only define label sets that cover every example. We introduce a new dataset t"
+      },
+      {
+        "rank": 3,
+        "source": "1909.02027:paragraph:0006 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset",
+        "keyword": 0.1676,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset",
+        "flags": "",
+        "preview": "We introduce a new crowdsourced dataset of 23,700 queries, including 22,500 in-scope queries covering 150 intents, which can be grouped into 10 general domains. The dataset also includes 1,200 out-of-scope queries. Table"
+      },
+      {
+        "rank": 4,
+        "source": "1909.02027:paragraph:0013 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation",
+        "keyword": 0.1262,
+        "page": 1,
+        "type": "body_text",
+        "section": "Benchmark Evaluation",
+        "flags": "",
+        "preview": "To quantify the challenges that our new dataset presents, we evaluated the performance of a range of classifier models and out-of-scope prediction schemes."
+      },
+      {
+        "rank": 5,
+        "source": "1909.02027:paragraph:0031 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "keyword": 0.1198,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "This paper analyzed intent classification and out-of-scope prediction methods with a new dataset consisting of carefully collected out-of-scope data. Our findings indicate that certain models like BERT perform better on "
+      },
+      {
+        "rank": 6,
+        "source": "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "keyword": 0.1004,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We evaluate a range of benchmark classifiers and out-of-scope handling methods on our dataset. BERT BIBREF1 yields the best in-scope accuracy, scoring 96% or above even when we limit the training data or introduce class "
+      },
+      {
+        "rank": 7,
+        "source": "1909.02027:paragraph:0004 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "keyword": 0.0777,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "This paper fills this gap by analyzing intent classification performance with a focus on out-of-scope handling. To do so, we constructed a new dataset with 23,700 queries that are short and unstructured, in the same styl"
+      },
+      {
+        "rank": 8,
+        "source": "1909.02027:paragraph:0012 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Dataset Variants",
+        "keyword": 0.0726,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset ::: Dataset Variants",
+        "flags": "",
+        "preview": "In addition to the full dataset, we consider three variations. First, Small, in which there are only 50 training queries per each in-scope intent, rather than 100. Second, Imbalanced, in which intents have either 25, 50,"
+      },
+      {
+        "rank": 9,
+        "source": "1909.02027:paragraph:0026 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-binary",
+        "keyword": 0.0541,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Results with oos-binary",
+        "flags": "",
+        "preview": "Table TABREF19 compares classifier performance using the oos-binary scheme. In-scope accuracy suffers for all models using the undersampling scheme when compared to training on the full dataset using the oos-train and oo"
+      },
+      {
+        "rank": 10,
+        "source": "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "keyword": 0.0428,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Results with oos-train",
+        "flags": "",
+        "preview": "Table TABREF14 presents results for all models across the four variations of the dataset. First, BERT is consistently the best approach for in-scope, followed by MLP. Second, out-of-scope query performance is much lower "
+      },
+      {
+        "rank": 11,
+        "source": "1909.02027:paragraph:0032 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "All datasets introduced in this paper can be found at https://github.com/clinc/oos-eval."
+      },
+      {
+        "rank": 12,
+        "source": "1909.02027:paragraph:0021 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "flags": "",
+        "preview": "To reduce the severity of the class imbalance between in-scope versus out-of-scope query samples (i.e., 15,000 versus 250 queries for OOS+), we investigate two strategies when using oos-binary: one where we undersample t"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5906,
+        "keyword": 0.2347,
+        "rerank": 0.9207,
+        "section": "Prior Work",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF20 compares our dataset with other short-query intent classification datasets. The Snips BIBREF0 dataset and the dataset presented in BIBREF10 are the most similar to the in-scope part of our work, with the s"
+      },
+      {
+        "rank": 2,
+        "source": "1909.02027:paragraph:0013 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6032,
+        "keyword": 0.1262,
+        "rerank": 0.7213,
+        "section": "Benchmark Evaluation",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To quantify the challenges that our new dataset presents, we evaluated the performance of a range of classifier models and out-of-scope prediction schemes."
+      },
+      {
+        "rank": 3,
+        "source": "1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5372,
+        "keyword": 0.1712,
+        "rerank": 0.6721,
+        "section": "Abstract",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "Task-oriented dialog systems need to know when a query falls outside their range of supported intents, but current text classification corpora only define label sets that cover every example. We introduce a new dataset t"
+      },
+      {
+        "rank": 4,
+        "source": "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5478,
+        "keyword": 0.1004,
+        "rerank": 0.6149,
+        "section": "Introduction",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate a range of benchmark classifiers and out-of-scope handling methods on our dataset. BERT BIBREF1 yields the best in-scope accuracy, scoring 96% or above even when we limit the training data or introduce class "
+      },
+      {
+        "rank": 5,
+        "source": "1909.02027:paragraph:0006 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5475,
+        "keyword": 0.1676,
+        "rerank": 0.5999,
+        "section": "Dataset",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We introduce a new crowdsourced dataset of 23,700 queries, including 22,500 in-scope queries covering 150 intents, which can be grouped into 10 general domains. The dataset also includes 1,200 out-of-scope queries. Table"
+      },
+      {
+        "rank": 6,
+        "source": "1909.02027:paragraph:0030 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5934,
+        "keyword": 0.0,
+        "rerank": 0.5992,
+        "section": "Prior Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The Dialog State Tracking Challenge (DSTC) datasets are another related resource. Specifically, DSTC 1 BIBREF12, DSTC 2 BIBREF13, and DSTC 3 BIBREF14 contain \u201cchatbot style\" queries, but the datasets are focused on state"
+      },
+      {
+        "rank": 7,
+        "source": "1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5859,
+        "keyword": 0.0,
+        "rerank": 0.5759,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Tools for developing such systems start by guiding developers to collect training data for intent classification: the task of identifying which of a fixed set of actions the user wishes to take based on their query. Rela"
+      },
+      {
+        "rank": 8,
+        "source": "1909.02027:paragraph:0031 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5257,
+        "keyword": 0.1198,
+        "rerank": 0.5703,
+        "section": "Conclusion",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "This paper analyzed intent classification and out-of-scope prediction methods with a new dataset consisting of carefully collected out-of-scope data. Our findings indicate that certain models like BERT perform better on "
+      },
+      {
+        "rank": 9,
+        "source": "1909.02027:paragraph:0029 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5827,
+        "keyword": 0.0,
+        "rerank": 0.5658,
+        "section": "Prior Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF11 created datasets with constrained training data, but with very few intents, presenting a very different type of challenge. We also include the TREC query classification datasets BIBREF7, which have a large set o"
+      },
+      {
+        "rank": 10,
+        "source": "1909.02027:paragraph:0011 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Data Preprocessing and Partitioning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5805,
+        "keyword": 0.0,
+        "rerank": 0.5588,
+        "section": "Dataset ::: Data Preprocessing and Partitioning",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In an effort to reduce bias in the in-scope data, we placed all queries from a given crowd worker in a single split (train, validation, or test). This avoids the potential issue of similar queries from a crowd worker end"
+      },
+      {
+        "rank": 11,
+        "source": "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5434,
+        "keyword": 0.0428,
+        "rerank": 0.5572,
+        "section": "Results ::: Results with oos-train",
+        "query_hits": "dataset, was",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF14 presents results for all models across the four variations of the dataset. First, BERT is consistently the best approach for in-scope, followed by MLP. Second, out-of-scope query performance is much lower "
+      },
+      {
+        "rank": 12,
+        "source": "1909.02027:paragraph:0012 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Dataset Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5371,
+        "keyword": 0.0726,
+        "rerank": 0.5457,
+        "section": "Dataset ::: Dataset Variants",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "In addition to the full dataset, we consider three variations. First, Small, in which there are only 50 training queries per each in-scope intent, rather than 100. Second, Imbalanced, in which intents have either 25, 50,"
+      },
+      {
+        "rank": 13,
+        "source": "1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5746,
+        "keyword": 0.0,
+        "rerank": 0.5403,
+        "section": "Prior Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In most other analyses and datasets, the idea of out-of-scope data is not considered, and instead the output classes are intended to cover all possible queries (e.g., TREC BIBREF7). Recent work by BIBREF8 considers a sim"
+      },
+      {
+        "rank": 14,
+        "source": "1909.02027:paragraph:0032 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5967,
+        "keyword": 0.0,
+        "rerank": 0.5096,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "All datasets introduced in this paper can be found at https://github.com/clinc/oos-eval."
+      },
+      {
+        "rank": 15,
+        "source": "1909.02027:paragraph:0004 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.0777,
+        "rerank": 0.4678,
+        "section": "Introduction",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "This paper fills this gap by analyzing intent classification performance with a focus on out-of-scope handling. To do so, we constructed a new dataset with 23,700 queries that are short and unstructured, in the same styl"
+      },
+      {
+        "rank": 16,
+        "source": "1909.02027:paragraph:0008 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Out-of-Scope Data Collection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5484,
+        "keyword": 0.0,
+        "rerank": 0.4583,
+        "section": "Dataset ::: Out-of-Scope Data Collection",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Out-of-scope queries were collected in two ways. First, using worker mistakes: queries written for one of the 150 intents that did not actually match any of the intents. Second, using scoping and scenario tasks with prom"
+      },
+      {
+        "rank": 17,
+        "source": "1909.02027:paragraph:0026 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-binary",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5095,
+        "keyword": 0.0541,
+        "rerank": 0.4357,
+        "section": "Results ::: Results with oos-binary",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 compares classifier performance using the oos-binary scheme. In-scope accuracy suffers for all models using the undersampling scheme when compared to training on the full dataset using the oos-train and oo"
+      },
+      {
+        "rank": 18,
+        "source": "1909.02027:paragraph:0007 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: In-Scope Data Collection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5323,
+        "keyword": 0.0,
+        "rerank": 0.4079,
+        "section": "Dataset ::: In-Scope Data Collection",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We defined the intents with guidance from queries collected using a scoping crowdsourcing task, which prompted crowd workers to provide questions and commands related to topic domains in the manner they would interact wi"
+      },
+      {
+        "rank": 19,
+        "source": "1909.02027:paragraph:0002 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5137,
+        "keyword": 0.0,
+        "rerank": 0.3495,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF1 shows example query-response exchanges between a user and a task-driven dialog system for personal finance. In the first user-system exchange, the system correctly identifies the user's intent as an in-sco"
+      },
+      {
+        "rank": 20,
+        "source": "1909.02027:paragraph:0009 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Out-of-Scope Data Collection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5063,
+        "keyword": 0.0,
+        "rerank": 0.3265,
+        "section": "Dataset ::: Out-of-Scope Data Collection",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The out-of-scope data is difficult to collect, requiring expert knowledge of the in-scope intents to painstakingly ensure that no out-of-scope query sample is mistakenly labeled as in-scope (and vice versa). Indeed, roug"
+      },
+      {
+        "rank": 21,
+        "source": "1909.02027:paragraph:0003 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5027,
+        "keyword": 0.0,
+        "rerank": 0.3152,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Out-of-scope queries are inevitable for a task-oriented dialog system, as most users will not be fully cognizant of the system's capabilities, which are limited by the fixed number of intent classes. Correctly identifyin"
+      },
+      {
+        "rank": 22,
+        "source": "1909.02027:paragraph:0021 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.499,
+        "keyword": 0.0,
+        "rerank": 0.3037,
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To reduce the severity of the class imbalance between in-scope versus out-of-scope query samples (i.e., 15,000 versus 250 queries for OOS+), we investigate two strategies when using oos-binary: one where we undersample t"
+      },
+      {
+        "rank": 23,
+        "source": "1909.02027:paragraph:0020 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4985,
+        "keyword": 0.0,
+        "rerank": 0.3019,
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We use three baseline approaches for the task of predicting whether a query is out-of-scope: (1) oos-train, where we train an additional (i.e. 151st) intent on out-of-scope training data; (2) oos-threshold, where we use "
+      },
+      {
+        "rank": 24,
+        "source": "1909.02027:paragraph:0022 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4843,
+        "keyword": 0.0,
+        "rerank": 0.2874,
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "query_hits": "was",
+        "reasons": "body/table evidence",
+        "preview": "From a development point of view, the oos-train and oos-binary methods both require careful curation of an out-of-scope training set, and this set can be tailored to individual systems. The oos-threshold method is a more"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5906,
+        "keyword": 0.2347,
+        "rerank": 0.9207,
+        "section": "Prior Work",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF20 compares our dataset with other short-query intent classification datasets. The Snips BIBREF0 dataset and the dataset presented in BIBREF10 are the most similar to the in-scope part of our work, with the s"
+      },
+      {
+        "rank": 2,
+        "source": "1909.02027:paragraph:0013 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6032,
+        "keyword": 0.1262,
+        "rerank": 0.7213,
+        "section": "Benchmark Evaluation",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To quantify the challenges that our new dataset presents, we evaluated the performance of a range of classifier models and out-of-scope prediction schemes."
+      },
+      {
+        "rank": 3,
+        "source": "1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5372,
+        "keyword": 0.1712,
+        "rerank": 0.6721,
+        "section": "Abstract",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "Task-oriented dialog systems need to know when a query falls outside their range of supported intents, but current text classification corpora only define label sets that cover every example. We introduce a new dataset t"
+      },
+      {
+        "rank": 4,
+        "source": "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5478,
+        "keyword": 0.1004,
+        "rerank": 0.6149,
+        "section": "Introduction",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate a range of benchmark classifiers and out-of-scope handling methods on our dataset. BERT BIBREF1 yields the best in-scope accuracy, scoring 96% or above even when we limit the training data or introduce class "
+      },
+      {
+        "rank": 5,
+        "source": "1909.02027:paragraph:0006 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5475,
+        "keyword": 0.1676,
+        "rerank": 0.5999,
+        "section": "Dataset",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We introduce a new crowdsourced dataset of 23,700 queries, including 22,500 in-scope queries covering 150 intents, which can be grouped into 10 general domains. The dataset also includes 1,200 out-of-scope queries. Table"
+      },
+      {
+        "rank": 6,
+        "source": "1909.02027:paragraph:0030 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5934,
+        "keyword": 0.0,
+        "rerank": 0.5992,
+        "section": "Prior Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The Dialog State Tracking Challenge (DSTC) datasets are another related resource. Specifically, DSTC 1 BIBREF12, DSTC 2 BIBREF13, and DSTC 3 BIBREF14 contain \u201cchatbot style\" queries, but the datasets are focused on state"
+      },
+      {
+        "rank": 7,
+        "source": "1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5859,
+        "keyword": 0.0,
+        "rerank": 0.5759,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Tools for developing such systems start by guiding developers to collect training data for intent classification: the task of identifying which of a fixed set of actions the user wishes to take based on their query. Rela"
+      },
+      {
+        "rank": 8,
+        "source": "1909.02027:paragraph:0031 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5257,
+        "keyword": 0.1198,
+        "rerank": 0.5703,
+        "section": "Conclusion",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "This paper analyzed intent classification and out-of-scope prediction methods with a new dataset consisting of carefully collected out-of-scope data. Our findings indicate that certain models like BERT perform better on "
+      },
+      {
+        "rank": 9,
+        "source": "1909.02027:paragraph:0029 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5827,
+        "keyword": 0.0,
+        "rerank": 0.5658,
+        "section": "Prior Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF11 created datasets with constrained training data, but with very few intents, presenting a very different type of challenge. We also include the TREC query classification datasets BIBREF7, which have a large set o"
+      },
+      {
+        "rank": 10,
+        "source": "1909.02027:paragraph:0011 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Data Preprocessing and Partitioning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5805,
+        "keyword": 0.0,
+        "rerank": 0.5588,
+        "section": "Dataset ::: Data Preprocessing and Partitioning",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In an effort to reduce bias in the in-scope data, we placed all queries from a given crowd worker in a single split (train, validation, or test). This avoids the potential issue of similar queries from a crowd worker end"
+      },
+      {
+        "rank": 11,
+        "source": "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5434,
+        "keyword": 0.0428,
+        "rerank": 0.5572,
+        "section": "Results ::: Results with oos-train",
+        "query_hits": "dataset, was",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF14 presents results for all models across the four variations of the dataset. First, BERT is consistently the best approach for in-scope, followed by MLP. Second, out-of-scope query performance is much lower "
+      },
+      {
+        "rank": 12,
+        "source": "1909.02027:paragraph:0012 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Dataset Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5371,
+        "keyword": 0.0726,
+        "rerank": 0.5457,
+        "section": "Dataset ::: Dataset Variants",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "In addition to the full dataset, we consider three variations. First, Small, in which there are only 50 training queries per each in-scope intent, rather than 100. Second, Imbalanced, in which intents have either 25, 50,"
+      },
+      {
+        "rank": 13,
+        "source": "1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5746,
+        "keyword": 0.0,
+        "rerank": 0.5403,
+        "section": "Prior Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In most other analyses and datasets, the idea of out-of-scope data is not considered, and instead the output classes are intended to cover all possible queries (e.g., TREC BIBREF7). Recent work by BIBREF8 considers a sim"
+      },
+      {
+        "rank": 14,
+        "source": "1909.02027:paragraph:0032 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5967,
+        "keyword": 0.0,
+        "rerank": 0.5096,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "All datasets introduced in this paper can be found at https://github.com/clinc/oos-eval."
+      },
+      {
+        "rank": 15,
+        "source": "1909.02027:paragraph:0004 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.0777,
+        "rerank": 0.4678,
+        "section": "Introduction",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "This paper fills this gap by analyzing intent classification performance with a focus on out-of-scope handling. To do so, we constructed a new dataset with 23,700 queries that are short and unstructured, in the same styl"
+      },
+      {
+        "rank": 16,
+        "source": "1909.02027:paragraph:0008 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Out-of-Scope Data Collection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5484,
+        "keyword": 0.0,
+        "rerank": 0.4583,
+        "section": "Dataset ::: Out-of-Scope Data Collection",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Out-of-scope queries were collected in two ways. First, using worker mistakes: queries written for one of the 150 intents that did not actually match any of the intents. Second, using scoping and scenario tasks with prom"
+      },
+      {
+        "rank": 17,
+        "source": "1909.02027:paragraph:0026 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-binary",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5095,
+        "keyword": 0.0541,
+        "rerank": 0.4357,
+        "section": "Results ::: Results with oos-binary",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 compares classifier performance using the oos-binary scheme. In-scope accuracy suffers for all models using the undersampling scheme when compared to training on the full dataset using the oos-train and oo"
+      },
+      {
+        "rank": 18,
+        "source": "1909.02027:paragraph:0007 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: In-Scope Data Collection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5323,
+        "keyword": 0.0,
+        "rerank": 0.4079,
+        "section": "Dataset ::: In-Scope Data Collection",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We defined the intents with guidance from queries collected using a scoping crowdsourcing task, which prompted crowd workers to provide questions and commands related to topic domains in the manner they would interact wi"
+      },
+      {
+        "rank": 19,
+        "source": "1909.02027:paragraph:0002 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5137,
+        "keyword": 0.0,
+        "rerank": 0.3495,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF1 shows example query-response exchanges between a user and a task-driven dialog system for personal finance. In the first user-system exchange, the system correctly identifies the user's intent as an in-sco"
+      },
+      {
+        "rank": 20,
+        "source": "1909.02027:paragraph:0009 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Dataset ::: Out-of-Scope Data Collection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5063,
+        "keyword": 0.0,
+        "rerank": 0.3265,
+        "section": "Dataset ::: Out-of-Scope Data Collection",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The out-of-scope data is difficult to collect, requiring expert knowledge of the in-scope intents to painstakingly ensure that no out-of-scope query sample is mistakenly labeled as in-scope (and vice versa). Indeed, roug"
+      },
+      {
+        "rank": 21,
+        "source": "1909.02027:paragraph:0003 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5027,
+        "keyword": 0.0,
+        "rerank": 0.3152,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Out-of-scope queries are inevitable for a task-oriented dialog system, as most users will not be fully cognizant of the system's capabilities, which are limited by the fixed number of intent classes. Correctly identifyin"
+      },
+      {
+        "rank": 22,
+        "source": "1909.02027:paragraph:0021 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.499,
+        "keyword": 0.0,
+        "rerank": 0.3037,
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To reduce the severity of the class imbalance between in-scope versus out-of-scope query samples (i.e., 15,000 versus 250 queries for OOS+), we investigate two strategies when using oos-binary: one where we undersample t"
+      },
+      {
+        "rank": 23,
+        "source": "1909.02027:paragraph:0020 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4985,
+        "keyword": 0.0,
+        "rerank": 0.3019,
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We use three baseline approaches for the task of predicting whether a query is out-of-scope: (1) oos-train, where we train an additional (i.e. 151st) intent on out-of-scope training data; (2) oos-threshold, where we use "
+      },
+      {
+        "rank": 24,
+        "source": "1909.02027:paragraph:0022 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4843,
+        "keyword": 0.0,
+        "rerank": 0.2874,
+        "section": "Benchmark Evaluation ::: Out-of-Scope Prediction",
+        "query_hits": "was",
+        "reasons": "body/table evidence",
+        "preview": "From a development point of view, the oos-train and oos-binary methods both require careful curation of an out-of-scope training set, and this set can be tailored to individual systems. The oos-threshold method is a more"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5906,
+        "keyword": 0.2347,
+        "rerank": 0.9207,
+        "section": "Prior Work",
+        "query_hits": "dataset",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.24,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF20 compares our dataset with other short-query intent classification datasets. The Snips BIBREF0 dataset and the dataset presented in BIBREF10 are the most similar to the in-scope part of our work, with the s"
+      },
+      {
+        "rank": 2,
+        "source": "1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5372,
+        "keyword": 0.1712,
+        "rerank": 0.6721,
+        "section": "Abstract",
+        "query_hits": "dataset",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7358,
+        "novelty": 0.7238,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1341,
+        "reasons": "body/table evidence",
+        "preview": "Task-oriented dialog systems need to know when a query falls outside their range of supported intents, but current text classification corpora only define label sets that cover every example. We introduce a new dataset t"
+      },
+      {
+        "rank": 3,
+        "source": "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5478,
+        "keyword": 0.1004,
+        "rerank": 0.6149,
+        "section": "Introduction",
+        "query_hits": "dataset",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.675,
+        "novelty": 0.6785,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0755,
+        "reasons": "body/table evidence",
+        "preview": "We evaluate a range of benchmark classifiers and out-of-scope handling methods on our dataset. BERT BIBREF1 yields the best in-scope accuracy, scoring 96% or above even when we limit the training data or introduce class "
+      },
+      {
+        "rank": 4,
+        "source": "1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5859,
+        "keyword": 0.0,
+        "rerank": 0.5759,
+        "section": "Introduction",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6335,
+        "novelty": 0.4607,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9693,
+        "reasons": "body/table evidence",
+        "preview": "Tools for developing such systems start by guiding developers to collect training data for intent classification: the task of identifying which of a fixed set of actions the user wishes to take based on their query. Rela"
+      },
+      {
+        "rank": 5,
+        "source": "1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5746,
+        "keyword": 0.0,
+        "rerank": 0.5403,
+        "section": "Prior Work",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5956,
+        "novelty": 0.4486,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.935,
+        "reasons": "body/table evidence",
+        "preview": "In most other analyses and datasets, the idea of out-of-scope data is not considered, and instead the output classes are intended to cover all possible queries (e.g., TREC BIBREF7). Recent work by BIBREF8 considers a sim"
+      },
+      {
+        "rank": 6,
+        "source": "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5434,
+        "keyword": 0.0428,
+        "rerank": 0.5572,
+        "section": "Results ::: Results with oos-train",
+        "query_hits": "dataset, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6136,
+        "novelty": 0.7834,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9174,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF14 presents results for all models across the four variations of the dataset. First, BERT is consistently the best approach for in-scope, followed by MLP. Second, out-of-scope query performance is much lower "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "annotated",
+        "dataset",
+        "was"
+      ],
+      "covered_query_terms": [
+        "dataset",
+        "was"
+      ],
+      "missing_query_terms": [
+        "annotated"
+      ],
+      "terms_by_chunk": {
+        "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work": [
+          "dataset"
+        ],
+        "1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract": [
+          "dataset"
+        ],
+        "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction": [
+          "dataset"
+        ],
+        "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train": [
+          "dataset",
+          "was"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Introduction",
+        "Prior Work",
+        "Results ::: Results with oos-train"
+      ],
+      "chunks_by_section": {
+        "Prior Work": [
+          "1909.02027:paragraph:0028 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work",
+          "1909.02027:paragraph:0027 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Prior Work"
+        ],
+        "Abstract": [
+          "1909.02027:abstract:000 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Abstract"
+        ],
+        "Introduction": [
+          "1909.02027:paragraph:0005 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction",
+          "1909.02027:paragraph:0001 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Introduction"
+        ],
+        "Results ::: Results with oos-train": [
+          "1909.02027:paragraph:0024 | An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction / Results ::: Results with oos-train"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The context does not provide specific details on how the dataset was annotated, but it describes the data collection and intent definition process.\n\nHere is what is mentioned:\n*   Intents were defined with guidance from queries collected using a scoping crowdsourcing task. This task asked crowd workers to provide questions and commands related to topic domains as they would interact with an AI assistant.\n*   Data generated by these scoping tasks was manually grouped into intents.\n*   Additional data for each",
+    "retrieved_context_answer": "The provided context does not explicitly state how the dataset was annotated. However, it mentions that some similar datasets were \"bootstrapped using crowdsourcing.\"",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.2826086956521739,
+    "retrieved_context_f1": 0.16216216216216214,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

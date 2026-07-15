@@ -1,0 +1,1565 @@
+{
+  "case": {
+    "case_id": "qasper_d3dbb5c22ef204d85707d2d24284cc77fa816b6c",
+    "paper_id": "1809.09194",
+    "paper_title": "Stochastic Answer Networks for SQuAD 2.0",
+    "question_id": "d3dbb5c22ef204d85707d2d24284cc77fa816b6c",
+    "annotation_id": "36b40dc9a0efe05cf88605c54b6a15173cd7c70d",
+    "question": "What other models do they compare to?",
+    "gold_answer": "SAN Baseline, BNA, DocQA, R.M-Reader, R.M-Reader+Verifier and DocQA+ELMo",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1809.09194:paragraph:0023",
+      "1809.09194:paragraph:0022"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1809.09194:paragraph:0023",
+      "score": 0.63,
+      "title": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+      "text": "Table TABREF21 reports comparison results in literature published . Our model achieves state-of-the-art on development dataset in setting without pre-trained large language model (ELMo). Comparing with the much complicated model R.M.-Reader + Verifier, which includes several components, our model still outperforms by 0.7 in terms of F1 score. Furthermore, we observe that ELMo gives a great boosting on the performance, e.g., 2.8 points in terms of F1 for DocQA. This encourages us to incorporate ELMo into our model in future."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1809.09194:paragraph:0001",
+      "score": 0.4533495406607368,
+      "title": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+      "text": "In comparison with many existing MRC systems BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , which extract answers by finding a sub-string in the passages/paragraphs, we propose a model that not only extracts answers but also predicts whether such an answer should exist. Using a multi-task learning approach (c.f. BIBREF5 ), we extend the Stochastic Answer Network (SAN) BIBREF1 for MRC answer span detector to include a classifier that whether the question is unanswerable. The unanswerable classifier is a pair-wise classification model BIBREF6 which predicts a label indicating whether the given pair of a passage and a question is unanswerable. The two models share the same lower layer to save the number of parameters, and separate the top layers for different tasks (the span detector and binary classifier)."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1809.09194:paragraph:0005",
+      "score": 0.45123146603169706,
+      "title": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+      "text": "Our model is a variation of SAN BIBREF1 , as shown in Figure FIGREF2 . The main difference is the additional binary classifier added in the model justifying whether the question is unanswerable. Roughly, the model includes two different layers: the shared layer and task specific layer. The shared layer is almost identical to the lower layers of SAN, which has a lexicon encoding layer, a contextual layer and a memory generation layer. On top of it, there are different answer modules for different tasks. We employ the SAN answer module for the span detector and a one-layer feed forward neural network for the binary classification task. It can also be viewed as a multi-task learning BIBREF8 , BIBREF5 , BIBREF9 . We will briefly describe the model from ground up as follows. Detailed descriptions can be found in BIBREF1 ."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1809.09194:paragraph:0002",
+      "score": 0.526703729654943,
+      "title": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+      "text": "Our model is pretty simple and intuitive, yet efficient. Without relying on the large pre-trained language models (ELMo) BIBREF7 , the proposed model achieves competitive results to the state-of-the-art on Stanford Question Answering Dataset (SQuAD) 2.0."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1809.09194:paragraph:0024",
+      "score": 0.4123561817501648,
+      "title": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+      "text": "Analysis. To better understand our model, we analyze the accuracy of the classifier in our joint model. We obtain 75.3 classification accuracy on the development with the threshold 0.5. By increasing value of INLINEFORM0 in Eq EQREF9 , the classification accuracy reached to 76.8 ( INLINEFORM1 ), however the final results of our model only have a small improvement (+0.2 in terms of F1 score). It shows that it is important to make balance between these two components: the span detector and unanswerable classifier."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1809.09194:abstract:000",
+      "score": 0.4116093452600816,
+      "title": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+      "text": "This paper presents an extension of the Stochastic Answer Network (SAN), one of the state-of-the-art machine reading comprehension models, to be able to judge whether a question is unanswerable or not. The extended SAN contains two components: a span detector and a binary classifier for judging whether the question is unanswerable, and both components are jointly optimized. Experiments show that SAN achieves the results competitive to the state-of-the-art on Stanford Question Answering Dataset (SQuAD) 2.0. To facilitate the research on this field, we release our code: https://github.com/kevinduh/san_mrc."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+      "attribution": 0.08957994722713887
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+      "attribution": 0.03567827851309223
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+      "attribution": 0.011650385123519048
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+      "attribution": 0.007304360330336984
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+      "attribution": 0.004065481436195602
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+      "attribution": 0.002597988848172773
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+      "attribution": 0.12363262303083537
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+      "attribution": 0.031626991595513125
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+      "attribution": 0.016940410270051054
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+      "attribution": 0.010373826637684097
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+      "attribution": 0.009097512093195047
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+      "attribution": 0.008873920009728106
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0001",
+      "interaction": 0.0014253825163797536
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0005",
+      "interaction": -0.00303923053590334
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0002",
+      "interaction": -0.00998568146648917
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.01850989877684744
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.017143814354280747
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:paragraph:0005",
+      "interaction": -0.007341723235203683
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:paragraph:0002",
+      "interaction": -0.00903943772074495
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.004539380291269714
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.02894023162996736
+    },
+    {
+      "left": "1809.09194:paragraph:0005",
+      "right": "1809.09194:paragraph:0002",
+      "interaction": -0.0030133595584112558
+    },
+    {
+      "left": "1809.09194:paragraph:0005",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.02593933494192599
+    },
+    {
+      "left": "1809.09194:paragraph:0005",
+      "right": "1809.09194:abstract:000",
+      "interaction": 0.005655966445712117
+    },
+    {
+      "left": "1809.09194:paragraph:0002",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.01722004019859008
+    },
+    {
+      "left": "1809.09194:paragraph:0002",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.0027676466872056443
+    },
+    {
+      "left": "1809.09194:paragraph:0024",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.0018733842875431927
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0001",
+      "interaction": -0.0027920343118245346
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0005",
+      "interaction": -0.005238677323394487
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0002",
+      "interaction": -0.016153705361489787
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.011267504950373528
+    },
+    {
+      "left": "1809.09194:paragraph:0023",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.002454425259191373
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:paragraph:0005",
+      "interaction": -0.008508237149607403
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:paragraph:0002",
+      "interaction": -0.0028475923866123744
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.004239976510993285
+    },
+    {
+      "left": "1809.09194:paragraph:0001",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.0020330692218632185
+    },
+    {
+      "left": "1809.09194:paragraph:0005",
+      "right": "1809.09194:paragraph:0002",
+      "interaction": -0.0026788934912510675
+    },
+    {
+      "left": "1809.09194:paragraph:0005",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.0038720974669185742
+    },
+    {
+      "left": "1809.09194:paragraph:0005",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.00539556847721366
+    },
+    {
+      "left": "1809.09194:paragraph:0002",
+      "right": "1809.09194:paragraph:0024",
+      "interaction": -0.005689004358222192
+    },
+    {
+      "left": "1809.09194:paragraph:0002",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.025547039782264608
+    },
+    {
+      "left": "1809.09194:paragraph:0024",
+      "right": "1809.09194:abstract:000",
+      "interaction": -0.00253408065504805
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.15087644119393173
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "remaining_chunks": 5,
+        "score": 0.058940826983548966
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.01660153737908976
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "remaining_chunks": 3,
+        "score": 0.0009893166029242284
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "remaining_chunks": 2,
+        "score": 0.014032165079372216
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "remaining_chunks": 1,
+        "score": 0.04861114761504837
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "selected_chunks": 1,
+        "score": 0.1391888577682735
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "selected_chunks": 2,
+        "score": 0.16308783872068144
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "selected_chunks": 3,
+        "score": 0.15067807178373216
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "selected_chunks": 4,
+        "score": 0.14667471263162435
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "selected_chunks": 5,
+        "score": 0.13594297632058328
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "selected_chunks": 6,
+        "score": 0.15087644119393173
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.15087644119393173
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "remaining_chunks": 5,
+        "score": 0.058940826983548966
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "remaining_chunks": 4,
+        "score": 0.060355855615440324
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "remaining_chunks": 3,
+        "score": 0.07693392676293542
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "remaining_chunks": 2,
+        "score": 0.0793125858960465
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "remaining_chunks": 1,
+        "score": 0.07533982330360145
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.15087644119393173
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "remaining_chunks": 5,
+        "score": 0.058940826983548966
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.01660153737908976
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "remaining_chunks": 3,
+        "score": 0.04530427643677626
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "remaining_chunks": 2,
+        "score": 0.06848699318235885
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "remaining_chunks": 1,
+        "score": 0.07099956485664882
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.15087644119393157
+      },
+      {
+        "step": 1,
+        "score": 0.12731314174811273
+      },
+      {
+        "step": 2,
+        "score": 0.11118082085516044
+      },
+      {
+        "step": 3,
+        "score": 0.09727029110544187
+      },
+      {
+        "step": 4,
+        "score": 0.08775695081277095
+      },
+      {
+        "step": 5,
+        "score": 0.07526542426833148
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What other models do they compare to?",
+    "expanded_queries": [
+      "What other models do they compare to?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "dense": 0.6132,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF21 reports comparison results in literature published . Our model achieves state-of-the-art on development dataset in setting without pre-trained large language model (ELMo). Comparing with the much complicat"
+      },
+      {
+        "rank": 2,
+        "source": "1809.09194:paragraph:0021 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "dense": 0.5655,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "We would like to investigate effectiveness the proposed joint model. To do so, the same shared layer/architecture is employed in the following variants of the proposed model:"
+      },
+      {
+        "rank": 3,
+        "source": "1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "dense": 0.548,
+        "page": 1,
+        "type": "body_text",
+        "section": "Model",
+        "flags": "",
+        "preview": "Our model is a variation of SAN BIBREF1 , as shown in Figure FIGREF2 . The main difference is the additional binary classifier added in the model justifying whether the question is unanswerable. Roughly, the model includ"
+      },
+      {
+        "rank": 4,
+        "source": "1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "dense": 0.5338,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Analysis. To better understand our model, we analyze the accuracy of the classifier in our joint model. We obtain 75.3 classification accuracy on the development with the threshold 0.5. By increasing value of INLINEFORM0"
+      },
+      {
+        "rank": 5,
+        "source": "1809.09194:paragraph:0025 | Stochastic Answer Networks for SQuAD 2.0 / Conclusion",
+        "dense": 0.5244,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "To sum up, we proposed a simple yet efficient model based on SAN. It showed that the joint learning algorithm boosted the performance on SQuAD 2.0. We also would like to incorporate ELMo into our model in future."
+      },
+      {
+        "rank": 6,
+        "source": "1809.09194:paragraph:0009 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "dense": 0.5134,
+        "page": 1,
+        "type": "body_text",
+        "section": "Model",
+        "flags": "",
+        "preview": "Note that INLINEFORM0 and INLINEFORM1 is transformed from INLINEFORM2 and INLINEFORM3 by one layer neural network INLINEFORM4 , respectively. A question-aware passage representation is computed as INLINEFORM5 . After tha"
+      },
+      {
+        "rank": 7,
+        "source": "1809.09194:paragraph:0022 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "dense": 0.4921,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "The results in terms of EM and F1 is summarized in Table TABREF20 . We observe that Joint SAN outperforms the SAN baseline with a large margin, e.g., 67.89 vs 69.27 (+1.38) and 70.68 vs 72.20 (+1.52) in terms of EM and F"
+      },
+      {
+        "rank": 8,
+        "source": "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "dense": 0.4916,
+        "page": 1,
+        "type": "body_text",
+        "section": "Background",
+        "flags": "",
+        "preview": "Our model is pretty simple and intuitive, yet efficient. Without relying on the large pre-trained language models (ELMo) BIBREF7 , the proposed model achieves competitive results to the state-of-the-art on Stanford Quest"
+      },
+      {
+        "rank": 9,
+        "source": "1809.09194:paragraph:0008 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "dense": 0.4909,
+        "page": 1,
+        "type": "body_text",
+        "section": "Model",
+        "flags": "",
+        "preview": "Memory Generation Layer. In this layer, we generate a working memory by fusing information from both passages INLINEFORM0 and questions INLINEFORM1 . The attention function BIBREF11 is used to compute the similarity scor"
+      },
+      {
+        "rank": 10,
+        "source": "1809.09194:paragraph:0019 | Stochastic Answer Networks for SQuAD 2.0 / Setup",
+        "dense": 0.4897,
+        "page": 1,
+        "type": "body_text",
+        "section": "Setup",
+        "flags": "",
+        "preview": "We evaluate our system on SQuAD 2.0 dataset BIBREF14 , a new MRC dataset which is a combination of Stanford Question Answering Dataset (SQuAD) 1.0 BIBREF15 and additional unanswerable question-answer pairs. The answerabl"
+      },
+      {
+        "rank": 11,
+        "source": "1809.09194:paragraph:0006 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "dense": 0.4842,
+        "page": 1,
+        "type": "body_text",
+        "section": "Model",
+        "flags": "",
+        "preview": "Lexicon Encoding Layer. We map the symbolic/surface feature of INLINEFORM0 and INLINEFORM1 into neural space via word embeddings , 16-dim part-of-speech (POS) tagging embeddings, 8-dim named-entity embeddings and 4-dim h"
+      },
+      {
+        "rank": 12,
+        "source": "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "dense": 0.4807,
+        "page": 1,
+        "type": "body_text",
+        "section": "Background",
+        "flags": "",
+        "preview": "In comparison with many existing MRC systems BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , which extract answers by finding a sub-string in the passages/paragraphs, we propose a model that not only extracts answers b"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "keyword": 0.1339,
+        "page": 1,
+        "type": "body_text",
+        "section": "Background",
+        "flags": "",
+        "preview": "Our model is pretty simple and intuitive, yet efficient. Without relying on the large pre-trained language models (ELMo) BIBREF7 , the proposed model achieves competitive results to the state-of-the-art on Stanford Quest"
+      },
+      {
+        "rank": 2,
+        "source": "1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "keyword": 0.0839,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "This paper presents an extension of the Stochastic Answer Network (SAN), one of the state-of-the-art machine reading comprehension models, to be able to judge whether a question is unanswerable or not. The extended SAN c"
+      },
+      {
+        "rank": 3,
+        "source": "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "keyword": 0.0698,
+        "page": 1,
+        "type": "body_text",
+        "section": "Background",
+        "flags": "",
+        "preview": "In comparison with many existing MRC systems BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , which extract answers by finding a sub-string in the passages/paragraphs, we propose a model that not only extracts answers b"
+      },
+      {
+        "rank": 4,
+        "source": "1809.09194:paragraph:0026 | Stochastic Answer Networks for SQuAD 2.0 / Acknowledgments",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Acknowledgments",
+        "flags": "",
+        "preview": "We thank Yichong Xu, Shuohang Wang and Sheng Zhang for valuable discussions and comments. We also thank Robin Jia for the help on SQuAD evaluations."
+      },
+      {
+        "rank": 5,
+        "source": "1809.09194:paragraph:0022 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "The results in terms of EM and F1 is summarized in Table TABREF20 . We observe that Joint SAN outperforms the SAN baseline with a large margin, e.g., 67.89 vs 69.27 (+1.38) and 70.68 vs 72.20 (+1.52) in terms of EM and F"
+      },
+      {
+        "rank": 6,
+        "source": "1809.09194:paragraph:0021 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "We would like to investigate effectiveness the proposed joint model. To do so, the same shared layer/architecture is employed in the following variants of the proposed model:"
+      },
+      {
+        "rank": 7,
+        "source": "1809.09194:paragraph:0020 | Stochastic Answer Networks for SQuAD 2.0 / Implementation details",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Implementation details",
+        "flags": "",
+        "preview": "We utilize spaCy tool to tokenize the both passages and questions, and generate lemma, part-of-speech and named entity tags. The word embeddings are initialized with pre-trained 300-dimensional GloVe BIBREF10 . A 2-layer"
+      },
+      {
+        "rank": 8,
+        "source": "1809.09194:paragraph:0019 | Stochastic Answer Networks for SQuAD 2.0 / Setup",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Setup",
+        "flags": "",
+        "preview": "We evaluate our system on SQuAD 2.0 dataset BIBREF14 , a new MRC dataset which is a combination of Stanford Question Answering Dataset (SQuAD) 1.0 BIBREF15 and additional unanswerable question-answer pairs. The answerabl"
+      },
+      {
+        "rank": 9,
+        "source": "1809.09194:paragraph:0018 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Model",
+        "flags": "",
+        "preview": "where INLINEFORM0 is a binary variable: INLINEFORM1 indicates the question is unanswerable and INLINEFORM2 denotes the question is answerable."
+      },
+      {
+        "rank": 10,
+        "source": "1809.09194:paragraph:0025 | Stochastic Answer Networks for SQuAD 2.0 / Conclusion",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "To sum up, we proposed a simple yet efficient model based on SAN. It showed that the joint learning algorithm boosted the performance on SQuAD 2.0. We also would like to incorporate ELMo into our model in future."
+      },
+      {
+        "rank": 11,
+        "source": "1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Analysis. To better understand our model, we analyze the accuracy of the classifier in our joint model. We obtain 75.3 classification accuracy on the development with the threshold 0.5. By increasing value of INLINEFORM0"
+      },
+      {
+        "rank": 12,
+        "source": "1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF21 reports comparison results in literature published . Our model achieves state-of-the-art on development dataset in setting without pre-trained large language model (ELMo). Comparing with the much complicat"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6132,
+        "keyword": 0.0,
+        "rerank": 0.63,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF21 reports comparison results in literature published . Our model achieves state-of-the-art on development dataset in setting without pre-trained large language model (ELMo). Comparing with the much complicat"
+      },
+      {
+        "rank": 2,
+        "source": "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4916,
+        "keyword": 0.1339,
+        "rerank": 0.5267,
+        "section": "Background",
+        "query_hits": "models",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our model is pretty simple and intuitive, yet efficient. Without relying on the large pre-trained language models (ELMo) BIBREF7 , the proposed model achieves competitive results to the state-of-the-art on Stanford Quest"
+      },
+      {
+        "rank": 3,
+        "source": "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4807,
+        "keyword": 0.0698,
+        "rerank": 0.4533,
+        "section": "Background",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "In comparison with many existing MRC systems BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , which extract answers by finding a sub-string in the passages/paragraphs, we propose a model that not only extracts answers b"
+      },
+      {
+        "rank": 4,
+        "source": "1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.548,
+        "keyword": 0.0,
+        "rerank": 0.4512,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Our model is a variation of SAN BIBREF1 , as shown in Figure FIGREF2 . The main difference is the additional binary classifier added in the model justifying whether the question is unanswerable. Roughly, the model includ"
+      },
+      {
+        "rank": 5,
+        "source": "1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5338,
+        "keyword": 0.0,
+        "rerank": 0.4124,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Analysis. To better understand our model, we analyze the accuracy of the classifier in our joint model. We obtain 75.3 classification accuracy on the development with the threshold 0.5. By increasing value of INLINEFORM0"
+      },
+      {
+        "rank": 6,
+        "source": "1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.454,
+        "keyword": 0.0839,
+        "rerank": 0.4116,
+        "section": "Abstract",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "This paper presents an extension of the Stochastic Answer Network (SAN), one of the state-of-the-art machine reading comprehension models, to be able to judge whether a question is unanswerable or not. The extended SAN c"
+      },
+      {
+        "rank": 7,
+        "source": "1809.09194:paragraph:0021 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5655,
+        "keyword": 0.0,
+        "rerank": 0.3992,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We would like to investigate effectiveness the proposed joint model. To do so, the same shared layer/architecture is employed in the following variants of the proposed model:"
+      },
+      {
+        "rank": 8,
+        "source": "1809.09194:paragraph:0019 | Stochastic Answer Networks for SQuAD 2.0 / Setup",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4897,
+        "keyword": 0.0,
+        "rerank": 0.3216,
+        "section": "Setup",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate our system on SQuAD 2.0 dataset BIBREF14 , a new MRC dataset which is a combination of Stanford Question Answering Dataset (SQuAD) 1.0 BIBREF15 and additional unanswerable question-answer pairs. The answerabl"
+      },
+      {
+        "rank": 9,
+        "source": "1809.09194:paragraph:0006 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4842,
+        "keyword": 0.0,
+        "rerank": 0.3066,
+        "section": "Model",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Lexicon Encoding Layer. We map the symbolic/surface feature of INLINEFORM0 and INLINEFORM1 into neural space via word embeddings , 16-dim part-of-speech (POS) tagging embeddings, 8-dim named-entity embeddings and 4-dim h"
+      },
+      {
+        "rank": 10,
+        "source": "1809.09194:paragraph:0022 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4921,
+        "keyword": 0.0,
+        "rerank": 0.2982,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The results in terms of EM and F1 is summarized in Table TABREF20 . We observe that Joint SAN outperforms the SAN baseline with a large margin, e.g., 67.89 vs 69.27 (+1.38) and 70.68 vs 72.20 (+1.52) in terms of EM and F"
+      },
+      {
+        "rank": 11,
+        "source": "1809.09194:paragraph:0025 | Stochastic Answer Networks for SQuAD 2.0 / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5244,
+        "keyword": 0.0,
+        "rerank": 0.2866,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To sum up, we proposed a simple yet efficient model based on SAN. It showed that the joint learning algorithm boosted the performance on SQuAD 2.0. We also would like to incorporate ELMo into our model in future."
+      },
+      {
+        "rank": 12,
+        "source": "1809.09194:paragraph:0009 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5134,
+        "keyword": 0.0,
+        "rerank": 0.2566,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Note that INLINEFORM0 and INLINEFORM1 is transformed from INLINEFORM2 and INLINEFORM3 by one layer neural network INLINEFORM4 , respectively. A question-aware passage representation is computed as INLINEFORM5 . After tha"
+      },
+      {
+        "rank": 13,
+        "source": "1809.09194:paragraph:0007 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4724,
+        "keyword": 0.0,
+        "rerank": 0.2443,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Contextual Encoding Layer. A shared two-layers BiLSTM is used on the top to encode the contextual information of both passages and questions. To avoid overfitting, we concatenate a pre-trained 600-dimensional CoVe vector"
+      },
+      {
+        "rank": 14,
+        "source": "1809.09194:paragraph:0011 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4648,
+        "keyword": 0.0,
+        "rerank": 0.2235,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Span detector. We adopt a multi-turn answer module for the span detector BIBREF1 . Formally, at time step INLINEFORM0 in the range of INLINEFORM1 , the state is defined by INLINEFORM2 . The initial state INLINEFORM3 is t"
+      },
+      {
+        "rank": 15,
+        "source": "1809.09194:paragraph:0020 | Stochastic Answer Networks for SQuAD 2.0 / Implementation details",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.463,
+        "keyword": 0.0,
+        "rerank": 0.2184,
+        "section": "Implementation details",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We utilize spaCy tool to tokenize the both passages and questions, and generate lemma, part-of-speech and named entity tags. The word embeddings are initialized with pre-trained 300-dimensional GloVe BIBREF10 . A 2-layer"
+      },
+      {
+        "rank": 16,
+        "source": "1809.09194:paragraph:0000 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4628,
+        "keyword": 0.0,
+        "rerank": 0.218,
+        "section": "Background",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Teaching machine to read and comprehend a given passage/paragraph and answer its corresponding questions is a challenging task. It is also one of the long-term goals of natural language understanding, and has important a"
+      },
+      {
+        "rank": 17,
+        "source": "1809.09194:paragraph:0008 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4909,
+        "keyword": 0.0,
+        "rerank": 0.1949,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Memory Generation Layer. In this layer, we generate a working memory by fusing information from both passages INLINEFORM0 and questions INLINEFORM1 . The attention function BIBREF11 is used to compute the similarity scor"
+      },
+      {
+        "rank": 18,
+        "source": "1809.09194:paragraph:0004 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4491,
+        "keyword": 0.0,
+        "rerank": 0.1804,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The Machine Reading Comprehension is a task which takes a question INLINEFORM0 and a passage/paragraph INLINEFORM1 as inputs, and aims to find an answer span INLINEFORM2 in INLINEFORM3 . We assume that if the question is"
+      },
+      {
+        "rank": 19,
+        "source": "1809.09194:paragraph:0015 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4773,
+        "keyword": 0.0,
+        "rerank": 0.1577,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Objective The objective function of the joint model has two parts: DISPLAYFORM0"
+      },
+      {
+        "rank": 20,
+        "source": "1809.09194:paragraph:0003 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4744,
+        "keyword": 0.0,
+        "rerank": 0.1497,
+        "section": "Background",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The contribution of this work is summarized as follows. First, we propose a simple yet efficient model for MRC that handles unanswerable questions and is optimized jointly. Second, our model achieves competitive results "
+      },
+      {
+        "rank": 21,
+        "source": "1809.09194:paragraph:0013 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4669,
+        "keyword": 0.0,
+        "rerank": 0.1291,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Unanswerable classifier. We adopt a one-layer neural network as our unanswerable binary classifier: DISPLAYFORM0"
+      },
+      {
+        "rank": 22,
+        "source": "1809.09194:paragraph:0010 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.458,
+        "keyword": 0.0,
+        "rerank": 0.1048,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where INLINEFORM0 means that we only drop diagonal elements on the similarity matrix (i.e., attention with itself). At last, INLINEFORM1 and INLINEFORM2 are concatenated and are passed through a BiLSTM to form the final "
+      },
+      {
+        "rank": 23,
+        "source": "1809.09194:paragraph:0026 | Stochastic Answer Networks for SQuAD 2.0 / Acknowledgments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4455,
+        "keyword": 0.0,
+        "rerank": 0.0705,
+        "section": "Acknowledgments",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We thank Yichong Xu, Shuohang Wang and Sheng Zhang for valuable discussions and comments. We also thank Robin Jia for the help on SQuAD evaluations."
+      },
+      {
+        "rank": 24,
+        "source": "1809.09194:paragraph:0016 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4403,
+        "keyword": 0.0,
+        "rerank": 0.0562,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Following BIBREF0 , the span loss function is defined: DISPLAYFORM0"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6132,
+        "keyword": 0.0,
+        "rerank": 0.63,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF21 reports comparison results in literature published . Our model achieves state-of-the-art on development dataset in setting without pre-trained large language model (ELMo). Comparing with the much complicat"
+      },
+      {
+        "rank": 2,
+        "source": "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4916,
+        "keyword": 0.1339,
+        "rerank": 0.5267,
+        "section": "Background",
+        "query_hits": "models",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our model is pretty simple and intuitive, yet efficient. Without relying on the large pre-trained language models (ELMo) BIBREF7 , the proposed model achieves competitive results to the state-of-the-art on Stanford Quest"
+      },
+      {
+        "rank": 3,
+        "source": "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4807,
+        "keyword": 0.0698,
+        "rerank": 0.4533,
+        "section": "Background",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "In comparison with many existing MRC systems BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , which extract answers by finding a sub-string in the passages/paragraphs, we propose a model that not only extracts answers b"
+      },
+      {
+        "rank": 4,
+        "source": "1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.548,
+        "keyword": 0.0,
+        "rerank": 0.4512,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Our model is a variation of SAN BIBREF1 , as shown in Figure FIGREF2 . The main difference is the additional binary classifier added in the model justifying whether the question is unanswerable. Roughly, the model includ"
+      },
+      {
+        "rank": 5,
+        "source": "1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5338,
+        "keyword": 0.0,
+        "rerank": 0.4124,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Analysis. To better understand our model, we analyze the accuracy of the classifier in our joint model. We obtain 75.3 classification accuracy on the development with the threshold 0.5. By increasing value of INLINEFORM0"
+      },
+      {
+        "rank": 6,
+        "source": "1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.454,
+        "keyword": 0.0839,
+        "rerank": 0.4116,
+        "section": "Abstract",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "This paper presents an extension of the Stochastic Answer Network (SAN), one of the state-of-the-art machine reading comprehension models, to be able to judge whether a question is unanswerable or not. The extended SAN c"
+      },
+      {
+        "rank": 7,
+        "source": "1809.09194:paragraph:0021 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5655,
+        "keyword": 0.0,
+        "rerank": 0.3992,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We would like to investigate effectiveness the proposed joint model. To do so, the same shared layer/architecture is employed in the following variants of the proposed model:"
+      },
+      {
+        "rank": 8,
+        "source": "1809.09194:paragraph:0019 | Stochastic Answer Networks for SQuAD 2.0 / Setup",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4897,
+        "keyword": 0.0,
+        "rerank": 0.3216,
+        "section": "Setup",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate our system on SQuAD 2.0 dataset BIBREF14 , a new MRC dataset which is a combination of Stanford Question Answering Dataset (SQuAD) 1.0 BIBREF15 and additional unanswerable question-answer pairs. The answerabl"
+      },
+      {
+        "rank": 9,
+        "source": "1809.09194:paragraph:0006 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4842,
+        "keyword": 0.0,
+        "rerank": 0.3066,
+        "section": "Model",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Lexicon Encoding Layer. We map the symbolic/surface feature of INLINEFORM0 and INLINEFORM1 into neural space via word embeddings , 16-dim part-of-speech (POS) tagging embeddings, 8-dim named-entity embeddings and 4-dim h"
+      },
+      {
+        "rank": 10,
+        "source": "1809.09194:paragraph:0022 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4921,
+        "keyword": 0.0,
+        "rerank": 0.2982,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The results in terms of EM and F1 is summarized in Table TABREF20 . We observe that Joint SAN outperforms the SAN baseline with a large margin, e.g., 67.89 vs 69.27 (+1.38) and 70.68 vs 72.20 (+1.52) in terms of EM and F"
+      },
+      {
+        "rank": 11,
+        "source": "1809.09194:paragraph:0025 | Stochastic Answer Networks for SQuAD 2.0 / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5244,
+        "keyword": 0.0,
+        "rerank": 0.2866,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To sum up, we proposed a simple yet efficient model based on SAN. It showed that the joint learning algorithm boosted the performance on SQuAD 2.0. We also would like to incorporate ELMo into our model in future."
+      },
+      {
+        "rank": 12,
+        "source": "1809.09194:paragraph:0009 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5134,
+        "keyword": 0.0,
+        "rerank": 0.2566,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Note that INLINEFORM0 and INLINEFORM1 is transformed from INLINEFORM2 and INLINEFORM3 by one layer neural network INLINEFORM4 , respectively. A question-aware passage representation is computed as INLINEFORM5 . After tha"
+      },
+      {
+        "rank": 13,
+        "source": "1809.09194:paragraph:0007 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4724,
+        "keyword": 0.0,
+        "rerank": 0.2443,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Contextual Encoding Layer. A shared two-layers BiLSTM is used on the top to encode the contextual information of both passages and questions. To avoid overfitting, we concatenate a pre-trained 600-dimensional CoVe vector"
+      },
+      {
+        "rank": 14,
+        "source": "1809.09194:paragraph:0011 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4648,
+        "keyword": 0.0,
+        "rerank": 0.2235,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Span detector. We adopt a multi-turn answer module for the span detector BIBREF1 . Formally, at time step INLINEFORM0 in the range of INLINEFORM1 , the state is defined by INLINEFORM2 . The initial state INLINEFORM3 is t"
+      },
+      {
+        "rank": 15,
+        "source": "1809.09194:paragraph:0020 | Stochastic Answer Networks for SQuAD 2.0 / Implementation details",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.463,
+        "keyword": 0.0,
+        "rerank": 0.2184,
+        "section": "Implementation details",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We utilize spaCy tool to tokenize the both passages and questions, and generate lemma, part-of-speech and named entity tags. The word embeddings are initialized with pre-trained 300-dimensional GloVe BIBREF10 . A 2-layer"
+      },
+      {
+        "rank": 16,
+        "source": "1809.09194:paragraph:0000 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4628,
+        "keyword": 0.0,
+        "rerank": 0.218,
+        "section": "Background",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Teaching machine to read and comprehend a given passage/paragraph and answer its corresponding questions is a challenging task. It is also one of the long-term goals of natural language understanding, and has important a"
+      },
+      {
+        "rank": 17,
+        "source": "1809.09194:paragraph:0008 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4909,
+        "keyword": 0.0,
+        "rerank": 0.1949,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Memory Generation Layer. In this layer, we generate a working memory by fusing information from both passages INLINEFORM0 and questions INLINEFORM1 . The attention function BIBREF11 is used to compute the similarity scor"
+      },
+      {
+        "rank": 18,
+        "source": "1809.09194:paragraph:0004 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4491,
+        "keyword": 0.0,
+        "rerank": 0.1804,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The Machine Reading Comprehension is a task which takes a question INLINEFORM0 and a passage/paragraph INLINEFORM1 as inputs, and aims to find an answer span INLINEFORM2 in INLINEFORM3 . We assume that if the question is"
+      },
+      {
+        "rank": 19,
+        "source": "1809.09194:paragraph:0015 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4773,
+        "keyword": 0.0,
+        "rerank": 0.1577,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Objective The objective function of the joint model has two parts: DISPLAYFORM0"
+      },
+      {
+        "rank": 20,
+        "source": "1809.09194:paragraph:0003 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4744,
+        "keyword": 0.0,
+        "rerank": 0.1497,
+        "section": "Background",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The contribution of this work is summarized as follows. First, we propose a simple yet efficient model for MRC that handles unanswerable questions and is optimized jointly. Second, our model achieves competitive results "
+      },
+      {
+        "rank": 21,
+        "source": "1809.09194:paragraph:0013 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4669,
+        "keyword": 0.0,
+        "rerank": 0.1291,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Unanswerable classifier. We adopt a one-layer neural network as our unanswerable binary classifier: DISPLAYFORM0"
+      },
+      {
+        "rank": 22,
+        "source": "1809.09194:paragraph:0010 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.458,
+        "keyword": 0.0,
+        "rerank": 0.1048,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where INLINEFORM0 means that we only drop diagonal elements on the similarity matrix (i.e., attention with itself). At last, INLINEFORM1 and INLINEFORM2 are concatenated and are passed through a BiLSTM to form the final "
+      },
+      {
+        "rank": 23,
+        "source": "1809.09194:paragraph:0026 | Stochastic Answer Networks for SQuAD 2.0 / Acknowledgments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4455,
+        "keyword": 0.0,
+        "rerank": 0.0705,
+        "section": "Acknowledgments",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We thank Yichong Xu, Shuohang Wang and Sheng Zhang for valuable discussions and comments. We also thank Robin Jia for the help on SQuAD evaluations."
+      },
+      {
+        "rank": 24,
+        "source": "1809.09194:paragraph:0016 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4403,
+        "keyword": 0.0,
+        "rerank": 0.0562,
+        "section": "Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Following BIBREF0 , the span loss function is defined: DISPLAYFORM0"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6132,
+        "keyword": 0.0,
+        "rerank": 0.63,
+        "section": "Results",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF21 reports comparison results in literature published . Our model achieves state-of-the-art on development dataset in setting without pre-trained large language model (ELMo). Comparing with the much complicat"
+      },
+      {
+        "rank": 2,
+        "source": "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4807,
+        "keyword": 0.0698,
+        "rerank": 0.4533,
+        "section": "Background",
+        "query_hits": "models",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7282,
+        "novelty": 0.9474,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1589,
+        "reasons": "body/table evidence",
+        "preview": "In comparison with many existing MRC systems BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 , BIBREF4 , which extract answers by finding a sub-string in the passages/paragraphs, we propose a model that not only extracts answers b"
+      },
+      {
+        "rank": 3,
+        "source": "1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.548,
+        "keyword": 0.0,
+        "rerank": 0.4512,
+        "section": "Model",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.725,
+        "novelty": 0.6594,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0758,
+        "reasons": "body/table evidence",
+        "preview": "Our model is a variation of SAN BIBREF1 , as shown in Figure FIGREF2 . The main difference is the additional binary classifier added in the model justifying whether the question is unanswerable. Roughly, the model includ"
+      },
+      {
+        "rank": 4,
+        "source": "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4916,
+        "keyword": 0.1339,
+        "rerank": 0.5267,
+        "section": "Background",
+        "query_hits": "models",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8411,
+        "novelty": 0.4427,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0053,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our model is pretty simple and intuitive, yet efficient. Without relying on the large pre-trained language models (ELMo) BIBREF7 , the proposed model achieves competitive results to the state-of-the-art on Stanford Quest"
+      },
+      {
+        "rank": 5,
+        "source": "1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5338,
+        "keyword": 0.0,
+        "rerank": 0.4124,
+        "section": "Results",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6652,
+        "novelty": 0.441,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9938,
+        "reasons": "body/table evidence",
+        "preview": "Analysis. To better understand our model, we analyze the accuracy of the classifier in our joint model. We obtain 75.3 classification accuracy on the development with the threshold 0.5. By increasing value of INLINEFORM0"
+      },
+      {
+        "rank": 6,
+        "source": "1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.454,
+        "keyword": 0.0839,
+        "rerank": 0.4116,
+        "section": "Abstract",
+        "query_hits": "models",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.664,
+        "novelty": 0.6793,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9061,
+        "reasons": "body/table evidence",
+        "preview": "This paper presents an extension of the Stochastic Answer Network (SAN), one of the state-of-the-art machine reading comprehension models, to be able to judge whether a question is unanswerable or not. The extended SAN c"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "compare",
+        "models",
+        "other",
+        "they"
+      ],
+      "covered_query_terms": [
+        "models"
+      ],
+      "missing_query_terms": [
+        "compare",
+        "other",
+        "they"
+      ],
+      "terms_by_chunk": {
+        "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background": [
+          "models"
+        ],
+        "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background": [
+          "models"
+        ],
+        "1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract": [
+          "models"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Background",
+        "Model",
+        "Results"
+      ],
+      "chunks_by_section": {
+        "Results": [
+          "1809.09194:paragraph:0023 | Stochastic Answer Networks for SQuAD 2.0 / Results",
+          "1809.09194:paragraph:0024 | Stochastic Answer Networks for SQuAD 2.0 / Results"
+        ],
+        "Background": [
+          "1809.09194:paragraph:0001 | Stochastic Answer Networks for SQuAD 2.0 / Background",
+          "1809.09194:paragraph:0002 | Stochastic Answer Networks for SQuAD 2.0 / Background"
+        ],
+        "Model": [
+          "1809.09194:paragraph:0005 | Stochastic Answer Networks for SQuAD 2.0 / Model"
+        ],
+        "Abstract": [
+          "1809.09194:abstract:000 | Stochastic Answer Networks for SQuAD 2.0 / Abstract"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "What other models do they compare to?",
+    "gold_context_answer": "The context mentions that the model being discussed achieves state-of-the-art performance in a setting without pre-trained large language models (ELMo). It compares its results with the \"much complicated model R.M.-Reader + Verifier,\" noting that its model outperforms it by 0.7 in terms of F1 score.\n\nThe context also mentions observing the boosting effect of ELMo, which is a pre-trained large language model, but does not list other",
+    "retrieved_context_answer": "The context provides several comparisons, depending on the specific model or aspect being discussed.\n\nFor performance comparison:\n*   The model is compared to the much complicated model **R.M.-Reader + Verifier**, where the proposed model outperformed it by 0.7 in terms of F1 score when tested without a pre-trained large language model (ELMo).\n*   The model achieves competitive results to the state-of-the-art on Stanford Question Answering",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.11363636363636363,
+    "retrieved_context_f1": 0.12048192771084339,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

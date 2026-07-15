@@ -1,0 +1,3395 @@
+{
+  "case": {
+    "case_id": "redundant_hamlet_author",
+    "pattern": "redundant_evidence",
+    "question": "Who wrote Hamlet?",
+    "gold_answer": "William Shakespeare.",
+    "gold_evidence_ids": [
+      "redundant_hamlet_a",
+      "redundant_hamlet_b",
+      "redundant_hamlet_c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_hamlet_a",
+        "right": "redundant_hamlet_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_hamlet_a",
+        "right": "redundant_hamlet_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_hamlet_b",
+        "right": "redundant_hamlet_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_hamlet_a",
+      "score": 0.8200000000000001,
+      "title": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+      "text": "William Shakespeare wrote the tragedy Hamlet."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_hamlet_c",
+      "score": 0.43266244246019725,
+      "title": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+      "text": "The tragedy of Hamlet belongs to the works of Shakespeare."
+    },
+    {
+      "rank": 3,
+      "passage_id": "redundant_hamlet_b",
+      "score": 0.4143164266913959,
+      "title": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+      "text": "Hamlet is a play authored by William Shakespeare."
+    },
+    {
+      "rank": 4,
+      "passage_id": "redundant_orwell_a",
+      "score": 0.33396733317290306,
+      "title": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+      "text": "George Orwell wrote the novel Nineteen Eighty-Four."
+    },
+    {
+      "rank": 5,
+      "passage_id": "direct_austen_evidence",
+      "score": 0.2741687495769911,
+      "title": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+      "text": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+    },
+    {
+      "rank": 6,
+      "passage_id": "redundant_orwell_huxley_distractor",
+      "score": 0.27532349333106465,
+      "title": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+      "text": "Aldous Huxley wrote Brave New World, another dystopian novel."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+      "attribution": 0.09057454990711146
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+      "attribution": 0.08047209894652889
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+      "attribution": 0.04512439027212547
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+      "attribution": -0.031056598797715045
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+      "attribution": -0.005443148718759268
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+      "attribution": -0.0035768083274359745
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+      "attribution": 0.1383531687922664
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+      "attribution": 0.0800714055344676
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+      "attribution": 0.02429360439359411
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+      "attribution": 0.010159658798293166
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+      "attribution": 0.007627638431268082
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+      "attribution": -0.004375619726713061
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.1590582274924734,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.10096032403725187,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "redundant_hamlet_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.08846632444781972,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.04709831133920129,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.14651394652382707,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "redundant_hamlet_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.010268685167516825,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_c",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.10096032403725187,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_b",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.1590582274924734,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_orwell_a",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.012999648884878742,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "direct_austen_evidence",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0144790313182533,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.020894063015749628,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "redundant_hamlet_b",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.08846632444781972,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "redundant_orwell_a",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.0014677959861374228,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "direct_austen_evidence",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.007374391377664085,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.03412632676552768,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "redundant_orwell_a",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.0012361204317138674,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "direct_austen_evidence",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": 0.004844946064247101,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": 0.034380106541827014,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "direct_austen_evidence",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.017475212162491188,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": 0.025046340066837196,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_austen_evidence",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": 0.03686717694716178,
+      "sign": "positive"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_c",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.14651394652382707,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_hamlet_b",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.04709831133920129,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_orwell_a",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.008363328173621256,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "direct_austen_evidence",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.009206719112234871,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_a",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.009222025613504235,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "redundant_hamlet_b",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.010268685167516825,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "redundant_orwell_a",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.016559089785074737,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "direct_austen_evidence",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.006885576250766765,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_c",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.00474556284365936,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "redundant_orwell_a",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.011411833715241675,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "direct_austen_evidence",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.006299011726690714,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_hamlet_b",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": 0.0035214321315162446,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "direct_austen_evidence",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.018009838512409285,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.00947909018939367,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_austen_evidence",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.0019056152023129683,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a"
+      ],
+      "score": 0.21336945954371433
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c"
+      ],
+      "score": 0.17854990692815298
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b"
+      ],
+      "score": 0.21417754356793361
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_a"
+      ],
+      "score": -0.025697100791995997
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "direct_austen_evidence"
+      ],
+      "score": -0.04216485591978292
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": -0.14657409000838695
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c"
+      ],
+      "score": 0.1885852822231452
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b"
+      ],
+      "score": 0.17332061611165905
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a"
+      ],
+      "score": 0.15636436749938865
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.1567984726711943
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.15498357903278082
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b"
+      ],
+      "score": 0.24210432959008676
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a"
+      ],
+      "score": 0.17087636797900385
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "direct_austen_evidence"
+      ],
+      "score": 0.19764246274600605
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.1784324189492844
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.21490846039475187
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.22071143110579483
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.20974970330653098
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": -0.006155358704974356
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": -0.058296656653328005
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": -0.02785673966408997
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b"
+      ],
+      "score": 0.18850403811296157
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a"
+      ],
+      "score": 0.16934314221509994
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "direct_austen_evidence"
+      ],
+      "score": 0.16918070369720717
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.17147269681447075
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.15004642127165768
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.1544429571214746
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.16048163400266857
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.15117143324176063
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.14294726770198896
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.15512720323282236
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.21852122481917535
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.2284523957109712
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.22182854719079514
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.17282840956299883
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.1578616329029605
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.16922057822667824
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.21686075323153353
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.20333631833753507
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2016823111904411
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": -0.04334905927022131
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.18209811519766317
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.17784464051020843
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.18789482389554923
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.17523312892375453
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.17187365697713086
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.16301367891558893
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.15929958390031684
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.15344696032060368
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.1540770069732611
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.15317741581178512
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.22547005226709094
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2208516615743128
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.22375760232405606
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.14934209974695545
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.20589621104306033
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.1713545588337796
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.16617664304582624
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.17250135555899992
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.16898031786419754
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.14693830185375223
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.22932819193159293
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.17609448212275913
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a"
+      ],
+      "score": 0.2576828193567675
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c"
+      ],
+      "score": 0.17820317049119883
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b"
+      ],
+      "score": 0.07066748387658472
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_a"
+      ],
+      "score": 0.06340138964039699
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "direct_austen_evidence"
+      ],
+      "score": 0.04182251972011364
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": -0.0062902827177699905
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c"
+      ],
+      "score": 0.25697449858815835
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b"
+      ],
+      "score": 0.2500488069674329
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a"
+      ],
+      "score": 0.2574123463133231
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.25738469692864907
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.25739630018535764
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b"
+      ],
+      "score": 0.2269829349772664
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a"
+      ],
+      "score": 0.18665101582710886
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "direct_austen_evidence"
+      ],
+      "score": 0.19482330978025963
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.19047023415989917
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.08325093639622139
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.08375895849011805
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.06963951764744503
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.03149426172386449
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.01579015727583233
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.019620530665232616
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b"
+      ],
+      "score": 0.25576445625796695
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a"
+      ],
+      "score": 0.2569485197454806
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "direct_austen_evidence"
+      ],
+      "score": 0.25675339872580627
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2567818993795751
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.250866582583128
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.25103253428694683
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.25302807675888506
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.2575282026587692
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2575749199944245
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2573777498279405
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.2207589301618046
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.22233096276329245
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2190574131487979
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.1844561107870082
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.17847584246446768
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.1886084351803312
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.0828220414795442
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.08168120102299081
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.08159092856797123
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.015587581921757132
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a"
+      ],
+      "score": 0.2562310830665513
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence"
+      ],
+      "score": 0.2563956120845823
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2562193917978779
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.2570963097070619
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2569634455813342
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.25708885588906105
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.25121759756695916
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.252015803536782
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2510542887606936
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.257524936977673
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.21010646167327518
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.20052455279165649
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2170458982457466
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.1808853112346016
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.08299701111788438
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence"
+      ],
+      "score": 0.25631582396047337
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2566140976435607
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.25655164736071356
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2570187824069682
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.2534084208260442
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.20040731666715117
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_hamlet_a",
+        "redundant_hamlet_c",
+        "redundant_hamlet_b",
+        "redundant_orwell_a",
+        "direct_austen_evidence",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.25612985505179375
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17609448212275913
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+        "remaining_chunks": 5,
+        "score": 0.16898031786419754
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+        "remaining_chunks": 4,
+        "score": 0.15317741581178512
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+        "remaining_chunks": 3,
+        "score": -0.04334905927022131
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "remaining_chunks": 2,
+        "score": -0.006155358704974356
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+        "remaining_chunks": 1,
+        "score": -0.04216485591978292
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+        "selected_chunks": 1,
+        "score": 0.21417754356793361
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+        "selected_chunks": 2,
+        "score": 0.24210432959008676
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+        "selected_chunks": 3,
+        "score": 0.18850403811296157
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "selected_chunks": 4,
+        "score": 0.18789482389554923
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+        "selected_chunks": 5,
+        "score": 0.16617664304582624
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+        "selected_chunks": 6,
+        "score": 0.17609448212275913
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17609448212275913
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+        "remaining_chunks": 5,
+        "score": 0.22932819193159293
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+        "remaining_chunks": 4,
+        "score": 0.20589621104306033
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+        "remaining_chunks": 3,
+        "score": -0.04334905927022131
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+        "remaining_chunks": 2,
+        "score": -0.02785673966408997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "remaining_chunks": 1,
+        "score": -0.04216485591978292
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17609448212275913
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: redundant_hamlet_c | Shakespearean tragedy",
+        "remaining_chunks": 5,
+        "score": 0.14693830185375223
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: direct_austen_evidence | Pride and Prejudice authorship",
+        "remaining_chunks": 4,
+        "score": 0.15344696032060368
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_hamlet_b | Hamlet by Shakespeare",
+        "remaining_chunks": 3,
+        "score": 0.14294726770198896
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "remaining_chunks": 2,
+        "score": 0.15636436749938865
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_orwell_a | 1984 author direct",
+        "remaining_chunks": 1,
+        "score": 0.21336945954371433
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: redundant_hamlet_a | Hamlet author direct",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.1760944821227591
+      },
+      {
+        "step": 1,
+        "score": 0.1760027736892768
+      },
+      {
+        "step": 2,
+        "score": 0.18168746592690763
+      },
+      {
+        "step": 3,
+        "score": 0.17483214311154335
+      },
+      {
+        "step": 4,
+        "score": 0.13301820789453064
+      },
+      {
+        "step": 5,
+        "score": 0.06255098118420635
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who wrote Hamlet?",
+    "expanded_queries": [
+      "Who wrote Hamlet?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "keyword": 0.4354,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "keyword": 0.2359,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "keyword": 0.2257,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "keyword": 0.1808,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "keyword": 0.1481,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 6,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "keyword": 0.1474,
+        "page": 3,
+        "type": "body_text",
+        "section": "english_novels",
+        "flags": "",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 7,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "keyword": 0.1371,
+        "page": 3,
+        "type": "body_text",
+        "section": "english_novels",
+        "flags": "",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4354,
+        "rerank": 0.82,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet, wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2359,
+        "rerank": 0.4327,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2257,
+        "rerank": 0.4143,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1808,
+        "rerank": 0.334,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1481,
+        "rerank": 0.2753,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 6,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1474,
+        "rerank": 0.2742,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 7,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1371,
+        "rerank": 0.2556,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4354,
+        "rerank": 0.82,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet, wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2359,
+        "rerank": 0.4327,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2257,
+        "rerank": 0.4143,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1808,
+        "rerank": 0.334,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1481,
+        "rerank": 0.2753,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 6,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1474,
+        "rerank": 0.2742,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 7,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1371,
+        "rerank": 0.2556,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4354,
+        "rerank": 0.82,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet, wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2359,
+        "rerank": 0.4327,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5389,
+        "novelty": 0.33,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5696,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2257,
+        "rerank": 0.4143,
+        "section": "hamlet_authorship",
+        "query_hits": "hamlet",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.517,
+        "novelty": 0.4,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5607,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1808,
+        "rerank": 0.334,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4214,
+        "novelty": 0.7,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5204,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 5,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1474,
+        "rerank": 0.2742,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3502,
+        "novelty": 0.6969,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4587,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1481,
+        "rerank": 0.2753,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3516,
+        "novelty": 0.4714,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4284,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "hamlet",
+        "wrote"
+      ],
+      "covered_query_terms": [
+        "hamlet",
+        "wrote"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_hamlet_a | Hamlet author direct": [
+          "hamlet",
+          "wrote"
+        ],
+        "redundant_hamlet_c | Shakespearean tragedy": [
+          "hamlet"
+        ],
+        "redundant_hamlet_b | Hamlet by Shakespeare": [
+          "hamlet"
+        ],
+        "redundant_orwell_a | 1984 author direct": [
+          "wrote"
+        ],
+        "direct_austen_evidence | Pride and Prejudice authorship": [
+          "wrote"
+        ],
+        "redundant_orwell_huxley_distractor | Brave New World distractor": [
+          "wrote"
+        ]
+      },
+      "section_titles": [
+        "english_novels",
+        "hamlet_authorship",
+        "nineteen_eighty_four"
+      ],
+      "chunks_by_section": {
+        "hamlet_authorship": [
+          "redundant_hamlet_a | Hamlet author direct",
+          "redundant_hamlet_c | Shakespearean tragedy",
+          "redundant_hamlet_b | Hamlet by Shakespeare"
+        ],
+        "nineteen_eighty_four": [
+          "redundant_orwell_a | 1984 author direct",
+          "redundant_orwell_huxley_distractor | Brave New World distractor"
+        ],
+        "english_novels": [
+          "direct_austen_evidence | Pride and Prejudice authorship"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "William Shakespeare wrote the tragedy Hamlet.",
+    "retrieved_context_answer": "William Shakespeare wrote the tragedy Hamlet.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5,
+    "retrieved_context_f1": 0.5,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

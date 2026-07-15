@@ -1,0 +1,1588 @@
+{
+  "case": {
+    "case_id": "qasper_d9b6c61fc6d29ad399d27b931b6cb7b1117b314a",
+    "paper_id": "1809.04267",
+    "paper_title": "Knowledge Based Machine Reading Comprehension",
+    "question_id": "d9b6c61fc6d29ad399d27b931b6cb7b1117b314a",
+    "annotation_id": "2e78374af9aef7849faaf2f205a96f44a6f51435",
+    "question": "Where is a question generation model used?",
+    "gold_answer": "The question generation model provides each candidate answer with a score by measuring semantic relevance between the question and the generated question based on the semantics of the candidate answer.",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1809.04267:paragraph:0003"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1809.04267:paragraph:0003",
+      "score": 0.8519429123566472,
+      "title": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+      "text": "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge base such as Freebase/ProBase/Reverb/NELL. The question answering model gives each candidate answer a score by measuring the semantic relevance between representation and the candidate answer representation in vector space. The question generation model provides each candidate answer with a score by measuring semantic relevance between the question and the generated question based on the semantics of the candidate answer. We implement an MRC model BiDAF BIBREF10 as a baseline for the proposed dataset. To test the scalability of our approach in leveraging external KBs, we use both manually created and automatically extracted KBs, including Freebase BIBREF11 , ProBase BIBREF12 , NELL BIBREF13 and Reverb BIBREF14 . Experiments show that incorporating evidence from external KBs improves both the matching-based and question generation-based approaches. Qualitative analysis shows the advantages and limitations of our approaches, as well as the remaining challenges."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1809.04267:paragraph:0052",
+      "score": 0.7796984507102593,
+      "title": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+      "text": "Table 4 shows the results of different question generation models. Our approach is abbreviated as QGNet, which stands for the use of a paraphrasing model plus our question generation model. We can see that QGNet performs better than Seq2Seq in terms of BLEU score because many important words of low frequency from the input are replicated to the target sequence. However, the improvement is not significant for the QA task. We also incorporate each of the four KBs into QGNet, and observe slight improvements on NELL and Reverb. Despite the overall accuracy of QGNet being lower than PCNet and KVMemNet, combining outcomes with them could generates 1.5% and 0.8% absolute gains, respectively."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1809.04267:paragraph:0027",
+      "score": 0.9186519991804355,
+      "title": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+      "text": "Our question generation model takes the path between an \u201canchor\u201d and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiveness in natural language generation tasks. The hierarchical encoder and the hierarchical attention mechanism are introduced to take into account the structure of the input facts. Facts from external KBs are conventionally integrated into the model using the same way as described in the matching model."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1809.04267:paragraph:0005",
+      "score": 0.872360435539408,
+      "title": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+      "text": "Our framework consists of a question answering model and a question generation model."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1809.04267:paragraph:0028",
+      "score": 0.831699972372457,
+      "title": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+      "text": "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and the relationship between them. Since each element might contain multiple words, we use RNN as the word layer encoder to get the representation of each element. We define the fact level sequence as a path starting from the anchor and ending at the candidate answer. Another RNN is used as the fact level encoder. The last hidden state at the fact layer is fed to the decoder."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1809.04267:paragraph:0045",
+      "score": 0.6050045677269098,
+      "title": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+      "text": "Our approach draws inspiration from two main classes in existing approaches of KBQA, namely ranking based and parsing based. Ranking based approaches BIBREF17 , BIBREF25 are bottom-up, which typically first find a set of candidate answers and then rank between the candidates with features at different levels to get the answer. Parsing-based approaches BIBREF16 are top-down, which first interpret logical form from a natural language utterance, and then do execution to yield the answer. Ranking-based approaches achieve better performances than parsing-based approaches on WebQuestions, a benchmark dataset for KBQA. We follow ranking-based approaches, and develop both a matching-based model with features at different levels and a question generation model. More references can be found at https://aclweb.org/aclwiki/Question_Answering_(State_of_the_art)."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+      "attribution": 0.20821176955697143
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+      "attribution": -0.018088864974146055
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+      "attribution": -0.014681229903227355
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+      "attribution": -0.011994781234877655
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+      "attribution": -0.009660775283529875
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+      "attribution": 0.004452049821565591
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+      "attribution": 0.1956304660197491
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+      "attribution": -0.007735341402288075
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+      "attribution": 0.0031655884728796395
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+      "attribution": -0.0017147505634948974
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+      "attribution": 0.0008128999444524444
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+      "attribution": 6.0715390015848065e-05
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0052",
+      "interaction": 0.01683438662377587
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0027",
+      "interaction": 0.01206857977862895
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0005",
+      "interaction": 0.0027598426926205605
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": 0.008041902882590494
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 0.0027171215922393655
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0027",
+      "interaction": 0.010905823861819377
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0005",
+      "interaction": 0.015493377593664849
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": 0.011071867355201848
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 0.0162424691040192
+    },
+    {
+      "left": "1809.04267:paragraph:0027",
+      "right": "1809.04267:paragraph:0005",
+      "interaction": 0.008436487086862255
+    },
+    {
+      "left": "1809.04267:paragraph:0027",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": 0.007113464240411594
+    },
+    {
+      "left": "1809.04267:paragraph:0027",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 0.004432310835208693
+    },
+    {
+      "left": "1809.04267:paragraph:0005",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": -0.007431667110093934
+    },
+    {
+      "left": "1809.04267:paragraph:0005",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": -0.01319919342987044
+    },
+    {
+      "left": "1809.04267:paragraph:0028",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 0.02593008558977407
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0052",
+      "interaction": 0.013775003052700132
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0027",
+      "interaction": -0.001632079658960203
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0005",
+      "interaction": -0.010124204301594757
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": 0.005697690952667736
+    },
+    {
+      "left": "1809.04267:paragraph:0003",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 1.3221704178611635e-05
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0027",
+      "interaction": 0.007992319088059618
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0005",
+      "interaction": 0.009981503399891963
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": 0.0015028973925132673
+    },
+    {
+      "left": "1809.04267:paragraph:0052",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 0.0004890507873239571
+    },
+    {
+      "left": "1809.04267:paragraph:0027",
+      "right": "1809.04267:paragraph:0005",
+      "interaction": 0.002100550222072164
+    },
+    {
+      "left": "1809.04267:paragraph:0027",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": -0.0020758047806443167
+    },
+    {
+      "left": "1809.04267:paragraph:0027",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": 0.0022699794446969773
+    },
+    {
+      "left": "1809.04267:paragraph:0005",
+      "right": "1809.04267:paragraph:0028",
+      "interaction": -0.00036992826758912105
+    },
+    {
+      "left": "1809.04267:paragraph:0005",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": -0.005727856203022847
+    },
+    {
+      "left": "1809.04267:paragraph:0028",
+      "right": "1809.04267:paragraph:0045",
+      "interaction": -2.7542642957310245e-05
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.1582381684036812
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.056564916294093825
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "remaining_chunks": 4,
+        "score": -0.059895239123208766
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "remaining_chunks": 3,
+        "score": -0.06501042432596582
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "remaining_chunks": 2,
+        "score": -0.00896624459237405
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "remaining_chunks": 1,
+        "score": -0.004041613527398957
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "selected_chunks": 1,
+        "score": 0.17238125040604402
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "selected_chunks": 2,
+        "score": 0.16148839490580957
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "selected_chunks": 3,
+        "score": 0.15862474329822251
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "selected_chunks": 4,
+        "score": 0.15311114864565356
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "selected_chunks": 5,
+        "score": 0.15622093437269624
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "selected_chunks": 6,
+        "score": 0.1582381684036812
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.1582381684036812
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "remaining_chunks": 5,
+        "score": 0.15470826851506025
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "remaining_chunks": 4,
+        "score": 0.15311114864565356
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "remaining_chunks": 3,
+        "score": -0.05855399866974986
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "remaining_chunks": 2,
+        "score": -0.05912283478974245
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "remaining_chunks": 1,
+        "score": -0.038904264505553954
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.1582381684036812
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.056564916294093825
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "remaining_chunks": 4,
+        "score": -0.054600962782459794
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "remaining_chunks": 3,
+        "score": -0.05855399866974986
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "remaining_chunks": 2,
+        "score": -0.05912283478974245
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "remaining_chunks": 1,
+        "score": -0.038904264505553954
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.15823816840368113
+      },
+      {
+        "step": 1,
+        "score": 0.12545716016538364
+      },
+      {
+        "step": 2,
+        "score": 0.07921818637793697
+      },
+      {
+        "step": 3,
+        "score": 0.04267394627692177
+      },
+      {
+        "step": 4,
+        "score": 0.00624783760195487
+      },
+      {
+        "step": 5,
+        "score": -0.008282076237509869
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Where is a question generation model used?",
+    "expanded_queries": [
+      "Where is a question generation model used?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1809.04267:paragraph:0026 | Knowledge Based Machine Reading Comprehension / The Question Generation Model",
+        "dense": 0.7319,
+        "page": 1,
+        "type": "body_text",
+        "section": "The Question Generation Model",
+        "flags": "",
+        "preview": "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between "
+      },
+      {
+        "rank": 2,
+        "source": "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "dense": 0.7257,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hierarchical seq2seq Generation Model",
+        "flags": "",
+        "preview": "Our question generation model takes the path between an \u201canchor\u201d and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiv"
+      },
+      {
+        "rank": 3,
+        "source": "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "dense": 0.7215,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hierarchical seq2seq Generation Model",
+        "flags": "",
+        "preview": "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and"
+      },
+      {
+        "rank": 4,
+        "source": "1809.04267:paragraph:0034 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "dense": 0.7191,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hierarchical seq2seq Generation Model",
+        "flags": "",
+        "preview": "We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process."
+      },
+      {
+        "rank": 5,
+        "source": "1809.04267:paragraph:0048 | Knowledge Based Machine Reading Comprehension / Settings",
+        "dense": 0.7116,
+        "page": 1,
+        "type": "body_text",
+        "section": "Settings",
+        "flags": "",
+        "preview": "In our experiments, we tune model parameters on the development set and report results on the test set. We design experiments from both ranking-based direction and question generation-based direction. The evaluation metr"
+      },
+      {
+        "rank": 6,
+        "source": "1809.04267:paragraph:0007 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "dense": 0.7101,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach Overview",
+        "flags": "",
+        "preview": "We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the i"
+      },
+      {
+        "rank": 7,
+        "source": "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "dense": 0.7068,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge ba"
+      },
+      {
+        "rank": 8,
+        "source": "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "dense": 0.697,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach Overview",
+        "flags": "",
+        "preview": "Our framework consists of a question answering model and a question generation model."
+      },
+      {
+        "rank": 9,
+        "source": "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "dense": 0.6935,
+        "page": 1,
+        "type": "body_text",
+        "section": "Analysis: Generative Models",
+        "flags": "",
+        "preview": "Table 4 shows the results of different question generation models. Our approach is abbreviated as QGNet, which stands for the use of a paraphrasing model plus our question generation model. We can see that QGNet performs"
+      },
+      {
+        "rank": 10,
+        "source": "1809.04267:paragraph:0006 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "dense": 0.6599,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach Overview",
+        "flags": "",
+        "preview": "We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we impleme"
+      },
+      {
+        "rank": 11,
+        "source": "1809.04267:paragraph:0013 | Knowledge Based Machine Reading Comprehension / QA Model 1: PCNet",
+        "dense": 0.6491,
+        "page": 1,
+        "type": "body_text",
+        "section": "QA Model 1: PCNet",
+        "flags": "",
+        "preview": "We represent the question $q$ using a bidirectional RNN layer based on the GRU unit. The concatenation of the last hidden vectors from both directions is used as the question vector $v_{q}$ . The dot product is used to m"
+      },
+      {
+        "rank": 12,
+        "source": "1809.04267:paragraph:0037 | Knowledge Based Machine Reading Comprehension / The Paraphrasing Model",
+        "dense": 0.6382,
+        "page": 1,
+        "type": "body_text",
+        "section": "The Paraphrasing Model",
+        "flags": "",
+        "preview": "The paraphrasing model is used to measure the semantic relevance between the original question and the question generated from the QG model. We use bidirectional RNN with gated recurrent unit to represent two questions, "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "keyword": 0.3591,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach Overview",
+        "flags": "",
+        "preview": "Our framework consists of a question answering model and a question generation model."
+      },
+      {
+        "rank": 2,
+        "source": "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "keyword": 0.248,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hierarchical seq2seq Generation Model",
+        "flags": "",
+        "preview": "Our question generation model takes the path between an \u201canchor\u201d and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiv"
+      },
+      {
+        "rank": 3,
+        "source": "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "keyword": 0.199,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge ba"
+      },
+      {
+        "rank": 4,
+        "source": "1809.04267:paragraph:0037 | Knowledge Based Machine Reading Comprehension / The Paraphrasing Model",
+        "keyword": 0.1674,
+        "page": 1,
+        "type": "body_text",
+        "section": "The Paraphrasing Model",
+        "flags": "",
+        "preview": "The paraphrasing model is used to measure the semantic relevance between the original question and the question generated from the QG model. We use bidirectional RNN with gated recurrent unit to represent two questions, "
+      },
+      {
+        "rank": 5,
+        "source": "1809.04267:paragraph:0026 | Knowledge Based Machine Reading Comprehension / The Question Generation Model",
+        "keyword": 0.1627,
+        "page": 1,
+        "type": "body_text",
+        "section": "The Question Generation Model",
+        "flags": "",
+        "preview": "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between "
+      },
+      {
+        "rank": 6,
+        "source": "1809.04267:paragraph:0034 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "keyword": 0.1559,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hierarchical seq2seq Generation Model",
+        "flags": "",
+        "preview": "We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process."
+      },
+      {
+        "rank": 7,
+        "source": "1809.04267:paragraph:0055 | Knowledge Based Machine Reading Comprehension / Conclusion",
+        "keyword": 0.1381,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we focus on knowledge based machine reading comprehension. We create a manually labeled dataset for the task, and develop a framework consisting of both question answering model and question generation mod"
+      },
+      {
+        "rank": 8,
+        "source": "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "keyword": 0.1343,
+        "page": 1,
+        "type": "body_text",
+        "section": "Analysis: Generative Models",
+        "flags": "",
+        "preview": "Table 4 shows the results of different question generation models. Our approach is abbreviated as QGNet, which stands for the use of a paraphrasing model plus our question generation model. We can see that QGNet performs"
+      },
+      {
+        "rank": 9,
+        "source": "1809.04267:paragraph:0048 | Knowledge Based Machine Reading Comprehension / Settings",
+        "keyword": 0.1323,
+        "page": 1,
+        "type": "body_text",
+        "section": "Settings",
+        "flags": "",
+        "preview": "In our experiments, we tune model parameters on the development set and report results on the test set. We design experiments from both ranking-based direction and question generation-based direction. The evaluation metr"
+      },
+      {
+        "rank": 10,
+        "source": "1809.04267:paragraph:0013 | Knowledge Based Machine Reading Comprehension / QA Model 1: PCNet",
+        "keyword": 0.1161,
+        "page": 1,
+        "type": "body_text",
+        "section": "QA Model 1: PCNet",
+        "flags": "",
+        "preview": "We represent the question $q$ using a bidirectional RNN layer based on the GRU unit. The concatenation of the last hidden vectors from both directions is used as the question vector $v_{q}$ . The dot product is used to m"
+      },
+      {
+        "rank": 11,
+        "source": "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "keyword": 0.1148,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hierarchical seq2seq Generation Model",
+        "flags": "",
+        "preview": "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and"
+      },
+      {
+        "rank": 12,
+        "source": "1809.04267:abstract:000 | Knowledge Based Machine Reading Comprehension / Abstract",
+        "keyword": 0.0972,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Machine reading comprehension (MRC) requires reasoning about both the knowledge involved in a document and knowledge about the world. However, existing datasets are typically dominated by questions that can be well solve"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7257,
+        "keyword": 0.248,
+        "rerank": 0.9187,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Our question generation model takes the path between an \u201canchor\u201d and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiv"
+      },
+      {
+        "rank": 2,
+        "source": "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.697,
+        "keyword": 0.3591,
+        "rerank": 0.8724,
+        "section": "Approach Overview",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our framework consists of a question answering model and a question generation model."
+      },
+      {
+        "rank": 3,
+        "source": "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7068,
+        "keyword": 0.199,
+        "rerank": 0.8519,
+        "section": "Introduction",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge ba"
+      },
+      {
+        "rank": 4,
+        "source": "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7215,
+        "keyword": 0.1148,
+        "rerank": 0.8317,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question, used",
+        "reasons": "body/table evidence",
+        "preview": "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and"
+      },
+      {
+        "rank": 5,
+        "source": "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6935,
+        "keyword": 0.1343,
+        "rerank": 0.7797,
+        "section": "Analysis: Generative Models",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Table 4 shows the results of different question generation models. Our approach is abbreviated as QGNet, which stands for the use of a paraphrasing model plus our question generation model. We can see that QGNet performs"
+      },
+      {
+        "rank": 6,
+        "source": "1809.04267:paragraph:0026 | Knowledge Based Machine Reading Comprehension / The Question Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7319,
+        "keyword": 0.1627,
+        "rerank": 0.7559,
+        "section": "The Question Generation Model",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between "
+      },
+      {
+        "rank": 7,
+        "source": "1809.04267:paragraph:0007 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7101,
+        "keyword": 0.0964,
+        "rerank": 0.7408,
+        "section": "Approach Overview",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the i"
+      },
+      {
+        "rank": 8,
+        "source": "1809.04267:paragraph:0034 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7191,
+        "keyword": 0.1559,
+        "rerank": 0.7327,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process."
+      },
+      {
+        "rank": 9,
+        "source": "1809.04267:paragraph:0037 | Knowledge Based Machine Reading Comprehension / The Paraphrasing Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6382,
+        "keyword": 0.1674,
+        "rerank": 0.7317,
+        "section": "The Paraphrasing Model",
+        "query_hits": "model, question, used",
+        "reasons": "body/table evidence",
+        "preview": "The paraphrasing model is used to measure the semantic relevance between the original question and the question generated from the QG model. We use bidirectional RNN with gated recurrent unit to represent two questions, "
+      },
+      {
+        "rank": 10,
+        "source": "1809.04267:paragraph:0048 | Knowledge Based Machine Reading Comprehension / Settings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7116,
+        "keyword": 0.1323,
+        "rerank": 0.7027,
+        "section": "Settings",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In our experiments, we tune model parameters on the development set and report results on the test set. We design experiments from both ranking-based direction and question generation-based direction. The evaluation metr"
+      },
+      {
+        "rank": 11,
+        "source": "1809.04267:paragraph:0055 | Knowledge Based Machine Reading Comprehension / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6255,
+        "keyword": 0.1381,
+        "rerank": 0.69,
+        "section": "Conclusion",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we focus on knowledge based machine reading comprehension. We create a manually labeled dataset for the task, and develop a framework consisting of both question answering model and question generation mod"
+      },
+      {
+        "rank": 12,
+        "source": "1809.04267:paragraph:0006 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6599,
+        "keyword": 0.0587,
+        "rerank": 0.6407,
+        "section": "Approach Overview",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we impleme"
+      },
+      {
+        "rank": 13,
+        "source": "1809.04267:abstract:000 | Knowledge Based Machine Reading Comprehension / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6054,
+        "keyword": 0.0972,
+        "rerank": 0.6283,
+        "section": "Abstract",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Machine reading comprehension (MRC) requires reasoning about both the knowledge involved in a document and knowledge about the world. However, existing datasets are typically dominated by questions that can be well solve"
+      },
+      {
+        "rank": 14,
+        "source": "1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6085,
+        "keyword": 0.0641,
+        "rerank": 0.605,
+        "section": "Related Work",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Our approach draws inspiration from two main classes in existing approaches of KBQA, namely ranking based and parsing based. Ranking based approaches BIBREF17 , BIBREF25 are bottom-up, which typically first find a set of"
+      },
+      {
+        "rank": 15,
+        "source": "1809.04267:paragraph:0013 | Knowledge Based Machine Reading Comprehension / QA Model 1: PCNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6491,
+        "keyword": 0.1161,
+        "rerank": 0.5738,
+        "section": "QA Model 1: PCNet",
+        "query_hits": "question, used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We represent the question $q$ using a bidirectional RNN layer based on the GRU unit. The concatenation of the last hidden vectors from both directions is used as the question vector $v_{q}$ . The dot product is used to m"
+      },
+      {
+        "rank": 16,
+        "source": "1809.04267:paragraph:0046 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6173,
+        "keyword": 0.0462,
+        "rerank": 0.572,
+        "section": "Related Work",
+        "query_hits": "generation, question",
+        "reasons": "body/table evidence",
+        "preview": "Our work also relates to BIBREF21 khot2017answering, which uses open IE outputs from external text corpora to improve multi-choice question answering. However, our work differs from them in that their task does not conta"
+      },
+      {
+        "rank": 17,
+        "source": "1809.04267:paragraph:0049 | Knowledge Based Machine Reading Comprehension / Settings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5846,
+        "keyword": 0.0636,
+        "rerank": 0.5719,
+        "section": "Settings",
+        "query_hits": "model, question, used",
+        "reasons": "body/table evidence",
+        "preview": "We also adapt BiDAF BIBREF10 , a top-performing reading comprehension model on the SQuAD dataset BIBREF0 as a strong baseline. As BiDAF output a span from the input document as the answer to the given question, we adapt "
+      },
+      {
+        "rank": 18,
+        "source": "1809.04267:paragraph:0053 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6099,
+        "keyword": 0.0457,
+        "rerank": 0.5615,
+        "section": "Analysis: Generative Models",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We show examples generated by our QG model in Figure 5 , in which the paths of two candidate answers are regarded as the input to the QG model. We can see that the original question is closer to the first generated resul"
+      },
+      {
+        "rank": 19,
+        "source": "1809.04267:paragraph:0038 | Knowledge Based Machine Reading Comprehension / The Paraphrasing Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6128,
+        "keyword": 0.0242,
+        "rerank": 0.5474,
+        "section": "The Paraphrasing Model",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We collect two datasets to train the paraphrasing model. The first dataset is from Quora dataset, which is built for detecting whether or not a pair of questions are semantically equivalent. 345,989 positive question pai"
+      },
+      {
+        "rank": 20,
+        "source": "1809.04267:paragraph:0044 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5893,
+        "keyword": 0.0332,
+        "rerank": 0.5229,
+        "section": "Related Work",
+        "query_hits": "question, used",
+        "reasons": "body/table evidence",
+        "preview": "KBMRC also relates to knowledge-base question answering (KBQA) BIBREF23 , which aims to answer questions based on an external large-scale KB such as Freebase or ProBase. KBMRC differs from KBQA in that the original KB co"
+      },
+      {
+        "rank": 21,
+        "source": "1809.04267:paragraph:0021 | Knowledge Based Machine Reading Comprehension / QA Model 2: KVMemNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0437,
+        "rerank": 0.5136,
+        "section": "QA Model 2: KVMemNet",
+        "query_hits": "model, used",
+        "reasons": "body/table evidence",
+        "preview": "In PCNet, reasoning over two facts is achieved by incorporating 2-hop paths, while in KVMemNet this is achieved by repeating the memory access process twice. After receiving the result $v_o$ , we update the query with $q"
+      },
+      {
+        "rank": 22,
+        "source": "1809.04267:paragraph:0001 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5834,
+        "keyword": 0.0237,
+        "rerank": 0.5068,
+        "section": "Introduction",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "Knowledge has a pivotal role in accurately understanding and reasoning natural language in MRC. Previous research BIBREF7 , BIBREF8 has established that human reading comprehension requires both words and world knowledge"
+      },
+      {
+        "rank": 23,
+        "source": "1809.04267:paragraph:0050 | Knowledge Based Machine Reading Comprehension / Analysis: Question Answering Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.614,
+        "keyword": 0.0065,
+        "rerank": 0.5044,
+        "section": "Analysis: Question Answering Models",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "Table 3 shows the results of our two question answering models. It is clear that KVMemNet achieves better P@1 scores on both dev and test sets than PCNet. The reason is that candidate answers of PCNet come from the \u201canch"
+      },
+      {
+        "rank": 24,
+        "source": "1809.04267:paragraph:0012 | Knowledge Based Machine Reading Comprehension / QA Model 1: PCNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6002,
+        "keyword": 0.0054,
+        "rerank": 0.4845,
+        "section": "QA Model 1: PCNet",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "We follow BIBREF17 , BIBREF18 bordes2014question,dong-EtAl:2015:ACL-IJCNLP1 and develop PCNet, which is short for path- and context- based neural network. In PCNet, candidate answers come from arguments of the document K"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7257,
+        "keyword": 0.248,
+        "rerank": 0.9187,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Our question generation model takes the path between an \u201canchor\u201d and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiv"
+      },
+      {
+        "rank": 2,
+        "source": "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.697,
+        "keyword": 0.3591,
+        "rerank": 0.8724,
+        "section": "Approach Overview",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our framework consists of a question answering model and a question generation model."
+      },
+      {
+        "rank": 3,
+        "source": "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7068,
+        "keyword": 0.199,
+        "rerank": 0.8519,
+        "section": "Introduction",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge ba"
+      },
+      {
+        "rank": 4,
+        "source": "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7215,
+        "keyword": 0.1148,
+        "rerank": 0.8317,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question, used",
+        "reasons": "body/table evidence",
+        "preview": "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and"
+      },
+      {
+        "rank": 5,
+        "source": "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6935,
+        "keyword": 0.1343,
+        "rerank": 0.7797,
+        "section": "Analysis: Generative Models",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Table 4 shows the results of different question generation models. Our approach is abbreviated as QGNet, which stands for the use of a paraphrasing model plus our question generation model. We can see that QGNet performs"
+      },
+      {
+        "rank": 6,
+        "source": "1809.04267:paragraph:0026 | Knowledge Based Machine Reading Comprehension / The Question Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7319,
+        "keyword": 0.1627,
+        "rerank": 0.7559,
+        "section": "The Question Generation Model",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we present the generation model which generates a question based on the semantics of a candidate answer. Afterward, we introduce how our paraphrasing model, which measures the semantic relevance between "
+      },
+      {
+        "rank": 7,
+        "source": "1809.04267:paragraph:0007 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7101,
+        "keyword": 0.0964,
+        "rerank": 0.7408,
+        "section": "Approach Overview",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We then implement a generation-based model. The motivation to design this model is that we want to associate natural language phrases with knowledge based representation. It takes semantics of a candidate answer as the i"
+      },
+      {
+        "rank": 8,
+        "source": "1809.04267:paragraph:0034 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7191,
+        "keyword": 0.1559,
+        "rerank": 0.7327,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We train our question generation model with maximum likelihood estimation. The loss function is given as follows, where $D$ is the training corpus. We use beam search in the inference process."
+      },
+      {
+        "rank": 9,
+        "source": "1809.04267:paragraph:0037 | Knowledge Based Machine Reading Comprehension / The Paraphrasing Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6382,
+        "keyword": 0.1674,
+        "rerank": 0.7317,
+        "section": "The Paraphrasing Model",
+        "query_hits": "model, question, used",
+        "reasons": "body/table evidence",
+        "preview": "The paraphrasing model is used to measure the semantic relevance between the original question and the question generated from the QG model. We use bidirectional RNN with gated recurrent unit to represent two questions, "
+      },
+      {
+        "rank": 10,
+        "source": "1809.04267:paragraph:0048 | Knowledge Based Machine Reading Comprehension / Settings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7116,
+        "keyword": 0.1323,
+        "rerank": 0.7027,
+        "section": "Settings",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In our experiments, we tune model parameters on the development set and report results on the test set. We design experiments from both ranking-based direction and question generation-based direction. The evaluation metr"
+      },
+      {
+        "rank": 11,
+        "source": "1809.04267:paragraph:0055 | Knowledge Based Machine Reading Comprehension / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6255,
+        "keyword": 0.1381,
+        "rerank": 0.69,
+        "section": "Conclusion",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we focus on knowledge based machine reading comprehension. We create a manually labeled dataset for the task, and develop a framework consisting of both question answering model and question generation mod"
+      },
+      {
+        "rank": 12,
+        "source": "1809.04267:paragraph:0006 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6599,
+        "keyword": 0.0587,
+        "rerank": 0.6407,
+        "section": "Approach Overview",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We implement two question answering models, which directly measure the semantic similarity between questions and candidate answers in the semantic space. First, to make the model's prediction more explainable, we impleme"
+      },
+      {
+        "rank": 13,
+        "source": "1809.04267:abstract:000 | Knowledge Based Machine Reading Comprehension / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6054,
+        "keyword": 0.0972,
+        "rerank": 0.6283,
+        "section": "Abstract",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Machine reading comprehension (MRC) requires reasoning about both the knowledge involved in a document and knowledge about the world. However, existing datasets are typically dominated by questions that can be well solve"
+      },
+      {
+        "rank": 14,
+        "source": "1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6085,
+        "keyword": 0.0641,
+        "rerank": 0.605,
+        "section": "Related Work",
+        "query_hits": "generation, model, question",
+        "reasons": "body/table evidence",
+        "preview": "Our approach draws inspiration from two main classes in existing approaches of KBQA, namely ranking based and parsing based. Ranking based approaches BIBREF17 , BIBREF25 are bottom-up, which typically first find a set of"
+      },
+      {
+        "rank": 15,
+        "source": "1809.04267:paragraph:0013 | Knowledge Based Machine Reading Comprehension / QA Model 1: PCNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6491,
+        "keyword": 0.1161,
+        "rerank": 0.5738,
+        "section": "QA Model 1: PCNet",
+        "query_hits": "question, used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We represent the question $q$ using a bidirectional RNN layer based on the GRU unit. The concatenation of the last hidden vectors from both directions is used as the question vector $v_{q}$ . The dot product is used to m"
+      },
+      {
+        "rank": 16,
+        "source": "1809.04267:paragraph:0046 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6173,
+        "keyword": 0.0462,
+        "rerank": 0.572,
+        "section": "Related Work",
+        "query_hits": "generation, question",
+        "reasons": "body/table evidence",
+        "preview": "Our work also relates to BIBREF21 khot2017answering, which uses open IE outputs from external text corpora to improve multi-choice question answering. However, our work differs from them in that their task does not conta"
+      },
+      {
+        "rank": 17,
+        "source": "1809.04267:paragraph:0049 | Knowledge Based Machine Reading Comprehension / Settings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5846,
+        "keyword": 0.0636,
+        "rerank": 0.5719,
+        "section": "Settings",
+        "query_hits": "model, question, used",
+        "reasons": "body/table evidence",
+        "preview": "We also adapt BiDAF BIBREF10 , a top-performing reading comprehension model on the SQuAD dataset BIBREF0 as a strong baseline. As BiDAF output a span from the input document as the answer to the given question, we adapt "
+      },
+      {
+        "rank": 18,
+        "source": "1809.04267:paragraph:0053 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6099,
+        "keyword": 0.0457,
+        "rerank": 0.5615,
+        "section": "Analysis: Generative Models",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We show examples generated by our QG model in Figure 5 , in which the paths of two candidate answers are regarded as the input to the QG model. We can see that the original question is closer to the first generated resul"
+      },
+      {
+        "rank": 19,
+        "source": "1809.04267:paragraph:0038 | Knowledge Based Machine Reading Comprehension / The Paraphrasing Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6128,
+        "keyword": 0.0242,
+        "rerank": 0.5474,
+        "section": "The Paraphrasing Model",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "We collect two datasets to train the paraphrasing model. The first dataset is from Quora dataset, which is built for detecting whether or not a pair of questions are semantically equivalent. 345,989 positive question pai"
+      },
+      {
+        "rank": 20,
+        "source": "1809.04267:paragraph:0044 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5893,
+        "keyword": 0.0332,
+        "rerank": 0.5229,
+        "section": "Related Work",
+        "query_hits": "question, used",
+        "reasons": "body/table evidence",
+        "preview": "KBMRC also relates to knowledge-base question answering (KBQA) BIBREF23 , which aims to answer questions based on an external large-scale KB such as Freebase or ProBase. KBMRC differs from KBQA in that the original KB co"
+      },
+      {
+        "rank": 21,
+        "source": "1809.04267:paragraph:0021 | Knowledge Based Machine Reading Comprehension / QA Model 2: KVMemNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0437,
+        "rerank": 0.5136,
+        "section": "QA Model 2: KVMemNet",
+        "query_hits": "model, used",
+        "reasons": "body/table evidence",
+        "preview": "In PCNet, reasoning over two facts is achieved by incorporating 2-hop paths, while in KVMemNet this is achieved by repeating the memory access process twice. After receiving the result $v_o$ , we update the query with $q"
+      },
+      {
+        "rank": 22,
+        "source": "1809.04267:paragraph:0001 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5834,
+        "keyword": 0.0237,
+        "rerank": 0.5068,
+        "section": "Introduction",
+        "query_hits": "model, question",
+        "reasons": "body/table evidence",
+        "preview": "Knowledge has a pivotal role in accurately understanding and reasoning natural language in MRC. Previous research BIBREF7 , BIBREF8 has established that human reading comprehension requires both words and world knowledge"
+      },
+      {
+        "rank": 23,
+        "source": "1809.04267:paragraph:0050 | Knowledge Based Machine Reading Comprehension / Analysis: Question Answering Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.614,
+        "keyword": 0.0065,
+        "rerank": 0.5044,
+        "section": "Analysis: Question Answering Models",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "Table 3 shows the results of our two question answering models. It is clear that KVMemNet achieves better P@1 scores on both dev and test sets than PCNet. The reason is that candidate answers of PCNet come from the \u201canch"
+      },
+      {
+        "rank": 24,
+        "source": "1809.04267:paragraph:0012 | Knowledge Based Machine Reading Comprehension / QA Model 1: PCNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6002,
+        "keyword": 0.0054,
+        "rerank": 0.4845,
+        "section": "QA Model 1: PCNet",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "We follow BIBREF17 , BIBREF18 bordes2014question,dong-EtAl:2015:ACL-IJCNLP1 and develop PCNet, which is short for path- and context- based neural network. In PCNet, candidate answers come from arguments of the document K"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7068,
+        "keyword": 0.199,
+        "rerank": 0.8519,
+        "section": "Introduction",
+        "query_hits": "generation, model, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9289,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.4189,
+        "reasons": "body/table evidence",
+        "preview": "We implement a framework consisting of both a question answering model and a question generation model, both of which take the knowledge extracted from the document as well as relevant facts from an external knowledge ba"
+      },
+      {
+        "rank": 2,
+        "source": "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6935,
+        "keyword": 0.1343,
+        "rerank": 0.7797,
+        "section": "Analysis: Generative Models",
+        "query_hits": "generation, model, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.852,
+        "novelty": 0.7059,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3115,
+        "reasons": "body/table evidence",
+        "preview": "Table 4 shows the results of different question generation models. Our approach is abbreviated as QGNet, which stands for the use of a paraphrasing model plus our question generation model. We can see that QGNet performs"
+      },
+      {
+        "rank": 3,
+        "source": "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7257,
+        "keyword": 0.248,
+        "rerank": 0.9187,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7045,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2786,
+        "reasons": "body/table evidence",
+        "preview": "Our question generation model takes the path between an \u201canchor\u201d and the candidate answer, and outputs a question. We adopt the sequence to sequence architecture as our basic question generation model due to its effectiv"
+      },
+      {
+        "rank": 4,
+        "source": "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.697,
+        "keyword": 0.3591,
+        "rerank": 0.8724,
+        "section": "Approach Overview",
+        "query_hits": "generation, model, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9507,
+        "novelty": 0.73,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2198,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our framework consists of a question answering model and a question generation model."
+      },
+      {
+        "rank": 5,
+        "source": "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7215,
+        "keyword": 0.1148,
+        "rerank": 0.8317,
+        "section": "Hierarchical seq2seq Generation Model",
+        "query_hits": "generation, model, question, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9074,
+        "novelty": 0.4758,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1669,
+        "reasons": "body/table evidence",
+        "preview": "As illustrated in Figure 3 , the question generation model contains an encoder and a decoder. We use a hierarchical encoder consisting of two layers to model the meaning of each element (subject, predicate or object) and"
+      },
+      {
+        "rank": 6,
+        "source": "1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6085,
+        "keyword": 0.0641,
+        "rerank": 0.605,
+        "section": "Related Work",
+        "query_hits": "generation, model, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6659,
+        "novelty": 0.704,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1512,
+        "reasons": "body/table evidence",
+        "preview": "Our approach draws inspiration from two main classes in existing approaches of KBQA, namely ranking based and parsing based. Ranking based approaches BIBREF17 , BIBREF25 are bottom-up, which typically first find a set of"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "generation",
+        "model",
+        "question",
+        "used"
+      ],
+      "covered_query_terms": [
+        "generation",
+        "model",
+        "question",
+        "used"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction": [
+          "generation",
+          "model",
+          "question"
+        ],
+        "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models": [
+          "generation",
+          "model",
+          "question"
+        ],
+        "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model": [
+          "generation",
+          "model",
+          "question"
+        ],
+        "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview": [
+          "generation",
+          "model",
+          "question"
+        ],
+        "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model": [
+          "generation",
+          "model",
+          "question",
+          "used"
+        ],
+        "1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work": [
+          "generation",
+          "model",
+          "question"
+        ]
+      },
+      "section_titles": [
+        "Analysis: Generative Models",
+        "Approach Overview",
+        "Hierarchical seq2seq Generation Model",
+        "Introduction",
+        "Related Work"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1809.04267:paragraph:0003 | Knowledge Based Machine Reading Comprehension / Introduction"
+        ],
+        "Analysis: Generative Models": [
+          "1809.04267:paragraph:0052 | Knowledge Based Machine Reading Comprehension / Analysis: Generative Models"
+        ],
+        "Hierarchical seq2seq Generation Model": [
+          "1809.04267:paragraph:0027 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model",
+          "1809.04267:paragraph:0028 | Knowledge Based Machine Reading Comprehension / Hierarchical seq2seq Generation Model"
+        ],
+        "Approach Overview": [
+          "1809.04267:paragraph:0005 | Knowledge Based Machine Reading Comprehension / Approach Overview"
+        ],
+        "Related Work": [
+          "1809.04267:paragraph:0045 | Knowledge Based Machine Reading Comprehension / Related Work"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "A question generation model is used in a framework that consists of both a question answering model and a question generation model. This model provides each candidate answer with a score by measuring the semantic relevance between the question and the generated question based on the semantics of the candidate answer.",
+    "retrieved_context_answer": "A question generation model is used in the following contexts:\n\n*   **As part of a framework:** It is implemented alongside a question answering model, where both models utilize knowledge extracted from a document and relevant facts from external knowledge bases such as Freebase, ProBase, Reverb, or NELL.\n*   **For scoring candidate answers:** The question generation model provides a score to each candidate answer by measuring the semantic relevance between the question and the generated question, based on",
+    "closed_book_f1": 0.1,
+    "gold_context_f1": 0.7407407407407407,
+    "retrieved_context_f1": 0.5142857142857143,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "retrieval_failure"
+  },
+  "failure_category": "retrieved_context_failure"
+}

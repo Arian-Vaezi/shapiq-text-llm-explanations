@@ -1,0 +1,2370 @@
+{
+  "case": {
+    "case_id": "conflict_fever_threshold",
+    "pattern": "conflicting_evidence",
+    "question": "What Fahrenheit temperature is commonly used as a fever threshold?",
+    "gold_answer": "100.4 degrees Fahrenheit.",
+    "gold_evidence_ids": [
+      "conflict_fever_1004f"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_fever_1004f",
+        "right": "conflict_fever_98f",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_fever_1004f",
+        "right": "conflict_fever_105f",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_fever_1004f",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+      "text": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_fever_98f",
+      "score": 0.708939448143839,
+      "title": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+      "text": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_fever_105f",
+      "score": 0.6824063295785742,
+      "title": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+      "text": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_fever_celsius_distractor",
+      "score": 0.5339079141158727,
+      "title": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "text": "Temperature can be converted between Fahrenheit and Celsius scales."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_penicillin_medicine",
+      "score": 0.2256214673022799,
+      "title": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "text": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_penicillin_resistance",
+      "score": 0.18881709102425392,
+      "title": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+      "text": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+      "attribution": 0.5556594906428497
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+      "attribution": 0.14804168105099777
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+      "attribution": 0.14804162086409267
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "attribution": 0.041590612907015365
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "attribution": -0.016666700504885622
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+      "attribution": -0.01666670023666417
+    }
+  ],
+  "generated_attributions": [],
+  "interactions": [
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_98f",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.2549084622286039,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_105f",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.2549084547667426,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_98f",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.2549084622286039,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_105f",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.2549084547667426,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.10023193358128736,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.017000004198626593,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.017000003778617843,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "conflict_fever_105f",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.25490845693817415,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.08023194248590496,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.006999995948878497,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.007000000952316571,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.08023195147187366,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.006999999134469383,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.0069999962426182645,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.006999995354332944,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.006999993662754741,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_penicillin_medicine",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.01700000049579385,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_fever_98f"
+      ],
+      "score": 0.5690488637879365
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_105f"
+      ],
+      "score": 0.5690488637879365
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.23969582179021204
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f"
+      ],
+      "score": 0.5690488637879365
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.5890488637879365
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.5890488637879365
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5890488637879365
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.5890488637879365
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.5890488637879365
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5890488637879365
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.25969582179021206
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.25969582179021206
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.5540488637879365
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.5540488637879365
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5540488637879365
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.5740488637879365
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5740488637879365
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5540488637879365
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.5740488637879365
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5740488637879365
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5540488637879365
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.22469582179021205
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.5390488637879365
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5390488637879365
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5190488637879365
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5390488637879365
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5390488637879365
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.5040488637879366
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_medicine",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.86
+    }
+  ],
+  "generated_coalition_scores": [],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 5,
+        "score": 0.5040488637879366
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "remaining_chunks": 4,
+        "score": 0.5390488637879365
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "remaining_chunks": 3,
+        "score": 0.22469582179021205
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 2,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "selected_chunks": 1,
+        "score": 1.0
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "selected_chunks": 2,
+        "score": 1.0
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "selected_chunks": 3,
+        "score": 0.965
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "selected_chunks": 4,
+        "score": 0.9299999999999999
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "selected_chunks": 5,
+        "score": 0.895
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "selected_chunks": 6,
+        "score": 0.86
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 5,
+        "score": 0.5040488637879366
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "remaining_chunks": 4,
+        "score": 0.5390488637879365
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "remaining_chunks": 3,
+        "score": 0.22469582179021205
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 2,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 5,
+        "score": 0.5040488637879366
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "remaining_chunks": 4,
+        "score": 0.5390488637879365
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "remaining_chunks": 3,
+        "score": 0.22469582179021205
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 2,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.8599999999999995
+      },
+      {
+        "step": 1,
+        "score": 0.8363573295681912
+      },
+      {
+        "step": 2,
+        "score": 0.7853179167222436
+      },
+      {
+        "step": 3,
+        "score": 0.7450035099869374
+      },
+      {
+        "step": 4,
+        "score": 0.6088019992221742
+      },
+      {
+        "step": 5,
+        "score": 0.404793211897806
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What Fahrenheit temperature is commonly used as a fever threshold?",
+    "expanded_queries": [
+      "What Fahrenheit temperature is commonly used as a fever threshold?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "dense": 0.8036,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "dense": 0.7222,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "dense": 0.7085,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "dense": 0.6332,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "dense": 0.5009,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "dense": 0.4995,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "dense": 0.4988,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "dense": 0.4625,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "dense": 0.4571,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 10,
+        "source": "comp_water_states | States of water",
+        "dense": 0.4371,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "dense": 0.4162,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 12,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "dense": 0.4036,
+        "page": 11,
+        "type": "body_text",
+        "section": "antibiotics_overview",
+        "flags": "",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "keyword": 0.5987,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "keyword": 0.3242,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "keyword": 0.296,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "keyword": 0.1952,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "keyword": 0.0832,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "keyword": 0.0756,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "keyword": 0.0755,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_language | Japanese language",
+        "keyword": 0.0693,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_venue | Opening ceremony venue",
+        "keyword": 0.0653,
+        "page": 1,
+        "type": "body_text",
+        "section": "olympics_2008",
+        "flags": "",
+        "preview": "The opening ceremony was held at the National Stadium, commonly called the Bird's Nest."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_dna | DNA stores instructions",
+        "keyword": 0.0599,
+        "page": 34,
+        "type": "body_text",
+        "section": "central_dogma",
+        "flags": "",
+        "preview": "DNA stores genetic instructions that can be used to make proteins."
+      },
+      {
+        "rank": 11,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "keyword": 0.0591,
+        "page": 31,
+        "type": "body_text",
+        "section": "cell_biology",
+        "flags": "",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 12,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "keyword": 0.0581,
+        "page": 11,
+        "type": "body_text",
+        "section": "antibiotics_overview",
+        "flags": "",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.8036,
+        "keyword": 0.5987,
+        "rerank": 0.95,
+        "section": "fever_threshold",
+        "query_hits": "commonly, fahrenheit, fever, temperature, threshold, used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.7222,
+        "keyword": 0.3242,
+        "rerank": 0.7089,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.7085,
+        "keyword": 0.296,
+        "rerank": 0.6824,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.6332,
+        "keyword": 0.1952,
+        "rerank": 0.5339,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4625,
+        "keyword": 0.0832,
+        "rerank": 0.2936,
+        "section": "speed_of_light",
+        "query_hits": "temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.5009,
+        "keyword": 0.0,
+        "rerank": 0.2566,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4995,
+        "keyword": 0.0,
+        "rerank": 0.2553,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4988,
+        "keyword": 0.0,
+        "rerank": 0.2547,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4162,
+        "keyword": 0.0756,
+        "rerank": 0.248,
+        "section": "sahara_desert",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 10,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.4036,
+        "keyword": 0.0536,
+        "rerank": 0.2256,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4571,
+        "keyword": 0.0,
+        "rerank": 0.2171,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 12,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4371,
+        "keyword": 0.0,
+        "rerank": 0.199,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 13,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.3603,
+        "keyword": 0.0581,
+        "rerank": 0.1888,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      },
+      {
+        "rank": 14,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.3344,
+        "keyword": 0.0755,
+        "rerank": 0.1741,
+        "section": "japan_capital",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 15,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.3321,
+        "keyword": 0.0591,
+        "rerank": 0.1638,
+        "section": "cell_biology",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 16,
+        "source": "missing_penicillin_treatment | Infection treatment",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.3978,
+        "keyword": 0.0,
+        "rerank": 0.1635,
+        "section": "antibiotics_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The appropriate treatment depends on the organism and the site of infection."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.3975,
+        "keyword": 0.0,
+        "rerank": 0.1632,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.3966,
+        "keyword": 0.0,
+        "rerank": 0.1625,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 19,
+        "source": "direct_gravity_magnetism | Magnetism distractor",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3947,
+        "keyword": 0.0,
+        "rerank": 0.1607,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Magnetism is a force involving magnetic fields and moving electric charges."
+      },
+      {
+        "rank": 20,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.3915,
+        "keyword": 0.0,
+        "rerank": 0.1578,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 21,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.3897,
+        "keyword": 0.0,
+        "rerank": 0.1562,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 22,
+        "source": "comp_photosynthesis_water | Water input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.3264,
+        "keyword": 0.0531,
+        "rerank": 0.1556,
+        "section": "photosynthesis_inputs",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 23,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.388,
+        "keyword": 0.0,
+        "rerank": 0.1546,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 24,
+        "source": "comp_primary_red | Red primary light",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3851,
+        "keyword": 0.0,
+        "rerank": 0.152,
+        "section": "primary_light_colours",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Red is one of the additive primary colours of light."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.8036,
+        "keyword": 0.5987,
+        "rerank": 0.95,
+        "section": "fever_threshold",
+        "query_hits": "commonly, fahrenheit, fever, temperature, threshold, used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.7222,
+        "keyword": 0.3242,
+        "rerank": 0.7089,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.7085,
+        "keyword": 0.296,
+        "rerank": 0.6824,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.6332,
+        "keyword": 0.1952,
+        "rerank": 0.5339,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4625,
+        "keyword": 0.0832,
+        "rerank": 0.2936,
+        "section": "speed_of_light",
+        "query_hits": "temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.5009,
+        "keyword": 0.0,
+        "rerank": 0.2566,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4995,
+        "keyword": 0.0,
+        "rerank": 0.2553,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4988,
+        "keyword": 0.0,
+        "rerank": 0.2547,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4162,
+        "keyword": 0.0756,
+        "rerank": 0.248,
+        "section": "sahara_desert",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 10,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.4036,
+        "keyword": 0.0536,
+        "rerank": 0.2256,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4571,
+        "keyword": 0.0,
+        "rerank": 0.2171,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 12,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4371,
+        "keyword": 0.0,
+        "rerank": 0.199,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 13,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.3603,
+        "keyword": 0.0581,
+        "rerank": 0.1888,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      },
+      {
+        "rank": 14,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.3344,
+        "keyword": 0.0755,
+        "rerank": 0.1741,
+        "section": "japan_capital",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 15,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.3321,
+        "keyword": 0.0591,
+        "rerank": 0.1638,
+        "section": "cell_biology",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 16,
+        "source": "missing_penicillin_treatment | Infection treatment",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.3978,
+        "keyword": 0.0,
+        "rerank": 0.1635,
+        "section": "antibiotics_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The appropriate treatment depends on the organism and the site of infection."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.3975,
+        "keyword": 0.0,
+        "rerank": 0.1632,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.3966,
+        "keyword": 0.0,
+        "rerank": 0.1625,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 19,
+        "source": "direct_gravity_magnetism | Magnetism distractor",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3947,
+        "keyword": 0.0,
+        "rerank": 0.1607,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Magnetism is a force involving magnetic fields and moving electric charges."
+      },
+      {
+        "rank": 20,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.3915,
+        "keyword": 0.0,
+        "rerank": 0.1578,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 21,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.3897,
+        "keyword": 0.0,
+        "rerank": 0.1562,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 22,
+        "source": "comp_photosynthesis_water | Water input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.3264,
+        "keyword": 0.0531,
+        "rerank": 0.1556,
+        "section": "photosynthesis_inputs",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 23,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.388,
+        "keyword": 0.0,
+        "rerank": 0.1546,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 24,
+        "source": "comp_primary_red | Red primary light",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3851,
+        "keyword": 0.0,
+        "rerank": 0.152,
+        "section": "primary_light_colours",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Red is one of the additive primary colours of light."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.8036,
+        "keyword": 0.5987,
+        "rerank": 0.95,
+        "section": "fever_threshold",
+        "query_hits": "commonly, fahrenheit, fever, temperature, threshold, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.7222,
+        "keyword": 0.3242,
+        "rerank": 0.7089,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7515,
+        "novelty": 0.4354,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8472,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.7085,
+        "keyword": 0.296,
+        "rerank": 0.6824,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7241,
+        "novelty": 0.4053,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8195,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.6332,
+        "keyword": 0.1952,
+        "rerank": 0.5339,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, temperature",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.571,
+        "novelty": 0.4783,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6581,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.4036,
+        "keyword": 0.0536,
+        "rerank": 0.2256,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2532,
+        "novelty": 0.7796,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5469,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 6,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.3603,
+        "keyword": 0.0581,
+        "rerank": 0.1888,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2153,
+        "novelty": 0.4278,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.465,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "commonly",
+        "fahrenheit",
+        "fever",
+        "temperature",
+        "threshold",
+        "used"
+      ],
+      "covered_query_terms": [
+        "commonly",
+        "fahrenheit",
+        "fever",
+        "temperature",
+        "threshold",
+        "used"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_fever_1004f | Fever threshold correct": [
+          "commonly",
+          "fahrenheit",
+          "fever",
+          "temperature",
+          "threshold",
+          "used"
+        ],
+        "conflict_fever_98f | Fever threshold conflict 98": [
+          "fahrenheit",
+          "fever",
+          "threshold"
+        ],
+        "conflict_fever_105f | Fever threshold conflict 105": [
+          "fahrenheit",
+          "fever",
+          "threshold"
+        ],
+        "conflict_fever_celsius_distractor | Celsius conversion distractor": [
+          "fahrenheit",
+          "temperature"
+        ],
+        "missing_penicillin_medicine | Antibiotic medicines": [
+          "used"
+        ],
+        "missing_penicillin_resistance | Antibiotic resistance": [
+          "used"
+        ]
+      },
+      "section_titles": [
+        "antibiotics_overview",
+        "fever_threshold"
+      ],
+      "chunks_by_section": {
+        "fever_threshold": [
+          "conflict_fever_1004f | Fever threshold correct",
+          "conflict_fever_98f | Fever threshold conflict 98",
+          "conflict_fever_105f | Fever threshold conflict 105",
+          "conflict_fever_celsius_distractor | Celsius conversion distractor"
+        ],
+        "antibiotics_overview": [
+          "missing_penicillin_medicine | Antibiotic medicines",
+          "missing_penicillin_resistance | Antibiotic resistance"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {}
+}

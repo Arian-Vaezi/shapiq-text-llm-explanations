@@ -1,0 +1,1584 @@
+{
+  "case": {
+    "case_id": "qasper_f94b53db307685d572aefad52cd55f53d23769c2",
+    "paper_id": "1612.03226",
+    "paper_title": "Active Learning for Speech Recognition: the Power of Gradients",
+    "question_id": "f94b53db307685d572aefad52cd55f53d23769c2",
+    "annotation_id": "9c2ab91e57ce83c4f616f6234421742f9f01e487",
+    "question": "How do they calculate variance from the model outputs?",
+    "gold_answer": "reducing the variance of an estimator; EGL method in BIBREF3 is almost the same as Eq. ( EQREF8 ), except the gradient's norm is not squared in BIBREF3",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1612.03226:paragraph:0006",
+      "1612.03226:paragraph:0011",
+      "1612.03226:paragraph:0013",
+      "1612.03226:paragraph:0014"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1612.03226:paragraph:0006",
+      "score": 0.9110042006087443,
+      "title": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+      "text": "Intuitively, an instance can be considered informative if it results in large changes in model parameters. A natural measure of the change is gradient length, INLINEFORM0 . Motivated by this intuition, Expected Gradient Length (EGL) BIBREF3 picks the instances expected to have the largest gradient length. Since labels are unknown on INLINEFORM1 , EGL computes the expectation of the gradient norm over all possible labelings. BIBREF3 interprets EGL as \u201cexpected model change\u201d. In the following section, we formalize the intuition for EGL and show that it follows naturally from reducing the variance of an estimator."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1612.03226:paragraph:0001",
+      "score": 0.6370546604244799,
+      "title": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+      "text": "The speech recognition community has generally identified the informativeness of samples by calculating confidence scores. In particular, an utterance is considered informative if the most likely prediction has small probability BIBREF1 , or if the predictions are distributed very uniformly over the labels BIBREF2 . Though confidence-based measures work well in practice, less attention has been focused on gradient-based methods like Expected Gradient Length (EGL) BIBREF3 , where the informativeness is measured by the norm of the gradient incurred by the instance. EGL has previously been justified as intuitively measuring the expected change in a model's parameters BIBREF3 .We formalize this intuition from the perspective of asymptotic variance reduction, and experimentally, we show EGL to be superior to confidence-based methods on speech recognition tasks. Additionally, we observe that the ranking of samples scored by EGL is not correlated with that of confidence scoring, suggesting EGL identifies aspects of an instance that confidence scores cannot capture."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1612.03226:paragraph:0018",
+      "score": 0.7589844900804732,
+      "title": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+      "text": "The confidence score methods BIBREF1 , BIBREF2 can be easily extended to our setup. Specifically, from the probabilities over the characters, we can compute an entropy per timestep and then average them. This method is denoted as entropy. We could also take the most likely prediction and calculate its CTC loss, normalized by number of timesteps. This method is denoted as pCTC (predicted CTC) in the following sections."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1612.03226:paragraph:0003",
+      "score": 0.6128500122107513,
+      "title": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+      "text": "Denote INLINEFORM0 as an utterance and INLINEFORM1 the corresponding label (transcription). A speech recognition system models the conditional distribution INLINEFORM2 , where INLINEFORM3 are the parameters in the model, and INLINEFORM4 is typically implemented by a Recurrent Neural Network (RNN). A training set is a collection of INLINEFORM5 pairs, denoted as INLINEFORM6 . The parameters of the model are estimated by minimizing the negative log-likelihood on the training set: DISPLAYFORM0"
+    },
+    {
+      "rank": 5,
+      "passage_id": "1612.03226:paragraph:0002",
+      "score": 0.3901531234802727,
+      "title": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+      "text": "In BIBREF3 , EGL was applied to active learning on sequence labeling tasks, but our work is the first we know of to apply EGL to speech recognition in particular. Gradient-based methods have also found applications outside active learning. For example, BIBREF4 suggests that in stochastic gradient descent, sampling training instances with probabilities proportional to their gradient lengths can speed up convergence. From the perspective of variance reduction, this importance sampling problem shares many similarities to problems found in active learning."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1612.03226:paragraph:0021",
+      "score": 0.5439013722269767,
+      "title": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+      "text": "Fig. FIGREF11 shows the ranking-vs-ranking plots between pCTC and entropy, EGL and entropy. We observe that pCTC rankings and entropy rankings (Fig. FIGREF11 ) are very correlated. This is likely because they are both related to model uncertainty. In contrast, EGL gives very different rankings from entropy (Fig. FIGREF11 ). This suggests EGL is able to identify aspects of an instance that uncertainty-based measurements cannot capture."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+      "attribution": 0.043726097560997865
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+      "attribution": 0.03886439864705246
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+      "attribution": 0.02550861790198024
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+      "attribution": 0.01672848806949895
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+      "attribution": 0.01620833258228315
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+      "attribution": 0.00841736482643261
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+      "attribution": 0.11908612717788153
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+      "attribution": 0.10443852373596822
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+      "attribution": 0.0031346079887450517
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+      "attribution": 0.0030941848561282406
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+      "attribution": -0.0025154505249378304
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+      "attribution": -0.0009043555800637777
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0001",
+      "interaction": -0.03145389738524889
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0018",
+      "interaction": -0.021530315067768428
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0003",
+      "interaction": -0.0031941829368401986
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": -0.04071117767795547
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": -0.025752081322898267
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0018",
+      "interaction": -0.011079795152548496
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0003",
+      "interaction": 0.0007729421669644207
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": -0.025771899412278833
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": -0.008488174753858933
+    },
+    {
+      "left": "1612.03226:paragraph:0018",
+      "right": "1612.03226:paragraph:0003",
+      "interaction": -0.002612707819733238
+    },
+    {
+      "left": "1612.03226:paragraph:0018",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": -0.02689516333085288
+    },
+    {
+      "left": "1612.03226:paragraph:0018",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": -0.0036250214994540523
+    },
+    {
+      "left": "1612.03226:paragraph:0003",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": -0.003259654303948622
+    },
+    {
+      "left": "1612.03226:paragraph:0003",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": -0.007430616802310606
+    },
+    {
+      "left": "1612.03226:paragraph:0002",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": 0.0007083642856770153
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0001",
+      "interaction": -0.04372671029116008
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0018",
+      "interaction": 0.007020992597026999
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0003",
+      "interaction": -0.002497604072941461
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": 0.012198165728131045
+    },
+    {
+      "left": "1612.03226:paragraph:0006",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": 0.0009106799776554199
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0018",
+      "interaction": -0.0021861716418921503
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0003",
+      "interaction": 0.00419779421994826
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": 0.007895010092212303
+    },
+    {
+      "left": "1612.03226:paragraph:0001",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": -0.001920333369866723
+    },
+    {
+      "left": "1612.03226:paragraph:0018",
+      "right": "1612.03226:paragraph:0003",
+      "interaction": -0.0006905481630691633
+    },
+    {
+      "left": "1612.03226:paragraph:0018",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": 0.0024594473844626588
+    },
+    {
+      "left": "1612.03226:paragraph:0018",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": 0.0006861425583052186
+    },
+    {
+      "left": "1612.03226:paragraph:0003",
+      "right": "1612.03226:paragraph:0002",
+      "interaction": -0.0005298072494227916
+    },
+    {
+      "left": "1612.03226:paragraph:0003",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": -0.0034021519083495813
+    },
+    {
+      "left": "1612.03226:paragraph:0002",
+      "right": "1612.03226:paragraph:0021",
+      "interaction": 0.01082696053616908
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.14945329892274462
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.1118539634224951
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "remaining_chunks": 4,
+        "score": 0.12181048968318153
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.10259991765889953
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "remaining_chunks": 2,
+        "score": 0.07078655673959189
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "remaining_chunks": 1,
+        "score": 0.029549812794043562
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "selected_chunks": 1,
+        "score": 0.1335288669631982
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "selected_chunks": 2,
+        "score": 0.13324034357627657
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "selected_chunks": 3,
+        "score": 0.12852061330408537
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "selected_chunks": 4,
+        "score": 0.13326703247271643
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "selected_chunks": 5,
+        "score": 0.13562770668678858
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "selected_chunks": 6,
+        "score": 0.14945329892274462
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.14945329892274462
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "remaining_chunks": 5,
+        "score": 0.13042265592374247
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "remaining_chunks": 4,
+        "score": 0.13850119760024837
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.13938120266442677
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "remaining_chunks": 2,
+        "score": 0.1427385991032799
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "remaining_chunks": 1,
+        "score": 0.1335288669631982
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.14945329892274462
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.1118539634224951
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.12105239066772644
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "remaining_chunks": 3,
+        "score": 0.10259991765889953
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "remaining_chunks": 2,
+        "score": 0.08829482315359427
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "remaining_chunks": 1,
+        "score": 0.07819293486203649
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.14945329892274456
+      },
+      {
+        "step": 1,
+        "score": 0.12708889584434294
+      },
+      {
+        "step": 2,
+        "score": 0.12987015553721157
+      },
+      {
+        "step": 3,
+        "score": 0.12505672417261252
+      },
+      {
+        "step": 4,
+        "score": 0.10931368780177492
+      },
+      {
+        "step": 5,
+        "score": 0.09234289038165532
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How do they calculate variance from the model outputs?",
+    "expanded_queries": [
+      "How do they calculate variance from the model outputs?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "dense": 0.5779,
+        "page": 1,
+        "type": "body_text",
+        "section": "Expected Gradient Length",
+        "flags": "",
+        "preview": "Intuitively, an instance can be considered informative if it results in large changes in model parameters. A natural measure of the change is gradient length, INLINEFORM0 . Motivated by this intuition, Expected Gradient "
+      },
+      {
+        "rank": 2,
+        "source": "1612.03226:paragraph:0010 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "dense": 0.5378,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "where INLINEFORM0 is the Fisher Information Matrix with respect to INLINEFORM1 . Using first order approximation at INLINEFORM2 , we have asymptotically, DISPLAYFORM0"
+      },
+      {
+        "rank": 3,
+        "source": "1612.03226:paragraph:0015 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "dense": 0.5303,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "Here we have provided a more formal characterization of EGL to complement its intuitive interpretation as \u201cexpected model change\u201d in BIBREF3 . For notational convenience, we denote Eq. ( EQREF8 ) as EGL in subsequent sec"
+      },
+      {
+        "rank": 4,
+        "source": "1612.03226:paragraph:0007 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "dense": 0.5297,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "Assume the joint distribution of INLINEFORM0 has the following form, DISPLAYFORM0"
+      },
+      {
+        "rank": 5,
+        "source": "1612.03226:paragraph:0011 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "dense": 0.5273,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "Eq. ( EQREF7 ) indicates that to reduce INLINEFORM0 on test data, we need to minimize the expected variance INLINEFORM1 over the test set. This is called Fisher Information Ratio criteria in BIBREF6 , which itself is har"
+      },
+      {
+        "rank": 6,
+        "source": "1612.03226:paragraph:0013 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "dense": 0.5267,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "A practical issue is that we do not know INLINEFORM0 in advance. We could instead substitute an estimate INLINEFORM1 from a pre-trained model, where it is reasonable to assume the INLINEFORM2 to be close to the true INLI"
+      },
+      {
+        "rank": 7,
+        "source": "1612.03226:paragraph:0005 | Active Learning for Speech Recognition: the Power of Gradients / Confidence Scores",
+        "dense": 0.5265,
+        "page": 1,
+        "type": "body_text",
+        "section": "Confidence Scores",
+        "flags": "",
+        "preview": "Confidence scoring has been used extensively as a proxy for the informativeness of training samples. Specifically, an INLINEFORM0 is considered informative if the predictions are uniformly distributed over all the labels"
+      },
+      {
+        "rank": 8,
+        "source": "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "dense": 0.5262,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The speech recognition community has generally identified the informativeness of samples by calculating confidence scores. In particular, an utterance is considered informative if the most likely prediction has small pro"
+      },
+      {
+        "rank": 9,
+        "source": "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "dense": 0.5203,
+        "page": 1,
+        "type": "body_text",
+        "section": "Problem Formulation",
+        "flags": "",
+        "preview": "Denote INLINEFORM0 as an utterance and INLINEFORM1 the corresponding label (transcription). A speech recognition system models the conditional distribution INLINEFORM2 , where INLINEFORM3 are the parameters in the model,"
+      },
+      {
+        "rank": 10,
+        "source": "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "dense": 0.5198,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "The confidence score methods BIBREF1 , BIBREF2 can be easily extended to our setup. Specifically, from the probabilities over the characters, we can compute an entropy per timestep and then average them. This method is d"
+      },
+      {
+        "rank": 11,
+        "source": "1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "dense": 0.5171,
+        "page": 1,
+        "type": "body_text",
+        "section": "Similarity between Query Methods",
+        "flags": "",
+        "preview": "Fig. FIGREF11 shows the ranking-vs-ranking plots between pCTC and entropy, EGL and entropy. We observe that pCTC rankings and entropy rankings (Fig. FIGREF11 ) are very correlated. This is likely because they are both re"
+      },
+      {
+        "rank": 12,
+        "source": "1612.03226:paragraph:0009 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "dense": 0.5166,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "Statistical signal processing theory BIBREF5 states the following asymptotic distribution of INLINEFORM0 , DISPLAYFORM0"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "keyword": 0.0975,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "The confidence score methods BIBREF1 , BIBREF2 can be easily extended to our setup. Specifically, from the probabilities over the characters, we can compute an entropy per timestep and then average them. This method is d"
+      },
+      {
+        "rank": 2,
+        "source": "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "keyword": 0.0718,
+        "page": 1,
+        "type": "body_text",
+        "section": "Expected Gradient Length",
+        "flags": "",
+        "preview": "Intuitively, an instance can be considered informative if it results in large changes in model parameters. A natural measure of the change is gradient length, INLINEFORM0 . Motivated by this intuition, Expected Gradient "
+      },
+      {
+        "rank": 3,
+        "source": "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "keyword": 0.0494,
+        "page": 1,
+        "type": "body_text",
+        "section": "Problem Formulation",
+        "flags": "",
+        "preview": "Denote INLINEFORM0 as an utterance and INLINEFORM1 the corresponding label (transcription). A speech recognition system models the conditional distribution INLINEFORM2 , where INLINEFORM3 are the parameters in the model,"
+      },
+      {
+        "rank": 4,
+        "source": "1612.03226:paragraph:0011 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "keyword": 0.0436,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "Eq. ( EQREF7 ) indicates that to reduce INLINEFORM0 on test data, we need to minimize the expected variance INLINEFORM1 over the test set. This is called Fisher Information Ratio criteria in BIBREF6 , which itself is har"
+      },
+      {
+        "rank": 5,
+        "source": "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "keyword": 0.041,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The speech recognition community has generally identified the informativeness of samples by calculating confidence scores. In particular, an utterance is considered informative if the most likely prediction has small pro"
+      },
+      {
+        "rank": 6,
+        "source": "1612.03226:paragraph:0017 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "keyword": 0.0387,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "A base model, INLINEFORM0 , is trained on 190 hours ( INLINEFORM1 100K instances) of transcribed speech data. Then, it selects a subset of a 1,700-hour ( INLINEFORM2 1.1M instances) unlabeled dataset. We query labels for"
+      },
+      {
+        "rank": 7,
+        "source": "1612.03226:paragraph:0015 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "keyword": 0.0369,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "Here we have provided a more formal characterization of EGL to complement its intuitive interpretation as \u201cexpected model change\u201d in BIBREF3 . For notational convenience, we denote Eq. ( EQREF8 ) as EGL in subsequent sec"
+      },
+      {
+        "rank": 8,
+        "source": "1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "keyword": 0.0346,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In BIBREF3 , EGL was applied to active learning on sequence labeling tasks, but our work is the first we know of to apply EGL to speech recognition in particular. Gradient-based methods have also found applications outsi"
+      },
+      {
+        "rank": 9,
+        "source": "1612.03226:paragraph:0013 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "keyword": 0.0313,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variance in the Asymptote",
+        "flags": "",
+        "preview": "A practical issue is that we do not know INLINEFORM0 in advance. We could instead substitute an estimate INLINEFORM1 from a pre-trained model, where it is reasonable to assume the INLINEFORM2 to be close to the true INLI"
+      },
+      {
+        "rank": 10,
+        "source": "1612.03226:paragraph:0019 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "keyword": 0.0306,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We implement EGL by marginalizing over the most likely 100 labels, and compare it with: 1) a random selection baseline, 2) entropy, and 3) pCTC. Using the same base model, each method queries a variable percentage of the"
+      },
+      {
+        "rank": 11,
+        "source": "1612.03226:paragraph:0023 | Active Learning for Speech Recognition: the Power of Gradients / Conclusion and Future Work",
+        "keyword": 0.0302,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion and Future Work",
+        "flags": "",
+        "preview": "We formally explained EGL from a variance reduction perspective and experimentally tested its performance on end-to-end speech recognition systems. Initial experiments show a notable gain over random selection, and that "
+      },
+      {
+        "rank": 12,
+        "source": "1612.03226:paragraph:0005 | Active Learning for Speech Recognition: the Power of Gradients / Confidence Scores",
+        "keyword": 0.028,
+        "page": 1,
+        "type": "body_text",
+        "section": "Confidence Scores",
+        "flags": "",
+        "preview": "Confidence scoring has been used extensively as a proxy for the informativeness of training samples. Specifically, an INLINEFORM0 is considered informative if the predictions are uniformly distributed over all the labels"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5779,
+        "keyword": 0.0718,
+        "rerank": 0.911,
+        "section": "Expected Gradient Length",
+        "query_hits": "model, variance",
+        "reasons": "body/table evidence",
+        "preview": "Intuitively, an instance can be considered informative if it results in large changes in model parameters. A natural measure of the change is gradient length, INLINEFORM0 . Motivated by this intuition, Expected Gradient "
+      },
+      {
+        "rank": 2,
+        "source": "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5198,
+        "keyword": 0.0975,
+        "rerank": 0.759,
+        "section": "Experiments",
+        "query_hits": "calculate",
+        "reasons": "body/table evidence",
+        "preview": "The confidence score methods BIBREF1 , BIBREF2 can be easily extended to our setup. Specifically, from the probabilities over the characters, we can compute an entropy per timestep and then average them. This method is d"
+      },
+      {
+        "rank": 3,
+        "source": "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5262,
+        "keyword": 0.041,
+        "rerank": 0.6371,
+        "section": "Introduction",
+        "query_hits": "model, variance",
+        "reasons": "body/table evidence",
+        "preview": "The speech recognition community has generally identified the informativeness of samples by calculating confidence scores. In particular, an utterance is considered informative if the most likely prediction has small pro"
+      },
+      {
+        "rank": 4,
+        "source": "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5203,
+        "keyword": 0.0494,
+        "rerank": 0.6129,
+        "section": "Problem Formulation",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Denote INLINEFORM0 as an utterance and INLINEFORM1 the corresponding label (transcription). A speech recognition system models the conditional distribution INLINEFORM2 , where INLINEFORM3 are the parameters in the model,"
+      },
+      {
+        "rank": 5,
+        "source": "1612.03226:paragraph:0005 | Active Learning for Speech Recognition: the Power of Gradients / Confidence Scores",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5265,
+        "keyword": 0.028,
+        "rerank": 0.5683,
+        "section": "Confidence Scores",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Confidence scoring has been used extensively as a proxy for the informativeness of training samples. Specifically, an INLINEFORM0 is considered informative if the predictions are uniformly distributed over all the labels"
+      },
+      {
+        "rank": 6,
+        "source": "1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5171,
+        "keyword": 0.0209,
+        "rerank": 0.5439,
+        "section": "Similarity between Query Methods",
+        "query_hits": "model, they",
+        "reasons": "body/table evidence",
+        "preview": "Fig. FIGREF11 shows the ranking-vs-ranking plots between pCTC and entropy, EGL and entropy. We observe that pCTC rankings and entropy rankings (Fig. FIGREF11 ) are very correlated. This is likely because they are both re"
+      },
+      {
+        "rank": 7,
+        "source": "1612.03226:paragraph:0011 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5273,
+        "keyword": 0.0436,
+        "rerank": 0.5191,
+        "section": "Variance in the Asymptote",
+        "query_hits": "variance",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Eq. ( EQREF7 ) indicates that to reduce INLINEFORM0 on test data, we need to minimize the expected variance INLINEFORM1 over the test set. This is called Fisher Information Ratio criteria in BIBREF6 , which itself is har"
+      },
+      {
+        "rank": 8,
+        "source": "1612.03226:paragraph:0023 | Active Learning for Speech Recognition: the Power of Gradients / Conclusion and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5082,
+        "keyword": 0.0302,
+        "rerank": 0.5119,
+        "section": "Conclusion and Future Work",
+        "query_hits": "variance",
+        "reasons": "body/table evidence",
+        "preview": "We formally explained EGL from a variance reduction perspective and experimentally tested its performance on end-to-end speech recognition systems. Initial experiments show a notable gain over random selection, and that "
+      },
+      {
+        "rank": 9,
+        "source": "1612.03226:paragraph:0015 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.0369,
+        "rerank": 0.5086,
+        "section": "Variance in the Asymptote",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Here we have provided a more formal characterization of EGL to complement its intuitive interpretation as \u201cexpected model change\u201d in BIBREF3 . For notational convenience, we denote Eq. ( EQREF8 ) as EGL in subsequent sec"
+      },
+      {
+        "rank": 10,
+        "source": "1612.03226:paragraph:0013 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5267,
+        "keyword": 0.0313,
+        "rerank": 0.4792,
+        "section": "Variance in the Asymptote",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A practical issue is that we do not know INLINEFORM0 in advance. We could instead substitute an estimate INLINEFORM1 from a pre-trained model, where it is reasonable to assume the INLINEFORM2 to be close to the true INLI"
+      },
+      {
+        "rank": 11,
+        "source": "1612.03226:paragraph:0017 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4763,
+        "keyword": 0.0387,
+        "rerank": 0.4276,
+        "section": "Experiments",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "A base model, INLINEFORM0 , is trained on 190 hours ( INLINEFORM1 100K instances) of transcribed speech data. Then, it selects a subset of a 1,700-hour ( INLINEFORM2 1.1M instances) unlabeled dataset. We query labels for"
+      },
+      {
+        "rank": 12,
+        "source": "1612.03226:paragraph:0019 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4752,
+        "keyword": 0.0306,
+        "rerank": 0.3989,
+        "section": "Experiments",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "We implement EGL by marginalizing over the most likely 100 labels, and compare it with: 1) a random selection baseline, 2) entropy, and 3) pCTC. Using the same base model, each method queries a variable percentage of the"
+      },
+      {
+        "rank": 13,
+        "source": "1612.03226:paragraph:0010 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0,
+        "rerank": 0.3911,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where INLINEFORM0 is the Fisher Information Matrix with respect to INLINEFORM1 . Using first order approximation at INLINEFORM2 , we have asymptotically, DISPLAYFORM0"
+      },
+      {
+        "rank": 14,
+        "source": "1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4691,
+        "keyword": 0.0346,
+        "rerank": 0.3902,
+        "section": "Introduction",
+        "query_hits": "variance",
+        "reasons": "body/table evidence",
+        "preview": "In BIBREF3 , EGL was applied to active learning on sequence labeling tasks, but our work is the first we know of to apply EGL to speech recognition in particular. Gradient-based methods have also found applications outsi"
+      },
+      {
+        "rank": 15,
+        "source": "1612.03226:paragraph:0007 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5297,
+        "keyword": 0.0,
+        "rerank": 0.3634,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Assume the joint distribution of INLINEFORM0 has the following form, DISPLAYFORM0"
+      },
+      {
+        "rank": 16,
+        "source": "1612.03226:paragraph:0014 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4852,
+        "keyword": 0.0,
+        "rerank": 0.3395,
+        "section": "Variance in the Asymptote",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "For RNNs, the gradients for each potential label can be obtained by back-propagation. Another practical issue is that EGL marginalizes over all possible labelings, but in speech recognition, the number of labelings scale"
+      },
+      {
+        "rank": 17,
+        "source": "1612.03226:abstract:000 | Active Learning for Speech Recognition: the Power of Gradients / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4616,
+        "keyword": 0.0257,
+        "rerank": 0.3369,
+        "section": "Abstract",
+        "query_hits": "variance",
+        "reasons": "body/table evidence",
+        "preview": "In training speech recognition systems, labeling audio clips can be expensive, and not all data is equally valuable. Active learning aims to label only the most informative samples to reduce cost. For speech recognition,"
+      },
+      {
+        "rank": 18,
+        "source": "1612.03226:paragraph:0009 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5166,
+        "keyword": 0.0,
+        "rerank": 0.3179,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Statistical signal processing theory BIBREF5 states the following asymptotic distribution of INLINEFORM0 , DISPLAYFORM0"
+      },
+      {
+        "rank": 19,
+        "source": "1612.03226:paragraph:0022 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4773,
+        "keyword": 0.0,
+        "rerank": 0.3119,
+        "section": "Similarity between Query Methods",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "We further investigate the samples for which EGL and entropy yield vastly different estimates of informativeness, e.g., the elements in the red circle in Fig. FIGREF11 . These particular samples consist of short utteranc"
+      },
+      {
+        "rank": 20,
+        "source": "1612.03226:paragraph:0016 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4697,
+        "keyword": 0.0,
+        "rerank": 0.2556,
+        "section": "Experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We empirically validate EGL on speech recognition tasks. In our experiments, the RNN takes in spectrograms of utterances, passing them through two 2D-convolutional layers, followed by seven bi-directional recurrent layer"
+      },
+      {
+        "rank": 21,
+        "source": "1612.03226:paragraph:0020 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4603,
+        "keyword": 0.0,
+        "rerank": 0.2233,
+        "section": "Similarity between Query Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "It is useful to understand how the three active learning methods differ in measuring the informativeness of an instance. To compare any two methods, we take rankings of informativeness given by these two methods, and plo"
+      },
+      {
+        "rank": 22,
+        "source": "1612.03226:paragraph:0008 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4835,
+        "keyword": 0.0,
+        "rerank": 0.2035,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where INLINEFORM0 is the true parameter, and INLINEFORM1 is independent of INLINEFORM2 . By selecting a subset of the training data, we are essentially choosing another distribution INLINEFORM3 so that the INLINEFORM4 pa"
+      },
+      {
+        "rank": 23,
+        "source": "1612.03226:paragraph:0000 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4229,
+        "keyword": 0.02,
+        "rerank": 0.1854,
+        "section": "Introduction",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "State-of-the-art automatic speech recognition (ASR) systems BIBREF0 have large model capacities and require significant quantities of training data to generalize. Labeling thousands of hours of audio, however, is expensi"
+      },
+      {
+        "rank": 24,
+        "source": "1612.03226:paragraph:0004 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4355,
+        "keyword": 0.0,
+        "rerank": 0.1376,
+        "section": "Problem Formulation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Active learning seeks to augment the training set with a new set of utterances and labels INLINEFORM0 in order to achieve good generalization on a held-out test dataset. In many applications, there is an unlabeled pool I"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5779,
+        "keyword": 0.0718,
+        "rerank": 0.911,
+        "section": "Expected Gradient Length",
+        "query_hits": "model, variance",
+        "reasons": "body/table evidence",
+        "preview": "Intuitively, an instance can be considered informative if it results in large changes in model parameters. A natural measure of the change is gradient length, INLINEFORM0 . Motivated by this intuition, Expected Gradient "
+      },
+      {
+        "rank": 2,
+        "source": "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5198,
+        "keyword": 0.0975,
+        "rerank": 0.759,
+        "section": "Experiments",
+        "query_hits": "calculate",
+        "reasons": "body/table evidence",
+        "preview": "The confidence score methods BIBREF1 , BIBREF2 can be easily extended to our setup. Specifically, from the probabilities over the characters, we can compute an entropy per timestep and then average them. This method is d"
+      },
+      {
+        "rank": 3,
+        "source": "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5262,
+        "keyword": 0.041,
+        "rerank": 0.6371,
+        "section": "Introduction",
+        "query_hits": "model, variance",
+        "reasons": "body/table evidence",
+        "preview": "The speech recognition community has generally identified the informativeness of samples by calculating confidence scores. In particular, an utterance is considered informative if the most likely prediction has small pro"
+      },
+      {
+        "rank": 4,
+        "source": "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5203,
+        "keyword": 0.0494,
+        "rerank": 0.6129,
+        "section": "Problem Formulation",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Denote INLINEFORM0 as an utterance and INLINEFORM1 the corresponding label (transcription). A speech recognition system models the conditional distribution INLINEFORM2 , where INLINEFORM3 are the parameters in the model,"
+      },
+      {
+        "rank": 5,
+        "source": "1612.03226:paragraph:0005 | Active Learning for Speech Recognition: the Power of Gradients / Confidence Scores",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5265,
+        "keyword": 0.028,
+        "rerank": 0.5683,
+        "section": "Confidence Scores",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "Confidence scoring has been used extensively as a proxy for the informativeness of training samples. Specifically, an INLINEFORM0 is considered informative if the predictions are uniformly distributed over all the labels"
+      },
+      {
+        "rank": 6,
+        "source": "1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5171,
+        "keyword": 0.0209,
+        "rerank": 0.5439,
+        "section": "Similarity between Query Methods",
+        "query_hits": "model, they",
+        "reasons": "body/table evidence",
+        "preview": "Fig. FIGREF11 shows the ranking-vs-ranking plots between pCTC and entropy, EGL and entropy. We observe that pCTC rankings and entropy rankings (Fig. FIGREF11 ) are very correlated. This is likely because they are both re"
+      },
+      {
+        "rank": 7,
+        "source": "1612.03226:paragraph:0011 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5273,
+        "keyword": 0.0436,
+        "rerank": 0.5191,
+        "section": "Variance in the Asymptote",
+        "query_hits": "variance",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Eq. ( EQREF7 ) indicates that to reduce INLINEFORM0 on test data, we need to minimize the expected variance INLINEFORM1 over the test set. This is called Fisher Information Ratio criteria in BIBREF6 , which itself is har"
+      },
+      {
+        "rank": 8,
+        "source": "1612.03226:paragraph:0023 | Active Learning for Speech Recognition: the Power of Gradients / Conclusion and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5082,
+        "keyword": 0.0302,
+        "rerank": 0.5119,
+        "section": "Conclusion and Future Work",
+        "query_hits": "variance",
+        "reasons": "body/table evidence",
+        "preview": "We formally explained EGL from a variance reduction perspective and experimentally tested its performance on end-to-end speech recognition systems. Initial experiments show a notable gain over random selection, and that "
+      },
+      {
+        "rank": 9,
+        "source": "1612.03226:paragraph:0015 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.0369,
+        "rerank": 0.5086,
+        "section": "Variance in the Asymptote",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Here we have provided a more formal characterization of EGL to complement its intuitive interpretation as \u201cexpected model change\u201d in BIBREF3 . For notational convenience, we denote Eq. ( EQREF8 ) as EGL in subsequent sec"
+      },
+      {
+        "rank": 10,
+        "source": "1612.03226:paragraph:0013 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5267,
+        "keyword": 0.0313,
+        "rerank": 0.4792,
+        "section": "Variance in the Asymptote",
+        "query_hits": "model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A practical issue is that we do not know INLINEFORM0 in advance. We could instead substitute an estimate INLINEFORM1 from a pre-trained model, where it is reasonable to assume the INLINEFORM2 to be close to the true INLI"
+      },
+      {
+        "rank": 11,
+        "source": "1612.03226:paragraph:0017 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4763,
+        "keyword": 0.0387,
+        "rerank": 0.4276,
+        "section": "Experiments",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "A base model, INLINEFORM0 , is trained on 190 hours ( INLINEFORM1 100K instances) of transcribed speech data. Then, it selects a subset of a 1,700-hour ( INLINEFORM2 1.1M instances) unlabeled dataset. We query labels for"
+      },
+      {
+        "rank": 12,
+        "source": "1612.03226:paragraph:0019 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4752,
+        "keyword": 0.0306,
+        "rerank": 0.3989,
+        "section": "Experiments",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "We implement EGL by marginalizing over the most likely 100 labels, and compare it with: 1) a random selection baseline, 2) entropy, and 3) pCTC. Using the same base model, each method queries a variable percentage of the"
+      },
+      {
+        "rank": 13,
+        "source": "1612.03226:paragraph:0010 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0,
+        "rerank": 0.3911,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where INLINEFORM0 is the Fisher Information Matrix with respect to INLINEFORM1 . Using first order approximation at INLINEFORM2 , we have asymptotically, DISPLAYFORM0"
+      },
+      {
+        "rank": 14,
+        "source": "1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4691,
+        "keyword": 0.0346,
+        "rerank": 0.3902,
+        "section": "Introduction",
+        "query_hits": "variance",
+        "reasons": "body/table evidence",
+        "preview": "In BIBREF3 , EGL was applied to active learning on sequence labeling tasks, but our work is the first we know of to apply EGL to speech recognition in particular. Gradient-based methods have also found applications outsi"
+      },
+      {
+        "rank": 15,
+        "source": "1612.03226:paragraph:0007 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5297,
+        "keyword": 0.0,
+        "rerank": 0.3634,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Assume the joint distribution of INLINEFORM0 has the following form, DISPLAYFORM0"
+      },
+      {
+        "rank": 16,
+        "source": "1612.03226:paragraph:0014 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4852,
+        "keyword": 0.0,
+        "rerank": 0.3395,
+        "section": "Variance in the Asymptote",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "For RNNs, the gradients for each potential label can be obtained by back-propagation. Another practical issue is that EGL marginalizes over all possible labelings, but in speech recognition, the number of labelings scale"
+      },
+      {
+        "rank": 17,
+        "source": "1612.03226:abstract:000 | Active Learning for Speech Recognition: the Power of Gradients / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4616,
+        "keyword": 0.0257,
+        "rerank": 0.3369,
+        "section": "Abstract",
+        "query_hits": "variance",
+        "reasons": "body/table evidence",
+        "preview": "In training speech recognition systems, labeling audio clips can be expensive, and not all data is equally valuable. Active learning aims to label only the most informative samples to reduce cost. For speech recognition,"
+      },
+      {
+        "rank": 18,
+        "source": "1612.03226:paragraph:0009 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5166,
+        "keyword": 0.0,
+        "rerank": 0.3179,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Statistical signal processing theory BIBREF5 states the following asymptotic distribution of INLINEFORM0 , DISPLAYFORM0"
+      },
+      {
+        "rank": 19,
+        "source": "1612.03226:paragraph:0022 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4773,
+        "keyword": 0.0,
+        "rerank": 0.3119,
+        "section": "Similarity between Query Methods",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "We further investigate the samples for which EGL and entropy yield vastly different estimates of informativeness, e.g., the elements in the red circle in Fig. FIGREF11 . These particular samples consist of short utteranc"
+      },
+      {
+        "rank": 20,
+        "source": "1612.03226:paragraph:0016 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4697,
+        "keyword": 0.0,
+        "rerank": 0.2556,
+        "section": "Experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We empirically validate EGL on speech recognition tasks. In our experiments, the RNN takes in spectrograms of utterances, passing them through two 2D-convolutional layers, followed by seven bi-directional recurrent layer"
+      },
+      {
+        "rank": 21,
+        "source": "1612.03226:paragraph:0020 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4603,
+        "keyword": 0.0,
+        "rerank": 0.2233,
+        "section": "Similarity between Query Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "It is useful to understand how the three active learning methods differ in measuring the informativeness of an instance. To compare any two methods, we take rankings of informativeness given by these two methods, and plo"
+      },
+      {
+        "rank": 22,
+        "source": "1612.03226:paragraph:0008 | Active Learning for Speech Recognition: the Power of Gradients / Variance in the Asymptote",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4835,
+        "keyword": 0.0,
+        "rerank": 0.2035,
+        "section": "Variance in the Asymptote",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where INLINEFORM0 is the true parameter, and INLINEFORM1 is independent of INLINEFORM2 . By selecting a subset of the training data, we are essentially choosing another distribution INLINEFORM3 so that the INLINEFORM4 pa"
+      },
+      {
+        "rank": 23,
+        "source": "1612.03226:paragraph:0000 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4229,
+        "keyword": 0.02,
+        "rerank": 0.1854,
+        "section": "Introduction",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "State-of-the-art automatic speech recognition (ASR) systems BIBREF0 have large model capacities and require significant quantities of training data to generalize. Labeling thousands of hours of audio, however, is expensi"
+      },
+      {
+        "rank": 24,
+        "source": "1612.03226:paragraph:0004 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4355,
+        "keyword": 0.0,
+        "rerank": 0.1376,
+        "section": "Problem Formulation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Active learning seeks to augment the training set with a new set of utterances and labels INLINEFORM0 in order to achieve good generalization on a held-out test dataset. In many applications, there is an unlabeled pool I"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5779,
+        "keyword": 0.0718,
+        "rerank": 0.911,
+        "section": "Expected Gradient Length",
+        "query_hits": "model, variance",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.28,
+        "reasons": "body/table evidence",
+        "preview": "Intuitively, an instance can be considered informative if it results in large changes in model parameters. A natural measure of the change is gradient length, INLINEFORM0 . Motivated by this intuition, Expected Gradient "
+      },
+      {
+        "rank": 2,
+        "source": "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5262,
+        "keyword": 0.041,
+        "rerank": 0.6371,
+        "section": "Introduction",
+        "query_hits": "model, variance",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7057,
+        "novelty": 0.6435,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.137,
+        "reasons": "body/table evidence",
+        "preview": "The speech recognition community has generally identified the informativeness of samples by calculating confidence scores. In particular, an utterance is considered informative if the most likely prediction has small pro"
+      },
+      {
+        "rank": 3,
+        "source": "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5198,
+        "keyword": 0.0975,
+        "rerank": 0.759,
+        "section": "Experiments",
+        "query_hits": "calculate",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8367,
+        "novelty": 0.9132,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.12,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0074,
+        "reasons": "body/table evidence",
+        "preview": "The confidence score methods BIBREF1 , BIBREF2 can be easily extended to our setup. Specifically, from the probabilities over the characters, we can compute an entropy per timestep and then average them. This method is d"
+      },
+      {
+        "rank": 4,
+        "source": "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5203,
+        "keyword": 0.0494,
+        "rerank": 0.6129,
+        "section": "Problem Formulation",
+        "query_hits": "model",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6797,
+        "novelty": 0.7167,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9249,
+        "reasons": "body/table evidence",
+        "preview": "Denote INLINEFORM0 as an utterance and INLINEFORM1 the corresponding label (transcription). A speech recognition system models the conditional distribution INLINEFORM2 , where INLINEFORM3 are the parameters in the model,"
+      },
+      {
+        "rank": 5,
+        "source": "1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4691,
+        "keyword": 0.0346,
+        "rerank": 0.3902,
+        "section": "Introduction",
+        "query_hits": "variance",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4405,
+        "novelty": 0.4557,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8427,
+        "reasons": "body/table evidence",
+        "preview": "In BIBREF3 , EGL was applied to active learning on sequence labeling tasks, but our work is the first we know of to apply EGL to speech recognition in particular. Gradient-based methods have also found applications outsi"
+      },
+      {
+        "rank": 6,
+        "source": "1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5171,
+        "keyword": 0.0209,
+        "rerank": 0.5439,
+        "section": "Similarity between Query Methods",
+        "query_hits": "model, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6057,
+        "novelty": 0.8016,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.12,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8331,
+        "reasons": "body/table evidence",
+        "preview": "Fig. FIGREF11 shows the ranking-vs-ranking plots between pCTC and entropy, EGL and entropy. We observe that pCTC rankings and entropy rankings (Fig. FIGREF11 ) are very correlated. This is likely because they are both re"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "calculate",
+        "model",
+        "outputs",
+        "they",
+        "variance"
+      ],
+      "covered_query_terms": [
+        "calculate",
+        "model",
+        "they",
+        "variance"
+      ],
+      "missing_query_terms": [
+        "outputs"
+      ],
+      "terms_by_chunk": {
+        "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length": [
+          "model",
+          "variance"
+        ],
+        "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction": [
+          "model",
+          "variance"
+        ],
+        "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments": [
+          "calculate"
+        ],
+        "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation": [
+          "model"
+        ],
+        "1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction": [
+          "variance"
+        ],
+        "1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods": [
+          "model",
+          "they"
+        ]
+      },
+      "section_titles": [
+        "Expected Gradient Length",
+        "Experiments",
+        "Introduction",
+        "Problem Formulation",
+        "Similarity between Query Methods"
+      ],
+      "chunks_by_section": {
+        "Expected Gradient Length": [
+          "1612.03226:paragraph:0006 | Active Learning for Speech Recognition: the Power of Gradients / Expected Gradient Length"
+        ],
+        "Introduction": [
+          "1612.03226:paragraph:0001 | Active Learning for Speech Recognition: the Power of Gradients / Introduction",
+          "1612.03226:paragraph:0002 | Active Learning for Speech Recognition: the Power of Gradients / Introduction"
+        ],
+        "Experiments": [
+          "1612.03226:paragraph:0018 | Active Learning for Speech Recognition: the Power of Gradients / Experiments"
+        ],
+        "Problem Formulation": [
+          "1612.03226:paragraph:0003 | Active Learning for Speech Recognition: the Power of Gradients / Problem Formulation"
+        ],
+        "Similarity between Query Methods": [
+          "1612.03226:paragraph:0021 | Active Learning for Speech Recognition: the Power of Gradients / Similarity between Query Methods"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The context mentions that Expected Gradient Length (EGL) is interpreted as \"expected model change,\" and it follows naturally from reducing the variance of an estimator. Furthermore, to reduce a quantity on test data, one needs to minimize the expected variance over the test set, which is referred to as Fisher Information Ratio criteria. An easier surrogate for this is maximizing another quantity.\n\nHowever, the context does not explicitly detail *how* variance is calculated from model outputs in a general sense.",
+    "retrieved_context_answer": "The context mentions that Expected Gradient Length (EGL) follows naturally from reducing the variance of an estimator, and it also states that EGL is formalized from the perspective of asymptotic variance reduction.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.2803738317757009,
+    "retrieved_context_f1": 0.37288135593220334,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

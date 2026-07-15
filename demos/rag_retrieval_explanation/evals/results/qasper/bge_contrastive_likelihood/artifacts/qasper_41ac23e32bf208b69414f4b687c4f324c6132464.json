@@ -1,0 +1,1586 @@
+{
+  "case": {
+    "case_id": "qasper_41ac23e32bf208b69414f4b687c4f324c6132464",
+    "paper_id": "1611.04798",
+    "paper_title": "Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder",
+    "question_id": "41ac23e32bf208b69414f4b687c4f324c6132464",
+    "annotation_id": "9440ae8637e9349bec4ec80b1fe88b0fab4a3abc",
+    "question": "Which languages do they test on for the under-resourced scenario?",
+    "gold_answer": "English; German",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1611.04798:paragraph:0030"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1611.04798:paragraph:0037",
+      "score": 0.8387480977276087,
+      "title": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+      "text": "We evaluate bridge and universal systems on two German INLINEFORM0 French test sets. They are compared to a direct system, which is an NMT trained on German INLINEFORM1 French data, and to a pivot system, which essentially consists of two separate NMTs trained to translate from German to English and English to French. The direct system should not exist in a real zero-resourced situation. We refer it as the perfect system for comparison purpose only. In case of the pivot system, to generate a translated text in French from a German sentence, we first translate it to English, then the output sentence is fed to the English INLINEFORM2 German NMT system to obtain the French translation. Since there are more than two languages involved in those systems, we increase the number of BPE merging operations proportionally in order to reduce the number of rare words in such systems. We do not expect our proposed systems to perform well with this primitive way of building direct translating connections since this is essentially a difficult task. We report the performance of those systems in Table TABREF23 ."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1611.04798:paragraph:0030",
+      "score": 0.8215024870441757,
+      "title": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+      "text": "First, we consider the translation for an under-resourced pair of languages. Here a small portion of the large parallel corpus for English-German is used as a simulation for the scenario where we do not have much parallel data: Translating texts in English to German. We perform language-specific coding in both source and target sides. By accommodating the German monolingual data as an additional input (German INLINEFORM0 German), which we called the mix-source approach, we could enrich the training data in a simple, natural way. Given this under-resourced situation, it could help our NMT obtain a better representation of the source side, hence, able to learn the translation relationship better. Including monolingual data in this way might also improve the translation of some rare word types such as named entities. Furthermore, as the ultimate goal of our work, we would like to investigate the advantages of multilinguality in NMT. We incorporate a similar portion of French-German parallel corpus into the English-German one. As discussed in Section SECREF5 , it is expected to help reducing the ambiguity in translation between one language pair since it utilizes the semantic context provided by the other source language. We name this mix-multi-source."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1611.04798:paragraph:0031",
+      "score": 0.6772392812499447,
+      "title": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+      "text": "Table TABREF16 summarizes the performance of our systems measured in BLEU on two test sets, tst2013 and tst2014. Compared to the baseline NMT system which is solely trained on TED English-German data, our mix-source system achieves a considerable improvement of 2.6 BLEU points on tst2013 and 2.1 BLEU points on and tst2014 . Adding French data to the source side and their corresponding German data to the target side in our mix-multi-source system also help to gain 2.2 and 1.6 BLEU points more on tst2013 tst2014, respectively. We observe a better improvement from our mix-source system compared to our mix-multi-source system. We speculate the reason that the mix-source encoder utilize the same information shared in two languages while the mix-multi-source receives and processes similar information in the other language but not necessarily the same. We might validate this hypothesis by comparing two systems trained on a common English-German-French corpus of TED. We put it in our future work's plan."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1611.04798:paragraph:0003",
+      "score": 0.6147687090767217,
+      "title": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+      "text": "In this paper, we introduce a unified approach to seamlessly extend the original NMT to multilingual settings. Our approach allows us to integrate any language in any side of the encoder-decoder architecture with only one encoder and one decoder for all the languages involved. Moreover, it is not necessary to do any network modification to enable attention mechanism in our NMT systems. We then apply our proprosed framework in two demanding scenarios: under-resourced translation and zero-resourced translation. The results show that bringing multilinguality to NMT helps to improve individual translations. With some insightful analyses of the results, we set our goal toward a fully multilingual NMT framework."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1611.04798:paragraph:0021",
+      "score": 0.592218031655264,
+      "title": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+      "text": "Target Forcing. While language-specific coding allows us to implement a multilingual attention-based NMT, there are two issues we have to consider before training the network. The first is that the number of rare words would increase in proportion with the number of languages involved. This might be solved by applying a rare word treatment method with appropriate awareness of the vocabularies' size. The second one is more problematic: Ambiguity level in the translation process definitely increases due to the additional introduction of words having the same or similar meaning across languages at both source and target sides. We deal with the problem by explicitly forcing the attention and translation to the direction that we prefer, expecting the information would limit the ambiguity to the scope of one language instead of all target languages. We realize this idea by adding at the beginning and at the end of every source sentences a special symbol indicating the language they would be translated into. For example, in a multilingual NMT, when a source sentence is German and the target language is English, the original sentence (already language-specific coded) is:"
+    },
+    {
+      "rank": 6,
+      "passage_id": "1611.04798:paragraph:0014",
+      "score": 0.5517858450469162,
+      "title": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+      "text": "By extending the solution of sequence-to-sequence modeling using encoder-decoder architectures to multi-task learning, Luong2016 managed to achieve better performance on some INLINEFORM0 tasks such as translation, parsing and image captioning compared to individual tasks. Specifically in translation, the work utilizes multiple encoders to translate from multiple languages, and multiple decoders to translate to multiple languages. In this view of multilingual translation, each language in source or target side is modeled by one encoder or decoder, depending on the side of the translation. Due to the natural diversity between two tasks in that multi-task learning scenario, e.g. translation and parsing, it could not feature the attention mechanism although it has proven its effectiveness in NMT. There exists two directions which proposed for multilingual translation scenarios where they leverage the attention mechanism. The first one is indicated in the work from BIBREF8 , where it introduce an one-to-many multilingual NMT system to translates from one source language into multiple target languages. Having one source language, the attention mechanism is then handed over to the corresponding decoder. The objective function is changed to adapt to multilingual settings. In testing time, the parameters specific to a desired language pair are used to perform the translation."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+      "attribution": 0.08692985796326382
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+      "attribution": 0.08449736491264231
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+      "attribution": 0.06360793362421137
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+      "attribution": -0.058982849910528476
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+      "attribution": 0.03143110334932018
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+      "attribution": 0.0012904118124114539
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+      "attribution": 0.12338428740214347
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+      "attribution": 0.035136627063067354
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+      "attribution": 0.01575321913026101
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+      "attribution": 0.011213736627298694
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+      "attribution": 0.0033847072614523895
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+      "attribution": -7.030582377197537e-05
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0030",
+      "interaction": -0.10191339319108077
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0031",
+      "interaction": -0.05509593351337376
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0003",
+      "interaction": -0.005686991988341355
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": -0.05779499403626377
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.02064142604413896
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0031",
+      "interaction": -0.03437518909778534
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0003",
+      "interaction": -0.015424647266271373
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": -0.026018597517863347
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.0392198659872626
+    },
+    {
+      "left": "1611.04798:paragraph:0031",
+      "right": "1611.04798:paragraph:0003",
+      "interaction": -0.012225683141147118
+    },
+    {
+      "left": "1611.04798:paragraph:0031",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": -0.014456559790045976
+    },
+    {
+      "left": "1611.04798:paragraph:0031",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.02591526924764669
+    },
+    {
+      "left": "1611.04798:paragraph:0003",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": -0.01499808149936277
+    },
+    {
+      "left": "1611.04798:paragraph:0003",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.05394327809056677
+    },
+    {
+      "left": "1611.04798:paragraph:0021",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.17809186667601423
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0030",
+      "interaction": -0.0026360119260582316
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0031",
+      "interaction": 0.0008161591179987248
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0003",
+      "interaction": -0.005709152930685813
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": 0.004337554813037076
+    },
+    {
+      "left": "1611.04798:paragraph:0037",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.0006677072018174771
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0031",
+      "interaction": -0.02117310978636761
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0003",
+      "interaction": -0.012938624760204168
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": -0.002739851446951218
+    },
+    {
+      "left": "1611.04798:paragraph:0030",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": 0.0017198723665624422
+    },
+    {
+      "left": "1611.04798:paragraph:0031",
+      "right": "1611.04798:paragraph:0003",
+      "interaction": -0.0065281831768007476
+    },
+    {
+      "left": "1611.04798:paragraph:0031",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": 0.0026971272630797946
+    },
+    {
+      "left": "1611.04798:paragraph:0031",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.007077143053674916
+    },
+    {
+      "left": "1611.04798:paragraph:0003",
+      "right": "1611.04798:paragraph:0021",
+      "interaction": -0.004052784341924853
+    },
+    {
+      "left": "1611.04798:paragraph:0003",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.0024843430180334415
+    },
+    {
+      "left": "1611.04798:paragraph:0021",
+      "right": "1611.04798:paragraph:0014",
+      "interaction": -0.001091683448520437
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.20877381961800234
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "remaining_chunks": 5,
+        "score": 0.17922566035582754
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "remaining_chunks": 4,
+        "score": 0.1741796450891464
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "remaining_chunks": 3,
+        "score": 0.1349717023968775
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "remaining_chunks": 2,
+        "score": 0.11537941800669027
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "remaining_chunks": 1,
+        "score": 0.10493345778995156
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "selected_chunks": 1,
+        "score": 0.24649985681940267
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "selected_chunks": 2,
+        "score": 0.3945511679292478
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "selected_chunks": 3,
+        "score": 0.369469041723812
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "selected_chunks": 4,
+        "score": 0.22799001398403773
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "selected_chunks": 5,
+        "score": 0.20611904813430992
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "selected_chunks": 6,
+        "score": 0.20877381961800234
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.20877381961800234
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "remaining_chunks": 5,
+        "score": 0.20898061778399357
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "remaining_chunks": 4,
+        "score": 0.08737416058666758
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "remaining_chunks": 3,
+        "score": 0.1106148132768503
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.09556411267124432
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "remaining_chunks": 1,
+        "score": 0.16690557265034334
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.20877381961800234
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "remaining_chunks": 5,
+        "score": 0.17922566035582754
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "remaining_chunks": 4,
+        "score": 0.1536355532339767
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.1916082215289342
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "remaining_chunks": 2,
+        "score": 0.09556411267124432
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "remaining_chunks": 1,
+        "score": 0.16690557265034334
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.20877381961800254
+      },
+      {
+        "step": 1,
+        "score": 0.22698254848855728
+      },
+      {
+        "step": 2,
+        "score": 0.23177476089336543
+      },
+      {
+        "step": 3,
+        "score": 0.234075716015592
+      },
+      {
+        "step": 4,
+        "score": 0.1887971170571174
+      },
+      {
+        "step": 5,
+        "score": 0.20393316660374142
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which languages do they test on for the under-resourced scenario?",
+    "expanded_queries": [
+      "Which languages do they test on for the under-resourced scenario?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1611.04798:paragraph:0027 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Evaluation",
+        "dense": 0.6586,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "In this section, we describe the evaluation of our proposed approach in comparisons with the strong baselines using NMT in two scenarios: the translation of an under-resource language pair and the translation of a langua"
+      },
+      {
+        "rank": 2,
+        "source": "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "dense": 0.6276,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-resourced Translation",
+        "flags": "",
+        "preview": "We evaluate bridge and universal systems on two German INLINEFORM0 French test sets. They are compared to a direct system, which is an NMT trained on German INLINEFORM1 French data, and to a pivot system, which essential"
+      },
+      {
+        "rank": 3,
+        "source": "1611.04798:paragraph:0035 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "dense": 0.6208,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-resourced Translation",
+        "flags": "",
+        "preview": "Among low-resourced scenarios, zero-resourced translation task stands in an extreme level. A zero-resourced translation task is one of the most difficult situation when there is no parallel data between the translating l"
+      },
+      {
+        "rank": 4,
+        "source": "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "dense": 0.6151,
+        "page": 1,
+        "type": "body_text",
+        "section": "Under-resourced Translation",
+        "flags": "",
+        "preview": "First, we consider the translation for an under-resourced pair of languages. Here a small portion of the large parallel corpus for English-German is used as a simulation for the scenario where we do not have much paralle"
+      },
+      {
+        "rank": 5,
+        "source": "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "dense": 0.5936,
+        "page": 1,
+        "type": "body_text",
+        "section": "Under-resourced Translation",
+        "flags": "",
+        "preview": "Table TABREF16 summarizes the performance of our systems measured in BLEU on two test sets, tst2013 and tst2014. Compared to the baseline NMT system which is solely trained on TED English-German data, our mix-source syst"
+      },
+      {
+        "rank": 6,
+        "source": "1611.04798:paragraph:0043 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Conclusion and Future Work",
+        "dense": 0.592,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion and Future Work",
+        "flags": "",
+        "preview": "Nevertheless, there are issues that we can continue working on to address in future work. A more balancing data would be helpful for this framework. The mechanism of forcing the NMT system to the right target language co"
+      },
+      {
+        "rank": 7,
+        "source": "1611.04798:paragraph:0040 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "dense": 0.5754,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-resourced Translation",
+        "flags": "",
+        "preview": "Balancing of the training corpus. Although it is not severe as in the case of mix-source system for large monolingual data, the limited number of sentences in target language can affect the training. The difference of 1."
+      },
+      {
+        "rank": 8,
+        "source": "1611.04798:paragraph:0018 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "dense": 0.5727,
+        "page": 1,
+        "type": "body_text",
+        "section": "Universal Encoder and Decoder",
+        "flags": "",
+        "preview": "Language-specific Coding. When the encoder of a NMT system considers words across languages as different words, with a well-chosen architecture, it is expected to be able to learn a good representation of the source word"
+      },
+      {
+        "rank": 9,
+        "source": "1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "dense": 0.572,
+        "page": 1,
+        "type": "body_text",
+        "section": "Universal Encoder and Decoder",
+        "flags": "",
+        "preview": "Target Forcing. While language-specific coding allows us to implement a multilingual attention-based NMT, there are two issues we have to consider before training the network. The first is that the number of rare words w"
+      },
+      {
+        "rank": 10,
+        "source": "1611.04798:paragraph:0026 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "dense": 0.565,
+        "page": 1,
+        "type": "body_text",
+        "section": "Universal Encoder and Decoder",
+        "flags": "",
+        "preview": "Figure FIGREF8 illustrates the essence of our approach. With two steps in the preprocessing phase, namely language-specific coding and target forcing, we are able to employ multilingual attention-based NMT without any sp"
+      },
+      {
+        "rank": 11,
+        "source": "1611.04798:paragraph:0017 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "dense": 0.5639,
+        "page": 1,
+        "type": "body_text",
+        "section": "Universal Encoder and Decoder",
+        "flags": "",
+        "preview": "Inspired by the multi-source NMT as additional parallel data in several languages are expected to benefit single translations, we aim to develop a NMT-based approach toward an universal framework to perform multilingual "
+      },
+      {
+        "rank": 12,
+        "source": "1611.04798:paragraph:0012 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Neural Machine Translation: Background",
+        "dense": 0.5612,
+        "page": 1,
+        "type": "body_text",
+        "section": "Neural Machine Translation: Background",
+        "flags": "",
+        "preview": "One of the most severe problems of NMT is handling of the rare words, which are not in the short lists of the vocabularies, i.e. out-of-vocabulary (OOV) words, or do not appear in the training set at all. In BIBREF6 , th"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1611.04798:paragraph:0035 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "keyword": 0.1184,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-resourced Translation",
+        "flags": "",
+        "preview": "Among low-resourced scenarios, zero-resourced translation task stands in an extreme level. A zero-resourced translation task is one of the most difficult situation when there is no parallel data between the translating l"
+      },
+      {
+        "rank": 2,
+        "source": "1611.04798:abstract:000 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Abstract",
+        "keyword": 0.0932,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "In this paper, we present our first attempts in building a multilingual Neural Machine Translation framework under a unified approach. We are then able to employ attention-based NMT for many-to-many multilingual translat"
+      },
+      {
+        "rank": 3,
+        "source": "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "keyword": 0.0766,
+        "page": 1,
+        "type": "body_text",
+        "section": "Under-resourced Translation",
+        "flags": "",
+        "preview": "First, we consider the translation for an under-resourced pair of languages. Here a small portion of the large parallel corpus for English-German is used as a simulation for the scenario where we do not have much paralle"
+      },
+      {
+        "rank": 4,
+        "source": "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "keyword": 0.0729,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-resourced Translation",
+        "flags": "",
+        "preview": "We evaluate bridge and universal systems on two German INLINEFORM0 French test sets. They are compared to a direct system, which is an NMT trained on German INLINEFORM1 French data, and to a pivot system, which essential"
+      },
+      {
+        "rank": 5,
+        "source": "1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "keyword": 0.0716,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In this paper, we introduce a unified approach to seamlessly extend the original NMT to multilingual settings. Our approach allows us to integrate any language in any side of the encoder-decoder architecture with only on"
+      },
+      {
+        "rank": 6,
+        "source": "1611.04798:paragraph:0026 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "keyword": 0.0687,
+        "page": 1,
+        "type": "body_text",
+        "section": "Universal Encoder and Decoder",
+        "flags": "",
+        "preview": "Figure FIGREF8 illustrates the essence of our approach. With two steps in the preprocessing phase, namely language-specific coding and target forcing, we are able to employ multilingual attention-based NMT without any sp"
+      },
+      {
+        "rank": 7,
+        "source": "1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "keyword": 0.0578,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "By extending the solution of sequence-to-sequence modeling using encoder-decoder architectures to multi-task learning, Luong2016 managed to achieve better performance on some INLINEFORM0 tasks such as translation, parsin"
+      },
+      {
+        "rank": 8,
+        "source": "1611.04798:paragraph:0042 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Conclusion and Future Work",
+        "keyword": 0.053,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion and Future Work",
+        "flags": "",
+        "preview": "In this paper, we present our first attempts in building a multilingual Neural Machine Translation framework. By treating words in different languages as different words and force the attention and translation to the dir"
+      },
+      {
+        "rank": 9,
+        "source": "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "keyword": 0.0494,
+        "page": 1,
+        "type": "body_text",
+        "section": "Under-resourced Translation",
+        "flags": "",
+        "preview": "Table TABREF16 summarizes the performance of our systems measured in BLEU on two test sets, tst2013 and tst2014. Compared to the baseline NMT system which is solely trained on TED English-German data, our mix-source syst"
+      },
+      {
+        "rank": 10,
+        "source": "1611.04798:paragraph:0036 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "keyword": 0.0486,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-resourced Translation",
+        "flags": "",
+        "preview": "We employ language-specific coding and target forcing in a strategy called bridge. Unlike the strategies used in under-resourced translation task, bridge is an entire many-to-many multilingual NMT. Simulating a zero-reso"
+      },
+      {
+        "rank": 11,
+        "source": "1611.04798:paragraph:0019 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "keyword": 0.0479,
+        "page": 1,
+        "type": "body_text",
+        "section": "Universal Encoder and Decoder",
+        "flags": "",
+        "preview": "We could apply the same trick to the target sentences and thus enable many-to-many translation capability of our NMT system. Similar to the multi-target translation BIBREF8 , we exploit further the correlation in semanti"
+      },
+      {
+        "rank": 12,
+        "source": "1611.04798:paragraph:0010 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Neural Machine Translation: Background",
+        "keyword": 0.0395,
+        "page": 1,
+        "type": "body_text",
+        "section": "Neural Machine Translation: Background",
+        "flags": "",
+        "preview": "Again, INLINEFORM0 is the recurrent activation function of the decoder and INLINEFORM1 is the shared word embedding matrix of the target sentences. The context vector INLINEFORM2 is calculated based on the annotation vec"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1611.04798:paragraph:0035 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6208,
+        "keyword": 0.1184,
+        "rerank": 0.8498,
+        "section": "Zero-resourced Translation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Among low-resourced scenarios, zero-resourced translation task stands in an extreme level. A zero-resourced translation task is one of the most difficult situation when there is no parallel data between the translating l"
+      },
+      {
+        "rank": 2,
+        "source": "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6276,
+        "keyword": 0.0729,
+        "rerank": 0.8387,
+        "section": "Zero-resourced Translation",
+        "query_hits": "languages, test, they",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate bridge and universal systems on two German INLINEFORM0 French test sets. They are compared to a direct system, which is an NMT trained on German INLINEFORM1 French data, and to a pivot system, which essential"
+      },
+      {
+        "rank": 3,
+        "source": "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6151,
+        "keyword": 0.0766,
+        "rerank": 0.8215,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages, scenario, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "First, we consider the translation for an under-resourced pair of languages. Here a small portion of the large parallel corpus for English-German is used as a simulation for the scenario where we do not have much paralle"
+      },
+      {
+        "rank": 4,
+        "source": "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5936,
+        "keyword": 0.0494,
+        "rerank": 0.6772,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages, test",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF16 summarizes the performance of our systems measured in BLEU on two test sets, tst2013 and tst2014. Compared to the baseline NMT system which is solely trained on TED English-German data, our mix-source syst"
+      },
+      {
+        "rank": 5,
+        "source": "1611.04798:paragraph:0026 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.565,
+        "keyword": 0.0687,
+        "rerank": 0.6353,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF8 illustrates the essence of our approach. With two steps in the preprocessing phase, namely language-specific coding and target forcing, we are able to employ multilingual attention-based NMT without any sp"
+      },
+      {
+        "rank": 6,
+        "source": "1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0716,
+        "rerank": 0.6148,
+        "section": "Introduction",
+        "query_hits": "languages, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we introduce a unified approach to seamlessly extend the original NMT to multilingual settings. Our approach allows us to integrate any language in any side of the encoder-decoder architecture with only on"
+      },
+      {
+        "rank": 7,
+        "source": "1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.572,
+        "keyword": 0.034,
+        "rerank": 0.5922,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages, they",
+        "reasons": "body/table evidence",
+        "preview": "Target Forcing. While language-specific coding allows us to implement a multilingual attention-based NMT, there are two issues we have to consider before training the network. The first is that the number of rare words w"
+      },
+      {
+        "rank": 8,
+        "source": "1611.04798:abstract:000 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4861,
+        "keyword": 0.0932,
+        "rerank": 0.5898,
+        "section": "Abstract",
+        "query_hits": "languages, scenario, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we present our first attempts in building a multilingual Neural Machine Translation framework under a unified approach. We are then able to employ attention-based NMT for many-to-many multilingual translat"
+      },
+      {
+        "rank": 9,
+        "source": "1611.04798:paragraph:0036 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.0486,
+        "rerank": 0.5643,
+        "section": "Zero-resourced Translation",
+        "query_hits": "under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "We employ language-specific coding and target forcing in a strategy called bridge. Unlike the strategies used in under-resourced translation task, bridge is an entire many-to-many multilingual NMT. Simulating a zero-reso"
+      },
+      {
+        "rank": 10,
+        "source": "1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5104,
+        "keyword": 0.0578,
+        "rerank": 0.5518,
+        "section": "Related Work",
+        "query_hits": "languages, scenario, they",
+        "reasons": "body/table evidence",
+        "preview": "By extending the solution of sequence-to-sequence modeling using encoder-decoder architectures to multi-task learning, Luong2016 managed to achieve better performance on some INLINEFORM0 tasks such as translation, parsin"
+      },
+      {
+        "rank": 11,
+        "source": "1611.04798:paragraph:0017 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5639,
+        "keyword": 0.0357,
+        "rerank": 0.5492,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Inspired by the multi-source NMT as additional parallel data in several languages are expected to benefit single translations, we aim to develop a NMT-based approach toward an universal framework to perform multilingual "
+      },
+      {
+        "rank": 12,
+        "source": "1611.04798:paragraph:0002 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5542,
+        "keyword": 0.027,
+        "rerank": 0.5368,
+        "section": "Introduction",
+        "query_hits": "languages, they",
+        "reasons": "body/table evidence",
+        "preview": "Some recent work has focused on extending the NMT framework to multilingual scenarios. By training such network using parallel corpora in number of different languages, NMT could benefit from additional information embed"
+      },
+      {
+        "rank": 13,
+        "source": "1611.04798:paragraph:0027 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6586,
+        "keyword": 0.0,
+        "rerank": 0.53,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we describe the evaluation of our proposed approach in comparisons with the strong baselines using NMT in two scenarios: the translation of an under-resource language pair and the translation of a langua"
+      },
+      {
+        "rank": 14,
+        "source": "1611.04798:paragraph:0018 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5727,
+        "keyword": 0.0201,
+        "rerank": 0.5285,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Language-specific Coding. When the encoder of a NMT system considers words across languages as different words, with a well-chosen architecture, it is expected to be able to learn a good representation of the source word"
+      },
+      {
+        "rank": 15,
+        "source": "1611.04798:paragraph:0028 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Experimental Settings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5553,
+        "keyword": 0.0327,
+        "rerank": 0.5236,
+        "section": "Experimental Settings",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Training Data. We choose WIT3's TED corpus BIBREF12 as the basis of our experiments since it might be the only high-quality parallel data of many low-resourced language pairs. TED is also multilingual in a sense that it "
+      },
+      {
+        "rank": 16,
+        "source": "1611.04798:paragraph:0032 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5598,
+        "keyword": 0.0168,
+        "rerank": 0.4927,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "As we expected Figure FIGREF19 shows how different words in different languages can be close in the shared space after being learned to translate into a common language. We extract the word embeddings from the encoder of"
+      },
+      {
+        "rank": 17,
+        "source": "1611.04798:paragraph:0042 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Conclusion and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.491,
+        "keyword": 0.053,
+        "rerank": 0.4684,
+        "section": "Conclusion and Future Work",
+        "query_hits": "languages, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we present our first attempts in building a multilingual Neural Machine Translation framework. By treating words in different languages as different words and force the attention and translation to the dir"
+      },
+      {
+        "rank": 18,
+        "source": "1611.04798:paragraph:0013 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder for Multilingual Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5408,
+        "keyword": 0.0219,
+        "rerank": 0.4653,
+        "section": "Universal Encoder and Decoder for Multilingual Neural Machine Translation",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "While the majority of previous research has focused on improving the performance of NMT on individual language pairs with individual NMT systems, recent work has started investigating potential ways to conduct the transl"
+      },
+      {
+        "rank": 19,
+        "source": "1611.04798:paragraph:0039 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5432,
+        "keyword": 0.0153,
+        "rerank": 0.4536,
+        "section": "Zero-resourced Translation",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Our target forcing mechanism is moderately primitive. Since the process is applied after language-specific coding, the target forcing symbol is the same for all source sentences in every languages. Thus, the forcing stre"
+      },
+      {
+        "rank": 20,
+        "source": "1611.04798:paragraph:0040 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5754,
+        "keyword": 0.0,
+        "rerank": 0.4534,
+        "section": "Zero-resourced Translation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Balancing of the training corpus. Although it is not severe as in the case of mix-source system for large monolingual data, the limited number of sentences in target language can affect the training. The difference of 1."
+      },
+      {
+        "rank": 21,
+        "source": "1611.04798:paragraph:0016 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5333,
+        "keyword": 0.0115,
+        "rerank": 0.4532,
+        "section": "Related Work",
+        "query_hits": "languages, they",
+        "reasons": "body/table evidence",
+        "preview": "In a separate effort to achieve multilingual NMT, the work of Zoph2016 leverages available parallel data from other language pairs to help reducing possible ambiguities in the translation process into a single target lan"
+      },
+      {
+        "rank": 22,
+        "source": "1611.04798:paragraph:0015 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5134,
+        "keyword": 0.0328,
+        "rerank": 0.4346,
+        "section": "Related Work",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Firat2016 proposed another approach which genuinely delivers attention-based NMT to multilingual translation. As in BIBREF9 , their approach utilizes one encoder per source language and one decoder per target language fo"
+      },
+      {
+        "rank": 23,
+        "source": "1611.04798:paragraph:0019 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4944,
+        "keyword": 0.0479,
+        "rerank": 0.4327,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "We could apply the same trick to the target sentences and thus enable many-to-many translation capability of our NMT system. Similar to the multi-target translation BIBREF8 , we exploit further the correlation in semanti"
+      },
+      {
+        "rank": 24,
+        "source": "1611.04798:paragraph:0033 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Using large monolingual data in NMT.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5498,
+        "keyword": 0.0,
+        "rerank": 0.429,
+        "section": "Using large monolingual data in NMT.",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "A standard NMT system employs parallel data only. While good parallel corpora are limited in number, getting monolingual data of an arbitrary language is trivial. To make use of German monolingual corpus in an English IN"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1611.04798:paragraph:0035 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6208,
+        "keyword": 0.1184,
+        "rerank": 0.8498,
+        "section": "Zero-resourced Translation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Among low-resourced scenarios, zero-resourced translation task stands in an extreme level. A zero-resourced translation task is one of the most difficult situation when there is no parallel data between the translating l"
+      },
+      {
+        "rank": 2,
+        "source": "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6276,
+        "keyword": 0.0729,
+        "rerank": 0.8387,
+        "section": "Zero-resourced Translation",
+        "query_hits": "languages, test, they",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate bridge and universal systems on two German INLINEFORM0 French test sets. They are compared to a direct system, which is an NMT trained on German INLINEFORM1 French data, and to a pivot system, which essential"
+      },
+      {
+        "rank": 3,
+        "source": "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6151,
+        "keyword": 0.0766,
+        "rerank": 0.8215,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages, scenario, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "First, we consider the translation for an under-resourced pair of languages. Here a small portion of the large parallel corpus for English-German is used as a simulation for the scenario where we do not have much paralle"
+      },
+      {
+        "rank": 4,
+        "source": "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5936,
+        "keyword": 0.0494,
+        "rerank": 0.6772,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages, test",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF16 summarizes the performance of our systems measured in BLEU on two test sets, tst2013 and tst2014. Compared to the baseline NMT system which is solely trained on TED English-German data, our mix-source syst"
+      },
+      {
+        "rank": 5,
+        "source": "1611.04798:paragraph:0026 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.565,
+        "keyword": 0.0687,
+        "rerank": 0.6353,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF8 illustrates the essence of our approach. With two steps in the preprocessing phase, namely language-specific coding and target forcing, we are able to employ multilingual attention-based NMT without any sp"
+      },
+      {
+        "rank": 6,
+        "source": "1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0716,
+        "rerank": 0.6148,
+        "section": "Introduction",
+        "query_hits": "languages, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we introduce a unified approach to seamlessly extend the original NMT to multilingual settings. Our approach allows us to integrate any language in any side of the encoder-decoder architecture with only on"
+      },
+      {
+        "rank": 7,
+        "source": "1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.572,
+        "keyword": 0.034,
+        "rerank": 0.5922,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages, they",
+        "reasons": "body/table evidence",
+        "preview": "Target Forcing. While language-specific coding allows us to implement a multilingual attention-based NMT, there are two issues we have to consider before training the network. The first is that the number of rare words w"
+      },
+      {
+        "rank": 8,
+        "source": "1611.04798:abstract:000 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4861,
+        "keyword": 0.0932,
+        "rerank": 0.5898,
+        "section": "Abstract",
+        "query_hits": "languages, scenario, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we present our first attempts in building a multilingual Neural Machine Translation framework under a unified approach. We are then able to employ attention-based NMT for many-to-many multilingual translat"
+      },
+      {
+        "rank": 9,
+        "source": "1611.04798:paragraph:0036 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.0486,
+        "rerank": 0.5643,
+        "section": "Zero-resourced Translation",
+        "query_hits": "under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "We employ language-specific coding and target forcing in a strategy called bridge. Unlike the strategies used in under-resourced translation task, bridge is an entire many-to-many multilingual NMT. Simulating a zero-reso"
+      },
+      {
+        "rank": 10,
+        "source": "1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5104,
+        "keyword": 0.0578,
+        "rerank": 0.5518,
+        "section": "Related Work",
+        "query_hits": "languages, scenario, they",
+        "reasons": "body/table evidence",
+        "preview": "By extending the solution of sequence-to-sequence modeling using encoder-decoder architectures to multi-task learning, Luong2016 managed to achieve better performance on some INLINEFORM0 tasks such as translation, parsin"
+      },
+      {
+        "rank": 11,
+        "source": "1611.04798:paragraph:0017 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5639,
+        "keyword": 0.0357,
+        "rerank": 0.5492,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Inspired by the multi-source NMT as additional parallel data in several languages are expected to benefit single translations, we aim to develop a NMT-based approach toward an universal framework to perform multilingual "
+      },
+      {
+        "rank": 12,
+        "source": "1611.04798:paragraph:0002 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5542,
+        "keyword": 0.027,
+        "rerank": 0.5368,
+        "section": "Introduction",
+        "query_hits": "languages, they",
+        "reasons": "body/table evidence",
+        "preview": "Some recent work has focused on extending the NMT framework to multilingual scenarios. By training such network using parallel corpora in number of different languages, NMT could benefit from additional information embed"
+      },
+      {
+        "rank": 13,
+        "source": "1611.04798:paragraph:0027 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6586,
+        "keyword": 0.0,
+        "rerank": 0.53,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we describe the evaluation of our proposed approach in comparisons with the strong baselines using NMT in two scenarios: the translation of an under-resource language pair and the translation of a langua"
+      },
+      {
+        "rank": 14,
+        "source": "1611.04798:paragraph:0018 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5727,
+        "keyword": 0.0201,
+        "rerank": 0.5285,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Language-specific Coding. When the encoder of a NMT system considers words across languages as different words, with a well-chosen architecture, it is expected to be able to learn a good representation of the source word"
+      },
+      {
+        "rank": 15,
+        "source": "1611.04798:paragraph:0028 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Experimental Settings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5553,
+        "keyword": 0.0327,
+        "rerank": 0.5236,
+        "section": "Experimental Settings",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Training Data. We choose WIT3's TED corpus BIBREF12 as the basis of our experiments since it might be the only high-quality parallel data of many low-resourced language pairs. TED is also multilingual in a sense that it "
+      },
+      {
+        "rank": 16,
+        "source": "1611.04798:paragraph:0032 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5598,
+        "keyword": 0.0168,
+        "rerank": 0.4927,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "As we expected Figure FIGREF19 shows how different words in different languages can be close in the shared space after being learned to translate into a common language. We extract the word embeddings from the encoder of"
+      },
+      {
+        "rank": 17,
+        "source": "1611.04798:paragraph:0042 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Conclusion and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.491,
+        "keyword": 0.053,
+        "rerank": 0.4684,
+        "section": "Conclusion and Future Work",
+        "query_hits": "languages, under-resourced",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we present our first attempts in building a multilingual Neural Machine Translation framework. By treating words in different languages as different words and force the attention and translation to the dir"
+      },
+      {
+        "rank": 18,
+        "source": "1611.04798:paragraph:0013 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder for Multilingual Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5408,
+        "keyword": 0.0219,
+        "rerank": 0.4653,
+        "section": "Universal Encoder and Decoder for Multilingual Neural Machine Translation",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "While the majority of previous research has focused on improving the performance of NMT on individual language pairs with individual NMT systems, recent work has started investigating potential ways to conduct the transl"
+      },
+      {
+        "rank": 19,
+        "source": "1611.04798:paragraph:0039 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5432,
+        "keyword": 0.0153,
+        "rerank": 0.4536,
+        "section": "Zero-resourced Translation",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Our target forcing mechanism is moderately primitive. Since the process is applied after language-specific coding, the target forcing symbol is the same for all source sentences in every languages. Thus, the forcing stre"
+      },
+      {
+        "rank": 20,
+        "source": "1611.04798:paragraph:0040 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5754,
+        "keyword": 0.0,
+        "rerank": 0.4534,
+        "section": "Zero-resourced Translation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Balancing of the training corpus. Although it is not severe as in the case of mix-source system for large monolingual data, the limited number of sentences in target language can affect the training. The difference of 1."
+      },
+      {
+        "rank": 21,
+        "source": "1611.04798:paragraph:0016 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5333,
+        "keyword": 0.0115,
+        "rerank": 0.4532,
+        "section": "Related Work",
+        "query_hits": "languages, they",
+        "reasons": "body/table evidence",
+        "preview": "In a separate effort to achieve multilingual NMT, the work of Zoph2016 leverages available parallel data from other language pairs to help reducing possible ambiguities in the translation process into a single target lan"
+      },
+      {
+        "rank": 22,
+        "source": "1611.04798:paragraph:0015 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5134,
+        "keyword": 0.0328,
+        "rerank": 0.4346,
+        "section": "Related Work",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "Firat2016 proposed another approach which genuinely delivers attention-based NMT to multilingual translation. As in BIBREF9 , their approach utilizes one encoder per source language and one decoder per target language fo"
+      },
+      {
+        "rank": 23,
+        "source": "1611.04798:paragraph:0019 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4944,
+        "keyword": 0.0479,
+        "rerank": 0.4327,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages",
+        "reasons": "body/table evidence",
+        "preview": "We could apply the same trick to the target sentences and thus enable many-to-many translation capability of our NMT system. Similar to the multi-target translation BIBREF8 , we exploit further the correlation in semanti"
+      },
+      {
+        "rank": 24,
+        "source": "1611.04798:paragraph:0033 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Using large monolingual data in NMT.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5498,
+        "keyword": 0.0,
+        "rerank": 0.429,
+        "section": "Using large monolingual data in NMT.",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "A standard NMT system employs parallel data only. While good parallel corpora are limited in number, getting monolingual data of an arbitrary language is trivial. To make use of German monolingual corpus in an English IN"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6276,
+        "keyword": 0.0729,
+        "rerank": 0.8387,
+        "section": "Zero-resourced Translation",
+        "query_hits": "languages, test, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9873,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3091,
+        "reasons": "body/table evidence",
+        "preview": "We evaluate bridge and universal systems on two German INLINEFORM0 French test sets. They are compared to a direct system, which is an NMT trained on German INLINEFORM1 French data, and to a pivot system, which essential"
+      },
+      {
+        "rank": 2,
+        "source": "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6151,
+        "keyword": 0.0766,
+        "rerank": 0.8215,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages, scenario, under-resourced",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9675,
+        "novelty": 0.8347,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2689,
+        "reasons": "body/table evidence",
+        "preview": "First, we consider the translation for an under-resourced pair of languages. Here a small portion of the large parallel corpus for English-German is used as a simulation for the scenario where we do not have much paralle"
+      },
+      {
+        "rank": 3,
+        "source": "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5936,
+        "keyword": 0.0494,
+        "rerank": 0.6772,
+        "section": "Under-resourced Translation",
+        "query_hits": "languages, test",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8017,
+        "novelty": 0.4451,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1917,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF16 summarizes the performance of our systems measured in BLEU on two test sets, tst2013 and tst2014. Compared to the baseline NMT system which is solely trained on TED English-German data, our mix-source syst"
+      },
+      {
+        "rank": 4,
+        "source": "1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0716,
+        "rerank": 0.6148,
+        "section": "Introduction",
+        "query_hits": "languages, under-resourced",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7298,
+        "novelty": 0.7126,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1674,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we introduce a unified approach to seamlessly extend the original NMT to multilingual settings. Our approach allows us to integrate any language in any side of the encoder-decoder architecture with only on"
+      },
+      {
+        "rank": 5,
+        "source": "1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.572,
+        "keyword": 0.034,
+        "rerank": 0.5922,
+        "section": "Universal Encoder and Decoder",
+        "query_hits": "languages, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7039,
+        "novelty": 0.6958,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1428,
+        "reasons": "body/table evidence",
+        "preview": "Target Forcing. While language-specific coding allows us to implement a multilingual attention-based NMT, there are two issues we have to consider before training the network. The first is that the number of rare words w"
+      },
+      {
+        "rank": 6,
+        "source": "1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5104,
+        "keyword": 0.0578,
+        "rerank": 0.5518,
+        "section": "Related Work",
+        "query_hits": "languages, scenario, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6574,
+        "novelty": 0.6889,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1418,
+        "reasons": "body/table evidence",
+        "preview": "By extending the solution of sequence-to-sequence modeling using encoder-decoder architectures to multi-task learning, Luong2016 managed to achieve better performance on some INLINEFORM0 tasks such as translation, parsin"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "languages",
+        "scenario",
+        "test",
+        "they",
+        "under-resourced"
+      ],
+      "covered_query_terms": [
+        "languages",
+        "scenario",
+        "test",
+        "they",
+        "under-resourced"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation": [
+          "languages",
+          "test",
+          "they"
+        ],
+        "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation": [
+          "languages",
+          "scenario",
+          "under-resourced"
+        ],
+        "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation": [
+          "languages",
+          "test"
+        ],
+        "1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction": [
+          "languages",
+          "under-resourced"
+        ],
+        "1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder": [
+          "languages",
+          "they"
+        ],
+        "1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work": [
+          "languages",
+          "scenario",
+          "they"
+        ]
+      },
+      "section_titles": [
+        "Introduction",
+        "Related Work",
+        "Under-resourced Translation",
+        "Universal Encoder and Decoder",
+        "Zero-resourced Translation"
+      ],
+      "chunks_by_section": {
+        "Zero-resourced Translation": [
+          "1611.04798:paragraph:0037 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Zero-resourced Translation"
+        ],
+        "Under-resourced Translation": [
+          "1611.04798:paragraph:0030 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation",
+          "1611.04798:paragraph:0031 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Under-resourced Translation"
+        ],
+        "Introduction": [
+          "1611.04798:paragraph:0003 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Introduction"
+        ],
+        "Universal Encoder and Decoder": [
+          "1611.04798:paragraph:0021 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Universal Encoder and Decoder"
+        ],
+        "Related Work": [
+          "1611.04798:paragraph:0014 | Toward Multilingual Neural Machine Translation with Universal Encoder and Decoder / Related Work"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "For the under-resourced scenario, the context mentions using a small portion of the large parallel corpus for **English-German** as a simulation where there is not much parallel data, specifically translating texts from English to German. Additionally, when investigating multilinguality, a similar portion of the **French-German** parallel corpus was incorporated into the English-German one.",
+    "retrieved_context_answer": "For the under-resourced translation scenario, the context mentions using:\n\n*   **English to German**: A small portion of the large parallel corpus for English-German is used as a simulation for this scenario.\n*   **French-German**: A similar portion of the French-German parallel corpus is incorporated into the English-German one in the mix-multi-source approach.\n\nAdditionally, when discussing zero-resourced translation, two German and French test sets are",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.06779661016949151,
+    "retrieved_context_f1": 0.05633802816901409,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

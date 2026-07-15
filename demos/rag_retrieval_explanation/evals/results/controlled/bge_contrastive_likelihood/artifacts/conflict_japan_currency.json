@@ -1,0 +1,3376 @@
+{
+  "case": {
+    "case_id": "conflict_japan_currency",
+    "pattern": "conflicting_evidence",
+    "question": "What is the official currency of Japan?",
+    "gold_answer": "The yen.",
+    "gold_evidence_ids": [
+      "conflict_japan_yen"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_japan_yen",
+        "right": "conflict_japan_yuan",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_japan_yen",
+        "right": "conflict_japan_won",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_japan_yen",
+      "score": 0.92,
+      "title": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+      "text": "The official currency of Japan is the yen."
+    },
+    {
+      "rank": 2,
+      "passage_id": "direct_tokyo_currency",
+      "score": 0.808925850228361,
+      "title": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+      "text": "The yen is the official currency used in Japan."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_japan_yuan",
+      "score": 0.692747485891137,
+      "title": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+      "text": "A mistaken note says Japan uses the yuan as its official currency."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_japan_islands",
+      "score": 0.37565407053643696,
+      "title": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+      "text": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_japan_tokyo",
+      "score": 0.3607266195188792,
+      "title": "Retrieved 5: missing_japan_tokyo | Tokyo",
+      "text": "Tokyo is Japan's capital and its largest metropolitan area."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_japan_won",
+      "score": 0.36331306946427944,
+      "title": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+      "text": "Another incorrect summary claims Japan uses the won."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+      "attribution": 0.15482348882492108
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+      "attribution": 0.0641153961153248
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_tokyo | Tokyo",
+      "attribution": 0.02689762658514738
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.02485090723856931
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+      "attribution": 0.021218540223706422
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+      "attribution": -0.004407612682058193
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+      "attribution": 0.08844191913280457
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+      "attribution": 0.057768248196837506
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_tokyo | Tokyo",
+      "attribution": 0.009073324930871186
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+      "attribution": 0.008039361135113332
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.006714107787662193
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+      "attribution": -0.0026039703084577426
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_yuan",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.0002164360775089216,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_won",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.04062521392636279,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_yuan",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.009454878419218956,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_won",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.007532072743754704,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_japan_yen",
+      "right": "direct_tokyo_currency",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.2244821978815521,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_yuan",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.0002164360775089216,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.030390878748427122,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "missing_japan_tokyo",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.04264492982063486,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_won",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.04062521392636279,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "conflict_japan_yuan",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.0028073317971974558,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.02750472148532598,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "missing_japan_tokyo",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.034771217259394305,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "conflict_japan_won",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.023964635918276297,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yuan",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.03565326694829339,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yuan",
+      "right": "missing_japan_tokyo",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.0408529370708651,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yuan",
+      "right": "conflict_japan_won",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.02851773999251721,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_japan_tokyo",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.0605014502471116,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "conflict_japan_won",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.031144213102597403,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "conflict_japan_won",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.04095688135224439,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_japan_yen",
+      "right": "direct_tokyo_currency",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.12397225445679566,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_yuan",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.009454878419218956,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.005649069774786344,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "missing_japan_tokyo",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.008295279104725708,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yen",
+      "right": "conflict_japan_won",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.007532072743754704,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "conflict_japan_yuan",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": 0.01370924995976329,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.008217253509832182,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "missing_japan_tokyo",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.009151304634698893,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_currency",
+      "right": "conflict_japan_won",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.005838133361515553,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yuan",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.022037837471240076,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yuan",
+      "right": "missing_japan_tokyo",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.02060959140468422,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_japan_yuan",
+      "right": "conflict_japan_won",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.03558872230803922,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_japan_tokyo",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.03232745296144253,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "conflict_japan_won",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.006687666841384557,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_tokyo",
+      "right": "conflict_japan_won",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.0209877702030969,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_japan_yen"
+      ],
+      "score": 0.2870625710216921
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency"
+      ],
+      "score": 0.3564120092650599
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan"
+      ],
+      "score": 0.10183902387582577
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.19627979404183138
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo"
+      ],
+      "score": 0.2221232264991594
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_won"
+      ],
+      "score": 0.17435228985277884
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency"
+      ],
+      "score": 0.30856333066428465
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan"
+      ],
+      "score": 0.24180362862601457
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands"
+      ],
+      "score": 0.24750914221180198
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.2324732761659447
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_won"
+      ],
+      "score": 0.2289052151511205
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan"
+      ],
+      "score": 0.3263376753379592
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands"
+      ],
+      "score": 0.33494977670378234
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.33551660019587803
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_won"
+      ],
+      "score": 0.33747909565005485
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.05274247532283449
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.06772036614183607
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.06191863128180175
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.07074493911989999
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.13358385907631953
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.1274484294321353
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan"
+      ],
+      "score": 0.2861016482942008
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands"
+      ],
+      "score": 0.2769222473837536
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.28118027562947756
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_won"
+      ],
+      "score": 0.28223593919056655
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.23709459331986016
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.24059954872560962
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.22986889748974104
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.24889406837762407
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.22771664262951008
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.21525358884786516
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.3369690743513528
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.3308991800527604
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.32687499754929505
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.33840398369154745
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.33719935579069926
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.3288435851552707
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.03221465788364586
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.05840501191682146
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.05285510966677376
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.1044966269616705
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.2876048129989449
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.2779977214187004
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.2845912384581071
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.291962637052959
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.284795220229468
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.29158941435350505
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.2483297574740373
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.24570810444477875
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.24326529007335584
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.23480788307915224
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.3338983830592218
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.3387671114549641
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.33841809899448927
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.33764180238644004
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.053540346670134076
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.27835474388303505
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.28510253896623305
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.2764130860899203
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.2937070374935168
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.2446164444492912
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.338795434899793
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.28749834448890477
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_japan_yen"
+      ],
+      "score": 0.1674755959019869
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency"
+      ],
+      "score": 0.1334623362481795
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan"
+      ],
+      "score": 0.05520663413590454
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.07481450775940024
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo"
+      ],
+      "score": 0.09132911231031615
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_won"
+      ],
+      "score": 0.07643636735219794
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency"
+      ],
+      "score": 0.16749361110747563
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan"
+      ],
+      "score": 0.16737333969447532
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands"
+      ],
+      "score": 0.16736617707162704
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16750705164118462
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_won"
+      ],
+      "score": 0.16753765928734266
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan"
+      ],
+      "score": 0.14717965002919542
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands"
+      ],
+      "score": 0.133863501802155
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.13522638113924024
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_won"
+      ],
+      "score": 0.1414536940979383
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": -0.002891746703460596
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.010848026576371406
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": -0.027678640632998408
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": -0.00800203003114297
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.07500858685676137
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.044181966039452125
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan"
+      ],
+      "score": 0.16722837824384063
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands"
+      ],
+      "score": 0.16747380843657655
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16734391239351187
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_won"
+      ],
+      "score": 0.1673425245316671
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.16751980991227045
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16753723598716475
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.1672857714120226
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16756032896256345
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.16744239819954332
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.16740430635475634
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.13637192992338287
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.14009507894081952
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.14144981800380263
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.13654697538991545
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.13848648351369774
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.1371722645506227
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.0007788085599546024
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": -0.01755845949948054
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": -0.02956697833594385
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.03983524750646761
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands"
+      ],
+      "score": 0.16753288538919564
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16766018155758022
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "conflict_japan_won"
+      ],
+      "score": 0.16747650138943326
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16763985485006982
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.1674165020837548
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.16747159767590258
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.1675702408337003
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.16748739049995798
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.16752595965552342
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.1675541912935985
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.1367115168676336
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.13625003184802909
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.13898828715368627
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.13520339896047695
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": -0.02387555721723189
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo"
+      ],
+      "score": 0.16763099036911777
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "conflict_japan_won"
+      ],
+      "score": 0.16747527839713572
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.16753776511234486
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.1672983810398967
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.16744035193477358
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.13595119396535016
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_japan_yen",
+        "direct_tokyo_currency",
+        "conflict_japan_yuan",
+        "missing_japan_islands",
+        "missing_japan_tokyo",
+        "conflict_japan_won"
+      ],
+      "score": 0.1674329900839041
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.28749834448890477
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+        "remaining_chunks": 5,
+        "score": 0.2446164444492912
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+        "remaining_chunks": 4,
+        "score": 0.053540346670134076
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: missing_japan_tokyo | Tokyo",
+        "remaining_chunks": 3,
+        "score": 0.05840501191682146
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 2,
+        "score": 0.06191863128180175
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+        "remaining_chunks": 1,
+        "score": 0.10183902387582577
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+        "selected_chunks": 1,
+        "score": 0.3564120092650599
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+        "selected_chunks": 2,
+        "score": 0.30856333066428465
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: missing_japan_tokyo | Tokyo",
+        "selected_chunks": 3,
+        "score": 0.28118027562947756
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+        "selected_chunks": 4,
+        "score": 0.291962637052959
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+        "selected_chunks": 5,
+        "score": 0.2937070374935168
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+        "selected_chunks": 6,
+        "score": 0.28749834448890477
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.28749834448890477
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+        "remaining_chunks": 5,
+        "score": 0.338795434899793
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+        "remaining_chunks": 4,
+        "score": 0.053540346670134076
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+        "remaining_chunks": 3,
+        "score": 0.1044966269616705
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 2,
+        "score": 0.1274484294321353
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+        "remaining_chunks": 1,
+        "score": 0.2221232264991594
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_japan_tokyo | Tokyo",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.28749834448890477
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: direct_tokyo_currency | Japan currency note",
+        "remaining_chunks": 5,
+        "score": 0.2446164444492912
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 4,
+        "score": 0.24326529007335584
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: conflict_japan_won | Japan currency won conflict",
+        "remaining_chunks": 3,
+        "score": 0.24059954872560962
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: missing_japan_tokyo | Tokyo",
+        "remaining_chunks": 2,
+        "score": 0.24180362862601457
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: conflict_japan_yuan | Japan currency yuan conflict",
+        "remaining_chunks": 1,
+        "score": 0.2870625710216921
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: conflict_japan_yen | Japan currency correct",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.28749834448890454
+      },
+      {
+        "step": 1,
+        "score": 0.2902452077677866
+      },
+      {
+        "step": 2,
+        "score": 0.2836709828271143
+      },
+      {
+        "step": 3,
+        "score": 0.26544866185967947
+      },
+      {
+        "step": 4,
+        "score": 0.22976464286775947
+      },
+      {
+        "step": 5,
+        "score": 0.24149024769180347
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the official currency of Japan?",
+    "expanded_queries": [
+      "What is the official currency of Japan?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_japan_yen | Japan currency correct",
+        "dense": 0.83,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "The official currency of Japan is the yen."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "dense": 0.8215,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_yuan | Japan currency yuan conflict",
+        "dense": 0.736,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "A mistaken note says Japan uses the yuan as its official currency."
+      },
+      {
+        "rank": 4,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "dense": 0.6053,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "dense": 0.6053,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 6,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "dense": 0.5761,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "dense": 0.55,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_tokyo | Tokyo",
+        "dense": 0.5464,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 9,
+        "source": "missing_japan_economy | Japanese economy",
+        "dense": 0.5369,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japan has major manufacturing, technology, service, and export industries."
+      },
+      {
+        "rank": 10,
+        "source": "missing_japan_language | Japanese language",
+        "dense": 0.5292,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 11,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "dense": 0.5163,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 12,
+        "source": "direct_tokyo_osaka | Osaka distractor",
+        "dense": 0.4582,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Osaka is a large Japanese city and an important commercial centre."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_japan_yen | Japan currency correct",
+        "keyword": 0.8189,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "The official currency of Japan is the yen."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "keyword": 0.5345,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_yuan | Japan currency yuan conflict",
+        "keyword": 0.4066,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "A mistaken note says Japan uses the yuan as its official currency."
+      },
+      {
+        "rank": 4,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "keyword": 0.118,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "keyword": 0.118,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 6,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "keyword": 0.0885,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 7,
+        "source": "missing_japan_tokyo | Tokyo",
+        "keyword": 0.084,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "keyword": 0.083,
+        "page": 25,
+        "type": "body_text",
+        "section": "japan_currency",
+        "flags": "",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      },
+      {
+        "rank": 9,
+        "source": "missing_japan_economy | Japanese economy",
+        "keyword": 0.0715,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japan has major manufacturing, technology, service, and export industries."
+      },
+      {
+        "rank": 10,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "keyword": 0.0588,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_japan_yen | Japan currency correct",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.83,
+        "keyword": 0.8189,
+        "rerank": 0.92,
+        "section": "japan_currency",
+        "query_hits": "currency, japan, official",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The official currency of Japan is the yen."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.8215,
+        "keyword": 0.5345,
+        "rerank": 0.8089,
+        "section": "japan_capital",
+        "query_hits": "currency, japan, official",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_yuan | Japan currency yuan conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.736,
+        "keyword": 0.4066,
+        "rerank": 0.6927,
+        "section": "japan_currency",
+        "query_hits": "currency, japan, official",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken note says Japan uses the yuan as its official currency."
+      },
+      {
+        "rank": 4,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.6053,
+        "keyword": 0.118,
+        "rerank": 0.421,
+        "section": "japan_capital",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.6053,
+        "keyword": 0.118,
+        "rerank": 0.421,
+        "section": "japan_currency",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 6,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0588,
+        "rerank": 0.3757,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.55,
+        "keyword": 0.083,
+        "rerank": 0.3633,
+        "section": "japan_currency",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5464,
+        "keyword": 0.084,
+        "rerank": 0.3607,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 9,
+        "source": "missing_japan_economy | Japanese economy",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5369,
+        "keyword": 0.0715,
+        "rerank": 0.3485,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan has major manufacturing, technology, service, and export industries."
+      },
+      {
+        "rank": 10,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.5163,
+        "keyword": 0.0885,
+        "rerank": 0.338,
+        "section": "japan_capital",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 11,
+        "source": "missing_japan_language | Japanese language",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5292,
+        "keyword": 0.0,
+        "rerank": 0.286,
+        "section": "japan_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 12,
+        "source": "direct_tokyo_osaka | Osaka distractor",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.4582,
+        "keyword": 0.0,
+        "rerank": 0.2284,
+        "section": "japan_capital",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Osaka is a large Japanese city and an important commercial centre."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_australia_correct | Federal capital",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.4355,
+        "keyword": 0.0,
+        "rerank": 0.21,
+        "section": "australian_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Canberra is the capital city of Australia and the seat of the federal government."
+      },
+      {
+        "rank": 14,
+        "source": "direct_canada_evidence | Canadian federal capital",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.4249,
+        "keyword": 0.0,
+        "rerank": 0.2014,
+        "section": "canadian_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Ottawa is the capital city of Canada and the seat of the federal government."
+      },
+      {
+        "rank": 15,
+        "source": "direct_olympics_evidence | 2008 Summer Olympics host",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4216,
+        "keyword": 0.0,
+        "rerank": 0.1988,
+        "section": "olympics_2008",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The 2008 Summer Olympics were hosted by Beijing, China."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4125,
+        "keyword": 0.0,
+        "rerank": 0.1914,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4008,
+        "keyword": 0.0,
+        "rerank": 0.1819,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      },
+      {
+        "rank": 18,
+        "source": "conflict_mercury_element_distractor | Mercury element distractor",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4003,
+        "keyword": 0.0,
+        "rerank": 0.1815,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is also the name of a chemical element with symbol Hg."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_france_a | French national capital",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.3978,
+        "keyword": 0.0,
+        "rerank": 0.1795,
+        "section": "france_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is the capital city of France."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.3951,
+        "keyword": 0.0,
+        "rerank": 0.1773,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 21,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.3859,
+        "keyword": 0.0,
+        "rerank": 0.1698,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_france_b | Seat of French government",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.3789,
+        "keyword": 0.0,
+        "rerank": 0.1642,
+        "section": "france_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "France's capital and national seat of government is Paris."
+      },
+      {
+        "rank": 23,
+        "source": "direct_canada_toronto | Toronto",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.3783,
+        "keyword": 0.0,
+        "rerank": 0.1636,
+        "section": "canadian_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Toronto is Canada's most populous city and the capital of Ontario."
+      },
+      {
+        "rank": 24,
+        "source": "comp_treaty_germany_distractor | Germany at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.376,
+        "keyword": 0.0,
+        "rerank": 0.1618,
+        "section": "versailles_signatories",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Germany was required to accept the Treaty of Versailles after World War I."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_japan_yen | Japan currency correct",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.83,
+        "keyword": 0.8189,
+        "rerank": 0.92,
+        "section": "japan_currency",
+        "query_hits": "currency, japan, official",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The official currency of Japan is the yen."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.8215,
+        "keyword": 0.5345,
+        "rerank": 0.8089,
+        "section": "japan_capital",
+        "query_hits": "currency, japan, official",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_yuan | Japan currency yuan conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.736,
+        "keyword": 0.4066,
+        "rerank": 0.6927,
+        "section": "japan_currency",
+        "query_hits": "currency, japan, official",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken note says Japan uses the yuan as its official currency."
+      },
+      {
+        "rank": 4,
+        "source": "direct_tokyo_evidence | Japan national capital",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.6053,
+        "keyword": 0.118,
+        "rerank": 0.421,
+        "section": "japan_capital",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_japan_tokyo_distractor | Japan capital distractor",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.6053,
+        "keyword": 0.118,
+        "rerank": 0.421,
+        "section": "japan_currency",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is the capital city of Japan."
+      },
+      {
+        "rank": 6,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0588,
+        "rerank": 0.3757,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.55,
+        "keyword": 0.083,
+        "rerank": 0.3633,
+        "section": "japan_currency",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5464,
+        "keyword": 0.084,
+        "rerank": 0.3607,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 9,
+        "source": "missing_japan_economy | Japanese economy",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5369,
+        "keyword": 0.0715,
+        "rerank": 0.3485,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan has major manufacturing, technology, service, and export industries."
+      },
+      {
+        "rank": 10,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.5163,
+        "keyword": 0.0885,
+        "rerank": 0.338,
+        "section": "japan_capital",
+        "query_hits": "japan",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 11,
+        "source": "missing_japan_language | Japanese language",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5292,
+        "keyword": 0.0,
+        "rerank": 0.286,
+        "section": "japan_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 12,
+        "source": "direct_tokyo_osaka | Osaka distractor",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.4582,
+        "keyword": 0.0,
+        "rerank": 0.2284,
+        "section": "japan_capital",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Osaka is a large Japanese city and an important commercial centre."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_australia_correct | Federal capital",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.4355,
+        "keyword": 0.0,
+        "rerank": 0.21,
+        "section": "australian_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Canberra is the capital city of Australia and the seat of the federal government."
+      },
+      {
+        "rank": 14,
+        "source": "direct_canada_evidence | Canadian federal capital",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.4249,
+        "keyword": 0.0,
+        "rerank": 0.2014,
+        "section": "canadian_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Ottawa is the capital city of Canada and the seat of the federal government."
+      },
+      {
+        "rank": 15,
+        "source": "direct_olympics_evidence | 2008 Summer Olympics host",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4216,
+        "keyword": 0.0,
+        "rerank": 0.1988,
+        "section": "olympics_2008",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The 2008 Summer Olympics were hosted by Beijing, China."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4125,
+        "keyword": 0.0,
+        "rerank": 0.1914,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4008,
+        "keyword": 0.0,
+        "rerank": 0.1819,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      },
+      {
+        "rank": 18,
+        "source": "conflict_mercury_element_distractor | Mercury element distractor",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4003,
+        "keyword": 0.0,
+        "rerank": 0.1815,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is also the name of a chemical element with symbol Hg."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_france_a | French national capital",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.3978,
+        "keyword": 0.0,
+        "rerank": 0.1795,
+        "section": "france_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paris is the capital city of France."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.3951,
+        "keyword": 0.0,
+        "rerank": 0.1773,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 21,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.3859,
+        "keyword": 0.0,
+        "rerank": 0.1698,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_france_b | Seat of French government",
+        "page": 18,
+        "type": "body_text",
+        "dense": 0.3789,
+        "keyword": 0.0,
+        "rerank": 0.1642,
+        "section": "france_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "France's capital and national seat of government is Paris."
+      },
+      {
+        "rank": 23,
+        "source": "direct_canada_toronto | Toronto",
+        "page": 2,
+        "type": "body_text",
+        "dense": 0.3783,
+        "keyword": 0.0,
+        "rerank": 0.1636,
+        "section": "canadian_cities",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Toronto is Canada's most populous city and the capital of Ontario."
+      },
+      {
+        "rank": 24,
+        "source": "comp_treaty_germany_distractor | Germany at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.376,
+        "keyword": 0.0,
+        "rerank": 0.1618,
+        "section": "versailles_signatories",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Germany was required to accept the Treaty of Versailles after World War I."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_japan_yen | Japan currency correct",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.83,
+        "keyword": 0.8189,
+        "rerank": 0.92,
+        "section": "japan_currency",
+        "query_hits": "currency, japan, official",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The official currency of Japan is the yen."
+      },
+      {
+        "rank": 2,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.8215,
+        "keyword": 0.5345,
+        "rerank": 0.8089,
+        "section": "japan_capital",
+        "query_hits": "currency, japan, official",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8818,
+        "novelty": 0.4333,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.959,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_japan_yuan | Japan currency yuan conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.736,
+        "keyword": 0.4066,
+        "rerank": 0.6927,
+        "section": "japan_currency",
+        "query_hits": "currency, japan, official",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7582,
+        "novelty": 0.4033,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8486,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken note says Japan uses the yuan as its official currency."
+      },
+      {
+        "rank": 4,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0588,
+        "rerank": 0.3757,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4209,
+        "novelty": 0.725,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6835,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 5,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.5464,
+        "keyword": 0.084,
+        "rerank": 0.3607,
+        "section": "japan_overview",
+        "query_hits": "japan",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.405,
+        "novelty": 0.4767,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6351,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.55,
+        "keyword": 0.083,
+        "rerank": 0.3633,
+        "section": "japan_currency",
+        "query_hits": "japan",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4078,
+        "novelty": 0.4529,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6341,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "currency",
+        "japan",
+        "official"
+      ],
+      "covered_query_terms": [
+        "currency",
+        "japan",
+        "official"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_japan_yen | Japan currency correct": [
+          "currency",
+          "japan",
+          "official"
+        ],
+        "direct_tokyo_currency | Japan currency note": [
+          "currency",
+          "japan",
+          "official"
+        ],
+        "conflict_japan_yuan | Japan currency yuan conflict": [
+          "currency",
+          "japan",
+          "official"
+        ],
+        "missing_japan_islands | Japanese archipelago": [
+          "japan"
+        ],
+        "missing_japan_tokyo | Tokyo": [
+          "japan"
+        ],
+        "conflict_japan_won | Japan currency won conflict": [
+          "japan"
+        ]
+      },
+      "section_titles": [
+        "japan_capital",
+        "japan_currency",
+        "japan_overview"
+      ],
+      "chunks_by_section": {
+        "japan_currency": [
+          "conflict_japan_yen | Japan currency correct",
+          "conflict_japan_yuan | Japan currency yuan conflict",
+          "conflict_japan_won | Japan currency won conflict"
+        ],
+        "japan_capital": [
+          "direct_tokyo_currency | Japan currency note"
+        ],
+        "japan_overview": [
+          "missing_japan_islands | Japanese archipelago",
+          "missing_japan_tokyo | Tokyo"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The official currency of Japan is the yen.",
+    "retrieved_context_answer": "The official currency of Japan is the yen.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.4,
+    "retrieved_context_f1": 0.4,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

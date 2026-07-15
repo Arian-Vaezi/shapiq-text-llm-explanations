@@ -1,0 +1,3374 @@
+{
+  "case": {
+    "case_id": "conflict_solar_system_center",
+    "pattern": "conflicting_evidence",
+    "question": "What is the central body of the Solar System?",
+    "gold_answer": "The Sun.",
+    "gold_evidence_ids": [
+      "conflict_solar_sun"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_solar_sun",
+        "right": "conflict_solar_earth",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_solar_sun",
+        "right": "conflict_solar_jupiter",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_solar_sun",
+      "score": 0.88,
+      "title": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+      "text": "The Sun is the central body of the Solar System."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_solar_jupiter",
+      "score": 0.12058648367613882,
+      "title": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+      "text": "A wrong summary claims Jupiter is the centre of the Solar System."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_planet_earth",
+      "score": 0.13265640347951907,
+      "title": "Retrieved 3: conflict_planet_earth | Earth",
+      "text": "Earth is the largest of the Solar System's terrestrial planets."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_suez_shipping",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "text": "Major shipping canals can shorten sea routes between regions."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_penicillin_medicine",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "text": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_mars_surface",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 6: missing_mars_surface | Martian surface",
+      "text": "Mars has volcanoes, impact craters, valleys, and polar ice caps."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+      "attribution": 0.15677664441866515
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+      "attribution": -0.03127130857907697
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+      "attribution": 0.016604950019752138
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_planet_earth | Earth",
+      "attribution": 0.010119510168543856
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "attribution": -0.0005629520139524716
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "attribution": 0.00023409638991925532
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+      "attribution": 0.11438040294103682
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+      "attribution": 0.004532771574150291
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_planet_earth | Earth",
+      "attribution": 0.004007449841166734
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+      "attribution": 0.003484027891019339
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+      "attribution": -0.0031821966828994444
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "attribution": 0.002326403179285712
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_earth",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.01775071665949241,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_earth",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.00919863120571348,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.01775071665949241,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.009193903766158869,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "missing_suez_shipping",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.004772309526843513,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.009632969346932897,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "missing_mars_surface",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.026130620777919417,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.013642141094615048,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "missing_suez_shipping",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.03135726389536242,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.018451188247273445,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "missing_mars_surface",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.027084756211858563,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "missing_suez_shipping",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.033478023031487544,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.044969661958587745,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "missing_mars_surface",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.048704186643420445,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.04218786148230513,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_mars_surface",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.044951127022920534,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_penicillin_medicine",
+      "right": "missing_mars_surface",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.03936626574494447,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.00919863120571348,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.0011155544345059932,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "missing_suez_shipping",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.00023222799940623984,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0013296358658223195,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "missing_mars_surface",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.003520714989749564,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.00921855825810528,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "missing_suez_shipping",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.008253404650835084,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.010156415418868825,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "missing_mars_surface",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.011089156281041379,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "missing_suez_shipping",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.010557804332061839,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.01701917826658424,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "missing_mars_surface",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.017050084485535223,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_penicillin_medicine",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.013024133937566901,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_mars_surface",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.010323668587087791,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_penicillin_medicine",
+      "right": "missing_mars_surface",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.011580971121904187,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_solar_sun"
+      ],
+      "score": 0.22049731954447305
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.05267763886499388
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.15405955567047858
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_suez_shipping"
+      ],
+      "score": 0.14919998981284455
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1476488849702543
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_surface"
+      ],
+      "score": 0.18989041657739902
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.1557336837977613
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1730894597541205
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping"
+      ],
+      "score": 0.1656170666027632
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1651129720065696
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_mars_surface"
+      ],
+      "score": 0.1727517795356075
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01887866012902162
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping"
+      ],
+      "score": -0.017889608590946682
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.006387899432529487
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_mars_surface"
+      ],
+      "score": 0.003936090220543087
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.056067896692468255
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.022823079136962132
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.03973077054507834
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.02641362401876335
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.0258157559643446
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.0328847423619143
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1527141844405352
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14958483334360484
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.14681186969180138
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_mars_surface"
+      ],
+      "score": 0.1494292799721234
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.16945360161953615
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.16450228284682378
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.16488487486924697
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1512230422437365
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.15553128376800096
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.15363657879703196
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": -0.020334822952635667
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.021657615948345643
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": -0.0035553571367397674
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.06695171706966979
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": -0.04274287662435239
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.01976062239584181
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.04158879341495009
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": -0.002564824972630997
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.015153772463060378
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.02691097738087167
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14938327546102126
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.15192947918530075
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.15098730698854423
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.13720412588955355
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.15166512037487467
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.15144619814602578
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.16837910984747007
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.17188758565725937
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17487263427199273
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.16113121707259825
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.05680205056409027
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": -0.03842084319252553
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.02116993286572405
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.04110124622568195
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.016002433052425158
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.14824748415391076
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.15886000601141959
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.15944753931322408
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.14782930495700353
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.17200793787319213
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.0366172886927163
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.15190094018738076
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_solar_sun"
+      ],
+      "score": 0.12561941556582235
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.029518599838946114
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.05489406583937673
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_suez_shipping"
+      ],
+      "score": 0.04195036222587145
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.053150667950372155
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_surface"
+      ],
+      "score": 0.053486455237201413
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.12522822397182876
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12544602419064188
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping"
+      ],
+      "score": 0.12554145639628567
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.12539273917377336
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_mars_surface"
+      ],
+      "score": 0.12556375433068234
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01746827669216766
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping"
+      ],
+      "score": 0.015457530842330924
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.012118089426402245
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_mars_surface"
+      ],
+      "score": 0.011114174434774804
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.03544946520381409
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.020457478585437783
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.022074682562520875
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.0229960752932159
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.029401415556362887
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.028195938577726287
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12544817708150702
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping"
+      ],
+      "score": 0.12560874454562831
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1255493866381785
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_mars_surface"
+      ],
+      "score": 0.1255100393874834
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.12561212557575496
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.12554254287635103
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.12556125648766836
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1256536412221071
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.12557596921077852
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.12561928356738417
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.00512345828549321
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.0008655479845103287
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.00311406400558778
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.002525218712365662
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.006377999224598252
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.005684451210123953
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.000908850622574231
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.008190815480041413
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.0033971442564532106
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.01608206475552043
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping"
+      ],
+      "score": 0.12557678149805418
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.12554360903975714
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_mars_surface"
+      ],
+      "score": 0.12550391630542956
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.125569582550498
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.12565671750455365
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.12561061274781926
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.12550862792021122
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.12555288972013334
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.12553941544212055
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.12554678723460877
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": -0.005279508706116431
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": -0.005890648196963777
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.0012742402385336749
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.00018225609448985214
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.002309365539962749
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine"
+      ],
+      "score": 0.1256269999503743
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_mars_surface"
+      ],
+      "score": 0.12550852639396615
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.12552528093823845
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1256159736479482
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1255491632520057
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": -0.003535509788014868
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth",
+        "missing_suez_shipping",
+        "missing_penicillin_medicine",
+        "missing_mars_surface"
+      ],
+      "score": 0.1255488586319321
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.15190094018738076
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "remaining_chunks": 5,
+        "score": -0.0366172886927163
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "remaining_chunks": 4,
+        "score": -0.016002433052425158
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "remaining_chunks": 3,
+        "score": -0.04158879341495009
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: conflict_planet_earth | Earth",
+        "remaining_chunks": 2,
+        "score": 0.02641362401876335
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 1,
+        "score": 0.1476488849702543
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "selected_chunks": 1,
+        "score": 0.22049731954447305
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "selected_chunks": 2,
+        "score": 0.1557336837977613
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "selected_chunks": 3,
+        "score": 0.1494292799721234
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: conflict_planet_earth | Earth",
+        "selected_chunks": 4,
+        "score": 0.15098730698854423
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "selected_chunks": 5,
+        "score": 0.15886000601141959
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "selected_chunks": 6,
+        "score": 0.15190094018738076
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.15190094018738076
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "remaining_chunks": 5,
+        "score": -0.0366172886927163
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: conflict_planet_earth | Earth",
+        "remaining_chunks": 4,
+        "score": -0.04110124622568195
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "remaining_chunks": 3,
+        "score": 0.02691097738087167
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 2,
+        "score": 0.0328847423619143
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 1,
+        "score": 0.18989041657739902
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.15190094018738076
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "remaining_chunks": 5,
+        "score": -0.0366172886927163
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: conflict_planet_earth | Earth",
+        "remaining_chunks": 4,
+        "score": -0.04110124622568195
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: missing_mars_surface | Martian surface",
+        "remaining_chunks": 3,
+        "score": -0.06695171706966979
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: missing_penicillin_medicine | Antibiotic medicines",
+        "remaining_chunks": 2,
+        "score": -0.017889608590946682
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 1,
+        "score": 0.05267763886499388
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.15190094018738087
+      },
+      {
+        "step": 1,
+        "score": 0.12688369089680251
+      },
+      {
+        "step": 2,
+        "score": 0.08450435966100932
+      },
+      {
+        "step": 3,
+        "score": 0.05922476031359184
+      },
+      {
+        "step": 4,
+        "score": 0.056715750210650846
+      },
+      {
+        "step": 5,
+        "score": 0.1453436665767724
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the central body of the Solar System?",
+    "expanded_queries": [
+      "What is the central body of the Solar System?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "keyword": 0.8654,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.1028,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "keyword": 0.0925,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_correct | Largest planet",
+        "keyword": 0.0913,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "keyword": 0.0894,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_saturn | Saturn",
+        "keyword": 0.0823,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "keyword": 0.0794,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "keyword": 0.0704,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.8654,
+        "rerank": 0.88,
+        "section": "solar_system_center",
+        "query_hits": "body, central, solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1028,
+        "rerank": 0.1327,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0913,
+        "rerank": 0.1223,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0894,
+        "rerank": 0.1206,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0823,
+        "rerank": 0.1142,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0794,
+        "rerank": 0.1116,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0704,
+        "rerank": 0.1035,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0925,
+        "rerank": 0.0934,
+        "section": "fever_threshold",
+        "query_hits": "body",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 9,
+        "source": "comp_lakes_shipping | Great Lakes shipping",
+        "page": 8,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "great_lakes",
+        "query_hits": "system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Great Lakes support shipping routes through canals and the Saint Lawrence system."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.8654,
+        "rerank": 0.88,
+        "section": "solar_system_center",
+        "query_hits": "body, central, solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1028,
+        "rerank": 0.1327,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0913,
+        "rerank": 0.1223,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0894,
+        "rerank": 0.1206,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0823,
+        "rerank": 0.1142,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0794,
+        "rerank": 0.1116,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0704,
+        "rerank": 0.1035,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0925,
+        "rerank": 0.0934,
+        "section": "fever_threshold",
+        "query_hits": "body",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 9,
+        "source": "comp_lakes_shipping | Great Lakes shipping",
+        "page": 8,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "great_lakes",
+        "query_hits": "system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Great Lakes support shipping routes through canals and the Saint Lawrence system."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.8654,
+        "rerank": 0.88,
+        "section": "solar_system_center",
+        "query_hits": "body, central, solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0894,
+        "rerank": 0.1206,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1562,
+        "novelty": 0.3536,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4438,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1028,
+        "rerank": 0.1327,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1696,
+        "novelty": 0.5885,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3283,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 4,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 5,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "antibiotics_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 6,
+        "source": "missing_mars_surface | Martian surface",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "mars_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars has volcanoes, impact craters, valleys, and polar ice caps."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "body",
+        "central",
+        "solar",
+        "system"
+      ],
+      "covered_query_terms": [
+        "body",
+        "central",
+        "solar",
+        "system"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_solar_sun | Solar system centre correct": [
+          "body",
+          "central",
+          "solar",
+          "system"
+        ],
+        "conflict_solar_jupiter | Solar system centre Jupiter conflict": [
+          "solar",
+          "system"
+        ],
+        "conflict_planet_earth | Earth": [
+          "solar",
+          "system"
+        ]
+      },
+      "section_titles": [
+        "antibiotics_overview",
+        "canal_overview",
+        "giant_planets",
+        "mars_overview",
+        "solar_system_center"
+      ],
+      "chunks_by_section": {
+        "solar_system_center": [
+          "conflict_solar_sun | Solar system centre correct",
+          "conflict_solar_jupiter | Solar system centre Jupiter conflict"
+        ],
+        "giant_planets": [
+          "conflict_planet_earth | Earth"
+        ],
+        "canal_overview": [
+          "missing_suez_shipping | Shipping canal distractor"
+        ],
+        "antibiotics_overview": [
+          "missing_penicillin_medicine | Antibiotic medicines"
+        ],
+        "mars_overview": [
+          "missing_mars_surface | Martian surface"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The Sun is the central body of the Solar System.",
+    "retrieved_context_answer": "The Sun is the central body of the Solar System.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.33333333333333337,
+    "retrieved_context_f1": 0.33333333333333337,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}
