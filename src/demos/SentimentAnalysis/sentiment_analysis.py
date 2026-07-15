@@ -127,14 +127,14 @@ def preload_models() -> None:
 
 def _get_encoder_imputer(text: str, model_key: str = "sst2"):
 
-    from demos.SentimentAnalysis.EncoderTextImputer import EncoderTextImputer
+    from demos.SentimentAnalysis.EncoderTextImputer import encoderTextImputer
 
     model_info = ENCODER_MODELS[model_key]
 
     if model_key in _MODEL_CACHE:
         # Fast path: reuse preloaded weights
         cached = _MODEL_CACHE[model_key]
-        return EncoderTextImputer(
+        return encoderTextImputer(
             model_name=model_info["model_id"],
             input_text=text,
             preloaded_model=cached["model"],
@@ -145,7 +145,7 @@ def _get_encoder_imputer(text: str, model_key: str = "sst2"):
     else:
         # Slow path: load on demand (fallback if preload was not called)
         print(f"[warning] {model_info['label']} not preloaded — loading now...")
-        return EncoderTextImputer(
+        return encoderTextImputer(
             model_name=model_info["model_id"],
             input_text=text,
             positive_label=model_info["positive_label"],
@@ -176,8 +176,8 @@ def compute_shapley_values(game) -> shapiq.InteractionValues:
         φ_i > 0 → pushes toward POSITIVE
         φ_i < 0 → pushes toward NEGATIVE
     """
-    from demos.SentimentAnalysis.SentimentDecoderGame import SentimentDecoderGame
-    budget = BUDGET_DECODER if isinstance(game, SentimentDecoderGame) else BUDGET_ENCODER
+    from demos.SentimentAnalysis.SentimentDecoderGame import sentimentDecoderGame
+    budget = BUDGET_DECODER if isinstance(game, sentimentDecoderGame) else BUDGET_ENCODER
 
     return shapiq.KernelSHAP(
         n=game.n_players,
@@ -193,8 +193,8 @@ def compute_interactions(game) -> shapiq.InteractionValues:
         < 0 → pair is redundant
         ≈ 0 → words act independently
     """
-    from demos.SentimentAnalysis.SentimentDecoderGame import SentimentDecoderGame
-    budget = BUDGET_DECODER if isinstance(game, SentimentDecoderGame) else BUDGET_ENCODER
+    from demos.SentimentAnalysis.SentimentDecoderGame import sentimentDecoderGame
+    budget = BUDGET_DECODER if isinstance(game, sentimentDecoderGame) else BUDGET_ENCODER
 
     return shapiq.KernelSHAPIQ(
         n=game.n_players,
@@ -341,11 +341,11 @@ def run_pipeline_decoder(text: str, model_key: str = "tinyllama") -> dict:
     Returns:
         Same dict structure as run_pipeline().
     """
-    from demos.SentimentAnalysis.SentimentDecoderGame import SentimentDecoderGame
+    from demos.SentimentAnalysis.SentimentDecoderGame import sentimentDecoderGame
 
     model_name = DECODER_MODELS[model_key]
 
-    game = SentimentDecoderGame(
+    game = sentimentDecoderGame(
     model_name=model_name,
     input_text=text,
     hf_model=_get_decoder(model_key),

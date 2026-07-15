@@ -6,7 +6,7 @@ from shapiq.game import Game
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 
-class EncoderTextImputer(Game):
+class encoderTextImputer(Game):
    
     def __init__(
         self,

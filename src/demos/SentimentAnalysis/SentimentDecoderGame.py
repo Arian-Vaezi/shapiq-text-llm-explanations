@@ -5,7 +5,7 @@ import numpy as np
 from shapiq.game import Game
 
 
-class SentimentDecoderGame(Game):
+class sentimentDecoderGame(Game):
 
 
     # ── Templates by language and register ────────────────────────────────────
