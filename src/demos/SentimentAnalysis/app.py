@@ -1,401 +1,317 @@
-"""Gradio web application for the Sentiment Analysis demo.
-
-This file contains only the UI logic.
-All computation is handled by sentiment_analysis.py.
-"""
-
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import sys
+from pathlib import Path
 
-import gradio as gr
-from sentiment_analysis import blank_placeholder, run_pipeline
+import streamlit as st
 
-if TYPE_CHECKING:
-    from collections.abc import Iterator
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-CSS = """
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+from sentiment_analysis import (
+    ENCODER_MODELS,
+    preload_models,
+    run_pipeline,
+    run_pipeline_decoder,
+)
 
+# ── Page config ───────────────────────────────────────────────────────────────
+st.set_page_config(
+    page_title="Sentiment Explainer",
+    page_icon="🔍",
+    layout="wide",
+)
+
+# ── Preload all models once at startup ────────────────────────────────────────
+# This runs only on the first page load.
+# After this, run_pipeline() has zero model-loading cost per click.
+if "models_loaded" not in st.session_state:
+    with st.spinner("Loading models… (this happens once at startup)"):
+        preload_models()
+    st.session_state["models_loaded"] = True
+
+# ── CSS ───────────────────────────────────────────────────────────────────────
+st.markdown(
+    """
+<style>
 :root {
-    --bg: #f7f8fc;
-    --card: #ffffff;
-    --card-soft: #f3f5fb;
-    --text: #111827;
-    --muted: #6b7280;
-    --border: #e5e7eb;
     --accent: #5b6cff;
-    --accent-dark: #4338ca;
     --accent-soft: #eef0ff;
+    --accent-dark: #4338ca;
     --green: #10b981;
     --red: #ef4444;
-    --blue: #3b82f6;
-    --shadow: 0 18px 45px rgba(31, 41, 55, 0.08);
-    --radius: 22px;
-    --font: 'Inter', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --surface: #ffffff;
+    --bg: #f7f8fc;
 }
 
-body, .gradio-container {
-    background:
-        radial-gradient(circle at top left, rgba(91,108,255,0.14), transparent 34%),
-        radial-gradient(circle at top right, rgba(16,185,129,0.10), transparent 30%),
-        linear-gradient(180deg, #f8f9ff 0%, #f7f8fc 100%) !important;
-    color: var(--text) !important;
-    font-family: var(--font) !important;
-}
+#MainMenu, footer, header { visibility: hidden; }
+.stApp { background: var(--bg); }
 
-.gradio-container {
-    max-width: 1280px !important;
-    margin: auto !important;
-}
-
-/* Header */
 .hero {
-    margin: 2rem 0 1.5rem;
-    padding: 2.4rem;
-    border-radius: 30px;
     background: linear-gradient(135deg, #ffffff 0%, #f1f4ff 100%);
     border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-}
-
-.hero-badge {
-    display: inline-flex;
-    padding: 0.42rem 0.8rem;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent-dark);
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
     margin-bottom: 1rem;
 }
-
 .hero h1 {
-    margin: 0;
-    font-size: 2.75rem;
-    line-height: 1.05;
-    letter-spacing: -0.045em;
+    font-size: 2.2rem;
     font-weight: 800;
     color: #111827;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.5rem 0;
 }
-
 .hero p {
-    max-width: 780px;
-    margin: 0.9rem 0 0;
     color: var(--muted);
     font-size: 1rem;
-    line-height: 1.7;
+    margin: 0;
+    line-height: 1.6;
 }
 
-/* Cards */
-.input-card,
-.examples-card,
-.info-card {
-    background: rgba(255,255,255,0.94);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 1.2rem;
-}
-
-.section-title {
-    font-size: 0.74rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    font-weight: 800;
-    margin-bottom: 0.4rem;
-}
-
-.section-subtitle {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-bottom: 0.85rem;
-}
-
-/* Input */
-textarea, input[type=text] {
-    background: #ffffff !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 16px !important;
-    color: var(--text) !important;
-    font-family: var(--mono) !important;
-    font-size: 0.95rem !important;
-    padding: 1rem !important;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.03) !important;
-}
-
-textarea:focus, input[type=text]:focus {
-    border-color: var(--accent) !important;
-    box-shadow: 0 0 0 4px rgba(91,108,255,0.12) !important;
-}
-
-/* Button */
-button.primary {
-    background: linear-gradient(135deg, var(--accent), #7c3aed) !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 16px !important;
-    font-weight: 800 !important;
-    padding: 0.85rem 1.3rem !important;
-    box-shadow: 0 12px 25px rgba(91,108,255,0.25) !important;
-}
-
-button.primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 16px 30px rgba(91,108,255,0.30) !important;
-}
-
-/* Style gr.Examples as chips — using Gradio's real class names */
-
-/* Strip all chrome from the wrapper */
-.examples-card .table-wrap {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    overflow: visible !important;
-}
-
-/* Hide the label above the table */
-.examples-card .label {
-    display: none !important;
-}
-
-/* Hide the column header row */
-.examples-card .tr-head {
-    display: none !important;
-}
-
-/* Turn the table into a flex chip row */
-.examples-card table {
-    display: block !important;
-    border: none !important;
-    background: transparent !important;
-}
-
-.examples-card tbody {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 0.5rem !important;
-    background: transparent !important;
-    padding: 0.2rem 0 0 !important;
-}
-
-/* Each row = one chip */
-.examples-card .tr-body {
-    display: block !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    transition: transform 0.15s !important;
-}
-
-/* The td is the visible pill */
-.examples-card .tr-body td {
-    display: inline-flex !important;
-    align-items: center !important;
-    max-width: none !important;
-    width: auto !important;
-    padding: 0.48rem 0.95rem !important;
-    border: 1.5px solid #e5e7eb !important;
-    border-radius: 999px !important;
-    background: #ffffff !important;
-    color: #374151 !important;
-    font-size: 0.82rem !important;
-    font-weight: 600 !important;
-    font-family: 'Inter', sans-serif !important;
-    cursor: pointer !important;
-    box-shadow: 0 2px 8px rgba(31,41,55,0.06) !important;
-    line-height: 1.4 !important;
-    white-space: normal !important;
-    text-align: left !important;
-    transition: border-color 0.15s, background 0.15s, color 0.15s, box-shadow 0.15s !important;
-}
-
-.examples-card .tr-body:hover td {
-    border-color: #5b6cff !important;
-    background: #eef0ff !important;
-    color: #4338ca !important;
-    box-shadow: 0 5px 16px rgba(91,108,255,0.18) !important;
-    transform: translateY(-1px) !important;
-}
-
-/* Pipeline */
-.pipeline-step {
+.step-header {
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    padding: 0.62rem 0;
-    border-bottom: 1px solid #f0f1f5;
-    color: #374151;
-    font-size: 0.86rem;
+    margin: 1.5rem 0 0.4rem 0;
 }
-
-.pipeline-step:last-child { border-bottom: none; }
-
-.pipeline-number {
-    width: 1.7rem;
-    height: 1.7rem;
-    border-radius: 50%;
+.step-number {
     background: var(--accent-soft);
     color: var(--accent-dark);
+    border-radius: 50%;
+    width: 1.8rem;
+    height: 1.8rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     flex-shrink: 0;
 }
-
-.idea-box {
-    margin-top: 1rem;
-    padding: 0.95rem;
-    background: #f8f9ff;
-    border: 1px solid #e0e4ff;
-    border-radius: 16px;
-    color: #4f46e5;
-    font-size: 0.84rem;
-    line-height: 1.65;
-}
-
-/* Result markdown */
-.result-panel {
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.45rem 1.65rem;
-    box-shadow: var(--shadow);
-}
-
-.result-panel h2  { margin-top: 0; font-size: 1.65rem; letter-spacing: -0.03em; }
-.result-panel h3  { margin-top: 1.45rem; font-size: 1rem; color: #111827; }
-
-.result-panel table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--mono);
-    font-size: 0.84rem;
-    margin-top: 0.65rem;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-.result-panel th {
-    background: #f3f4f6;
-    color: #4b5563;
-    padding: 0.65rem 0.8rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-}
-
-.result-panel td {
-    padding: 0.6rem 0.8rem;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.result-panel blockquote {
-    border-left: 4px solid var(--accent);
-    background: #f8f9ff;
-    padding: 0.75rem 1rem;
-    border-radius: 12px;
-    color: var(--muted);
-}
-
-/* Metrics */
-.metric-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.7rem;
-    margin-top: 1rem;
-}
-
-.metric {
-    background: #f9fafb;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 0.8rem;
-}
-
-.metric-label {
-    color: var(--muted);
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-}
-
-.metric-value {
-    margin-top: 0.25rem;
-    font-family: var(--mono);
+.step-title {
+    font-size: 1.05rem;
     font-weight: 700;
     color: #111827;
 }
 
-/* Tabs */
-.tab-nav button {
-    font-family: var(--font) !important;
-    font-weight: 700 !important;
-    color: var(--muted) !important;
-    background: transparent !important;
-    border-radius: 12px !important;
-}
-
-.tab-nav button.selected {
-    color: var(--accent-dark) !important;
-    background: var(--accent-soft) !important;
-}
-
-img {
-    border-radius: 18px !important;
+.result-card {
+    background: var(--surface);
     border: 1px solid var(--border);
-    background: white;
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 0.5rem;
 }
-"""
+.metric-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+}
+.metric-chip {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.82rem;
+}
+.metric-chip span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+.metric-chip strong {
+    display: block;
+    color: #111827;
+    font-weight: 700;
+    margin-top: 0.15rem;
+}
+
+.seg-box {
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0 1rem 0;
+    font-size: 0.9rem;
+}
+.seg-box .seg-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+}
+.seg-token {
+    display: inline-block;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    border-radius: 6px;
+    padding: 0.2rem 0.5rem;
+    margin: 0.15rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: monospace;
+}
+.mask-token {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 6px;
+    padding: 0.2rem 0.5rem;
+    margin: 0.15rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: monospace;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 
+# ── Example sentences ─────────────────────────────────────────────────────────
 DEMO_EXAMPLES = [
-    ["This film is not bad at all"],
-    ["I really loved this amazing film"],
-    ["What a magnificent disaster of a film"],
-    ["The acting was superb but the plot was absolutely terrible"],
-    ["I would not say this was a bad experience"],
+    "This film is not bad at all",
+    "I really loved this amazing film",
+    "What a magnificent disaster of a film",
+    "The acting was superb but the plot was absolutely terrible",
+    "I would not say this was a bad experience",
 ]
 
 
-def load_example(example: list[str]) -> str:
-    """Called by gr.Examples .select() — just returns the chosen sentence."""
-    return example[0]
+# ── Sidebar ───────────────────────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("## ⚙️ Settings")
 
-
-def on_analyse(text: str) -> Iterator[tuple[object, object, object, object, object]]:
-    """Run the analysis callback and stream UI updates."""
-    text = text.strip()
-
-    if not text:
-        yield (
-            "### Type a sentence and click *Analyse →*",
-            blank_placeholder("Enter a sentence above"),
-            blank_placeholder(""),
-            blank_placeholder(""),
-            gr.update(visible=False),
-        )
-        return
-
-    yield (
-        "### Computing explanation...\n\n"
-        "The model is evaluating word contributions and pairwise interactions.",
-        blank_placeholder("Computing Shapley values..."),
-        blank_placeholder("Computing interactions..."),
-        blank_placeholder("Building heatmap..."),
-        gr.update(visible=False),
+    st.markdown("**Model**")
+    model_choice = st.radio(
+        "Model",
+        options=["encoder", "tinyllama", "gemma3", "gemma4"],
+        format_func=lambda x: {
+            "encoder": "DistilBERT (encoder · fast · CPU)",
+            "tinyllama": "TinyLlama 1.1B  (decoder · lighter)",
+            "gemma3": "Gemma 3 1B  (decoder · GPU recommended)",
+            "gemma4": "Gemma 4 E2B  (decoder · 16GB VRAM)",
+        }[x],
+        label_visibility="collapsed",
     )
 
-    result = run_pipeline(text)
+    # Encoder sub-selector (only shown when encoder is selected)
+    encoder_key = "imdb"
+    if model_choice == "encoder":
+        st.markdown("**Encoder variant**")
+        encoder_key = st.radio(
+            "Encoder variant",
+            options=list(ENCODER_MODELS.keys()),
+            format_func=lambda k: ENCODER_MODELS[k]["label"],
+            label_visibility="collapsed",
+        )
+        st.caption(ENCODER_MODELS[encoder_key]["description"])
 
+    # Value function formula — updated to match actual implementation
+    with st.expander("📐 Value function"):
+        if model_choice == "encoder":
+            st.markdown("**Contrastive classification score**")
+            st.latex(
+                r"v(S) = P(\text{POS} \mid \text{masked}(S))"
+                r"- P(\text{NEG} \mid \text{masked}(S))"
+            )
+            st.markdown("""
+            | Value | Meaning |
+            |-------|---------|
+            | `+1`  | strongly positive |
+            | ` 0`  | uncertain / balanced |
+            | `−1`  | strongly negative |
+
+            **Masking strategy:** absent words → `[MASK]` token
+            **Baseline v(∅):** all words masked → model score on `[MASK] [MASK] ...`
+            **Normalization:** all coalition values centered around v(∅)
+            """)
+        else:
+            model_label = "Gemma 3 1B" if model_choice == "gemma" else "TinyLlama 1.1B"
+            st.markdown(f"**{model_label} — contrastive log-odds**")
+            st.latex(
+                r"v(S) = \frac{1}{|T^+|}\sum_{t \in T^+} \log p(t \mid S)"
+                r"- \frac{1}{|T^-|}\sum_{t \in T^-} \log p(t \mid S)"
+            )
+            st.markdown("""
+            **T⁺ (positive templates):**
+            > " This is positive." / " I loved it." / " Excellent!"
+
+            **T⁻ (negative templates):**
+            > " This is negative." / " I hated it." / " Terrible!"
+
+            **Masking strategy:** absent words → **removed entirely**
+            **Baseline v(∅):** empty string (no words)
+            **Score range:** unbounded (typically ±5 to ±20)
+            """)
+
+    st.divider()
+
+    st.markdown("**📓 Examples**")
+    st.caption("Click to load.")
+    for i, example in enumerate(DEMO_EXAMPLES):
+        label = example[:45] + "…" if len(example) > 45 else example
+        if st.button(label, key=f"example_{i}", use_container_width=True):
+            st.session_state["text_input"] = example
+
+    st.divider()
+
+    st.markdown("**Pipeline**")
+    st.markdown("""
+    1. **Segmentation** — split sentence into word players
+    2. **Masking** — build masked sentence per coalition
+    3. **KernelSHAP** — first-order Shapley Values
+    4. **KernelSHAPIQ** — pairwise k-SII interactions
+    5. **Plots** — sentence · network · heatmap
+    """)
+
+
+# ── Main content ──────────────────────────────────────────────────────────────
+
+st.markdown(
+    """
+<div class="hero">
+    <h1>🔍 Sentiment Explainer</h1>
+    <p>
+        Explain how a sentiment model makes its decision using
+        <strong>Shapley Values</strong> and <strong>Shapley Interactions (k-SII)</strong>.
+        Individual word contributions tell part of the story —
+        interactions reveal what first-order explanations miss.
+    </p>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+# Text input
+col_input, col_btn = st.columns([5, 1])
+with col_input:
+    text = st.text_input(
+        "Input sentence",
+        key="text_input",
+        placeholder="Example: This film is not bad at all",
+        label_visibility="collapsed",
+    )
+with col_btn:
+    st.markdown("<div style='margin-top:0.3rem'></div>", unsafe_allow_html=True)
+    run_btn = st.button("Analyse →", type="primary", use_container_width=True)
+
+
+# ── Analysis ──────────────────────────────────────────────────────────────────
+
+if run_btn and text.strip():
+    with st.spinner("Computing Shapley Values and k-SII interactions…"):
+        if model_choice == "encoder":
+            result = run_pipeline(text.strip(), model_key=encoder_key)
+        else:
+            result = run_pipeline_decoder(text.strip(), model_key=model_choice)
+
+    # Unpack
     label = result["label"]
     score = result["score"]
     words = result["words"]
@@ -403,161 +319,286 @@ def on_analyse(text: str) -> Iterator[tuple[object, object, object, object, obje
     n = result["n_players"]
     sv = result["sv"]
     top_int = result["top_interactions"]
+    mtype = result["model_type"]
+    mname = result["model_name"].split("/")[-1]
+    mask_tok = "[MASK]" if mtype == "encoder" else "removed"
 
     emoji = "😊" if label == "POSITIVE" else "😠"
     color = "#10b981" if label == "POSITIVE" else "#ef4444"
+    badge = "Encoder" if mtype == "encoder" else "Decoder"
 
-    sv_rows = ""
-    for word, val in zip(words, sv.values, strict=False):
-        bar_len = min(int(abs(val) * 15), 10)
-        bar_color = "#10b981" if val >= 0 else "#ef4444"
-        bar = f'<span style="color:{bar_color}">{"█" * bar_len}</span>'
-        sv_rows += f"| {word} | {val:+.4f} | {bar} |\n"
-
-    int_rows = ""
-    for w1, w2, val in top_int:
-        sign = "synergy" if val > 0 else "redundancy"
-        icon = "🟢" if val > 0 else "🔵"
-        int_rows += f"| {w1} + {w2} | {val:+.4f} | {icon} {sign} |\n"
-
-    result_md = f"""
-## {emoji} Sentiment: *{label}*
-<span style="font-size:1.4rem; font-weight:800; color:{color};">{score:.3f}</span>
-
-<div class="metric-grid">
-    <div class="metric">
-        <div class="metric-label">Baseline</div>
-        <div class="metric-value">{baseline:.4f}</div>
+    # ── Prediction result card ────────────────────────────────────────────────
+    st.markdown(
+        f"""
+    <div class="result-card">
+        <div style="font-size:1.6rem; font-weight:800; color:{color};">
+            {emoji} {label} &nbsp;
+            <span style="font-size:1.2rem;">{score:.3f}</span>
+            &nbsp;
+            <span style="background:{color}22; color:{color}; padding:0.2rem 0.6rem;
+                  border-radius:999px; font-size:0.8rem; font-weight:700;">
+                {badge} · {mname}
+            </span>
+        </div>
+        <div class="metric-row">
+            <div class="metric-chip">
+                <span>v(∅) baseline</span>
+                <strong>{baseline:+.4f}</strong>
+            </div>
+            <div class="metric-chip">
+                <span>v(N) full sentence</span>
+                <strong>{score:+.4f}</strong>
+            </div>
+            <div class="metric-chip">
+                <span>Players</span>
+                <strong>{n} words</strong>
+            </div>
+            <div class="metric-chip">
+                <span>Masking</span>
+                <strong>{mask_tok}</strong>
+            </div>
+            <div class="metric-chip">
+                <span>Index</span>
+                <strong>k-SII order 2</strong>
+            </div>
+        </div>
     </div>
-    <div class="metric">
-        <div class="metric-label">Players</div>
-        <div class="metric-value">{n} words</div>
-    </div>
-    <div class="metric">
-        <div class="metric-label">Model</div>
-        <div class="metric-value">DistilBERT IMDB</div>
-    </div>
-</div>
-
----
-
-### Word-level contributions
-
-| Word | Shapley Value | Attribution |
-|---|---:|---|
-{sv_rows}
-
----
-
-### Strongest pairwise interactions
-
-| Word Pair | k-SII | Interpretation |
-|---|---:|---|
-{int_rows}
-
-**Synergy** means the words become more influential together.
-**Redundancy** means the words partially overlap or compete in their contribution.
-"""
-
-    yield (
-        result_md,
-        result["img_sentence"],
-        result["img_network"],
-        result["img_heatmap"],
-        gr.update(visible=True),
+    """,
+        unsafe_allow_html=True,
     )
 
-
-with gr.Blocks(title="Sentiment Explainer", css=CSS) as demo:
-    gr.HTML("""
-    <div class="hero">
-        <div class="hero-badge">Explainable AI Demo</div>
-        <h1>Sentiment Explainer</h1>
-        <p>
-            Explore how a sentiment model makes decisions by combining
-            word-level Shapley values with pairwise interaction analysis.
-            This demo turns the original notebook into a clean interactive application.
-        </p>
+    # ── Segmentation details ──────────────────────────────────────────────────
+    st.markdown(
+        """
+    <div class="step-header">
+        <span class="step-number">0</span>
+        <span class="step-title">Segmentation — how the sentence becomes players</span>
     </div>
-    """)
+    """,
+        unsafe_allow_html=True,
+    )
 
-    with gr.Row(equal_height=False):
-        with gr.Column(scale=1, min_width=350):
-            with gr.Group(elem_classes=["input-card"]):
-                gr.HTML('<div class="section-title">Input Sentence</div>')
-                text_input = gr.Textbox(
-                    placeholder="Example: This film is not bad at all",
-                    lines=3,
-                    show_label=False,
-                )
-                analyse_btn = gr.Button("Analyse →", variant="primary")
+    # Build token display
+    tokens_html = "".join(f'<span class="seg-token">{w}</span>' for w in words)
 
-            with gr.Group(elem_classes=["examples-card"]):
-                gr.HTML("""
-                <div class="section-title">Examples</div>
-                <div class="section-subtitle">Click a chip to load it into the input.</div>
+    # Show one masked example — mask all except first two words
+    example_coalition = [True, True] + [False] * (n - 2)
+    masked_words_html = "".join(
+        f'<span class="seg-token">{w}</span>'
+        if example_coalition[i]
+        else f'<span class="mask-token">{mask_tok}</span>'
+        for i, w in enumerate(words)
+    )
+
+    st.markdown(
+        f"""
+    <div class="seg-box">
+        <div class="seg-label">Word players (n = {n})</div>
+        {tokens_html}
+    </div>
+    <div class="seg-box">
+        <div class="seg-label">
+            Masking strategy — absent words →
+            <code>{"[MASK]" if mtype == "encoder" else "removed"}</code>
+            &nbsp;|&nbsp; Example coalition S = {{word 0, word 1}}
+        </div>
+        {masked_words_html}
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    if mtype == "encoder":
+        st.caption(
+            f"The sentence is split into **{n} word players**. "
+            f"For each of the ~{2**n:,} possible coalitions S, absent words are replaced "
+            f"with `[MASK]`. The model scores each masked sentence and returns "
+            f"`P(POSITIVE|S) - P(NEGATIVE|S) ∈ [-1, +1]`. "
+            f"KernelSHAP samples {result.get('budget', 256)} coalitions to approximate "
+            f"the full Shapley computation."
+        )
+    else:
+        st.caption(
+            f"The sentence is split into **{n} word players**. "
+            f"For each coalition S, absent words are **removed entirely** "
+            f"(decoder models have no [MASK] token). "
+            f"The model scores each truncated sentence via contrastive log-odds "
+            f"over positive and negative templates."
+        )
+
+    # ── Step 1: Shapley Values ────────────────────────────────────────────────
+    st.markdown(
+        """
+    <div class="step-header">
+        <span class="step-number">1</span>
+        <span class="step-title">Individual word contributions — Shapley Values</span>
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    if mtype == "encoder":
+        st.caption(
+            "Each bar shows how much a word shifts `v(S)` on average across all coalitions. "
+            "The value function is `v(S) = P(POSITIVE|S) - P(NEGATIVE|S)`. "
+            "After normalization, v(∅) = 0 — so each SV is a contribution "
+            "*relative to the all-masked baseline*. "
+            "**Positive SV** → word pushes toward POSITIVE. "
+            "**Negative SV** → word pushes toward NEGATIVE. "
+            "Words near zero have little individual effect — but may interact strongly (see Step 2)."
+        )
+    else:
+        st.caption(
+            "Each bar shows how much a word shifts the contrastive log-odds score on average. "
+            "The value function is `v(S) = mean log P(T⁺|S) - mean log P(T⁻|S)`. "
+            "After normalization, v(∅) = 0 (empty string baseline). "
+            "**Positive SV** → word steers completions toward positive templates. "
+            "**Negative SV** → word steers toward negative templates."
+        )
+
+    st.image(result["img_sentence"], use_container_width=True)
+
+    # SV table with actual values
+    sv_rows = sorted(
+        zip(words, sv.values[:n], strict=False),
+        key=lambda x: abs(x[1]),
+        reverse=True,
+    )
+    sv_data = {
+        "Word": [r[0] for r in sv_rows],
+        "SV": [f"{r[1]:+.4f}" for r in sv_rows],
+        "Direction": ["↑ positive" if r[1] >= 0 else "↓ negative" for r in sv_rows],
+    }
+    st.dataframe(sv_data, use_container_width=True, hide_index=True)
+
+    if mtype == "encoder":
+        st.caption(
+            "⚠️ Individual SVs can be counterintuitive — e.g. 'bad' may score positive "
+            "because the model learned from IMDb that 'not bad' is a positive phrase. "
+            "The SV of 'bad' alone does not capture this. "
+            "That is exactly what k-SII interactions reveal in Step 2."
+        )
+    else:
+        st.caption(
+            "⚠️ Decoder SVs reflect how a word changes the model's completion tendency "
+            "averaged over all subsets — not how it reads in the full sentence. "
+            "Words that seem neutral individually may form strong pairs (Step 2)."
+        )
+
+    # ── Step 2: k-SII Interactions ────────────────────────────────────────────
+    st.markdown(
+        """
+    <div class="step-header">
+        <span class="step-number">2</span>
+        <span class="step-title">Pairwise word interactions — k-SII order 2</span>
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    st.caption(
+        "k-SII(i,j) = `v(S∪{i,j}) - v(S∪{i}) - v(S∪{j}) + v(S)` averaged over all S. "
+        "It measures how much words i and j contribute **together beyond their individual SVs**. "
+        "**Positive k-SII** (synergy) → the pair is more powerful together than the sum of parts. "
+        "**Negative k-SII** (redundancy) → the words overlap — having both adds less than expected. "
+        "This is what first-order Shapley Values cannot capture."
+    )
+
+    col_net, col_heat = st.columns(2)
+    with col_net:
+        st.markdown("**Interaction network**")
+        st.caption(
+            "Nodes = words. Edges = k-SII values. "
+            "🔴 Red / thick = strong synergy. "
+            "🔵 Blue = redundancy. "
+            "No edge ≈ k-SII ≈ 0 (independent words)."
+        )
+        st.image(result["img_network"], use_container_width=True)
+    with col_heat:
+        st.markdown("**Interaction heatmap**")
+        st.caption(
+            "Cell (i,j) = k-SII(word_i, word_j). "
+            "🟥 Bright red = strong synergy. "
+            "🟦 Bright blue = strong redundancy. "
+            "Diagonal = first-order SVs. "
+            "A dominant off-diagonal cell means that pair drives the prediction."
+        )
+        st.image(result["img_heatmap"], use_container_width=True)
+
+    # Top interactions table
+    st.markdown("**Top pairwise interactions (sorted by |k-SII|)**")
+    int_data = {
+        "Word 1": [t[0] for t in top_int],
+        "Word 2": [t[1] for t in top_int],
+        "k-SII": [f"{t[2]:+.4f}" for t in top_int],
+        "Type": ["🟢 synergy" if t[2] > 0 else "🔵 redundancy" for t in top_int],
+    }
+    st.dataframe(int_data, use_container_width=True, hide_index=True)
+
+    # ── Step 3: Interpretation ────────────────────────────────────────────────
+    st.markdown(
+        """
+    <div class="step-header">
+        <span class="step-number">3</span>
+        <span class="step-title">Interpretation</span>
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    if top_int:
+        w1, w2, val = top_int[0]
+        sv_w1 = sv.values[words.index(w1)] if w1 in words else 0.0
+        sv_w2 = sv.values[words.index(w2)] if w2 in words else 0.0
+
+        if abs(val) > 0.3:
+            if val > 0:
+                st.success(f"""
+                **Strongest synergy: `{w1}` + `{w2}` → k-SII = {val:+.4f}**
+
+                Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}
+                Sum of individual SVs: {sv_w1 + sv_w2:+.4f}
+                Extra contribution from the pair together: **{val:+.4f}**
+
+                The pair contributes more to `v(S)` than their individual SVs predict.
+                This is the interaction that first-order Shapley Values miss.
                 """)
-                examples_widget = gr.Examples(
-                    examples=DEMO_EXAMPLES,
-                    inputs=[text_input],
-                    label="",
-                    # Disable the built-in auto-run so clicking only fills the box
-                    run_on_click=False,
-                    fn=None,
-                )
+            else:
+                st.info(f"""
+                **Strongest redundancy: `{w1}` + `{w2}` → k-SII = {val:+.4f}**
 
-            with gr.Group(elem_classes=["info-card"]):
-                gr.HTML("""
-                <div class="section-title">Pipeline</div>
-                <div class="pipeline-step">
-                    <span class="pipeline-number">1</span>
-                    <span>TextImputer masks words</span>
-                </div>
-                <div class="pipeline-step">
-                    <span class="pipeline-number">2</span>
-                    <span>KernelSHAP estimates word contributions</span>
-                </div>
-                <div class="pipeline-step">
-                    <span class="pipeline-number">3</span>
-                    <span>KernelSHAPIQ computes pairwise interactions</span>
-                </div>
-                <div class="pipeline-step">
-                    <span class="pipeline-number">4</span>
-                    <span>Plots explain the model decision</span>
-                </div>
-                <div class="idea-box">
-                    <strong>Key idea:</strong><br>
-                    Some sentiment effects only appear when words are interpreted together,
-                    for example negation pairs such as <code>not</code> + <code>bad</code>.
-                </div>
+                Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}
+                Sum of individual SVs: {sv_w1 + sv_w2:+.4f}
+                Overlap (diminishing returns): **{val:+.4f}**
+
+                These words carry similar sentiment signals — the model already
+                gets the information from one word, adding the other contributes less.
                 """)
+        else:
+            st.info(f"""
+            **No dominant interaction detected** (strongest k-SII = {val:+.4f})
 
-        with gr.Column(scale=2):
-            result_md = gr.Markdown(
-                "### Enter a sentence and run the analysis.",
-                elem_classes=["result-panel"],
-            )
+            Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}
 
-            with gr.Tabs(visible=False) as plot_tabs:
-                with gr.Tab("Sentence Contribution"):
-                    img_sentence = gr.Image(show_label=False)
-                with gr.Tab("Interaction Network"):
-                    img_network = gr.Image(show_label=False)
-                with gr.Tab("Interaction Heatmap"):
-                    img_heatmap = gr.Image(show_label=False)
+            Words act approximately independently in this sentence.
+            First-order Shapley Values give a complete picture here.
+            """)
 
-    analyse_btn.click(
-        fn=on_analyse,
-        inputs=[text_input],
-        outputs=[result_md, img_sentence, img_network, img_heatmap, plot_tabs],
+elif run_btn and not text.strip():
+    st.warning("Please enter a sentence before clicking Analyse.")
+
+else:
+    st.markdown(
+        """
+    <div style="text-align:center; padding:3rem 1rem; color:#9ca3af;">
+        <div style="font-size:3rem;">🔍</div>
+        <div style="font-size:1.1rem; font-weight:600; margin-top:0.5rem;">
+            Select a model and enter a sentence to begin
+        </div>
+        <div style="font-size:0.9rem; margin-top:0.4rem;">
+            Results will show segmentation, Shapley Values, interaction network, and heatmap
+        </div>
+    </div>
+    """,
+        unsafe_allow_html=True,
     )
-
-    text_input.submit(
-        fn=on_analyse,
-        inputs=[text_input],
-        outputs=[result_md, img_sentence, img_network, img_heatmap, plot_tabs],
-    )
-
-
-if __name__ == "__main__":
-    demo.launch()
