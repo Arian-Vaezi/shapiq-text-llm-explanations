@@ -21,7 +21,7 @@ together — capturing negation, redundancy, and sarcasm cues that SVs alone mis
 | `results_app.py` | Dashboard for pre-computed multilingual results, with a launcher for the live app. |
 | `experiments.py` | Batch runner for the multilingual SLURM experiments. |
 | `build_diagrams.py` | Reconstructs figures from `results/summary.json`. |
-| `01_sentiment_analysis_interactions.ipynb` | Walk-through notebook with the original three examples. |
+
 
 ---
 
