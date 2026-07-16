@@ -38,6 +38,17 @@ SUMMARY_ASR = (
     THIS_DIR / "results" / "summary_asr.json"
 )
 
+SUMMARY_INTERACTIONS = (
+    THIS_DIR / "results" / "summary_interactions.json"
+)
+
+
+# Shown wherever a value function is named, so the two are never confused.
+VALUE_FUNCTION_LABELS = {
+    "logprob": "Logprob proxy",
+    "judge_0_10": "LLM judge (0-10)",
+}
+
 
 
 # -----------------------------------------------------------------------------
@@ -51,6 +62,26 @@ def load_asr_results():
         return []
 
     with SUMMARY_ASR.open(
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        return json.load(f)
+
+
+
+@st.cache_data
+def load_interactions() -> list:
+    """Second-order k-SII runs, built by build_summary_interactions.py.
+
+    Keyed on (model, prompt_id) only: the value functions are deterministic, so
+    these runs carry no temperature.
+    """
+
+    if not SUMMARY_INTERACTIONS.exists():
+        return []
+
+    with SUMMARY_INTERACTIONS.open(
         "r",
         encoding="utf-8"
     ) as f:
@@ -609,21 +640,214 @@ elif page == "🔍 Result Explorer":
 
 
     # -------------------------------------------------------------------------
-    # Future explanation
+    # Explanation: second-order k-SII over prompt sentences
     # -------------------------------------------------------------------------
 
     st.divider()
 
 
-    st.header("🧩 Explanation")
+    st.header("🧩 Explanation — second-order interactions (k-SII)")
 
 
-    st.info(
-        """
-Future extension:
+    interactions = load_interactions()
 
-- Top Shapley values
-- Top k-SII interactions
-- Prompt token contribution visualization
-"""
-    )
+    # Interactions are keyed on (model, prompt_id) ONLY. Both value functions are
+    # deterministic, so these runs have no temperature: the selector above does
+    # not narrow them, and the same explanation is correct at every temperature.
+    runs = [
+        r for r in interactions
+        if r["model"] == selected_model and r["prompt_id"] == selected_prompt
+    ]
+
+
+    if not runs:
+
+        st.info(
+            "No interaction run for this selection. The sweep covers "
+            "**10 prompts x 3 models** (Mistral-7B, Qwen2.5-7B, TinyLlama-1.1B) "
+            "under the logprob value function, plus a **7-prompt pilot on "
+            "Mistral-7B** under the LLM judge — not the full 5 x 15 grid above."
+        )
+
+        available = sorted({(r["model"], r["prompt_id"]) for r in interactions})
+
+        with st.expander(f"Selections that do have an interaction run ({len(available)})"):
+
+            for model_name, prompt_name in available:
+                st.markdown(f"- `{model_name}` · `{prompt_name}`")
+
+    else:
+
+        st.caption(
+            "Computed on the prompt's **sentences** as players, at order 2. "
+            "Both value functions are deterministic, so these runs are "
+            "**temperature-independent** — the temperature selector above does not "
+            "apply here."
+        )
+
+        by_vf = {r["value_function"]: r for r in runs}
+
+        # Logprob first: it is the one the paper's headline result is built on.
+        ordered_vfs = [vf for vf in ("logprob", "judge_0_10") if vf in by_vf]
+
+
+        # ---------------------------------------------------------------------
+        # Reconstruction — how much of the value function needs pairs?
+        # ---------------------------------------------------------------------
+
+        st.subheader("Faithfulness: does an additive explanation suffice?")
+
+        st.caption(
+            "R² of reconstructing the value function from the evaluated coalitions "
+            "using main effects only (order 1) vs. main effects + pairs (order 1+2). "
+            "The gap ΔR² is how much of the behaviour **only** appears once pairs are allowed in."
+        )
+
+        for vf in ordered_vfs:
+
+            run = by_vf[vf]
+            rec = run.get("reconstruction", {}) or {}
+
+            order1 = rec.get("order1_r2")
+            order2 = rec.get("order2_r2")
+            delta = rec.get("delta_r2")
+
+            st.markdown(f"**{VALUE_FUNCTION_LABELS.get(vf, vf)}**")
+
+            m1, m2, m3, m4 = st.columns(4)
+
+            m1.metric("Order-1 R²", f"{order1:.3f}" if order1 is not None else "—")
+            m2.metric("Order-1+2 R²", f"{order2:.3f}" if order2 is not None else "—")
+            m3.metric(
+                "ΔR² gap",
+                f"{delta * 100:+.1f} pp" if delta is not None else "—",
+            )
+            m4.metric(
+                run["score_label"].replace("_", " ").title(),
+                f"{run['score']:.2f}" if isinstance(run["score"], int | float) else "—",
+            )
+
+            if delta is not None:
+
+                if delta >= 0.20:
+                    st.success(
+                        f"**{delta * 100:+.1f} pp → interactions matter.** Sentence-level "
+                        "effects alone miss a large part of this value function; the pairs "
+                        "carry it."
+                    )
+
+                elif delta >= 0.10:
+                    st.warning(
+                        f"**{delta * 100:+.1f} pp → interactions contribute.** An additive "
+                        "explanation is incomplete but captures most of the signal."
+                    )
+
+                else:
+                    st.info(
+                        f"**{delta * 100:+.1f} pp → close to additive.** Per-sentence effects "
+                        "already explain almost all of this value function."
+                    )
+
+            st.markdown("")
+
+
+        # ---------------------------------------------------------------------
+        # The two value functions disagree — this is the finding, not a bug
+        # ---------------------------------------------------------------------
+
+        if len(ordered_vfs) > 1:
+
+            lp_delta = (by_vf["logprob"].get("reconstruction") or {}).get("delta_r2")
+            jd_delta = (by_vf["judge_0_10"].get("reconstruction") or {}).get("delta_r2")
+
+            if lp_delta is not None and jd_delta is not None:
+
+                st.error(
+                    f"**The trade-off — this is the finding, not a bug.** On this prompt the "
+                    f"logprob proxy shows a **{lp_delta * 100:+.1f} pp** gap but the judge "
+                    f"shows **{jd_delta * 100:+.1f} pp**.\n\n"
+                    "The judge is the *faithful* target (it scores what we actually care about) "
+                    "but it is near-binary, so the payload sentence is necessary **and** "
+                    "sufficient and absorbs almost all the value — leaving little for pairs. "
+                    "The logprob value function is interaction-rich but is only a **proxy** for "
+                    "compliance. Faithful value function → few interactions; interaction-rich "
+                    "value function → only a proxy. Picking a value function is a modelling "
+                    "decision, not a detail."
+                )
+
+
+        # ---------------------------------------------------------------------
+        # Per-sentence main effects + top pairs
+        # ---------------------------------------------------------------------
+
+        st.subheader("Per-sentence effects and top pairs")
+
+        tabs = st.tabs([VALUE_FUNCTION_LABELS.get(vf, vf) for vf in ordered_vfs])
+
+        for tab, vf in zip(tabs, ordered_vfs, strict=True):
+
+            with tab:
+
+                run = by_vf[vf]
+
+                players = run.get("players", [])
+                values = run.get("player_values", [])
+
+                st.markdown(
+                    f"**Sentence main effects** · {run.get('n_players', len(players))} players · "
+                    f"budget {run.get('budget', '—')} · "
+                    f"{(run.get('reconstruction') or {}).get('n_unique_coalitions', '—')} "
+                    "unique coalitions"
+                )
+
+                # At order 2 these are k-SII MAIN EFFECTS, not plain Shapley values.
+                st.caption(
+                    "At order 2 these are **2-SII main effects** (`result[(i,)]`), not plain "
+                    "Shapley values."
+                )
+
+                st.dataframe(
+                    [
+                        {"2-SII main effect": round(v, 4), "sentence": p}
+                        for v, p in sorted(
+                            zip(values, players, strict=True), key=lambda t: -abs(t[0])
+                        )
+                    ],
+                    width="stretch",
+                    hide_index=True,
+                )
+
+                pairs = run.get("top_interaction_pairs", [])
+
+                if pairs:
+
+                    st.markdown("**Top sentence pairs by |k-SII|**")
+
+                    st.caption(
+                        "Sign is about **additivity, not outcome direction**: `+` (synergy) means "
+                        "the pair does more together than the additive model predicts, `-` "
+                        "(redundancy) less. A `+` does **not** mean the pair pushes toward a "
+                        "jailbreak."
+                    )
+
+                    st.dataframe(
+                        [
+                            {
+                                "k-SII": round(p["k_sii"], 4),
+                                "type": "synergy" if p["k_sii"] > 0 else "redundancy",
+                                "sentence i": p["player_i"],
+                                "sentence j": p["player_j"],
+                            }
+                            for p in sorted(pairs, key=lambda p: -abs(p["k_sii"]))
+                        ],
+                        width="stretch",
+                        hide_index=True,
+                    )
+
+
+        st.caption(
+            "⚠️ The logprob **compliance score is not the jailbreak label** — it measures "
+            "*verbalized* compliance and disagrees with the judge on 43% of runs (a "
+            "prompt-injection attack can comply fully without any affirmative phrase). "
+            "Do not read `compliance > 0` as `jailbroken`."
+        )
