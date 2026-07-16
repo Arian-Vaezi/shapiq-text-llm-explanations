@@ -27,6 +27,17 @@ dependencies = [
     "transformers>=5.3.0",
     "torch>=2.10.0",
     "accelerate>=1.13.0",
+    "sentence-transformers>=5.5.1",
+    "python-dotenv>=1.2.2",
+    "google-genai>=2.8.0",
+    "groq>=0.37.1,<1.0.0",
+    "langchain>=1.3.4",
+    "langchain-groq>=1.1.2",
+    "langchain-core>=1.4.2",
+    "langgraph>=1.2.4",
+    "agentevals>=0.0.9",
+    "streamlit>=1.58.0",
+    "spacy>=3.7,<4",
 ]
 authors = [
     {name = "Maximilian Muschalik", email = "Maximilian.Muschalik@lmu.de"},
@@ -184,11 +195,57 @@ exclude = [
 "src/demos/SentimentAnalysis/__init__.py" = [
     "N999",  # SentimentAnalysis is a demo folder name, not an importable public package
 ]
+# The sentiment demo predates the strict lint policy. Its style is forgiven rather than
+# rewritten: these are the same allowances the repo already grants examples/ and tests/
+# (ANN, TRY, S, N, E402 ...), because demo code is scripts, not library code. Nothing here
+# is a defect — the findings are annotations, exception-message style, a pickle load of the
+# demo's own results, and a subprocess call to relaunch itself.
+"src/demos/SentimentAnalysis/**/*.py" = [
+    "ANN",     # type annotations are not required in demos (as in examples/)
+    "TRY",     # exception-message style (as in tests/)
+    "EM",      # exception messages may be inline literals here
+    "S",       # pickle/subprocess of the demo's own artifacts (as in tests/)
+    "RUF",     # ambiguous unicode in UI copy, mutable class attrs
+    "ERA001",  # commented-out code kept as documentation
+    "E402",    # sys.path setup precedes local imports (as in examples/)
+    "E741",    # short loop names in plotting code
+    "N801",    # existing public class name, renaming it would break callers
+    "B007",    # unused loop variables in UI rendering loops
+    "F841",    # an unused local in a plotting helper
+    "FBT001",  # boolean flags are fine in demo entry points
+]
 "src/demos/**/*.py" = [
     "T20",   # demos can have print statements
     "D",     # docstrings are not required in demos
     "INP",   # demos can be an implicit namespace package
     "N999",  # demos can have camelCase module/file names
+]
+"demos/rag_retrieval_explanation/tests/**/*.py" = [
+    "S101", # pytest uses assertions
+    "D",    # test docstrings are optional
+    "E501", # descriptive test data may use long lines
+    "ANN",  # fixture annotations are optional
+    "ARG",  # fixtures may require unused arguments
+    "INP",  # tests are collected as a package
+    "N",    # test helper names prioritize readability
+    "PTH",  # path style is not part of the production API
+    "S",    # security rules are relaxed for test fixtures
+    "PT",   # existing pytest style is accepted
+    "NPY",
+    "SLF",  # tests may inspect private helpers
+    "TRY",
+]
+"demos/rag_retrieval_explanation/backend/services.py" = [
+    "PLC0415",  # defer registry imports to avoid eager model setup
+]
+"demos/rag_retrieval_explanation/core/chunking.py" = [
+    "PLC0415",  # PDF parsers are optional dependencies
+]
+"demos/rag_retrieval_explanation/core/model_backends.py" = [
+    "PLC0415",  # llama-cpp-python is an optional dependency
+]
+"demos/rag_retrieval_explanation/core/retrieval.py" = [
+    "PLC0415",  # dense retrieval dependencies are optional
 ]
 "docs/source/*.py" = [
     "A001",  # some conf.py variables shadow builtins which is okay here
@@ -212,13 +269,18 @@ exclude = [
     "PTH",  # in script code we use a lot of os, which is okay
     "T201",  # scripts can have print statements
     "BLE001",  # scripts can have bare excepts
-    "TRY"
+    "TRY",
+    "PLC0415",  # scripts may defer optional heavyweight dependencies
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ty.src]
+# The RAG demo is intentionally not ty-gated: its optional deps (pypdf,
+# llama-cpp-python, fastapi, ...) are not installed in the lint CI job, so ty
+# cannot resolve them. Demos sit in the same "not type-checked" category as
+# tests/benchmark/scripts/shapiq_games below. ruff still lints/formats the demo.
 include = ["src/shapiq"]
 exclude = [
     "tests",
@@ -266,6 +328,13 @@ required-imports = ["from __future__ import annotations"]
 
 
 [dependency-groups]
+rag_demo = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "python-multipart>=0.0.20",
+    "pypdf",
+    "llama-cpp-python>=0.3.16",
+]
 all_ml = [
     "tabpfn>=2.1.3",
     "torchvision",
@@ -306,4 +375,38 @@ dev = [
     {include-group = "test"},
     {include-group = "lint"},
     {include-group = "all_ml"},
+]
+
+# ---------------------------------------------------------------------------
+# GPU support: pull a CUDA build of torch matched to the platform's driver.
+# Scoped with sys_platform markers so macOS keeps the default PyPI wheels
+# (there are no CUDA wheels for macOS).
+#   - Windows dev boxes:  cu126
+#   - Linux GPU clusters: cu128. The default PyPI Linux wheel is now built for
+#     CUDA 13.0, which is too new for drivers like LRZ HLAI's CUDA 12.9 (torch
+#     then reports cuda_available=False and silently runs on CPU). A cu128 build
+#     runs on any 12.8+ driver. CI is GPU-less, but CUDA wheels run fine on CPU,
+#     so this is safe there too.
+# ---------------------------------------------------------------------------
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu126", marker = "sys_platform == 'win32'" },
+    { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+# torchvision's compiled ops (e.g. torchvision::nms) must be built against the exact
+# same torch build, or importing it fails with "operator torchvision::nms does not
+# exist". transformers imports torchvision eagerly, so a mismatch breaks even text-only
+# use. Pin it to the same cu128 index as torch on Linux so uv installs a matched pair.
+torchvision = [
+    { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
 ]

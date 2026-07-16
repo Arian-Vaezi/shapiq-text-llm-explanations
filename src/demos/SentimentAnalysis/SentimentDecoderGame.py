@@ -6,8 +6,6 @@ from shapiq.game import Game
 
 
 class sentimentDecoderGame(Game):
-
-
     # ── Templates by language and register ────────────────────────────────────
     # Each (language, register) pair gives 2 positive + 2 negative templates.
     # Leading space matches how causal LMs tokenize a continuation following
@@ -92,6 +90,7 @@ class sentimentDecoderGame(Game):
             self._model = hf_model
         else:
             from demos.shared.hf_model import HFModelWrapper
+
             self._model = HFModelWrapper(
                 model_name=model_name,
                 device=device,
@@ -127,7 +126,6 @@ class sentimentDecoderGame(Game):
     # ── Masking ───────────────────────────────────────────────────────────────
 
     def _coalition_to_text(self, coalition: np.ndarray) -> str:
-     
         present_words = self._words[np.asarray(coalition, dtype=bool)]
         return " ".join(present_words.astype(str))
 
@@ -138,19 +136,15 @@ class sentimentDecoderGame(Game):
     # ── Scoring ───────────────────────────────────────────────────────────────
 
     def _compute_score(self, text: str) -> float:
-     
-        pos_scores = np.mean([
-            self._model.score_continuations([text], t)[0]
-            for t in self.POSITIVE_TEMPLATES
-        ])
-        neg_scores = np.mean([
-            self._model.score_continuations([text], t)[0]
-            for t in self.NEGATIVE_TEMPLATES
-        ])
+        pos_scores = np.mean(
+            [self._model.score_continuations([text], t)[0] for t in self.POSITIVE_TEMPLATES]
+        )
+        neg_scores = np.mean(
+            [self._model.score_continuations([text], t)[0] for t in self.NEGATIVE_TEMPLATES]
+        )
         return float(pos_scores - neg_scores)
 
     def _compute_scores_batch(self, texts: list[str]) -> np.ndarray:
-
         pos_matrix = self._model.score_all_continuations(texts, self.POSITIVE_TEMPLATES)
         neg_matrix = self._model.score_all_continuations(texts, self.NEGATIVE_TEMPLATES)
 
@@ -162,6 +156,5 @@ class sentimentDecoderGame(Game):
     # ── Value function ────────────────────────────────────────────────────────
 
     def value_function(self, coalitions: np.ndarray) -> np.ndarray:
- 
         texts = self._coalitions_to_texts(coalitions)
         return self._compute_scores_batch(texts)

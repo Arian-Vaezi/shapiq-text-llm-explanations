@@ -1,0 +1,3377 @@
+{
+  "case": {
+    "case_id": "conflict_solar_system_center",
+    "pattern": "conflicting_evidence",
+    "question": "What is the central body of the Solar System?",
+    "gold_answer": "The Sun.",
+    "gold_evidence_ids": [
+      "conflict_solar_sun"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_solar_sun",
+        "right": "conflict_solar_earth",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_solar_sun",
+        "right": "conflict_solar_jupiter",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_solar_sun",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+      "text": "The Sun is the central body of the Solar System."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_solar_jupiter",
+      "score": 0.5067910406775451,
+      "title": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+      "text": "A wrong summary claims Jupiter is the centre of the Solar System."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_solar_earth",
+      "score": 0.5169886631053966,
+      "title": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+      "text": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_planet_saturn",
+      "score": 0.4693652441245521,
+      "title": "Retrieved 4: conflict_planet_saturn | Saturn",
+      "text": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+    },
+    {
+      "rank": 5,
+      "passage_id": "conflict_solar_planets_distractor",
+      "score": 0.48276429985241376,
+      "title": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+      "text": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_planet_earth",
+      "score": 0.4646695020033126,
+      "title": "Retrieved 6: conflict_planet_earth | Earth",
+      "text": "Earth is the largest of the Solar System's terrestrial planets."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+      "attribution": 0.06228358575044172
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+      "attribution": -0.016128153572484587
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+      "attribution": 0.013677928317550879
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+      "attribution": -0.006816086186218181
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_planet_saturn | Saturn",
+      "attribution": 0.0064491987887255985
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_planet_earth | Earth",
+      "attribution": 0.006050346746664241
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+      "attribution": 0.11152958392075976
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+      "attribution": 0.009619077006912133
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_planet_earth | Earth",
+      "attribution": 0.0055008521897349305
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_planet_saturn | Saturn",
+      "attribution": 0.005270569714747441
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+      "attribution": -0.004181179201317
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+      "attribution": -0.0022451030022652115
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_earth",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.0022506429705203197,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.012172314081534068,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_earth",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.007359065932594403,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.01292406699394596,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.012172314081534068,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_earth",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.0022506429705203197,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_planet_saturn",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.014885431066584427,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.028872613511187303,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.011993152791224069,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_solar_earth",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.0035560857871044763,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_planet_saturn",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.010313039628704538,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.014923012325860156,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.007659941861058495,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_earth",
+      "right": "conflict_planet_saturn",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.010373646629284769,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_earth",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.017398200355153142,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_earth",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.005309853178228602,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_saturn",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.03191710570488393,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_saturn",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.022746606292791148,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_planets_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.027292111753787797,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_jupiter",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.01292406699394596,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_earth",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.007359065932594403,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_planet_saturn",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.0024162197347030604,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.008393827898162967,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_sun",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.004204484180548414,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_solar_earth",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.0049958723369181906,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_planet_saturn",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.010128133557971555,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.015419951440211813,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_jupiter",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.010533472934232534,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_earth",
+      "right": "conflict_planet_saturn",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.009145545413214355,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_earth",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.01085293433722834,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_earth",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.005879547403206708,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_saturn",
+      "right": "conflict_solar_planets_distractor",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.022617190640170516,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_saturn",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.014538818169768255,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_solar_planets_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.015888187233321607,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_solar_sun"
+      ],
+      "score": 0.11733433945116833
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.01968471253011421
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_earth"
+      ],
+      "score": 0.03650223256426671
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn"
+      ],
+      "score": 0.08750203314090119
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.11656449737555219
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.07489459820391153
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.0712174500598921
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth"
+      ],
+      "score": 0.07450828733266524
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.07963791571236303
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.07290250476877044
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth"
+      ],
+      "score": 0.08450842957728241
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth"
+      ],
+      "score": -0.012437950396242972
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.008574474459939613
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.015415719508681702
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.007264181068145123
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.02181992247125522
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.030758726204711345
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.03286174346843376
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.029255190734248537
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.021793832961609805
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04518167775062562
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth"
+      ],
+      "score": 0.06410852643766043
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.07064899862528704
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.0722717478067609
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07285690375557999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.06896752090418781
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.06930351209437383
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07473490498568847
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.08175709153811292
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.08307366825333337
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07573662431642814
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": -0.009810013303069534
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": -0.004892920529359801
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": -0.0075916688318828085
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.008777764229508031
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.0064332944279195114
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01341315420843732
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.027536283650891516
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.024759855578643297
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.025605289172249412
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.019570889601091074
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.0653437032345395
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.06888811581962043
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.0670193380737682
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.06825930120975668
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06908163461689368
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06841927394547073
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.07146667998627018
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07430315294475417
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06801007978951182
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07637560120378462
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.0011526228729069887
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.0007929734510988967
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": -0.00039412006442492153
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.006270453103627879
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.019906045183753066
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.06562388911232753
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06935536786024976
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06825061772743751
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06790301772613488
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07011187437219674
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": -0.005987991757581634
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06551681960669925
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_solar_sun"
+      ],
+      "score": 0.12559874793785253
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.028063534732337636
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_earth"
+      ],
+      "score": 0.023420637582788506
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn"
+      ],
+      "score": 0.058808834523502385
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.07314406763224934
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.05092132446067266
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter"
+      ],
+      "score": 0.12518128833532055
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth"
+      ],
+      "score": 0.12530511407615674
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.12551465124330902
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.1254555559905604
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_earth"
+      ],
+      "score": 0.125306544585435
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth"
+      ],
+      "score": 0.004402684580526728
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.013612499181335835
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.014905053125240542
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01321621639703674
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.01702179232620543
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.028599648847000947
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.027011904012993693
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.023880728958674657
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.028451310116263562
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04124611852490834
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth"
+      ],
+      "score": 0.12538787769185156
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.12556941163967572
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.12529632508232302
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12552244320667827
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.12547939782846973
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.1255403462422428
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12530466971955767
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.1254377829960861
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12540204192811694
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12550357564278664
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.004956501362026466
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.008026814850174924
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.005130188100559263
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.008309475785130471
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.011019589722283674
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01367959727853918
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.01693462890876163
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.020746155168123726
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.02400009137131126
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.018505745327677958
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn"
+      ],
+      "score": 0.1256019557606899
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.12560580296534352
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12544262720768895
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.1254781949099089
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12556831707427252
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12561412592994603
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.1256014030500774
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12553135138875765
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12558115916224893
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12557351891569096
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.004213105082940705
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.007731832226538282
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.005703442549635895
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.007535968672210014
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.014697569391391385
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor"
+      ],
+      "score": 0.12561698695179668
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12552182547827861
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12553087455189588
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12558799742417975
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1255836300471882
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": -0.005373547622151198
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_solar_sun",
+        "conflict_solar_jupiter",
+        "conflict_solar_earth",
+        "conflict_planet_saturn",
+        "conflict_solar_planets_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12549380048816272
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.06551681960669925
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "remaining_chunks": 5,
+        "score": -0.005987991757581634
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "remaining_chunks": 4,
+        "score": 0.019906045183753066
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+        "remaining_chunks": 3,
+        "score": 0.024759855578643297
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+        "remaining_chunks": 2,
+        "score": 0.021793832961609805
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_planet_saturn | Saturn",
+        "remaining_chunks": 1,
+        "score": 0.07489459820391153
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "selected_chunks": 1,
+        "score": 0.11733433945116833
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "selected_chunks": 2,
+        "score": 0.0712174500598921
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+        "selected_chunks": 3,
+        "score": 0.0722717478067609
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+        "selected_chunks": 4,
+        "score": 0.06888811581962043
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: conflict_planet_saturn | Saturn",
+        "selected_chunks": 5,
+        "score": 0.06562388911232753
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "selected_chunks": 6,
+        "score": 0.06551681960669925
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.06551681960669925
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "remaining_chunks": 5,
+        "score": -0.005987991757581634
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+        "remaining_chunks": 4,
+        "score": 0.006270453103627879
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "remaining_chunks": 3,
+        "score": 0.019570889601091074
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+        "remaining_chunks": 2,
+        "score": 0.021793832961609805
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_planet_saturn | Saturn",
+        "remaining_chunks": 1,
+        "score": 0.07489459820391153
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.06551681960669925
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_solar_sun | Solar system centre correct",
+        "remaining_chunks": 5,
+        "score": -0.005987991757581634
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 4,
+        "score": 0.0011526228729069887
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_solar_earth | Solar system centre Earth conflict",
+        "remaining_chunks": 3,
+        "score": 0.008777764229508031
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_planet_saturn | Saturn",
+        "remaining_chunks": 2,
+        "score": 0.015415719508681702
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: conflict_solar_planets_distractor | Solar planets distractor",
+        "remaining_chunks": 1,
+        "score": 0.01968471253011421
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.06551681960669918
+      },
+      {
+        "step": 1,
+        "score": 0.057251783203088276
+      },
+      {
+        "step": 2,
+        "score": 0.045666700497184354
+      },
+      {
+        "step": 3,
+        "score": 0.03884458090730543
+      },
+      {
+        "step": 4,
+        "score": 0.03311416087001496
+      },
+      {
+        "step": 5,
+        "score": 0.07225765663005192
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the central body of the Solar System?",
+    "expanded_queries": [
+      "What is the central body of the Solar System?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "dense": 0.7955,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "dense": 0.6858,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "dense": 0.6709,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "dense": 0.6518,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_saturn | Saturn",
+        "dense": 0.6327,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "dense": 0.6198,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_correct | Largest planet",
+        "dense": 0.6109,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "dense": 0.5904,
+        "page": 41,
+        "type": "body_text",
+        "section": "closest_planet_sun",
+        "flags": "",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 9,
+        "source": "comp_inner_venus | Venus is an inner rocky planet",
+        "dense": 0.5685,
+        "page": 21,
+        "type": "body_text",
+        "section": "inner_planets",
+        "flags": "",
+        "preview": "Venus is one of the inner rocky planets, orbiting the Sun after Mercury."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "dense": 0.5662,
+        "page": 41,
+        "type": "body_text",
+        "section": "closest_planet_sun",
+        "flags": "",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "dense": 0.5611,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "dense": 0.5598,
+        "page": 21,
+        "type": "body_text",
+        "section": "inner_planets",
+        "flags": "",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "keyword": 0.8654,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.1028,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "keyword": 0.0925,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_correct | Largest planet",
+        "keyword": 0.0913,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "keyword": 0.0894,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_saturn | Saturn",
+        "keyword": 0.0823,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "keyword": 0.0794,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "keyword": 0.0704,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.7955,
+        "keyword": 0.8654,
+        "rerank": 0.95,
+        "section": "solar_system_center",
+        "query_hits": "body, central, solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6858,
+        "keyword": 0.0794,
+        "rerank": 0.517,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6709,
+        "keyword": 0.0894,
+        "rerank": 0.5068,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6518,
+        "keyword": 0.0704,
+        "rerank": 0.4828,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6327,
+        "keyword": 0.0823,
+        "rerank": 0.4694,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6198,
+        "keyword": 0.1028,
+        "rerank": 0.4647,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6109,
+        "keyword": 0.0913,
+        "rerank": 0.4525,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5904,
+        "keyword": 0.0,
+        "rerank": 0.342,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 9,
+        "source": "comp_inner_venus | Venus is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5685,
+        "keyword": 0.0,
+        "rerank": 0.322,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Venus is one of the inner rocky planets, orbiting the Sun after Mercury."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5662,
+        "keyword": 0.0,
+        "rerank": 0.3199,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5611,
+        "keyword": 0.0,
+        "rerank": 0.3152,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5598,
+        "keyword": 0.0,
+        "rerank": 0.314,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 13,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5451,
+        "keyword": 0.0,
+        "rerank": 0.3006,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5273,
+        "keyword": 0.0,
+        "rerank": 0.2843,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_venus_planet | Closest planet Venus conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5223,
+        "keyword": 0.0,
+        "rerank": 0.2796,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken classroom answer says Venus is closest to the Sun."
+      },
+      {
+        "rank": 16,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.5216,
+        "keyword": 0.0,
+        "rerank": 0.2791,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 17,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5118,
+        "keyword": 0.0,
+        "rerank": 0.2701,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 18,
+        "source": "comp_inner_jupiter_distractor | Jupiter is not rocky",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5012,
+        "keyword": 0.0,
+        "rerank": 0.2603,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is a gas giant rather than one of the small inner rocky planets."
+      },
+      {
+        "rank": 19,
+        "source": "comp_tri_state_solid | Solid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4994,
+        "keyword": 0.0,
+        "rerank": 0.2587,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Solid is a common state of matter with a relatively fixed shape."
+      },
+      {
+        "rank": 20,
+        "source": "missing_mars_planet | The red planet",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.482,
+        "keyword": 0.0,
+        "rerank": 0.2428,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is a rocky planet known for iron-rich minerals that give its surface a reddish colour."
+      },
+      {
+        "rank": 21,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.4815,
+        "keyword": 0.0,
+        "rerank": 0.2423,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_orbit_b | Earth's annual revolution",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4801,
+        "keyword": 0.0,
+        "rerank": 0.241,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One year corresponds approximately to one complete revolution of Earth around the Sun."
+      },
+      {
+        "rank": 23,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4797,
+        "keyword": 0.0,
+        "rerank": 0.2406,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 24,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4652,
+        "keyword": 0.0,
+        "rerank": 0.2273,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.7955,
+        "keyword": 0.8654,
+        "rerank": 0.95,
+        "section": "solar_system_center",
+        "query_hits": "body, central, solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6858,
+        "keyword": 0.0794,
+        "rerank": 0.517,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6709,
+        "keyword": 0.0894,
+        "rerank": 0.5068,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6518,
+        "keyword": 0.0704,
+        "rerank": 0.4828,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6327,
+        "keyword": 0.0823,
+        "rerank": 0.4694,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6198,
+        "keyword": 0.1028,
+        "rerank": 0.4647,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6109,
+        "keyword": 0.0913,
+        "rerank": 0.4525,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5904,
+        "keyword": 0.0,
+        "rerank": 0.342,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 9,
+        "source": "comp_inner_venus | Venus is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5685,
+        "keyword": 0.0,
+        "rerank": 0.322,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Venus is one of the inner rocky planets, orbiting the Sun after Mercury."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5662,
+        "keyword": 0.0,
+        "rerank": 0.3199,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5611,
+        "keyword": 0.0,
+        "rerank": 0.3152,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5598,
+        "keyword": 0.0,
+        "rerank": 0.314,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 13,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5451,
+        "keyword": 0.0,
+        "rerank": 0.3006,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5273,
+        "keyword": 0.0,
+        "rerank": 0.2843,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_venus_planet | Closest planet Venus conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5223,
+        "keyword": 0.0,
+        "rerank": 0.2796,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A mistaken classroom answer says Venus is closest to the Sun."
+      },
+      {
+        "rank": 16,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.5216,
+        "keyword": 0.0,
+        "rerank": 0.2791,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 17,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5118,
+        "keyword": 0.0,
+        "rerank": 0.2701,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 18,
+        "source": "comp_inner_jupiter_distractor | Jupiter is not rocky",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5012,
+        "keyword": 0.0,
+        "rerank": 0.2603,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is a gas giant rather than one of the small inner rocky planets."
+      },
+      {
+        "rank": 19,
+        "source": "comp_tri_state_solid | Solid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4994,
+        "keyword": 0.0,
+        "rerank": 0.2587,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Solid is a common state of matter with a relatively fixed shape."
+      },
+      {
+        "rank": 20,
+        "source": "missing_mars_planet | The red planet",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.482,
+        "keyword": 0.0,
+        "rerank": 0.2428,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is a rocky planet known for iron-rich minerals that give its surface a reddish colour."
+      },
+      {
+        "rank": 21,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.4815,
+        "keyword": 0.0,
+        "rerank": 0.2423,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_orbit_b | Earth's annual revolution",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4801,
+        "keyword": 0.0,
+        "rerank": 0.241,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One year corresponds approximately to one complete revolution of Earth around the Sun."
+      },
+      {
+        "rank": 23,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4797,
+        "keyword": 0.0,
+        "rerank": 0.2406,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 24,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4652,
+        "keyword": 0.0,
+        "rerank": 0.2273,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.7955,
+        "keyword": 0.8654,
+        "rerank": 0.95,
+        "section": "solar_system_center",
+        "query_hits": "body, central, solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6709,
+        "keyword": 0.0894,
+        "rerank": 0.5068,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5431,
+        "novelty": 0.3536,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7766,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6858,
+        "keyword": 0.0794,
+        "rerank": 0.517,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5536,
+        "novelty": 0.3972,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6317,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6327,
+        "keyword": 0.0823,
+        "rerank": 0.4694,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5045,
+        "novelty": 0.6706,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6278,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.6518,
+        "keyword": 0.0704,
+        "rerank": 0.4828,
+        "section": "solar_system_center",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5183,
+        "novelty": 0.4342,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6065,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6198,
+        "keyword": 0.1028,
+        "rerank": 0.4647,
+        "section": "giant_planets",
+        "query_hits": "solar, system",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4997,
+        "novelty": 0.3385,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5771,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "body",
+        "central",
+        "solar",
+        "system"
+      ],
+      "covered_query_terms": [
+        "body",
+        "central",
+        "solar",
+        "system"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_solar_sun | Solar system centre correct": [
+          "body",
+          "central",
+          "solar",
+          "system"
+        ],
+        "conflict_solar_jupiter | Solar system centre Jupiter conflict": [
+          "solar",
+          "system"
+        ],
+        "conflict_solar_earth | Solar system centre Earth conflict": [
+          "solar",
+          "system"
+        ],
+        "conflict_planet_saturn | Saturn": [
+          "solar",
+          "system"
+        ],
+        "conflict_solar_planets_distractor | Solar planets distractor": [
+          "solar",
+          "system"
+        ],
+        "conflict_planet_earth | Earth": [
+          "solar",
+          "system"
+        ]
+      },
+      "section_titles": [
+        "giant_planets",
+        "solar_system_center"
+      ],
+      "chunks_by_section": {
+        "solar_system_center": [
+          "conflict_solar_sun | Solar system centre correct",
+          "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+          "conflict_solar_earth | Solar system centre Earth conflict",
+          "conflict_solar_planets_distractor | Solar planets distractor"
+        ],
+        "giant_planets": [
+          "conflict_planet_saturn | Saturn",
+          "conflict_planet_earth | Earth"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The Sun is the central body of the Solar System.",
+    "retrieved_context_answer": "The Sun is the central body of the Solar System.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.33333333333333337,
+    "retrieved_context_f1": 0.33333333333333337,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

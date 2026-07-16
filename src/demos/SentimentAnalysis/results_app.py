@@ -7,7 +7,7 @@ import streamlit as st
 
 # ── Paths ──────────────────────────────────────────────────────────────────────
 THIS_DIR = Path(__file__).resolve().parent
-SUMMARY  = THIS_DIR / "results" / "summary.json"
+SUMMARY = THIS_DIR / "results" / "summary.json"
 FIGS_DIR = THIS_DIR / "figures"
 
 st.set_page_config(
@@ -17,7 +17,8 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.markdown("""
+st.markdown(
+    """
 <style>
 .block-container { padding-top: 1.5rem; padding-bottom: 2rem; }
 .mono { font-family: monospace; font-size: 0.85rem; }
@@ -33,7 +34,10 @@ st.markdown("""
     margin-bottom: 10px; font-size: 0.9rem; line-height: 1.65;
 }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
+
 
 # ── Data ───────────────────────────────────────────────────────────────────────
 @st.cache_data
@@ -42,24 +46,33 @@ def load_data() -> list[dict]:
         return []
     return json.loads(SUMMARY.read_text(encoding="utf-8"))
 
+
 def fig_path(run_key: str, kind: str) -> Path | None:
     p = FIGS_DIR / f"{run_key}_{kind}.png"
     return p if p.exists() else None
 
+
 PHENOMENA = ["negative", "positive", "negation", "sarcasm"]
-LANGS     = ["en", "fr", "de"]
-FLAGS     = {"en": "🇬🇧", "fr": "🇫🇷", "de": "🇩🇪"}
-EXPECTED  = {"negative": "NEGATIVE", "positive": "POSITIVE",
-             "negation": "POSITIVE", "sarcasm": "NEGATIVE"}
-PH_ICONS  = {"negative": "👎", "positive": "👍", "negation": "🔄", "sarcasm": "😏"}
+LANGS = ["en", "fr", "de"]
+FLAGS = {"en": "🇬🇧", "fr": "🇫🇷", "de": "🇩🇪"}
+EXPECTED = {
+    "negative": "NEGATIVE",
+    "positive": "POSITIVE",
+    "negation": "POSITIVE",
+    "sarcasm": "NEGATIVE",
+}
+PH_ICONS = {"negative": "👎", "positive": "👍", "negation": "🔄", "sarcasm": "😏"}
+
 
 def label_badge(label: str, correct: bool) -> str:
     icon = "✓" if correct else "✗"
-    css  = "pill-pos" if correct else "pill-neg"
+    css = "pill-pos" if correct else "pill-neg"
     return f'<span class="pill {css}">{label} {icon}</span>'
+
 
 def is_correct(run: dict) -> bool:
     return run["label"] == EXPECTED.get(run["phenomenon"], "?")
+
 
 def top_pairs(run: dict, n: int = 5) -> list[tuple[str, str, float]]:
     d = run.get("sii_exact") or run.get("sii_approx") or {}
@@ -72,10 +85,12 @@ def top_pairs(run: dict, n: int = 5) -> list[tuple[str, str, float]]:
             result.append((parts[0], parts[1], val))
     return result
 
+
 def top_svs(run: dict, n: int = 8) -> list[tuple[str, float]]:
     d = run.get("sv_exact") or run.get("sv_approx") or {}
     order1 = d.get("order1", {})
     return sorted(order1.items(), key=lambda x: abs(x[1]), reverse=True)[:n]
+
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
 data = load_data()
@@ -88,8 +103,8 @@ with st.sidebar:
         st.stop()
     st.caption(
         f"**{len(data)}** runs · "
-        f"**{sum(1 for r in data if r['model_type']=='encoder')}** encoder · "
-        f"**{sum(1 for r in data if r['model_type']=='decoder')}** decoder"
+        f"**{sum(1 for r in data if r['model_type'] == 'encoder')}** encoder · "
+        f"**{sum(1 for r in data if r['model_type'] == 'decoder')}** decoder"
     )
     st.divider()
     page = st.radio(
@@ -103,10 +118,13 @@ with st.sidebar:
 # ════════════════════════════════════════════════════════════════════════════════
 if page == "📖 Story":
     st.markdown("## What did we find?")
-    st.caption("24 sentences × 4 phenomena × EN/FR/DE × 2 models — "
-               "XLM-RoBERTa (encoder) + Qwen 3.5-4B (decoder)")
+    st.caption(
+        "24 sentences × 4 phenomena × EN/FR/DE × 2 models — "
+        "XLM-RoBERTa (encoder) + Qwen 3.5-4B (decoder)"
+    )
     st.divider()
-    st.markdown("""
+    st.markdown(
+        """
 <div class="finding">
     <b>Finding 1  Encoder predictions were more consistent</b><br>
     XLM-RoBERTa handled clear positive and negative sentiment more reliably,
@@ -126,20 +144,24 @@ if page == "📖 Story":
     the intended negative meaning, although the interaction values still
     revealed conflicting word combinations.
 </div>
-""", unsafe_allow_html=True)
+""",
+        unsafe_allow_html=True,
+    )
 
 # ════════════════════════════════════════════════════════════════════════════════
 # ACCURACY
 # ════════════════════════════════════════════════════════════════════════════════
 elif page == "📊 Accuracy":
     st.markdown("## Label accuracy")
-    st.caption("For negation, expected label is POSITIVE. For sarcasm, expected label is NEGATIVE (model should understand the flip).")
+    st.caption(
+        "For negation, expected label is POSITIVE. For sarcasm, expected label is NEGATIVE (model should understand the flip)."
+    )
     st.divider()
 
     col_enc, col_dec = st.columns(2)
     for col, mtype, mname, mid in [
         (col_enc, "encoder", "XLM-RoBERTa", "cardiffnlp/twitter-xlm-roberta-base-sentiment"),
-        (col_dec, "decoder", "Qwen 3.5-4B",  "Qwen/Qwen3.5-4B"),
+        (col_dec, "decoder", "Qwen 3.5-4B", "Qwen/Qwen3.5-4B"),
     ]:
         with col:
             st.markdown(f"#### {mname}")
@@ -150,7 +172,7 @@ elif page == "📊 Accuracy":
             st.divider()
             for ph in PHENOMENA:
                 ph_runs = [r for r in runs if r["phenomenon"] == ph]
-                c, n    = sum(1 for r in ph_runs if is_correct(r)), len(ph_runs)
+                c, n = sum(1 for r in ph_runs if is_correct(r)), len(ph_runs)
                 st.markdown(f"**{PH_ICONS[ph]} {ph.capitalize()}**")
                 st.progress(c / n if n else 0, text=f"{c}/{n}")
                 wrong = [r["text"] for r in ph_runs if not is_correct(r)]
@@ -165,8 +187,10 @@ elif page == "📊 Accuracy":
 # ════════════════════════════════════════════════════════════════════════════════
 elif page == "🔁 Negation":
     st.markdown("## Negation — k-SII captures what SV misses")
-    st.caption("The negation word alone has modest SV. Its k-SII with the sentiment word is "
-               "consistently the dominant pair across EN, FR, and DE in both models.")
+    st.caption(
+        "The negation word alone has modest SV. Its k-SII with the sentiment word is "
+        "consistently the dominant pair across EN, FR, and DE in both models."
+    )
     st.divider()
 
     neg_runs = [r for r in data if r["phenomenon"] == "negation"]
@@ -182,11 +206,11 @@ elif page == "🔁 Negation":
         dec_r = g.get("decoder")
         enc_pairs = top_pairs(enc_r) if enc_r else []
         dec_pairs = top_pairs(dec_r) if dec_r else []
-        enc_top   = enc_pairs[0] if enc_pairs else None
-        dec_top   = dec_pairs[0] if dec_pairs else None
+        enc_top = enc_pairs[0] if enc_pairs else None
+        dec_top = dec_pairs[0] if dec_pairs else None
 
         with st.container(border=True):
-            st.markdown(f"{FLAGS.get(g['lang'],'')} **[{g['lang'].upper()}]** {g['text']}")
+            st.markdown(f"{FLAGS.get(g['lang'], '')} **[{g['lang'].upper()}]** {g['text']}")
             c1, c2 = st.columns(2)
             with c1:
                 st.caption("**Encoder** (XLM-RoBERTa)")
@@ -211,7 +235,9 @@ elif page == "🔁 Negation":
 
             with st.expander("📊 Show plots"):
                 tabs = st.tabs(["Encoder", "Decoder"])
-                for tab, mtype, run in zip(tabs, ["encoder", "decoder"], [enc_r, dec_r]):
+                for tab, mtype, run in zip(
+                    tabs, ["encoder", "decoder"], [enc_r, dec_r], strict=False
+                ):
                     with tab:
                         if run is None:
                             st.caption("No data")
@@ -220,8 +246,8 @@ elif page == "🔁 Negation":
                         fc1, fc2, fc3 = st.columns(3)
                         for col, kind, cap in [
                             (fc1, "sentence", "Sentence (SV)"),
-                            (fc2, "network",  "Network (k-SII)"),
-                            (fc3, "heatmap",  "Heatmap (k-SII)"),
+                            (fc2, "network", "Network (k-SII)"),
+                            (fc3, "heatmap", "Heatmap (k-SII)"),
                         ]:
                             fp = fig_path(rk, kind)
                             with col:
@@ -235,8 +261,10 @@ elif page == "🔁 Negation":
 # ════════════════════════════════════════════════════════════════════════════════
 elif page == "😏 Sarcasm":
     st.markdown("## Sarcasm — spread interactions, near-zero accuracy")
-    st.caption("Both models fail 5/6 times. The one correct case is an accident of "
-               "literal negative vocabulary, not genuine sarcasm detection.")
+    st.caption(
+        "Both models fail 5/6 times. The one correct case is an accident of "
+        "literal negative vocabulary, not genuine sarcasm detection."
+    )
     st.divider()
 
     sar_runs = [r for r in data if r["phenomenon"] == "sarcasm"]
@@ -250,8 +278,14 @@ elif page == "😏 Sarcasm":
     st.divider()
 
     st.markdown("#### 🔍 The French outlier — accidentally correct")
-    fr_enc = next((r for r in sar_runs if r["lang"] == "fr"
-                   and r["topic"] == "film" and r["model_type"] == "encoder"), None)
+    fr_enc = next(
+        (
+            r
+            for r in sar_runs
+            if r["lang"] == "fr" and r["topic"] == "film" and r["model_type"] == "encoder"
+        ),
+        None,
+    )
     if fr_enc:
         st.markdown(f"> *{fr_enc['text']}*")
         svs = top_svs(fr_enc, n=3)
@@ -277,9 +311,16 @@ elif page == "😏 Sarcasm":
 
         with st.expander(f"📊 Plots — sarcasm {lang.upper()}"):
             for topic in ["film", "service"]:
-                r = next((x for x in sar_runs if x["lang"] == lang
-                          and x["topic"] == topic
-                          and x["model_type"] == "encoder"), None)
+                r = next(
+                    (
+                        x
+                        for x in sar_runs
+                        if x["lang"] == lang
+                        and x["topic"] == topic
+                        and x["model_type"] == "encoder"
+                    ),
+                    None,
+                )
                 if r:
                     st.caption(f"**{topic}** (encoder)")
                     fc1, fc2, fc3 = st.columns(3)
@@ -302,8 +343,11 @@ elif page == "🔍 Explorer":
 
     fc1, fc2, fc3 = st.columns(3)
     with fc1:
-        ph_sel = st.selectbox("Phenomenon", ["All"] + PHENOMENA,
-                              format_func=lambda x: f"{PH_ICONS.get(x,'')} {x}" if x != "All" else x)
+        ph_sel = st.selectbox(
+            "Phenomenon",
+            ["All"] + PHENOMENA,
+            format_func=lambda x: f"{PH_ICONS.get(x, '')} {x}" if x != "All" else x,
+        )
     with fc2:
         lang_sel = st.selectbox("Language", ["All"] + [f"{FLAGS[l]} {l.upper()}" for l in LANGS])
     with fc3:
@@ -311,17 +355,20 @@ elif page == "🔍 Explorer":
 
     lang_val = lang_sel.split()[-1].lower() if lang_sel != "All" else "All"
     runs = [r for r in data if r["model_type"] == model_sel]
-    if ph_sel   != "All": runs = [r for r in runs if r["phenomenon"] == ph_sel]
-    if lang_val != "All": runs = [r for r in runs if r["lang"] == lang_val]
+    if ph_sel != "All":
+        runs = [r for r in runs if r["phenomenon"] == ph_sel]
+    if lang_val != "All":
+        runs = [r for r in runs if r["lang"] == lang_val]
 
     if not runs:
         st.info("No results match this filter.")
         st.stop()
 
-    options = {f"{FLAGS.get(r['lang'],'')} [{r['lang'].upper()}] {r['text']}": r for r in runs}
-    selected_key = st.selectbox(f"{len(runs)} sentence(s)", list(options.keys()),
-                                label_visibility="visible")
-    r  = options[selected_key]
+    options = {f"{FLAGS.get(r['lang'], '')} [{r['lang'].upper()}] {r['text']}": r for r in runs}
+    selected_key = st.selectbox(
+        f"{len(runs)} sentence(s)", list(options.keys()), label_visibility="visible"
+    )
+    r = options[selected_key]
     rk = r["run_key"]
     correct = is_correct(r)
 
@@ -329,11 +376,13 @@ elif page == "🔍 Explorer":
 
     hc1, hc2, hc3, hc4, hc5 = st.columns([3, 1, 1, 1, 1])
     hc1.markdown(f"**{r['text']}**")
-    hc1.caption(f"{FLAGS.get(r['lang'],'')} {r['lang'].upper()} · {r['phenomenon']} · {r['topic']} · {r['model_type']}")
-    hc2.metric("Label",    r["label"])
+    hc1.caption(
+        f"{FLAGS.get(r['lang'], '')} {r['lang'].upper()} · {r['phenomenon']} · {r['topic']} · {r['model_type']}"
+    )
+    hc2.metric("Label", r["label"])
     hc3.metric("Expected", EXPECTED.get(r["phenomenon"], "?"))
     hc4.metric("Correct?", "✓" if correct else "✗")
-    hc5.metric("n words",  r["n_players"])
+    hc5.metric("n words", r["n_players"])
 
     st.markdown("#### Shapiq plots")
     fp_s = fig_path(rk, "sentence")
@@ -344,9 +393,12 @@ elif page == "🔍 Explorer":
         st.warning(f"No figures found for `{rk}`. Run `build_diagrams.py` first.")
     else:
         pc1, pc2, pc3 = st.columns(3)
-        if fp_s: pc1.image(str(fp_s), caption="Sentence (SV)",       use_container_width=True)
-        if fp_n: pc2.image(str(fp_n), caption="Network (k-SII)",     use_container_width=True)
-        if fp_h: pc3.image(str(fp_h), caption="Heatmap (k-SII)",     use_container_width=True)
+        if fp_s:
+            pc1.image(str(fp_s), caption="Sentence (SV)", use_container_width=True)
+        if fp_n:
+            pc2.image(str(fp_n), caption="Network (k-SII)", use_container_width=True)
+        if fp_h:
+            pc3.image(str(fp_h), caption="Heatmap (k-SII)", use_container_width=True)
 
     st.divider()
     nc1, nc2 = st.columns(2)
@@ -371,8 +423,9 @@ elif page == "🔍 Explorer":
             for w1, w2, val in pairs:
                 icon = "🟢" if val > 0 else "🔵"
                 kind = "synergy" if val > 0 else "redundancy"
-                st.markdown(f"{icon} `{w1}` + `{w2}` &nbsp; `{val:+.4f}` _{kind}_",
-                            unsafe_allow_html=True)
+                st.markdown(
+                    f"{icon} `{w1}` + `{w2}` &nbsp; `{val:+.4f}` _{kind}_", unsafe_allow_html=True
+                )
                 st.progress(abs(val) / max_p if max_p else 0)
         else:
             st.caption("No k-SII data.")
@@ -380,17 +433,17 @@ elif page == "🔍 Explorer":
     st.divider()
     with st.expander("Technical details"):
         sc1, sc2, sc3, sc4 = st.columns(4)
-        sc1.metric("v(full)",      f"{r['v_full']:+.4f}")
+        sc1.metric("v(full)", f"{r['v_full']:+.4f}")
         sc2.metric("v(∅) baseline", f"{r['v_empty']:+.4f}")
         sc3.metric("Exact skipped", "yes" if r.get("exact_skipped") else "no")
         n = r.get("n_players", 0)
         if n > 20:
             sc4.metric("Budget", str(r["budget"]))
             st.caption("Budget = 512: approximation used only for n > 20 players).")
-                
-       # if r.get("timing"):
+
+        # if r.get("timing"):
         #    st.caption("Timing (s): " + " · ".join(f"{k}: {v:.2f}" for k, v in r["timing"].items()))
-        #st.caption(f"`run_key`: `{rk}`")
+        # st.caption(f"`run_key`: `{rk}`")
         st.caption(f"Model: `{r['model_id']}`")
 # ══════════════════════════════════════════════════════════════════════════
 # Instant Analysis launcher
@@ -412,7 +465,7 @@ import socket
 import subprocess
 import sys
 
-LIVE_APP  = THIS_DIR / "app.py"
+LIVE_APP = THIS_DIR / "app.py"
 LIVE_PORT = 8502  # results app: 8501 · live app: 8502
 
 
@@ -426,9 +479,15 @@ def launch_live_app() -> None:
     """Spawn app.py as an independent Streamlit server on LIVE_PORT."""
     subprocess.Popen(
         [
-            sys.executable, "-m", "streamlit", "run", str(LIVE_APP),
-            "--server.port", str(LIVE_PORT),
-            "--server.headless", "true",
+            sys.executable,
+            "-m",
+            "streamlit",
+            "run",
+            str(LIVE_APP),
+            "--server.port",
+            str(LIVE_PORT),
+            "--server.headless",
+            "true",
         ],
         cwd=str(THIS_DIR),
     )
@@ -446,15 +505,14 @@ def render_instant_analysis_launcher() -> None:
             f"http://localhost:{LIVE_PORT}",
             use_container_width=True,
         )
-    else:
-        if st.button("🚀 Start Instant Analysis", use_container_width=True):
-            launch_live_app()
-            st.success("Starting — give it ~5 seconds, then click below.")
-            st.link_button(
-                "Open Instant Analysis ↗",
-                f"http://localhost:{LIVE_PORT}",
-                use_container_width=True,
-            )
+    elif st.button("🚀 Start Instant Analysis", use_container_width=True):
+        launch_live_app()
+        st.success("Starting — give it ~5 seconds, then click below.")
+        st.link_button(
+            "Open Instant Analysis ↗",
+            f"http://localhost:{LIVE_PORT}",
+            use_container_width=True,
+        )
 
 
 # Call inside your sidebar block:

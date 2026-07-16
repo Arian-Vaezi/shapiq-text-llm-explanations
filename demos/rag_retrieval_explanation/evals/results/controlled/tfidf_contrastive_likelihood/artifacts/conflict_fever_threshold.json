@@ -1,0 +1,3386 @@
+{
+  "case": {
+    "case_id": "conflict_fever_threshold",
+    "pattern": "conflicting_evidence",
+    "question": "What Fahrenheit temperature is commonly used as a fever threshold?",
+    "gold_answer": "100.4 degrees Fahrenheit.",
+    "gold_evidence_ids": [
+      "conflict_fever_1004f"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_fever_1004f",
+        "right": "conflict_fever_98f",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_fever_1004f",
+        "right": "conflict_fever_105f",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_fever_1004f",
+      "score": 0.88,
+      "title": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+      "text": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_fever_98f",
+      "score": 0.4923163902504031,
+      "title": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+      "text": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_fever_105f",
+      "score": 0.4556783832000817,
+      "title": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+      "text": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_fever_celsius_distractor",
+      "score": 0.2943065132123587,
+      "title": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "text": "Temperature can be converted between Fahrenheit and Celsius scales."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_japan_language",
+      "score": 0.10027621488886952,
+      "title": "Retrieved 5: missing_japan_language | Japanese language",
+      "text": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_penicillin_resistance",
+      "score": 0.08572643372608767,
+      "title": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+      "text": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+      "attribution": 0.08755995853546965
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+      "attribution": -0.03349683481982389
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_language | Japanese language",
+      "attribution": -0.016873767878575113
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "attribution": -0.008573385004275043
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+      "attribution": -0.006009627923551019
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+      "attribution": -0.0007052880042692579
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+      "attribution": 0.11965074652317083
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+      "attribution": -0.011418551923430645
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+      "attribution": -0.008050360374319866
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+      "attribution": 0.0029635631469217562
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "attribution": -0.0022405539169401845
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_language | Japanese language",
+      "attribution": -0.00010801511645800118
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_98f",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.017570384794885173,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_105f",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.045177910268349,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_98f",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.028716482977786034,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_105f",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.01897036593097359,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_98f",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.017570384794885173,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_105f",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.045177910268349,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.013691412832738722,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "missing_japan_language",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.024181354685960083,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.006419752502292649,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "conflict_fever_105f",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": 0.014676212471219835,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": 0.007600933400932879,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "missing_japan_language",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.007850502126989149,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.012200418304122199,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.010794233839970802,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "missing_japan_language",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": 0.0030243787545486613,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": 0.01059707848153174,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "missing_japan_language",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.0027585850567530493,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.0053560475244176274,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_language",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.000327630160259932,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_98f",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.028716482977786034,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_105f",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.01897036593097359,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.005181819039330446,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "missing_japan_language",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.00029198861177210874,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_1004f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.003010971636927671,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "conflict_fever_105f",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.009447362722434561,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.004455499169205211,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "missing_japan_language",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.0045309153858968465,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_98f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.007239348785481346,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.0021780976755029955,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "missing_japan_language",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.0003274912422040576,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_105f",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.005804130834032551,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "missing_japan_language",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.0010828571384289512,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.0009981297762832143,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_language",
+      "right": "missing_penicillin_resistance",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.001983916076535805,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f"
+      ],
+      "score": 0.035284467316306856
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_fever_98f"
+      ],
+      "score": -0.030348099179965893
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_105f"
+      ],
+      "score": -0.09164427021995236
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.03206102351555723
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_language"
+      ],
+      "score": -0.04698516994948926
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.02765375760569505
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f"
+      ],
+      "score": 0.02766295320015566
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f"
+      ],
+      "score": 0.026594312998909242
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.03392095762894176
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_japan_language"
+      ],
+      "score": 0.035421866015745596
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.03560852510323287
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f"
+      ],
+      "score": -0.08831618898470595
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.029137403095404635
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_japan_language"
+      ],
+      "score": -0.035287076859208066
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.023652396032974532
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.08495708866913587
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": -0.1050718523641318
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.07684354970581181
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.049607169284993924
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.06525603233614807
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.05161222412869504
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f"
+      ],
+      "score": 0.02340099015674124
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.0298010374618487
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_japan_language"
+      ],
+      "score": 0.027814432685827617
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.03370248209221871
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.02719404322968333
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": 0.027302290653468342
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.02526592600797639
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.035713592438402886
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.034516125587817914
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.04072702282625784
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.058936036703614025
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": -0.07690442239121253
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.0515755300514098
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.04918741333396692
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.040017377891659656
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.042380443542563984
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.11550355807254736
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.10596565451663353
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.12221876749520777
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.06628113902428967
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.030153474888337417
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": 0.027854452007655794
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.03279600299378227
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.028343805428123425
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.03776050852226576
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.029243746613846544
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.029730819610784054
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.036000521127223406
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.023288166624843787
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.029199864083877314
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.09603601902265996
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.05374616396781734
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.07620375111129307
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.0597173825254384
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.12792901956009506
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.02602124067688627
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.03139903404925137
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.024472960558102774
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.02927551104642956
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.02749147233651794
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.08528345814299915
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.021901055380146417
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f"
+      ],
+      "score": 0.10083400783851204
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_fever_98f"
+      ],
+      "score": -0.0031874418598800136
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_105f"
+      ],
+      "score": -0.005861513000771201
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.0031764079968903958
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_language"
+      ],
+      "score": 0.005172738651254116
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.018848267826954923
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f"
+      ],
+      "score": 0.10038607436683367
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f"
+      ],
+      "score": 0.10072380447234441
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.10097328004542949
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_japan_language"
+      ],
+      "score": 0.10044251991381381
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10033272660039161
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f"
+      ],
+      "score": -0.04124403778444191
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.020466039841822048
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_japan_language"
+      ],
+      "score": -0.018632541726672003
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.01382777560801629
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.007059671186333161
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": -0.00877380452562393
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.009886808774073552
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.0027073357160311007
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.010167299683494613
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.012805030565190667
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f"
+      ],
+      "score": 0.10109068638039298
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.10106456024015675
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_japan_language"
+      ],
+      "score": 0.09991686300291702
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10022013690421594
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.10105348076471143
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": 0.10080345590301376
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.1007559081813898
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.10095974116217321
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10097577849422223
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10057932712887707
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": -0.04490348980581249
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": -0.04051343303569932
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.04322827368947518
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.026388853040158866
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.025120755866248012
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.020807305033887502
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.004415367504380652
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.007233040573992933
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.01170983584318075
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.003244771705483429
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.10123939431688278
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language"
+      ],
+      "score": 0.10050641564415075
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10098432593209095
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.10101909823000299
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10108773652161884
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10067381731997871
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.10121307141457869
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10111315895172834
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10090263968589386
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10104361315499755
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": -0.04733085873592291
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.049854132312754484
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.04266066004493935
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.022634954101671045
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.005555043524949621
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language"
+      ],
+      "score": 0.10098505779466527
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10109156679217535
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10098409154390531
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10108886269212014
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.1009409134693795
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": -0.050186864277349474
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f",
+        "conflict_fever_98f",
+        "conflict_fever_105f",
+        "conflict_fever_celsius_distractor",
+        "missing_japan_language",
+        "missing_penicillin_resistance"
+      ],
+      "score": 0.10079682852503413
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.021901055380146417
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 5,
+        "score": -0.08528345814299915
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "remaining_chunks": 4,
+        "score": -0.0597173825254384
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: missing_japan_language | Japanese language",
+        "remaining_chunks": 3,
+        "score": -0.040017377891659656
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 2,
+        "score": -0.023652396032974532
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "remaining_chunks": 1,
+        "score": -0.030348099179965893
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "selected_chunks": 1,
+        "score": 0.035284467316306856
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "selected_chunks": 2,
+        "score": 0.026594312998909242
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: missing_japan_language | Japanese language",
+        "selected_chunks": 3,
+        "score": 0.027302290653468342
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "selected_chunks": 4,
+        "score": 0.029730819610784054
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "selected_chunks": 5,
+        "score": 0.02749147233651794
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "selected_chunks": 6,
+        "score": 0.021901055380146417
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.021901055380146417
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 5,
+        "score": -0.08528345814299915
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "remaining_chunks": 4,
+        "score": -0.12792901956009506
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "remaining_chunks": 3,
+        "score": -0.06628113902428967
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 2,
+        "score": -0.05161222412869504
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_japan_language | Japanese language",
+        "remaining_chunks": 1,
+        "score": -0.02765375760569505
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.021901055380146417
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 5,
+        "score": -0.08528345814299915
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 4,
+        "score": -0.07620375111129307
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: missing_penicillin_resistance | Antibiotic resistance",
+        "remaining_chunks": 3,
+        "score": -0.07690442239121253
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: conflict_fever_98f | Fever threshold conflict 98",
+        "remaining_chunks": 2,
+        "score": -0.1050718523641318
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: conflict_fever_105f | Fever threshold conflict 105",
+        "remaining_chunks": 1,
+        "score": -0.04698516994948926
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_japan_language | Japanese language",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.021901055380146417
+      },
+      {
+        "step": 1,
+        "score": 0.011694328082443377
+      },
+      {
+        "step": 2,
+        "score": -0.007656539517340537
+      },
+      {
+        "step": 3,
+        "score": -0.01832528963216428
+      },
+      {
+        "step": 4,
+        "score": -0.028026582627020756
+      },
+      {
+        "step": 5,
+        "score": -0.0277240374132389
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What Fahrenheit temperature is commonly used as a fever threshold?",
+    "expanded_queries": [
+      "What Fahrenheit temperature is commonly used as a fever threshold?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "keyword": 0.5987,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "keyword": 0.3242,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "keyword": 0.296,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "keyword": 0.1952,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "keyword": 0.0832,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "keyword": 0.0756,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "keyword": 0.0755,
+        "page": 30,
+        "type": "body_text",
+        "section": "japan_capital",
+        "flags": "",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_language | Japanese language",
+        "keyword": 0.0693,
+        "page": 12,
+        "type": "body_text",
+        "section": "japan_overview",
+        "flags": "",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_venue | Opening ceremony venue",
+        "keyword": 0.0653,
+        "page": 1,
+        "type": "body_text",
+        "section": "olympics_2008",
+        "flags": "",
+        "preview": "The opening ceremony was held at the National Stadium, commonly called the Bird's Nest."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_dna | DNA stores instructions",
+        "keyword": 0.0599,
+        "page": 34,
+        "type": "body_text",
+        "section": "central_dogma",
+        "flags": "",
+        "preview": "DNA stores genetic instructions that can be used to make proteins."
+      },
+      {
+        "rank": 11,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "keyword": 0.0591,
+        "page": 31,
+        "type": "body_text",
+        "section": "cell_biology",
+        "flags": "",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 12,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "keyword": 0.0581,
+        "page": 11,
+        "type": "body_text",
+        "section": "antibiotics_overview",
+        "flags": "",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5987,
+        "rerank": 0.88,
+        "section": "fever_threshold",
+        "query_hits": "commonly, fahrenheit, fever, temperature, threshold, used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3242,
+        "rerank": 0.4923,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.296,
+        "rerank": 0.4557,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1952,
+        "rerank": 0.2943,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0832,
+        "rerank": 0.1184,
+        "section": "speed_of_light",
+        "query_hits": "temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0756,
+        "rerank": 0.1085,
+        "section": "sahara_desert",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0755,
+        "rerank": 0.1083,
+        "section": "japan_capital",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_language | Japanese language",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0693,
+        "rerank": 0.1003,
+        "section": "japan_overview",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_venue | Opening ceremony venue",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0653,
+        "rerank": 0.0951,
+        "section": "olympics_2008",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The opening ceremony was held at the National Stadium, commonly called the Bird's Nest."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_dna | DNA stores instructions",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0599,
+        "rerank": 0.088,
+        "section": "central_dogma",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA stores genetic instructions that can be used to make proteins."
+      },
+      {
+        "rank": 11,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0591,
+        "rerank": 0.087,
+        "section": "cell_biology",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 12,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0581,
+        "rerank": 0.0857,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      },
+      {
+        "rank": 13,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0572,
+        "rerank": 0.0845,
+        "section": "mars_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 14,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0536,
+        "rerank": 0.0798,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 15,
+        "source": "comp_photosynthesis_water | Water input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0531,
+        "rerank": 0.0792,
+        "section": "photosynthesis_inputs",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 18,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 19,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 21,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 22,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 23,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5987,
+        "rerank": 0.88,
+        "section": "fever_threshold",
+        "query_hits": "commonly, fahrenheit, fever, temperature, threshold, used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3242,
+        "rerank": 0.4923,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.296,
+        "rerank": 0.4557,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1952,
+        "rerank": 0.2943,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0832,
+        "rerank": 0.1184,
+        "section": "speed_of_light",
+        "query_hits": "temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0756,
+        "rerank": 0.1085,
+        "section": "sahara_desert",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "direct_tokyo_currency | Japan currency note",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0755,
+        "rerank": 0.1083,
+        "section": "japan_capital",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The yen is the official currency used in Japan."
+      },
+      {
+        "rank": 8,
+        "source": "missing_japan_language | Japanese language",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0693,
+        "rerank": 0.1003,
+        "section": "japan_overview",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_venue | Opening ceremony venue",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0653,
+        "rerank": 0.0951,
+        "section": "olympics_2008",
+        "query_hits": "commonly",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The opening ceremony was held at the National Stadium, commonly called the Bird's Nest."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_dna | DNA stores instructions",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0599,
+        "rerank": 0.088,
+        "section": "central_dogma",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA stores genetic instructions that can be used to make proteins."
+      },
+      {
+        "rank": 11,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0591,
+        "rerank": 0.087,
+        "section": "cell_biology",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 12,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0581,
+        "rerank": 0.0857,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      },
+      {
+        "rank": 13,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0572,
+        "rerank": 0.0845,
+        "section": "mars_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 14,
+        "source": "missing_penicillin_medicine | Antibiotic medicines",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0536,
+        "rerank": 0.0798,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antibiotics are medicines used to treat infections caused by susceptible bacteria."
+      },
+      {
+        "rank": 15,
+        "source": "comp_photosynthesis_water | Water input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0531,
+        "rerank": 0.0792,
+        "section": "photosynthesis_inputs",
+        "query_hits": "used",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 17,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 18,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 19,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 21,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 22,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 23,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 24,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5987,
+        "rerank": 0.88,
+        "section": "fever_threshold",
+        "query_hits": "commonly, fahrenheit, fever, temperature, threshold, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3242,
+        "rerank": 0.4923,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5692,
+        "novelty": 0.4354,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6905,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.296,
+        "rerank": 0.4557,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, fever, threshold",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5285,
+        "novelty": 0.4053,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6513,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1952,
+        "rerank": 0.2943,
+        "section": "fever_threshold",
+        "query_hits": "fahrenheit, temperature",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3492,
+        "novelty": 0.4783,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4673,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 5,
+        "source": "missing_japan_language | Japanese language",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0693,
+        "rerank": 0.1003,
+        "section": "japan_overview",
+        "query_hits": "commonly",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1336,
+        "novelty": 0.7711,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4429,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japanese writing commonly combines kanji with the hiragana and katakana scripts."
+      },
+      {
+        "rank": 6,
+        "source": "missing_penicillin_resistance | Antibiotic resistance",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0581,
+        "rerank": 0.0857,
+        "section": "antibiotics_overview",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1175,
+        "novelty": 0.7577,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4271,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bacteria can evolve resistance when antibiotics are overused or used incorrectly."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "commonly",
+        "fahrenheit",
+        "fever",
+        "temperature",
+        "threshold",
+        "used"
+      ],
+      "covered_query_terms": [
+        "commonly",
+        "fahrenheit",
+        "fever",
+        "temperature",
+        "threshold",
+        "used"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_fever_1004f | Fever threshold correct": [
+          "commonly",
+          "fahrenheit",
+          "fever",
+          "temperature",
+          "threshold",
+          "used"
+        ],
+        "conflict_fever_98f | Fever threshold conflict 98": [
+          "fahrenheit",
+          "fever",
+          "threshold"
+        ],
+        "conflict_fever_105f | Fever threshold conflict 105": [
+          "fahrenheit",
+          "fever",
+          "threshold"
+        ],
+        "conflict_fever_celsius_distractor | Celsius conversion distractor": [
+          "fahrenheit",
+          "temperature"
+        ],
+        "missing_japan_language | Japanese language": [
+          "commonly"
+        ],
+        "missing_penicillin_resistance | Antibiotic resistance": [
+          "used"
+        ]
+      },
+      "section_titles": [
+        "antibiotics_overview",
+        "fever_threshold",
+        "japan_overview"
+      ],
+      "chunks_by_section": {
+        "fever_threshold": [
+          "conflict_fever_1004f | Fever threshold correct",
+          "conflict_fever_98f | Fever threshold conflict 98",
+          "conflict_fever_105f | Fever threshold conflict 105",
+          "conflict_fever_celsius_distractor | Celsius conversion distractor"
+        ],
+        "japan_overview": [
+          "missing_japan_language | Japanese language"
+        ],
+        "antibiotics_overview": [
+          "missing_penicillin_resistance | Antibiotic resistance"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "A body temperature of 100.4 degrees Fahrenheit is commonly used as a fever threshold.",
+    "retrieved_context_answer": "A body temperature of 100.4 degrees Fahrenheit is commonly used as a fever threshold.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.4210526315789474,
+    "retrieved_context_f1": 0.4210526315789474,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import torch
 import numpy as np
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 class HFModelWrapper:
-    
     def __init__(
         self,
         model_name: str,
@@ -30,8 +29,10 @@ class HFModelWrapper:
         else:
             self.device = "cpu"
 
-        print(f"[HFModelWrapper] {model_name} → device: {self.device}"
-              f"{' (4-bit quantized)' if load_in_4bit else ''}")
+        print(
+            f"[HFModelWrapper] {model_name} → device: {self.device}"
+            f"{' (4-bit quantized)' if load_in_4bit else ''}"
+        )
 
         if load_in_4bit and self.device != "cuda":
             raise ValueError(
@@ -43,11 +44,7 @@ class HFModelWrapper:
         # ── Dtype selection ───────────────────────────────────────────────────
         # float16 on GPU (faster, less memory)
         # float32 on CPU (float16 not well supported on CPU)
-        dtype = (
-            torch.float16
-            if self.device in ("cuda", "mps")
-            else torch.float32
-        )
+        dtype = torch.float16 if self.device in ("cuda", "mps") else torch.float32
 
         # ── Tokenizer ─────────────────────────────────────────────────────────
         self.tokenizer = AutoTokenizer.from_pretrained(
@@ -107,8 +104,9 @@ class HFModelWrapper:
         self.model.eval()
 
         if self.device == "cuda":
-            print(f"[HFModelWrapper] Ready. "
-                  f"Memory: {torch.cuda.memory_allocated()/1e9:.2f}GB used")
+            print(
+                f"[HFModelWrapper] Ready. Memory: {torch.cuda.memory_allocated() / 1e9:.2f}GB used"
+            )
         else:
             print(f"[HFModelWrapper] Ready on {self.device}.")
 
@@ -120,7 +118,6 @@ class HFModelWrapper:
         prompts: list[str],
         continuation: str,
     ) -> np.ndarray:
-     
         if not prompts:
             return np.array([], dtype=float)
 
@@ -155,13 +152,13 @@ class HFModelWrapper:
         self.tokenizer.padding_side = original_side
 
         # Single forward pass for the entire batch
-        outputs  = self.model(**encoded)
-        logits   = outputs.logits                    # (batch, seq, vocab)
+        outputs = self.model(**encoded)
+        logits = outputs.logits  # (batch, seq, vocab)
 
         # Shift: logits[i] predicts token[i+1]
-        shift_logits = logits[:, :-1, :]             # (batch, seq-1, vocab)
-        shift_ids    = encoded["input_ids"][:, 1:]   # (batch, seq-1)
-        shift_mask   = encoded["attention_mask"][:, 1:]  # (batch, seq-1)
+        shift_logits = logits[:, :-1, :]  # (batch, seq-1, vocab)
+        shift_ids = encoded["input_ids"][:, 1:]  # (batch, seq-1)
+        shift_mask = encoded["attention_mask"][:, 1:]  # (batch, seq-1)
 
         # Log probabilities
         log_probs = torch.log_softmax(shift_logits, dim=-1)  # (batch, seq-1, vocab)
@@ -170,7 +167,7 @@ class HFModelWrapper:
         token_log_probs = log_probs.gather(
             dim=-1,
             index=shift_ids.unsqueeze(-1),
-        ).squeeze(-1)                                # (batch, seq-1)
+        ).squeeze(-1)  # (batch, seq-1)
 
         # Zero out padding positions
         token_log_probs = token_log_probs * shift_mask
@@ -192,12 +189,11 @@ class HFModelWrapper:
         prompts: list[str],
         continuations: list[str],
     ) -> np.ndarray:
-     
         results = []
         for continuation in continuations:
             all_scores = []
             for start in range(0, len(prompts), self.batch_size):
-                batch  = prompts[start : start + self.batch_size]
+                batch = prompts[start : start + self.batch_size]
                 scores = self.score_continuations(batch, continuation)
                 all_scores.extend(scores.tolist())
             results.append(all_scores)

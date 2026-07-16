@@ -1,0 +1,3389 @@
+{
+  "case": {
+    "case_id": "conflict_water_boiling_point",
+    "pattern": "conflicting_evidence",
+    "question": "At standard atmospheric pressure, at what Celsius temperature does water boil?",
+    "gold_answer": "100 degrees Celsius.",
+    "gold_evidence_ids": [
+      "conflict_boiling_100c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_boiling_100c",
+        "right": "conflict_boiling_90c",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_boiling_100c",
+        "right": "conflict_boiling_50c",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_boiling_100c",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+      "text": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_boiling_freezing_distractor",
+      "score": 0.7180225749156485,
+      "title": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+      "text": "At standard pressure, water freezes at 0 degrees Celsius."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_fever_celsius_distractor",
+      "score": 0.5024695298057168,
+      "title": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "text": "Temperature can be converted between Fahrenheit and Celsius scales."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_boiling_90c",
+      "score": 0.4977177596569513,
+      "title": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+      "text": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+    },
+    {
+      "rank": 5,
+      "passage_id": "conflict_boiling_50c",
+      "score": 0.48943823205787496,
+      "title": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+      "text": "A false worksheet claims that water boils at 50 degrees Celsius."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_fever_1004f",
+      "score": 0.4512876115006149,
+      "title": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+      "text": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+      "attribution": 0.05360115289628378
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+      "attribution": 0.008883355890390724
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+      "attribution": 0.007925597533290646
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "attribution": 0.006567020539552885
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+      "attribution": 0.004037781127260994
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+      "attribution": -0.000910006085503466
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+      "attribution": 0.07969774822650555
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+      "attribution": 0.011027839539121207
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+      "attribution": 0.010840881869731952
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+      "attribution": 0.004337759912182095
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+      "attribution": 0.0037497394980510303
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+      "attribution": 0.002884691772336952
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_90c",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.01590019274369527,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_50c",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.010216175172089018,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_90c",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.0005129470494907542,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_50c",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.002481017923431011,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_freezing_distractor",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.0232797976680585,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.013365089503575843,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_90c",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.01590019274369527,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_50c",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.010216175172089018,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_fever_1004f",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.03523795607075984,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.002877118694332432,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_boiling_90c",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.0016405158412581102,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_boiling_50c",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.01330062552871916,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_fever_1004f",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.01491541476465611,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "conflict_boiling_90c",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.006983826351006159,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "conflict_boiling_50c",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.002190401755161209,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "conflict_fever_1004f",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.014084416662295372,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_90c",
+      "right": "conflict_boiling_50c",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.005380923529788829,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_90c",
+      "right": "conflict_fever_1004f",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": 0.009972840251091655,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_boiling_50c",
+      "right": "conflict_fever_1004f",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": 0.006976649069292388,
+      "sign": "positive"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_freezing_distractor",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.022307004932248797,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.0013286071897867522,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_90c",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.0005129470494907542,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_boiling_50c",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.002481017923431011,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_boiling_100c",
+      "right": "conflict_fever_1004f",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.012704054384630098,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_fever_celsius_distractor",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.013197575005691764,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_boiling_90c",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.008570378738814891,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_boiling_50c",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.009343795863709488,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_freezing_distractor",
+      "right": "conflict_fever_1004f",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.010767370871087183,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "conflict_boiling_90c",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.011274912949449111,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "conflict_boiling_50c",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.012911985579035612,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_fever_celsius_distractor",
+      "right": "conflict_fever_1004f",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.019589696270970985,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_90c",
+      "right": "conflict_boiling_50c",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.025613188453998327,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_90c",
+      "right": "conflict_fever_1004f",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.018236043478690154,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_boiling_50c",
+      "right": "conflict_fever_1004f",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.01756762532889715,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c"
+      ],
+      "score": 0.12587146456832426
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor"
+      ],
+      "score": 0.03389308545440034
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.03182482396874092
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c"
+      ],
+      "score": 0.029496936272229657
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_50c"
+      ],
+      "score": 0.02788990266209762
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f"
+      ],
+      "score": 0.024699183110383216
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor"
+      ],
+      "score": 0.09520702780083001
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.10340726400530809
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.05772919769062862
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.07501547887296989
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.07467312465049786
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.02778148284798737
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.003526279179034697
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": -0.003422055461993534
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.054765205487097846
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.04801672270487506
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.03164154313696971
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0040922152058112116
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": -0.01688850932998265
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0490591745264789
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.04801888037722074
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.10019608694125492
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.07429781801919183
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.07329468220133245
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.06381912009241936
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.06382649327793188
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.07968992467901442
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0700707356340719
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.06819875639411244
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.054337335959384836
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.06207935697806999
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.03938623863765889
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": -0.0004427750117170226
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.06685734765962736
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": -0.020113612534584047
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.053670875994351275
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.04993293294102258
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.009058006994176415
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.01421089862012781
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.01780827154578174
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.02362187240873226
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.055827894133688716
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.061363771745841456
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0673619174519639
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.07987426711280993
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.07299766772457006
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0677479446851077
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.07415171240750335
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.06706915204840186
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.06660297501819307
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.06652861164294671
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.03931776229471107
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.05113643614652197
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.05645869906136003
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.049092956930628984
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.019254294157211138
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.07286318795369928
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.07632647684659166
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.05657293175178357
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.07381327872187654
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.07239446007459532
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.052232649140813714
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.08010490173023394
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c"
+      ],
+      "score": 0.1106503726630359
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor"
+      ],
+      "score": 0.06395118297278546
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.058172133966880535
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c"
+      ],
+      "score": 0.06408982950151804
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_50c"
+      ],
+      "score": 0.06303536107814595
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0791365627716819
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor"
+      ],
+      "score": 0.11104099883531543
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.11207004576367596
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.11260250056198606
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11254308715100059
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11296681024281335
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.031700343528856034
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.034890336490463525
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.03399889704088077
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.04688946847391512
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.04198512064485288
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.03710411924550178
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.03325410650538846
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": -0.004857171391291992
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.03281404620294426
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.03252017855118422
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor"
+      ],
+      "score": 0.11208171216707674
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.11214172930432664
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11273827118259544
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11284238797780488
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.11285072467366652
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11278201284168765
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11296808975900707
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.1125324219587866
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11309062854796265
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.1131545007591554
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.03185583109079593
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.029181836188615196
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.04297004347470629
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.03109438974659562
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.046503641572171184
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.047399241843462614
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": -0.0050261619232998545
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.013798257248534729
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.018300304182751026
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.007375357047670006
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c"
+      ],
+      "score": 0.11293672985797454
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11252057260039877
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.1130817355478369
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11273603799989806
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11294395392503581
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11300603787960395
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11300438484573105
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11244191106639467
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11243200083322341
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11284438274515823
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.035623254512283986
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.04965184506726933
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.040058590970796726
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.04646144099158922
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.0032705591617414043
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c"
+      ],
+      "score": 0.11226688967400567
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11245887833727874
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11265630329269916
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11266930505619233
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.11277360455583696
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.03625988494775162
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_boiling_100c",
+        "conflict_boiling_freezing_distractor",
+        "conflict_fever_celsius_distractor",
+        "conflict_boiling_90c",
+        "conflict_boiling_50c",
+        "conflict_fever_1004f"
+      ],
+      "score": 0.1125386604918886
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.08010490173023394
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+        "remaining_chunks": 5,
+        "score": 0.052232649140813714
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+        "remaining_chunks": 4,
+        "score": 0.019254294157211138
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 3,
+        "score": 0.009058006994176415
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 2,
+        "score": -0.01688850932998265
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+        "remaining_chunks": 1,
+        "score": 0.02788990266209762
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+        "selected_chunks": 1,
+        "score": 0.12587146456832426
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+        "selected_chunks": 2,
+        "score": 0.09520702780083001
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+        "selected_chunks": 3,
+        "score": 0.06381912009241936
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "selected_chunks": 4,
+        "score": 0.0673619174519639
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+        "selected_chunks": 5,
+        "score": 0.07632647684659166
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+        "selected_chunks": 6,
+        "score": 0.08010490173023394
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.08010490173023394
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+        "remaining_chunks": 5,
+        "score": 0.052232649140813714
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+        "remaining_chunks": 4,
+        "score": 0.019254294157211138
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 3,
+        "score": 0.02362187240873226
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+        "remaining_chunks": 2,
+        "score": 0.04801888037722074
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+        "remaining_chunks": 1,
+        "score": 0.024699183110383216
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.08010490173023394
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_boiling_100c | Water boiling point correct",
+        "remaining_chunks": 5,
+        "score": 0.052232649140813714
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: conflict_boiling_90c | Water boiling point conflict 90",
+        "remaining_chunks": 4,
+        "score": 0.05645869906136003
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_boiling_freezing_distractor | Water freezing distractor",
+        "remaining_chunks": 3,
+        "score": 0.01780827154578174
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: conflict_fever_1004f | Fever threshold correct",
+        "remaining_chunks": 2,
+        "score": 0.03164154313696971
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "remaining_chunks": 1,
+        "score": 0.02788990266209762
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: conflict_boiling_50c | Water boiling point conflict 50",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.08010490173023398
+      },
+      {
+        "step": 1,
+        "score": 0.06910552594486295
+      },
+      {
+        "step": 2,
+        "score": 0.06056428840057783
+      },
+      {
+        "step": 3,
+        "score": 0.05122882207291836
+      },
+      {
+        "step": 4,
+        "score": 0.04160704406569704
+      },
+      {
+        "step": 5,
+        "score": 0.045690578046216804
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "At standard atmospheric pressure, at what Celsius temperature does water boil?",
+    "expanded_queries": [
+      "At standard atmospheric pressure, at what Celsius temperature does water boil?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "dense": 0.7846,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "dense": 0.6744,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "dense": 0.6224,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "dense": 0.6089,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "dense": 0.5943,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "dense": 0.5721,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 7,
+        "source": "comp_water_states | States of water",
+        "dense": 0.552,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "dense": 0.5332,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "dense": 0.5102,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "dense": 0.4805,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "dense": 0.4734,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "dense": 0.4688,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "One liter equals 1000 milliliters."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "keyword": 0.6538,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "keyword": 0.3679,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "keyword": 0.1884,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 4,
+        "source": "comp_water_states | States of water",
+        "keyword": 0.1634,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "keyword": 0.131,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "keyword": 0.1221,
+        "page": 26,
+        "type": "body_text",
+        "section": "water_boiling_point",
+        "flags": "",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "keyword": 0.121,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 8,
+        "source": "comp_photosynthesis_water | Water input",
+        "keyword": 0.1162,
+        "page": 6,
+        "type": "body_text",
+        "section": "photosynthesis_inputs",
+        "flags": "",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "keyword": 0.0859,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "keyword": 0.0782,
+        "page": 40,
+        "type": "body_text",
+        "section": "fever_threshold",
+        "flags": "",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 11,
+        "source": "comp_water_salt | Salt water",
+        "keyword": 0.0633,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.7846,
+        "keyword": 0.6538,
+        "rerank": 0.95,
+        "section": "water_boiling_point",
+        "query_hits": "atmospheric, celsius, pressure, standard, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6744,
+        "keyword": 0.3679,
+        "rerank": 0.718,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, pressure, standard, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5943,
+        "keyword": 0.1884,
+        "rerank": 0.5025,
+        "section": "fever_threshold",
+        "query_hits": "celsius, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6224,
+        "keyword": 0.1221,
+        "rerank": 0.4977,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6089,
+        "keyword": 0.131,
+        "rerank": 0.4894,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5721,
+        "keyword": 0.121,
+        "rerank": 0.4513,
+        "section": "fever_threshold",
+        "query_hits": "celsius, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 7,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.552,
+        "keyword": 0.1634,
+        "rerank": 0.4223,
+        "section": "water_composition",
+        "query_hits": "water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5332,
+        "keyword": 0.0782,
+        "rerank": 0.366,
+        "section": "fever_threshold",
+        "query_hits": "standard",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4805,
+        "keyword": 0.0859,
+        "rerank": 0.3214,
+        "section": "speed_of_light",
+        "query_hits": "temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5102,
+        "keyword": 0.0,
+        "rerank": 0.2791,
+        "section": "fever_threshold",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 11,
+        "source": "comp_photosynthesis_water | Water input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.4106,
+        "keyword": 0.1162,
+        "rerank": 0.2714,
+        "section": "photosynthesis_inputs",
+        "query_hits": "water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 12,
+        "source": "comp_water_salt | Salt water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.433,
+        "keyword": 0.0633,
+        "rerank": 0.2676,
+        "section": "water_composition",
+        "query_hits": "water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4734,
+        "keyword": 0.0,
+        "rerank": 0.2455,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4688,
+        "keyword": 0.0,
+        "rerank": 0.2413,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 15,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.459,
+        "keyword": 0.0,
+        "rerank": 0.2323,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      },
+      {
+        "rank": 16,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4534,
+        "keyword": 0.0,
+        "rerank": 0.2272,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4512,
+        "keyword": 0.0,
+        "rerank": 0.2252,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 18,
+        "source": "comp_photosynthesis_carbon | Carbon dioxide input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.4476,
+        "keyword": 0.0,
+        "rerank": 0.2219,
+        "section": "photosynthesis_inputs",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During photosynthesis, plants take in carbon dioxide from the air through leaf stomata."
+      },
+      {
+        "rank": 19,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4432,
+        "keyword": 0.0,
+        "rerank": 0.2179,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 20,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4282,
+        "keyword": 0.0,
+        "rerank": 0.2041,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 21,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4268,
+        "keyword": 0.0,
+        "rerank": 0.2029,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 22,
+        "source": "comp_tri_state_solid | Solid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4206,
+        "keyword": 0.0,
+        "rerank": 0.1972,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Solid is a common state of matter with a relatively fixed shape."
+      },
+      {
+        "rank": 23,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4196,
+        "keyword": 0.0,
+        "rerank": 0.1963,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 24,
+        "source": "redundant_light_speed_c | Light speed physics constant",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.419,
+        "keyword": 0.0,
+        "rerank": 0.1958,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Physics denotes the vacuum speed of light as c, approximately 3.00 x 10^8 m/s."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.7846,
+        "keyword": 0.6538,
+        "rerank": 0.95,
+        "section": "water_boiling_point",
+        "query_hits": "atmospheric, celsius, pressure, standard, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6744,
+        "keyword": 0.3679,
+        "rerank": 0.718,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, pressure, standard, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5943,
+        "keyword": 0.1884,
+        "rerank": 0.5025,
+        "section": "fever_threshold",
+        "query_hits": "celsius, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6224,
+        "keyword": 0.1221,
+        "rerank": 0.4977,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6089,
+        "keyword": 0.131,
+        "rerank": 0.4894,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5721,
+        "keyword": 0.121,
+        "rerank": 0.4513,
+        "section": "fever_threshold",
+        "query_hits": "celsius, temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      },
+      {
+        "rank": 7,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.552,
+        "keyword": 0.1634,
+        "rerank": 0.4223,
+        "section": "water_composition",
+        "query_hits": "water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_fever_105f | Fever threshold conflict 105",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5332,
+        "keyword": 0.0782,
+        "rerank": 0.366,
+        "section": "fever_threshold",
+        "query_hits": "standard",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false chart lists 105 degrees Fahrenheit as the standard fever threshold."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_light_sound_distractor | Sound speed distractor",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4805,
+        "keyword": 0.0859,
+        "rerank": 0.3214,
+        "section": "speed_of_light",
+        "query_hits": "temperature",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of sound in air is far slower and depends on temperature."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_fever_98f | Fever threshold conflict 98",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5102,
+        "keyword": 0.0,
+        "rerank": 0.2791,
+        "section": "fever_threshold",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect note says 98.6 degrees Fahrenheit is the fever threshold."
+      },
+      {
+        "rank": 11,
+        "source": "comp_photosynthesis_water | Water input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.4106,
+        "keyword": 0.1162,
+        "rerank": 0.2714,
+        "section": "photosynthesis_inputs",
+        "query_hits": "water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plant roots absorb water from the soil, and that water is used in photosynthesis."
+      },
+      {
+        "rank": 12,
+        "source": "comp_water_salt | Salt water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.433,
+        "keyword": 0.0633,
+        "rerank": 0.2676,
+        "section": "water_composition",
+        "query_hits": "water",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4734,
+        "keyword": 0.0,
+        "rerank": 0.2455,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4688,
+        "keyword": 0.0,
+        "rerank": 0.2413,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 15,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.459,
+        "keyword": 0.0,
+        "rerank": 0.2323,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      },
+      {
+        "rank": 16,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4534,
+        "keyword": 0.0,
+        "rerank": 0.2272,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4512,
+        "keyword": 0.0,
+        "rerank": 0.2252,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 18,
+        "source": "comp_photosynthesis_carbon | Carbon dioxide input",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.4476,
+        "keyword": 0.0,
+        "rerank": 0.2219,
+        "section": "photosynthesis_inputs",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During photosynthesis, plants take in carbon dioxide from the air through leaf stomata."
+      },
+      {
+        "rank": 19,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4432,
+        "keyword": 0.0,
+        "rerank": 0.2179,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 20,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4282,
+        "keyword": 0.0,
+        "rerank": 0.2041,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 21,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.4268,
+        "keyword": 0.0,
+        "rerank": 0.2029,
+        "section": "metric_volume",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 22,
+        "source": "comp_tri_state_solid | Solid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4206,
+        "keyword": 0.0,
+        "rerank": 0.1972,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Solid is a common state of matter with a relatively fixed shape."
+      },
+      {
+        "rank": 23,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4196,
+        "keyword": 0.0,
+        "rerank": 0.1963,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 24,
+        "source": "redundant_light_speed_c | Light speed physics constant",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.419,
+        "keyword": 0.0,
+        "rerank": 0.1958,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Physics denotes the vacuum speed of light as c, approximately 3.00 x 10^8 m/s."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.7846,
+        "keyword": 0.6538,
+        "rerank": 0.95,
+        "section": "water_boiling_point",
+        "query_hits": "atmospheric, celsius, pressure, standard, water",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6744,
+        "keyword": 0.3679,
+        "rerank": 0.718,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, pressure, standard, water",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7608,
+        "novelty": 0.25,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8293,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_fever_celsius_distractor | Celsius conversion distractor",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5943,
+        "keyword": 0.1884,
+        "rerank": 0.5025,
+        "section": "fever_threshold",
+        "query_hits": "celsius, temperature",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5386,
+        "novelty": 0.8656,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6844,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Temperature can be converted between Fahrenheit and Celsius scales."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6224,
+        "keyword": 0.1221,
+        "rerank": 0.4977,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, water",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5337,
+        "novelty": 0.3781,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6119,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_boiling_50c | Water boiling point conflict 50",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.6089,
+        "keyword": 0.131,
+        "rerank": 0.4894,
+        "section": "water_boiling_point",
+        "query_hits": "celsius, water",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5252,
+        "novelty": 0.3559,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6015,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false worksheet claims that water boils at 50 degrees Celsius."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_fever_1004f | Fever threshold correct",
+        "page": 40,
+        "type": "body_text",
+        "dense": 0.5721,
+        "keyword": 0.121,
+        "rerank": 0.4513,
+        "section": "fever_threshold",
+        "query_hits": "celsius, temperature",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4859,
+        "novelty": 0.4783,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5848,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A body temperature of 100.4 degrees Fahrenheit, or 38 degrees Celsius, is commonly used as a fever threshold."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "atmospheric",
+        "boil",
+        "celsius",
+        "does",
+        "pressure",
+        "standard",
+        "temperature",
+        "water"
+      ],
+      "covered_query_terms": [
+        "atmospheric",
+        "celsius",
+        "pressure",
+        "standard",
+        "temperature",
+        "water"
+      ],
+      "missing_query_terms": [
+        "boil",
+        "does"
+      ],
+      "terms_by_chunk": {
+        "conflict_boiling_100c | Water boiling point correct": [
+          "atmospheric",
+          "celsius",
+          "pressure",
+          "standard",
+          "water"
+        ],
+        "conflict_boiling_freezing_distractor | Water freezing distractor": [
+          "celsius",
+          "pressure",
+          "standard",
+          "water"
+        ],
+        "conflict_fever_celsius_distractor | Celsius conversion distractor": [
+          "celsius",
+          "temperature"
+        ],
+        "conflict_boiling_90c | Water boiling point conflict 90": [
+          "celsius",
+          "water"
+        ],
+        "conflict_boiling_50c | Water boiling point conflict 50": [
+          "celsius",
+          "water"
+        ],
+        "conflict_fever_1004f | Fever threshold correct": [
+          "celsius",
+          "temperature"
+        ]
+      },
+      "section_titles": [
+        "fever_threshold",
+        "water_boiling_point"
+      ],
+      "chunks_by_section": {
+        "water_boiling_point": [
+          "conflict_boiling_100c | Water boiling point correct",
+          "conflict_boiling_freezing_distractor | Water freezing distractor",
+          "conflict_boiling_90c | Water boiling point conflict 90",
+          "conflict_boiling_50c | Water boiling point conflict 50"
+        ],
+        "fever_threshold": [
+          "conflict_fever_celsius_distractor | Celsius conversion distractor",
+          "conflict_fever_1004f | Fever threshold correct"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "At standard atmospheric pressure, water boils at 100 degrees Celsius.",
+    "retrieved_context_answer": "At standard atmospheric pressure, water boils at 100 degrees Celsius.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.4615384615384615,
+    "retrieved_context_f1": 0.4615384615384615,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

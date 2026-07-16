@@ -61,64 +61,177 @@ EXACT_MAX_PLAYERS_DECODER = 20
 
 SENTENCES: list[dict] = [
     # ── Negative ──────────────────────────────────────────────────────────────
-    {"id": "neg_film", "phenomenon": "negative", "topic": "film", "lang": "en",
-     "text": "This film was absolutely terrible."},
-    {"id": "neg_film", "phenomenon": "negative", "topic": "film", "lang": "fr",
-     "text": "Ce film était absolument terrible."},
-    {"id": "neg_film", "phenomenon": "negative", "topic": "film", "lang": "de",
-     "text": "Dieser Film war absolut furchtbar."},
-
-    {"id": "neg_service", "phenomenon": "negative", "topic": "service", "lang": "en",
-     "text": "The service at this restaurant was really bad."},
-    {"id": "neg_service", "phenomenon": "negative", "topic": "service", "lang": "fr",
-     "text": "Le service dans ce restaurant était vraiment mauvais."},
-    {"id": "neg_service", "phenomenon": "negative", "topic": "service", "lang": "de",
-     "text": "Der Service in diesem Restaurant war wirklich schlecht."},
-
+    {
+        "id": "neg_film",
+        "phenomenon": "negative",
+        "topic": "film",
+        "lang": "en",
+        "text": "This film was absolutely terrible.",
+    },
+    {
+        "id": "neg_film",
+        "phenomenon": "negative",
+        "topic": "film",
+        "lang": "fr",
+        "text": "Ce film était absolument terrible.",
+    },
+    {
+        "id": "neg_film",
+        "phenomenon": "negative",
+        "topic": "film",
+        "lang": "de",
+        "text": "Dieser Film war absolut furchtbar.",
+    },
+    {
+        "id": "neg_service",
+        "phenomenon": "negative",
+        "topic": "service",
+        "lang": "en",
+        "text": "The service at this restaurant was really bad.",
+    },
+    {
+        "id": "neg_service",
+        "phenomenon": "negative",
+        "topic": "service",
+        "lang": "fr",
+        "text": "Le service dans ce restaurant était vraiment mauvais.",
+    },
+    {
+        "id": "neg_service",
+        "phenomenon": "negative",
+        "topic": "service",
+        "lang": "de",
+        "text": "Der Service in diesem Restaurant war wirklich schlecht.",
+    },
     # ── Positive ──────────────────────────────────────────────────────────────
-    {"id": "pos_film", "phenomenon": "positive", "topic": "film", "lang": "en",
-     "text": "This film was absolutely wonderful."},
-    {"id": "pos_film", "phenomenon": "positive", "topic": "film", "lang": "fr",
-     "text": "Ce film était absolument merveilleux."},
-    {"id": "pos_film", "phenomenon": "positive", "topic": "film", "lang": "de",
-     "text": "Dieser Film war absolut wunderbar."},
-
-    {"id": "pos_service", "phenomenon": "positive", "topic": "service", "lang": "en",
-     "text": "The service at this restaurant was truly amazing."},
-    {"id": "pos_service", "phenomenon": "positive", "topic": "service", "lang": "fr",
-     "text": "Le service dans ce restaurant était vraiment incroyable."},
-    {"id": "pos_service", "phenomenon": "positive", "topic": "service", "lang": "de",
-     "text": "Der Service in diesem Restaurant war wirklich erstaunlich."},
-
+    {
+        "id": "pos_film",
+        "phenomenon": "positive",
+        "topic": "film",
+        "lang": "en",
+        "text": "This film was absolutely wonderful.",
+    },
+    {
+        "id": "pos_film",
+        "phenomenon": "positive",
+        "topic": "film",
+        "lang": "fr",
+        "text": "Ce film était absolument merveilleux.",
+    },
+    {
+        "id": "pos_film",
+        "phenomenon": "positive",
+        "topic": "film",
+        "lang": "de",
+        "text": "Dieser Film war absolut wunderbar.",
+    },
+    {
+        "id": "pos_service",
+        "phenomenon": "positive",
+        "topic": "service",
+        "lang": "en",
+        "text": "The service at this restaurant was truly amazing.",
+    },
+    {
+        "id": "pos_service",
+        "phenomenon": "positive",
+        "topic": "service",
+        "lang": "fr",
+        "text": "Le service dans ce restaurant était vraiment incroyable.",
+    },
+    {
+        "id": "pos_service",
+        "phenomenon": "positive",
+        "topic": "service",
+        "lang": "de",
+        "text": "Der Service in diesem Restaurant war wirklich erstaunlich.",
+    },
     # ── Negation ──────────────────────────────────────────────────────────────
-    {"id": "neg8_film", "phenomenon": "negation", "topic": "film", "lang": "en",
-     "text": "This film is not bad at all."},
-    {"id": "neg8_film", "phenomenon": "negation", "topic": "film", "lang": "fr",
-     "text": "Ce film n'est pas mauvais du tout."},
-    {"id": "neg8_film", "phenomenon": "negation", "topic": "film", "lang": "de",
-     "text": "Dieser Film ist überhaupt nicht schlecht."},
-
-    {"id": "neg8_service", "phenomenon": "negation", "topic": "service", "lang": "en",
-     "text": "The service at this restaurant is not terrible at all."},
-    {"id": "neg8_service", "phenomenon": "negation", "topic": "service", "lang": "fr",
-     "text": "Le service dans ce restaurant n'est pas terrible du tout."},
-    {"id": "neg8_service", "phenomenon": "negation", "topic": "service", "lang": "de",
-     "text": "Der Service in diesem Restaurant ist überhaupt nicht furchtbar."},
-
+    {
+        "id": "neg8_film",
+        "phenomenon": "negation",
+        "topic": "film",
+        "lang": "en",
+        "text": "This film is not bad at all.",
+    },
+    {
+        "id": "neg8_film",
+        "phenomenon": "negation",
+        "topic": "film",
+        "lang": "fr",
+        "text": "Ce film n'est pas mauvais du tout.",
+    },
+    {
+        "id": "neg8_film",
+        "phenomenon": "negation",
+        "topic": "film",
+        "lang": "de",
+        "text": "Dieser Film ist überhaupt nicht schlecht.",
+    },
+    {
+        "id": "neg8_service",
+        "phenomenon": "negation",
+        "topic": "service",
+        "lang": "en",
+        "text": "The service at this restaurant is not terrible at all.",
+    },
+    {
+        "id": "neg8_service",
+        "phenomenon": "negation",
+        "topic": "service",
+        "lang": "fr",
+        "text": "Le service dans ce restaurant n'est pas terrible du tout.",
+    },
+    {
+        "id": "neg8_service",
+        "phenomenon": "negation",
+        "topic": "service",
+        "lang": "de",
+        "text": "Der Service in diesem Restaurant ist überhaupt nicht furchtbar.",
+    },
     # ── Sarcasm ───────────────────────────────────────────────────────────────
-    {"id": "sar_film", "phenomenon": "sarcasm", "topic": "film", "lang": "en",
-     "text": "Oh great, another boring film, exactly what I was hoping for."},
-    {"id": "sar_film", "phenomenon": "sarcasm", "topic": "film", "lang": "fr",
-     "text": "Oh super, encore un film ennuyeux, exactement ce que j'espérais."},
-    {"id": "sar_film", "phenomenon": "sarcasm", "topic": "film", "lang": "de",
-     "text": "Oh toll, noch ein langweiliger Film, genau das, worauf ich gehofft hatte."},
-
-    {"id": "sar_service", "phenomenon": "sarcasm", "topic": "service", "lang": "en",
-     "text": "Oh wonderful, another slow service, just what I needed."},
-    {"id": "sar_service", "phenomenon": "sarcasm", "topic": "service", "lang": "fr",
-     "text": "Oh merveilleux, encore un service lent, juste ce qu'il me fallait."},
-    {"id": "sar_service", "phenomenon": "sarcasm", "topic": "service", "lang": "de",
-     "text": "Oh wunderbar, noch ein langsamer Service, genau das, was ich brauchte."},
+    {
+        "id": "sar_film",
+        "phenomenon": "sarcasm",
+        "topic": "film",
+        "lang": "en",
+        "text": "Oh great, another boring film, exactly what I was hoping for.",
+    },
+    {
+        "id": "sar_film",
+        "phenomenon": "sarcasm",
+        "topic": "film",
+        "lang": "fr",
+        "text": "Oh super, encore un film ennuyeux, exactement ce que j'espérais.",
+    },
+    {
+        "id": "sar_film",
+        "phenomenon": "sarcasm",
+        "topic": "film",
+        "lang": "de",
+        "text": "Oh toll, noch ein langweiliger Film, genau das, worauf ich gehofft hatte.",
+    },
+    {
+        "id": "sar_service",
+        "phenomenon": "sarcasm",
+        "topic": "service",
+        "lang": "en",
+        "text": "Oh wonderful, another slow service, just what I needed.",
+    },
+    {
+        "id": "sar_service",
+        "phenomenon": "sarcasm",
+        "topic": "service",
+        "lang": "fr",
+        "text": "Oh merveilleux, encore un service lent, juste ce qu'il me fallait.",
+    },
+    {
+        "id": "sar_service",
+        "phenomenon": "sarcasm",
+        "topic": "service",
+        "lang": "de",
+        "text": "Oh wunderbar, noch ein langsamer Service, genau das, was ich brauchte.",
+    },
 ]
 
 assert len(SENTENCES) == 24, f"Expected 24 sentences, got {len(SENTENCES)}"
@@ -130,6 +243,7 @@ for s in SENTENCES:
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 
+
 def log(msg: str) -> None:
     """Print and append a timestamped message to the progress log."""
     line = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {msg}"
@@ -139,6 +253,7 @@ def log(msg: str) -> None:
 
 
 # ── Model loading ─────────────────────────────────────────────────────────────
+
 
 def load_encoder():
     """Load the multilingual encoder model + tokenizer once.
@@ -180,6 +295,7 @@ def load_decoder():
 
 # ── Game construction ─────────────────────────────────────────────────────────
 
+
 def build_encoder_game(text: str, model, tokenizer):
     """Build an EncoderTextImputer for the given text using preloaded weights."""
     from EncoderTextImputer import EncoderTextImputer
@@ -220,6 +336,7 @@ def build_decoder_game(text: str, wrapper, language: str = "en", register: str =
 
 # ── Core computation ──────────────────────────────────────────────────────────
 
+
 def compute_all(game, budget: int, *, compute_exact: bool) -> dict:
     """Run approximate and (optionally) exact SV + k-SII for one game.
 
@@ -238,9 +355,9 @@ def compute_all(game, budget: int, *, compute_exact: bool) -> dict:
     timing: dict[str, float] = {}
 
     t0 = time.time()
-    sv_approx = shapiq.KernelSHAP(
-        n=game.n_players, random_state=RANDOM_STATE
-    ).approximate(budget=budget, game=game)
+    sv_approx = shapiq.KernelSHAP(n=game.n_players, random_state=RANDOM_STATE).approximate(
+        budget=budget, game=game
+    )
     timing["sv_approx"] = time.time() - t0
 
     t0 = time.time()
@@ -305,6 +422,7 @@ def interaction_values_to_summary(
 
 # ── Single sentence run ────────────────────────────────────────────────────────
 
+
 def run_one(sentence: dict, model_type: str, models: dict) -> dict | None:
     """Run the full pipeline for one sentence on one model type.
 
@@ -339,8 +457,10 @@ def run_one(sentence: dict, model_type: str, models: dict) -> dict | None:
         else:
             wrapper = models["decoder"]
             game = build_decoder_game(
-                sentence["text"], wrapper,
-                language=sentence["lang"], register=DECODER_REGISTER,
+                sentence["text"],
+                wrapper,
+                language=sentence["lang"],
+                register=DECODER_REGISTER,
             )
             budget = BUDGET_DECODER
             compute_exact = game.n_players <= EXACT_MAX_PLAYERS_DECODER
@@ -395,6 +515,7 @@ def run_one(sentence: dict, model_type: str, models: dict) -> dict | None:
 
 # ── Summary persistence ────────────────────────────────────────────────────────
 
+
 def load_summary() -> list[dict]:
     """Load existing summary.json, or return an empty list."""
     if SUMMARY_PATH.exists():
@@ -419,6 +540,7 @@ def append_to_summary(entry: dict) -> None:
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run shapiq sentiment experiments offline.")

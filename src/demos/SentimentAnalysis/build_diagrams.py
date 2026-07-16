@@ -14,6 +14,7 @@ SRC_DIR = THIS_DIR.parents[1]  # src/
 sys.path.insert(0, str(SRC_DIR))
 
 import matplotlib as mpl
+
 mpl.use("Agg")
 import matplotlib.pyplot as plt
 
@@ -26,6 +27,7 @@ FIGURES_DIR.mkdir(exist_ok=True)
 
 
 # ── Reconstruct InteractionValues from saved JSON dicts ───────────────────────
+
 
 def rebuild_sv(order1: dict[str, float], words: list[str]) -> shapiq.InteractionValues:
     """Rebuild a first-order InteractionValues object from a saved order1 dict.
@@ -83,7 +85,7 @@ def rebuild_sii(
         values.append(order1[w])
 
     # order 2 — keys are "word_i__word_j" in original (i<j) order
-    for (i, j) in combinations(range(n), 2):
+    for i, j in combinations(range(n), 2):
         key = f"{words[i]}__{words[j]}"
         lookup[(i, j)] = len(values)
         values.append(order2[key])
@@ -101,6 +103,7 @@ def rebuild_sii(
 
 
 # ── Plotting ───────────────────────────────────────────────────────────────────
+
 
 def make_sentence_plot(sv: shapiq.InteractionValues, words: list[str], out_path: Path) -> None:
     """Save the sentence attribution plot."""
@@ -149,14 +152,21 @@ def make_heatmap_plot(sii: shapiq.InteractionValues, words: list[str], out_path:
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build shapiq diagrams from saved results.")
-    parser.add_argument("--run_key", default=None, help="Plot only this run_key (e.g. sar_film_en_decoder).")
-    parser.add_argument("--phenomenon", default=None, choices=["negative", "positive", "negation", "sarcasm"])
+    parser.add_argument(
+        "--run_key", default=None, help="Plot only this run_key (e.g. sar_film_en_decoder)."
+    )
+    parser.add_argument(
+        "--phenomenon", default=None, choices=["negative", "positive", "negation", "sarcasm"]
+    )
     parser.add_argument("--lang", default=None, choices=["en", "fr", "de"])
     parser.add_argument("--model_type", default=None, choices=["encoder", "decoder"])
     parser.add_argument(
-        "--index", default="approx", choices=["approx", "exact"],
+        "--index",
+        default="approx",
+        choices=["approx", "exact"],
         help="Use approximate (KernelSHAP/IQ) or exact values for plotting. Defaults to approx.",
     )
     args = parser.parse_args()
@@ -189,7 +199,9 @@ def main() -> None:
         sii_dict = r["sii_exact"] if args.index == "exact" else r["sii_approx"]
 
         if sv_dict is None or sii_dict is None:
-            print(f"[{run_key}] {args.index} values not available (exact_skipped={r.get('exact_skipped')}), skipping.")
+            print(
+                f"[{run_key}] {args.index} values not available (exact_skipped={r.get('exact_skipped')}), skipping."
+            )
             continue
 
         print(f"[{run_key}]  text='{r['text']}'  label={r['label']}")

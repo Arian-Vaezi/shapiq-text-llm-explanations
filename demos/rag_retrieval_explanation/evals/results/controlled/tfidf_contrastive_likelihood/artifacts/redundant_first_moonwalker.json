@@ -1,0 +1,3404 @@
+{
+  "case": {
+    "case_id": "redundant_first_moonwalker",
+    "pattern": "redundant_evidence",
+    "question": "Who was the first person to walk on the Moon?",
+    "gold_answer": "Neil Armstrong.",
+    "gold_evidence_ids": [
+      "redundant_neil_a",
+      "redundant_neil_b",
+      "redundant_neil_c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_neil_a",
+        "right": "redundant_neil_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_neil_a",
+        "right": "redundant_neil_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_neil_b",
+        "right": "redundant_neil_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_neil_a",
+      "score": 0.88,
+      "title": "Retrieved 1: redundant_neil_a | Armstrong first step",
+      "text": "Neil Armstrong was the first person to walk on the Moon."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_neil_c",
+      "score": 0.4095593471841124,
+      "title": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+      "text": "The first Moon walk was made by Neil Armstrong."
+    },
+    {
+      "rank": 3,
+      "passage_id": "redundant_orbit_moon",
+      "score": 0.1814041947587846,
+      "title": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+      "text": "The Moon orbits Earth."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_suez_shipping",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "text": "Major shipping canals can shorten sea routes between regions."
+    },
+    {
+      "rank": 5,
+      "passage_id": "direct_tokyo_osaka",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+      "text": "Osaka is a large Japanese city and an important commercial centre."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_penicillin_mould",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+      "text": "Some medically useful compounds were developed after observations of microorganisms."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+      "attribution": 0.16867206705527865
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+      "attribution": 0.13456518440661813
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+      "attribution": 0.020640052829197505
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+      "attribution": 0.01901252546113006
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+      "attribution": 0.012446097417069571
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "attribution": 0.005021794957977169
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+      "attribution": 0.0699123933457732
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+      "attribution": 0.06845758275098626
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+      "attribution": 0.0034564692900834544
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+      "attribution": 0.003352371651755578
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+      "attribution": 0.002705379919475288
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+      "attribution": -0.0009576571300576299
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.32494919827463636,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_left"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.13897669026888151,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_left"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.32494919827463636,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_orbit_moon",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.026552517944540287,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "missing_suez_shipping",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.016402767184169977,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.03004612373574461,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "missing_penicillin_mould",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.03076877223952841,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_orbit_moon",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.015878092021085095,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "missing_suez_shipping",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.009440187078522115,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.022039379688219302,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "missing_penicillin_mould",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.022998990595108737,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "missing_suez_shipping",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.02709439190089887,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.02710157221901094,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "missing_penicillin_mould",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.021519479828355524,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.015048351671658631,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_penicillin_mould",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": 0.0003181854864351354,
+      "sign": "positive"
+    },
+    {
+      "left": "direct_tokyo_osaka",
+      "right": "missing_penicillin_mould",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.016385064434238258,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.13897669026888151,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_orbit_moon",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.0027274835887836665,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "missing_suez_shipping",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.0026165527531056116,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0036615322954222083,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "missing_penicillin_mould",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.0032537051416217933,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_orbit_moon",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.0027580255307877344,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "missing_suez_shipping",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": 0.0027132024684867464,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.0034560417933758576,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "missing_penicillin_mould",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.002982016237112751,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "missing_suez_shipping",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.006872992129934388,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.008958679093636394,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "missing_penicillin_mould",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.006605336347423352,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "direct_tokyo_osaka",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.003934381270238212,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_shipping",
+      "right": "missing_penicillin_mould",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.0007952888124067109,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_tokyo_osaka",
+      "right": "missing_penicillin_mould",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.0035398216979341535,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_neil_a"
+      ],
+      "score": 0.4019875498443658
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_c"
+      ],
+      "score": 0.4131052123708898
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon"
+      ],
+      "score": 0.13204814732462544
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_suez_shipping"
+      ],
+      "score": 0.07359222246279451
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.11677123560293301
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_mould"
+      ],
+      "score": 0.09498442347558678
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c"
+      ],
+      "score": 0.36830639090790185
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3667454868807717
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping"
+      ],
+      "score": 0.3585429894099419
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.3635687154988252
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3516109086053294
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.40177944340696914
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping"
+      ],
+      "score": 0.39184254484237446
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.40084533688280977
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3902669197896377
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.0953286388156166
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.13194146005041485
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1284021749910329
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.1197575859547858
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14455170906691506
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.12450970070412293
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.35660480215828916
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping"
+      ],
+      "score": 0.3496849484061254
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.35499542872153056
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3554808160926328
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.341748582818444
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.35308863894888487
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3433225699881207
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.34535861573418136
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.34889243976814366
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.35519625328918925
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.3880210393121858
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.39467296160518306
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3842669404285588
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.38910448383665663
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.37970944844486776
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3900400530031908
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.03717926342996036
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.06547637406784546
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.0941897641256143
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.10881450937125725
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.35900162549978687
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.3621730807661522
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3575056936924528
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.35582486384216516
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.34502195334967956
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3554388217530027
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.35549073465100556
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3435534995823336
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.35193020177288903
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3493533264801082
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.3926994192589992
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3854562766234447
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.39331907435998925
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3853239992647539
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.054662344070513624
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.356727421522985
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3542069796535513
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3544330132517417
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.34645563014863257
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3425583589484641
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3870895532870732
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.3603577199446172
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_neil_a"
+      ],
+      "score": 0.14712792514664474
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_c"
+      ],
+      "score": 0.14531329439021667
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon"
+      ],
+      "score": 0.02775688385859143
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_suez_shipping"
+      ],
+      "score": 0.006199221027525237
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.0233309143555972
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_penicillin_mould"
+      ],
+      "score": 0.017015753126057742
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c"
+      ],
+      "score": 0.14704106444954135
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.1467440476748112
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14695948533086767
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14675485096761742
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.146672488232646
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.1445235413165331
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14552118859580743
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14548273498467046
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14536839025489445
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.009109368170413301
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.018203806945802592
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.019405685618852142
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.014802167552697032
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.018033382933279163
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.025208420294564826
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.14678359231358273
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14679569317026908
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14695962146959873
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14682712907167705
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14688652063358065
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14675755626220033
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14686299329458385
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14694381108325105
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1470052901209108
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1466824934827794
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.1457504349299883
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14559622650831883
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14530181644364493
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14516727826583542
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14552848092411297
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1455391191332276
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": -0.007063053075267278
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.0014815734178081907
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.008699090569086687
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.014469382192921265
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping"
+      ],
+      "score": 0.14693370931913552
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14708090253352235
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1469391822588485
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.1468193405708692
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.146699707357559
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14680425353281634
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14697575828708076
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1469671725850007
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14673250892184653
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1466926439398053
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14554251962175124
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14581458036040484
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1455861618608426
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14541106918083535
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": -0.007996547807382792
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka"
+      ],
+      "score": 0.14708695519092807
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1471460819038014
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14700022604172458
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14709217297766086
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14707281711410636
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.14580147353738626
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_suez_shipping",
+        "direct_tokyo_osaka",
+        "missing_penicillin_mould"
+      ],
+      "score": 0.1469265390567348
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3603577199446172
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "remaining_chunks": 5,
+        "score": 0.3425583589484641
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "remaining_chunks": 4,
+        "score": 0.054662344070513624
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 3,
+        "score": 0.10881450937125725
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+        "remaining_chunks": 2,
+        "score": 0.14455170906691506
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+        "remaining_chunks": 1,
+        "score": 0.07359222246279451
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "selected_chunks": 1,
+        "score": 0.4131052123708898
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "selected_chunks": 2,
+        "score": 0.36830639090790185
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+        "selected_chunks": 3,
+        "score": 0.35660480215828916
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+        "selected_chunks": 4,
+        "score": 0.3621730807661522
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+        "selected_chunks": 5,
+        "score": 0.3544330132517417
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "selected_chunks": 6,
+        "score": 0.3603577199446172
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3603577199446172
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "remaining_chunks": 5,
+        "score": 0.3870895532870732
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "remaining_chunks": 4,
+        "score": 0.054662344070513624
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 3,
+        "score": 0.10881450937125725
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 2,
+        "score": 0.12450970070412293
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+        "remaining_chunks": 1,
+        "score": 0.09498442347558678
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3603577199446172
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "remaining_chunks": 5,
+        "score": 0.3425583589484641
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 4,
+        "score": 0.3493533264801082
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: direct_tokyo_osaka | Osaka distractor",
+        "remaining_chunks": 3,
+        "score": 0.34889243976814366
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_suez_shipping | Shipping canal distractor",
+        "remaining_chunks": 2,
+        "score": 0.3516109086053294
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: missing_penicillin_mould | Mould-derived compounds",
+        "remaining_chunks": 1,
+        "score": 0.4019875498443658
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.36035771994461674
+      },
+      {
+        "step": 1,
+        "score": 0.3565092247036581
+      },
+      {
+        "step": 2,
+        "score": 0.3492783537101431
+      },
+      {
+        "step": 3,
+        "score": 0.3331633679787215
+      },
+      {
+        "step": 4,
+        "score": 0.2919159708182479
+      },
+      {
+        "step": 5,
+        "score": 0.22980390916317592
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who was the first person to walk on the Moon?",
+    "expanded_queries": [
+      "Who was the first person to walk on the Moon?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "keyword": 0.7648,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "keyword": 0.3035,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.1681,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "keyword": 0.0877,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.7648,
+        "rerank": 0.88,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, person, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3035,
+        "rerank": 0.4096,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1681,
+        "rerank": 0.1814,
+        "section": "earth_orbit",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0877,
+        "rerank": 0.0994,
+        "section": "apollo_11_first_step",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "comp_treaty_germany_distractor | Germany at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Germany was required to accept the Treaty of Versailles after World War I."
+      },
+      {
+        "rank": 6,
+        "source": "comp_treaty_britain | Britain at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Britain was one of the Allied powers represented in the Treaty of Versailles negotiations."
+      },
+      {
+        "rank": 7,
+        "source": "comp_treaty_united_states | United States at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The United States was one of the Allied powers represented in the Treaty of Versailles negotiations."
+      },
+      {
+        "rank": 8,
+        "source": "comp_treaty_france | France at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "France was one of the Allied powers represented in the Treaty of Versailles negotiations."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mona_lisa",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 10,
+        "source": "direct_olympics_venue | Opening ceremony venue",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "olympics_2008",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The opening ceremony was held at the National Stadium, commonly called the Bird's Nest."
+      },
+      {
+        "rank": 11,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "english_novels",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 12,
+        "source": "comp_curie_family | Curie family",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "marie_curie_awards",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 13,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "japan_capital",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "apollo_11_first_step",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 15,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 16,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 17,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 18,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 19,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 21,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 22,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 23,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 24,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.7648,
+        "rerank": 0.88,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, person, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3035,
+        "rerank": 0.4096,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1681,
+        "rerank": 0.1814,
+        "section": "earth_orbit",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0877,
+        "rerank": 0.0994,
+        "section": "apollo_11_first_step",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "comp_treaty_germany_distractor | Germany at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Germany was required to accept the Treaty of Versailles after World War I."
+      },
+      {
+        "rank": 6,
+        "source": "comp_treaty_britain | Britain at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Britain was one of the Allied powers represented in the Treaty of Versailles negotiations."
+      },
+      {
+        "rank": 7,
+        "source": "comp_treaty_united_states | United States at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The United States was one of the Allied powers represented in the Treaty of Versailles negotiations."
+      },
+      {
+        "rank": 8,
+        "source": "comp_treaty_france | France at Versailles",
+        "page": 33,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "versailles_signatories",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "France was one of the Allied powers represented in the Treaty of Versailles negotiations."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "page": 16,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mona_lisa",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 10,
+        "source": "direct_olympics_venue | Opening ceremony venue",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "olympics_2008",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The opening ceremony was held at the National Stadium, commonly called the Bird's Nest."
+      },
+      {
+        "rank": 11,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "english_novels",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 12,
+        "source": "comp_curie_family | Curie family",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "marie_curie_awards",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 13,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "japan_capital",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "apollo_11_first_step",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 15,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 16,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 17,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 18,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 19,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 21,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 22,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 23,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 24,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.7648,
+        "rerank": 0.88,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, person, walk, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3035,
+        "rerank": 0.4096,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, walk, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4773,
+        "novelty": 0.2292,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5826,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1681,
+        "rerank": 0.1814,
+        "section": "earth_orbit",
+        "query_hits": "moon",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2238,
+        "novelty": 0.7,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3505,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 4,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 5,
+        "source": "direct_tokyo_osaka | Osaka distractor",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "japan_capital",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Osaka is a large Japanese city and an important commercial centre."
+      },
+      {
+        "rank": 6,
+        "source": "missing_penicillin_mould | Mould-derived compounds",
+        "page": 11,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "antibiotics_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some medically useful compounds were developed after observations of microorganisms."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "first",
+        "moon",
+        "person",
+        "walk",
+        "was"
+      ],
+      "covered_query_terms": [
+        "first",
+        "moon",
+        "person",
+        "walk",
+        "was"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_neil_a | Armstrong first step": [
+          "first",
+          "moon",
+          "person",
+          "walk",
+          "was"
+        ],
+        "redundant_neil_c | First lunar surface wording": [
+          "first",
+          "moon",
+          "walk",
+          "was"
+        ],
+        "redundant_orbit_moon | Moon orbit": [
+          "moon"
+        ]
+      },
+      "section_titles": [
+        "antibiotics_overview",
+        "apollo_11_first_step",
+        "canal_overview",
+        "earth_orbit",
+        "japan_capital"
+      ],
+      "chunks_by_section": {
+        "apollo_11_first_step": [
+          "redundant_neil_a | Armstrong first step",
+          "redundant_neil_c | First lunar surface wording"
+        ],
+        "earth_orbit": [
+          "redundant_orbit_moon | Moon orbit"
+        ],
+        "canal_overview": [
+          "missing_suez_shipping | Shipping canal distractor"
+        ],
+        "japan_capital": [
+          "direct_tokyo_osaka | Osaka distractor"
+        ],
+        "antibiotics_overview": [
+          "missing_penicillin_mould | Mould-derived compounds"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Neil Armstrong was the first person to walk on the Moon.",
+    "retrieved_context_answer": "Neil Armstrong was the first person to walk on the Moon.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.3076923076923077,
+    "retrieved_context_f1": 0.3076923076923077,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

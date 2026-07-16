@@ -1,0 +1,1584 @@
+{
+  "case": {
+    "case_id": "qasper_18c5d366b1da8447b5404eab71f4cc658ba12e6f",
+    "paper_id": "1810.08699",
+    "paper_title": "pioNER: Datasets and Baselines for Armenian Named Entity Recognition",
+    "question_id": "18c5d366b1da8447b5404eab71f4cc658ba12e6f",
+    "annotation_id": "663e9d9f52cfad714f96f2c57d21313ef20f8add",
+    "question": "what ner models were evaluated?",
+    "gold_answer": "Stanford NER; spaCy 2.0; recurrent model with a CRF top layer",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1810.08699:paragraph:0024",
+      "1810.08699:paragraph:0025",
+      "1810.08699:paragraph:0026",
+      "1810.08699:paragraph:0027"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1810.08699:paragraph:0034",
+      "score": 0.949776987428535,
+      "title": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+      "text": "We release two named-entity annotated datasets for the Armenian language: a silver-standard corpus for training NER models, and a gold-standard corpus for testing. It is worth to underline the importance of the latter corpus, as we aim it to serve as a benchmark for future named entity recognition systems designed for the Armenian language. Along with the corpora, we publish GloVe word vector models trained on a collection of Armenian texts."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1810.08699:paragraph:0030",
+      "score": 0.7499372861509658,
+      "title": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+      "text": "Table TABREF19 shows the average scores of evaluated models. The highest F1 score was achieved by the recurrent model using a batch size of 8 and Adam optimizer with an initial learning rate of 0.001. Updating word embeddings during training also noticeably improved the performance. GloVe word vector models of four different sizes (50, 100, 200, and 300) were tested, with vectors of size 50 producing the best results (Table TABREF20 )."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1810.08699:paragraph:0024",
+      "score": 0.8833574145180821,
+      "title": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+      "text": "In this section we describe a number of experiments targeted to compare the performance of popular named entity recognition algorithms on our data. We trained and evaluated Stanford NER, spaCy 2.0, and a recurrent model similar to BIBREF13 , BIBREF14 that uses bidirectional LSTM cells for character-based feature extraction and CRF, described in Guillaume Genthial's Sequence Tagging with Tensorflow blog post BIBREF15 ."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1810.08699:paragraph:0000",
+      "score": 0.5167076936777927,
+      "title": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+      "text": "Named entity recognition is an important task of natural language processing, featuring in many popular text processing toolkits. This area of natural language processing has been actively studied in the latest decades and the advent of deep learning reinvigorated the research on more effective and accurate models. However, most of existing approaches require large annotated corpora. To the best of our knowledge, no such work has been done for the Armenian language, and in this work we address several problems, including the creation of a corpus for training machine learning models, the development of gold-standard test corpus and evaluation of the effectiveness of established approaches for the Armenian language."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1810.08699:paragraph:0032",
+      "score": 0.6197015581102624,
+      "title": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+      "text": "It is clear that the development set of automatically generated examples was not an ideal indicator of models' performance on gold-standard test set. Higher development set scores often led to lower test scores as seen in the evaluation results for spaCy 2.0 and Char-biLSTM+biLSTM+CRF (Tables TABREF21 and TABREF20 ). Analysis of errors on the development set revealed that many were caused by the incompleteness of annotations, when named entity recognizers correctly predicted entities that were absent from annotations (e.g. [\u053d\u054d\u0540\u0544-\u056b LOC] (USSR's), [\u0534\u056b\u0576\u0561\u0574\u0578\u0576 ORG] (the_Dinamo), [\u054a\u056b\u0580\u0565\u0576\u0565\u0575\u0561\u0576 \u0569\u0565\u0580\u0561\u056f\u0572\u0566\u0578\u0582 LOC] (Iberian Peninsula's) etc). Similarly, the recognizers often correctly ignored non-entities that are incorrectly labeled in data (e.g. [\u0585\u057d\u0574\u0561\u0576\u0576\u0565\u0580\u056b PER], [\u056f\u0578\u0576\u057d\u0565\u0580\u057e\u0561\u057f\u0578\u0580\u056b\u0561\u0576 ORG] etc)."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1810.08699:paragraph:0017",
+      "score": 0.5429630252529212,
+      "title": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+      "text": "In order to evaluate the models trained on generated data, we manually annotated a named entities dataset comprising 53453 tokens and 2566 sentences selected from over 250 news texts from ilur.am. This dataset is comparable in size with the test sets of other languages (Table TABREF10 ). Included sentences are from political, sports, local and world news (Figures FIGREF8 , FIGREF9 ), covering the period between August 2012 and July 2018. The dataset provides annotations for 3 popular named entity classes: people (PER), organizations (ORG), and locations (LOC), and is released in CoNLL03 format with IOB tagging scheme. Tokens and sentences were segmented according to the UD standards for the Armenian language BIBREF11 ."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+      "attribution": 0.054709114420146664
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+      "attribution": 0.025605561362818555
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+      "attribution": 0.012562304969736897
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+      "attribution": -0.008477715109726365
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+      "attribution": -0.008216595096923827
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+      "attribution": 0.0013105425631347522
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+      "attribution": 0.12140898740045047
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+      "attribution": 0.053067466185202535
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+      "attribution": 0.00842545163720857
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+      "attribution": 0.005682144189966918
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+      "attribution": 0.0016371122589216266
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+      "attribution": 6.682763137547674e-05
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0030",
+      "interaction": -0.010663144870459447
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0024",
+      "interaction": -0.00803753552555632
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0000",
+      "interaction": 0.00046687273739019503
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.00827304741662295
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": 0.005689179365435735
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0024",
+      "interaction": -0.02842746085181567
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0000",
+      "interaction": -0.0003883115184587734
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.011927258497228756
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.004800952107305111
+    },
+    {
+      "left": "1810.08699:paragraph:0024",
+      "right": "1810.08699:paragraph:0000",
+      "interaction": -0.01689297310121525
+    },
+    {
+      "left": "1810.08699:paragraph:0024",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": -0.06915088723820023
+    },
+    {
+      "left": "1810.08699:paragraph:0024",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.005911876696296613
+    },
+    {
+      "left": "1810.08699:paragraph:0000",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.00021297937014599222
+    },
+    {
+      "left": "1810.08699:paragraph:0000",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.002004621289566889
+    },
+    {
+      "left": "1810.08699:paragraph:0032",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": 0.011523398912325636
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0030",
+      "interaction": -0.0022900656714768377
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0024",
+      "interaction": 0.0007917058845652377
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0000",
+      "interaction": 0.000234356915583156
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.0006268795793435797
+    },
+    {
+      "left": "1810.08699:paragraph:0034",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": 0.00017401250883598816
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0024",
+      "interaction": -0.005945359158517883
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0000",
+      "interaction": -0.0017543659596328024
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.00746646549365521
+    },
+    {
+      "left": "1810.08699:paragraph:0030",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.005691746146821797
+    },
+    {
+      "left": "1810.08699:paragraph:0024",
+      "right": "1810.08699:paragraph:0000",
+      "interaction": 0.0025258191130351844
+    },
+    {
+      "left": "1810.08699:paragraph:0024",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.008996608533113773
+    },
+    {
+      "left": "1810.08699:paragraph:0024",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.009012436979100605
+    },
+    {
+      "left": "1810.08699:paragraph:0000",
+      "right": "1810.08699:paragraph:0032",
+      "interaction": 0.0031550081933031026
+    },
+    {
+      "left": "1810.08699:paragraph:0000",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.00038039258064529726
+    },
+    {
+      "left": "1810.08699:paragraph:0032",
+      "right": "1810.08699:paragraph:0017",
+      "interaction": -0.0015119119169443437
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.07749321279020538
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "remaining_chunks": 5,
+        "score": 0.07307087728553663
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "remaining_chunks": 4,
+        "score": -0.027399244649051246
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "remaining_chunks": 3,
+        "score": -0.005211790382991188
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "remaining_chunks": 2,
+        "score": 0.0030850376590826345
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.007878336891935511
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "selected_chunks": 1,
+        "score": 0.13284306977582228
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "selected_chunks": 2,
+        "score": 0.100065820330417
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "selected_chunks": 3,
+        "score": 0.08639847427383973
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "selected_chunks": 4,
+        "score": 0.06201235790769566
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "selected_chunks": 5,
+        "score": 0.06511974852130564
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "selected_chunks": 6,
+        "score": 0.07749321279020538
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.07749321279020538
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "remaining_chunks": 5,
+        "score": 0.07855474111312111
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "remaining_chunks": 4,
+        "score": 0.08223688534128004
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "remaining_chunks": 3,
+        "score": 0.04430155781912437
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "remaining_chunks": 2,
+        "score": 0.0030850376590826345
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "remaining_chunks": 1,
+        "score": 0.0024624267812664025
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.07749321279020538
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "remaining_chunks": 5,
+        "score": 0.06511974852130564
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "remaining_chunks": 4,
+        "score": 0.07827410585104944
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "remaining_chunks": 3,
+        "score": 0.035208270777846606
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "remaining_chunks": 2,
+        "score": -0.010010692664720655
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 1: 1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "remaining_chunks": 1,
+        "score": 0.0024624267812664025
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.07749321279020546
+      },
+      {
+        "step": 1,
+        "score": 0.07634031599769893
+      },
+      {
+        "step": 2,
+        "score": 0.05674417215690449
+      },
+      {
+        "step": 3,
+        "score": 0.05248644336549299
+      },
+      {
+        "step": 4,
+        "score": 0.034732312377262965
+      },
+      {
+        "step": 5,
+        "score": 0.030345514233145476
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "what ner models were evaluated?",
+    "expanded_queries": [
+      "what ner models were evaluated?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1810.08699:paragraph:0025 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "dense": 0.6486,
+        "page": 1,
+        "type": "body_text",
+        "section": "Models",
+        "flags": "",
+        "preview": "Stanford NER is conditional random fields (CRF) classifier based on lexical and contextual features such as the current word, character-level n-grams of up to length 6 at its beginning and the end, previous and next word"
+      },
+      {
+        "rank": 2,
+        "source": "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "dense": 0.6456,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "In this section we describe a number of experiments targeted to compare the performance of popular named entity recognition algorithms on our data. We trained and evaluated Stanford NER, spaCy 2.0, and a recurrent model "
+      },
+      {
+        "rank": 3,
+        "source": "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "dense": 0.6311,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "We release two named-entity annotated datasets for the Armenian language: a silver-standard corpus for training NER models, and a gold-standard corpus for testing. It is worth to underline the importance of the latter co"
+      },
+      {
+        "rank": 4,
+        "source": "1810.08699:paragraph:0031 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "dense": 0.6174,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "For spaCy 2.0 named entity recognizer, the same word embedding models were tested. However, in this case the performance of 200-dimensional embeddings was highest (Table TABREF21 ). Unsurprisingly, both deep learning mod"
+      },
+      {
+        "rank": 5,
+        "source": "1810.08699:paragraph:0005 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "dense": 0.6162,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Furthermore, popular entity recognition models were applied to the mentioned data in order to obtain baseline results for future research in the area. Along with the datasets, we developed GloVe BIBREF10 word embeddings "
+      },
+      {
+        "rank": 6,
+        "source": "1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "dense": 0.608,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "It is clear that the development set of automatically generated examples was not an ideal indicator of models' performance on gold-standard test set. Higher development set scores often led to lower test scores as seen i"
+      },
+      {
+        "rank": 7,
+        "source": "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "dense": 0.5925,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "Table TABREF19 shows the average scores of evaluated models. The highest F1 score was achieved by the recurrent model using a batch size of 8 and Adam optimizer with an initial learning rate of 0.001. Updating word embed"
+      },
+      {
+        "rank": 8,
+        "source": "1810.08699:paragraph:0035 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "dense": 0.5769,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "Additionally, to establish the applicability of Wikipedia-based approaches for the Armenian language, we provide evaluation results for 3 different named entity recognition systems trained and tested on our datasets. The"
+      },
+      {
+        "rank": 9,
+        "source": "1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "dense": 0.5737,
+        "page": 1,
+        "type": "body_text",
+        "section": "Test dataset",
+        "flags": "",
+        "preview": "In order to evaluate the models trained on generated data, we manually annotated a named entities dataset comprising 53453 tokens and 2566 sentences selected from over 250 news texts from ilur.am. This dataset is compara"
+      },
+      {
+        "rank": 10,
+        "source": "1810.08699:paragraph:0001 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "dense": 0.5692,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Considering the cost of creating manually annotated named entity corpus, we focused on alternative approaches. Lack of named entity corpora is a common problem for many languages, thus bringing the attention of many rese"
+      },
+      {
+        "rank": 11,
+        "source": "1810.08699:paragraph:0027 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "dense": 0.5658,
+        "page": 1,
+        "type": "body_text",
+        "section": "Models",
+        "flags": "",
+        "preview": "The main model that we focused on was the recurrent model with a CRF top layer, and the above-mentioned methods served mostly as baselines. The distinctive feature of this approach is the way contextual word embeddings a"
+      },
+      {
+        "rank": 12,
+        "source": "1810.08699:paragraph:0036 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "dense": 0.5653,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "There are several avenues of future work. Since Nothman et al. 2013, more efficient methods of exploiting Wikipedia have been proposed, namely WiNER BIBREF19 , which could help increase both the quantity and quality of t"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "keyword": 0.1678,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "We release two named-entity annotated datasets for the Armenian language: a silver-standard corpus for training NER models, and a gold-standard corpus for testing. It is worth to underline the importance of the latter co"
+      },
+      {
+        "rank": 2,
+        "source": "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "keyword": 0.1122,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "In this section we describe a number of experiments targeted to compare the performance of popular named entity recognition algorithms on our data. We trained and evaluated Stanford NER, spaCy 2.0, and a recurrent model "
+      },
+      {
+        "rank": 3,
+        "source": "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "keyword": 0.0889,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "Table TABREF19 shows the average scores of evaluated models. The highest F1 score was achieved by the recurrent model using a batch size of 8 and Adam optimizer with an initial learning rate of 0.001. Updating word embed"
+      },
+      {
+        "rank": 4,
+        "source": "1810.08699:paragraph:0025 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "keyword": 0.06,
+        "page": 1,
+        "type": "body_text",
+        "section": "Models",
+        "flags": "",
+        "preview": "Stanford NER is conditional random fields (CRF) classifier based on lexical and contextual features such as the current word, character-level n-grams of up to length 6 at its beginning and the end, previous and next word"
+      },
+      {
+        "rank": 5,
+        "source": "1810.08699:paragraph:0005 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "keyword": 0.0506,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Furthermore, popular entity recognition models were applied to the mentioned data in order to obtain baseline results for future research in the area. Along with the datasets, we developed GloVe BIBREF10 word embeddings "
+      },
+      {
+        "rank": 6,
+        "source": "1810.08699:paragraph:0031 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "keyword": 0.0457,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "For spaCy 2.0 named entity recognizer, the same word embedding models were tested. However, in this case the performance of 200-dimensional embeddings was highest (Table TABREF21 ). Unsurprisingly, both deep learning mod"
+      },
+      {
+        "rank": 7,
+        "source": "1810.08699:abstract:000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Abstract",
+        "keyword": 0.0313,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "In this work, we tackle the problem of Armenian named entity recognition, providing silver- and gold-standard datasets as well as establishing baseline results on popular models. We present a 163000-token named entity co"
+      },
+      {
+        "rank": 8,
+        "source": "1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "keyword": 0.029,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Named entity recognition is an important task of natural language processing, featuring in many popular text processing toolkits. This area of natural language processing has been actively studied in the latest decades a"
+      },
+      {
+        "rank": 9,
+        "source": "1810.08699:paragraph:0029 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Evaluation",
+        "keyword": 0.0262,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "We randomly selected 80% of generated annotated sentences for training and used the other 20% as a development set. The models with the best F1 score on the development set were tested on the manually annotated gold data"
+      },
+      {
+        "rank": 10,
+        "source": "1810.08699:paragraph:0033 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "keyword": 0.0251,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "Generally, tested models demonstrated relatively high precision of recognizing tokens that started named entities, but failed to do so with descriptor words for organizations and, to a certain degree, locations. The conf"
+      },
+      {
+        "rank": 11,
+        "source": "1810.08699:paragraph:0006 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "keyword": 0.0242,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The contributions of this work are (i) the silver-standard training corpus, (ii) the gold-standard test corpus, (iii) GloVe word embeddings, (iv) baseline results for 3 different models on the proposed benchmark data set"
+      },
+      {
+        "rank": 12,
+        "source": "1810.08699:paragraph:0004 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "keyword": 0.0218,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Aside from the lack of training data, we also address the absence of a benchmark dataset of Armenian texts for named entity recognition. We propose a gold-standard corpus with manual annotation of CoNLL named entity cate"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6311,
+        "keyword": 0.1678,
+        "rerank": 0.9498,
+        "section": "Conclusion",
+        "query_hits": "models, ner",
+        "reasons": "body/table evidence",
+        "preview": "We release two named-entity annotated datasets for the Armenian language: a silver-standard corpus for training NER models, and a gold-standard corpus for testing. It is worth to underline the importance of the latter co"
+      },
+      {
+        "rank": 2,
+        "source": "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6456,
+        "keyword": 0.1122,
+        "rerank": 0.8834,
+        "section": "Experiments",
+        "query_hits": "evaluated, ner",
+        "reasons": "body/table evidence",
+        "preview": "In this section we describe a number of experiments targeted to compare the performance of popular named entity recognition algorithms on our data. We trained and evaluated Stanford NER, spaCy 2.0, and a recurrent model "
+      },
+      {
+        "rank": 3,
+        "source": "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5925,
+        "keyword": 0.0889,
+        "rerank": 0.7499,
+        "section": "Discussion",
+        "query_hits": "evaluated, models, were",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 shows the average scores of evaluated models. The highest F1 score was achieved by the recurrent model using a batch size of 8 and Adam optimizer with an initial learning rate of 0.001. Updating word embed"
+      },
+      {
+        "rank": 4,
+        "source": "1810.08699:paragraph:0025 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6486,
+        "keyword": 0.06,
+        "rerank": 0.6673,
+        "section": "Models",
+        "query_hits": "ner",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Stanford NER is conditional random fields (CRF) classifier based on lexical and contextual features such as the current word, character-level n-grams of up to length 6 at its beginning and the end, previous and next word"
+      },
+      {
+        "rank": 5,
+        "source": "1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.608,
+        "keyword": 0.0129,
+        "rerank": 0.6197,
+        "section": "Discussion",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence",
+        "preview": "It is clear that the development set of automatically generated examples was not an ideal indicator of models' performance on gold-standard test set. Higher development set scores often led to lower test scores as seen i"
+      },
+      {
+        "rank": 6,
+        "source": "1810.08699:paragraph:0005 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6162,
+        "keyword": 0.0506,
+        "rerank": 0.6059,
+        "section": "Introduction",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Furthermore, popular entity recognition models were applied to the mentioned data in order to obtain baseline results for future research in the area. Along with the datasets, we developed GloVe BIBREF10 word embeddings "
+      },
+      {
+        "rank": 7,
+        "source": "1810.08699:paragraph:0031 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6174,
+        "keyword": 0.0457,
+        "rerank": 0.5999,
+        "section": "Discussion",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "For spaCy 2.0 named entity recognizer, the same word embedding models were tested. However, in this case the performance of 200-dimensional embeddings was highest (Table TABREF21 ). Unsurprisingly, both deep learning mod"
+      },
+      {
+        "rank": 8,
+        "source": "1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5737,
+        "keyword": 0.014,
+        "rerank": 0.543,
+        "section": "Test dataset",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence",
+        "preview": "In order to evaluate the models trained on generated data, we manually annotated a named entities dataset comprising 53453 tokens and 2566 sentences selected from over 250 news texts from ilur.am. This dataset is compara"
+      },
+      {
+        "rank": 9,
+        "source": "1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5637,
+        "keyword": 0.029,
+        "rerank": 0.5167,
+        "section": "Introduction",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "Named entity recognition is an important task of natural language processing, featuring in many popular text processing toolkits. This area of natural language processing has been actively studied in the latest decades a"
+      },
+      {
+        "rank": 10,
+        "source": "1810.08699:abstract:000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5266,
+        "keyword": 0.0313,
+        "rerank": 0.4655,
+        "section": "Abstract",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we tackle the problem of Armenian named entity recognition, providing silver- and gold-standard datasets as well as establishing baseline results on popular models. We present a 163000-token named entity co"
+      },
+      {
+        "rank": 11,
+        "source": "1810.08699:paragraph:0035 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5769,
+        "keyword": 0.0,
+        "rerank": 0.4651,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Additionally, to establish the applicability of Wikipedia-based approaches for the Armenian language, we provide evaluation results for 3 different named entity recognition systems trained and tested on our datasets. The"
+      },
+      {
+        "rank": 12,
+        "source": "1810.08699:paragraph:0033 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5408,
+        "keyword": 0.0251,
+        "rerank": 0.4572,
+        "section": "Discussion",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "Generally, tested models demonstrated relatively high precision of recognizing tokens that started named entities, but failed to do so with descriptor words for organizations and, to a certain degree, locations. The conf"
+      },
+      {
+        "rank": 13,
+        "source": "1810.08699:paragraph:0001 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5692,
+        "keyword": 0.0,
+        "rerank": 0.4475,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Considering the cost of creating manually annotated named entity corpus, we focused on alternative approaches. Lack of named entity corpora is a common problem for many languages, thus bringing the attention of many rese"
+      },
+      {
+        "rank": 14,
+        "source": "1810.08699:paragraph:0029 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5628,
+        "keyword": 0.0262,
+        "rerank": 0.4397,
+        "section": "Evaluation",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We randomly selected 80% of generated annotated sentences for training and used the other 20% as a development set. The models with the best F1 score on the development set were tested on the manually annotated gold data"
+      },
+      {
+        "rank": 15,
+        "source": "1810.08699:paragraph:0027 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5658,
+        "keyword": 0.0,
+        "rerank": 0.4396,
+        "section": "Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The main model that we focused on was the recurrent model with a CRF top layer, and the above-mentioned methods served mostly as baselines. The distinctive feature of this approach is the way contextual word embeddings a"
+      },
+      {
+        "rank": 16,
+        "source": "1810.08699:paragraph:0036 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5653,
+        "keyword": 0.0,
+        "rerank": 0.4387,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "There are several avenues of future work. Since Nothman et al. 2013, more efficient methods of exploiting Wikipedia have been proposed, namely WiNER BIBREF19 , which could help increase both the quantity and quality of t"
+      },
+      {
+        "rank": 17,
+        "source": "1810.08699:paragraph:0003 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5631,
+        "keyword": 0.0,
+        "rerank": 0.4336,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Nothman et al. generated a silver-standard corpus for 9 languages by extracting Wikipedia article texts with outgoing links and turning those links into named entity annotations based on the target article's type BIBREF5"
+      },
+      {
+        "rank": 18,
+        "source": "1810.08699:paragraph:0013 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Using Wikidata to classify Wikipedia",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5425,
+        "keyword": 0.0,
+        "rerank": 0.4161,
+        "section": "Using Wikidata to classify Wikipedia",
+        "query_hits": "were",
+        "reasons": "body/table evidence",
+        "preview": "The classification could be done using solely instance of labels, but these labels are unnecessarily specific for the task and building a mapping on it would require a more time-consuming and meticulous work. Therefore, "
+      },
+      {
+        "rank": 19,
+        "source": "1810.08699:paragraph:0004 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5647,
+        "keyword": 0.0218,
+        "rerank": 0.4062,
+        "section": "Introduction",
+        "query_hits": "models",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aside from the lack of training data, we also address the absence of a benchmark dataset of Armenian texts for named entity recognition. We propose a gold-standard corpus with manual annotation of CoNLL named entity cate"
+      },
+      {
+        "rank": 20,
+        "source": "1810.08699:paragraph:0018 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.529,
+        "keyword": 0.0,
+        "rerank": 0.3851,
+        "section": "Test dataset",
+        "query_hits": "were",
+        "reasons": "body/table evidence",
+        "preview": "During annotation, we generally relied on categories and guidelines assembled by BBN Technologies for TREC 2002 question answering track. Only named entities corresponding to BBN's person name category were tagged as PER"
+      },
+      {
+        "rank": 21,
+        "source": "1810.08699:paragraph:0026 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5371,
+        "keyword": 0.0,
+        "rerank": 0.3738,
+        "section": "Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "spaCy 2.0 uses a CNN-based transition system for named entity recognition. For each token, a Bloom embedding is calculated based on its lowercase form, prefix, suffix and shape, then using residual CNNs, a contextual rep"
+      },
+      {
+        "rank": 22,
+        "source": "1810.08699:paragraph:0006 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5468,
+        "keyword": 0.0242,
+        "rerank": 0.3693,
+        "section": "Introduction",
+        "query_hits": "models",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The contributions of this work are (i) the silver-standard training corpus, (ii) the gold-standard test corpus, (iii) GloVe word embeddings, (iv) baseline results for 3 different models on the proposed benchmark data set"
+      },
+      {
+        "rank": 23,
+        "source": "1810.08699:paragraph:0023 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Word embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.535,
+        "keyword": 0.0209,
+        "rerank": 0.3664,
+        "section": "Word embeddings",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Similar to the original embeddings published for the English language, we release 50-, 100-, 200- and 300-dimensional word vectors for Armenian with a vocabulary size of 400000. Before training, all the words in the data"
+      },
+      {
+        "rank": 24,
+        "source": "1810.08699:paragraph:0022 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Word embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5327,
+        "keyword": 0.0,
+        "rerank": 0.3637,
+        "section": "Word embeddings",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Apart from the datasets, we also developed word embeddings for the Armenian language, which we used in our experiments to train and evaluate named entity recognition algorithms. Considering their ability to capture seman"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6311,
+        "keyword": 0.1678,
+        "rerank": 0.9498,
+        "section": "Conclusion",
+        "query_hits": "models, ner",
+        "reasons": "body/table evidence",
+        "preview": "We release two named-entity annotated datasets for the Armenian language: a silver-standard corpus for training NER models, and a gold-standard corpus for testing. It is worth to underline the importance of the latter co"
+      },
+      {
+        "rank": 2,
+        "source": "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6456,
+        "keyword": 0.1122,
+        "rerank": 0.8834,
+        "section": "Experiments",
+        "query_hits": "evaluated, ner",
+        "reasons": "body/table evidence",
+        "preview": "In this section we describe a number of experiments targeted to compare the performance of popular named entity recognition algorithms on our data. We trained and evaluated Stanford NER, spaCy 2.0, and a recurrent model "
+      },
+      {
+        "rank": 3,
+        "source": "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5925,
+        "keyword": 0.0889,
+        "rerank": 0.7499,
+        "section": "Discussion",
+        "query_hits": "evaluated, models, were",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 shows the average scores of evaluated models. The highest F1 score was achieved by the recurrent model using a batch size of 8 and Adam optimizer with an initial learning rate of 0.001. Updating word embed"
+      },
+      {
+        "rank": 4,
+        "source": "1810.08699:paragraph:0025 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6486,
+        "keyword": 0.06,
+        "rerank": 0.6673,
+        "section": "Models",
+        "query_hits": "ner",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Stanford NER is conditional random fields (CRF) classifier based on lexical and contextual features such as the current word, character-level n-grams of up to length 6 at its beginning and the end, previous and next word"
+      },
+      {
+        "rank": 5,
+        "source": "1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.608,
+        "keyword": 0.0129,
+        "rerank": 0.6197,
+        "section": "Discussion",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence",
+        "preview": "It is clear that the development set of automatically generated examples was not an ideal indicator of models' performance on gold-standard test set. Higher development set scores often led to lower test scores as seen i"
+      },
+      {
+        "rank": 6,
+        "source": "1810.08699:paragraph:0005 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6162,
+        "keyword": 0.0506,
+        "rerank": 0.6059,
+        "section": "Introduction",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Furthermore, popular entity recognition models were applied to the mentioned data in order to obtain baseline results for future research in the area. Along with the datasets, we developed GloVe BIBREF10 word embeddings "
+      },
+      {
+        "rank": 7,
+        "source": "1810.08699:paragraph:0031 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6174,
+        "keyword": 0.0457,
+        "rerank": 0.5999,
+        "section": "Discussion",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "For spaCy 2.0 named entity recognizer, the same word embedding models were tested. However, in this case the performance of 200-dimensional embeddings was highest (Table TABREF21 ). Unsurprisingly, both deep learning mod"
+      },
+      {
+        "rank": 8,
+        "source": "1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5737,
+        "keyword": 0.014,
+        "rerank": 0.543,
+        "section": "Test dataset",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence",
+        "preview": "In order to evaluate the models trained on generated data, we manually annotated a named entities dataset comprising 53453 tokens and 2566 sentences selected from over 250 news texts from ilur.am. This dataset is compara"
+      },
+      {
+        "rank": 9,
+        "source": "1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5637,
+        "keyword": 0.029,
+        "rerank": 0.5167,
+        "section": "Introduction",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "Named entity recognition is an important task of natural language processing, featuring in many popular text processing toolkits. This area of natural language processing has been actively studied in the latest decades a"
+      },
+      {
+        "rank": 10,
+        "source": "1810.08699:abstract:000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5266,
+        "keyword": 0.0313,
+        "rerank": 0.4655,
+        "section": "Abstract",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we tackle the problem of Armenian named entity recognition, providing silver- and gold-standard datasets as well as establishing baseline results on popular models. We present a 163000-token named entity co"
+      },
+      {
+        "rank": 11,
+        "source": "1810.08699:paragraph:0035 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5769,
+        "keyword": 0.0,
+        "rerank": 0.4651,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Additionally, to establish the applicability of Wikipedia-based approaches for the Armenian language, we provide evaluation results for 3 different named entity recognition systems trained and tested on our datasets. The"
+      },
+      {
+        "rank": 12,
+        "source": "1810.08699:paragraph:0033 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5408,
+        "keyword": 0.0251,
+        "rerank": 0.4572,
+        "section": "Discussion",
+        "query_hits": "models",
+        "reasons": "body/table evidence",
+        "preview": "Generally, tested models demonstrated relatively high precision of recognizing tokens that started named entities, but failed to do so with descriptor words for organizations and, to a certain degree, locations. The conf"
+      },
+      {
+        "rank": 13,
+        "source": "1810.08699:paragraph:0001 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5692,
+        "keyword": 0.0,
+        "rerank": 0.4475,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Considering the cost of creating manually annotated named entity corpus, we focused on alternative approaches. Lack of named entity corpora is a common problem for many languages, thus bringing the attention of many rese"
+      },
+      {
+        "rank": 14,
+        "source": "1810.08699:paragraph:0029 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5628,
+        "keyword": 0.0262,
+        "rerank": 0.4397,
+        "section": "Evaluation",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We randomly selected 80% of generated annotated sentences for training and used the other 20% as a development set. The models with the best F1 score on the development set were tested on the manually annotated gold data"
+      },
+      {
+        "rank": 15,
+        "source": "1810.08699:paragraph:0027 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5658,
+        "keyword": 0.0,
+        "rerank": 0.4396,
+        "section": "Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The main model that we focused on was the recurrent model with a CRF top layer, and the above-mentioned methods served mostly as baselines. The distinctive feature of this approach is the way contextual word embeddings a"
+      },
+      {
+        "rank": 16,
+        "source": "1810.08699:paragraph:0036 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5653,
+        "keyword": 0.0,
+        "rerank": 0.4387,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "There are several avenues of future work. Since Nothman et al. 2013, more efficient methods of exploiting Wikipedia have been proposed, namely WiNER BIBREF19 , which could help increase both the quantity and quality of t"
+      },
+      {
+        "rank": 17,
+        "source": "1810.08699:paragraph:0003 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5631,
+        "keyword": 0.0,
+        "rerank": 0.4336,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Nothman et al. generated a silver-standard corpus for 9 languages by extracting Wikipedia article texts with outgoing links and turning those links into named entity annotations based on the target article's type BIBREF5"
+      },
+      {
+        "rank": 18,
+        "source": "1810.08699:paragraph:0013 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Using Wikidata to classify Wikipedia",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5425,
+        "keyword": 0.0,
+        "rerank": 0.4161,
+        "section": "Using Wikidata to classify Wikipedia",
+        "query_hits": "were",
+        "reasons": "body/table evidence",
+        "preview": "The classification could be done using solely instance of labels, but these labels are unnecessarily specific for the task and building a mapping on it would require a more time-consuming and meticulous work. Therefore, "
+      },
+      {
+        "rank": 19,
+        "source": "1810.08699:paragraph:0004 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5647,
+        "keyword": 0.0218,
+        "rerank": 0.4062,
+        "section": "Introduction",
+        "query_hits": "models",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aside from the lack of training data, we also address the absence of a benchmark dataset of Armenian texts for named entity recognition. We propose a gold-standard corpus with manual annotation of CoNLL named entity cate"
+      },
+      {
+        "rank": 20,
+        "source": "1810.08699:paragraph:0018 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.529,
+        "keyword": 0.0,
+        "rerank": 0.3851,
+        "section": "Test dataset",
+        "query_hits": "were",
+        "reasons": "body/table evidence",
+        "preview": "During annotation, we generally relied on categories and guidelines assembled by BBN Technologies for TREC 2002 question answering track. Only named entities corresponding to BBN's person name category were tagged as PER"
+      },
+      {
+        "rank": 21,
+        "source": "1810.08699:paragraph:0026 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5371,
+        "keyword": 0.0,
+        "rerank": 0.3738,
+        "section": "Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "spaCy 2.0 uses a CNN-based transition system for named entity recognition. For each token, a Bloom embedding is calculated based on its lowercase form, prefix, suffix and shape, then using residual CNNs, a contextual rep"
+      },
+      {
+        "rank": 22,
+        "source": "1810.08699:paragraph:0006 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5468,
+        "keyword": 0.0242,
+        "rerank": 0.3693,
+        "section": "Introduction",
+        "query_hits": "models",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The contributions of this work are (i) the silver-standard training corpus, (ii) the gold-standard test corpus, (iii) GloVe word embeddings, (iv) baseline results for 3 different models on the proposed benchmark data set"
+      },
+      {
+        "rank": 23,
+        "source": "1810.08699:paragraph:0023 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Word embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.535,
+        "keyword": 0.0209,
+        "rerank": 0.3664,
+        "section": "Word embeddings",
+        "query_hits": "models, were",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Similar to the original embeddings published for the English language, we release 50-, 100-, 200- and 300-dimensional word vectors for Armenian with a vocabulary size of 400000. Before training, all the words in the data"
+      },
+      {
+        "rank": 24,
+        "source": "1810.08699:paragraph:0022 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Word embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5327,
+        "keyword": 0.0,
+        "rerank": 0.3637,
+        "section": "Word embeddings",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Apart from the datasets, we also developed word embeddings for the Armenian language, which we used in our experiments to train and evaluate named entity recognition algorithms. Considering their ability to capture seman"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6311,
+        "keyword": 0.1678,
+        "rerank": 0.9498,
+        "section": "Conclusion",
+        "query_hits": "models, ner",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.44,
+        "reasons": "body/table evidence",
+        "preview": "We release two named-entity annotated datasets for the Armenian language: a silver-standard corpus for training NER models, and a gold-standard corpus for testing. It is worth to underline the importance of the latter co"
+      },
+      {
+        "rank": 2,
+        "source": "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5925,
+        "keyword": 0.0889,
+        "rerank": 0.7499,
+        "section": "Discussion",
+        "query_hits": "evaluated, models, were",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7939,
+        "novelty": 0.8754,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1253,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF19 shows the average scores of evaluated models. The highest F1 score was achieved by the recurrent model using a batch size of 8 and Adam optimizer with an initial learning rate of 0.001. Updating word embed"
+      },
+      {
+        "rank": 3,
+        "source": "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6456,
+        "keyword": 0.1122,
+        "rerank": 0.8834,
+        "section": "Experiments",
+        "query_hits": "evaluated, ner",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9315,
+        "novelty": 0.7144,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.12,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1011,
+        "reasons": "body/table evidence",
+        "preview": "In this section we describe a number of experiments targeted to compare the performance of popular named entity recognition algorithms on our data. We trained and evaluated Stanford NER, spaCy 2.0, and a recurrent model "
+      },
+      {
+        "rank": 4,
+        "source": "1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5637,
+        "keyword": 0.029,
+        "rerank": 0.5167,
+        "section": "Introduction",
+        "query_hits": "models",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5534,
+        "novelty": 0.6889,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9724,
+        "reasons": "body/table evidence",
+        "preview": "Named entity recognition is an important task of natural language processing, featuring in many popular text processing toolkits. This area of natural language processing has been actively studied in the latest decades a"
+      },
+      {
+        "rank": 5,
+        "source": "1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.608,
+        "keyword": 0.0129,
+        "rerank": 0.6197,
+        "section": "Discussion",
+        "query_hits": "models, were",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6596,
+        "novelty": 0.4708,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9132,
+        "reasons": "body/table evidence",
+        "preview": "It is clear that the development set of automatically generated examples was not an ideal indicator of models' performance on gold-standard test set. Higher development set scores often led to lower test scores as seen i"
+      },
+      {
+        "rank": 6,
+        "source": "1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5737,
+        "keyword": 0.014,
+        "rerank": 0.543,
+        "section": "Test dataset",
+        "query_hits": "models, were",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5805,
+        "novelty": 0.7147,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8793,
+        "reasons": "body/table evidence",
+        "preview": "In order to evaluate the models trained on generated data, we manually annotated a named entities dataset comprising 53453 tokens and 2566 sentences selected from over 250 news texts from ilur.am. This dataset is compara"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "evaluated",
+        "models",
+        "ner",
+        "were"
+      ],
+      "covered_query_terms": [
+        "evaluated",
+        "models",
+        "ner",
+        "were"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion": [
+          "models",
+          "ner"
+        ],
+        "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion": [
+          "evaluated",
+          "models",
+          "were"
+        ],
+        "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments": [
+          "evaluated",
+          "ner"
+        ],
+        "1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction": [
+          "models"
+        ],
+        "1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion": [
+          "models",
+          "were"
+        ],
+        "1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset": [
+          "models",
+          "were"
+        ]
+      },
+      "section_titles": [
+        "Conclusion",
+        "Discussion",
+        "Experiments",
+        "Introduction",
+        "Test dataset"
+      ],
+      "chunks_by_section": {
+        "Conclusion": [
+          "1810.08699:paragraph:0034 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Conclusion"
+        ],
+        "Discussion": [
+          "1810.08699:paragraph:0030 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion",
+          "1810.08699:paragraph:0032 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Discussion"
+        ],
+        "Experiments": [
+          "1810.08699:paragraph:0024 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Experiments"
+        ],
+        "Introduction": [
+          "1810.08699:paragraph:0000 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Introduction"
+        ],
+        "Test dataset": [
+          "1810.08699:paragraph:0017 | pioNER: Datasets and Baselines for Armenian Named Entity Recognition / Test dataset"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "The NER models evaluated were BERT, RoBERTa, and XLM-RoBERTa.",
+    "gold_context_answer": "The evaluated NER models included Stanford NER, spaCy 2.0, and a recurrent model similar to BIBREF13, BIBREF14 that utilizes bidirectional LSTM cells for character-based feature extraction and CRF.\n\nSpecifically:\n*   **Stanford NER** is described as a conditional random fields (CRF) classifier based on lexical and contextual features.\n*   **spaCy 2.0** uses a CNN-based transition system for named entity recognition,",
+    "retrieved_context_answer": "The evaluated NER models mentioned in the context are:\n\n*   Stanford NER\n*   spaCy 2.0\n*   A recurrent model similar to BIBREF13, BIBREF14 that uses bidirectional LSTM cells for character-based feature extraction and CRF.\n\nAdditionally, the context mentions testing GloVe word vector models of four different sizes (50, 100, 200, and 300). It also references evaluation results",
+    "closed_book_f1": 0.0909090909090909,
+    "gold_context_f1": 0.24657534246575344,
+    "retrieved_context_f1": 0.26470588235294124,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

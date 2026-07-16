@@ -1,0 +1,1585 @@
+{
+  "case": {
+    "case_id": "qasper_23b2901264bda91045258b5d4120879ae292e950",
+    "paper_id": "1911.02855",
+    "paper_title": "Dice Loss for Data-imbalanced NLP Tasks",
+    "question_id": "23b2901264bda91045258b5d4120879ae292e950",
+    "annotation_id": "6734e42dde15a73478a26e1997934655548a074a",
+    "question": "What are method improvements of F1 for paraphrase identification?",
+    "gold_answer": "Using DSC loss improves the F1 score by +0.58 for MRPC and +0.73 for QQP",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1911.02855:paragraph:0065"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1911.02855:paragraph:0027",
+      "score": 0.8329248398254835,
+      "title": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+      "text": "We evaluate the proposed method on four NLP tasks: part-of-speech tagging, named entity recognition, machine reading comprehension and paraphrase identification. Baselines in our experiments are optimized by using the standard cross-entropy training objective."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1911.02855:paragraph:0068",
+      "score": 0.6929571852375879,
+      "title": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+      "text": "In this paper, we alleviate the severe data imbalance issue in NLP tasks. We propose to use dice loss in replacement of the standard cross-entropy loss, which performs as a soft version of F1 score. Using dice loss can help narrow the gap between training objectives and evaluation metrics. Empirically, we show that the proposed training objective leads to significant performance boost for part-of-speech, named entity recognition, machine reading comprehension and paraphrase identification tasks."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1911.02855:abstract:000",
+      "score": 0.596516186147512,
+      "title": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+      "text": "Many NLP tasks such as tagging and machine reading comprehension are faced with the severe data imbalance issue: negative examples significantly outnumber positive examples, and the huge number of background examples (or easy-negative examples) overwhelms the training. The most commonly used cross entropy (CE) criteria is actually an accuracy-oriented objective, and thus creates a discrepancy between training and test: at training time, each training instance contributes equally to the objective function, while at test time F1 score concerns more about positive examples. In this paper, we propose to use dice loss in replacement of the standard cross-entropy objective for data-imbalanced NLP tasks. Dice loss is based on the Sorensen-Dice coefficient or Tversky index, which attaches similar importance to false positives and false negatives, and is more immune to the data-imbalance issue. To further alleviate the dominating influence from easy-negative examples in training, we propose to associate training examples with dynamically adjusted weights to deemphasize easy-negative examples.Theoretical analysis shows that this strategy narrows down the gap between the F1 score in evaluation and the dice loss in training. With the proposed training objective, we observe significant performance boost on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5, CTB6 and UD1.4 for the part of speech tagging task; SOTA results on CoNLL03, OntoNotes5.0, MSRA and OntoNotes4.0 for the named entity recognition task; along with competitive results on the tasks of machine reading comprehension and paraphrase identification."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1911.02855:paragraph:0061",
+      "score": 0.7966961665251917,
+      "title": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+      "text": "Paraphrases are textual expressions that have the same semantic meaning using different surface words. Paraphrase identification (PI) is the task of identifying whether two sentences have the same meaning or not. We use BERT BIBREF11 and XLNet BIBREF43 as backbones and report F1 score for comparison. Hyperparameters are tuned on the development set of each dataset."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1911.02855:paragraph:0004",
+      "score": 0.5271098827474995,
+      "title": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+      "text": "Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, +2.19) for the POS task; SOTA results on CoNLL03 (93.33, +0.29), OntoNotes5.0 (92.07, +0.96)), MSRA 96.72(+0.97) and OntoNotes4.0 (84.47,+2.36) for the NER task; along with competitive results on the tasks of machine reading comprehension and paraphrase identification."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1911.02855:paragraph:0067",
+      "score": 0.5128570097863199,
+      "title": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+      "text": "As mentioned in Section SECREF10, Tversky index (TI) offers the flexibility in controlling the tradeoff between false-negatives and false-positives. In this subsection, we explore the effect of hyperparameters (i.e., $\\alpha $ and $\\beta $) in TI to test how they manipulate the tradeoff. We conduct experiments on the Chinese OntoNotes4.0 NER dataset and English QuoRef MRC dataset to examine the influence of tradeoff between precision and recall. Experiment results are shown in Table . The highest F1 for Chinese OntoNotes4.0 is 84.67 when $\\alpha $ is set to 0.6 while for QuoRef, the highest F1 is 68.44 when $\\alpha $ is set to 0.4. In addition, we can observe that the performance varies a lot as $\\alpha $ changes in distinct datasets, which shows that the hyperparameters $\\alpha ,\\beta $ play an important role in the proposed method."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+      "attribution": -0.018944651005270693
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+      "attribution": -0.009405838006798077
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+      "attribution": -0.008113154275908693
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+      "attribution": -0.003986473009595917
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+      "attribution": -0.0021389150795697036
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+      "attribution": 0.0015574964690947418
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+      "attribution": 0.09588815591825998
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+      "attribution": 0.06675467541546938
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+      "attribution": 0.007616009310066173
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+      "attribution": 0.006155316255949534
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+      "attribution": 0.003887631338290791
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+      "attribution": 0.0035030398583969983
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0068",
+      "interaction": 0.02105102570427817
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:abstract:000",
+      "interaction": -0.00010151188738368937
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0061",
+      "interaction": -0.006709517983681932
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": 0.0018262774526441503
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.012383169470143899
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:abstract:000",
+      "interaction": -0.010817286800865836
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:paragraph:0061",
+      "interaction": 0.0033296687004837886
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.008309562367601477
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.009315660414769915
+    },
+    {
+      "left": "1911.02855:abstract:000",
+      "right": "1911.02855:paragraph:0061",
+      "interaction": 0.003422440410801106
+    },
+    {
+      "left": "1911.02855:abstract:000",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.022394732790121608
+    },
+    {
+      "left": "1911.02855:abstract:000",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.0053534214729102905
+    },
+    {
+      "left": "1911.02855:paragraph:0061",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.0076645953511979845
+    },
+    {
+      "left": "1911.02855:paragraph:0061",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.008415926509315913
+    },
+    {
+      "left": "1911.02855:paragraph:0004",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.006938598145912213
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0068",
+      "interaction": 0.009650971582861538
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:abstract:000",
+      "interaction": -0.004642872073074181
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0061",
+      "interaction": -0.0017015913160372486
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.002993224178780389
+    },
+    {
+      "left": "1911.02855:paragraph:0027",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.0022670996110014897
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:abstract:000",
+      "interaction": -0.02316986380707271
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:paragraph:0061",
+      "interaction": -0.0016176758003813832
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.004371245347485562
+    },
+    {
+      "left": "1911.02855:paragraph:0068",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.0032122991187140287
+    },
+    {
+      "left": "1911.02855:abstract:000",
+      "right": "1911.02855:paragraph:0061",
+      "interaction": -0.004929280852741903
+    },
+    {
+      "left": "1911.02855:abstract:000",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.008843793691662757
+    },
+    {
+      "left": "1911.02855:abstract:000",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.0026832997389174755
+    },
+    {
+      "left": "1911.02855:paragraph:0061",
+      "right": "1911.02855:paragraph:0004",
+      "interaction": -0.0037085017199974864
+    },
+    {
+      "left": "1911.02855:paragraph:0061",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.003001215400172487
+    },
+    {
+      "left": "1911.02855:paragraph:0004",
+      "right": "1911.02855:paragraph:0067",
+      "interaction": -0.004284768133782763
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.04103153520653208
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.009285157271966826
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "remaining_chunks": 4,
+        "score": 0.027898036117927072
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "remaining_chunks": 3,
+        "score": 0.03976420473759523
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "remaining_chunks": 2,
+        "score": -0.013945269972149399
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "remaining_chunks": 1,
+        "score": -0.006007084286602016
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "selected_chunks": 1,
+        "score": 0.01173483369455064
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "selected_chunks": 2,
+        "score": -0.007285973239013421
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "selected_chunks": 3,
+        "score": -0.03604958792509089
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "selected_chunks": 4,
+        "score": -0.04390519556288536
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "selected_chunks": 5,
+        "score": -0.03870755426967315
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "selected_chunks": 6,
+        "score": -0.04103153520653208
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.04103153520653208
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "remaining_chunks": 5,
+        "score": -0.03870755426967315
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "remaining_chunks": 4,
+        "score": -0.04390519556288536
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "remaining_chunks": 3,
+        "score": -0.02408671155149128
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "remaining_chunks": 2,
+        "score": -0.007285973239013421
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.02423020179305424
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.04103153520653208
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "remaining_chunks": 5,
+        "score": -0.03870755426967315
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "remaining_chunks": 4,
+        "score": -0.023709651682136845
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "remaining_chunks": 3,
+        "score": -0.02408671155149128
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "remaining_chunks": 2,
+        "score": -0.01715100190748614
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.01173483369455064
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": -0.04103153520653207
+      },
+      {
+        "step": 1,
+        "score": -0.02168053182251188
+      },
+      {
+        "step": 2,
+        "score": -0.010177392649939413
+      },
+      {
+        "step": 3,
+        "score": -0.004473756833882057
+      },
+      {
+        "step": 4,
+        "score": -0.00035934565614246426
+      },
+      {
+        "step": 5,
+        "score": 0.004711857841329733
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What are method improvements of F1 for paraphrase identification?",
+    "expanded_queries": [
+      "What are method improvements of F1 for paraphrase identification?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "dense": 0.7148,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Paraphrase Identification",
+        "flags": "",
+        "preview": "Paraphrases are textual expressions that have the same semantic meaning using different surface words. Paraphrase identification (PI) is the task of identifying whether two sentences have the same meaning or not. We use "
+      },
+      {
+        "rank": 2,
+        "source": "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "dense": 0.666,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We evaluate the proposed method on four NLP tasks: part-of-speech tagging, named entity recognition, machine reading comprehension and paraphrase identification. Baselines in our experiments are optimized by using the st"
+      },
+      {
+        "rank": 3,
+        "source": "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "dense": 0.6189,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we alleviate the severe data imbalance issue in NLP tasks. We propose to use dice loss in replacement of the standard cross-entropy loss, which performs as a soft version of F1 score. Using dice loss can h"
+      },
+      {
+        "rank": 4,
+        "source": "1911.02855:paragraph:0060 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Results",
+        "dense": 0.6156,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Machine Reading Comprehension ::: Results",
+        "flags": "",
+        "preview": "Table shows the experimental results for MRC tasks. With either BERT or XLNet, our proposed DSC loss obtains significant performance boost on both EM and F1. For SQuADv1.1, our proposed method outperforms XLNet by +1.25 "
+      },
+      {
+        "rank": 5,
+        "source": "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "dense": 0.6112,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Many NLP tasks such as tagging and machine reading comprehension are faced with the severe data imbalance issue: negative examples significantly outnumber positive examples, and the huge number of background examples (or"
+      },
+      {
+        "rank": 6,
+        "source": "1911.02855:paragraph:0052 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension",
+        "dense": 0.6102,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Machine Reading Comprehension",
+        "flags": "",
+        "preview": "Machine reading comprehension (MRC) BIBREF39, BIBREF40, BIBREF41, BIBREF40, BIBREF42, BIBREF15 has become a central task in natural language understanding. MRC in the SQuAD-style is to predict the answer span in the pass"
+      },
+      {
+        "rank": 7,
+        "source": "1911.02855:paragraph:0065 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification ::: Results",
+        "dense": 0.6003,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Paraphrase Identification ::: Results",
+        "flags": "",
+        "preview": "Table shows the results for PI task. We find that replacing the training objective with DSC introduces performance boost for both BERT and XLNet. Using DSC loss improves the F1 score by +0.58 for MRPC and +0.73 for QQP."
+      },
+      {
+        "rank": 8,
+        "source": "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "dense": 0.5978,
+        "page": 1,
+        "type": "body_text",
+        "section": "Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "flags": "",
+        "preview": "As mentioned in Section SECREF10, Tversky index (TI) offers the flexibility in controlling the tradeoff between false-negatives and false-positives. In this subsection, we explore the effect of hyperparameters (i.e., $\\a"
+      },
+      {
+        "rank": 9,
+        "source": "1911.02855:paragraph:0066 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Dice Loss on Accuracy-oriented Tasks",
+        "dense": 0.586,
+        "page": 1,
+        "type": "body_text",
+        "section": "Ablation Studies ::: The Effect of Dice Loss on Accuracy-oriented Tasks",
+        "flags": "",
+        "preview": "We argue that the most commonly used cross-entropy objective is actually accuracy-oriented, whereas the proposed dice loss (DL) performs as a hard version of F1-score. To explore the effect of the dice loss on accuracy-o"
+      },
+      {
+        "rank": 10,
+        "source": "1911.02855:paragraph:0051 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition ::: Results",
+        "dense": 0.5846,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Named Entity Recognition ::: Results",
+        "flags": "",
+        "preview": "Table shows experimental results on NER datasets. For English datasets including CoNLL2003 and OntoNotes5.0, our proposed method outperforms BERT-MRCBIBREF38 by +0.29 and +0.96 respectively. We observe huge performance b"
+      },
+      {
+        "rank": 11,
+        "source": "1911.02855:paragraph:0055 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Datasets",
+        "dense": 0.5826,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Machine Reading Comprehension ::: Datasets",
+        "flags": "",
+        "preview": "Quoref is a QA dataset which tests the coreferential reasoning capability of reading comprehension systems, containing 24K questions over 4.7K paragraphs from Wikipedia."
+      },
+      {
+        "rank": 12,
+        "source": "1911.02855:paragraph:0038 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition",
+        "dense": 0.5681,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Named Entity Recognition",
+        "flags": "",
+        "preview": "Named entity recognition (NER) refers to the task of detecting the span and semantic category of entities from a chunk of text. Our implementation uses the current state-of-the-art BERT-MRC model proposed by xiaoya2019ne"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "keyword": 0.2182,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We evaluate the proposed method on four NLP tasks: part-of-speech tagging, named entity recognition, machine reading comprehension and paraphrase identification. Baselines in our experiments are optimized by using the st"
+      },
+      {
+        "rank": 2,
+        "source": "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "keyword": 0.1503,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Paraphrase Identification",
+        "flags": "",
+        "preview": "Paraphrases are textual expressions that have the same semantic meaning using different surface words. Paraphrase identification (PI) is the task of identifying whether two sentences have the same meaning or not. We use "
+      },
+      {
+        "rank": 3,
+        "source": "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "keyword": 0.1268,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we alleviate the severe data imbalance issue in NLP tasks. We propose to use dice loss in replacement of the standard cross-entropy loss, which performs as a soft version of F1 score. Using dice loss can h"
+      },
+      {
+        "rank": 4,
+        "source": "1911.02855:paragraph:0051 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition ::: Results",
+        "keyword": 0.1149,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Named Entity Recognition ::: Results",
+        "flags": "",
+        "preview": "Table shows experimental results on NER datasets. For English datasets including CoNLL2003 and OntoNotes5.0, our proposed method outperforms BERT-MRCBIBREF38 by +0.29 and +0.96 respectively. We observe huge performance b"
+      },
+      {
+        "rank": 5,
+        "source": "1911.02855:paragraph:0060 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Results",
+        "keyword": 0.0989,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Machine Reading Comprehension ::: Results",
+        "flags": "",
+        "preview": "Table shows the experimental results for MRC tasks. With either BERT or XLNet, our proposed DSC loss obtains significant performance boost on both EM and F1. For SQuADv1.1, our proposed method outperforms XLNet by +1.25 "
+      },
+      {
+        "rank": 6,
+        "source": "1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "keyword": 0.0874,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, "
+      },
+      {
+        "rank": 7,
+        "source": "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "keyword": 0.0666,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Many NLP tasks such as tagging and machine reading comprehension are faced with the severe data imbalance issue: negative examples significantly outnumber positive examples, and the huge number of background examples (or"
+      },
+      {
+        "rank": 8,
+        "source": "1911.02855:paragraph:0059 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Baselines",
+        "keyword": 0.0632,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Machine Reading Comprehension ::: Baselines",
+        "flags": "",
+        "preview": "XLNet: xlnet2019 proposes a generalized autoregressive pretraining method that enables learning bidirectional contexts."
+      },
+      {
+        "rank": 9,
+        "source": "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "keyword": 0.045,
+        "page": 1,
+        "type": "body_text",
+        "section": "Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "flags": "",
+        "preview": "As mentioned in Section SECREF10, Tversky index (TI) offers the flexibility in controlling the tradeoff between false-negatives and false-positives. In this subsection, we explore the effect of hyperparameters (i.e., $\\a"
+      },
+      {
+        "rank": 10,
+        "source": "1911.02855:paragraph:0022 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "keyword": 0.0281,
+        "page": 1,
+        "type": "body_text",
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "flags": "",
+        "preview": "Comparing Eq.DISPLAY_FORM14 with Eq.DISPLAY_FORM22, we can see that Eq.DISPLAY_FORM14 is actually a soft form of $F1$, using a continuous $p$ rather than the binary $\\mathbb {I}( p_{i1}>0.5)$. This gap isn't a big issue "
+      },
+      {
+        "rank": 11,
+        "source": "1911.02855:paragraph:0021 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "keyword": 0.0279,
+        "page": 1,
+        "type": "body_text",
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "flags": "",
+        "preview": "Consider a simple case where the dataset consists of only one example $x_i$, which is classified as positive as long as $p_{i1}$ is larger than 0.5. The computation of $F1$ score is actually as follows:"
+      },
+      {
+        "rank": 12,
+        "source": "1911.02855:paragraph:0065 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification ::: Results",
+        "keyword": 0.0242,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Paraphrase Identification ::: Results",
+        "flags": "",
+        "preview": "Table shows the results for PI task. We find that replacing the training objective with DSC introduces performance boost for both BERT and XLNet. Using DSC loss improves the F1 score by +0.58 for MRPC and +0.73 for QQP."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.666,
+        "keyword": 0.2182,
+        "rerank": 0.8329,
+        "section": "Experiments",
+        "query_hits": "identification, method, paraphrase",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluate the proposed method on four NLP tasks: part-of-speech tagging, named entity recognition, machine reading comprehension and paraphrase identification. Baselines in our experiments are optimized by using the st"
+      },
+      {
+        "rank": 2,
+        "source": "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7148,
+        "keyword": 0.1503,
+        "rerank": 0.7967,
+        "section": "Experiments ::: Paraphrase Identification",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paraphrases are textual expressions that have the same semantic meaning using different surface words. Paraphrase identification (PI) is the task of identifying whether two sentences have the same meaning or not. We use "
+      },
+      {
+        "rank": 3,
+        "source": "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6189,
+        "keyword": 0.1268,
+        "rerank": 0.693,
+        "section": "Conclusion",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we alleviate the severe data imbalance issue in NLP tasks. We propose to use dice loss in replacement of the standard cross-entropy loss, which performs as a soft version of F1 score. Using dice loss can h"
+      },
+      {
+        "rank": 4,
+        "source": "1911.02855:paragraph:0060 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6156,
+        "keyword": 0.0989,
+        "rerank": 0.6188,
+        "section": "Experiments ::: Machine Reading Comprehension ::: Results",
+        "query_hits": "method",
+        "reasons": "body/table evidence",
+        "preview": "Table shows the experimental results for MRC tasks. With either BERT or XLNet, our proposed DSC loss obtains significant performance boost on both EM and F1. For SQuADv1.1, our proposed method outperforms XLNet by +1.25 "
+      },
+      {
+        "rank": 5,
+        "source": "1911.02855:paragraph:0051 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5846,
+        "keyword": 0.1149,
+        "rerank": 0.6154,
+        "section": "Experiments ::: Named Entity Recognition ::: Results",
+        "query_hits": "improvements, method",
+        "reasons": "body/table evidence",
+        "preview": "Table shows experimental results on NER datasets. For English datasets including CoNLL2003 and OntoNotes5.0, our proposed method outperforms BERT-MRCBIBREF38 by +0.29 and +0.96 respectively. We observe huge performance b"
+      },
+      {
+        "rank": 6,
+        "source": "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6112,
+        "keyword": 0.0666,
+        "rerank": 0.5965,
+        "section": "Abstract",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence",
+        "preview": "Many NLP tasks such as tagging and machine reading comprehension are faced with the severe data imbalance issue: negative examples significantly outnumber positive examples, and the huge number of background examples (or"
+      },
+      {
+        "rank": 7,
+        "source": "1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5564,
+        "keyword": 0.0874,
+        "rerank": 0.5271,
+        "section": "Introduction",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence",
+        "preview": "Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, "
+      },
+      {
+        "rank": 8,
+        "source": "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5978,
+        "keyword": 0.045,
+        "rerank": 0.5129,
+        "section": "Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "query_hits": "method",
+        "reasons": "body/table evidence",
+        "preview": "As mentioned in Section SECREF10, Tversky index (TI) offers the flexibility in controlling the tradeoff between false-negatives and false-positives. In this subsection, we explore the effect of hyperparameters (i.e., $\\a"
+      },
+      {
+        "rank": 9,
+        "source": "1911.02855:paragraph:0052 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6102,
+        "keyword": 0.0156,
+        "rerank": 0.4645,
+        "section": "Experiments ::: Machine Reading Comprehension",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Machine reading comprehension (MRC) BIBREF39, BIBREF40, BIBREF41, BIBREF40, BIBREF42, BIBREF15 has become a central task in natural language understanding. MRC in the SQuAD-style is to predict the answer span in the pass"
+      },
+      {
+        "rank": 10,
+        "source": "1911.02855:paragraph:0066 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Dice Loss on Accuracy-oriented Tasks",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.586,
+        "keyword": 0.0185,
+        "rerank": 0.4253,
+        "section": "Ablation Studies ::: The Effect of Dice Loss on Accuracy-oriented Tasks",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We argue that the most commonly used cross-entropy objective is actually accuracy-oriented, whereas the proposed dice loss (DL) performs as a hard version of F1-score. To explore the effect of the dice loss on accuracy-o"
+      },
+      {
+        "rank": 11,
+        "source": "1911.02855:paragraph:0028 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Part-of-Speech Tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5676,
+        "keyword": 0.0195,
+        "rerank": 0.3938,
+        "section": "Experiments ::: Part-of-Speech Tagging",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Part-of-speech tagging (POS) is the task of assigning a label (e.g., noun, verb, adjective) to each word in a given text. In this paper, we choose BERT as the backbone and conduct experiments on three Chinese POS dataset"
+      },
+      {
+        "rank": 12,
+        "source": "1911.02855:paragraph:0038 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5681,
+        "keyword": 0.0156,
+        "rerank": 0.3895,
+        "section": "Experiments ::: Named Entity Recognition",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Named entity recognition (NER) refers to the task of detecting the span and semantic category of entities from a chunk of text. Our implementation uses the current state-of-the-art BERT-MRC model proposed by xiaoya2019ne"
+      },
+      {
+        "rank": 13,
+        "source": "1911.02855:paragraph:0007 | Dice Loss for Data-imbalanced NLP Tasks / Related Work ::: Data Imbalance Issue in Object Detection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5424,
+        "keyword": 0.0212,
+        "rerank": 0.3812,
+        "section": "Related Work ::: Data Imbalance Issue in Object Detection",
+        "query_hits": "method",
+        "reasons": "body/table evidence",
+        "preview": "The background-object label imbalance issue is severe and thus well studied in the field of object detection BIBREF27, BIBREF28, BIBREF29, BIBREF30, BIBREF31. The idea of hard negative mining (HNM) BIBREF30 has gained mu"
+      },
+      {
+        "rank": 14,
+        "source": "1911.02855:paragraph:0037 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Part-of-Speech Tagging ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5552,
+        "keyword": 0.0131,
+        "rerank": 0.3629,
+        "section": "Experiments ::: Part-of-Speech Tagging ::: Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table presents the experimental results on the POS task. As can be seen, the proposed DSC loss outperforms the best baseline results by a large margin, i.e., outperforming BERT-tagger by +1.86 in terms of F1 score on CTB"
+      },
+      {
+        "rank": 15,
+        "source": "1911.02855:paragraph:0065 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6003,
+        "keyword": 0.0242,
+        "rerank": 0.3587,
+        "section": "Experiments ::: Paraphrase Identification ::: Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table shows the results for PI task. We find that replacing the training objective with DSC introduces performance boost for both BERT and XLNet. Using DSC loss improves the F1 score by +0.58 for MRPC and +0.73 for QQP."
+      },
+      {
+        "rank": 16,
+        "source": "1911.02855:paragraph:0022 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5392,
+        "keyword": 0.0281,
+        "rerank": 0.355,
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Comparing Eq.DISPLAY_FORM14 with Eq.DISPLAY_FORM22, we can see that Eq.DISPLAY_FORM14 is actually a soft form of $F1$, using a continuous $p$ rather than the binary $\\mathbb {I}( p_{i1}>0.5)$. This gap isn't a big issue "
+      },
+      {
+        "rank": 17,
+        "source": "1911.02855:paragraph:0059 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5492,
+        "keyword": 0.0632,
+        "rerank": 0.351,
+        "section": "Experiments ::: Machine Reading Comprehension ::: Baselines",
+        "query_hits": "method",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "XLNet: xlnet2019 proposes a generalized autoregressive pretraining method that enables learning bidirectional contexts."
+      },
+      {
+        "rank": 18,
+        "source": "1911.02855:paragraph:0001 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5333,
+        "keyword": 0.0098,
+        "rerank": 0.3192,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Data imbalance results in the following two issues: (1) the training-test discrepancy: Without balancing the labels, the learning process tends to converge to a point that strongly biases towards class with the majority "
+      },
+      {
+        "rank": 19,
+        "source": "1911.02855:paragraph:0006 | Dice Loss for Data-imbalanced NLP Tasks / Related Work ::: Data Resample",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.537,
+        "keyword": 0.0,
+        "rerank": 0.3123,
+        "section": "Related Work ::: Data Resample",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The idea of weighting training examples has a long history. Importance sampling BIBREF17 assigns weights to different samples and changes the data distribution. Boosting algorithms such as AdaBoost BIBREF18 select harder"
+      },
+      {
+        "rank": 20,
+        "source": "1911.02855:paragraph:0025 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5367,
+        "keyword": 0.0,
+        "rerank": 0.3117,
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "A close look at Eq.DISPLAY_FORM14 reveals that it actually mimics the idea of focal loss (FL for short) BIBREF16 for object detection in vision. Focal loss was proposed for one-stage object detector to handle foreground-"
+      },
+      {
+        "rank": 21,
+        "source": "1911.02855:paragraph:0003 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5282,
+        "keyword": 0.009,
+        "rerank": 0.309,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Only using dice loss or Tversky index is not enough since they are unable to address the dominating influence of easy-negative examples. This is intrinsically because dice loss is actually a hard version of the F1 score."
+      },
+      {
+        "rank": 22,
+        "source": "1911.02855:paragraph:0055 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5826,
+        "keyword": 0.0,
+        "rerank": 0.2939,
+        "section": "Experiments ::: Machine Reading Comprehension ::: Datasets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Quoref is a QA dataset which tests the coreferential reasoning capability of reading comprehension systems, containing 24K questions over 4.7K paragraphs from Wikipedia."
+      },
+      {
+        "rank": 23,
+        "source": "1911.02855:paragraph:0012 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Cross Entropy Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5247,
+        "keyword": 0.0,
+        "rerank": 0.2903,
+        "section": "Losses ::: Cross Entropy Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "where $\\alpha _i\\in [0,1]$ may be set by the inverse class frequency or treated as a hyperparameter to set by cross validation. In this work, we use $\\lg (\\frac{n-n_t}{n_t}+K)$ to calculate the coefficient $\\alpha $, whe"
+      },
+      {
+        "rank": 24,
+        "source": "1911.02855:paragraph:0021 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5534,
+        "keyword": 0.0279,
+        "rerank": 0.2801,
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Consider a simple case where the dataset consists of only one example $x_i$, which is classified as positive as long as $p_{i1}$ is larger than 0.5. The computation of $F1$ score is actually as follows:"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.666,
+        "keyword": 0.2182,
+        "rerank": 0.8329,
+        "section": "Experiments",
+        "query_hits": "identification, method, paraphrase",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluate the proposed method on four NLP tasks: part-of-speech tagging, named entity recognition, machine reading comprehension and paraphrase identification. Baselines in our experiments are optimized by using the st"
+      },
+      {
+        "rank": 2,
+        "source": "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7148,
+        "keyword": 0.1503,
+        "rerank": 0.7967,
+        "section": "Experiments ::: Paraphrase Identification",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paraphrases are textual expressions that have the same semantic meaning using different surface words. Paraphrase identification (PI) is the task of identifying whether two sentences have the same meaning or not. We use "
+      },
+      {
+        "rank": 3,
+        "source": "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6189,
+        "keyword": 0.1268,
+        "rerank": 0.693,
+        "section": "Conclusion",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we alleviate the severe data imbalance issue in NLP tasks. We propose to use dice loss in replacement of the standard cross-entropy loss, which performs as a soft version of F1 score. Using dice loss can h"
+      },
+      {
+        "rank": 4,
+        "source": "1911.02855:paragraph:0060 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6156,
+        "keyword": 0.0989,
+        "rerank": 0.6188,
+        "section": "Experiments ::: Machine Reading Comprehension ::: Results",
+        "query_hits": "method",
+        "reasons": "body/table evidence",
+        "preview": "Table shows the experimental results for MRC tasks. With either BERT or XLNet, our proposed DSC loss obtains significant performance boost on both EM and F1. For SQuADv1.1, our proposed method outperforms XLNet by +1.25 "
+      },
+      {
+        "rank": 5,
+        "source": "1911.02855:paragraph:0051 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5846,
+        "keyword": 0.1149,
+        "rerank": 0.6154,
+        "section": "Experiments ::: Named Entity Recognition ::: Results",
+        "query_hits": "improvements, method",
+        "reasons": "body/table evidence",
+        "preview": "Table shows experimental results on NER datasets. For English datasets including CoNLL2003 and OntoNotes5.0, our proposed method outperforms BERT-MRCBIBREF38 by +0.29 and +0.96 respectively. We observe huge performance b"
+      },
+      {
+        "rank": 6,
+        "source": "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6112,
+        "keyword": 0.0666,
+        "rerank": 0.5965,
+        "section": "Abstract",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence",
+        "preview": "Many NLP tasks such as tagging and machine reading comprehension are faced with the severe data imbalance issue: negative examples significantly outnumber positive examples, and the huge number of background examples (or"
+      },
+      {
+        "rank": 7,
+        "source": "1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5564,
+        "keyword": 0.0874,
+        "rerank": 0.5271,
+        "section": "Introduction",
+        "query_hits": "identification, paraphrase",
+        "reasons": "body/table evidence",
+        "preview": "Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, "
+      },
+      {
+        "rank": 8,
+        "source": "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5978,
+        "keyword": 0.045,
+        "rerank": 0.5129,
+        "section": "Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "query_hits": "method",
+        "reasons": "body/table evidence",
+        "preview": "As mentioned in Section SECREF10, Tversky index (TI) offers the flexibility in controlling the tradeoff between false-negatives and false-positives. In this subsection, we explore the effect of hyperparameters (i.e., $\\a"
+      },
+      {
+        "rank": 9,
+        "source": "1911.02855:paragraph:0052 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6102,
+        "keyword": 0.0156,
+        "rerank": 0.4645,
+        "section": "Experiments ::: Machine Reading Comprehension",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Machine reading comprehension (MRC) BIBREF39, BIBREF40, BIBREF41, BIBREF40, BIBREF42, BIBREF15 has become a central task in natural language understanding. MRC in the SQuAD-style is to predict the answer span in the pass"
+      },
+      {
+        "rank": 10,
+        "source": "1911.02855:paragraph:0066 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Dice Loss on Accuracy-oriented Tasks",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.586,
+        "keyword": 0.0185,
+        "rerank": 0.4253,
+        "section": "Ablation Studies ::: The Effect of Dice Loss on Accuracy-oriented Tasks",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We argue that the most commonly used cross-entropy objective is actually accuracy-oriented, whereas the proposed dice loss (DL) performs as a hard version of F1-score. To explore the effect of the dice loss on accuracy-o"
+      },
+      {
+        "rank": 11,
+        "source": "1911.02855:paragraph:0028 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Part-of-Speech Tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5676,
+        "keyword": 0.0195,
+        "rerank": 0.3938,
+        "section": "Experiments ::: Part-of-Speech Tagging",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Part-of-speech tagging (POS) is the task of assigning a label (e.g., noun, verb, adjective) to each word in a given text. In this paper, we choose BERT as the backbone and conduct experiments on three Chinese POS dataset"
+      },
+      {
+        "rank": 12,
+        "source": "1911.02855:paragraph:0038 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Named Entity Recognition",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5681,
+        "keyword": 0.0156,
+        "rerank": 0.3895,
+        "section": "Experiments ::: Named Entity Recognition",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Named entity recognition (NER) refers to the task of detecting the span and semantic category of entities from a chunk of text. Our implementation uses the current state-of-the-art BERT-MRC model proposed by xiaoya2019ne"
+      },
+      {
+        "rank": 13,
+        "source": "1911.02855:paragraph:0007 | Dice Loss for Data-imbalanced NLP Tasks / Related Work ::: Data Imbalance Issue in Object Detection",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5424,
+        "keyword": 0.0212,
+        "rerank": 0.3812,
+        "section": "Related Work ::: Data Imbalance Issue in Object Detection",
+        "query_hits": "method",
+        "reasons": "body/table evidence",
+        "preview": "The background-object label imbalance issue is severe and thus well studied in the field of object detection BIBREF27, BIBREF28, BIBREF29, BIBREF30, BIBREF31. The idea of hard negative mining (HNM) BIBREF30 has gained mu"
+      },
+      {
+        "rank": 14,
+        "source": "1911.02855:paragraph:0037 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Part-of-Speech Tagging ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5552,
+        "keyword": 0.0131,
+        "rerank": 0.3629,
+        "section": "Experiments ::: Part-of-Speech Tagging ::: Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table presents the experimental results on the POS task. As can be seen, the proposed DSC loss outperforms the best baseline results by a large margin, i.e., outperforming BERT-tagger by +1.86 in terms of F1 score on CTB"
+      },
+      {
+        "rank": 15,
+        "source": "1911.02855:paragraph:0065 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification ::: Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6003,
+        "keyword": 0.0242,
+        "rerank": 0.3587,
+        "section": "Experiments ::: Paraphrase Identification ::: Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table shows the results for PI task. We find that replacing the training objective with DSC introduces performance boost for both BERT and XLNet. Using DSC loss improves the F1 score by +0.58 for MRPC and +0.73 for QQP."
+      },
+      {
+        "rank": 16,
+        "source": "1911.02855:paragraph:0022 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5392,
+        "keyword": 0.0281,
+        "rerank": 0.355,
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Comparing Eq.DISPLAY_FORM14 with Eq.DISPLAY_FORM22, we can see that Eq.DISPLAY_FORM14 is actually a soft form of $F1$, using a continuous $p$ rather than the binary $\\mathbb {I}( p_{i1}>0.5)$. This gap isn't a big issue "
+      },
+      {
+        "rank": 17,
+        "source": "1911.02855:paragraph:0059 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5492,
+        "keyword": 0.0632,
+        "rerank": 0.351,
+        "section": "Experiments ::: Machine Reading Comprehension ::: Baselines",
+        "query_hits": "method",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "XLNet: xlnet2019 proposes a generalized autoregressive pretraining method that enables learning bidirectional contexts."
+      },
+      {
+        "rank": 18,
+        "source": "1911.02855:paragraph:0001 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5333,
+        "keyword": 0.0098,
+        "rerank": 0.3192,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Data imbalance results in the following two issues: (1) the training-test discrepancy: Without balancing the labels, the learning process tends to converge to a point that strongly biases towards class with the majority "
+      },
+      {
+        "rank": 19,
+        "source": "1911.02855:paragraph:0006 | Dice Loss for Data-imbalanced NLP Tasks / Related Work ::: Data Resample",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.537,
+        "keyword": 0.0,
+        "rerank": 0.3123,
+        "section": "Related Work ::: Data Resample",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The idea of weighting training examples has a long history. Importance sampling BIBREF17 assigns weights to different samples and changes the data distribution. Boosting algorithms such as AdaBoost BIBREF18 select harder"
+      },
+      {
+        "rank": 20,
+        "source": "1911.02855:paragraph:0025 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5367,
+        "keyword": 0.0,
+        "rerank": 0.3117,
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "A close look at Eq.DISPLAY_FORM14 reveals that it actually mimics the idea of focal loss (FL for short) BIBREF16 for object detection in vision. Focal loss was proposed for one-stage object detector to handle foreground-"
+      },
+      {
+        "rank": 21,
+        "source": "1911.02855:paragraph:0003 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5282,
+        "keyword": 0.009,
+        "rerank": 0.309,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Only using dice loss or Tversky index is not enough since they are unable to address the dominating influence of easy-negative examples. This is intrinsically because dice loss is actually a hard version of the F1 score."
+      },
+      {
+        "rank": 22,
+        "source": "1911.02855:paragraph:0055 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Machine Reading Comprehension ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5826,
+        "keyword": 0.0,
+        "rerank": 0.2939,
+        "section": "Experiments ::: Machine Reading Comprehension ::: Datasets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Quoref is a QA dataset which tests the coreferential reasoning capability of reading comprehension systems, containing 24K questions over 4.7K paragraphs from Wikipedia."
+      },
+      {
+        "rank": 23,
+        "source": "1911.02855:paragraph:0012 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Cross Entropy Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5247,
+        "keyword": 0.0,
+        "rerank": 0.2903,
+        "section": "Losses ::: Cross Entropy Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "where $\\alpha _i\\in [0,1]$ may be set by the inverse class frequency or treated as a hyperparameter to set by cross validation. In this work, we use $\\lg (\\frac{n-n_t}{n_t}+K)$ to calculate the coefficient $\\alpha $, whe"
+      },
+      {
+        "rank": 24,
+        "source": "1911.02855:paragraph:0021 | Dice Loss for Data-imbalanced NLP Tasks / Losses ::: Self-adusting Dice Loss",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5534,
+        "keyword": 0.0279,
+        "rerank": 0.2801,
+        "section": "Losses ::: Self-adusting Dice Loss",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Consider a simple case where the dataset consists of only one example $x_i$, which is classified as positive as long as $p_{i1}$ is larger than 0.5. The computation of $F1$ score is actually as follows:"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.666,
+        "keyword": 0.2182,
+        "rerank": 0.8329,
+        "section": "Experiments",
+        "query_hits": "identification, method, paraphrase",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluate the proposed method on four NLP tasks: part-of-speech tagging, named entity recognition, machine reading comprehension and paraphrase identification. Baselines in our experiments are optimized by using the st"
+      },
+      {
+        "rank": 2,
+        "source": "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6189,
+        "keyword": 0.1268,
+        "rerank": 0.693,
+        "section": "Conclusion",
+        "query_hits": "identification, paraphrase",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8359,
+        "novelty": 0.635,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2478,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we alleviate the severe data imbalance issue in NLP tasks. We propose to use dice loss in replacement of the standard cross-entropy loss, which performs as a soft version of F1 score. Using dice loss can h"
+      },
+      {
+        "rank": 3,
+        "source": "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6112,
+        "keyword": 0.0666,
+        "rerank": 0.5965,
+        "section": "Abstract",
+        "query_hits": "identification, paraphrase",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7228,
+        "novelty": 0.6368,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1508,
+        "reasons": "body/table evidence",
+        "preview": "Many NLP tasks such as tagging and machine reading comprehension are faced with the severe data imbalance issue: negative examples significantly outnumber positive examples, and the huge number of background examples (or"
+      },
+      {
+        "rank": 4,
+        "source": "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7148,
+        "keyword": 0.1503,
+        "rerank": 0.7967,
+        "section": "Experiments ::: Paraphrase Identification",
+        "query_hits": "identification, paraphrase",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9575,
+        "novelty": 0.7231,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.12,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1247,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Paraphrases are textual expressions that have the same semantic meaning using different surface words. Paraphrase identification (PI) is the task of identifying whether two sentences have the same meaning or not. We use "
+      },
+      {
+        "rank": 5,
+        "source": "1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5564,
+        "keyword": 0.0874,
+        "rerank": 0.5271,
+        "section": "Introduction",
+        "query_hits": "identification, paraphrase",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6415,
+        "novelty": 0.6642,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0846,
+        "reasons": "body/table evidence",
+        "preview": "Combing both strategies, we observe significant performance boosts on a wide range of data imbalanced NLP tasks. Notably, we are able to achieve SOTA results on CTB5 (97.92, +1.86), CTB6 (96.57, +1.80) and UD1.4 (96.98, "
+      },
+      {
+        "rank": 6,
+        "source": "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5978,
+        "keyword": 0.045,
+        "rerank": 0.5129,
+        "section": "Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "query_hits": "method",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6247,
+        "novelty": 0.713,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0371,
+        "reasons": "body/table evidence",
+        "preview": "As mentioned in Section SECREF10, Tversky index (TI) offers the flexibility in controlling the tradeoff between false-negatives and false-positives. In this subsection, we explore the effect of hyperparameters (i.e., $\\a"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "identification",
+        "improvements",
+        "method",
+        "paraphrase"
+      ],
+      "covered_query_terms": [
+        "identification",
+        "method",
+        "paraphrase"
+      ],
+      "missing_query_terms": [
+        "improvements"
+      ],
+      "terms_by_chunk": {
+        "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments": [
+          "identification",
+          "method",
+          "paraphrase"
+        ],
+        "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion": [
+          "identification",
+          "paraphrase"
+        ],
+        "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract": [
+          "identification",
+          "paraphrase"
+        ],
+        "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification": [
+          "identification",
+          "paraphrase"
+        ],
+        "1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction": [
+          "identification",
+          "paraphrase"
+        ],
+        "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index": [
+          "method"
+        ]
+      },
+      "section_titles": [
+        "Ablation Studies ::: The Effect of Hyperparameters in Tversky index",
+        "Abstract",
+        "Conclusion",
+        "Experiments",
+        "Experiments ::: Paraphrase Identification",
+        "Introduction"
+      ],
+      "chunks_by_section": {
+        "Experiments": [
+          "1911.02855:paragraph:0027 | Dice Loss for Data-imbalanced NLP Tasks / Experiments"
+        ],
+        "Conclusion": [
+          "1911.02855:paragraph:0068 | Dice Loss for Data-imbalanced NLP Tasks / Conclusion"
+        ],
+        "Abstract": [
+          "1911.02855:abstract:000 | Dice Loss for Data-imbalanced NLP Tasks / Abstract"
+        ],
+        "Experiments ::: Paraphrase Identification": [
+          "1911.02855:paragraph:0061 | Dice Loss for Data-imbalanced NLP Tasks / Experiments ::: Paraphrase Identification"
+        ],
+        "Introduction": [
+          "1911.02855:paragraph:0004 | Dice Loss for Data-imbalanced NLP Tasks / Introduction"
+        ],
+        "Ablation Studies ::: The Effect of Hyperparameters in Tversky index": [
+          "1911.02855:paragraph:0067 | Dice Loss for Data-imbalanced NLP Tasks / Ablation Studies ::: The Effect of Hyperparameters in Tversky index"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "Replacing the training objective with DSC loss resulted in performance boosts for both BERT and XLNet in Paraphrase Identification. Specifically, using DSC loss improved the F1 score by +0.58 for MRPC and +0.73 for QQP.",
+    "retrieved_context_answer": "The context indicates that using Dice Loss in replacement of the standard cross-entropy objective is a method improvement for data-imbalanced NLP tasks, which includes paraphrase identification.\n\nSpecifically:\n*   Dice loss performs as a soft version of F1 score and can help narrow the gap between training objectives and evaluation metrics [2].\n*   The use of Dice loss, which is based on the Sorensen-Dice coefficient or Tversky index, attaches similar importance to false positives",
+    "closed_book_f1": 0.07142857142857142,
+    "gold_context_f1": 0.5925925925925927,
+    "retrieved_context_f1": 0.15384615384615383,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

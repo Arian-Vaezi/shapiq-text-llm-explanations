@@ -7,7 +7,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from sentiment_analysis import (  # noqa: E402
+from sentiment_analysis import (
     ENCODER_MODELS,
     preload_models,
     run_pipeline,
@@ -30,7 +30,8 @@ if "models_loaded" not in st.session_state:
     st.session_state["models_loaded"] = True
 
 # ── CSS ───────────────────────────────────────────────────────────────────────
-st.markdown("""
+st.markdown(
+    """
 <style>
 :root {
     --accent: #5b6cff;
@@ -167,7 +168,9 @@ st.markdown("""
     font-family: monospace;
 }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 
 # ── Example sentences ─────────────────────────────────────────────────────────
@@ -189,11 +192,10 @@ with st.sidebar:
         "Model",
         options=["encoder", "tinyllama", "gemma3", "gemma4"],
         format_func=lambda x: {
-            "encoder":   "DistilBERT (encoder · fast · CPU)",
+            "encoder": "DistilBERT (encoder · fast · CPU)",
             "tinyllama": "TinyLlama 1.1B  (decoder · lighter)",
-            "gemma3":     "Gemma 3 1B  (decoder · GPU recommended)",
-            "gemma4":    "Gemma 4 E2B  (decoder · 16GB VRAM)",
-            
+            "gemma3": "Gemma 3 1B  (decoder · GPU recommended)",
+            "gemma4": "Gemma 4 E2B  (decoder · 16GB VRAM)",
         }[x],
         label_visibility="collapsed",
     )
@@ -225,8 +227,8 @@ with st.sidebar:
             | ` 0`  | uncertain / balanced |
             | `−1`  | strongly negative |
 
-            **Masking strategy:** absent words → `[MASK]` token  
-            **Baseline v(∅):** all words masked → model score on `[MASK] [MASK] ...`  
+            **Masking strategy:** absent words → `[MASK]` token
+            **Baseline v(∅):** all words masked → model score on `[MASK] [MASK] ...`
             **Normalization:** all coalition values centered around v(∅)
             """)
         else:
@@ -243,8 +245,8 @@ with st.sidebar:
             **T⁻ (negative templates):**
             > " This is negative." / " I hated it." / " Terrible!"
 
-            **Masking strategy:** absent words → **removed entirely**  
-            **Baseline v(∅):** empty string (no words)  
+            **Masking strategy:** absent words → **removed entirely**
+            **Baseline v(∅):** empty string (no words)
             **Score range:** unbounded (typically ±5 to ±20)
             """)
 
@@ -271,7 +273,8 @@ with st.sidebar:
 
 # ── Main content ──────────────────────────────────────────────────────────────
 
-st.markdown("""
+st.markdown(
+    """
 <div class="hero">
     <h1>🔍 Sentiment Explainer</h1>
     <p>
@@ -281,7 +284,9 @@ st.markdown("""
         interactions reveal what first-order explanations miss.
     </p>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # Text input
 col_input, col_btn = st.columns([5, 1])
@@ -300,7 +305,6 @@ with col_btn:
 # ── Analysis ──────────────────────────────────────────────────────────────────
 
 if run_btn and text.strip():
-
     with st.spinner("Computing Shapley Values and k-SII interactions…"):
         if model_choice == "encoder":
             result = run_pipeline(text.strip(), model_key=encoder_key)
@@ -308,15 +312,15 @@ if run_btn and text.strip():
             result = run_pipeline_decoder(text.strip(), model_key=model_choice)
 
     # Unpack
-    label    = result["label"]
-    score    = result["score"]
-    words    = result["words"]
+    label = result["label"]
+    score = result["score"]
+    words = result["words"]
     baseline = result["baseline"]
-    n        = result["n_players"]
-    sv       = result["sv"]
-    top_int  = result["top_interactions"]
-    mtype    = result["model_type"]
-    mname    = result["model_name"].split("/")[-1]
+    n = result["n_players"]
+    sv = result["sv"]
+    top_int = result["top_interactions"]
+    mtype = result["model_type"]
+    mname = result["model_name"].split("/")[-1]
     mask_tok = "[MASK]" if mtype == "encoder" else "removed"
 
     emoji = "😊" if label == "POSITIVE" else "😠"
@@ -324,7 +328,8 @@ if run_btn and text.strip():
     badge = "Encoder" if mtype == "encoder" else "Decoder"
 
     # ── Prediction result card ────────────────────────────────────────────────
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="result-card">
         <div style="font-size:1.6rem; font-weight:800; color:{color};">
             {emoji} {label} &nbsp;
@@ -358,20 +363,23 @@ if run_btn and text.strip():
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     # ── Segmentation details ──────────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(
+        """
     <div class="step-header">
         <span class="step-number">0</span>
         <span class="step-title">Segmentation — how the sentence becomes players</span>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     # Build token display
-    tokens_html = "".join(
-        f'<span class="seg-token">{w}</span>' for w in words
-    )
+    tokens_html = "".join(f'<span class="seg-token">{w}</span>' for w in words)
 
     # Show one masked example — mask all except first two words
     example_coalition = [True, True] + [False] * (n - 2)
@@ -382,7 +390,8 @@ if run_btn and text.strip():
         for i, w in enumerate(words)
     )
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <div class="seg-box">
         <div class="seg-label">Word players (n = {n})</div>
         {tokens_html}
@@ -395,7 +404,9 @@ if run_btn and text.strip():
         </div>
         {masked_words_html}
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     if mtype == "encoder":
         st.caption(
@@ -416,12 +427,15 @@ if run_btn and text.strip():
         )
 
     # ── Step 1: Shapley Values ────────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(
+        """
     <div class="step-header">
         <span class="step-number">1</span>
         <span class="step-title">Individual word contributions — Shapley Values</span>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     if mtype == "encoder":
         st.caption(
@@ -446,14 +460,14 @@ if run_btn and text.strip():
 
     # SV table with actual values
     sv_rows = sorted(
-        zip(words, sv.values[:n]),
+        zip(words, sv.values[:n], strict=False),
         key=lambda x: abs(x[1]),
         reverse=True,
     )
     sv_data = {
-        "Word":          [r[0] for r in sv_rows],
-        "SV":            [f"{r[1]:+.4f}" for r in sv_rows],
-        "Direction":     ["↑ positive" if r[1] >= 0 else "↓ negative" for r in sv_rows],
+        "Word": [r[0] for r in sv_rows],
+        "SV": [f"{r[1]:+.4f}" for r in sv_rows],
+        "Direction": ["↑ positive" if r[1] >= 0 else "↓ negative" for r in sv_rows],
     }
     st.dataframe(sv_data, use_container_width=True, hide_index=True)
 
@@ -472,12 +486,15 @@ if run_btn and text.strip():
         )
 
     # ── Step 2: k-SII Interactions ────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(
+        """
     <div class="step-header">
         <span class="step-number">2</span>
         <span class="step-title">Pairwise word interactions — k-SII order 2</span>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     st.caption(
         "k-SII(i,j) = `v(S∪{i,j}) - v(S∪{i}) - v(S∪{j}) + v(S)` averaged over all S. "
@@ -511,20 +528,23 @@ if run_btn and text.strip():
     # Top interactions table
     st.markdown("**Top pairwise interactions (sorted by |k-SII|)**")
     int_data = {
-        "Word 1":  [t[0] for t in top_int],
-        "Word 2":  [t[1] for t in top_int],
-        "k-SII":   [f"{t[2]:+.4f}" for t in top_int],
-        "Type":    ["🟢 synergy" if t[2] > 0 else "🔵 redundancy" for t in top_int],
+        "Word 1": [t[0] for t in top_int],
+        "Word 2": [t[1] for t in top_int],
+        "k-SII": [f"{t[2]:+.4f}" for t in top_int],
+        "Type": ["🟢 synergy" if t[2] > 0 else "🔵 redundancy" for t in top_int],
     }
     st.dataframe(int_data, use_container_width=True, hide_index=True)
 
     # ── Step 3: Interpretation ────────────────────────────────────────────────
-    st.markdown("""
+    st.markdown(
+        """
     <div class="step-header">
         <span class="step-number">3</span>
         <span class="step-title">Interpretation</span>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     if top_int:
         w1, w2, val = top_int[0]
@@ -536,8 +556,8 @@ if run_btn and text.strip():
                 st.success(f"""
                 **Strongest synergy: `{w1}` + `{w2}` → k-SII = {val:+.4f}**
 
-                Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}  
-                Sum of individual SVs: {sv_w1 + sv_w2:+.4f}  
+                Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}
+                Sum of individual SVs: {sv_w1 + sv_w2:+.4f}
                 Extra contribution from the pair together: **{val:+.4f}**
 
                 The pair contributes more to `v(S)` than their individual SVs predict.
@@ -547,8 +567,8 @@ if run_btn and text.strip():
                 st.info(f"""
                 **Strongest redundancy: `{w1}` + `{w2}` → k-SII = {val:+.4f}**
 
-                Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}  
-                Sum of individual SVs: {sv_w1 + sv_w2:+.4f}  
+                Individual SVs: `{w1}` = {sv_w1:+.4f}, `{w2}` = {sv_w2:+.4f}
+                Sum of individual SVs: {sv_w1 + sv_w2:+.4f}
                 Overlap (diminishing returns): **{val:+.4f}**
 
                 These words carry similar sentiment signals — the model already
@@ -568,7 +588,8 @@ elif run_btn and not text.strip():
     st.warning("Please enter a sentence before clicking Analyse.")
 
 else:
-    st.markdown("""
+    st.markdown(
+        """
     <div style="text-align:center; padding:3rem 1rem; color:#9ca3af;">
         <div style="font-size:3rem;">🔍</div>
         <div style="font-size:1.1rem; font-weight:600; margin-top:0.5rem;">
@@ -578,4 +599,6 @@ else:
             Results will show segmentation, Shapley Values, interaction network, and heatmap
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )

@@ -1,0 +1,1569 @@
+{
+  "case": {
+    "case_id": "qasper_b1bc9ae9d40e7065343c12f860a461c7c730a612",
+    "paper_id": "1912.08960",
+    "paper_title": "Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity",
+    "question_id": "b1bc9ae9d40e7065343c12f860a461c7c730a612",
+    "annotation_id": "3ac0d42b1c169429408c4dd0f053fe96d71134ea",
+    "question": "Which datasets are used?",
+    "gold_answer": "Existential (OneShape, MultiShapes), Spacial (TwoShapes, Multishapes), Quantification (Count, Ratio) datasets are generated from ShapeWorldICE",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1912.08960:paragraph:0019"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1912.08960:paragraph:0011",
+      "score": 0.794832037947034,
+      "title": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+      "text": "In this work, we develop the evaluation datasets within the ShapeWorld framework. ShapeWorld is a controlled data generation framework consisting of abstract colored shapes (see Figure FIGREF1 for an example). We use ShapeWorld to generate training and evaluation data for two major reasons. ShapeWorld supports customized data generation according to user specification, which enables a variety of model inspections in terms of language construction, visual complexity and reasoning ability. Another benefit is that each training and test instance generated in ShapeWorld is returned as a triplet of $<$image, caption, world model$>$. The world model stores information about the underlying microworld used to generate an image and a descriptive caption, internally represented as a list of entities with their attributes, such as shape, color, position. During data generation, ShapeWorld randomly samples a world model from a set of available entities and attributes. The generated world model is then used to realize a corresponding instance consisting of image and caption. The world model gives the actual semantic information contained in an image, which allows evaluation of caption truthfulness."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1912.08960:paragraph:0010",
+      "score": 0.7679353403803585,
+      "title": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+      "text": "Recently, many synthetic datasets have been proposed as diagnostic tools for deep learning models, such as CLEVR BIBREF21 for visual question answering (VQA), the bAbI tasks BIBREF22 for text understanding and reasoning, and ShapeWorld BIBREF11 for visually grounded language understanding. The primary motivation is to reduce complexity which is considered irrelevant to the evaluation focus, to enable better control over the data, and to provide more detailed insights into strengths and limitations of existing models."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1912.08960:paragraph:0019",
+      "score": 0.6652377979221283,
+      "title": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+      "text": "We develop a variety of ShapeWorldICE datasets, with a similar idea to the \u201cskill tasks\u201d in the bAbI framework BIBREF22. Table TABREF4 gives an overview for different ShapeWorldICE datasets we use in this paper. We consider three different types of captioning tasks, each of which focuses on a distinct aspect of reasoning abilities. Existential descriptions examine whether a certain object is present in an image. Spatial descriptions identify spatial relationships among visual objects. Quantification descriptions involve count-based and ratio-based statements, with an explicit focus on inspecting models for their counting ability. We develop two variants for each type of dataset to enable different levels of visual complexity or specific aspects of the same reasoning type. All the training and test captions sampled in this work are in English."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1912.08960:paragraph:0035",
+      "score": 0.7570060613195974,
+      "title": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+      "text": "Caption diversity benefits from varied language constructions in the training data. The diversity ratios of generated captions for different ShapeWorldICE datasets are illustrated in Figure FIGREF17. We can see that the diversity of inferred captions is largely sensitive to the caption variability in the dataset itself. For simple datasets (such as Existential-OneShape) where language constructions in the training set are less diverse, the output captions tend to have uniform sentence structures. The high diversity ratios of generated Spatial and Quantification captions suggest that caption diversity benefits from heterogeneous language constructions in complex datasets."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1912.08960:paragraph:0020",
+      "score": 0.7177383283357051,
+      "title": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+      "text": "Each dataset variant consists of around 200k training instances and 4,096 validation instances, plus 4,096 test instances. Each training instance consists of an image and a reference caption. At test time, only the test images are available to the evaluated models. Underlying world models are kept from the models and are used for later GTD evaluation. For each test instance, we sample ten reference captions of the same distribution as the training captions to enable the comparison of our proposed metrics to BLEU and SPICE. We fine-tune our model hyperparameters based on the performance on the validation set. All reported results are measured on the test split with the parameters yielding the best validation performance."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1912.08960:paragraph:0000",
+      "score": 0.4871655714334649,
+      "title": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+      "text": "Automatically generating text to describe the content of images, also known as image captioning, is a multimodal task of considerable interest in both the computer vision and the NLP communities. Image captioning can be framed as a translation task from an image to a descriptive natural language statement. Many existing captioning models BIBREF0, BIBREF1, BIBREF2, BIBREF3 follow the typical encoder-decoder framework where a convolutional network is used to condense images into visual feature representations, combined with a recurrent network for language generation. While these models demonstrate promising results, quantifying image captioning performance remains a challenging problem, in a similar way to other generative tasks BIBREF4, BIBREF5."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+      "attribution": 0.10810529802362073
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+      "attribution": 0.06615848300757365
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+      "attribution": 0.018010726960522645
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+      "attribution": 0.013517474320320548
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+      "attribution": -0.004230733963096059
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+      "attribution": -0.0011734552473460086
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+      "attribution": 0.11407120432152335
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+      "attribution": 0.07155622267095377
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+      "attribution": 0.028634492342964522
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+      "attribution": 0.020048383268542934
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+      "attribution": 0.004015724284512534
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+      "attribution": 0.0029128110337136174
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0010",
+      "interaction": -0.007582380835448161
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0019",
+      "interaction": -0.021451726381089675
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0035",
+      "interaction": -0.03053690669955768
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": 0.0005496248021705908
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": 0.0020392674422068545
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0019",
+      "interaction": -0.01134896440528662
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0035",
+      "interaction": -0.02152058565466021
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": -0.00110543916659108
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": -0.004990000640033024
+    },
+    {
+      "left": "1912.08960:paragraph:0019",
+      "right": "1912.08960:paragraph:0035",
+      "interaction": -0.07404078221208309
+    },
+    {
+      "left": "1912.08960:paragraph:0019",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": -0.0003752824815684986
+    },
+    {
+      "left": "1912.08960:paragraph:0019",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": -0.00019536250376068543
+    },
+    {
+      "left": "1912.08960:paragraph:0035",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": 0.006848781090885386
+    },
+    {
+      "left": "1912.08960:paragraph:0035",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": 0.008396717612431761
+    },
+    {
+      "left": "1912.08960:paragraph:0020",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": -0.002780372585892169
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0010",
+      "interaction": 0.016654339629746672
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0019",
+      "interaction": 0.0020845560459238632
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0035",
+      "interaction": -0.004022800461970496
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": -0.004611981196445785
+    },
+    {
+      "left": "1912.08960:paragraph:0011",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": 0.0005933129410460627
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0019",
+      "interaction": -0.012141722441601067
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0035",
+      "interaction": -0.010766976074536489
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": -0.005223366096208483
+    },
+    {
+      "left": "1912.08960:paragraph:0010",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": -0.00392888348831046
+    },
+    {
+      "left": "1912.08960:paragraph:0019",
+      "right": "1912.08960:paragraph:0035",
+      "interaction": -0.03289389091664695
+    },
+    {
+      "left": "1912.08960:paragraph:0019",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": -0.007402734103512263
+    },
+    {
+      "left": "1912.08960:paragraph:0019",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": -0.003602316532248948
+    },
+    {
+      "left": "1912.08960:paragraph:0035",
+      "right": "1912.08960:paragraph:0020",
+      "interaction": -0.0033269894853319142
+    },
+    {
+      "left": "1912.08960:paragraph:0035",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": -0.0030305655719355417
+    },
+    {
+      "left": "1912.08960:paragraph:0020",
+      "right": "1912.08960:paragraph:0000",
+      "interaction": 0.0005041557824212228
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2003877924791022
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "remaining_chunks": 5,
+        "score": 0.1323622562616641
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "remaining_chunks": 4,
+        "score": 0.05452774181175679
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "remaining_chunks": 3,
+        "score": 0.024893843778385993
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "remaining_chunks": 2,
+        "score": -0.007175280765518766
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "remaining_chunks": 1,
+        "score": -0.00134786636964368
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "selected_chunks": 1,
+        "score": 0.17543765509750564
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "selected_chunks": 2,
+        "score": 0.19405324018414272
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "selected_chunks": 3,
+        "score": 0.1880074250853322
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "selected_chunks": 4,
+        "score": 0.19617583183928167
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "selected_chunks": 5,
+        "score": 0.19859834797183584
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "selected_chunks": 6,
+        "score": 0.2003877924791022
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2003877924791022
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "remaining_chunks": 5,
+        "score": 0.1978619144467706
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "remaining_chunks": 4,
+        "score": 0.18986046153307878
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "remaining_chunks": 3,
+        "score": 0.15729937020378293
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "remaining_chunks": 2,
+        "score": 0.16243517311897748
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "remaining_chunks": 1,
+        "score": -0.004322063556874867
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2003877924791022
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "remaining_chunks": 5,
+        "score": 0.1323622562616641
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "remaining_chunks": 4,
+        "score": 0.05452774181175679
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "remaining_chunks": 3,
+        "score": 0.024893843778385993
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "remaining_chunks": 2,
+        "score": 0.02418804117044182
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.04448555566106749
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.20038779247910204
+      },
+      {
+        "step": 1,
+        "score": 0.17950433399615795
+      },
+      {
+        "step": 2,
+        "score": 0.15818507013753347
+      },
+      {
+        "step": 3,
+        "score": 0.13196378811709436
+      },
+      {
+        "step": 4,
+        "score": 0.09447184056118872
+      },
+      {
+        "step": 5,
+        "score": 0.05608934224376623
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which datasets are used?",
+    "expanded_queries": [
+      "Which datasets are used?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "dense": 0.6592,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work ::: Synthetic datasets",
+        "flags": "",
+        "preview": "Recently, many synthetic datasets have been proposed as diagnostic tools for deep learning models, such as CLEVR BIBREF21 for visual question answering (VQA), the bAbI tasks BIBREF22 for text understanding and reasoning,"
+      },
+      {
+        "rank": 2,
+        "source": "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "dense": 0.6137,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experimental Setup ::: Datasets",
+        "flags": "",
+        "preview": "Each dataset variant consists of around 200k training instances and 4,096 validation instances, plus 4,096 test instances. Each training instance consists of an image and a reference caption. At test time, only the test "
+      },
+      {
+        "rank": 3,
+        "source": "1912.08960:paragraph:0023 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "dense": 0.6112,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "We train and evaluate the Show&Tell and LRCN1u models on the ShapeWorldICE datasets. Here we discuss in detail the diagnostic results of these experiments. During training, we periodically record model output on the test"
+      },
+      {
+        "rank": 4,
+        "source": "1912.08960:paragraph:0025 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "dense": 0.5986,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "We observed similar results on other ShapeWorldICE datasets that we experimented with, validating the superiority of LRCN1u over Show&Tell on ShapeWorldICE. Consequently, we decided to focus on the LRCN1u architecture in"
+      },
+      {
+        "rank": 5,
+        "source": "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "dense": 0.5926,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experimental Setup ::: Datasets",
+        "flags": "",
+        "preview": "We develop a variety of ShapeWorldICE datasets, with a similar idea to the \u201cskill tasks\u201d in the bAbI framework BIBREF22. Table TABREF4 gives an overview for different ShapeWorldICE datasets we use in this paper. We consi"
+      },
+      {
+        "rank": 6,
+        "source": "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "dense": 0.5874,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Caption diversity benefits from varied language constructions in the training data. The diversity ratios of generated captions for different ShapeWorldICE datasets are illustrated in Figure FIGREF17. We can see that the "
+      },
+      {
+        "rank": 7,
+        "source": "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "dense": 0.5761,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work ::: Synthetic datasets",
+        "flags": "",
+        "preview": "In this work, we develop the evaluation datasets within the ShapeWorld framework. ShapeWorld is a controlled data generation framework consisting of abstract colored shapes (see Figure FIGREF1 for an example). We use Sha"
+      },
+      {
+        "rank": 8,
+        "source": "1912.08960:paragraph:0008 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Existing evaluation of image captioning",
+        "dense": 0.5529,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work ::: Existing evaluation of image captioning",
+        "flags": "",
+        "preview": "Many researchers have pointed out problems with existing reference-based metrics including low correlations with human judgment BIBREF12, BIBREF10, BIBREF13 and strong baselines using nearest-neighbor methods BIBREF14 or"
+      },
+      {
+        "rank": 9,
+        "source": "1912.08960:paragraph:0029 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "dense": 0.5519,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Comparing SPICE curves for three datasets shown in Figure FIGREF9-FIGREF9, they suggest an increase in task complexity, but they do not reflect the successively closing gap of caption truthfulness scores between two Exis"
+      },
+      {
+        "rank": 10,
+        "source": "1912.08960:paragraph:0005 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "dense": 0.5401,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Practical evaluation of GTD is currently only possible on synthetic data. We construct a range of datasets designed for image captioning evaluation. We call this diagnostic evaluation benchmark ShapeWorldICE (ShapeWorld "
+      },
+      {
+        "rank": 11,
+        "source": "1912.08960:paragraph:0033 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "dense": 0.5382,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "The counting task is non-trivial. Counting has long been considered to be a challenging task in multimodal reasoning BIBREF28, BIBREF29. To explore how well the LRCN1u model copes with counting tasks, we generated two Qu"
+      },
+      {
+        "rank": 12,
+        "source": "1912.08960:paragraph:0001 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "dense": 0.5357,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Evaluating candidate captions for human preference is slow and laborious. To alleviate this problem, many automatic evaluation metrics have been proposed, such as BLEU BIBREF6, METEOR BIBREF7, ROUGE BIBREF8 and CIDEr BIB"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "keyword": 0.0932,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work ::: Synthetic datasets",
+        "flags": "",
+        "preview": "In this work, we develop the evaluation datasets within the ShapeWorld framework. ShapeWorld is a controlled data generation framework consisting of abstract colored shapes (see Figure FIGREF1 for an example). We use Sha"
+      },
+      {
+        "rank": 2,
+        "source": "1912.08960:paragraph:0025 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "keyword": 0.0904,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "We observed similar results on other ShapeWorldICE datasets that we experimented with, validating the superiority of LRCN1u over Show&Tell on ShapeWorldICE. Consequently, we decided to focus on the LRCN1u architecture in"
+      },
+      {
+        "rank": 3,
+        "source": "1912.08960:paragraph:0029 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "keyword": 0.0846,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Comparing SPICE curves for three datasets shown in Figure FIGREF9-FIGREF9, they suggest an increase in task complexity, but they do not reflect the successively closing gap of caption truthfulness scores between two Exis"
+      },
+      {
+        "rank": 4,
+        "source": "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "keyword": 0.0824,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Caption diversity benefits from varied language constructions in the training data. The diversity ratios of generated captions for different ShapeWorldICE datasets are illustrated in Figure FIGREF17. We can see that the "
+      },
+      {
+        "rank": 5,
+        "source": "1912.08960:paragraph:0032 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "keyword": 0.0791,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Failure to learn complex spatial relationships. While CNNs can produce rich visual representations that can be used for a variety of vision tasks BIBREF27, it remains an open question whether these condensed visual repre"
+      },
+      {
+        "rank": 6,
+        "source": "1912.08960:paragraph:0017 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / GTD Evaluation Framework ::: Diversity",
+        "keyword": 0.0598,
+        "page": 1,
+        "type": "body_text",
+        "section": "GTD Evaluation Framework ::: Diversity",
+        "flags": "",
+        "preview": "As ShapeWorldICE exploits a limited size of open-class words, we emphasize the diversity in ShapeWorldICE at the sentence level rather than the word level. Since the ground-truth reference captions in ShapeWorld are rand"
+      },
+      {
+        "rank": 7,
+        "source": "1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "keyword": 0.055,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Automatically generating text to describe the content of images, also known as image captioning, is a multimodal task of considerable interest in both the computer vision and the NLP communities. Image captioning can be "
+      },
+      {
+        "rank": 8,
+        "source": "1912.08960:abstract:000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Abstract",
+        "keyword": 0.0515,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Image captioning as a multimodal task has drawn much interest in recent years. However, evaluation for this task remains a challenging problem. Existing evaluation metrics focus on surface similarity between a candidate "
+      },
+      {
+        "rank": 9,
+        "source": "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "keyword": 0.0511,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experimental Setup ::: Datasets",
+        "flags": "",
+        "preview": "Each dataset variant consists of around 200k training instances and 4,096 validation instances, plus 4,096 test instances. Each training instance consists of an image and a reference caption. At test time, only the test "
+      },
+      {
+        "rank": 10,
+        "source": "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "keyword": 0.0502,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experimental Setup ::: Datasets",
+        "flags": "",
+        "preview": "We develop a variety of ShapeWorldICE datasets, with a similar idea to the \u201cskill tasks\u201d in the bAbI framework BIBREF22. Table TABREF4 gives an overview for different ShapeWorldICE datasets we use in this paper. We consi"
+      },
+      {
+        "rank": 11,
+        "source": "1912.08960:paragraph:0031 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "keyword": 0.0421,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Perfect grammaticality for all caption types. As shown in Figure FIGREF15, generated captions for all types of ShapeWorldICE datasets attain quasi-perfect grammaticality scores in fewer than 5,000 iterations, suggesting "
+      },
+      {
+        "rank": 12,
+        "source": "1912.08960:paragraph:0023 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "keyword": 0.0404,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "We train and evaluate the Show&Tell and LRCN1u models on the ShapeWorldICE datasets. Here we discuss in detail the diagnostic results of these experiments. During training, we periodically record model output on the test"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0932,
+        "rerank": 0.7948,
+        "section": "Related work ::: Synthetic datasets",
+        "query_hits": "datasets, used",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we develop the evaluation datasets within the ShapeWorld framework. ShapeWorld is a controlled data generation framework consisting of abstract colored shapes (see Figure FIGREF1 for an example). We use Sha"
+      },
+      {
+        "rank": 2,
+        "source": "1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6592,
+        "keyword": 0.0335,
+        "rerank": 0.7679,
+        "section": "Related work ::: Synthetic datasets",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Recently, many synthetic datasets have been proposed as diagnostic tools for deep learning models, such as CLEVR BIBREF21 for visual question answering (VQA), the bAbI tasks BIBREF22 for text understanding and reasoning,"
+      },
+      {
+        "rank": 3,
+        "source": "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5874,
+        "keyword": 0.0824,
+        "rerank": 0.757,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Caption diversity benefits from varied language constructions in the training data. The diversity ratios of generated captions for different ShapeWorldICE datasets are illustrated in Figure FIGREF17. We can see that the "
+      },
+      {
+        "rank": 4,
+        "source": "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6137,
+        "keyword": 0.0511,
+        "rerank": 0.7177,
+        "section": "Experimental Setup ::: Datasets",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Each dataset variant consists of around 200k training instances and 4,096 validation instances, plus 4,096 test instances. Each training instance consists of an image and a reference caption. At test time, only the test "
+      },
+      {
+        "rank": 5,
+        "source": "1912.08960:paragraph:0025 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5986,
+        "keyword": 0.0904,
+        "rerank": 0.7088,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We observed similar results on other ShapeWorldICE datasets that we experimented with, validating the superiority of LRCN1u over Show&Tell on ShapeWorldICE. Consequently, we decided to focus on the LRCN1u architecture in"
+      },
+      {
+        "rank": 6,
+        "source": "1912.08960:paragraph:0023 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6112,
+        "keyword": 0.0404,
+        "rerank": 0.6776,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "We train and evaluate the Show&Tell and LRCN1u models on the ShapeWorldICE datasets. Here we discuss in detail the diagnostic results of these experiments. During training, we periodically record model output on the test"
+      },
+      {
+        "rank": 7,
+        "source": "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5926,
+        "keyword": 0.0502,
+        "rerank": 0.6652,
+        "section": "Experimental Setup ::: Datasets",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "We develop a variety of ShapeWorldICE datasets, with a similar idea to the \u201cskill tasks\u201d in the bAbI framework BIBREF22. Table TABREF4 gives an overview for different ShapeWorldICE datasets we use in this paper. We consi"
+      },
+      {
+        "rank": 8,
+        "source": "1912.08960:paragraph:0032 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.0791,
+        "rerank": 0.6092,
+        "section": "Results",
+        "query_hits": "datasets, used",
+        "reasons": "body/table evidence",
+        "preview": "Failure to learn complex spatial relationships. While CNNs can produce rich visual representations that can be used for a variety of vision tasks BIBREF27, it remains an open question whether these condensed visual repre"
+      },
+      {
+        "rank": 9,
+        "source": "1912.08960:paragraph:0029 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5519,
+        "keyword": 0.0846,
+        "rerank": 0.5806,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Comparing SPICE curves for three datasets shown in Figure FIGREF9-FIGREF9, they suggest an increase in task complexity, but they do not reflect the successively closing gap of caption truthfulness scores between two Exis"
+      },
+      {
+        "rank": 10,
+        "source": "1912.08960:paragraph:0017 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / GTD Evaluation Framework ::: Diversity",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5325,
+        "keyword": 0.0598,
+        "rerank": 0.5553,
+        "section": "GTD Evaluation Framework ::: Diversity",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "As ShapeWorldICE exploits a limited size of open-class words, we emphasize the diversity in ShapeWorldICE at the sentence level rather than the word level. Since the ground-truth reference captions in ShapeWorld are rand"
+      },
+      {
+        "rank": 11,
+        "source": "1912.08960:abstract:000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5276,
+        "keyword": 0.0515,
+        "rerank": 0.5171,
+        "section": "Abstract",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Image captioning as a multimodal task has drawn much interest in recent years. However, evaluation for this task remains a challenging problem. Existing evaluation metrics focus on surface similarity between a candidate "
+      },
+      {
+        "rank": 12,
+        "source": "1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.055,
+        "rerank": 0.4872,
+        "section": "Introduction",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Automatically generating text to describe the content of images, also known as image captioning, is a multimodal task of considerable interest in both the computer vision and the NLP communities. Image captioning can be "
+      },
+      {
+        "rank": 13,
+        "source": "1912.08960:paragraph:0005 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5401,
+        "keyword": 0.0317,
+        "rerank": 0.4825,
+        "section": "Introduction",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Practical evaluation of GTD is currently only possible on synthetic data. We construct a range of datasets designed for image captioning evaluation. We call this diagnostic evaluation benchmark ShapeWorldICE (ShapeWorld "
+      },
+      {
+        "rank": 14,
+        "source": "1912.08960:paragraph:0033 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5382,
+        "keyword": 0.033,
+        "rerank": 0.4822,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "The counting task is non-trivial. Counting has long been considered to be a challenging task in multimodal reasoning BIBREF28, BIBREF29. To explore how well the LRCN1u model copes with counting tasks, we generated two Qu"
+      },
+      {
+        "rank": 15,
+        "source": "1912.08960:paragraph:0008 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Existing evaluation of image captioning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5529,
+        "keyword": 0.0,
+        "rerank": 0.3804,
+        "section": "Related work ::: Existing evaluation of image captioning",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Many researchers have pointed out problems with existing reference-based metrics including low correlations with human judgment BIBREF12, BIBREF10, BIBREF13 and strong baselines using nearest-neighbor methods BIBREF14 or"
+      },
+      {
+        "rank": 16,
+        "source": "1912.08960:paragraph:0031 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5128,
+        "keyword": 0.0421,
+        "rerank": 0.3521,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Perfect grammaticality for all caption types. As shown in Figure FIGREF15, generated captions for all types of ShapeWorldICE datasets attain quasi-perfect grammaticality scores in fewer than 5,000 iterations, suggesting "
+      },
+      {
+        "rank": 17,
+        "source": "1912.08960:paragraph:0034 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5185,
+        "keyword": 0.0363,
+        "rerank": 0.3468,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "From Figure FIGREF16, we notice that the LRCN1u model performs poorly on these datasets in terms of truthfulness, reflected in the 0.50 and 0.46 scores achieved by the model on the Quant-Count and Quant-Ratio tasks respe"
+      },
+      {
+        "rank": 18,
+        "source": "1912.08960:paragraph:0001 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5357,
+        "keyword": 0.0,
+        "rerank": 0.3401,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Evaluating candidate captions for human preference is slow and laborious. To alleviate this problem, many automatic evaluation metrics have been proposed, such as BLEU BIBREF6, METEOR BIBREF7, ROUGE BIBREF8 and CIDEr BIB"
+      },
+      {
+        "rank": 19,
+        "source": "1912.08960:paragraph:0021 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5351,
+        "keyword": 0.0,
+        "rerank": 0.3387,
+        "section": "Experimental Setup ::: Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We experiment with two image captioning models: the Show&Tell model BIBREF0 and the LRCN1u model BIBREF1. Both models follow the basic encoder-decoder architecture design that uses a CNN encoder to condense the visual in"
+      },
+      {
+        "rank": 20,
+        "source": "1912.08960:paragraph:0003 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5291,
+        "keyword": 0.0,
+        "rerank": 0.3247,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "However, in image captioning, visual scenes with multiple objects and relations correspond to a diversity of valid descriptions. Consider the example image and captions from the ShapeWorld framework BIBREF11 shown in Fig"
+      },
+      {
+        "rank": 21,
+        "source": "1912.08960:paragraph:0038 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Acknowledgments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5219,
+        "keyword": 0.0,
+        "rerank": 0.3077,
+        "section": "Acknowledgments",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We thank the anonymous reviewers for their constructive feedback. HX is grateful for being supported by the CSC Cambridge Scholarship. TS is supported in part by the EPSRC Centre for Doctoral Training in Data Science, fu"
+      },
+      {
+        "rank": 22,
+        "source": "1912.08960:paragraph:0037 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Discussions and Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5205,
+        "keyword": 0.0,
+        "rerank": 0.3044,
+        "section": "Discussions and Conclusions",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "While performing the evaluation experiments on the LRCN1u model, we noticed that caption agreement does not always improve as the training loss decreases. Ideally, the training objective should be in accordance with how "
+      },
+      {
+        "rank": 23,
+        "source": "1912.08960:paragraph:0007 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Existing evaluation of image captioning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5182,
+        "keyword": 0.0,
+        "rerank": 0.2991,
+        "section": "Related work ::: Existing evaluation of image captioning",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As a natural language generation task, image captioning frequently uses evaluation metrics such as BLEU BIBREF6, METEOR BIBREF7, ROUGE BIBREF8 and CIDEr BIBREF9. These metrics use n-gram similarity between the candidate "
+      },
+      {
+        "rank": 24,
+        "source": "1912.08960:paragraph:0015 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / GTD Evaluation Framework ::: Truthfulness",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.516,
+        "keyword": 0.0,
+        "rerank": 0.2939,
+        "section": "GTD Evaluation Framework ::: Truthfulness",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The second aspect we investigate is truthfulness, that is, whether a candidate caption is compatible with the content of the image it is supposed to describe. We evaluate caption truthfulness on the basis of a linguistic"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0932,
+        "rerank": 0.7948,
+        "section": "Related work ::: Synthetic datasets",
+        "query_hits": "datasets, used",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we develop the evaluation datasets within the ShapeWorld framework. ShapeWorld is a controlled data generation framework consisting of abstract colored shapes (see Figure FIGREF1 for an example). We use Sha"
+      },
+      {
+        "rank": 2,
+        "source": "1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6592,
+        "keyword": 0.0335,
+        "rerank": 0.7679,
+        "section": "Related work ::: Synthetic datasets",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Recently, many synthetic datasets have been proposed as diagnostic tools for deep learning models, such as CLEVR BIBREF21 for visual question answering (VQA), the bAbI tasks BIBREF22 for text understanding and reasoning,"
+      },
+      {
+        "rank": 3,
+        "source": "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5874,
+        "keyword": 0.0824,
+        "rerank": 0.757,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Caption diversity benefits from varied language constructions in the training data. The diversity ratios of generated captions for different ShapeWorldICE datasets are illustrated in Figure FIGREF17. We can see that the "
+      },
+      {
+        "rank": 4,
+        "source": "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6137,
+        "keyword": 0.0511,
+        "rerank": 0.7177,
+        "section": "Experimental Setup ::: Datasets",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Each dataset variant consists of around 200k training instances and 4,096 validation instances, plus 4,096 test instances. Each training instance consists of an image and a reference caption. At test time, only the test "
+      },
+      {
+        "rank": 5,
+        "source": "1912.08960:paragraph:0025 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5986,
+        "keyword": 0.0904,
+        "rerank": 0.7088,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We observed similar results on other ShapeWorldICE datasets that we experimented with, validating the superiority of LRCN1u over Show&Tell on ShapeWorldICE. Consequently, we decided to focus on the LRCN1u architecture in"
+      },
+      {
+        "rank": 6,
+        "source": "1912.08960:paragraph:0023 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6112,
+        "keyword": 0.0404,
+        "rerank": 0.6776,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "We train and evaluate the Show&Tell and LRCN1u models on the ShapeWorldICE datasets. Here we discuss in detail the diagnostic results of these experiments. During training, we periodically record model output on the test"
+      },
+      {
+        "rank": 7,
+        "source": "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5926,
+        "keyword": 0.0502,
+        "rerank": 0.6652,
+        "section": "Experimental Setup ::: Datasets",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "We develop a variety of ShapeWorldICE datasets, with a similar idea to the \u201cskill tasks\u201d in the bAbI framework BIBREF22. Table TABREF4 gives an overview for different ShapeWorldICE datasets we use in this paper. We consi"
+      },
+      {
+        "rank": 8,
+        "source": "1912.08960:paragraph:0032 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.0791,
+        "rerank": 0.6092,
+        "section": "Results",
+        "query_hits": "datasets, used",
+        "reasons": "body/table evidence",
+        "preview": "Failure to learn complex spatial relationships. While CNNs can produce rich visual representations that can be used for a variety of vision tasks BIBREF27, it remains an open question whether these condensed visual repre"
+      },
+      {
+        "rank": 9,
+        "source": "1912.08960:paragraph:0029 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5519,
+        "keyword": 0.0846,
+        "rerank": 0.5806,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Comparing SPICE curves for three datasets shown in Figure FIGREF9-FIGREF9, they suggest an increase in task complexity, but they do not reflect the successively closing gap of caption truthfulness scores between two Exis"
+      },
+      {
+        "rank": 10,
+        "source": "1912.08960:paragraph:0017 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / GTD Evaluation Framework ::: Diversity",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5325,
+        "keyword": 0.0598,
+        "rerank": 0.5553,
+        "section": "GTD Evaluation Framework ::: Diversity",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "As ShapeWorldICE exploits a limited size of open-class words, we emphasize the diversity in ShapeWorldICE at the sentence level rather than the word level. Since the ground-truth reference captions in ShapeWorld are rand"
+      },
+      {
+        "rank": 11,
+        "source": "1912.08960:abstract:000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5276,
+        "keyword": 0.0515,
+        "rerank": 0.5171,
+        "section": "Abstract",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Image captioning as a multimodal task has drawn much interest in recent years. However, evaluation for this task remains a challenging problem. Existing evaluation metrics focus on surface similarity between a candidate "
+      },
+      {
+        "rank": 12,
+        "source": "1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.055,
+        "rerank": 0.4872,
+        "section": "Introduction",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Automatically generating text to describe the content of images, also known as image captioning, is a multimodal task of considerable interest in both the computer vision and the NLP communities. Image captioning can be "
+      },
+      {
+        "rank": 13,
+        "source": "1912.08960:paragraph:0005 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5401,
+        "keyword": 0.0317,
+        "rerank": 0.4825,
+        "section": "Introduction",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Practical evaluation of GTD is currently only possible on synthetic data. We construct a range of datasets designed for image captioning evaluation. We call this diagnostic evaluation benchmark ShapeWorldICE (ShapeWorld "
+      },
+      {
+        "rank": 14,
+        "source": "1912.08960:paragraph:0033 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5382,
+        "keyword": 0.033,
+        "rerank": 0.4822,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "The counting task is non-trivial. Counting has long been considered to be a challenging task in multimodal reasoning BIBREF28, BIBREF29. To explore how well the LRCN1u model copes with counting tasks, we generated two Qu"
+      },
+      {
+        "rank": 15,
+        "source": "1912.08960:paragraph:0008 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Existing evaluation of image captioning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5529,
+        "keyword": 0.0,
+        "rerank": 0.3804,
+        "section": "Related work ::: Existing evaluation of image captioning",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Many researchers have pointed out problems with existing reference-based metrics including low correlations with human judgment BIBREF12, BIBREF10, BIBREF13 and strong baselines using nearest-neighbor methods BIBREF14 or"
+      },
+      {
+        "rank": 16,
+        "source": "1912.08960:paragraph:0031 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5128,
+        "keyword": 0.0421,
+        "rerank": 0.3521,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Perfect grammaticality for all caption types. As shown in Figure FIGREF15, generated captions for all types of ShapeWorldICE datasets attain quasi-perfect grammaticality scores in fewer than 5,000 iterations, suggesting "
+      },
+      {
+        "rank": 17,
+        "source": "1912.08960:paragraph:0034 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5185,
+        "keyword": 0.0363,
+        "rerank": 0.3468,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "From Figure FIGREF16, we notice that the LRCN1u model performs poorly on these datasets in terms of truthfulness, reflected in the 0.50 and 0.46 scores achieved by the model on the Quant-Count and Quant-Ratio tasks respe"
+      },
+      {
+        "rank": 18,
+        "source": "1912.08960:paragraph:0001 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5357,
+        "keyword": 0.0,
+        "rerank": 0.3401,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Evaluating candidate captions for human preference is slow and laborious. To alleviate this problem, many automatic evaluation metrics have been proposed, such as BLEU BIBREF6, METEOR BIBREF7, ROUGE BIBREF8 and CIDEr BIB"
+      },
+      {
+        "rank": 19,
+        "source": "1912.08960:paragraph:0021 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5351,
+        "keyword": 0.0,
+        "rerank": 0.3387,
+        "section": "Experimental Setup ::: Models",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We experiment with two image captioning models: the Show&Tell model BIBREF0 and the LRCN1u model BIBREF1. Both models follow the basic encoder-decoder architecture design that uses a CNN encoder to condense the visual in"
+      },
+      {
+        "rank": 20,
+        "source": "1912.08960:paragraph:0003 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5291,
+        "keyword": 0.0,
+        "rerank": 0.3247,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "However, in image captioning, visual scenes with multiple objects and relations correspond to a diversity of valid descriptions. Consider the example image and captions from the ShapeWorld framework BIBREF11 shown in Fig"
+      },
+      {
+        "rank": 21,
+        "source": "1912.08960:paragraph:0038 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Acknowledgments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5219,
+        "keyword": 0.0,
+        "rerank": 0.3077,
+        "section": "Acknowledgments",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We thank the anonymous reviewers for their constructive feedback. HX is grateful for being supported by the CSC Cambridge Scholarship. TS is supported in part by the EPSRC Centre for Doctoral Training in Data Science, fu"
+      },
+      {
+        "rank": 22,
+        "source": "1912.08960:paragraph:0037 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Discussions and Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5205,
+        "keyword": 0.0,
+        "rerank": 0.3044,
+        "section": "Discussions and Conclusions",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "While performing the evaluation experiments on the LRCN1u model, we noticed that caption agreement does not always improve as the training loss decreases. Ideally, the training objective should be in accordance with how "
+      },
+      {
+        "rank": 23,
+        "source": "1912.08960:paragraph:0007 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Existing evaluation of image captioning",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5182,
+        "keyword": 0.0,
+        "rerank": 0.2991,
+        "section": "Related work ::: Existing evaluation of image captioning",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As a natural language generation task, image captioning frequently uses evaluation metrics such as BLEU BIBREF6, METEOR BIBREF7, ROUGE BIBREF8 and CIDEr BIBREF9. These metrics use n-gram similarity between the candidate "
+      },
+      {
+        "rank": 24,
+        "source": "1912.08960:paragraph:0015 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / GTD Evaluation Framework ::: Truthfulness",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.516,
+        "keyword": 0.0,
+        "rerank": 0.2939,
+        "section": "GTD Evaluation Framework ::: Truthfulness",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The second aspect we investigate is truthfulness, that is, whether a candidate caption is compatible with the content of the image it is supposed to describe. We evaluate caption truthfulness on the basis of a linguistic"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5761,
+        "keyword": 0.0932,
+        "rerank": 0.7948,
+        "section": "Related work ::: Synthetic datasets",
+        "query_hits": "datasets, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.44,
+        "reasons": "body/table evidence",
+        "preview": "In this work, we develop the evaluation datasets within the ShapeWorld framework. ShapeWorld is a controlled data generation framework consisting of abstract colored shapes (see Figure FIGREF1 for an example). We use Sha"
+      },
+      {
+        "rank": 2,
+        "source": "1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6592,
+        "keyword": 0.0335,
+        "rerank": 0.7679,
+        "section": "Related work ::: Synthetic datasets",
+        "query_hits": "datasets",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.967,
+        "novelty": 0.4832,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2993,
+        "reasons": "body/table evidence",
+        "preview": "Recently, many synthetic datasets have been proposed as diagnostic tools for deep learning models, such as CLEVR BIBREF21 for visual question answering (VQA), the bAbI tasks BIBREF22 for text understanding and reasoning,"
+      },
+      {
+        "rank": 3,
+        "source": "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5926,
+        "keyword": 0.0502,
+        "rerank": 0.6652,
+        "section": "Experimental Setup ::: Datasets",
+        "query_hits": "datasets",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.841,
+        "novelty": 0.6935,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2203,
+        "reasons": "body/table evidence",
+        "preview": "We develop a variety of ShapeWorldICE datasets, with a similar idea to the \u201cskill tasks\u201d in the bAbI framework BIBREF22. Table TABREF4 gives an overview for different ShapeWorldICE datasets we use in this paper. We consi"
+      },
+      {
+        "rank": 4,
+        "source": "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5874,
+        "keyword": 0.0824,
+        "rerank": 0.757,
+        "section": "Results",
+        "query_hits": "datasets",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9536,
+        "novelty": 0.7132,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1599,
+        "reasons": "body/table evidence",
+        "preview": "Caption diversity benefits from varied language constructions in the training data. The diversity ratios of generated captions for different ShapeWorldICE datasets are illustrated in Figure FIGREF17. We can see that the "
+      },
+      {
+        "rank": 5,
+        "source": "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6137,
+        "keyword": 0.0511,
+        "rerank": 0.7177,
+        "section": "Experimental Setup ::: Datasets",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9054,
+        "novelty": 0.4583,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0828,
+        "reasons": "body/table evidence",
+        "preview": "Each dataset variant consists of around 200k training instances and 4,096 validation instances, plus 4,096 test instances. Each training instance consists of an image and a reference caption. At test time, only the test "
+      },
+      {
+        "rank": 6,
+        "source": "1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.055,
+        "rerank": 0.4872,
+        "section": "Introduction",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6224,
+        "novelty": 0.7329,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0379,
+        "reasons": "body/table evidence",
+        "preview": "Automatically generating text to describe the content of images, also known as image captioning, is a multimodal task of considerable interest in both the computer vision and the NLP communities. Image captioning can be "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "datasets",
+        "used"
+      ],
+      "covered_query_terms": [
+        "datasets",
+        "used"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets": [
+          "datasets",
+          "used"
+        ],
+        "1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets": [
+          "datasets"
+        ],
+        "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets": [
+          "datasets"
+        ],
+        "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results": [
+          "datasets"
+        ],
+        "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets": [
+          "used"
+        ],
+        "1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction": [
+          "used"
+        ]
+      },
+      "section_titles": [
+        "Experimental Setup ::: Datasets",
+        "Introduction",
+        "Related work ::: Synthetic datasets",
+        "Results"
+      ],
+      "chunks_by_section": {
+        "Related work ::: Synthetic datasets": [
+          "1912.08960:paragraph:0011 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets",
+          "1912.08960:paragraph:0010 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Related work ::: Synthetic datasets"
+        ],
+        "Experimental Setup ::: Datasets": [
+          "1912.08960:paragraph:0019 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets",
+          "1912.08960:paragraph:0020 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Experimental Setup ::: Datasets"
+        ],
+        "Results": [
+          "1912.08960:paragraph:0035 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Results"
+        ],
+        "Introduction": [
+          "1912.08960:paragraph:0000 | Going Beneath the Surface: Evaluating Image Captioning for Grammaticality, Truthfulness and Diversity / Introduction"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have any retrieved context to answer this question.",
+    "gold_context_answer": "The context mentions that the authors develop a variety of ShapeWorldICE datasets. These datasets are used for three different types of captioning tasks:\n1. Existential descriptions, which test if an object is present in an image.\n2. Spatial descriptions, which identify spatial relationships among visual objects.\n3. Quantification descriptions, which involve count-based and ratio-based statements, focusing on counting ability.\n\nFor each type of dataset, two variants are developed to allow for",
+    "retrieved_context_answer": "The context mentions several types of datasets:\n\n*   **Synthetic datasets:** These have been proposed as diagnostic tools for deep learning models. Examples cited include CLEVR for visual question answering (VQA), bAbI tasks for text understanding and reasoning, and ShapeWorld for visually grounded language understanding.\n*   **ShapeWorld framework/datasets:** This is a controlled data generation framework that generates training and evaluation data using abstract colored shapes. The work develops \"ShapeWorldICE datasets\"",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.16091954022988506,
+    "retrieved_context_f1": 0.04878048780487805,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

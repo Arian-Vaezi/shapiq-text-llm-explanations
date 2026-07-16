@@ -1,0 +1,1572 @@
+{
+  "case": {
+    "case_id": "qasper_c5abe97625b9e1c8de8208e15d59c704a597b88c",
+    "paper_id": "2002.08795",
+    "paper_title": "How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents",
+    "question_id": "c5abe97625b9e1c8de8208e15d59c704a597b88c",
+    "annotation_id": "955ce5af24c0a73ea5493aa343c318e8d91c2762",
+    "question": "What are the results from these proposed strategies?",
+    "gold_answer": "KG-A2C-chained and KG-A2C-Explore both pass the bottleneck of a score of 40",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "2002.08795:paragraph:0016"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "2002.08795:paragraph:0011",
+      "score": 0.8600000000000001,
+      "title": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+      "text": "We compare our two exploration strategies to the following baselines and ablations:"
+    },
+    {
+      "rank": 2,
+      "passage_id": "2002.08795:paragraph:0005",
+      "score": 0.46890684676991917,
+      "title": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "text": "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge graph state. This method freezes the policy used to reach the bottleneck and restarts the training from there on out, additionally conducting a backtracking search to ensure that a sub-optimal policy has not been frozen. The second contribution explore how to leverage knowledge graphs to improve existing exploration algorithms for dealing with combinatorial action-spaces such as Go-Explore BIBREF9. We additionally present a comparative ablation study analyzing the performance of these methods on the popular text-game Zork1."
+    },
+    {
+      "rank": 3,
+      "passage_id": "2002.08795:abstract:000",
+      "score": 0.5403681508133791,
+      "title": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+      "text": "Text-based games -- in which an agent interacts with the world through textual natural language -- present us with the problem of combinatorially-sized action-spaces. Most current reinforcement learning algorithms are not capable of effectively handling such a large number of possible actions per turn. Poor sample efficiency, consequently, results in agents that are unable to pass bottleneck states, where they are unable to proceed because they do not see the right action sequence to pass the bottleneck enough times to be sufficiently reinforced. Building on prior work using knowledge graphs in reinforcement learning, we introduce two new game state exploration strategies. We compare our exploration strategies against strong baselines on the classic text-adventure game, Zork1, where prior agent have been unable to get past a bottleneck where the agent is eaten by a Grue."
+    },
+    {
+      "rank": 4,
+      "passage_id": "2002.08795:paragraph:0004",
+      "score": 0.40208691787373546,
+      "title": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "text": "BIBREF6 introduce the KG-A2C, which uses a knowledge graph based state-representation to aid in the section of actions in a combinatorially-sized action-space\u2014specifically they use the knowledge graph to constrain the kinds of entities that can be filled in the blanks in the template action-space. They test their approach on Zork1, showing the combination of the knowledge graph and template action selection resulted in improvements over existing methods. They note that their approach reaches a score of 40 which corresponds to a bottleneck in Zork1 where the player is eaten by a \u201cgrue\u201d (resulting in negative reward) if the player has not first lit a lamp. The lamp must be lit many steps after first being encountered, in a different section of the game; this action is necessary to continue exploring but doesn\u2019t immediately produce any positive reward. That is, there is a long term dependency between actions that is not immediately rewarded, as seen in Figure FIGREF1. Others using artificially constrained action spaces also report an inability to pass through this bottleneck BIBREF7, BIBREF8. They pose a significant challenge for these methods because the agent does not see the correct action sequence to pass the bottleneck enough times. This is in part due to the fact that for that sequence to be reinforced, the agent needs to reach the next possible reward beyond the bottleneck."
+    },
+    {
+      "rank": 5,
+      "passage_id": "2002.08795:paragraph:0002",
+      "score": 0.37492524766445684,
+      "title": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "text": "Action-Space. To solve Zork1, the cannonical text-adventure games, requires the generation of actions consisting of up to five-words from a relatively modest vocabulary of 697 words recognized by the game\u2019s parser. This results in $\\mathcal {O}(697^5)={1.64e14}$ possible actions at every step. To facilitate text-adventure game playing, BIBREF2 introduce Jericho, a framework for interacting with text-games. They propose a template-based action space in which the agent first selects a template, consisting of an action verb and preposition, and then filling that in with relevant entities $($e.g. $[get]$ $ [from] $ $)$. Zork1 has 237 templates, each with up to two blanks, yielding a template-action space of size $\\mathcal {O}(237 \\times 697^2)={1.15e8}$. This space is still far larger than most used by previous approaches applying reinforcement learning to text-based games."
+    },
+    {
+      "rank": 6,
+      "passage_id": "2002.08795:paragraph:0001",
+      "score": 0.3211824356715128,
+      "title": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "text": "Formally, we use the definition of text-adventure games as seen in BIBREF1 and BIBREF2. These games are partially observable Markov decision processes (POMDPs), represented as a 7-tuple of $\\langle S,T,A,\\Omega , O,R, \\gamma \\rangle $ representing the set of environment states, mostly deterministic conditional transition probabilities between states, the vocabulary or words used to compose text commands, observations returned by the game, observation conditional probabilities, reward function, and the discount factor respectively. For our purposes, understanding the exact state and action spaces we use in this work is critical and so we define each of these in relative depth."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.058541030485240134
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.019385778487740497
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+      "attribution": 0.008576393639815322
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": -0.005050754298945983
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.0021905359442743718
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+      "attribution": 2.8306335826661072e-05
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.13460362785228283
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+      "attribution": 0.05040592241396083
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.01944360996226609
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.01585992689206884
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+      "attribution": 0.013643010177206441
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+      "attribution": 0.011021767525070404
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0005",
+      "interaction": 0.0113068493881081
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:abstract:000",
+      "interaction": -0.0067248895325310734
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0004",
+      "interaction": -0.018599531653999093
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.009565055842840607
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.013151948600415792
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:abstract:000",
+      "interaction": -0.005453275336901649
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:paragraph:0004",
+      "interaction": -0.023608047513095632
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.007147144419014565
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.009884360998964555
+    },
+    {
+      "left": "2002.08795:abstract:000",
+      "right": "2002.08795:paragraph:0004",
+      "interaction": -0.036355274681425326
+    },
+    {
+      "left": "2002.08795:abstract:000",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.007602583417557083
+    },
+    {
+      "left": "2002.08795:abstract:000",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": 0.001398810783230511
+    },
+    {
+      "left": "2002.08795:paragraph:0004",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": 0.01402981660424669
+    },
+    {
+      "left": "2002.08795:paragraph:0004",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.0027136976842807603
+    },
+    {
+      "left": "2002.08795:paragraph:0002",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.002490804299785349
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0005",
+      "interaction": -0.00014042516056664243
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:abstract:000",
+      "interaction": -0.009148579140834995
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0004",
+      "interaction": 0.005532318875293351
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.0046546411959639605
+    },
+    {
+      "left": "2002.08795:paragraph:0011",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.0072281590059790155
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:abstract:000",
+      "interaction": 0.0010252862472179601
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:paragraph:0004",
+      "interaction": -0.0190217736586406
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.010676734782533564
+    },
+    {
+      "left": "2002.08795:paragraph:0005",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.009947656108017913
+    },
+    {
+      "left": "2002.08795:abstract:000",
+      "right": "2002.08795:paragraph:0004",
+      "interaction": -0.008968446930097112
+    },
+    {
+      "left": "2002.08795:abstract:000",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.013758700967272062
+    },
+    {
+      "left": "2002.08795:abstract:000",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.01306331906775253
+    },
+    {
+      "left": "2002.08795:paragraph:0004",
+      "right": "2002.08795:paragraph:0002",
+      "interaction": -0.02294538879216773
+    },
+    {
+      "left": "2002.08795:paragraph:0004",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.009388818322600752
+    },
+    {
+      "left": "2002.08795:paragraph:0002",
+      "right": "2002.08795:paragraph:0001",
+      "interaction": -0.01117663744322383
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.08367129023648023
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 5,
+        "score": 0.04231987584991337
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 4,
+        "score": 0.036416514227035734
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "remaining_chunks": 3,
+        "score": -0.004569671470371184
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 2,
+        "score": 0.006288018099618764
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 1,
+        "score": 0.03385300895919219
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "selected_chunks": 1,
+        "score": 0.10859815000381678
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "selected_chunks": 2,
+        "score": 0.09752045075031257
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "selected_chunks": 3,
+        "score": 0.08239174551117379
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "selected_chunks": 4,
+        "score": 0.08597348360814627
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "selected_chunks": 5,
+        "score": 0.08655285832061899
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "selected_chunks": 6,
+        "score": 0.08367129023648023
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.08367129023648023
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "remaining_chunks": 5,
+        "score": 0.08655285832061899
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.08987873970148785
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 3,
+        "score": 0.11659666502317201
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 2,
+        "score": 0.0003380774936446729
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 1,
+        "score": 0.024180132298723844
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.08367129023648023
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 5,
+        "score": 0.04231987584991337
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 4,
+        "score": 0.036416514227035734
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 3,
+        "score": 0.034013407922849126
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "remaining_chunks": 2,
+        "score": 0.013034816849223807
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "remaining_chunks": 1,
+        "score": 0.044467520091768575
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.0836712902364801
+      },
+      {
+        "step": 1,
+        "score": 0.08128735446437091
+      },
+      {
+        "step": 2,
+        "score": 0.07465449280448724
+      },
+      {
+        "step": 3,
+        "score": 0.0692279773041037
+      },
+      {
+        "step": 4,
+        "score": 0.056470496481993065
+      },
+      {
+        "step": 5,
+        "score": 0.04475841619729716
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What are the results from these proposed strategies?",
+    "expanded_queries": [
+      "What are the results from these proposed strategies?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "dense": 0.6154,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "We compare our two exploration strategies to the following baselines and ablations:"
+      },
+      {
+        "rank": 2,
+        "source": "2002.08795:paragraph:0006 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "dense": 0.5602,
+        "page": 1,
+        "type": "body_text",
+        "section": "Exploration Methods",
+        "flags": "",
+        "preview": "In this section, we describe methods to explore combinatorially sized action spaces such as text-games\u2014focusing especially on methods that can deal with their inherent bottleneck structure. We first describe our method t"
+      },
+      {
+        "rank": 3,
+        "source": "2002.08795:paragraph:0015 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "dense": 0.5458,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "A2C-Explore Uses A2C in addition to the exploration strategy seen in KG-A2C-Explore. The cell representations here are defined in terms of the recurrent network based encoding of the textual observation."
+      },
+      {
+        "rank": 4,
+        "source": "2002.08795:paragraph:0018 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "dense": 0.541,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "The Go-Explore based exploration algorithm sees less of a difference between agents. A2C-Explore converges more quickly, but to a lower reward trajectory that fails to pass the bottleneck, whereas KG-A2C-Explore takes lo"
+      },
+      {
+        "rank": 5,
+        "source": "2002.08795:paragraph:0016 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "dense": 0.5404,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "Figure FIGREF10 shows that agents utilizing knowledge-graphs in addition to either enhanced exploration method far outperform the baseline A2C and KG-A2C. KG-A2C-chained and KG-A2C-Explore both pass the bottleneck of a s"
+      },
+      {
+        "rank": 6,
+        "source": "2002.08795:paragraph:0009 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "dense": 0.5403,
+        "page": 1,
+        "type": "body_text",
+        "section": "Exploration Methods",
+        "flags": "",
+        "preview": "KG-A2C-Explore Go-Explore BIBREF9 is an algorithm that is designed to keep track of sub-optimal and under-explored states in order to allow the agent to explore upon more optimal states that may be a result of sparse rew"
+      },
+      {
+        "rank": 7,
+        "source": "2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "dense": 0.5214,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction and Background",
+        "flags": "",
+        "preview": "BIBREF6 introduce the KG-A2C, which uses a knowledge graph based state-representation to aid in the section of actions in a combinatorially-sized action-space\u2014specifically they use the knowledge graph to constrain the ki"
+      },
+      {
+        "rank": 8,
+        "source": "2002.08795:paragraph:0023 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Hyperparameters",
+        "dense": 0.5174,
+        "page": 1,
+        "type": "body_text",
+        "section": "Appendix ::: Hyperparameters",
+        "flags": "",
+        "preview": "Hyperparameters used for our agents are given below. Patience and buffer size are used for the policy chaining method as described in Section SECREF2. Cell step size is a parameter used for Go-Explore and describes how m"
+      },
+      {
+        "rank": 9,
+        "source": "2002.08795:paragraph:0019 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "dense": 0.5147,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "Comparing the advanced exploration methods when using the knowledge graph, we see that both agents successfully pass the bottleneck corresponding to entering the cellar and lighting the lamp and reach comparable scores w"
+      },
+      {
+        "rank": 10,
+        "source": "2002.08795:paragraph:0010 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "dense": 0.5101,
+        "page": 1,
+        "type": "body_text",
+        "section": "Exploration Methods",
+        "flags": "",
+        "preview": "Go-Explore maintains an archive of cells\u2014defined as a set of states that map to a single representation\u2014to keep track of promising states. BIBREF9 simply encodes each cell by keeping track of the agent's position and BIB"
+      },
+      {
+        "rank": 11,
+        "source": "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "dense": 0.5035,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction and Background",
+        "flags": "",
+        "preview": "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge"
+      },
+      {
+        "rank": 12,
+        "source": "2002.08795:paragraph:0007 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "dense": 0.5034,
+        "page": 1,
+        "type": "body_text",
+        "section": "Exploration Methods",
+        "flags": "",
+        "preview": "KG-A2C-chained An example of a bottleneck can be seen in Figure FIGREF1. We extend the KG-A2C algorithm as follows. First, we detect bottlenecks as states where the agent is unable to progress any further. We set a patie"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "keyword": 0.1985,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "We compare our two exploration strategies to the following baselines and ablations:"
+      },
+      {
+        "rank": 2,
+        "source": "2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "keyword": 0.1458,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Text-based games -- in which an agent interacts with the world through textual natural language -- present us with the problem of combinatorially-sized action-spaces. Most current reinforcement learning algorithms are no"
+      },
+      {
+        "rank": 3,
+        "source": "2002.08795:paragraph:0021 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Zork1",
+        "keyword": 0.0718,
+        "page": 1,
+        "type": "body_text",
+        "section": "Appendix ::: Zork1",
+        "flags": "",
+        "preview": "The bottleneck seen at a score of around 40 is when the player first enters the cellar on the right side of the map. The cellar is dark and you need to immediately light the lamp to see anything. Attempting to explore th"
+      },
+      {
+        "rank": 4,
+        "source": "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "keyword": 0.057,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction and Background",
+        "flags": "",
+        "preview": "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge"
+      },
+      {
+        "rank": 5,
+        "source": "2002.08795:paragraph:0017 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "keyword": 0.0471,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "There are a couple of key insights that can be drawn from these results The first is that the knowledge graph appears to be critical; it is theorized to help with partial observability. However the knowledge graph repres"
+      },
+      {
+        "rank": 6,
+        "source": "2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "keyword": 0.038,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction and Background",
+        "flags": "",
+        "preview": "Action-Space. To solve Zork1, the cannonical text-adventure games, requires the generation of actions consisting of up to five-words from a relatively modest vocabulary of 697 words recognized by the game\u2019s parser. This "
+      },
+      {
+        "rank": 7,
+        "source": "2002.08795:paragraph:0023 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Hyperparameters",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Appendix ::: Hyperparameters",
+        "flags": "",
+        "preview": "Hyperparameters used for our agents are given below. Patience and buffer size are used for the policy chaining method as described in Section SECREF2. Cell step size is a parameter used for Go-Explore and describes how m"
+      },
+      {
+        "rank": 8,
+        "source": "2002.08795:paragraph:0020 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Zork1",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Appendix ::: Zork1",
+        "flags": "",
+        "preview": "Zork1 is one of the first text-adventure games and heavily influences games released later in terms of narrative style and game structure. It is a dungeon crawler where the player must explore a vast world and collect a "
+      },
+      {
+        "rank": 9,
+        "source": "2002.08795:paragraph:0022 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Knowledge Graph Rules",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Appendix ::: Knowledge Graph Rules",
+        "flags": "",
+        "preview": "We make no changes from the graph update rules used by BIBREF6. Candidate interactive objects are identified by performing part-of-speech tagging on the current observation, identifying singular and proper nouns as well "
+      },
+      {
+        "rank": 10,
+        "source": "2002.08795:paragraph:0015 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "A2C-Explore Uses A2C in addition to the exploration strategy seen in KG-A2C-Explore. The cell representations here are defined in terms of the recurrent network based encoding of the textual observation."
+      },
+      {
+        "rank": 11,
+        "source": "2002.08795:paragraph:0016 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "Figure FIGREF10 shows that agents utilizing knowledge-graphs in addition to either enhanced exploration method far outperform the baseline A2C and KG-A2C. KG-A2C-chained and KG-A2C-Explore both pass the bottleneck of a s"
+      },
+      {
+        "rank": 12,
+        "source": "2002.08795:paragraph:0018 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "The Go-Explore based exploration algorithm sees less of a difference between agents. A2C-Explore converges more quickly, but to a lower reward trajectory that fails to pass the bottleneck, whereas KG-A2C-Explore takes lo"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6154,
+        "keyword": 0.1985,
+        "rerank": 0.86,
+        "section": "Evaluation",
+        "query_hits": "strategies",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We compare our two exploration strategies to the following baselines and ablations:"
+      },
+      {
+        "rank": 2,
+        "source": "2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4806,
+        "keyword": 0.1458,
+        "rerank": 0.5404,
+        "section": "Abstract",
+        "query_hits": "results, strategies",
+        "reasons": "body/table evidence",
+        "preview": "Text-based games -- in which an agent interacts with the world through textual natural language -- present us with the problem of combinatorially-sized action-spaces. Most current reinforcement learning algorithms are no"
+      },
+      {
+        "rank": 3,
+        "source": "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5035,
+        "keyword": 0.057,
+        "rerank": 0.4689,
+        "section": "Introduction and Background",
+        "query_hits": "strategies, these",
+        "reasons": "body/table evidence",
+        "preview": "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge"
+      },
+      {
+        "rank": 4,
+        "source": "2002.08795:paragraph:0018 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.541,
+        "keyword": 0.0,
+        "rerank": 0.4257,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The Go-Explore based exploration algorithm sees less of a difference between agents. A2C-Explore converges more quickly, but to a lower reward trajectory that fails to pass the bottleneck, whereas KG-A2C-Explore takes lo"
+      },
+      {
+        "rank": 5,
+        "source": "2002.08795:paragraph:0009 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5403,
+        "keyword": 0.0,
+        "rerank": 0.424,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "KG-A2C-Explore Go-Explore BIBREF9 is an algorithm that is designed to keep track of sub-optimal and under-explored states in order to allow the agent to explore upon more optimal states that may be a result of sparse rew"
+      },
+      {
+        "rank": 6,
+        "source": "2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5214,
+        "keyword": 0.0,
+        "rerank": 0.4021,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF6 introduce the KG-A2C, which uses a knowledge graph based state-representation to aid in the section of actions in a combinatorially-sized action-space\u2014specifically they use the knowledge graph to constrain the ki"
+      },
+      {
+        "rank": 7,
+        "source": "2002.08795:paragraph:0017 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4773,
+        "keyword": 0.0471,
+        "rerank": 0.3823,
+        "section": "Evaluation",
+        "query_hits": "results, these",
+        "reasons": "body/table evidence",
+        "preview": "There are a couple of key insights that can be drawn from these results The first is that the knowledge graph appears to be critical; it is theorized to help with partial observability. However the knowledge graph repres"
+      },
+      {
+        "rank": 8,
+        "source": "2002.08795:paragraph:0006 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5602,
+        "keyword": 0.0,
+        "rerank": 0.3784,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we describe methods to explore combinatorially sized action spaces such as text-games\u2014focusing especially on methods that can deal with their inherent bottleneck structure. We first describe our method t"
+      },
+      {
+        "rank": 9,
+        "source": "2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4906,
+        "keyword": 0.038,
+        "rerank": 0.3749,
+        "section": "Introduction and Background",
+        "query_hits": "results",
+        "reasons": "body/table evidence",
+        "preview": "Action-Space. To solve Zork1, the cannonical text-adventure games, requires the generation of actions consisting of up to five-words from a relatively modest vocabulary of 697 words recognized by the game\u2019s parser. This "
+      },
+      {
+        "rank": 10,
+        "source": "2002.08795:paragraph:0023 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Hyperparameters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5174,
+        "keyword": 0.0,
+        "rerank": 0.361,
+        "section": "Appendix ::: Hyperparameters",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Hyperparameters used for our agents are given below. Patience and buffer size are used for the policy chaining method as described in Section SECREF2. Cell step size is a parameter used for Go-Explore and describes how m"
+      },
+      {
+        "rank": 11,
+        "source": "2002.08795:paragraph:0019 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5147,
+        "keyword": 0.0,
+        "rerank": 0.3536,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Comparing the advanced exploration methods when using the knowledge graph, we see that both agents successfully pass the bottleneck corresponding to entering the cellar and lighting the lamp and reach comparable scores w"
+      },
+      {
+        "rank": 12,
+        "source": "2002.08795:paragraph:0010 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.0,
+        "rerank": 0.341,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Go-Explore maintains an archive of cells\u2014defined as a set of states that map to a single representation\u2014to keep track of promising states. BIBREF9 simply encodes each cell by keeping track of the agent's position and BIB"
+      },
+      {
+        "rank": 13,
+        "source": "2002.08795:paragraph:0015 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5458,
+        "keyword": 0.0,
+        "rerank": 0.339,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A2C-Explore Uses A2C in addition to the exploration strategy seen in KG-A2C-Explore. The cell representations here are defined in terms of the recurrent network based encoding of the textual observation."
+      },
+      {
+        "rank": 14,
+        "source": "2002.08795:paragraph:0016 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5404,
+        "keyword": 0.0,
+        "rerank": 0.3242,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Figure FIGREF10 shows that agents utilizing knowledge-graphs in addition to either enhanced exploration method far outperform the baseline A2C and KG-A2C. KG-A2C-chained and KG-A2C-Explore both pass the bottleneck of a s"
+      },
+      {
+        "rank": 15,
+        "source": "2002.08795:paragraph:0007 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5034,
+        "keyword": 0.0,
+        "rerank": 0.3226,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "KG-A2C-chained An example of a bottleneck can be seen in Figure FIGREF1. We extend the KG-A2C algorithm as follows. First, we detect bottlenecks as states where the agent is unable to progress any further. We set a patie"
+      },
+      {
+        "rank": 16,
+        "source": "2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4919,
+        "keyword": 0.0,
+        "rerank": 0.3212,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "Formally, we use the definition of text-adventure games as seen in BIBREF1 and BIBREF2. These games are partially observable Markov decision processes (POMDPs), represented as a 7-tuple of $\\langle S,T,A,\\Omega , O,R, \\g"
+      },
+      {
+        "rank": 17,
+        "source": "2002.08795:paragraph:0000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4916,
+        "keyword": 0.0,
+        "rerank": 0.3204,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "Many reinforcement learning algorithms are designed for relatively small discrete or continuous action spaces and so have trouble scaling. Text-adventure games\u2014or interaction fictions\u2014are simulations in which both an age"
+      },
+      {
+        "rank": 18,
+        "source": "2002.08795:paragraph:0022 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Knowledge Graph Rules",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4864,
+        "keyword": 0.0,
+        "rerank": 0.2759,
+        "section": "Appendix ::: Knowledge Graph Rules",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We make no changes from the graph update rules used by BIBREF6. Candidate interactive objects are identified by performing part-of-speech tagging on the current observation, identifying singular and proper nouns as well "
+      },
+      {
+        "rank": 19,
+        "source": "2002.08795:paragraph:0008 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4849,
+        "keyword": 0.0,
+        "rerank": 0.272,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Simply freezing the policy that led to the bottleneck, however, can potentially result in a policy one that is globally sub-optimal. We therefore employ a backtracking strategy that restarts exploration from each of the "
+      },
+      {
+        "rank": 20,
+        "source": "2002.08795:paragraph:0003 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4735,
+        "keyword": 0.0,
+        "rerank": 0.2707,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "State-Representation. Prior work has shown that knowledge graphs are effective in terms of dealing with the challenges of partial observability $($BIBREF3 BIBREF3; BIBREF4$)$. A knowledge graph is a set of 3-tuples of th"
+      },
+      {
+        "rank": 21,
+        "source": "2002.08795:paragraph:0021 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Zork1",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4149,
+        "keyword": 0.0718,
+        "rerank": 0.2185,
+        "section": "Appendix ::: Zork1",
+        "query_hits": "results",
+        "reasons": "body/table evidence",
+        "preview": "The bottleneck seen at a score of around 40 is when the player first enters the cellar on the right side of the map. The cellar is dark and you need to immediately light the lamp to see anything. Attempting to explore th"
+      },
+      {
+        "rank": 22,
+        "source": "2002.08795:paragraph:0013 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4845,
+        "keyword": 0.0,
+        "rerank": 0.1708,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A2C Represents the same approach as KG-A2C but with all the knowledge graph components removed. The state representation is text only encoded using recurrent networks."
+      },
+      {
+        "rank": 23,
+        "source": "2002.08795:paragraph:0014 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4769,
+        "keyword": 0.0,
+        "rerank": 0.1499,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A2C-chained Is a variation on KG-A2C-chained where we use our policy chaining approach with the A2C method to train the agent instead of KG-A2C."
+      },
+      {
+        "rank": 24,
+        "source": "2002.08795:paragraph:0020 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Zork1",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4326,
+        "keyword": 0.0,
+        "rerank": 0.1283,
+        "section": "Appendix ::: Zork1",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Zork1 is one of the first text-adventure games and heavily influences games released later in terms of narrative style and game structure. It is a dungeon crawler where the player must explore a vast world and collect a "
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6154,
+        "keyword": 0.1985,
+        "rerank": 0.86,
+        "section": "Evaluation",
+        "query_hits": "strategies",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We compare our two exploration strategies to the following baselines and ablations:"
+      },
+      {
+        "rank": 2,
+        "source": "2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4806,
+        "keyword": 0.1458,
+        "rerank": 0.5404,
+        "section": "Abstract",
+        "query_hits": "results, strategies",
+        "reasons": "body/table evidence",
+        "preview": "Text-based games -- in which an agent interacts with the world through textual natural language -- present us with the problem of combinatorially-sized action-spaces. Most current reinforcement learning algorithms are no"
+      },
+      {
+        "rank": 3,
+        "source": "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5035,
+        "keyword": 0.057,
+        "rerank": 0.4689,
+        "section": "Introduction and Background",
+        "query_hits": "strategies, these",
+        "reasons": "body/table evidence",
+        "preview": "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge"
+      },
+      {
+        "rank": 4,
+        "source": "2002.08795:paragraph:0018 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.541,
+        "keyword": 0.0,
+        "rerank": 0.4257,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The Go-Explore based exploration algorithm sees less of a difference between agents. A2C-Explore converges more quickly, but to a lower reward trajectory that fails to pass the bottleneck, whereas KG-A2C-Explore takes lo"
+      },
+      {
+        "rank": 5,
+        "source": "2002.08795:paragraph:0009 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5403,
+        "keyword": 0.0,
+        "rerank": 0.424,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "KG-A2C-Explore Go-Explore BIBREF9 is an algorithm that is designed to keep track of sub-optimal and under-explored states in order to allow the agent to explore upon more optimal states that may be a result of sparse rew"
+      },
+      {
+        "rank": 6,
+        "source": "2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5214,
+        "keyword": 0.0,
+        "rerank": 0.4021,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF6 introduce the KG-A2C, which uses a knowledge graph based state-representation to aid in the section of actions in a combinatorially-sized action-space\u2014specifically they use the knowledge graph to constrain the ki"
+      },
+      {
+        "rank": 7,
+        "source": "2002.08795:paragraph:0017 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4773,
+        "keyword": 0.0471,
+        "rerank": 0.3823,
+        "section": "Evaluation",
+        "query_hits": "results, these",
+        "reasons": "body/table evidence",
+        "preview": "There are a couple of key insights that can be drawn from these results The first is that the knowledge graph appears to be critical; it is theorized to help with partial observability. However the knowledge graph repres"
+      },
+      {
+        "rank": 8,
+        "source": "2002.08795:paragraph:0006 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5602,
+        "keyword": 0.0,
+        "rerank": 0.3784,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we describe methods to explore combinatorially sized action spaces such as text-games\u2014focusing especially on methods that can deal with their inherent bottleneck structure. We first describe our method t"
+      },
+      {
+        "rank": 9,
+        "source": "2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4906,
+        "keyword": 0.038,
+        "rerank": 0.3749,
+        "section": "Introduction and Background",
+        "query_hits": "results",
+        "reasons": "body/table evidence",
+        "preview": "Action-Space. To solve Zork1, the cannonical text-adventure games, requires the generation of actions consisting of up to five-words from a relatively modest vocabulary of 697 words recognized by the game\u2019s parser. This "
+      },
+      {
+        "rank": 10,
+        "source": "2002.08795:paragraph:0023 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Hyperparameters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5174,
+        "keyword": 0.0,
+        "rerank": 0.361,
+        "section": "Appendix ::: Hyperparameters",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Hyperparameters used for our agents are given below. Patience and buffer size are used for the policy chaining method as described in Section SECREF2. Cell step size is a parameter used for Go-Explore and describes how m"
+      },
+      {
+        "rank": 11,
+        "source": "2002.08795:paragraph:0019 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5147,
+        "keyword": 0.0,
+        "rerank": 0.3536,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Comparing the advanced exploration methods when using the knowledge graph, we see that both agents successfully pass the bottleneck corresponding to entering the cellar and lighting the lamp and reach comparable scores w"
+      },
+      {
+        "rank": 12,
+        "source": "2002.08795:paragraph:0010 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5101,
+        "keyword": 0.0,
+        "rerank": 0.341,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Go-Explore maintains an archive of cells\u2014defined as a set of states that map to a single representation\u2014to keep track of promising states. BIBREF9 simply encodes each cell by keeping track of the agent's position and BIB"
+      },
+      {
+        "rank": 13,
+        "source": "2002.08795:paragraph:0015 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5458,
+        "keyword": 0.0,
+        "rerank": 0.339,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A2C-Explore Uses A2C in addition to the exploration strategy seen in KG-A2C-Explore. The cell representations here are defined in terms of the recurrent network based encoding of the textual observation."
+      },
+      {
+        "rank": 14,
+        "source": "2002.08795:paragraph:0016 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5404,
+        "keyword": 0.0,
+        "rerank": 0.3242,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Figure FIGREF10 shows that agents utilizing knowledge-graphs in addition to either enhanced exploration method far outperform the baseline A2C and KG-A2C. KG-A2C-chained and KG-A2C-Explore both pass the bottleneck of a s"
+      },
+      {
+        "rank": 15,
+        "source": "2002.08795:paragraph:0007 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5034,
+        "keyword": 0.0,
+        "rerank": 0.3226,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "KG-A2C-chained An example of a bottleneck can be seen in Figure FIGREF1. We extend the KG-A2C algorithm as follows. First, we detect bottlenecks as states where the agent is unable to progress any further. We set a patie"
+      },
+      {
+        "rank": 16,
+        "source": "2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4919,
+        "keyword": 0.0,
+        "rerank": 0.3212,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "Formally, we use the definition of text-adventure games as seen in BIBREF1 and BIBREF2. These games are partially observable Markov decision processes (POMDPs), represented as a 7-tuple of $\\langle S,T,A,\\Omega , O,R, \\g"
+      },
+      {
+        "rank": 17,
+        "source": "2002.08795:paragraph:0000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4916,
+        "keyword": 0.0,
+        "rerank": 0.3204,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "Many reinforcement learning algorithms are designed for relatively small discrete or continuous action spaces and so have trouble scaling. Text-adventure games\u2014or interaction fictions\u2014are simulations in which both an age"
+      },
+      {
+        "rank": 18,
+        "source": "2002.08795:paragraph:0022 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Knowledge Graph Rules",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4864,
+        "keyword": 0.0,
+        "rerank": 0.2759,
+        "section": "Appendix ::: Knowledge Graph Rules",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We make no changes from the graph update rules used by BIBREF6. Candidate interactive objects are identified by performing part-of-speech tagging on the current observation, identifying singular and proper nouns as well "
+      },
+      {
+        "rank": 19,
+        "source": "2002.08795:paragraph:0008 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Exploration Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4849,
+        "keyword": 0.0,
+        "rerank": 0.272,
+        "section": "Exploration Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Simply freezing the policy that led to the bottleneck, however, can potentially result in a policy one that is globally sub-optimal. We therefore employ a backtracking strategy that restarts exploration from each of the "
+      },
+      {
+        "rank": 20,
+        "source": "2002.08795:paragraph:0003 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4735,
+        "keyword": 0.0,
+        "rerank": 0.2707,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "reasons": "body/table evidence",
+        "preview": "State-Representation. Prior work has shown that knowledge graphs are effective in terms of dealing with the challenges of partial observability $($BIBREF3 BIBREF3; BIBREF4$)$. A knowledge graph is a set of 3-tuples of th"
+      },
+      {
+        "rank": 21,
+        "source": "2002.08795:paragraph:0021 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Zork1",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4149,
+        "keyword": 0.0718,
+        "rerank": 0.2185,
+        "section": "Appendix ::: Zork1",
+        "query_hits": "results",
+        "reasons": "body/table evidence",
+        "preview": "The bottleneck seen at a score of around 40 is when the player first enters the cellar on the right side of the map. The cellar is dark and you need to immediately light the lamp to see anything. Attempting to explore th"
+      },
+      {
+        "rank": 22,
+        "source": "2002.08795:paragraph:0013 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4845,
+        "keyword": 0.0,
+        "rerank": 0.1708,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A2C Represents the same approach as KG-A2C but with all the knowledge graph components removed. The state representation is text only encoded using recurrent networks."
+      },
+      {
+        "rank": 23,
+        "source": "2002.08795:paragraph:0014 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4769,
+        "keyword": 0.0,
+        "rerank": 0.1499,
+        "section": "Evaluation",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A2C-chained Is a variation on KG-A2C-chained where we use our policy chaining approach with the A2C method to train the agent instead of KG-A2C."
+      },
+      {
+        "rank": 24,
+        "source": "2002.08795:paragraph:0020 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Appendix ::: Zork1",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4326,
+        "keyword": 0.0,
+        "rerank": 0.1283,
+        "section": "Appendix ::: Zork1",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Zork1 is one of the first text-adventure games and heavily influences games released later in terms of narrative style and game structure. It is a dungeon crawler where the player must explore a vast world and collect a "
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6154,
+        "keyword": 0.1985,
+        "rerank": 0.86,
+        "section": "Evaluation",
+        "query_hits": "strategies",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.06,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We compare our two exploration strategies to the following baselines and ablations:"
+      },
+      {
+        "rank": 2,
+        "source": "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5035,
+        "keyword": 0.057,
+        "rerank": 0.4689,
+        "section": "Introduction and Background",
+        "query_hits": "strategies, these",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5275,
+        "novelty": 0.8557,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0135,
+        "reasons": "body/table evidence",
+        "preview": "More efficient exploration strategies are required to pass bottlenecks. Our contributions are two-fold. We first introduce a method that detects bottlenecks in text-games using the overall reward gained and the knowledge"
+      },
+      {
+        "rank": 3,
+        "source": "2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4806,
+        "keyword": 0.1458,
+        "rerank": 0.5404,
+        "section": "Abstract",
+        "query_hits": "results, strategies",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6139,
+        "novelty": 0.801,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9201,
+        "reasons": "body/table evidence",
+        "preview": "Text-based games -- in which an agent interacts with the world through textual natural language -- present us with the problem of combinatorially-sized action-spaces. Most current reinforcement learning algorithms are no"
+      },
+      {
+        "rank": 4,
+        "source": "2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5214,
+        "keyword": 0.0,
+        "rerank": 0.4021,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4468,
+        "novelty": 0.4458,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8467,
+        "reasons": "body/table evidence",
+        "preview": "BIBREF6 introduce the KG-A2C, which uses a knowledge graph based state-representation to aid in the section of actions in a combinatorially-sized action-space\u2014specifically they use the knowledge graph to constrain the ki"
+      },
+      {
+        "rank": 5,
+        "source": "2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4906,
+        "keyword": 0.038,
+        "rerank": 0.3749,
+        "section": "Introduction and Background",
+        "query_hits": "results",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.414,
+        "novelty": 0.4515,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8193,
+        "reasons": "body/table evidence",
+        "preview": "Action-Space. To solve Zork1, the cannonical text-adventure games, requires the generation of actions consisting of up to five-words from a relatively modest vocabulary of 697 words recognized by the game\u2019s parser. This "
+      },
+      {
+        "rank": 6,
+        "source": "2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4919,
+        "keyword": 0.0,
+        "rerank": 0.3212,
+        "section": "Introduction and Background",
+        "query_hits": "these",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3491,
+        "novelty": 0.4745,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7666,
+        "reasons": "body/table evidence",
+        "preview": "Formally, we use the definition of text-adventure games as seen in BIBREF1 and BIBREF2. These games are partially observable Markov decision processes (POMDPs), represented as a 7-tuple of $\\langle S,T,A,\\Omega , O,R, \\g"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "proposed",
+        "results",
+        "strategies",
+        "these"
+      ],
+      "covered_query_terms": [
+        "results",
+        "strategies",
+        "these"
+      ],
+      "missing_query_terms": [
+        "proposed"
+      ],
+      "terms_by_chunk": {
+        "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation": [
+          "strategies"
+        ],
+        "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background": [
+          "strategies",
+          "these"
+        ],
+        "2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract": [
+          "results",
+          "strategies"
+        ],
+        "2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background": [
+          "these"
+        ],
+        "2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background": [
+          "results"
+        ],
+        "2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background": [
+          "these"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Evaluation",
+        "Introduction and Background"
+      ],
+      "chunks_by_section": {
+        "Evaluation": [
+          "2002.08795:paragraph:0011 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Evaluation"
+        ],
+        "Introduction and Background": [
+          "2002.08795:paragraph:0005 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+          "2002.08795:paragraph:0004 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+          "2002.08795:paragraph:0002 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background",
+          "2002.08795:paragraph:0001 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Introduction and Background"
+        ],
+        "Abstract": [
+          "2002.08795:abstract:000 | How To Avoid Being Eaten By a Grue: Exploration Strategies for Text-Adventure Agents / Abstract"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Agents utilizing knowledge-graphs in addition to either enhanced exploration method far outperform the baseline A2C and KG-A2C. Specifically, KG-A2C-chained and KG-A2C-Explore both pass the bottleneck of a score of 40, while A2C-Explore reaches the bottleneck but cannot surpass it.",
+    "retrieved_context_answer": "The context mentions that the authors compare their two exploration strategies against strong baselines on the classic text-adventure game, Zork1.\n\nRegarding prior work:\n*   BIBREF6 tested an approach using a knowledge graph based state-representation to constrain actions in Zork1, achieving a score of 40, which corresponds to reaching a bottleneck where the player is eaten by a \"grue\" if they haven't lit a lamp first.\n*   Other",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5161290322580645,
+    "retrieved_context_f1": 0.14285714285714285,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

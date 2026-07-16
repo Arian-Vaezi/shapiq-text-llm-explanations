@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import numpy as np
 import torch
-from shapiq.game import Game
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+from shapiq.game import Game
 
 
 class encoderTextImputer(Game):
-   
     def __init__(
         self,
         model_name: str,
@@ -21,23 +21,23 @@ class encoderTextImputer(Game):
         negative_label: str = "NEGATIVE",
         verbose: bool = False,
     ) -> None:
-        self.model_name   = model_name
+        self.model_name = model_name
         self.original_text = input_text
-        self.batch_size   = batch_size
+        self.batch_size = batch_size
 
         # ── Model and tokenizer ───────────────────────────────────────────────
         if preloaded_model is not None and preloaded_tokenizer is not None:
             # Mode 2: reuse already-loaded weights — no loading cost
-            self._model    = preloaded_model
+            self._model = preloaded_model
             self.tokenizer = preloaded_tokenizer
-            self.device    = next(preloaded_model.parameters()).device
+            self.device = next(preloaded_model.parameters()).device
         else:
             # Mode 1: load from HuggingFace (first time or standalone use)
             if device is None:
                 device = "cuda" if torch.cuda.is_available() else "cpu"
-            self.device    = torch.device(device)
+            self.device = torch.device(device)
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-            self._model    = AutoModelForSequenceClassification.from_pretrained(model_name)
+            self._model = AutoModelForSequenceClassification.from_pretrained(model_name)
             self._model.to(self.device)
             self._model.eval()
 
@@ -63,7 +63,7 @@ class encoderTextImputer(Game):
         # One forward pass on the fully masked sentence.
         # This is the baseline all coalition values are centered around.
         empty_text = " ".join([self.mask_token] * n_players)
-        v_empty    = float(self._evaluate_texts([empty_text])[0])
+        v_empty = float(self._evaluate_texts([empty_text])[0])
 
         # ── Init Game ─────────────────────────────────────────────────────────
         super().__init__(
@@ -100,8 +100,8 @@ class encoderTextImputer(Game):
         Raises:
             ValueError: If label not found and no fallback applies.
         """
-        target    = target_label.upper()
-        id2label  = self._model.config.id2label
+        target = target_label.upper()
+        id2label = self._model.config.id2label
 
         for idx, label in id2label.items():
             if str(label).upper() == target:
@@ -113,19 +113,15 @@ class encoderTextImputer(Game):
         if target == "POSITIVE":
             return 1
 
-        raise ValueError(
-            f"Could not find label {target_label!r} in model labels: {id2label}"
-        )
+        raise ValueError(f"Could not find label {target_label!r} in model labels: {id2label}")
 
     # ── Masking ───────────────────────────────────────────────────────────────
 
     def coalition_to_text(self, coalition: np.ndarray) -> str:
- 
         coalition = np.asarray(coalition, dtype=bool)
         if coalition.shape != (self.n_players,):
             raise ValueError(
-                f"Coalition must have shape ({self.n_players},), "
-                f"got {coalition.shape}."
+                f"Coalition must have shape ({self.n_players},), got {coalition.shape}."
             )
         words = self._words.copy()
         words[~coalition] = self.mask_token
@@ -168,7 +164,7 @@ class encoderTextImputer(Game):
         scores: list[float] = []
 
         for start in range(0, len(texts), self.batch_size):
-            batch   = texts[start : start + self.batch_size]
+            batch = texts[start : start + self.batch_size]
             encoded = self.tokenizer(
                 batch,
                 padding=True,
@@ -177,7 +173,7 @@ class encoderTextImputer(Game):
             ).to(self.device)
 
             outputs = self._model(**encoded)
-            probs   = torch.softmax(outputs.logits, dim=-1)
+            probs = torch.softmax(outputs.logits, dim=-1)
             batch_scores = probs[:, self._pos_idx] - probs[:, self._neg_idx]
             scores.extend(batch_scores.cpu().tolist())
 

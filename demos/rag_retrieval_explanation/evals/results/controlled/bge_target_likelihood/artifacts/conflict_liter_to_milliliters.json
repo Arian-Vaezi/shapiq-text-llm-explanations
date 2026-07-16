@@ -1,0 +1,3378 @@
+{
+  "case": {
+    "case_id": "conflict_liter_to_milliliters",
+    "pattern": "conflicting_evidence",
+    "question": "How many milliliters are in one liter?",
+    "gold_answer": "1000 milliliters.",
+    "gold_evidence_ids": [
+      "conflict_liter_1000ml"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_liter_1000ml",
+        "right": "conflict_liter_100ml",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_liter_1000ml",
+        "right": "conflict_liter_10ml",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_liter_1000ml",
+      "score": 0.92,
+      "title": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+      "text": "One liter equals 1000 milliliters."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_liter_10ml",
+      "score": 0.7520674946231724,
+      "title": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+      "text": "A false flashcard says one liter equals 10 milliliters."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_liter_100ml",
+      "score": 0.7403264304777607,
+      "title": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+      "text": "An erroneous conversion table says one liter equals 100 milliliters."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_liter_gallon_distractor",
+      "score": 0.428690663810837,
+      "title": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+      "text": "A gallon is a customary unit of volume distinct from the metric liter."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_japan_islands",
+      "score": 0.1365301458276652,
+      "title": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "text": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_suez_mediterranean",
+      "score": 0.11535705339401657,
+      "title": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+      "text": "The Mediterranean Sea is connected to many ports and trade routes."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+      "attribution": 0.04250722948263652
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+      "attribution": -0.028768606966282487
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+      "attribution": -0.022352632611930122
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+      "attribution": -0.009027342498826987
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+      "attribution": -0.008717572562339918
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "attribution": -0.0033193874861124203
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+      "attribution": 0.1478024626884667
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+      "attribution": 0.009583500797359175
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.007796080383120414
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+      "attribution": -0.00408206758889112
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+      "attribution": 0.0036948338319846776
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+      "attribution": 0.0036671174458486294
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_100ml",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.010757904503410298,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_10ml",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.00018180200924110853,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_100ml",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.010475384699066647,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_10ml",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.005863166368960351,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_10ml",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.00018180200924110853,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_100ml",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.010757904503410298,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_gallon_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.01138350907497361,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.019048738015668174,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.017743804560789694,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "conflict_liter_100ml",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": 0.0007467652938132273,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "conflict_liter_gallon_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.0029987818648822104,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.006336413493524941,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.012461139782072443,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_100ml",
+      "right": "conflict_liter_gallon_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.004095822629426555,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_100ml",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.0005971001701128621,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_100ml",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.001380214738508224,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_gallon_distractor",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.006865590319457148,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_gallon_distractor",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.014173372670777985,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.02016911187330395,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_10ml",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.005863166368960351,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_100ml",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.010475384699066647,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "conflict_liter_gallon_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.01120088394754057,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.010893316851483734,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_1000ml",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.002238138903240142,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "conflict_liter_100ml",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.005124936856924213,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "conflict_liter_gallon_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.014192347726502123,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.013002596303609074,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_10ml",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.009715027942373769,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_100ml",
+      "right": "conflict_liter_gallon_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.01845086830576135,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_100ml",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.008579781254429293,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_100ml",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.007894319995969316,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_gallon_distractor",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.01670932090548213,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_liter_gallon_distractor",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.018722843584936626,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_suez_mediterranean",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.01781421044606438,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml"
+      ],
+      "score": 0.07092586941489798
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml"
+      ],
+      "score": 0.0027357881315620003
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml"
+      ],
+      "score": -0.023393023122615708
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.030356178599265204
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.04606009485127838
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.05032766556830465
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml"
+      ],
+      "score": 0.0031143685795058107
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml"
+      ],
+      "score": 0.002750404989659283
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": -0.0006465344496418002
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.0026417884942688263
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.004395898035345791
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml"
+      ],
+      "score": -0.05590905523289713
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": -0.0384001118893636
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "missing_japan_islands"
+      ],
+      "score": -0.04319126050255628
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.05902132365770929
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": -0.04988060622211049
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": -0.04632748253897151
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.05517304117558758
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": -0.02450948724226243
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.037997388576461455
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.04008294735618256
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml"
+      ],
+      "score": -0.008970723695011285
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.004591844750684415
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.0053203659504023615
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.006719640106004621
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": -0.009508273699298186
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.0017280398787256068
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.0023373818767797316
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.011288472848569042
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.005204246467419349
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.0034766960094527732
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": -0.09117925948210942
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": -0.06827792765753632
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.07404396193209453
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": -0.04455079853815086
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.05753764443549578
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.05546534042742618
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": -0.05820477124372722
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.06565060297392072
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.0716679750523452
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.05617460234047694
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": -0.017315131152488672
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": -0.017438064990933366
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.01968960549855342
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": -0.0010571894770081136
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.011283200969393281
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.01735439548048473
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.000506908668424344
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.009773958514717518
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.004889418589179073
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.00585335030748152
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": -0.09797828430386676
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.10632495688420127
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.08811058952442147
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.06869588507012375
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.06651799052006296
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": -0.014078332784340064
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.022721451872575182
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.020517413006344576
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.011716820236539749
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.01154633135453298
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.06336783505622459
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": -0.029678312536316254
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml"
+      ],
+      "score": 0.17105059948520063
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml"
+      ],
+      "score": 0.0466067348562238
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml"
+      ],
+      "score": 0.02843897291754538
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.07830094135452126
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.06608789268036513
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.0552486463988362
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml"
+      ],
+      "score": 0.16937590805422875
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml"
+      ],
+      "score": 0.1680585920947344
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.1695701075552296
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.16898221909129307
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16928779094663843
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml"
+      ],
+      "score": 0.027914737329091166
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.03585934285223802
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.026744401364227954
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.03034025411019614
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.020204749846982673
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.03394066880098845
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.02396052563922474
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.042023758845311676
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.03555431885434601
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.02906567935774279
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml"
+      ],
+      "score": 0.1693259487755091
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.16883330823717346
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.1684131849249635
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16944936315532405
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.16989109632023647
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.16949262324081577
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16966850068768624
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.1686759581621461
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.1682549544703057
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16811120784209294
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.000779771775668181
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.010808243690675956
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.014526561500454782
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.04285610640022697
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.02493862042774364
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.023199710415236996
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.007738864250043109
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.001343266324353054
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.006234032143775992
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.02167613083847164
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor"
+      ],
+      "score": 0.169270804085853
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands"
+      ],
+      "score": 0.17011705431148477
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.17022677329286373
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.16988824721723178
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16950665376049895
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.1694464307232988
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.16937407246386188
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16943135111044272
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16923861847150212
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.1688406153545512
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.01783025689881884
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.0054714606559994605
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.012036437185178994
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.020686848528568058
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.003030682539759577
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.16959782312570748
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16937326176808726
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16943725182798575
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16959747737946645
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16975326899004867
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.01713145055063342
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_liter_1000ml",
+        "conflict_liter_10ml",
+        "conflict_liter_100ml",
+        "conflict_liter_gallon_distractor",
+        "missing_japan_islands",
+        "missing_suez_mediterranean"
+      ],
+      "score": 0.16846192732654208
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.029678312536316254
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+        "remaining_chunks": 5,
+        "score": -0.06336783505622459
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+        "remaining_chunks": 4,
+        "score": -0.06869588507012375
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+        "remaining_chunks": 3,
+        "score": -0.05617460234047694
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "remaining_chunks": 2,
+        "score": -0.02450948724226243
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+        "remaining_chunks": 1,
+        "score": 0.04606009485127838
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+        "selected_chunks": 1,
+        "score": 0.07092586941489798
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+        "selected_chunks": 2,
+        "score": 0.002750404989659283
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+        "selected_chunks": 3,
+        "score": -0.008970723695011285
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "selected_chunks": 4,
+        "score": -0.01968960549855342
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+        "selected_chunks": 5,
+        "score": -0.022721451872575182
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "selected_chunks": 6,
+        "score": -0.029678312536316254
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.029678312536316254
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+        "remaining_chunks": 5,
+        "score": -0.06336783505622459
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+        "remaining_chunks": 4,
+        "score": -0.06651799052006296
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+        "remaining_chunks": 3,
+        "score": -0.05617460234047694
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+        "remaining_chunks": 2,
+        "score": -0.04008294735618256
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 1,
+        "score": 0.05032766556830465
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": -0.029678312536316254
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_liter_1000ml | Liter conversion correct",
+        "remaining_chunks": 5,
+        "score": -0.06336783505622459
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 4,
+        "score": -0.10632495688420127
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: conflict_liter_gallon_distractor | Gallon distractor",
+        "remaining_chunks": 3,
+        "score": -0.07404396193209453
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: missing_suez_mediterranean | Mediterranean shipping",
+        "remaining_chunks": 2,
+        "score": -0.05590905523289713
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: conflict_liter_100ml | Liter conversion conflict 100",
+        "remaining_chunks": 1,
+        "score": 0.0027357881315620003
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: conflict_liter_10ml | Liter conversion conflict 10",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": -0.029678312536316254
+      },
+      {
+        "step": 1,
+        "score": -0.02401454162139314
+      },
+      {
+        "step": 2,
+        "score": -0.03883601354106525
+      },
+      {
+        "step": 3,
+        "score": -0.032618655098489664
+      },
+      {
+        "step": 4,
+        "score": -0.03298286866840478
+      },
+      {
+        "step": 5,
+        "score": 0.03118766077769997
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How many milliliters are in one liter?",
+    "expanded_queries": [
+      "How many milliliters are in one liter?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "dense": 0.8503,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "dense": 0.7485,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "dense": 0.7385,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "dense": 0.5623,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 5,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "dense": 0.4738,
+        "page": 47,
+        "type": "body_text",
+        "section": "blood_transport",
+        "flags": "",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 6,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "dense": 0.4621,
+        "page": 35,
+        "type": "body_text",
+        "section": "matter_states",
+        "flags": "",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      },
+      {
+        "rank": 7,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "dense": 0.4579,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_light_speed_a | Light speed exact value",
+        "dense": 0.4555,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "The speed of light in a vacuum is exactly 299,792,458 metres per second."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_light_speed_c | Light speed physics constant",
+        "dense": 0.4323,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "Physics denotes the vacuum speed of light as c, approximately 3.00 x 10^8 m/s."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "dense": 0.4215,
+        "page": 34,
+        "type": "body_text",
+        "section": "central_dogma",
+        "flags": "",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "dense": 0.419,
+        "page": 14,
+        "type": "body_text",
+        "section": "chemical_symbols",
+        "flags": "",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_light_speed_b | Light speed rounded",
+        "dense": 0.4177,
+        "page": 23,
+        "type": "body_text",
+        "section": "speed_of_light",
+        "flags": "",
+        "preview": "Light travels through vacuum at about 300,000 kilometres per second."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "keyword": 0.4945,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "keyword": 0.365,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "keyword": 0.3325,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "keyword": 0.163,
+        "page": 42,
+        "type": "body_text",
+        "section": "metric_volume",
+        "flags": "",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 5,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 12,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.8503,
+        "keyword": 0.4945,
+        "rerank": 0.92,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.7385,
+        "keyword": 0.365,
+        "rerank": 0.7521,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.7485,
+        "keyword": 0.3325,
+        "rerank": 0.7403,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.163,
+        "rerank": 0.4287,
+        "section": "metric_volume",
+        "query_hits": "liter",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 5,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4579,
+        "keyword": 0.0,
+        "rerank": 0.2463,
+        "section": "water_composition",
+        "query_hits": "one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 6,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0,
+        "rerank": 0.229,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 7,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4621,
+        "keyword": 0.0,
+        "rerank": 0.2197,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_light_speed_a | Light speed exact value",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4555,
+        "keyword": 0.0,
+        "rerank": 0.2144,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of light in a vacuum is exactly 299,792,458 metres per second."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_light_speed_c | Light speed physics constant",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4323,
+        "keyword": 0.0,
+        "rerank": 0.1958,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Physics denotes the vacuum speed of light as c, approximately 3.00 x 10^8 m/s."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.4215,
+        "keyword": 0.0,
+        "rerank": 0.1873,
+        "section": "central_dogma",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.419,
+        "keyword": 0.0,
+        "rerank": 0.1852,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_light_speed_b | Light speed rounded",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4177,
+        "keyword": 0.0,
+        "rerank": 0.1842,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Light travels through vacuum at about 300,000 kilometres per second."
+      },
+      {
+        "rank": 13,
+        "source": "comp_water_salt | Salt water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4169,
+        "keyword": 0.0,
+        "rerank": 0.1835,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4161,
+        "keyword": 0.0,
+        "rerank": 0.1829,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 15,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4122,
+        "keyword": 0.0,
+        "rerank": 0.1798,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4096,
+        "keyword": 0.0,
+        "rerank": 0.1777,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4071,
+        "keyword": 0.0,
+        "rerank": 0.1757,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      },
+      {
+        "rank": 18,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4031,
+        "keyword": 0.0,
+        "rerank": 0.1725,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 19,
+        "source": "comp_primary_red | Red primary light",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3656,
+        "keyword": 0.0,
+        "rerank": 0.1725,
+        "section": "primary_light_colours",
+        "query_hits": "one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Red is one of the additive primary colours of light."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4029,
+        "keyword": 0.0,
+        "rerank": 0.1723,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 21,
+        "source": "comp_tri_state_gas | Gas state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4026,
+        "keyword": 0.0,
+        "rerank": 0.1721,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gas is a common state of matter that expands to fill available space."
+      },
+      {
+        "rank": 22,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.3987,
+        "keyword": 0.0,
+        "rerank": 0.169,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 23,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.3592,
+        "keyword": 0.0,
+        "rerank": 0.1674,
+        "section": "right_triangle_notes",
+        "query_hits": "one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 24,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.3573,
+        "keyword": 0.0,
+        "rerank": 0.1659,
+        "section": "cell_biology",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.8503,
+        "keyword": 0.4945,
+        "rerank": 0.92,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.7385,
+        "keyword": 0.365,
+        "rerank": 0.7521,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.7485,
+        "keyword": 0.3325,
+        "rerank": 0.7403,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.163,
+        "rerank": 0.4287,
+        "section": "metric_volume",
+        "query_hits": "liter",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 5,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4579,
+        "keyword": 0.0,
+        "rerank": 0.2463,
+        "section": "water_composition",
+        "query_hits": "one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 6,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0,
+        "rerank": 0.229,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 7,
+        "source": "comp_tri_state_liquid | Liquid state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4621,
+        "keyword": 0.0,
+        "rerank": 0.2197,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Liquid is a common state of matter that flows and takes the shape of its container."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_light_speed_a | Light speed exact value",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4555,
+        "keyword": 0.0,
+        "rerank": 0.2144,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The speed of light in a vacuum is exactly 299,792,458 metres per second."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_light_speed_c | Light speed physics constant",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4323,
+        "keyword": 0.0,
+        "rerank": 0.1958,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Physics denotes the vacuum speed of light as c, approximately 3.00 x 10^8 m/s."
+      },
+      {
+        "rank": 10,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.4215,
+        "keyword": 0.0,
+        "rerank": 0.1873,
+        "section": "central_dogma",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.419,
+        "keyword": 0.0,
+        "rerank": 0.1852,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_light_speed_b | Light speed rounded",
+        "page": 23,
+        "type": "body_text",
+        "dense": 0.4177,
+        "keyword": 0.0,
+        "rerank": 0.1842,
+        "section": "speed_of_light",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Light travels through vacuum at about 300,000 kilometres per second."
+      },
+      {
+        "rank": 13,
+        "source": "comp_water_salt | Salt water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4169,
+        "keyword": 0.0,
+        "rerank": 0.1835,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_boiling_freezing_distractor | Water freezing distractor",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4161,
+        "keyword": 0.0,
+        "rerank": 0.1829,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard pressure, water freezes at 0 degrees Celsius."
+      },
+      {
+        "rank": 15,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4122,
+        "keyword": 0.0,
+        "rerank": 0.1798,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_boiling_100c | Water boiling point correct",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4096,
+        "keyword": 0.0,
+        "rerank": 0.1777,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At standard atmospheric pressure, water boils at 100 degrees Celsius."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4071,
+        "keyword": 0.0,
+        "rerank": 0.1757,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      },
+      {
+        "rank": 18,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4031,
+        "keyword": 0.0,
+        "rerank": 0.1725,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 19,
+        "source": "comp_primary_red | Red primary light",
+        "page": 22,
+        "type": "body_text",
+        "dense": 0.3656,
+        "keyword": 0.0,
+        "rerank": 0.1725,
+        "section": "primary_light_colours",
+        "query_hits": "one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Red is one of the additive primary colours of light."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.4029,
+        "keyword": 0.0,
+        "rerank": 0.1723,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 21,
+        "source": "comp_tri_state_gas | Gas state",
+        "page": 35,
+        "type": "body_text",
+        "dense": 0.4026,
+        "keyword": 0.0,
+        "rerank": 0.1721,
+        "section": "matter_states",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gas is a common state of matter that expands to fill available space."
+      },
+      {
+        "rank": 22,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.3987,
+        "keyword": 0.0,
+        "rerank": 0.169,
+        "section": "battery_terminals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 23,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.3592,
+        "keyword": 0.0,
+        "rerank": 0.1674,
+        "section": "right_triangle_notes",
+        "query_hits": "one",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      },
+      {
+        "rank": 24,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.3573,
+        "keyword": 0.0,
+        "rerank": 0.1659,
+        "section": "cell_biology",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_liter_1000ml | Liter conversion correct",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.8503,
+        "keyword": 0.4945,
+        "rerank": 0.92,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One liter equals 1000 milliliters."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_liter_10ml | Liter conversion conflict 10",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.7385,
+        "keyword": 0.365,
+        "rerank": 0.7521,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8173,
+        "novelty": 0.33,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8891,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false flashcard says one liter equals 10 milliliters."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_liter_100ml | Liter conversion conflict 100",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.7485,
+        "keyword": 0.3325,
+        "rerank": 0.7403,
+        "section": "metric_volume",
+        "query_hits": "liter, milliliters, one",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8045,
+        "novelty": 0.35,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8809,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An erroneous conversion table says one liter equals 100 milliliters."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_liter_gallon_distractor | Gallon distractor",
+        "page": 42,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.163,
+        "rerank": 0.4287,
+        "section": "metric_volume",
+        "query_hits": "liter",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4655,
+        "novelty": 0.4921,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A gallon is a customary unit of volume distinct from the metric liter."
+      },
+      {
+        "rank": 5,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.3206,
+        "keyword": 0.0,
+        "rerank": 0.1365,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1476,
+        "novelty": 0.9788,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.484,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 6,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.2941,
+        "keyword": 0.0,
+        "rerank": 0.1154,
+        "section": "canal_overview",
+        "query_hits": "many",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1245,
+        "novelty": 0.734,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4299,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "liter",
+        "many",
+        "milliliters",
+        "one"
+      ],
+      "covered_query_terms": [
+        "liter",
+        "many",
+        "milliliters",
+        "one"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "conflict_liter_1000ml | Liter conversion correct": [
+          "liter",
+          "milliliters",
+          "one"
+        ],
+        "conflict_liter_10ml | Liter conversion conflict 10": [
+          "liter",
+          "milliliters",
+          "one"
+        ],
+        "conflict_liter_100ml | Liter conversion conflict 100": [
+          "liter",
+          "milliliters",
+          "one"
+        ],
+        "conflict_liter_gallon_distractor | Gallon distractor": [
+          "liter"
+        ],
+        "missing_japan_islands | Japanese archipelago": [
+          "many"
+        ],
+        "missing_suez_mediterranean | Mediterranean shipping": [
+          "many"
+        ]
+      },
+      "section_titles": [
+        "canal_overview",
+        "japan_overview",
+        "metric_volume"
+      ],
+      "chunks_by_section": {
+        "metric_volume": [
+          "conflict_liter_1000ml | Liter conversion correct",
+          "conflict_liter_10ml | Liter conversion conflict 10",
+          "conflict_liter_100ml | Liter conversion conflict 100",
+          "conflict_liter_gallon_distractor | Gallon distractor"
+        ],
+        "japan_overview": [
+          "missing_japan_islands | Japanese archipelago"
+        ],
+        "canal_overview": [
+          "missing_suez_mediterranean | Mediterranean shipping"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "One liter equals 1000 milliliters.",
+    "retrieved_context_answer": "One liter equals 1000 milliliters.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5714285714285715,
+    "retrieved_context_f1": 0.5714285714285715,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

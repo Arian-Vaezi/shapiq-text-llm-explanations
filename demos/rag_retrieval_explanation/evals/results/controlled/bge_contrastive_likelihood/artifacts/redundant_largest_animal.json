@@ -1,0 +1,3414 @@
+{
+  "case": {
+    "case_id": "redundant_largest_animal",
+    "pattern": "redundant_evidence",
+    "question": "What is the largest animal known to have lived on Earth?",
+    "gold_answer": "The blue whale.",
+    "gold_evidence_ids": [
+      "redundant_blue_whale_a",
+      "redundant_blue_whale_b",
+      "redundant_blue_whale_c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_blue_whale_a",
+        "right": "redundant_blue_whale_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_blue_whale_a",
+        "right": "redundant_blue_whale_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_blue_whale_b",
+        "right": "redundant_blue_whale_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_blue_whale_a",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+      "text": "The blue whale is the largest animal known to have lived on Earth."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_blue_whale_elephant_distractor",
+      "score": 0.5407735588923233,
+      "title": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+      "text": "The African elephant is the largest living land animal."
+    },
+    {
+      "rank": 3,
+      "passage_id": "redundant_blue_whale_b",
+      "score": 0.5574496386585894,
+      "title": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+      "text": "The largest living animal is the blue whale."
+    },
+    {
+      "rank": 4,
+      "passage_id": "redundant_sahara_antarctica_distractor",
+      "score": 0.3280000320986346,
+      "title": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "text": "Antarctica is the largest desert overall when cold polar deserts are included."
+    },
+    {
+      "rank": 5,
+      "passage_id": "redundant_pacific_a",
+      "score": 0.4639601164151987,
+      "title": "Retrieved 5: redundant_pacific_a | Largest ocean",
+      "text": "The Pacific Ocean is the largest ocean on Earth."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_planet_earth",
+      "score": 0.45100274585691774,
+      "title": "Retrieved 6: conflict_planet_earth | Earth",
+      "text": "Earth is the largest of the Solar System's terrestrial planets."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+      "attribution": 0.1526886216931648
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+      "attribution": 0.08973539856733788
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+      "attribution": 0.03262232351119689
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_pacific_a | Largest ocean",
+      "attribution": 0.019347470223205154
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": 0.011303376326063921
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_planet_earth | Earth",
+      "attribution": -0.009739086772527931
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+      "attribution": 0.11890555673835654
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+      "attribution": 0.013713907932924733
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_pacific_a | Largest ocean",
+      "attribution": 0.00452922295900574
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_planet_earth | Earth",
+      "attribution": -0.004051219749509906
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": 0.003033518922191581
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+      "attribution": 0.000716880043268368
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.1369750872990212,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": 0.0114583468652791,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_blue_whale_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_elephant_distractor",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.04642436266871751,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_b",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.1369750872990212,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.009646108885496347,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_pacific_a",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.016387358444214448,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.0192083713476311,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "redundant_blue_whale_b",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.04226799770199795,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.035413020092900836,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "redundant_pacific_a",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.04338114695853312,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.005185769031527038,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.05554610047913585,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_pacific_a",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.05628787091564562,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.024077253199844616,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "redundant_pacific_a",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.04610996079350594,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.011545922041388814,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.009876397979747344,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_elephant_distractor",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.023231443006720358,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_blue_whale_b",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.0114583468652791,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.003756942097360941,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_pacific_a",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.00038749869227866507,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.010692786685068678,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "redundant_blue_whale_b",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.009868939519851502,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.007683579786867026,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "redundant_pacific_a",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.0121829959368011,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_elephant_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.0025834302540632082,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.020401238230846677,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "redundant_pacific_a",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.01834230728336755,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_b",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.009429753996077131,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "redundant_pacific_a",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.013325333593996801,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.002747822743970143,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.003096141898961582,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.3155914353980688
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor"
+      ],
+      "score": 0.17549096466235836
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.31696031283993187
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.14828836543003154
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a"
+      ],
+      "score": 0.17226233742354935
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.02980057716681117
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor"
+      ],
+      "score": 0.2972588852419741
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.3045816376884545
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2829505685476662
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_pacific_a"
+      ],
+      "score": 0.29104116859151186
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.29175415301527463
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.28635904775646237
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.14421158165254022
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.12965941892933253
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13501104753206639
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2759324470867709
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.26440125572604334
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2586020469610758
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.11781425368568599
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12048081725324467
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.10275026731817805
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.2977808719442947
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.28790101625695863
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.2945236007020645
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.29348947336593145
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.2911419796617767
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.28807045822893707
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2970095310028342
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.2889731915462881
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.28940493191239147
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.29249506350697807
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.26624895683395533
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.2581639061184051
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.24572788363030218
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.11127892772125958
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.11195831211516738
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12522863281729302
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.19260168083840468
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.16543351604202905
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.22010848931852767
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.09820515330519775
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.29651342165803485
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.29516268222143427
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2967369755553897
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.29265406225417123
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2905188099469662
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2888428024209573
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.2925886353566495
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2925871263804807
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.29371392757060855
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2905796844349996
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.185925469018983
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1996479896272153
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2171535792578646
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.11009009984755613
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13295053374870625
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.29763449899346994
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2957385033750073
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.30593085243781937
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.29415210230484357
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2931394374782449
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17059121626646023
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2959581020967432
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.13688110738948367
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor"
+      ],
+      "score": 0.055390325941382046
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.04655796972966608
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.040487882381976315
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a"
+      ],
+      "score": 0.047414250237301725
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.0071090437208403134
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor"
+      ],
+      "score": 0.13689770362296583
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.13685180521486184
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.136905509324724
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_pacific_a"
+      ],
+      "score": 0.1368100951282749
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13685569646742324
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.0461896498195814
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0553802438906954
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.04482972434561161
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04452640135910224
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.018043584384299316
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.018699317494317635
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.020653953035896233
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.03130141440373646
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.03462064697095035
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.024047352130395883
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b"
+      ],
+      "score": 0.13678974745189354
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.136932178947889
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.1368415255771842
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13685444404229352
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13699910132131732
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.13690736030717776
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13680928377341206
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.1367424802428231
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13678379979619715
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13672781112704702
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.043146100501914586
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.03917463427781076
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.028255843445372686
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.03979770520265313
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.035788925560746754
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.039898944752942644
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.0026378386859836622
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": -0.00965473734229172
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.011512717887271151
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.02968574682150016
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.13688299781312074
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a"
+      ],
+      "score": 0.13682809492203585
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13680242244370389
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.13690989655091768
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1369898079644538
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13688355707531186
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.1369787896933965
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13693709376487118
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1367714632557815
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1368758693078983
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.008899523594672165
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.012200004792434882
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.021281408363321153
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.037735950623007164
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": -0.025995620584733148
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.13690318575099114
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13676789456867033
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1367610172049354
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13687378981604081
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13700792993438937
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": -0.0023223739746081606
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_blue_whale_elephant_distractor",
+        "redundant_blue_whale_b",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.13684786666639737
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2959581020967432
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 5,
+        "score": 0.17059121626646023
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+        "remaining_chunks": 4,
+        "score": 0.11009009984755613
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "remaining_chunks": 3,
+        "score": 0.09820515330519775
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 2,
+        "score": 0.12048081725324467
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 1,
+        "score": 0.02980057716681117
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "selected_chunks": 1,
+        "score": 0.3155914353980688
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+        "selected_chunks": 2,
+        "score": 0.3045816376884545
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "selected_chunks": 3,
+        "score": 0.2977808719442947
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: redundant_pacific_a | Largest ocean",
+        "selected_chunks": 4,
+        "score": 0.29516268222143427
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "selected_chunks": 5,
+        "score": 0.29763449899346994
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "selected_chunks": 6,
+        "score": 0.2959581020967432
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2959581020967432
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 5,
+        "score": 0.17059121626646023
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+        "remaining_chunks": 4,
+        "score": 0.11009009984755613
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "remaining_chunks": 3,
+        "score": 0.09820515330519775
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 2,
+        "score": 0.12048081725324467
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 1,
+        "score": 0.14828836543003154
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2959581020967432
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 5,
+        "score": 0.17059121626646023
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "remaining_chunks": 4,
+        "score": 0.13295053374870625
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_blue_whale_b | Largest living animal",
+        "remaining_chunks": 3,
+        "score": 0.09820515330519775
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 2,
+        "score": 0.12048081725324467
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 1,
+        "score": 0.14828836543003154
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.2959581020967437
+      },
+      {
+        "step": 1,
+        "score": 0.2777319281689619
+      },
+      {
+        "step": 2,
+        "score": 0.24689538883226098
+      },
+      {
+        "step": 3,
+        "score": 0.229233153510649
+      },
+      {
+        "step": 4,
+        "score": 0.1958468721316243
+      },
+      {
+        "step": 5,
+        "score": 0.17973859312015977
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the largest animal known to have lived on Earth?",
+    "expanded_queries": [
+      "What is the largest animal known to have lived on Earth?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "dense": 0.8105,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "dense": 0.7054,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "dense": 0.696,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_pacific_a | Largest ocean",
+        "dense": 0.62,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "dense": 0.6046,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "dense": 0.5772,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_neptune | Neptune",
+        "dense": 0.576,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 8,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "dense": 0.5603,
+        "page": 46,
+        "type": "body_text",
+        "section": "giant_panda_diet",
+        "flags": "",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 9,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "dense": 0.5602,
+        "page": 46,
+        "type": "body_text",
+        "section": "giant_panda_diet",
+        "flags": "",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_planet_correct | Largest planet",
+        "dense": 0.5584,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_blue_whale_c | Marine mammal wording",
+        "dense": 0.5485,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "Blue whales exceed all other animals in size."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_sahara_a | Sahara direct",
+        "dense": 0.5364,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "The Sahara is the largest hot desert in the world."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "keyword": 0.8248,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "keyword": 0.1634,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "keyword": 0.14,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.1131,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_a | Largest ocean",
+        "keyword": 0.1115,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "keyword": 0.0847,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.0733,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_france_lyon | Lyon",
+        "keyword": 0.0663,
+        "page": 18,
+        "type": "body_text",
+        "section": "france_cities",
+        "flags": "",
+        "preview": "Lyon is a major French city known for commerce and gastronomy."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "keyword": 0.0615,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "missing_eiffel_paris | Paris tourism",
+        "keyword": 0.0606,
+        "page": 9,
+        "type": "body_text",
+        "section": "paris_landmarks",
+        "flags": "",
+        "preview": "Paris is known for museums, boulevards, cafes, bridges, and major landmarks."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_monalisa_michelangelo | Michelangelo",
+        "keyword": 0.059,
+        "page": 16,
+        "type": "body_text",
+        "section": "mona_lisa",
+        "flags": "",
+        "preview": "Michelangelo was another leading Italian Renaissance artist, known for sculpture and frescoes."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_sahara_a | Sahara direct",
+        "keyword": 0.0584,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "The Sahara is the largest hot desert in the world."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.8105,
+        "keyword": 0.8248,
+        "rerank": 0.95,
+        "section": "largest_animals",
+        "query_hits": "animal, earth, have, known, largest, lived",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.7054,
+        "keyword": 0.1634,
+        "rerank": 0.5574,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.696,
+        "keyword": 0.14,
+        "rerank": 0.5408,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.62,
+        "keyword": 0.1115,
+        "rerank": 0.464,
+        "section": "world_oceans",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6046,
+        "keyword": 0.1131,
+        "rerank": 0.451,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5772,
+        "keyword": 0.0847,
+        "rerank": 0.4167,
+        "section": "sahara_desert",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5584,
+        "keyword": 0.052,
+        "rerank": 0.3584,
+        "section": "giant_planets",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5364,
+        "keyword": 0.0584,
+        "rerank": 0.3415,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5282,
+        "keyword": 0.0412,
+        "rerank": 0.328,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 10,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.5264,
+        "keyword": 0.0436,
+        "rerank": 0.3273,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.576,
+        "keyword": 0.0,
+        "rerank": 0.3249,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.5603,
+        "keyword": 0.0,
+        "rerank": 0.3112,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 13,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.5602,
+        "keyword": 0.0,
+        "rerank": 0.3111,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_sahara_b | Largest hot desert wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4932,
+        "keyword": 0.0565,
+        "rerank": 0.303,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Among hot deserts, the Sahara is the largest by area."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_blue_whale_c | Marine mammal wording",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.5485,
+        "keyword": 0.0,
+        "rerank": 0.3008,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Blue whales exceed all other animals in size."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4746,
+        "keyword": 0.0458,
+        "rerank": 0.2829,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4931,
+        "keyword": 0.0514,
+        "rerank": 0.2711,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 18,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4521,
+        "keyword": 0.0417,
+        "rerank": 0.2616,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4338,
+        "keyword": 0.0733,
+        "rerank": 0.2571,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4743,
+        "keyword": 0.0469,
+        "rerank": 0.253,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4334,
+        "keyword": 0.0615,
+        "rerank": 0.2525,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 22,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.4348,
+        "keyword": 0.0518,
+        "rerank": 0.2502,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 23,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.4897,
+        "keyword": 0.0,
+        "rerank": 0.2494,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 24,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.435,
+        "keyword": 0.0455,
+        "rerank": 0.2481,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.8105,
+        "keyword": 0.8248,
+        "rerank": 0.95,
+        "section": "largest_animals",
+        "query_hits": "animal, earth, have, known, largest, lived",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.7054,
+        "keyword": 0.1634,
+        "rerank": 0.5574,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.696,
+        "keyword": 0.14,
+        "rerank": 0.5408,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.62,
+        "keyword": 0.1115,
+        "rerank": 0.464,
+        "section": "world_oceans",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6046,
+        "keyword": 0.1131,
+        "rerank": 0.451,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5772,
+        "keyword": 0.0847,
+        "rerank": 0.4167,
+        "section": "sahara_desert",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5584,
+        "keyword": 0.052,
+        "rerank": 0.3584,
+        "section": "giant_planets",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5364,
+        "keyword": 0.0584,
+        "rerank": 0.3415,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5282,
+        "keyword": 0.0412,
+        "rerank": 0.328,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 10,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.5264,
+        "keyword": 0.0436,
+        "rerank": 0.3273,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.576,
+        "keyword": 0.0,
+        "rerank": 0.3249,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.5603,
+        "keyword": 0.0,
+        "rerank": 0.3112,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 13,
+        "source": "direct_bamboo_panda_bear | Panda classification distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.5602,
+        "keyword": 0.0,
+        "rerank": 0.3111,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The giant panda is a bear species with distinctive black-and-white fur."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_sahara_b | Largest hot desert wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4932,
+        "keyword": 0.0565,
+        "rerank": 0.303,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Among hot deserts, the Sahara is the largest by area."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_blue_whale_c | Marine mammal wording",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.5485,
+        "keyword": 0.0,
+        "rerank": 0.3008,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Blue whales exceed all other animals in size."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4746,
+        "keyword": 0.0458,
+        "rerank": 0.2829,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4931,
+        "keyword": 0.0514,
+        "rerank": 0.2711,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 18,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4521,
+        "keyword": 0.0417,
+        "rerank": 0.2616,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4338,
+        "keyword": 0.0733,
+        "rerank": 0.2571,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4743,
+        "keyword": 0.0469,
+        "rerank": 0.253,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4334,
+        "keyword": 0.0615,
+        "rerank": 0.2525,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 22,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.4348,
+        "keyword": 0.0518,
+        "rerank": 0.2502,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 23,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.4897,
+        "keyword": 0.0,
+        "rerank": 0.2494,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 24,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.435,
+        "keyword": 0.0455,
+        "rerank": 0.2481,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.8105,
+        "keyword": 0.8248,
+        "rerank": 0.95,
+        "section": "largest_animals",
+        "query_hits": "animal, earth, have, known, largest, lived",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.696,
+        "keyword": 0.14,
+        "rerank": 0.5408,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5781,
+        "novelty": 0.4125,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6549,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.7054,
+        "keyword": 0.1634,
+        "rerank": 0.5574,
+        "section": "largest_animals",
+        "query_hits": "animal, largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5953,
+        "novelty": 0.275,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6505,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5282,
+        "keyword": 0.0412,
+        "rerank": 0.328,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3588,
+        "novelty": 0.6969,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6261,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.62,
+        "keyword": 0.1115,
+        "rerank": 0.464,
+        "section": "world_oceans",
+        "query_hits": "earth, largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4989,
+        "novelty": 0.6036,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6136,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6046,
+        "keyword": 0.1131,
+        "rerank": 0.451,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4856,
+        "novelty": 0.6308,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6059,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "animal",
+        "earth",
+        "have",
+        "known",
+        "largest",
+        "lived"
+      ],
+      "covered_query_terms": [
+        "animal",
+        "earth",
+        "have",
+        "known",
+        "largest",
+        "lived"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_blue_whale_a | Blue whale direct": [
+          "animal",
+          "earth",
+          "have",
+          "known",
+          "largest",
+          "lived"
+        ],
+        "redundant_blue_whale_elephant_distractor | Elephant distractor": [
+          "animal",
+          "largest"
+        ],
+        "redundant_blue_whale_b | Largest living animal": [
+          "animal",
+          "largest"
+        ],
+        "redundant_sahara_antarctica_distractor | Antarctic desert distractor": [
+          "largest"
+        ],
+        "redundant_pacific_a | Largest ocean": [
+          "earth",
+          "largest"
+        ],
+        "conflict_planet_earth | Earth": [
+          "earth",
+          "largest"
+        ]
+      },
+      "section_titles": [
+        "giant_planets",
+        "largest_animals",
+        "sahara_desert",
+        "world_oceans"
+      ],
+      "chunks_by_section": {
+        "largest_animals": [
+          "redundant_blue_whale_a | Blue whale direct",
+          "redundant_blue_whale_elephant_distractor | Elephant distractor",
+          "redundant_blue_whale_b | Largest living animal"
+        ],
+        "sahara_desert": [
+          "redundant_sahara_antarctica_distractor | Antarctic desert distractor"
+        ],
+        "world_oceans": [
+          "redundant_pacific_a | Largest ocean"
+        ],
+        "giant_planets": [
+          "conflict_planet_earth | Earth"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The blue whale is the largest animal known to have lived on Earth.",
+    "retrieved_context_answer": "The blue whale is the largest animal known to have lived on Earth.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.375,
+    "retrieved_context_f1": 0.375,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}
