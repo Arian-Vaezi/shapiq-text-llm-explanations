@@ -7,7 +7,7 @@ library. Part of the `shapiq-text-llm-explanations` project (Demo 1).
 The central question: sentiment is *compositional*. "not bad" is positive even
 though "not" and "bad" look weak or negative individually. First-order Shapley
 Values explain **which words** matter; k-SII explains **which word pairs** matter
-together — capturing negation, redundancy, and sarcasm cues that SVs alone miss.
+together, capturing negation, redundancy, and sarcasm cues that SVs alone miss.
 
 ---
 
