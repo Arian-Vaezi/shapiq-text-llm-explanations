@@ -19,10 +19,10 @@ together, capturing negation, redundancy, and sarcasm cues that SVs alone miss.
 | `encoderTextImputer.py` | Encoder game -> `[MASK]` imputation + contrastive classification score. |
 | `sentimentDecoderGame.py` | Decoder game -> word removal + contrastive log-odds over language-matched templates. |
 | `HFModelWrapper.py` | Causal-LM loading (incl. 4-bit) and batched continuation scoring. |
-| `app.py` | Live Streamlit app — type any sentence, pick a model, get SV + k-SII + plots. |
+| `app.py` | Live Streamlit app -> type any sentence, pick a model, get SV + k-SII + plots. |
 | `results_app.py` | Dashboard for the pre-computed multilingual results, with a launcher for the live app. |
 | `Experiments.py` | Batch runner for the multilingual SLURM experiments (exact + approximate). |
-| `run_experiments_half1.sbatch` / `run_experiments_half2.sbatch` | SLURM job scripts — sentences 1–12 and 13–24, to fit the 8h window. |
+| `run_experiments_half1.sbatch` / `run_experiments_half2.sbatch` | SLURM job scripts -> sentences 1–12 and 13–24, to fit the 8h window. |
 | `build_diagrams.py` | Rebuilds `InteractionValues` from `results/summary.json` and re-renders figures. |
 
 ---
@@ -50,7 +50,7 @@ for models that only expose generic `LABEL_0` / `LABEL_1` names.
 v(S) = mean log P(T⁺ | text(S)) − mean log P(T⁻ | text(S))        unbounded
 ```
 
-Absent words are **removed entirely** — causal LMs have no mask token. The
+Absent words are **removed entirely** -> causal LMs have no mask token. The
 baseline `v(∅)` is the empty string. Grounded in CELL (ICLR 2025): a contrastive
 scoring function needs no class label.
 
@@ -109,7 +109,7 @@ the gap between the full-sentence score and the empty baseline.
 
 `shapiq` also ships `STII` and `FSII` as one-line swaps. STII (Sundararajan &
 Dhamdhere, 2020) prioritizes top-order faithfulness and is a natural robustness
-check — worth noting since the standard interaction index can produce unstable or
+check, worth noting since the standard interaction index can produce unstable or
 sign-ambiguous estimates in some settings.
 
 ### Budgets
@@ -122,7 +122,7 @@ a deliberate speed/accuracy tradeoff:
 | `sentiment_analysis.py` (live app) | 256 | **10** | never |
 | `Experiments.py` (SLURM) | 512 | 512 | encoder: always · decoder: if n ≤ 20 |
 
-The live decoder budget of 10 is very low — each coalition costs 4 forward passes
+The live decoder budget of 10 is very low -> each coalition costs 4 forward passes
 (2 positive + 2 negative templates), so a realistic budget would make the app
 unusably slow. Treat live decoder numbers as indicative; the SLURM runs are the
 ones to cite.
@@ -178,7 +178,7 @@ streamlit run results_app.py
 
 Sections: Story · Accuracy · Negation · Sarcasm · Explorer. The sidebar has an
 **⚡ Instant Analysis** launcher that spawns `app.py` on port `8502` and opens it
-in a new tab, so both run side by side. This is a local-demo pattern — for a
+in a new tab, so both run side by side. This is a local-demo pattern, for a
 deployed version, use Streamlit's native multipage layout instead of `subprocess`.
 
 **Regenerate figures** from saved results:
@@ -259,7 +259,7 @@ of one model.
 **Sarcasm is hard.** Both models mostly fail to detect it; k-SII shows diffuse
 interactions with no clean structure. The one correct French case appears to be an
 accident of literal negative vocabulary (*ennuyeux*), not irony detection. An
-honest null result — the method cannot reveal a phenomenon the model never learned.
+honest null result, the method cannot reveal a phenomenon the model never learned.
 
 ---
 
@@ -275,7 +275,7 @@ honest null result — the method cannot reveal a phenomenon the model never lea
 
 ## References
 
-- Muschalik et al. — *shapiq: Shapley Interactions for Machine Learning*, NeurIPS 2024
-- Sundararajan & Dhamdhere — *The Shapley Taylor Interaction Index*, 2020
+- Muschalik et al.  *shapiq: Shapley Interactions for Machine Learning*, NeurIPS 2024
+- Sundararajan & Dhamdhere  *The Shapley Taylor Interaction Index*, 2020
 - *Order-sensitive Shapley Values for Evaluating Conceptual Soundness of NLP Models*, 2022
 - *CELL your Model: Contrastive Explanations for Large Language Models*, ICLR 2025
