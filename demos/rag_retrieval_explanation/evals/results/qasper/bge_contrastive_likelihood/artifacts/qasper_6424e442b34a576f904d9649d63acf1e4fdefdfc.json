@@ -1,0 +1,1570 @@
+{
+  "case": {
+    "case_id": "qasper_6424e442b34a576f904d9649d63acf1e4fdefdfc",
+    "paper_id": "1808.09111",
+    "paper_title": "Unsupervised Learning of Syntactic Structure with Invertible Neural Projections",
+    "question_id": "6424e442b34a576f904d9649d63acf1e4fdefdfc",
+    "annotation_id": "89e68f3e625f10fa7cc018ec88fa3b3b37134555",
+    "question": "What datasets do they evaluate on?",
+    "gold_answer": "Wall Street Journal (WSJ) portion of the Penn Treebank",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1808.09111:paragraph:0038"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1808.09111:paragraph:0000",
+      "score": 0.6045946606419023,
+      "title": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "text": "Data annotation is a major bottleneck for the application of supervised learning approaches to many problems. As a result, unsupervised methods that learn directly from unlabeled data are increasingly important. For tasks related to unsupervised syntactic analysis, discrete generative models have dominated in recent years \u2013 for example, for both part-of-speech (POS) induction BIBREF0 , BIBREF1 and unsupervised dependency parsing BIBREF2 , BIBREF3 , BIBREF4 . While similar models have had success on a range of unsupervised tasks, they have mostly ignored the apparent utility of continuous word representations evident from supervised NLP applications BIBREF5 , BIBREF6 . In this work, we focus on leveraging and explicitly representing continuous word embeddings within unsupervised models of syntactic structure."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1808.09111:paragraph:0046",
+      "score": 0.7411665843559131,
+      "title": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+      "text": "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , \u201chead-percolation\u201d rules BIBREF39 are applied to obtain gold dependencies for evaluation. We train basic DMV, extended DMV (E-DMV) BIBREF35 and Gaussian DMV (which treats POS tag as unknown latent variables and generates observed word embeddings directly conditioned on them following Gaussian distribution) as baselines. Basic DMV and E-DMV are trained with Viterbi EM BIBREF40 on unsupervised POS tags induced from our Markov-structured model described in sec:pos. Multinomial parameters of the syntax model in both Gaussian DMV and our model are initialized with the pre-trained DMV baseline. Other parameters are initialized in the same way as in the POS tagging experiment. The directed dependency accuracy (DDA) is used for evaluation and we report accuracy on sentences of length INLINEFORM1 and all lengths. We train the parser until training data likelihood converges, and report the mean and standard deviation over 20 random restarts."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1808.09111:paragraph:0054",
+      "score": 0.5795053849222178,
+      "title": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+      "text": "In Figure FIGREF54 we depict the learned latent embeddings with the DMV-structured syntax model. Unlike the Markov structure, the DMV structure maps a large subset of singular and plural nouns to the same overlapping region. However, two clusters of singular and plural nouns are actually separated. We inspect the two clusters and the overlapping region in Figure FIGREF54 , it turns out that the nouns in the separated clusters are words that can appear as subjects and, therefore, for which verb agreement is important to model. In contrast, the nouns in the overlapping region are typically objects. This demonstrates that the latent embeddings are focusing on aspects of language that are specifically important for modeling dependency without ever having seen examples of dependency parses. Some previous work has deliberately created embeddings to capture different notions of similarity BIBREF43 , BIBREF44 , while they use extra morphology or dependency annotations to guide the embedding learning, our approach provides a potential alternative to create new embeddings that are guided by structured syntax model, only using unlabeled text corpora."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1808.09111:paragraph:0005",
+      "score": 0.592546087277904,
+      "title": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "text": "In experiments, we instantiate our approach using both a Markov-structured syntax model and a tree-structured syntax model \u2013 specifically, the DMV. We evaluate on two tasks: part-of-speech (POS) induction and unsupervised dependency parsing without gold POS tags. Experimental results on the Penn Treebank BIBREF13 demonstrate that our approach improves the basic HMM and DMV by a large margin, leading to the state-of-the-art results on POS induction, and state-of-the-art results on unsupervised dependency parsing in the difficult training scenario where neither gold POS annotation nor punctuation-based constraints are available."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1808.09111:paragraph:0037",
+      "score": 0.8460397211917303,
+      "title": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+      "text": "In this section, we first describe our datasets and experimental setup. We then instantiate our approach with Markov and DMV-structured syntax models, and report results on POS tagging and dependency grammar induction respectively. Lastly, we analyze the learned latent embeddings."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1808.09111:paragraph:0004",
+      "score": 0.5401381428443047,
+      "title": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "text": "Recent work has sought to take advantage of word embeddings in unsupervised generative models with alternate approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 . BIBREF9 build an HMM with Gaussian emissions on observed word embeddings, but they do not attempt to learn new embeddings. BIBREF10 , BIBREF11 , and BIBREF12 extend HMM or dependency model with valence (DMV) BIBREF2 with multinomials that use word (or tag) embeddings in their parameterization. However, they do not represent the embeddings as latent variables."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "attribution": 0.06044235807912848
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+      "attribution": -0.027213838088148878
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+      "attribution": 0.023917577296063846
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "attribution": 0.02161292724183014
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+      "attribution": 0.016500518062850963
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "attribution": 0.0036043151158741383
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "attribution": 0.09891259787994075
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+      "attribution": 0.08613587705066426
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "attribution": 0.013837022814151185
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+      "attribution": -0.00758773655972737
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+      "attribution": 0.004540311859231665
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+      "attribution": 0.0011102502844085012
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0046",
+      "interaction": -0.007452378876354858
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0054",
+      "interaction": -0.012747368903958289
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0005",
+      "interaction": 0.00010467141922280793
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": 0.003877217984196156
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": -0.0028857824112706785
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0054",
+      "interaction": -0.020418959775526303
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0005",
+      "interaction": -0.040388318028448986
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": -0.006382464346056462
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": 0.0026644471852361206
+    },
+    {
+      "left": "1808.09111:paragraph:0054",
+      "right": "1808.09111:paragraph:0005",
+      "interaction": -0.023545668732557663
+    },
+    {
+      "left": "1808.09111:paragraph:0054",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": -0.0050567440962460755
+    },
+    {
+      "left": "1808.09111:paragraph:0054",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": -0.011817437079630816
+    },
+    {
+      "left": "1808.09111:paragraph:0005",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": -0.02041293666425161
+    },
+    {
+      "left": "1808.09111:paragraph:0005",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": 0.0022187531800944215
+    },
+    {
+      "left": "1808.09111:paragraph:0037",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": 0.006120536176982541
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0046",
+      "interaction": -0.0036124918017935745
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0054",
+      "interaction": -0.00012475813598930016
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0005",
+      "interaction": -0.027490556093193536
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": 0.006462353879727096
+    },
+    {
+      "left": "1808.09111:paragraph:0000",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": -0.004056173039541322
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0054",
+      "interaction": -0.005065747396136305
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0005",
+      "interaction": -0.008841759766831915
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": -0.014284863874276387
+    },
+    {
+      "left": "1808.09111:paragraph:0046",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": -0.0038785022838766976
+    },
+    {
+      "left": "1808.09111:paragraph:0054",
+      "right": "1808.09111:paragraph:0005",
+      "interaction": -0.0037931169517013644
+    },
+    {
+      "left": "1808.09111:paragraph:0054",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": -0.004435666574323939
+    },
+    {
+      "left": "1808.09111:paragraph:0054",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": -0.004968778714336695
+    },
+    {
+      "left": "1808.09111:paragraph:0005",
+      "right": "1808.09111:paragraph:0037",
+      "interaction": 0.022069750812539434
+    },
+    {
+      "left": "1808.09111:paragraph:0005",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": 0.0017241961347625883
+    },
+    {
+      "left": "1808.09111:paragraph:0037",
+      "right": "1808.09111:paragraph:0004",
+      "interaction": -0.0031832839734430947
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09886385730042135
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.05367973528959413
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "remaining_chunks": 4,
+        "score": 0.08735539494361633
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "remaining_chunks": 3,
+        "score": 0.063051254563246
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.07086933632008852
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "remaining_chunks": 1,
+        "score": 0.011744365180367589
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "selected_chunks": 1,
+        "score": 0.12720762172256417
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "selected_chunks": 2,
+        "score": 0.03556813997774477
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "selected_chunks": 3,
+        "score": 0.060769712352047534
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "selected_chunks": 4,
+        "score": 0.09232784552256912
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "selected_chunks": 5,
+        "score": 0.09081897578444453
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "selected_chunks": 6,
+        "score": 0.09886385730042135
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09886385730042135
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "remaining_chunks": 5,
+        "score": 0.0876996224304788
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "remaining_chunks": 4,
+        "score": 0.13818360734065704
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.13290993164585685
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.046401338039443796
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "remaining_chunks": 1,
+        "score": 0.011744365180367589
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09886385730042135
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.05367973528959413
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.05279942677712823
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "remaining_chunks": 3,
+        "score": 0.03493321416661843
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.03221320363153746
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "remaining_chunks": 1,
+        "score": 0.03425916926506001
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.09886385730042144
+      },
+      {
+        "step": 1,
+        "score": 0.0872659097566214
+      },
+      {
+        "step": 2,
+        "score": 0.07553726432771743
+      },
+      {
+        "step": 3,
+        "score": 0.06957799975169618
+      },
+      {
+        "step": 4,
+        "score": 0.06349018647144339
+      },
+      {
+        "step": 5,
+        "score": 0.04880900817586834
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What datasets do they evaluate on?",
+    "expanded_queries": [
+      "What datasets do they evaluate on?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "dense": 0.5355,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "flags": "",
+        "preview": "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , \u201chead-percolation\u201d rules BIBREF39 are a"
+      },
+      {
+        "rank": 2,
+        "source": "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "dense": 0.5303,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "In this section, we first describe our datasets and experimental setup. We then instantiate our approach with Markov and DMV-structured syntax models, and report results on POS tagging and dependency grammar induction re"
+      },
+      {
+        "rank": 3,
+        "source": "1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "dense": 0.5146,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Data annotation is a major bottleneck for the application of supervised learning approaches to many problems. As a result, unsupervised methods that learn directly from unlabeled data are increasingly important. For task"
+      },
+      {
+        "rank": 4,
+        "source": "1808.09111:paragraph:0051 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "dense": 0.5121,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sensitivity Analysis",
+        "flags": "",
+        "preview": "We investigate the effect of the choice of pre-trained embedding on performance while using our approach. To this end, we additionally include results using fastText embeddings BIBREF41 \u2013 which, in contrast with skip-gra"
+      },
+      {
+        "rank": 5,
+        "source": "1808.09111:paragraph:0044 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "dense": 0.5116,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "flags": "",
+        "preview": "For the task of unsupervised dependency parse induction, we employ the Dependency Model with Valence (DMV) BIBREF2 as the syntax model in our approach. DMV is a generative model that defines a probability distribution ov"
+      },
+      {
+        "rank": 6,
+        "source": "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "dense": 0.5051,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Analysis of Embeddings",
+        "flags": "",
+        "preview": "In Figure FIGREF54 we depict the learned latent embeddings with the DMV-structured syntax model. Unlike the Markov structure, the DMV structure maps a large subset of singular and plural nouns to the same overlapping reg"
+      },
+      {
+        "rank": 7,
+        "source": "1808.09111:paragraph:0023 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Structure with Neural Projector",
+        "dense": 0.5046,
+        "page": 1,
+        "type": "body_text",
+        "section": "General Structure with Neural Projector",
+        "flags": "",
+        "preview": "The marginal data likelihood of our model is: DISPLAYFORM0"
+      },
+      {
+        "rank": 8,
+        "source": "1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "dense": 0.4902,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Recent work has sought to take advantage of word embeddings in unsupervised generative models with alternate approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 . BIBREF9 build an HMM with Gaussian emissions on observed "
+      },
+      {
+        "rank": 9,
+        "source": "1808.09111:paragraph:0052 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "dense": 0.4894,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Analysis of Embeddings",
+        "flags": "",
+        "preview": "We perform qualitative analysis to understand how the latent embeddings help induce syntactic structures. First we filter out low-frequency words and punctuations in WSJ, and visualize the rest words (10k) with t-SNE BIB"
+      },
+      {
+        "rank": 10,
+        "source": "1808.09111:paragraph:0047 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "dense": 0.4884,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "flags": "",
+        "preview": "Our model directly observes word embeddings and does not require gold POS tags during training. Thus, results from related work trained on gold tags are not directly comparable. However, to measure how these systems migh"
+      },
+      {
+        "rank": 11,
+        "source": "1808.09111:paragraph:0031 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Learning with Invertibility",
+        "dense": 0.4881,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning with Invertibility",
+        "flags": "",
+        "preview": "More generally, for an arbitrary syntax model the data likelihood of our approach is: DISPLAYFORM0"
+      },
+      {
+        "rank": 12,
+        "source": "1808.09111:paragraph:0043 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "dense": 0.4877,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised POS tagging",
+        "flags": "",
+        "preview": "We found that most tagging errors happen in noun subcategories. Therefore, we do the one-to-one mapping between gold POS tags and induced clusters and plot the normalized confusion matrix of noun subcategories in Figure "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "keyword": 0.1359,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "In this section, we first describe our datasets and experimental setup. We then instantiate our approach with Markov and DMV-structured syntax models, and report results on POS tagging and dependency grammar induction re"
+      },
+      {
+        "rank": 2,
+        "source": "1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "keyword": 0.0554,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In experiments, we instantiate our approach using both a Markov-structured syntax model and a tree-structured syntax model \u2013 specifically, the DMV. We evaluate on two tasks: part-of-speech (POS) induction and unsupervise"
+      },
+      {
+        "rank": 3,
+        "source": "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "keyword": 0.0368,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "flags": "",
+        "preview": "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , \u201chead-percolation\u201d rules BIBREF39 are a"
+      },
+      {
+        "rank": 4,
+        "source": "1808.09111:paragraph:0041 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "keyword": 0.0331,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised POS tagging",
+        "flags": "",
+        "preview": "Following existing literature, we train and test on the entire WSJ corpus (49208 sentences, 1M tokens). We use 45 tag clusters, the number of POS tags that appear in WSJ corpus. We train the discrete HMM and the Gaussian"
+      },
+      {
+        "rank": 5,
+        "source": "1808.09111:paragraph:0052 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Analysis of Embeddings",
+        "flags": "",
+        "preview": "We perform qualitative analysis to understand how the latent embeddings help induce syntactic structures. First we filter out low-frequency words and punctuations in WSJ, and visualize the rest words (10k) with t-SNE BIB"
+      },
+      {
+        "rank": 6,
+        "source": "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Analysis of Embeddings",
+        "flags": "",
+        "preview": "In Figure FIGREF54 we depict the learned latent embeddings with the DMV-structured syntax model. Unlike the Markov structure, the DMV structure maps a large subset of singular and plural nouns to the same overlapping reg"
+      },
+      {
+        "rank": 7,
+        "source": "1808.09111:paragraph:0050 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sensitivity Analysis",
+        "flags": "",
+        "preview": "Different from the Markov prior in POS tagging experiments, our parsing model seems to be quite sensitive to the initialization. For example, directed accuracy of our approach on sentences of length INLINEFORM0 is below "
+      },
+      {
+        "rank": 8,
+        "source": "1808.09111:paragraph:0053 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Analysis of Embeddings",
+        "flags": "",
+        "preview": "For our Markov-structured model, we have displayed the embedding space in Figure SECREF5 , where the gold POS clusters are well-formed. Further, we present five example target words and their five nearest neighbors in te"
+      },
+      {
+        "rank": 9,
+        "source": "1808.09111:paragraph:0056 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Conclusion",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this work, we define a novel generative approach to leverage continuous word representations for unsupervised learning of syntactic structure. Experiments on both POS induction and unsupervised dependency parsing task"
+      },
+      {
+        "rank": 10,
+        "source": "1808.09111:paragraph:0051 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sensitivity Analysis",
+        "flags": "",
+        "preview": "We investigate the effect of the choice of pre-trained embedding on performance while using our approach. To this end, we additionally include results using fastText embeddings BIBREF41 \u2013 which, in contrast with skip-gra"
+      },
+      {
+        "rank": 11,
+        "source": "1808.09111:paragraph:0047 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "flags": "",
+        "preview": "Our model directly observes word embeddings and does not require gold POS tags during training. Thus, results from related work trained on gold tags are not directly comparable. However, to measure how these systems migh"
+      },
+      {
+        "rank": 12,
+        "source": "1808.09111:paragraph:0048 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "flags": "",
+        "preview": "As shown in Table TABREF39 , our approach is able to improve over the Gaussian DMV by 4.8 points on length INLINEFORM0 and 4.8 points on all lengths, which suggests the additional latent embedding layer and neural projec"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.1359,
+        "rerank": 0.846,
+        "section": "Experiments",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we first describe our datasets and experimental setup. We then instantiate our approach with Markov and DMV-structured syntax models, and report results on POS tagging and dependency grammar induction re"
+      },
+      {
+        "rank": 2,
+        "source": "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5355,
+        "keyword": 0.0368,
+        "rerank": 0.7412,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "evaluate",
+        "reasons": "body/table evidence",
+        "preview": "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , \u201chead-percolation\u201d rules BIBREF39 are a"
+      },
+      {
+        "rank": 3,
+        "source": "1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5146,
+        "keyword": 0.0,
+        "rerank": 0.6046,
+        "section": "Introduction",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Data annotation is a major bottleneck for the application of supervised learning approaches to many problems. As a result, unsupervised methods that learn directly from unlabeled data are increasingly important. For task"
+      },
+      {
+        "rank": 4,
+        "source": "1808.09111:paragraph:0041 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4861,
+        "keyword": 0.0331,
+        "rerank": 0.6022,
+        "section": "Unsupervised POS tagging",
+        "query_hits": "evaluate",
+        "reasons": "body/table evidence",
+        "preview": "Following existing literature, we train and test on the entire WSJ corpus (49208 sentences, 1M tokens). We use 45 tag clusters, the number of POS tags that appear in WSJ corpus. We train the discrete HMM and the Gaussian"
+      },
+      {
+        "rank": 5,
+        "source": "1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4638,
+        "keyword": 0.0554,
+        "rerank": 0.5925,
+        "section": "Introduction",
+        "query_hits": "evaluate",
+        "reasons": "body/table evidence",
+        "preview": "In experiments, we instantiate our approach using both a Markov-structured syntax model and a tree-structured syntax model \u2013 specifically, the DMV. We evaluate on two tasks: part-of-speech (POS) induction and unsupervise"
+      },
+      {
+        "rank": 6,
+        "source": "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5051,
+        "keyword": 0.0,
+        "rerank": 0.5795,
+        "section": "Qualitative Analysis of Embeddings",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "In Figure FIGREF54 we depict the learned latent embeddings with the DMV-structured syntax model. Unlike the Markov structure, the DMV structure maps a large subset of singular and plural nouns to the same overlapping reg"
+      },
+      {
+        "rank": 7,
+        "source": "1808.09111:paragraph:0051 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5121,
+        "keyword": 0.0,
+        "rerank": 0.5679,
+        "section": "Sensitivity Analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We investigate the effect of the choice of pre-trained embedding on performance while using our approach. To this end, we additionally include results using fastText embeddings BIBREF41 \u2013 which, in contrast with skip-gra"
+      },
+      {
+        "rank": 8,
+        "source": "1808.09111:paragraph:0044 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5116,
+        "keyword": 0.0,
+        "rerank": 0.5667,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the task of unsupervised dependency parse induction, we employ the Dependency Model with Valence (DMV) BIBREF2 as the syntax model in our approach. DMV is a generative model that defines a probability distribution ov"
+      },
+      {
+        "rank": 9,
+        "source": "1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4902,
+        "keyword": 0.0,
+        "rerank": 0.5401,
+        "section": "Introduction",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Recent work has sought to take advantage of word embeddings in unsupervised generative models with alternate approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 . BIBREF9 build an HMM with Gaussian emissions on observed "
+      },
+      {
+        "rank": 10,
+        "source": "1808.09111:paragraph:0047 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4884,
+        "keyword": 0.0,
+        "rerank": 0.5053,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Our model directly observes word embeddings and does not require gold POS tags during training. Thus, results from related work trained on gold tags are not directly comparable. However, to measure how these systems migh"
+      },
+      {
+        "rank": 11,
+        "source": "1808.09111:paragraph:0043 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4877,
+        "keyword": 0.0,
+        "rerank": 0.5034,
+        "section": "Unsupervised POS tagging",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We found that most tagging errors happen in noun subcategories. Therefore, we do the one-to-one mapping between gold POS tags and induced clusters and plot the normalized confusion matrix of noun subcategories in Figure "
+      },
+      {
+        "rank": 12,
+        "source": "1808.09111:paragraph:0048 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.471,
+        "keyword": 0.0,
+        "rerank": 0.4893,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "As shown in Table TABREF39 , our approach is able to improve over the Gaussian DMV by 4.8 points on length INLINEFORM0 and 4.8 points on all lengths, which suggests the additional latent embedding layer and neural projec"
+      },
+      {
+        "rank": 13,
+        "source": "1808.09111:paragraph:0001 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4821,
+        "keyword": 0.0,
+        "rerank": 0.4887,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Pre-trained word embeddings from massive unlabeled corpora offer a compact way of injecting a prior notion of word similarity into models that would otherwise treat words as discrete, isolated categories. However, the sp"
+      },
+      {
+        "rank": 14,
+        "source": "1808.09111:paragraph:0003 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4816,
+        "keyword": 0.0,
+        "rerank": 0.4874,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "By choosing an invertible neural network as our non-linear projector, and then parameterizing our model in terms of the projection's inverse, we are able to derive tractable exact inference and marginal likelihood comput"
+      },
+      {
+        "rank": 15,
+        "source": "1808.09111:paragraph:0045 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4696,
+        "keyword": 0.0,
+        "rerank": 0.4856,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Most existing approaches to this task are not fully unsupervised since they rely on gold POS tags following the original experimental setup for DMV. This is partially because automatically parsing from words is difficult"
+      },
+      {
+        "rank": 16,
+        "source": "1808.09111:paragraph:0053 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4804,
+        "keyword": 0.0,
+        "rerank": 0.4841,
+        "section": "Qualitative Analysis of Embeddings",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For our Markov-structured model, we have displayed the embedding space in Figure SECREF5 , where the gold POS clusters are well-formed. Further, we present five example target words and their five nearest neighbors in te"
+      },
+      {
+        "rank": 17,
+        "source": "1808.09111:paragraph:0038 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4803,
+        "keyword": 0.0,
+        "rerank": 0.4839,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For both POS tagging and dependency parsing, we run experiments on the Wall Street Journal (WSJ) portion of the Penn Treebank. To create the observed data embeddings, we train skip-gram word embeddings BIBREF7 that are f"
+      },
+      {
+        "rank": 18,
+        "source": "1808.09111:paragraph:0039 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Experimental Setup",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4796,
+        "keyword": 0.0,
+        "rerank": 0.482,
+        "section": "General Experimental Setup",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the neural projector, we employ rectified networks as coupling function INLINEFORM0 following BIBREF16 . We use a rectified network with an input layer, one hidden layer, and linear output units, the number of hidden"
+      },
+      {
+        "rank": 19,
+        "source": "1808.09111:paragraph:0022 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Structure with Neural Projector",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4794,
+        "keyword": 0.0,
+        "rerank": 0.4814,
+        "section": "General Structure with Neural Projector",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "where INLINEFORM0 represents the probability of the syntax model, and can encode any syntactic structure \u2013 though, its factorization structure will determine whether inference is tractable in our full model. As shown in "
+      },
+      {
+        "rank": 20,
+        "source": "1808.09111:paragraph:0025 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Learning & Inference",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4757,
+        "keyword": 0.0,
+        "rerank": 0.4718,
+        "section": "Learning & Inference",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we introduce an invertibility condition for our neural projector to tackle the optimization challenge. Specifically, we constrain our neural projector with two requirements: (1) INLINEFORM0 and (2) INLIN"
+      },
+      {
+        "rank": 21,
+        "source": "1808.09111:paragraph:0042 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4724,
+        "keyword": 0.0,
+        "rerank": 0.463,
+        "section": "Unsupervised POS tagging",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We compare our approach with basic HMM, Gaussian HMM, and several state-of-the-art systems, including sophisticated HMM variants and clustering techniques with hand-engineered features. The results are presented in Table"
+      },
+      {
+        "rank": 22,
+        "source": "1808.09111:paragraph:0023 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Structure with Neural Projector",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5046,
+        "keyword": 0.0,
+        "rerank": 0.4482,
+        "section": "General Structure with Neural Projector",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The marginal data likelihood of our model is: DISPLAYFORM0"
+      },
+      {
+        "rank": 23,
+        "source": "1808.09111:paragraph:0010 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Example: Gaussian HMM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4642,
+        "keyword": 0.0,
+        "rerank": 0.4414,
+        "section": "Example: Gaussian HMM",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "While the observed word embeddings do inform this model with a notion of word similarity \u2013 lacking in the basic multinomial HMM \u2013 the Gaussian emissions may not be sufficiently flexible to separate some syntactic categor"
+      },
+      {
+        "rank": 24,
+        "source": "1808.09111:paragraph:0049 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4626,
+        "keyword": 0.0,
+        "rerank": 0.4371,
+        "section": "Sensitivity Analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the above experiments we initialize the structured syntax components with the pre-trained Gaussian or discrete baseline, which is shown as a useful technique to help train our deep models. We further study the results"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.1359,
+        "rerank": 0.846,
+        "section": "Experiments",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we first describe our datasets and experimental setup. We then instantiate our approach with Markov and DMV-structured syntax models, and report results on POS tagging and dependency grammar induction re"
+      },
+      {
+        "rank": 2,
+        "source": "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5355,
+        "keyword": 0.0368,
+        "rerank": 0.7412,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "evaluate",
+        "reasons": "body/table evidence",
+        "preview": "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , \u201chead-percolation\u201d rules BIBREF39 are a"
+      },
+      {
+        "rank": 3,
+        "source": "1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5146,
+        "keyword": 0.0,
+        "rerank": 0.6046,
+        "section": "Introduction",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Data annotation is a major bottleneck for the application of supervised learning approaches to many problems. As a result, unsupervised methods that learn directly from unlabeled data are increasingly important. For task"
+      },
+      {
+        "rank": 4,
+        "source": "1808.09111:paragraph:0041 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4861,
+        "keyword": 0.0331,
+        "rerank": 0.6022,
+        "section": "Unsupervised POS tagging",
+        "query_hits": "evaluate",
+        "reasons": "body/table evidence",
+        "preview": "Following existing literature, we train and test on the entire WSJ corpus (49208 sentences, 1M tokens). We use 45 tag clusters, the number of POS tags that appear in WSJ corpus. We train the discrete HMM and the Gaussian"
+      },
+      {
+        "rank": 5,
+        "source": "1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4638,
+        "keyword": 0.0554,
+        "rerank": 0.5925,
+        "section": "Introduction",
+        "query_hits": "evaluate",
+        "reasons": "body/table evidence",
+        "preview": "In experiments, we instantiate our approach using both a Markov-structured syntax model and a tree-structured syntax model \u2013 specifically, the DMV. We evaluate on two tasks: part-of-speech (POS) induction and unsupervise"
+      },
+      {
+        "rank": 6,
+        "source": "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5051,
+        "keyword": 0.0,
+        "rerank": 0.5795,
+        "section": "Qualitative Analysis of Embeddings",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "In Figure FIGREF54 we depict the learned latent embeddings with the DMV-structured syntax model. Unlike the Markov structure, the DMV structure maps a large subset of singular and plural nouns to the same overlapping reg"
+      },
+      {
+        "rank": 7,
+        "source": "1808.09111:paragraph:0051 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5121,
+        "keyword": 0.0,
+        "rerank": 0.5679,
+        "section": "Sensitivity Analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We investigate the effect of the choice of pre-trained embedding on performance while using our approach. To this end, we additionally include results using fastText embeddings BIBREF41 \u2013 which, in contrast with skip-gra"
+      },
+      {
+        "rank": 8,
+        "source": "1808.09111:paragraph:0044 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5116,
+        "keyword": 0.0,
+        "rerank": 0.5667,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the task of unsupervised dependency parse induction, we employ the Dependency Model with Valence (DMV) BIBREF2 as the syntax model in our approach. DMV is a generative model that defines a probability distribution ov"
+      },
+      {
+        "rank": 9,
+        "source": "1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4902,
+        "keyword": 0.0,
+        "rerank": 0.5401,
+        "section": "Introduction",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Recent work has sought to take advantage of word embeddings in unsupervised generative models with alternate approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 . BIBREF9 build an HMM with Gaussian emissions on observed "
+      },
+      {
+        "rank": 10,
+        "source": "1808.09111:paragraph:0047 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4884,
+        "keyword": 0.0,
+        "rerank": 0.5053,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Our model directly observes word embeddings and does not require gold POS tags during training. Thus, results from related work trained on gold tags are not directly comparable. However, to measure how these systems migh"
+      },
+      {
+        "rank": 11,
+        "source": "1808.09111:paragraph:0043 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4877,
+        "keyword": 0.0,
+        "rerank": 0.5034,
+        "section": "Unsupervised POS tagging",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We found that most tagging errors happen in noun subcategories. Therefore, we do the one-to-one mapping between gold POS tags and induced clusters and plot the normalized confusion matrix of noun subcategories in Figure "
+      },
+      {
+        "rank": 12,
+        "source": "1808.09111:paragraph:0048 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.471,
+        "keyword": 0.0,
+        "rerank": 0.4893,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "As shown in Table TABREF39 , our approach is able to improve over the Gaussian DMV by 4.8 points on length INLINEFORM0 and 4.8 points on all lengths, which suggests the additional latent embedding layer and neural projec"
+      },
+      {
+        "rank": 13,
+        "source": "1808.09111:paragraph:0001 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4821,
+        "keyword": 0.0,
+        "rerank": 0.4887,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Pre-trained word embeddings from massive unlabeled corpora offer a compact way of injecting a prior notion of word similarity into models that would otherwise treat words as discrete, isolated categories. However, the sp"
+      },
+      {
+        "rank": 14,
+        "source": "1808.09111:paragraph:0003 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4816,
+        "keyword": 0.0,
+        "rerank": 0.4874,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "By choosing an invertible neural network as our non-linear projector, and then parameterizing our model in terms of the projection's inverse, we are able to derive tractable exact inference and marginal likelihood comput"
+      },
+      {
+        "rank": 15,
+        "source": "1808.09111:paragraph:0045 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4696,
+        "keyword": 0.0,
+        "rerank": 0.4856,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Most existing approaches to this task are not fully unsupervised since they rely on gold POS tags following the original experimental setup for DMV. This is partially because automatically parsing from words is difficult"
+      },
+      {
+        "rank": 16,
+        "source": "1808.09111:paragraph:0053 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4804,
+        "keyword": 0.0,
+        "rerank": 0.4841,
+        "section": "Qualitative Analysis of Embeddings",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For our Markov-structured model, we have displayed the embedding space in Figure SECREF5 , where the gold POS clusters are well-formed. Further, we present five example target words and their five nearest neighbors in te"
+      },
+      {
+        "rank": 17,
+        "source": "1808.09111:paragraph:0038 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4803,
+        "keyword": 0.0,
+        "rerank": 0.4839,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For both POS tagging and dependency parsing, we run experiments on the Wall Street Journal (WSJ) portion of the Penn Treebank. To create the observed data embeddings, we train skip-gram word embeddings BIBREF7 that are f"
+      },
+      {
+        "rank": 18,
+        "source": "1808.09111:paragraph:0039 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Experimental Setup",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4796,
+        "keyword": 0.0,
+        "rerank": 0.482,
+        "section": "General Experimental Setup",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the neural projector, we employ rectified networks as coupling function INLINEFORM0 following BIBREF16 . We use a rectified network with an input layer, one hidden layer, and linear output units, the number of hidden"
+      },
+      {
+        "rank": 19,
+        "source": "1808.09111:paragraph:0022 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Structure with Neural Projector",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4794,
+        "keyword": 0.0,
+        "rerank": 0.4814,
+        "section": "General Structure with Neural Projector",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "where INLINEFORM0 represents the probability of the syntax model, and can encode any syntactic structure \u2013 though, its factorization structure will determine whether inference is tractable in our full model. As shown in "
+      },
+      {
+        "rank": 20,
+        "source": "1808.09111:paragraph:0025 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Learning & Inference",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4757,
+        "keyword": 0.0,
+        "rerank": 0.4718,
+        "section": "Learning & Inference",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we introduce an invertibility condition for our neural projector to tackle the optimization challenge. Specifically, we constrain our neural projector with two requirements: (1) INLINEFORM0 and (2) INLIN"
+      },
+      {
+        "rank": 21,
+        "source": "1808.09111:paragraph:0042 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised POS tagging",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4724,
+        "keyword": 0.0,
+        "rerank": 0.463,
+        "section": "Unsupervised POS tagging",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We compare our approach with basic HMM, Gaussian HMM, and several state-of-the-art systems, including sophisticated HMM variants and clustering techniques with hand-engineered features. The results are presented in Table"
+      },
+      {
+        "rank": 22,
+        "source": "1808.09111:paragraph:0023 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / General Structure with Neural Projector",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5046,
+        "keyword": 0.0,
+        "rerank": 0.4482,
+        "section": "General Structure with Neural Projector",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The marginal data likelihood of our model is: DISPLAYFORM0"
+      },
+      {
+        "rank": 23,
+        "source": "1808.09111:paragraph:0010 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Example: Gaussian HMM",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4642,
+        "keyword": 0.0,
+        "rerank": 0.4414,
+        "section": "Example: Gaussian HMM",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "While the observed word embeddings do inform this model with a notion of word similarity \u2013 lacking in the basic multinomial HMM \u2013 the Gaussian emissions may not be sufficiently flexible to separate some syntactic categor"
+      },
+      {
+        "rank": 24,
+        "source": "1808.09111:paragraph:0049 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Sensitivity Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4626,
+        "keyword": 0.0,
+        "rerank": 0.4371,
+        "section": "Sensitivity Analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the above experiments we initialize the structured syntax components with the pre-trained Gaussian or discrete baseline, which is shown as a useful technique to help train our deep models. We further study the results"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5146,
+        "keyword": 0.0,
+        "rerank": 0.6046,
+        "section": "Introduction",
+        "query_hits": "they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7212,
+        "novelty": 1.0,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1602,
+        "reasons": "body/table evidence",
+        "preview": "Data annotation is a major bottleneck for the application of supervised learning approaches to many problems. As a result, unsupervised methods that learn directly from unlabeled data are increasingly important. For task"
+      },
+      {
+        "rank": 2,
+        "source": "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5355,
+        "keyword": 0.0368,
+        "rerank": 0.7412,
+        "section": "Unsupervised Dependency Parsing without gold POS tags",
+        "query_hits": "evaluate",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8789,
+        "novelty": 0.928,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1258,
+        "reasons": "body/table evidence",
+        "preview": "Like previous work we use sections 02-21 of WSJ corpus as training data and evaluate on section 23, we remove punctuations and train the models on sentences of length INLINEFORM0 , \u201chead-percolation\u201d rules BIBREF39 are a"
+      },
+      {
+        "rank": 3,
+        "source": "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5051,
+        "keyword": 0.0,
+        "rerank": 0.5795,
+        "section": "Qualitative Analysis of Embeddings",
+        "query_hits": "they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6922,
+        "novelty": 0.7243,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0967,
+        "reasons": "body/table evidence",
+        "preview": "In Figure FIGREF54 we depict the learned latent embeddings with the DMV-structured syntax model. Unlike the Markov structure, the DMV structure maps a large subset of singular and plural nouns to the same overlapping reg"
+      },
+      {
+        "rank": 4,
+        "source": "1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4638,
+        "keyword": 0.0554,
+        "rerank": 0.5925,
+        "section": "Introduction",
+        "query_hits": "evaluate",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7073,
+        "novelty": 0.4682,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0738,
+        "reasons": "body/table evidence",
+        "preview": "In experiments, we instantiate our approach using both a Markov-structured syntax model and a tree-structured syntax model \u2013 specifically, the DMV. We evaluate on two tasks: part-of-speech (POS) induction and unsupervise"
+      },
+      {
+        "rank": 5,
+        "source": "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.1359,
+        "rerank": 0.846,
+        "section": "Experiments",
+        "query_hits": "datasets",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.9,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.046,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we first describe our datasets and experimental setup. We then instantiate our approach with Markov and DMV-structured syntax models, and report results on POS tagging and dependency grammar induction re"
+      },
+      {
+        "rank": 6,
+        "source": "1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4902,
+        "keyword": 0.0,
+        "rerank": 0.5401,
+        "section": "Introduction",
+        "query_hits": "they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6468,
+        "novelty": 0.456,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0201,
+        "reasons": "body/table evidence",
+        "preview": "Recent work has sought to take advantage of word embeddings in unsupervised generative models with alternate approaches BIBREF9 , BIBREF10 , BIBREF11 , BIBREF12 . BIBREF9 build an HMM with Gaussian emissions on observed "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "datasets",
+        "evaluate",
+        "they"
+      ],
+      "covered_query_terms": [
+        "datasets",
+        "evaluate",
+        "they"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction": [
+          "they"
+        ],
+        "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags": [
+          "evaluate"
+        ],
+        "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings": [
+          "they"
+        ],
+        "1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction": [
+          "evaluate"
+        ],
+        "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments": [
+          "datasets"
+        ],
+        "1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction": [
+          "they"
+        ]
+      },
+      "section_titles": [
+        "Experiments",
+        "Introduction",
+        "Qualitative Analysis of Embeddings",
+        "Unsupervised Dependency Parsing without gold POS tags"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1808.09111:paragraph:0000 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+          "1808.09111:paragraph:0005 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction",
+          "1808.09111:paragraph:0004 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Introduction"
+        ],
+        "Unsupervised Dependency Parsing without gold POS tags": [
+          "1808.09111:paragraph:0046 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Unsupervised Dependency Parsing without gold POS tags"
+        ],
+        "Qualitative Analysis of Embeddings": [
+          "1808.09111:paragraph:0054 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Qualitative Analysis of Embeddings"
+        ],
+        "Experiments": [
+          "1808.09111:paragraph:0037 | Unsupervised Learning of Syntactic Structure with Invertible Neural Projections / Experiments"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "For POS tagging and dependency parsing, experiments are run on the Wall Street Journal (WSJ) portion of the Penn Treebank. The skip-gram word embeddings are trained on the one billion word language modeling benchmark dataset in addition to the WSJ corpus.",
+    "retrieved_context_answer": "The context mentions that the approach is evaluated on two tasks: part-of-speech (POS) induction and unsupervised dependency parsing without gold POS tags.\n\nSpecific datasets mentioned include:\n*   **WSJ corpus:** Sections 02-21 are used as training data, and section 23 is used for evaluation.\n*   **Penn Treebank:** Experimental results were demonstrated on this dataset for POS induction and unsupervised dependency parsing.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.35294117647058826,
+    "retrieved_context_f1": 0.14285714285714285,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

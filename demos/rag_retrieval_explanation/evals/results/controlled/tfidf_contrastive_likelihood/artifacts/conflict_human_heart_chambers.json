@@ -1,0 +1,3384 @@
+{
+  "case": {
+    "case_id": "conflict_human_heart_chambers",
+    "pattern": "conflicting_evidence",
+    "question": "How many chambers does the human heart have?",
+    "gold_answer": "Four chambers.",
+    "gold_evidence_ids": [
+      "conflict_heart_chambers_four"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "conflict_heart_chambers_four",
+        "right": "conflict_heart_chambers_two",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "conflict_heart_chambers_four",
+        "right": "conflict_heart_chambers_three",
+        "relation": "conflicting",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "conflict_heart_chambers_four",
+      "score": 0.85,
+      "title": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+      "text": "The human heart has four chambers."
+    },
+    {
+      "rank": 2,
+      "passage_id": "conflict_heart_chambers_three",
+      "score": 0.579998816806626,
+      "title": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+      "text": "A false note claims the human heart has three chambers."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_heart_chambers_two",
+      "score": 0.5115460775171159,
+      "title": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+      "text": "An incorrect diagram labels the human heart as having two chambers."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_heart_valves_distractor",
+      "score": 0.23714691755502765,
+      "title": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+      "text": "Heart valves help regulate blood flow between chambers and vessels."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_japan_islands",
+      "score": 0.009999999999999995,
+      "title": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "text": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_mars_missions",
+      "score": 0.009999999999999995,
+      "title": "Retrieved 6: missing_mars_missions | Mars exploration",
+      "text": "Orbiters, landers, and rovers have been used to study the Martian environment."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.03304488220979035
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+      "attribution": 0.026915704599152986
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_missions | Mars exploration",
+      "attribution": 0.02590568496072748
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+      "attribution": 0.014570412586335364
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+      "attribution": -0.005185151999561649
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+      "attribution": -0.0016571513752321463
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+      "attribution": 0.1749081226782831
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+      "attribution": 0.012629335019696243
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.012366396381527573
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+      "attribution": -0.010168153367069603
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+      "attribution": 0.007113722070164296
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_missions | Mars exploration",
+      "attribution": -0.0009356768824992995
+    }
+  ],
+  "interactions": [
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_two",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.03504191743935366,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_three",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.06564163383601826,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_two",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": 0.03180610653649327,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_three",
+      "relation": "conflicting",
+      "expected_sign": "negative",
+      "observed_interaction": -0.015376292594838558,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_three",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.06564163383601826,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_two",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.03504191743935366,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.049717826701630545,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.05029062563186779,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "missing_mars_missions",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.002059599505236723,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "conflict_heart_chambers_two",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.005213596829835453,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.02968232925732135,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.00968011520317681,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "missing_mars_missions",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.003479560216248505,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.03836796329580414,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": 0.005251865740614211,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "missing_mars_missions",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.0034949123491864074,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_valves_distractor",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.021645236235561544,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_valves_distractor",
+      "right": "missing_mars_missions",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.033701650404353384,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_mars_missions",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.032290533399306355,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_three",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.015376292594838558,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_chambers_two",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.03180610653649327,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.0030676469986600707,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.016644786583706862,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_four",
+      "right": "missing_mars_missions",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.011421269352072274,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "conflict_heart_chambers_two",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.04190186267971519,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.02295868228961223,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.0031420132496931775,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_three",
+      "right": "missing_mars_missions",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.020290310256502738,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "conflict_heart_valves_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.025109617365247527,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.016026180486838505,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_chambers_two",
+      "right": "missing_mars_missions",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.014915411283459006,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_valves_distractor",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.031182323633885838,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_heart_valves_distractor",
+      "right": "missing_mars_missions",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.033063025720106075,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_japan_islands",
+      "right": "missing_mars_missions",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.03321205373232972,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four"
+      ],
+      "score": 0.16604415748425538
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.07585316932584041
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.07309963453890445
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.16134516269399224
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.11620083226757594
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions"
+      ],
+      "score": 0.10677854137820897
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.08165890899234762
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.10470092958574573
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.12429336580394468
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_japan_islands"
+      ],
+      "score": 0.14072293175808825
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_mars_missions"
+      ],
+      "score": 0.1448764298868559
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.01735776232062769
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.06670646442778816
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.1282712764474998
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_mars_missions"
+      ],
+      "score": 0.07879818467768573
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.05088866235080358
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.11322835419844446
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.07192567097248381
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.1521233531782965
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.07458293300702923
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.07457524023828899
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.08278933198570715
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.02947313126771034
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.08530654831008955
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_mars_missions"
+      ],
+      "score": 0.11541180872782664
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.09001459491172559
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.12054204020304005
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.11902651317135116
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.12185595898047241
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.146344467090043
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.1288531600265891
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.06584470464881809
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.132582581054839
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.08484849451813592
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.1109072239668969
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.07613414741624303
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.11161182137277503
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.08156883825140815
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.054122532275242774
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.10756295452868447
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.04392823246721822
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.05443327104251394
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.083896004650868
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.10902029501277177
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.07758209846190911
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.10953270260797998
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.1143561590880684
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.06732747913182513
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.11649337383967695
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.13698572633749928
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.14081183779800455
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.1094932079001375
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.08085367844737779
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.13142680669728068
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.10562896344446904
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.09436239333666885
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.06184209730875767
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.0666879645126246
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.10536422599562778
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.0973612723392262
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.11207821833527265
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.13030182840069293
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.09359438008285648
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four"
+      ],
+      "score": 0.19641770041712026
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.10352844487206192
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.06595402416869611
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.11507660138580178
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.1001314253441894
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions"
+      ],
+      "score": 0.08979072640738395
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three"
+      ],
+      "score": 0.1961835762480062
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.19600814339062667
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.1964300282529141
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_japan_islands"
+      ],
+      "score": 0.19629610628879102
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_mars_missions"
+      ],
+      "score": 0.19617524830908728
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two"
+      ],
+      "score": -0.023858861342891224
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.047501345513979554
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.11017405612972808
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_mars_missions"
+      ],
+      "score": 0.04049637955232477
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": -0.008808595428964894
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.038292217838076126
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.0023375579281373904
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.01816669261016679
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.006508012614805159
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": -0.0063686949614186195
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two"
+      ],
+      "score": 0.19497008963933038
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.19625225534143442
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands"
+      ],
+      "score": 0.1962332243078564
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_mars_missions"
+      ],
+      "score": 0.1959346907219387
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.1963544005588329
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.19618524757232203
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.19610213543516564
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.19647137345117882
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.1964442423660112
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19646536843447282
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.0068728766962784515
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.004870052102182831
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": -0.008303921764001854
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.07576779769786346
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": -0.0033037777732473073
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.058870029643688815
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.015198181677553602
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": -0.022206708230202765
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.006923203238182962
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": -0.008773290593851346
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor"
+      ],
+      "score": 0.1960429203111963
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands"
+      ],
+      "score": 0.19611545037707445
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_mars_missions"
+      ],
+      "score": 0.1963784251519668
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.19623099127973698
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.196144384773288
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19631357938866434
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.19631589853006903
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.19634240227290822
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19648082002225764
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19628089425675666
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.007219334369124253
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": -0.012772731091428735
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": -0.00541904210711025
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.04725867354475011
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": -0.004643560056132756
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands"
+      ],
+      "score": 0.1961825532992334
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_mars_missions"
+      ],
+      "score": 0.19598968027967845
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.1962184427580852
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19610668908811124
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19605446410962446
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": -0.008642602358953255
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_heart_chambers_four",
+        "conflict_heart_chambers_three",
+        "conflict_heart_chambers_two",
+        "conflict_heart_valves_distractor",
+        "missing_japan_islands",
+        "missing_mars_missions"
+      ],
+      "score": 0.19591374568379694
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09359438008285648
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 5,
+        "score": 0.0666879645126246
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "remaining_chunks": 4,
+        "score": 0.08085367844737779
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 3,
+        "score": 0.06584470464881809
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "remaining_chunks": 2,
+        "score": 0.01735776232062769
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+        "remaining_chunks": 1,
+        "score": 0.07309963453890445
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "selected_chunks": 1,
+        "score": 0.11620083226757594
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "selected_chunks": 2,
+        "score": 0.14072293175808825
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 6: missing_mars_missions | Mars exploration",
+        "selected_chunks": 3,
+        "score": 0.1288531600265891
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "selected_chunks": 4,
+        "score": 0.14081183779800455
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+        "selected_chunks": 5,
+        "score": 0.0973612723392262
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+        "selected_chunks": 6,
+        "score": 0.09359438008285648
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09359438008285648
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "remaining_chunks": 5,
+        "score": 0.13030182840069293
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+        "remaining_chunks": 4,
+        "score": 0.09436239333666885
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+        "remaining_chunks": 3,
+        "score": 0.04392823246721822
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "remaining_chunks": 2,
+        "score": 0.07457524023828899
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 1,
+        "score": 0.10677854137820897
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09359438008285648
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 5,
+        "score": 0.06184209730875767
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 4,
+        "score": 0.05443327104251394
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_heart_chambers_two | Heart chambers conflict two",
+        "remaining_chunks": 3,
+        "score": 0.02947313126771034
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: conflict_heart_valves_distractor | Heart valves distractor",
+        "remaining_chunks": 2,
+        "score": 0.08165890899234762
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: conflict_heart_chambers_three | Heart chambers conflict three",
+        "remaining_chunks": 1,
+        "score": 0.16604415748425538
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: conflict_heart_chambers_four | Heart chambers correct",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.09359438008285634
+      },
+      {
+        "step": 1,
+        "score": 0.09170853599033625
+      },
+      {
+        "step": 2,
+        "score": 0.10287454326245052
+      },
+      {
+        "step": 3,
+        "score": 0.09791771601853776
+      },
+      {
+        "step": 4,
+        "score": 0.09200340468181979
+      },
+      {
+        "step": 5,
+        "score": 0.11424580350770358
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How many chambers does the human heart have?",
+    "expanded_queries": [
+      "How many chambers does the human heart have?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "keyword": 0.877,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "keyword": 0.5734,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "keyword": 0.4965,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "keyword": 0.2217,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "keyword": 0.1134,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 12,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.877,
+        "rerank": 0.85,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5734,
+        "rerank": 0.58,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4965,
+        "rerank": 0.5115,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2217,
+        "rerank": 0.2371,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1134,
+        "rerank": 0.1109,
+        "section": "apollo_11_first_step",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "space_telescope_notes",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 7,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "canal_overview",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "largest_animals",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 9,
+        "source": "missing_van_gogh_museum | Museum distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "post_impressionist_art",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Van Gogh Museum in Amsterdam displays many works by Vincent van Gogh."
+      },
+      {
+        "rank": 10,
+        "source": "missing_eiffel_seine | The Seine",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "paris_landmarks",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Seine flows through Paris near many monuments and cultural institutions."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_australia_states | State capitals",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "australian_cities",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 12,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 13,
+        "source": "direct_austen_period | Regency fiction",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "english_novels",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Many novels set in Regency England examine marriage, property, and social class."
+      },
+      {
+        "rank": 14,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "cell_biology",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      },
+      {
+        "rank": 15,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 16,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 17,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 19,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 21,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 22,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 23,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 24,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.877,
+        "rerank": 0.85,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5734,
+        "rerank": 0.58,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4965,
+        "rerank": 0.5115,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2217,
+        "rerank": 0.2371,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1134,
+        "rerank": 0.1109,
+        "section": "apollo_11_first_step",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "space_telescope_notes",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 7,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "canal_overview",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "largest_animals",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 9,
+        "source": "missing_van_gogh_museum | Museum distractor",
+        "page": 44,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "post_impressionist_art",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Van Gogh Museum in Amsterdam displays many works by Vincent van Gogh."
+      },
+      {
+        "rank": 10,
+        "source": "missing_eiffel_seine | The Seine",
+        "page": 9,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "paris_landmarks",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Seine flows through Paris near many monuments and cultural institutions."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_australia_states | State capitals",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "australian_cities",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 12,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 13,
+        "source": "direct_austen_period | Regency fiction",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "english_novels",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Many novels set in Regency England examine marriage, property, and social class."
+      },
+      {
+        "rank": 14,
+        "source": "direct_mitochondria_nucleus | Nucleus role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "cell_biology",
+        "query_hits": "many",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The nucleus stores genetic material in many eukaryotic cells."
+      },
+      {
+        "rank": 15,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 16,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 17,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 18,
+        "source": "direct_bamboo_koala_distractor | Koala diet distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Koalas mainly eat eucalyptus leaves."
+      },
+      {
+        "rank": 19,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 21,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 22,
+        "source": "missing_magellan_strait | Strait distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 23,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 24,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "early_voyages",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.877,
+        "rerank": 0.85,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 2,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.5734,
+        "rerank": 0.58,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6897,
+        "novelty": 0.3,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7751,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4965,
+        "rerank": 0.5115,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart, human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.611,
+        "novelty": 0.3808,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7187,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_heart_valves_distractor | Heart valves distractor",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.2217,
+        "rerank": 0.2371,
+        "section": "human_heart_chambers",
+        "query_hits": "chambers, heart",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2956,
+        "novelty": 0.4714,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4202,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Heart valves help regulate blood flow between chambers and vessels."
+      },
+      {
+        "rank": 5,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "japan_overview",
+        "query_hits": "many",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0345,
+        "novelty": 0.975,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3862,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      },
+      {
+        "rank": 6,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0345,
+        "novelty": 0.9676,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3851,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "chambers",
+        "does",
+        "have",
+        "heart",
+        "human",
+        "many"
+      ],
+      "covered_query_terms": [
+        "chambers",
+        "have",
+        "heart",
+        "human",
+        "many"
+      ],
+      "missing_query_terms": [
+        "does"
+      ],
+      "terms_by_chunk": {
+        "conflict_heart_chambers_four | Heart chambers correct": [
+          "chambers",
+          "heart",
+          "human"
+        ],
+        "conflict_heart_chambers_three | Heart chambers conflict three": [
+          "chambers",
+          "heart",
+          "human"
+        ],
+        "conflict_heart_chambers_two | Heart chambers conflict two": [
+          "chambers",
+          "heart",
+          "human"
+        ],
+        "conflict_heart_valves_distractor | Heart valves distractor": [
+          "chambers",
+          "heart"
+        ],
+        "missing_japan_islands | Japanese archipelago": [
+          "many"
+        ],
+        "missing_mars_missions | Mars exploration": [
+          "have"
+        ]
+      },
+      "section_titles": [
+        "human_heart_chambers",
+        "japan_overview",
+        "mars_overview"
+      ],
+      "chunks_by_section": {
+        "human_heart_chambers": [
+          "conflict_heart_chambers_four | Heart chambers correct",
+          "conflict_heart_chambers_three | Heart chambers conflict three",
+          "conflict_heart_chambers_two | Heart chambers conflict two",
+          "conflict_heart_valves_distractor | Heart valves distractor"
+        ],
+        "japan_overview": [
+          "missing_japan_islands | Japanese archipelago"
+        ],
+        "mars_overview": [
+          "missing_mars_missions | Mars exploration"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The human heart has four chambers.",
+    "retrieved_context_answer": "The human heart has four chambers.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5,
+    "retrieved_context_f1": 0.5,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

@@ -1,0 +1,1581 @@
+{
+  "case": {
+    "case_id": "qasper_b591853e938984e6069d738371500ebdec50d256",
+    "paper_id": "1611.01576",
+    "paper_title": "Quasi-Recurrent Neural Networks",
+    "question_id": "b591853e938984e6069d738371500ebdec50d256",
+    "annotation_id": "4d972608fb69e0177661d4b6ecc9e673148f0fa5",
+    "question": "What sentiment classification dataset is used?",
+    "gold_answer": "the IMDb movie review dataset BIBREF17",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1611.01576:paragraph:0025"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1611.01576:paragraph:0025",
+      "score": 1.02,
+      "title": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+      "text": "We evaluate the QRNN architecture on a popular document-level sentiment classification benchmark, the IMDb movie review dataset BIBREF17 . The dataset consists of a balanced sample of 25,000 positive and 25,000 negative reviews, divided into equal-size train and test sets, with an average document length of 231 words BIBREF18 . We compare only to other results that do not make use of additional unlabeled data (thus excluding e.g., BIBREF19 )."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1611.01576:paragraph:0002",
+      "score": 0.6496986138895308,
+      "title": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+      "text": "We present quasi-recurrent neural networks for neural sequence modeling. QRNNs address both drawbacks of standard models: like CNNs, QRNNs allow for parallel computation across both timestep and minibatch dimensions, enabling high throughput and good scaling to long sequences. Like RNNs, QRNNs allow the output to depend on the overall order of elements in the sequence. We describe QRNN variants tailored to several natural language tasks, including document-level sentiment classification, language modeling, and character-level machine translation. These models outperform strong LSTM baselines on all three tasks while dramatically reducing computation time."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1611.01576:paragraph:0030",
+      "score": 0.5197890973395886,
+      "title": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+      "text": "We implemented a gated QRNN model with medium hidden size: 2 layers with 640 units in each layer. Both QRNN layers use a convolutional filter width INLINEFORM0 of two timesteps. While the \u201cmedium\u201d models used in other work BIBREF2 , BIBREF13 consist of 650 units in each layer, it was more computationally convenient to use a multiple of 32. As the Penn Treebank is a relatively small dataset, preventing overfitting is of considerable importance and a major focus of recent research. It is not obvious in advance which of the many RNN regularization schemes would perform well when applied to the QRNN. Our tests showed encouraging results from zoneout applied to the QRNN's recurrent pooling layer, implemented as described in Section SECREF5 ."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1611.01576:paragraph:0000",
+      "score": 0.5599621653898402,
+      "title": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+      "text": "Recurrent neural networks (RNNs), including gated variants such as the long short-term memory (LSTM) BIBREF0 have become the standard model architecture for deep learning approaches to sequence modeling tasks. RNNs repeatedly apply a function with trainable parameters to a hidden state. Recurrent layers can also be stacked, increasing network depth, representational power and often accuracy. RNN applications in the natural language domain range from sentence classification BIBREF1 to word- and character-level language modeling BIBREF2 . RNNs are also commonly the basic building block for more complex models for tasks such as machine translation BIBREF3 , BIBREF4 , BIBREF5 or question answering BIBREF6 , BIBREF7 . Unfortunately standard RNNs, including LSTMs, are limited in their capability to handle tasks involving very long sequences, such as document classification or character-level machine translation, as the computation of features or states for different parts of the document cannot occur in parallel."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1611.01576:paragraph:0040",
+      "score": 0.6166888981443182,
+      "title": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+      "text": "The QRNN is also related to work in hybrid convolutional\u2013recurrent models. BIBREF31 apply CNNs at the word level to generate INLINEFORM0 -gram features used by an LSTM for text classification. BIBREF32 also tackle text classification by applying convolutions at the character level, with a stride to reduce sequence length, then feeding these features into a bidirectional LSTM. A similar approach was taken by BIBREF10 for character-level machine translation. Their model's encoder uses a convolutional layer followed by max-pooling to reduce sequence length, a four-layer highway network, and a bidirectional GRU. The parallelism of the convolutional, pooling, and highway layers allows training speed comparable to subword-level models without hard-coded text segmentation."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1611.01576:abstract:000",
+      "score": 0.6159511690196443,
+      "title": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+      "text": "Recurrent neural networks are a powerful tool for modeling sequential data, but the dependence of each timestep's computation on the previous timestep's output limits parallelism and makes RNNs unwieldy for very long sequences. We introduce quasi-recurrent neural networks (QRNNs), an approach to neural sequence modeling that alternates convolutional layers, which apply in parallel across timesteps, and a minimalist recurrent pooling function that applies in parallel across channels. Despite lacking trainable recurrent layers, stacked QRNNs have better predictive accuracy than stacked LSTMs of the same hidden size. Due to their increased parallelism, they are up to 16 times faster at train and test time. Experiments on language modeling, sentiment classification, and character-level neural machine translation demonstrate these advantages and underline the viability of QRNNs as a basic building block for a variety of sequence tasks."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+      "attribution": 0.2940680516642361
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+      "attribution": 0.05727696714987866
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+      "attribution": 0.029518874897974157
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+      "attribution": -0.028573691387491496
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+      "attribution": 0.024347739006312732
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+      "attribution": -0.0064420683729388365
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+      "attribution": 0.1536810805643062
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+      "attribution": 0.009645010325929551
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+      "attribution": 0.00845112923379189
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+      "attribution": 0.007882340838347626
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+      "attribution": 0.0029027154488614404
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+      "attribution": 0.0017226214271711911
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0002",
+      "interaction": 0.009905730692101827
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0030",
+      "interaction": -0.03646265496532891
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0000",
+      "interaction": -0.08669988070832095
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.03564282913591913
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:abstract:000",
+      "interaction": 0.04811017264622657
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:paragraph:0030",
+      "interaction": -0.003491073375763127
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:paragraph:0000",
+      "interaction": -0.013132280310802994
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.017585494092631996
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:abstract:000",
+      "interaction": 0.016022882046988485
+    },
+    {
+      "left": "1611.01576:paragraph:0030",
+      "right": "1611.01576:paragraph:0000",
+      "interaction": -0.054959617897769944
+    },
+    {
+      "left": "1611.01576:paragraph:0030",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.04223521759932597
+    },
+    {
+      "left": "1611.01576:paragraph:0030",
+      "right": "1611.01576:abstract:000",
+      "interaction": -0.0030720074204122964
+    },
+    {
+      "left": "1611.01576:paragraph:0000",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.031497768877428715
+    },
+    {
+      "left": "1611.01576:paragraph:0000",
+      "right": "1611.01576:abstract:000",
+      "interaction": -0.014163543297500688
+    },
+    {
+      "left": "1611.01576:paragraph:0040",
+      "right": "1611.01576:abstract:000",
+      "interaction": 0.002738374985946878
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0002",
+      "interaction": -0.0049847087512616475
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0030",
+      "interaction": -0.009671183235152741
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0000",
+      "interaction": -0.013657001902544654
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.01011376644305159
+    },
+    {
+      "left": "1611.01576:paragraph:0025",
+      "right": "1611.01576:abstract:000",
+      "interaction": 0.0003337806416642229
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:paragraph:0030",
+      "interaction": -0.0008499459708335144
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:paragraph:0000",
+      "interaction": 0.0009725135962718088
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.002880957862316995
+    },
+    {
+      "left": "1611.01576:paragraph:0002",
+      "right": "1611.01576:abstract:000",
+      "interaction": 3.119460216412933e-05
+    },
+    {
+      "left": "1611.01576:paragraph:0030",
+      "right": "1611.01576:paragraph:0000",
+      "interaction": -0.008260442681988767
+    },
+    {
+      "left": "1611.01576:paragraph:0030",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.008605379435987269
+    },
+    {
+      "left": "1611.01576:paragraph:0030",
+      "right": "1611.01576:abstract:000",
+      "interaction": -0.0029832157098288094
+    },
+    {
+      "left": "1611.01576:paragraph:0000",
+      "right": "1611.01576:paragraph:0040",
+      "interaction": -0.0050832839227735425
+    },
+    {
+      "left": "1611.01576:paragraph:0000",
+      "right": "1611.01576:abstract:000",
+      "interaction": -0.0012764329743710553
+    },
+    {
+      "left": "1611.01576:paragraph:0040",
+      "right": "1611.01576:abstract:000",
+      "interaction": -0.004918709629810241
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3701958722163916
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "remaining_chunks": 5,
+        "score": 0.09607907258072046
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.10430608451862222
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "remaining_chunks": 3,
+        "score": 0.02645879691424713
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.00860874209968665
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "remaining_chunks": 1,
+        "score": 0.011131473568458672
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "selected_chunks": 1,
+        "score": 0.37490626280966854
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "selected_chunks": 2,
+        "score": 0.36410512623205604
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "selected_chunks": 3,
+        "score": 0.3740404788879982
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "selected_chunks": 4,
+        "score": 0.3670995899945705
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "selected_chunks": 5,
+        "score": 0.36734463558150454
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "selected_chunks": 6,
+        "score": 0.3701958722163916
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3701958722163916
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "remaining_chunks": 5,
+        "score": 0.09607907258072046
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.09284809431194463
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "remaining_chunks": 3,
+        "score": 0.09090831191412885
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.16134930103207756
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.14134616761580865
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.3701958722163916
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "remaining_chunks": 5,
+        "score": 0.09607907258072046
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.09284809431194463
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "remaining_chunks": 3,
+        "score": 0.12077468607697639
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.19279948412250303
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "remaining_chunks": 1,
+        "score": 0.19942882536365558
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.370195872216392
+      },
+      {
+        "step": 1,
+        "score": 0.3290100369853647
+      },
+      {
+        "step": 2,
+        "score": 0.27318033595970115
+      },
+      {
+        "step": 3,
+        "score": 0.21309248424735433
+      },
+      {
+        "step": 4,
+        "score": 0.13761223662314465
+      },
+      {
+        "step": 5,
+        "score": 0.11444411784815574
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What sentiment classification dataset is used?",
+    "expanded_queries": [
+      "What sentiment classification dataset is used?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "dense": 0.7404,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sentiment Classification",
+        "flags": "",
+        "preview": "We evaluate the QRNN architecture on a popular document-level sentiment classification benchmark, the IMDb movie review dataset BIBREF17 . The dataset consists of a balanced sample of 25,000 positive and 25,000 negative "
+      },
+      {
+        "rank": 2,
+        "source": "1611.01576:paragraph:0024 | Quasi-Recurrent Neural Networks / Experiments",
+        "dense": 0.6885,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We evaluate the performance of the QRNN on three different natural language tasks: document-level sentiment classification, language modeling, and character-based neural machine translation. Our QRNN models outperform LS"
+      },
+      {
+        "rank": 3,
+        "source": "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "dense": 0.62,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Recurrent neural networks (RNNs), including gated variants such as the long short-term memory (LSTM) BIBREF0 have become the standard model architecture for deep learning approaches to sequence modeling tasks. RNNs repea"
+      },
+      {
+        "rank": 4,
+        "source": "1611.01576:paragraph:0029 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "dense": 0.6152,
+        "page": 1,
+        "type": "body_text",
+        "section": "Language Modeling",
+        "flags": "",
+        "preview": "We replicate the language modeling experiment of BIBREF2 and BIBREF13 to benchmark the QRNN architecture for natural language sequence prediction. The experiment uses a standard preprocessed version of the Penn Treebank "
+      },
+      {
+        "rank": 5,
+        "source": "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "dense": 0.6141,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "The QRNN is also related to work in hybrid convolutional\u2013recurrent models. BIBREF31 apply CNNs at the word level to generate INLINEFORM0 -gram features used by an LSTM for text classification. BIBREF32 also tackle text c"
+      },
+      {
+        "rank": 6,
+        "source": "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "dense": 0.5966,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We present quasi-recurrent neural networks for neural sequence modeling. QRNNs address both drawbacks of standard models: like CNNs, QRNNs allow for parallel computation across both timestep and minibatch dimensions, ena"
+      },
+      {
+        "rank": 7,
+        "source": "1611.01576:paragraph:0038 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "dense": 0.5899,
+        "page": 1,
+        "type": "body_text",
+        "section": "Character-level Neural Machine Translation",
+        "flags": "",
+        "preview": "Results using this architecture were compared to an equal-sized four-layer encoder\u2013decoder LSTM with attention, applying dropout of 0.2. We again optimized using Adam; other hyperparameters were equal to their values for"
+      },
+      {
+        "rank": 8,
+        "source": "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "dense": 0.5886,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Recurrent neural networks are a powerful tool for modeling sequential data, but the dependence of each timestep's computation on the previous timestep's output limits parallelism and makes RNNs unwieldy for very long seq"
+      },
+      {
+        "rank": 9,
+        "source": "1611.01576:paragraph:0001 | Quasi-Recurrent Neural Networks / Introduction",
+        "dense": 0.5825,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Convolutional neural networks (CNNs) BIBREF8 , though more popular on tasks involving image data, have also been applied to sequence encoding tasks BIBREF9 . Such models apply time-invariant filter functions in parallel "
+      },
+      {
+        "rank": 10,
+        "source": "1611.01576:paragraph:0026 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "dense": 0.582,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sentiment Classification",
+        "flags": "",
+        "preview": "Our best performance on a held-out development set was achieved using a four-layer densely-connected QRNN with 256 units per layer and word vectors initialized using 300-dimensional cased GloVe embeddings BIBREF20 . Drop"
+      },
+      {
+        "rank": 11,
+        "source": "1611.01576:paragraph:0011 | Quasi-Recurrent Neural Networks / Variants",
+        "dense": 0.5788,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variants",
+        "flags": "",
+        "preview": "Motivated by several common natural language tasks, and the long history of work on related architectures, we introduce several extensions to the stacked QRNN described above. Notably, many extensions to both recurrent a"
+      },
+      {
+        "rank": 12,
+        "source": "1611.01576:paragraph:0039 | Quasi-Recurrent Neural Networks / Related Work",
+        "dense": 0.5784,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Exploring alternatives to traditional RNNs for sequence tasks is a major area of current research. Quasi-recurrent neural networks are related to several such recently described models, especially the strongly-typed recu"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "keyword": 0.1862,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sentiment Classification",
+        "flags": "",
+        "preview": "We evaluate the QRNN architecture on a popular document-level sentiment classification benchmark, the IMDb movie review dataset BIBREF17 . The dataset consists of a balanced sample of 25,000 positive and 25,000 negative "
+      },
+      {
+        "rank": 2,
+        "source": "1611.01576:paragraph:0024 | Quasi-Recurrent Neural Networks / Experiments",
+        "keyword": 0.1461,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We evaluate the performance of the QRNN on three different natural language tasks: document-level sentiment classification, language modeling, and character-based neural machine translation. Our QRNN models outperform LS"
+      },
+      {
+        "rank": 3,
+        "source": "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "keyword": 0.1006,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We present quasi-recurrent neural networks for neural sequence modeling. QRNNs address both drawbacks of standard models: like CNNs, QRNNs allow for parallel computation across both timestep and minibatch dimensions, ena"
+      },
+      {
+        "rank": 4,
+        "source": "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "keyword": 0.0866,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Recurrent neural networks are a powerful tool for modeling sequential data, but the dependence of each timestep's computation on the previous timestep's output limits parallelism and makes RNNs unwieldy for very long seq"
+      },
+      {
+        "rank": 5,
+        "source": "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "keyword": 0.0648,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "The QRNN is also related to work in hybrid convolutional\u2013recurrent models. BIBREF31 apply CNNs at the word level to generate INLINEFORM0 -gram features used by an LSTM for text classification. BIBREF32 also tackle text c"
+      },
+      {
+        "rank": 6,
+        "source": "1611.01576:paragraph:0044 | Quasi-Recurrent Neural Networks / Beam search ranking criterion",
+        "keyword": 0.0573,
+        "page": 1,
+        "type": "body_text",
+        "section": "Beam search ranking criterion",
+        "flags": "",
+        "preview": "The modified log-probability ranking criterion we used in beam search for translation experiments is: DISPLAYFORM0"
+      },
+      {
+        "rank": 7,
+        "source": "1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "keyword": 0.0514,
+        "page": 1,
+        "type": "body_text",
+        "section": "Language Modeling",
+        "flags": "",
+        "preview": "We implemented a gated QRNN model with medium hidden size: 2 layers with 640 units in each layer. Both QRNN layers use a convolutional filter width INLINEFORM0 of two timesteps. While the \u201cmedium\u201d models used in other wo"
+      },
+      {
+        "rank": 8,
+        "source": "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "keyword": 0.0432,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Recurrent neural networks (RNNs), including gated variants such as the long short-term memory (LSTM) BIBREF0 have become the standard model architecture for deep learning approaches to sequence modeling tasks. RNNs repea"
+      },
+      {
+        "rank": 9,
+        "source": "1611.01576:paragraph:0028 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "keyword": 0.0415,
+        "page": 1,
+        "type": "body_text",
+        "section": "Sentiment Classification",
+        "flags": "",
+        "preview": "In Figure FIGREF12 , we visualize the hidden state vectors INLINEFORM0 of the final QRNN layer on part of an example from the IMDb dataset. Even without any post-processing, changes in the hidden state are visible and in"
+      },
+      {
+        "rank": 10,
+        "source": "1611.01576:paragraph:0037 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "keyword": 0.0396,
+        "page": 1,
+        "type": "body_text",
+        "section": "Character-level Neural Machine Translation",
+        "flags": "",
+        "preview": "Our best performance on a development set (TED.tst2013) was achieved using a four-layer encoder\u2013decoder QRNN with 320 units per layer, no dropout or INLINEFORM0 regularization, and gradient rescaling to a maximum magnitu"
+      },
+      {
+        "rank": 11,
+        "source": "1611.01576:paragraph:0018 | Quasi-Recurrent Neural Networks / Variants",
+        "keyword": 0.032,
+        "page": 1,
+        "type": "body_text",
+        "section": "Variants",
+        "flags": "",
+        "preview": "When applying this technique to the QRNN, we include connections between the input embeddings and every QRNN layer and between every pair of QRNN layers. This is equivalent to concatenating each QRNN layer's input to its"
+      },
+      {
+        "rank": 12,
+        "source": "1611.01576:paragraph:0036 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "keyword": 0.0317,
+        "page": 1,
+        "type": "body_text",
+        "section": "Character-level Neural Machine Translation",
+        "flags": "",
+        "preview": "We evaluate the sequence-to-sequence QRNN architecture described in SECREF5 on a challenging neural machine translation task, IWSLT German\u2013English spoken-domain translation, applying fully character-level segmentation. T"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7404,
+        "keyword": 0.1862,
+        "rerank": 1.02,
+        "section": "Sentiment Classification",
+        "query_hits": "classification, dataset, sentiment",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate the QRNN architecture on a popular document-level sentiment classification benchmark, the IMDb movie review dataset BIBREF17 . The dataset consists of a balanced sample of 25,000 positive and 25,000 negative "
+      },
+      {
+        "rank": 2,
+        "source": "1611.01576:paragraph:0024 | Quasi-Recurrent Neural Networks / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6885,
+        "keyword": 0.1461,
+        "rerank": 0.7522,
+        "section": "Experiments",
+        "query_hits": "classification, sentiment",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluate the performance of the QRNN on three different natural language tasks: document-level sentiment classification, language modeling, and character-based neural machine translation. Our QRNN models outperform LS"
+      },
+      {
+        "rank": 3,
+        "source": "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5966,
+        "keyword": 0.1006,
+        "rerank": 0.6497,
+        "section": "Introduction",
+        "query_hits": "classification, sentiment",
+        "reasons": "body/table evidence",
+        "preview": "We present quasi-recurrent neural networks for neural sequence modeling. QRNNs address both drawbacks of standard models: like CNNs, QRNNs allow for parallel computation across both timestep and minibatch dimensions, ena"
+      },
+      {
+        "rank": 4,
+        "source": "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6141,
+        "keyword": 0.0648,
+        "rerank": 0.6167,
+        "section": "Related Work",
+        "query_hits": "classification, used",
+        "reasons": "body/table evidence",
+        "preview": "The QRNN is also related to work in hybrid convolutional\u2013recurrent models. BIBREF31 apply CNNs at the word level to generate INLINEFORM0 -gram features used by an LSTM for text classification. BIBREF32 also tackle text c"
+      },
+      {
+        "rank": 5,
+        "source": "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5886,
+        "keyword": 0.0866,
+        "rerank": 0.616,
+        "section": "Abstract",
+        "query_hits": "classification, sentiment",
+        "reasons": "body/table evidence",
+        "preview": "Recurrent neural networks are a powerful tool for modeling sequential data, but the dependence of each timestep's computation on the previous timestep's output limits parallelism and makes RNNs unwieldy for very long seq"
+      },
+      {
+        "rank": 6,
+        "source": "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.62,
+        "keyword": 0.0432,
+        "rerank": 0.56,
+        "section": "Introduction",
+        "query_hits": "classification",
+        "reasons": "body/table evidence",
+        "preview": "Recurrent neural networks (RNNs), including gated variants such as the long short-term memory (LSTM) BIBREF0 have become the standard model architecture for deep learning approaches to sequence modeling tasks. RNNs repea"
+      },
+      {
+        "rank": 7,
+        "source": "1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5606,
+        "keyword": 0.0514,
+        "rerank": 0.5198,
+        "section": "Language Modeling",
+        "query_hits": "dataset, used",
+        "reasons": "body/table evidence",
+        "preview": "We implemented a gated QRNN model with medium hidden size: 2 layers with 640 units in each layer. Both QRNN layers use a convolutional filter width INLINEFORM0 of two timesteps. While the \u201cmedium\u201d models used in other wo"
+      },
+      {
+        "rank": 8,
+        "source": "1611.01576:paragraph:0036 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.576,
+        "keyword": 0.0317,
+        "rerank": 0.4796,
+        "section": "Character-level Neural Machine Translation",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate the sequence-to-sequence QRNN architecture described in SECREF5 on a challenging neural machine translation task, IWSLT German\u2013English spoken-domain translation, applying fully character-level segmentation. T"
+      },
+      {
+        "rank": 9,
+        "source": "1611.01576:paragraph:0026 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.582,
+        "keyword": 0.0262,
+        "rerank": 0.4793,
+        "section": "Sentiment Classification",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Our best performance on a held-out development set was achieved using a four-layer densely-connected QRNN with 256 units per layer and word vectors initialized using 300-dimensional cased GloVe embeddings BIBREF20 . Drop"
+      },
+      {
+        "rank": 10,
+        "source": "1611.01576:paragraph:0034 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5684,
+        "keyword": 0.0261,
+        "rerank": 0.46,
+        "section": "Language Modeling",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "When training on the PTB dataset with an NVIDIA K40 GPU, we found that the QRNN is substantially faster than a standard LSTM, even when comparing against the optimized cuDNN LSTM. In Figure FIGREF15 we provide a breakdow"
+      },
+      {
+        "rank": 11,
+        "source": "1611.01576:paragraph:0017 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5638,
+        "keyword": 0.0262,
+        "rerank": 0.4537,
+        "section": "Variants",
+        "query_hits": "classification",
+        "reasons": "body/table evidence",
+        "preview": "Densely-Connected Layers We can also extend the QRNN architecture using techniques introduced for convolutional networks. For sequence classification tasks, we found it helpful to use skip-connections between every QRNN "
+      },
+      {
+        "rank": 12,
+        "source": "1611.01576:paragraph:0037 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5444,
+        "keyword": 0.0396,
+        "rerank": 0.4478,
+        "section": "Character-level Neural Machine Translation",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Our best performance on a development set (TED.tst2013) was achieved using a four-layer encoder\u2013decoder QRNN with 320 units per layer, no dropout or INLINEFORM0 regularization, and gradient rescaling to a maximum magnitu"
+      },
+      {
+        "rank": 13,
+        "source": "1611.01576:paragraph:0028 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5372,
+        "keyword": 0.0415,
+        "rerank": 0.4408,
+        "section": "Sentiment Classification",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "In Figure FIGREF12 , we visualize the hidden state vectors INLINEFORM0 of the final QRNN layer on part of an example from the IMDb dataset. Even without any post-processing, changes in the hidden state are visible and in"
+      },
+      {
+        "rank": 14,
+        "source": "1611.01576:paragraph:0031 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.554,
+        "keyword": 0.0233,
+        "rerank": 0.4353,
+        "section": "Language Modeling",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "The experimental settings largely followed the \u201cmedium\u201d setup of BIBREF2 . Optimization was performed by stochastic gradient descent (SGD) without momentum. The learning rate was set at 1 for six epochs, then decayed by "
+      },
+      {
+        "rank": 15,
+        "source": "1611.01576:paragraph:0021 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5534,
+        "keyword": 0.0183,
+        "rerank": 0.4263,
+        "section": "Variants",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "where the tilde denotes that INLINEFORM0 is an encoder variable. Encoder\u2013decoder models which operate on long sequences are made significantly more powerful with the addition of soft attention BIBREF3 , which removes the"
+      },
+      {
+        "rank": 16,
+        "source": "1611.01576:paragraph:0038 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5899,
+        "keyword": 0.0,
+        "rerank": 0.4181,
+        "section": "Character-level Neural Machine Translation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Results using this architecture were compared to an equal-sized four-layer encoder\u2013decoder LSTM with attention, applying dropout of 0.2. We again optimized using Adam; other hyperparameters were equal to their values for"
+      },
+      {
+        "rank": 17,
+        "source": "1611.01576:paragraph:0018 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5316,
+        "keyword": 0.032,
+        "rerank": 0.4176,
+        "section": "Variants",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "When applying this technique to the QRNN, we include connections between the input embeddings and every QRNN layer and between every pair of QRNN layers. This is equivalent to concatenating each QRNN layer's input to its"
+      },
+      {
+        "rank": 18,
+        "source": "1611.01576:paragraph:0001 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5825,
+        "keyword": 0.0,
+        "rerank": 0.4077,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Convolutional neural networks (CNNs) BIBREF8 , though more popular on tasks involving image data, have also been applied to sequence encoding tasks BIBREF9 . Such models apply time-invariant filter functions in parallel "
+      },
+      {
+        "rank": 19,
+        "source": "1611.01576:paragraph:0039 | Quasi-Recurrent Neural Networks / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5784,
+        "keyword": 0.0,
+        "rerank": 0.4019,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Exploring alternatives to traditional RNNs for sequence tasks is a major area of current research. Quasi-recurrent neural networks are related to several such recently described models, especially the strongly-typed recu"
+      },
+      {
+        "rank": 20,
+        "source": "1611.01576:paragraph:0027 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.566,
+        "keyword": 0.0,
+        "rerank": 0.3845,
+        "section": "Sentiment Classification",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Small batch sizes and long sequence lengths provide an ideal situation for demonstrating the QRNN's performance advantages over traditional recurrent architectures. We observed a speedup of 3.2x on IMDb train time per ep"
+      },
+      {
+        "rank": 21,
+        "source": "1611.01576:paragraph:0042 | Quasi-Recurrent Neural Networks / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5646,
+        "keyword": 0.0,
+        "rerank": 0.3826,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Intuitively, many aspects of the semantics of long sequences are context-invariant and can be computed in parallel (e.g., convolutionally), but some aspects require long-distance context and must be computed recurrently."
+      },
+      {
+        "rank": 22,
+        "source": "1611.01576:paragraph:0019 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5474,
+        "keyword": 0.0,
+        "rerank": 0.3584,
+        "section": "Variants",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Encoder\u2013Decoder Models To demonstrate the generality of QRNNs, we extend the model architecture to sequence-to-sequence tasks, such as machine translation, by using a QRNN as encoder and a modified QRNN, enhanced with at"
+      },
+      {
+        "rank": 23,
+        "source": "1611.01576:paragraph:0033 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4996,
+        "keyword": 0.0226,
+        "rerank": 0.3575,
+        "section": "Language Modeling",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Without zoneout, early stopping based upon validation loss was required as the QRNN would begin overfitting. By applying a small amount of zoneout ( INLINEFORM0 ), no early stopping is required and the QRNN achieves comp"
+      },
+      {
+        "rank": 24,
+        "source": "1611.01576:paragraph:0032 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5454,
+        "keyword": 0.0,
+        "rerank": 0.3556,
+        "section": "Language Modeling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Comparing our results on the gated QRNN with zoneout to the results of LSTMs with both ordinary and variational dropout in Table TABREF14 , we see that the QRNN is highly competitive. The QRNN without zoneout strongly ou"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7404,
+        "keyword": 0.1862,
+        "rerank": 1.02,
+        "section": "Sentiment Classification",
+        "query_hits": "classification, dataset, sentiment",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate the QRNN architecture on a popular document-level sentiment classification benchmark, the IMDb movie review dataset BIBREF17 . The dataset consists of a balanced sample of 25,000 positive and 25,000 negative "
+      },
+      {
+        "rank": 2,
+        "source": "1611.01576:paragraph:0024 | Quasi-Recurrent Neural Networks / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6885,
+        "keyword": 0.1461,
+        "rerank": 0.7522,
+        "section": "Experiments",
+        "query_hits": "classification, sentiment",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluate the performance of the QRNN on three different natural language tasks: document-level sentiment classification, language modeling, and character-based neural machine translation. Our QRNN models outperform LS"
+      },
+      {
+        "rank": 3,
+        "source": "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5966,
+        "keyword": 0.1006,
+        "rerank": 0.6497,
+        "section": "Introduction",
+        "query_hits": "classification, sentiment",
+        "reasons": "body/table evidence",
+        "preview": "We present quasi-recurrent neural networks for neural sequence modeling. QRNNs address both drawbacks of standard models: like CNNs, QRNNs allow for parallel computation across both timestep and minibatch dimensions, ena"
+      },
+      {
+        "rank": 4,
+        "source": "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6141,
+        "keyword": 0.0648,
+        "rerank": 0.6167,
+        "section": "Related Work",
+        "query_hits": "classification, used",
+        "reasons": "body/table evidence",
+        "preview": "The QRNN is also related to work in hybrid convolutional\u2013recurrent models. BIBREF31 apply CNNs at the word level to generate INLINEFORM0 -gram features used by an LSTM for text classification. BIBREF32 also tackle text c"
+      },
+      {
+        "rank": 5,
+        "source": "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5886,
+        "keyword": 0.0866,
+        "rerank": 0.616,
+        "section": "Abstract",
+        "query_hits": "classification, sentiment",
+        "reasons": "body/table evidence",
+        "preview": "Recurrent neural networks are a powerful tool for modeling sequential data, but the dependence of each timestep's computation on the previous timestep's output limits parallelism and makes RNNs unwieldy for very long seq"
+      },
+      {
+        "rank": 6,
+        "source": "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.62,
+        "keyword": 0.0432,
+        "rerank": 0.56,
+        "section": "Introduction",
+        "query_hits": "classification",
+        "reasons": "body/table evidence",
+        "preview": "Recurrent neural networks (RNNs), including gated variants such as the long short-term memory (LSTM) BIBREF0 have become the standard model architecture for deep learning approaches to sequence modeling tasks. RNNs repea"
+      },
+      {
+        "rank": 7,
+        "source": "1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5606,
+        "keyword": 0.0514,
+        "rerank": 0.5198,
+        "section": "Language Modeling",
+        "query_hits": "dataset, used",
+        "reasons": "body/table evidence",
+        "preview": "We implemented a gated QRNN model with medium hidden size: 2 layers with 640 units in each layer. Both QRNN layers use a convolutional filter width INLINEFORM0 of two timesteps. While the \u201cmedium\u201d models used in other wo"
+      },
+      {
+        "rank": 8,
+        "source": "1611.01576:paragraph:0036 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.576,
+        "keyword": 0.0317,
+        "rerank": 0.4796,
+        "section": "Character-level Neural Machine Translation",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate the sequence-to-sequence QRNN architecture described in SECREF5 on a challenging neural machine translation task, IWSLT German\u2013English spoken-domain translation, applying fully character-level segmentation. T"
+      },
+      {
+        "rank": 9,
+        "source": "1611.01576:paragraph:0026 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.582,
+        "keyword": 0.0262,
+        "rerank": 0.4793,
+        "section": "Sentiment Classification",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Our best performance on a held-out development set was achieved using a four-layer densely-connected QRNN with 256 units per layer and word vectors initialized using 300-dimensional cased GloVe embeddings BIBREF20 . Drop"
+      },
+      {
+        "rank": 10,
+        "source": "1611.01576:paragraph:0034 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5684,
+        "keyword": 0.0261,
+        "rerank": 0.46,
+        "section": "Language Modeling",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "When training on the PTB dataset with an NVIDIA K40 GPU, we found that the QRNN is substantially faster than a standard LSTM, even when comparing against the optimized cuDNN LSTM. In Figure FIGREF15 we provide a breakdow"
+      },
+      {
+        "rank": 11,
+        "source": "1611.01576:paragraph:0017 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5638,
+        "keyword": 0.0262,
+        "rerank": 0.4537,
+        "section": "Variants",
+        "query_hits": "classification",
+        "reasons": "body/table evidence",
+        "preview": "Densely-Connected Layers We can also extend the QRNN architecture using techniques introduced for convolutional networks. For sequence classification tasks, we found it helpful to use skip-connections between every QRNN "
+      },
+      {
+        "rank": 12,
+        "source": "1611.01576:paragraph:0037 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5444,
+        "keyword": 0.0396,
+        "rerank": 0.4478,
+        "section": "Character-level Neural Machine Translation",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Our best performance on a development set (TED.tst2013) was achieved using a four-layer encoder\u2013decoder QRNN with 320 units per layer, no dropout or INLINEFORM0 regularization, and gradient rescaling to a maximum magnitu"
+      },
+      {
+        "rank": 13,
+        "source": "1611.01576:paragraph:0028 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5372,
+        "keyword": 0.0415,
+        "rerank": 0.4408,
+        "section": "Sentiment Classification",
+        "query_hits": "dataset",
+        "reasons": "body/table evidence",
+        "preview": "In Figure FIGREF12 , we visualize the hidden state vectors INLINEFORM0 of the final QRNN layer on part of an example from the IMDb dataset. Even without any post-processing, changes in the hidden state are visible and in"
+      },
+      {
+        "rank": 14,
+        "source": "1611.01576:paragraph:0031 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.554,
+        "keyword": 0.0233,
+        "rerank": 0.4353,
+        "section": "Language Modeling",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "The experimental settings largely followed the \u201cmedium\u201d setup of BIBREF2 . Optimization was performed by stochastic gradient descent (SGD) without momentum. The learning rate was set at 1 for six epochs, then decayed by "
+      },
+      {
+        "rank": 15,
+        "source": "1611.01576:paragraph:0021 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5534,
+        "keyword": 0.0183,
+        "rerank": 0.4263,
+        "section": "Variants",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "where the tilde denotes that INLINEFORM0 is an encoder variable. Encoder\u2013decoder models which operate on long sequences are made significantly more powerful with the addition of soft attention BIBREF3 , which removes the"
+      },
+      {
+        "rank": 16,
+        "source": "1611.01576:paragraph:0038 | Quasi-Recurrent Neural Networks / Character-level Neural Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5899,
+        "keyword": 0.0,
+        "rerank": 0.4181,
+        "section": "Character-level Neural Machine Translation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Results using this architecture were compared to an equal-sized four-layer encoder\u2013decoder LSTM with attention, applying dropout of 0.2. We again optimized using Adam; other hyperparameters were equal to their values for"
+      },
+      {
+        "rank": 17,
+        "source": "1611.01576:paragraph:0018 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5316,
+        "keyword": 0.032,
+        "rerank": 0.4176,
+        "section": "Variants",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "When applying this technique to the QRNN, we include connections between the input embeddings and every QRNN layer and between every pair of QRNN layers. This is equivalent to concatenating each QRNN layer's input to its"
+      },
+      {
+        "rank": 18,
+        "source": "1611.01576:paragraph:0001 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5825,
+        "keyword": 0.0,
+        "rerank": 0.4077,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Convolutional neural networks (CNNs) BIBREF8 , though more popular on tasks involving image data, have also been applied to sequence encoding tasks BIBREF9 . Such models apply time-invariant filter functions in parallel "
+      },
+      {
+        "rank": 19,
+        "source": "1611.01576:paragraph:0039 | Quasi-Recurrent Neural Networks / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5784,
+        "keyword": 0.0,
+        "rerank": 0.4019,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Exploring alternatives to traditional RNNs for sequence tasks is a major area of current research. Quasi-recurrent neural networks are related to several such recently described models, especially the strongly-typed recu"
+      },
+      {
+        "rank": 20,
+        "source": "1611.01576:paragraph:0027 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.566,
+        "keyword": 0.0,
+        "rerank": 0.3845,
+        "section": "Sentiment Classification",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Small batch sizes and long sequence lengths provide an ideal situation for demonstrating the QRNN's performance advantages over traditional recurrent architectures. We observed a speedup of 3.2x on IMDb train time per ep"
+      },
+      {
+        "rank": 21,
+        "source": "1611.01576:paragraph:0042 | Quasi-Recurrent Neural Networks / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5646,
+        "keyword": 0.0,
+        "rerank": 0.3826,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Intuitively, many aspects of the semantics of long sequences are context-invariant and can be computed in parallel (e.g., convolutionally), but some aspects require long-distance context and must be computed recurrently."
+      },
+      {
+        "rank": 22,
+        "source": "1611.01576:paragraph:0019 | Quasi-Recurrent Neural Networks / Variants",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5474,
+        "keyword": 0.0,
+        "rerank": 0.3584,
+        "section": "Variants",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Encoder\u2013Decoder Models To demonstrate the generality of QRNNs, we extend the model architecture to sequence-to-sequence tasks, such as machine translation, by using a QRNN as encoder and a modified QRNN, enhanced with at"
+      },
+      {
+        "rank": 23,
+        "source": "1611.01576:paragraph:0033 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4996,
+        "keyword": 0.0226,
+        "rerank": 0.3575,
+        "section": "Language Modeling",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Without zoneout, early stopping based upon validation loss was required as the QRNN would begin overfitting. By applying a small amount of zoneout ( INLINEFORM0 ), no early stopping is required and the QRNN achieves comp"
+      },
+      {
+        "rank": 24,
+        "source": "1611.01576:paragraph:0032 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5454,
+        "keyword": 0.0,
+        "rerank": 0.3556,
+        "section": "Language Modeling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Comparing our results on the gated QRNN with zoneout to the results of LSTMs with both ordinary and variational dropout in Table TABREF14 , we see that the QRNN is highly competitive. The QRNN without zoneout strongly ou"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7404,
+        "keyword": 0.1862,
+        "rerank": 1.02,
+        "section": "Sentiment Classification",
+        "query_hits": "classification, dataset, sentiment",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.32,
+        "reasons": "body/table evidence",
+        "preview": "We evaluate the QRNN architecture on a popular document-level sentiment classification benchmark, the IMDb movie review dataset BIBREF17 . The dataset consists of a balanced sample of 25,000 positive and 25,000 negative "
+      },
+      {
+        "rank": 2,
+        "source": "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5966,
+        "keyword": 0.1006,
+        "rerank": 0.6497,
+        "section": "Introduction",
+        "query_hits": "classification, sentiment",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6439,
+        "novelty": 0.753,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0992,
+        "reasons": "body/table evidence",
+        "preview": "We present quasi-recurrent neural networks for neural sequence modeling. QRNNs address both drawbacks of standard models: like CNNs, QRNNs allow for parallel computation across both timestep and minibatch dimensions, ena"
+      },
+      {
+        "rank": 3,
+        "source": "1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5606,
+        "keyword": 0.0514,
+        "rerank": 0.5198,
+        "section": "Language Modeling",
+        "query_hits": "dataset, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.519,
+        "novelty": 0.8458,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0048,
+        "reasons": "body/table evidence",
+        "preview": "We implemented a gated QRNN model with medium hidden size: 2 layers with 640 units in each layer. Both QRNN layers use a convolutional filter width INLINEFORM0 of two timesteps. While the \u201cmedium\u201d models used in other wo"
+      },
+      {
+        "rank": 4,
+        "source": "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.62,
+        "keyword": 0.0432,
+        "rerank": 0.56,
+        "section": "Introduction",
+        "query_hits": "classification",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5577,
+        "novelty": 0.4454,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9419,
+        "reasons": "body/table evidence",
+        "preview": "Recurrent neural networks (RNNs), including gated variants such as the long short-term memory (LSTM) BIBREF0 have become the standard model architecture for deep learning approaches to sequence modeling tasks. RNNs repea"
+      },
+      {
+        "rank": 5,
+        "source": "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6141,
+        "keyword": 0.0648,
+        "rerank": 0.6167,
+        "section": "Related Work",
+        "query_hits": "classification, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6122,
+        "novelty": 0.7189,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9071,
+        "reasons": "body/table evidence",
+        "preview": "The QRNN is also related to work in hybrid convolutional\u2013recurrent models. BIBREF31 apply CNNs at the word level to generate INLINEFORM0 -gram features used by an LSTM for text classification. BIBREF32 also tackle text c"
+      },
+      {
+        "rank": 6,
+        "source": "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5886,
+        "keyword": 0.0866,
+        "rerank": 0.616,
+        "section": "Abstract",
+        "query_hits": "classification, sentiment",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6115,
+        "novelty": 0.6651,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.899,
+        "reasons": "body/table evidence",
+        "preview": "Recurrent neural networks are a powerful tool for modeling sequential data, but the dependence of each timestep's computation on the previous timestep's output limits parallelism and makes RNNs unwieldy for very long seq"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "classification",
+        "dataset",
+        "sentiment",
+        "used"
+      ],
+      "covered_query_terms": [
+        "classification",
+        "dataset",
+        "sentiment",
+        "used"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification": [
+          "classification",
+          "dataset",
+          "sentiment"
+        ],
+        "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction": [
+          "classification",
+          "sentiment"
+        ],
+        "1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling": [
+          "dataset",
+          "used"
+        ],
+        "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction": [
+          "classification"
+        ],
+        "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work": [
+          "classification",
+          "used"
+        ],
+        "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract": [
+          "classification",
+          "sentiment"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Introduction",
+        "Language Modeling",
+        "Related Work",
+        "Sentiment Classification"
+      ],
+      "chunks_by_section": {
+        "Sentiment Classification": [
+          "1611.01576:paragraph:0025 | Quasi-Recurrent Neural Networks / Sentiment Classification"
+        ],
+        "Introduction": [
+          "1611.01576:paragraph:0002 | Quasi-Recurrent Neural Networks / Introduction",
+          "1611.01576:paragraph:0000 | Quasi-Recurrent Neural Networks / Introduction"
+        ],
+        "Language Modeling": [
+          "1611.01576:paragraph:0030 | Quasi-Recurrent Neural Networks / Language Modeling"
+        ],
+        "Related Work": [
+          "1611.01576:paragraph:0040 | Quasi-Recurrent Neural Networks / Related Work"
+        ],
+        "Abstract": [
+          "1611.01576:abstract:000 | Quasi-Recurrent Neural Networks / Abstract"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer this question.",
+    "gold_context_answer": "The IMDb movie review dataset BIBREF17 is used as a popular document-level sentiment classification benchmark. This dataset contains a balanced sample of 25,000 positive and 25,000 negative reviews, which are divided into equal-size train and test sets, with an average document length of 231 words BIBREF18.",
+    "retrieved_context_answer": "The IMDb movie review dataset BIBREF17 is used as a popular document-level sentiment classification benchmark. This dataset contains 25,000 positive and 25,000 negative reviews, which are divided into equal-size train and test sets, with an average document length of 231 words.",
+    "closed_book_f1": 0.11764705882352942,
+    "gold_context_f1": 0.21428571428571425,
+    "retrieved_context_f1": 0.23529411764705882,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

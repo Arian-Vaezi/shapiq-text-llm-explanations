@@ -1,0 +1,1480 @@
+{
+  "case": {
+    "case_id": "qasper_feb448860918ef5b905bb25d7b855ba389117c1f",
+    "paper_id": "2002.01664",
+    "paper_title": "Identification of Indian Languages using Ghost-VLAD pooling",
+    "question_id": "feb448860918ef5b905bb25d7b855ba389117c1f",
+    "annotation_id": "6bd56f3bb625bf8ff1ff215f9122f6e9c77b698c",
+    "question": "How was the audio data gathered?",
+    "gold_answer": "Through the All India Radio new channel where actors read news.",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "2002.01664:paragraph:0001",
+      "2002.01664:paragraph:0009"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "2002.01664:paragraph:0009",
+      "score": 0.9900000000000001,
+      "title": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+      "text": "In this section, we describe our dataset collection process. We collected and curated around 635Hrs of audio data for 7 Indian languages, namely Kannada, Hindi, Telugu, Malayalam, Bengali, and English. We collected the data from the All India Radio news channel where an actor will be reading news for about 5-10 mins. To cover many speakers for the dataset, we crawled data from 2010 to 2019. Since the audio is very long to train any deep neural network directly, we segment the audio clips into smaller chunks using Voice activity detector. Since the audio clips will have music embedded during the news, we use Inhouse music detection model to remove the music segments from the dataset to make the dataset clean and our dataset contains 635Hrs of clean audio which is divided into 520Hrs of training data containing 165K utterances and 115Hrs of testing data containing 35K utterances. The amount of audio data for training and testing for each of the language is shown in the table bellow."
+    },
+    {
+      "rank": 2,
+      "passage_id": "2002.01664:paragraph:0010",
+      "score": 0.6290176656957064,
+      "title": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+      "text": "In this section, we describe the feature extraction process and network architecture in detail. We use spectral features of 256 dimensions computed using 512 point FFT for every frame, and we add an energy feature for every frame giving us total 257 features for every frame. We use a window size of 25ms and frame shift of 10ms during feature computation. We crop random 5sec audio data from each utterance during training which results in a spectrogram of size 257x500 (features x number of features). We use these spectrograms as input to our CNN model during training. During testing, we compute the prediction score irrespective of the audio length."
+    },
+    {
+      "rank": 3,
+      "passage_id": "2002.01664:paragraph:0001",
+      "score": 0.42346846577527003,
+      "title": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+      "text": "In this paper, we explore multiple pooling strategies for language identification task. Mainly we propose Ghost-VLAD based pooling method for language identification. Inspired by the recent work by W. Xie et al. [9] and Y. Zhong et al. [10], we use Ghost-VLAD to improve the accuracy of language identification task for Indian languages. We explore multiple pooling strategies including NetVLAD pooling [11], Average pooling and Statistics pooling( as proposed in X-vectors [7]) and show that Ghost-VLAD pooling is the best pooling strategy for language identification. Our model obtains the best accuracy of 98.24%, and it outperforms all the other previously proposed pooling methods. We conduct all our experiments on 635hrs of audio data for 7 Indian languages collected from $\\textbf {All India Radio}$ news channel. The paper is organized as follows. In section 2, we explain the proposed pooling method for language identification. In section 3, we explain our dataset. In section 4, we describe the experiments, and in section 5, we describe the results."
+    },
+    {
+      "rank": 4,
+      "passage_id": "2002.01664:abstract:000",
+      "score": 0.5644800560440306,
+      "title": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+      "text": "In this work, we propose a new pooling strategy for language identification by considering Indian languages. The idea is to obtain utterance level features for any variable length audio for robust language recognition. We use the GhostVLAD approach to generate an utterance level feature vector for any variable length input audio by aggregating the local frame level features across time. The generated feature vector is shown to have very good language discriminative features and helps in getting state of the art results for language identification task. We conduct our experiments on 635Hrs of audio data for 7 Indian languages. Our method outperforms the previous state of the art x-vector [11] method by an absolute improvement of 1.88% in F1-score and achieves 98.43% F1-score on the held-out test data. We compare our system with various pooling approaches and show that GhostVLAD is the best pooling approach for this task. We also provide visualization of the utterance level embeddings generated using Ghost-VLAD pooling and show that this method creates embeddings which has very good language discriminative features."
+    },
+    {
+      "rank": 5,
+      "passage_id": "2002.01664:paragraph:0000",
+      "score": 0.36265685692554633,
+      "title": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+      "text": "The idea of language identification is to classify a given audio signal into a particular class using a classification algorithm. Commonly language identification task was done using i-vector systems [1]. A very well known approach for language identification proposed by N. Dahek et al. [1] uses the GMM-UBM model to obtain utterance level features called i-vectors. Recent advances in deep learning [15,16] have helped to improve the language identification task using many different neural network architectures which can be trained efficiently using GPUs for large scale datasets. These neural networks can be configured in various ways to obtain better accuracy for language identification task. Early work on using Deep learning for language Identification was published by Pavel Matejka et al. [2], where they used stacked bottleneck features extracted from deep neural networks for language identification task and showed that the bottleneck features learned by Deep neural networks are better than simple MFCC or PLP features. Later the work by I. Lopez-Moreno et al. [3] from Google showed how to use Deep neural networks to directly map the sequence of MFCC frames into its language class so that we can apply language identification at the frame level. Speech signals will have both spatial and temporal information, but simple DNNs are not able to capture temporal information. Work done by J. Gonzalez-Dominguez et al. [4] by Google developed an LSTM based language identification model which improves the accuracy over the DNN based models. Work done by Alicia et al. [5] used CNNs to improve upon i-vector [1] and other previously developed systems. The work done by Daniel Garcia-Romero et al. [6] has used a combination of Acoustic model trained for speech recognition with Time-delay neural networks where they train the TDNN model by feeding the stacked bottleneck features from acoustic model to predict the language labels at the frame level. Recently X-vectors [7] is proposed for speaker identification task and are shown to outperform all the previous state of the art speaker identification algorithms and are also used for language identification by David Snyder et al. [8]."
+    },
+    {
+      "rank": 6,
+      "passage_id": "2002.01664:paragraph:0018",
+      "score": 0.3848720299492459,
+      "title": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+      "text": "In this work, we use Ghost-VLAD pooling approach that was originally proposed for face recognition to improve language identification performance for Indian languages. We collected and curated 630 hrs audio data from news All India Radio news channel for 7 Indian languages. Our experimental results shows that our approach outperforms the previous state of the art methods by an absolute 1.88% F1-score. We have also conducted experiments with different pooling strategies proposed in the past, and the GhostVLAD pooling approach turns out to be the best approach for aggregating frame-level features into a single utterance level feature. Our experiments also prove that our approach works much better even if the input during training contains smaller durations. Finally, we see that the embeddings generated by our method has very good language discriminative features and helps to improve the performance of language identification."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+      "attribution": 0.1321263856985544
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+      "attribution": 0.043486420893064405
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+      "attribution": 0.013261418561930267
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+      "attribution": 0.005150254728156948
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+      "attribution": 0.0048042978701557226
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+      "attribution": -0.000631511842968677
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+      "attribution": 0.1654652975226431
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+      "attribution": 0.02406652635596503
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+      "attribution": 0.008796870444637638
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+      "attribution": 0.0023570504299963895
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+      "attribution": 0.0012899261092774983
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+      "attribution": -0.0009939081335560462
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0010",
+      "interaction": -0.015578548315880451
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0001",
+      "interaction": -0.01072528207169205
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:abstract:000",
+      "interaction": -0.02658718426433105
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.033584082523693756
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.020274428066499872
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:paragraph:0001",
+      "interaction": 0.0032045270212576692
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:abstract:000",
+      "interaction": -0.017570374869399004
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.0012324320159528101
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.0004527794819792772
+    },
+    {
+      "left": "2002.01664:paragraph:0001",
+      "right": "2002.01664:abstract:000",
+      "interaction": -0.013030928044380788
+    },
+    {
+      "left": "2002.01664:paragraph:0001",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": 0.00670090436201699
+    },
+    {
+      "left": "2002.01664:paragraph:0001",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.012314565682533382
+    },
+    {
+      "left": "2002.01664:abstract:000",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.0005060186342774824
+    },
+    {
+      "left": "2002.01664:abstract:000",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.013044118083408817
+    },
+    {
+      "left": "2002.01664:paragraph:0000",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.011373875370819369
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0010",
+      "interaction": -0.001059600010119288
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0001",
+      "interaction": -0.00745782244270068
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:abstract:000",
+      "interaction": 0.003049260063731805
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.001845246807693979
+    },
+    {
+      "left": "2002.01664:paragraph:0009",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.03432657460074619
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:paragraph:0001",
+      "interaction": 0.00324881186588722
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:abstract:000",
+      "interaction": -0.0015604217939411157
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.0025677422425145298
+    },
+    {
+      "left": "2002.01664:paragraph:0010",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.0007102057331438906
+    },
+    {
+      "left": "2002.01664:paragraph:0001",
+      "right": "2002.01664:abstract:000",
+      "interaction": 0.0010041235304827985
+    },
+    {
+      "left": "2002.01664:paragraph:0001",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.0010208240500528007
+    },
+    {
+      "left": "2002.01664:paragraph:0001",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.008109890617128846
+    },
+    {
+      "left": "2002.01664:abstract:000",
+      "right": "2002.01664:paragraph:0000",
+      "interaction": -0.001979739774371051
+    },
+    {
+      "left": "2002.01664:abstract:000",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": 0.005449853098242148
+    },
+    {
+      "left": "2002.01664:paragraph:0000",
+      "right": "2002.01664:paragraph:0018",
+      "interaction": -0.0006735322034263826
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.19819726529439896
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "remaining_chunks": 5,
+        "score": 0.10363144981607675
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "remaining_chunks": 4,
+        "score": 0.07315872243537913
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "remaining_chunks": 3,
+        "score": 0.04669779742157609
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "remaining_chunks": 2,
+        "score": 0.05883467416040955
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.028732617226833068
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "selected_chunks": 1,
+        "score": 0.20131534172632415
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "selected_chunks": 2,
+        "score": 0.21877886373415256
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "selected_chunks": 3,
+        "score": 0.22716945533623334
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "selected_chunks": 4,
+        "score": 0.23194590300963447
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "selected_chunks": 5,
+        "score": 0.22692441566173482
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "selected_chunks": 6,
+        "score": 0.19819726529439896
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.19819726529439896
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "remaining_chunks": 5,
+        "score": 0.10363144981607675
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "remaining_chunks": 4,
+        "score": 0.0966162563552111
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "remaining_chunks": 3,
+        "score": 0.08922118704217397
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "remaining_chunks": 2,
+        "score": 0.04993969834014522
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "remaining_chunks": 1,
+        "score": 0.030720589836769507
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.19819726529439896
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "remaining_chunks": 5,
+        "score": 0.10363144981607675
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "remaining_chunks": 4,
+        "score": 0.07315872243537913
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "remaining_chunks": 3,
+        "score": 0.07822727024107501
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.04993969834014522
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "remaining_chunks": 1,
+        "score": 0.028732617226833068
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.19819726529439888
+      },
+      {
+        "step": 1,
+        "score": 0.1800336833890487
+      },
+      {
+        "step": 2,
+        "score": 0.1486207110295027
+      },
+      {
+        "step": 3,
+        "score": 0.12494631818277381
+      },
+      {
+        "step": 4,
+        "score": 0.0949794158907203
+      },
+      {
+        "step": 5,
+        "score": 0.06680180164114297
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How was the audio data gathered?",
+    "expanded_queries": [
+      "How was the audio data gathered?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "dense": 0.6942,
+        "page": 1,
+        "type": "body_text",
+        "section": "DATASET",
+        "flags": "",
+        "preview": "In this section, we describe our dataset collection process. We collected and curated around 635Hrs of audio data for 7 Indian languages, namely Kannada, Hindi, Telugu, Malayalam, Bengali, and English. We collected the d"
+      },
+      {
+        "rank": 2,
+        "source": "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "dense": 0.6142,
+        "page": 1,
+        "type": "body_text",
+        "section": "EXPERIMENTS",
+        "flags": "",
+        "preview": "In this section, we describe the feature extraction process and network architecture in detail. We use spectral features of 256 dimensions computed using 512 point FFT for every frame, and we add an energy feature for ev"
+      },
+      {
+        "rank": 3,
+        "source": "2002.01664:paragraph:0014 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different approaches",
+        "dense": 0.5939,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS ::: Comparison with different approaches",
+        "flags": "",
+        "preview": "We compare our system performance with the previous state of the art language identification approaches, as shown in Table 2. The i-vector+svm system is trained using GMM-UBM models to generate i-vectors as proposed in ["
+      },
+      {
+        "rank": 4,
+        "source": "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "dense": 0.5821,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "In this work, we propose a new pooling strategy for language identification by considering Indian languages. The idea is to obtain utterance level features for any variable length audio for robust language recognition. W"
+      },
+      {
+        "rank": 5,
+        "source": "2002.01664:paragraph:0016 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Duration analysis",
+        "dense": 0.563,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS ::: Duration analysis",
+        "flags": "",
+        "preview": "To observe the performance of our method with different input durations, we conducted an experiment where we train our model on different input durations. Since our model uses ResNet as the base feature extractor, we nee"
+      },
+      {
+        "rank": 6,
+        "source": "2002.01664:paragraph:0004 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "dense": 0.5578,
+        "page": 1,
+        "type": "body_text",
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "flags": "",
+        "preview": "The model takes spectrogram as an input and feeds into CNN based ResNet architecture. The ResNet is used to map the spectrogram into 3D feature map of dimension HxWxD. We convert this 3D feature map into 2D by unfolding "
+      },
+      {
+        "rank": 7,
+        "source": "2002.01664:paragraph:0013 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS",
+        "dense": 0.5574,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS",
+        "flags": "",
+        "preview": "In this section, we compare the performance of our system with the recent state of the art language identification approaches. We also compare different pooling strategies and finally, compare the robustness of our syste"
+      },
+      {
+        "rank": 8,
+        "source": "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "dense": 0.5502,
+        "page": 1,
+        "type": "body_text",
+        "section": "INTRODUCTION",
+        "flags": "",
+        "preview": "In this paper, we explore multiple pooling strategies for language identification task. Mainly we propose Ghost-VLAD based pooling method for language identification. Inspired by the recent work by W. Xie et al. [9] and "
+      },
+      {
+        "rank": 9,
+        "source": "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "dense": 0.5487,
+        "page": 1,
+        "type": "body_text",
+        "section": "INTRODUCTION",
+        "flags": "",
+        "preview": "The idea of language identification is to classify a given audio signal into a particular class using a classification algorithm. Commonly language identification task was done using i-vector systems [1]. A very well kno"
+      },
+      {
+        "rank": 10,
+        "source": "2002.01664:paragraph:0011 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "dense": 0.5334,
+        "page": 1,
+        "type": "body_text",
+        "section": "EXPERIMENTS",
+        "flags": "",
+        "preview": "For the network architecture, we use ResNet-34 architecture, as described in [9]. The model uses convolution layers with Relu activations to map the spectrogram of size 257x500 input into 3D feature map of size 1x32x512."
+      },
+      {
+        "rank": 11,
+        "source": "2002.01664:paragraph:0002 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES",
+        "dense": 0.5318,
+        "page": 1,
+        "type": "body_text",
+        "section": "POOLING STRATEGIES",
+        "flags": "",
+        "preview": "In any language identification model, we want to obtain utterance level representation which has very good language discriminative features. These representations should be compact and should be easily separable by a lin"
+      },
+      {
+        "rank": 12,
+        "source": "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "dense": 0.5131,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this work, we use Ghost-VLAD pooling approach that was originally proposed for face recognition to improve language identification performance for Indian languages. We collected and curated 630 hrs audio data from new"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "keyword": 0.3177,
+        "page": 1,
+        "type": "body_text",
+        "section": "DATASET",
+        "flags": "",
+        "preview": "In this section, we describe our dataset collection process. We collected and curated around 635Hrs of audio data for 7 Indian languages, namely Kannada, Hindi, Telugu, Malayalam, Bengali, and English. We collected the d"
+      },
+      {
+        "rank": 2,
+        "source": "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "keyword": 0.1435,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "In this work, we propose a new pooling strategy for language identification by considering Indian languages. The idea is to obtain utterance level features for any variable length audio for robust language recognition. W"
+      },
+      {
+        "rank": 3,
+        "source": "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "keyword": 0.1327,
+        "page": 1,
+        "type": "body_text",
+        "section": "EXPERIMENTS",
+        "flags": "",
+        "preview": "In this section, we describe the feature extraction process and network architecture in detail. We use spectral features of 256 dimensions computed using 512 point FFT for every frame, and we add an energy feature for ev"
+      },
+      {
+        "rank": 4,
+        "source": "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "keyword": 0.0919,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this work, we use Ghost-VLAD pooling approach that was originally proposed for face recognition to improve language identification performance for Indian languages. We collected and curated 630 hrs audio data from new"
+      },
+      {
+        "rank": 5,
+        "source": "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "keyword": 0.073,
+        "page": 1,
+        "type": "body_text",
+        "section": "INTRODUCTION",
+        "flags": "",
+        "preview": "In this paper, we explore multiple pooling strategies for language identification task. Mainly we propose Ghost-VLAD based pooling method for language identification. Inspired by the recent work by W. Xie et al. [9] and "
+      },
+      {
+        "rank": 6,
+        "source": "2002.01664:paragraph:0017 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Visualization of embeddings",
+        "keyword": 0.0422,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS ::: Visualization of embeddings",
+        "flags": "",
+        "preview": "We visualize the embeddings generated by our approach to see the effectiveness. We extracted 512-dimensional embeddings for our testing data and reduced the dimensionality using t-sne projection. The t-sne plot of the em"
+      },
+      {
+        "rank": 7,
+        "source": "2002.01664:paragraph:0014 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different approaches",
+        "keyword": 0.0319,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS ::: Comparison with different approaches",
+        "flags": "",
+        "preview": "We compare our system performance with the previous state of the art language identification approaches, as shown in Table 2. The i-vector+svm system is trained using GMM-UBM models to generate i-vectors as proposed in ["
+      },
+      {
+        "rank": 8,
+        "source": "2002.01664:paragraph:0012 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "keyword": 0.0196,
+        "page": 1,
+        "type": "body_text",
+        "section": "EXPERIMENTS",
+        "flags": "",
+        "preview": "For the baseline, we train an i-vector model using GMM-UBM. We fit a small classifier on top of the generated i-vectors to measure the accuracy. This model is referred as i-vector+svm . To compare our model with the prev"
+      },
+      {
+        "rank": 9,
+        "source": "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "keyword": 0.0124,
+        "page": 1,
+        "type": "body_text",
+        "section": "INTRODUCTION",
+        "flags": "",
+        "preview": "The idea of language identification is to classify a given audio signal into a particular class using a classification algorithm. Commonly language identification task was done using i-vector systems [1]. A very well kno"
+      },
+      {
+        "rank": 10,
+        "source": "2002.01664:paragraph:0016 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Duration analysis",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS ::: Duration analysis",
+        "flags": "",
+        "preview": "To observe the performance of our method with different input durations, we conducted an experiment where we train our model on different input durations. Since our model uses ResNet as the base feature extractor, we nee"
+      },
+      {
+        "rank": 11,
+        "source": "2002.01664:paragraph:0015 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different pooling techniques",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "RESULTS ::: Comparison with different pooling techniques",
+        "flags": "",
+        "preview": "We compare our approach with different pooling strategies in Table 3. We use ResNet as our base feature extraction network. We keep the base network the same and change only the pooling layers to see which pooling approa"
+      },
+      {
+        "rank": 12,
+        "source": "2002.01664:paragraph:0011 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "EXPERIMENTS",
+        "flags": "",
+        "preview": "For the network architecture, we use ResNet-34 architecture, as described in [9]. The model uses convolution layers with Relu activations to map the spectrogram of size 257x500 input into 3D feature map of size 1x32x512."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6942,
+        "keyword": 0.3177,
+        "rerank": 0.99,
+        "section": "DATASET",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe our dataset collection process. We collected and curated around 635Hrs of audio data for 7 Indian languages, namely Kannada, Hindi, Telugu, Malayalam, Bengali, and English. We collected the d"
+      },
+      {
+        "rank": 2,
+        "source": "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6142,
+        "keyword": 0.1327,
+        "rerank": 0.629,
+        "section": "EXPERIMENTS",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe the feature extraction process and network architecture in detail. We use spectral features of 256 dimensions computed using 512 point FFT for every frame, and we add an energy feature for ev"
+      },
+      {
+        "rank": 3,
+        "source": "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5821,
+        "keyword": 0.1435,
+        "rerank": 0.5645,
+        "section": "Abstract",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we propose a new pooling strategy for language identification by considering Indian languages. The idea is to obtain utterance level features for any variable length audio for robust language recognition. W"
+      },
+      {
+        "rank": 4,
+        "source": "2002.01664:paragraph:0014 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different approaches",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5939,
+        "keyword": 0.0319,
+        "rerank": 0.4564,
+        "section": "RESULTS ::: Comparison with different approaches",
+        "query_hits": "audio",
+        "reasons": "body/table evidence",
+        "preview": "We compare our system performance with the previous state of the art language identification approaches, as shown in Table 2. The i-vector+svm system is trained using GMM-UBM models to generate i-vectors as proposed in ["
+      },
+      {
+        "rank": 5,
+        "source": "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5502,
+        "keyword": 0.073,
+        "rerank": 0.4235,
+        "section": "INTRODUCTION",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we explore multiple pooling strategies for language identification task. Mainly we propose Ghost-VLAD based pooling method for language identification. Inspired by the recent work by W. Xie et al. [9] and "
+      },
+      {
+        "rank": 6,
+        "source": "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5131,
+        "keyword": 0.0919,
+        "rerank": 0.3849,
+        "section": "Conclusion",
+        "query_hits": "audio, data, was",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we use Ghost-VLAD pooling approach that was originally proposed for face recognition to improve language identification performance for Indian languages. We collected and curated 630 hrs audio data from new"
+      },
+      {
+        "rank": 7,
+        "source": "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5487,
+        "keyword": 0.0124,
+        "rerank": 0.3627,
+        "section": "INTRODUCTION",
+        "query_hits": "audio, was",
+        "reasons": "body/table evidence",
+        "preview": "The idea of language identification is to classify a given audio signal into a particular class using a classification algorithm. Commonly language identification task was done using i-vector systems [1]. A very well kno"
+      },
+      {
+        "rank": 8,
+        "source": "2002.01664:paragraph:0016 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Duration analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.563,
+        "keyword": 0.0,
+        "rerank": 0.3243,
+        "section": "RESULTS ::: Duration analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To observe the performance of our method with different input durations, we conducted an experiment where we train our model on different input durations. Since our model uses ResNet as the base feature extractor, we nee"
+      },
+      {
+        "rank": 9,
+        "source": "2002.01664:paragraph:0004 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5578,
+        "keyword": 0.0,
+        "rerank": 0.3123,
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The model takes spectrogram as an input and feeds into CNN based ResNet architecture. The ResNet is used to map the spectrogram into 3D feature map of dimension HxWxD. We convert this 3D feature map into 2D by unfolding "
+      },
+      {
+        "rank": 10,
+        "source": "2002.01664:paragraph:0013 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5574,
+        "keyword": 0.0,
+        "rerank": 0.3112,
+        "section": "RESULTS",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we compare the performance of our system with the recent state of the art language identification approaches. We also compare different pooling strategies and finally, compare the robustness of our syste"
+      },
+      {
+        "rank": 11,
+        "source": "2002.01664:paragraph:0012 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5129,
+        "keyword": 0.0196,
+        "rerank": 0.256,
+        "section": "EXPERIMENTS",
+        "query_hits": "data",
+        "reasons": "body/table evidence",
+        "preview": "For the baseline, we train an i-vector model using GMM-UBM. We fit a small classifier on top of the generated i-vectors to measure the accuracy. This model is referred as i-vector+svm . To compare our model with the prev"
+      },
+      {
+        "rank": 12,
+        "source": "2002.01664:paragraph:0011 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5334,
+        "keyword": 0.0,
+        "rerank": 0.2554,
+        "section": "EXPERIMENTS",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the network architecture, we use ResNet-34 architecture, as described in [9]. The model uses convolution layers with Relu activations to map the spectrogram of size 257x500 input into 3D feature map of size 1x32x512."
+      },
+      {
+        "rank": 13,
+        "source": "2002.01664:paragraph:0002 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5318,
+        "keyword": 0.0,
+        "rerank": 0.2516,
+        "section": "POOLING STRATEGIES",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In any language identification model, we want to obtain utterance level representation which has very good language discriminative features. These representations should be compact and should be easily separable by a lin"
+      },
+      {
+        "rank": 14,
+        "source": "2002.01664:paragraph:0015 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different pooling techniques",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5087,
+        "keyword": 0.0,
+        "rerank": 0.1979,
+        "section": "RESULTS ::: Comparison with different pooling techniques",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We compare our approach with different pooling strategies in Table 3. We use ResNet as our base feature extraction network. We keep the base network the same and change only the pooling layers to see which pooling approa"
+      },
+      {
+        "rank": 15,
+        "source": "2002.01664:paragraph:0007 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: Statistic and average pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5062,
+        "keyword": 0.0,
+        "rerank": 0.1921,
+        "section": "POOLING STRATEGIES ::: Statistic and average pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In statistic pooling, we compute the first and second order statistics of the local features from the top layer of the ResNet model. The 3-D feature map is unfolded to create N features of D dimensions, and then we compu"
+      },
+      {
+        "rank": 16,
+        "source": "2002.01664:paragraph:0003 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.491,
+        "keyword": 0.0,
+        "rerank": 0.1865,
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "query_hits": "was",
+        "reasons": "body/table evidence",
+        "preview": "The NetVLAD pooling strategy was initially developed for place recognition by R. Arandjelovic et al. [11]. The NetVLAD is an extension to VLAD [18] approach where they were able to replace the hard assignment based clust"
+      },
+      {
+        "rank": 17,
+        "source": "2002.01664:paragraph:0008 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: Statistic and average pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4963,
+        "keyword": 0.0,
+        "rerank": 0.1689,
+        "section": "POOLING STRATEGIES ::: Statistic and average pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the Average pooling layer, we compute only the first-order statistics (mean) of the local features from the top layer of the CNN model. The feature map from the top layer of CNN is unfolded to create N features of D d"
+      },
+      {
+        "rank": 18,
+        "source": "2002.01664:paragraph:0006 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: GhostVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4622,
+        "keyword": 0.0,
+        "rerank": 0.1194,
+        "section": "POOLING STRATEGIES ::: GhostVLAD pooling",
+        "query_hits": "was",
+        "reasons": "body/table evidence",
+        "preview": "GhostVLAD is an extension of the NetVLAD approach, which we discussed in the previous section. The GhostVLAD model was proposed for face recognition by Y. Zhong [10]. GhostVLAD works exactly similar to NetVLAD except it "
+      },
+      {
+        "rank": 19,
+        "source": "2002.01664:paragraph:0017 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Visualization of embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4868,
+        "keyword": 0.0422,
+        "rerank": 0.1166,
+        "section": "RESULTS ::: Visualization of embeddings",
+        "query_hits": "data",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We visualize the embeddings generated by our approach to see the effectiveness. We extracted 512-dimensional embeddings for our testing data and reduced the dimensionality using t-sne projection. The t-sne plot of the em"
+      },
+      {
+        "rank": 20,
+        "source": "2002.01664:paragraph:0005 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4581,
+        "keyword": 0.0,
+        "rerank": 0.08,
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Where $w_k$,$b_k$ and $c_k$ are trainable parameters for the cluster $k$ and V(j,k) represents a point in the V matrix for (j,k)th location. The matrix is constructed using the equation (1) where the first term correspon"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6942,
+        "keyword": 0.3177,
+        "rerank": 0.99,
+        "section": "DATASET",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe our dataset collection process. We collected and curated around 635Hrs of audio data for 7 Indian languages, namely Kannada, Hindi, Telugu, Malayalam, Bengali, and English. We collected the d"
+      },
+      {
+        "rank": 2,
+        "source": "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6142,
+        "keyword": 0.1327,
+        "rerank": 0.629,
+        "section": "EXPERIMENTS",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe the feature extraction process and network architecture in detail. We use spectral features of 256 dimensions computed using 512 point FFT for every frame, and we add an energy feature for ev"
+      },
+      {
+        "rank": 3,
+        "source": "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5821,
+        "keyword": 0.1435,
+        "rerank": 0.5645,
+        "section": "Abstract",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we propose a new pooling strategy for language identification by considering Indian languages. The idea is to obtain utterance level features for any variable length audio for robust language recognition. W"
+      },
+      {
+        "rank": 4,
+        "source": "2002.01664:paragraph:0014 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different approaches",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5939,
+        "keyword": 0.0319,
+        "rerank": 0.4564,
+        "section": "RESULTS ::: Comparison with different approaches",
+        "query_hits": "audio",
+        "reasons": "body/table evidence",
+        "preview": "We compare our system performance with the previous state of the art language identification approaches, as shown in Table 2. The i-vector+svm system is trained using GMM-UBM models to generate i-vectors as proposed in ["
+      },
+      {
+        "rank": 5,
+        "source": "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5502,
+        "keyword": 0.073,
+        "rerank": 0.4235,
+        "section": "INTRODUCTION",
+        "query_hits": "audio, data",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we explore multiple pooling strategies for language identification task. Mainly we propose Ghost-VLAD based pooling method for language identification. Inspired by the recent work by W. Xie et al. [9] and "
+      },
+      {
+        "rank": 6,
+        "source": "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5131,
+        "keyword": 0.0919,
+        "rerank": 0.3849,
+        "section": "Conclusion",
+        "query_hits": "audio, data, was",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we use Ghost-VLAD pooling approach that was originally proposed for face recognition to improve language identification performance for Indian languages. We collected and curated 630 hrs audio data from new"
+      },
+      {
+        "rank": 7,
+        "source": "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5487,
+        "keyword": 0.0124,
+        "rerank": 0.3627,
+        "section": "INTRODUCTION",
+        "query_hits": "audio, was",
+        "reasons": "body/table evidence",
+        "preview": "The idea of language identification is to classify a given audio signal into a particular class using a classification algorithm. Commonly language identification task was done using i-vector systems [1]. A very well kno"
+      },
+      {
+        "rank": 8,
+        "source": "2002.01664:paragraph:0016 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Duration analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.563,
+        "keyword": 0.0,
+        "rerank": 0.3243,
+        "section": "RESULTS ::: Duration analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To observe the performance of our method with different input durations, we conducted an experiment where we train our model on different input durations. Since our model uses ResNet as the base feature extractor, we nee"
+      },
+      {
+        "rank": 9,
+        "source": "2002.01664:paragraph:0004 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5578,
+        "keyword": 0.0,
+        "rerank": 0.3123,
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The model takes spectrogram as an input and feeds into CNN based ResNet architecture. The ResNet is used to map the spectrogram into 3D feature map of dimension HxWxD. We convert this 3D feature map into 2D by unfolding "
+      },
+      {
+        "rank": 10,
+        "source": "2002.01664:paragraph:0013 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5574,
+        "keyword": 0.0,
+        "rerank": 0.3112,
+        "section": "RESULTS",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we compare the performance of our system with the recent state of the art language identification approaches. We also compare different pooling strategies and finally, compare the robustness of our syste"
+      },
+      {
+        "rank": 11,
+        "source": "2002.01664:paragraph:0012 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5129,
+        "keyword": 0.0196,
+        "rerank": 0.256,
+        "section": "EXPERIMENTS",
+        "query_hits": "data",
+        "reasons": "body/table evidence",
+        "preview": "For the baseline, we train an i-vector model using GMM-UBM. We fit a small classifier on top of the generated i-vectors to measure the accuracy. This model is referred as i-vector+svm . To compare our model with the prev"
+      },
+      {
+        "rank": 12,
+        "source": "2002.01664:paragraph:0011 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5334,
+        "keyword": 0.0,
+        "rerank": 0.2554,
+        "section": "EXPERIMENTS",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the network architecture, we use ResNet-34 architecture, as described in [9]. The model uses convolution layers with Relu activations to map the spectrogram of size 257x500 input into 3D feature map of size 1x32x512."
+      },
+      {
+        "rank": 13,
+        "source": "2002.01664:paragraph:0002 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5318,
+        "keyword": 0.0,
+        "rerank": 0.2516,
+        "section": "POOLING STRATEGIES",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In any language identification model, we want to obtain utterance level representation which has very good language discriminative features. These representations should be compact and should be easily separable by a lin"
+      },
+      {
+        "rank": 14,
+        "source": "2002.01664:paragraph:0015 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Comparison with different pooling techniques",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5087,
+        "keyword": 0.0,
+        "rerank": 0.1979,
+        "section": "RESULTS ::: Comparison with different pooling techniques",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We compare our approach with different pooling strategies in Table 3. We use ResNet as our base feature extraction network. We keep the base network the same and change only the pooling layers to see which pooling approa"
+      },
+      {
+        "rank": 15,
+        "source": "2002.01664:paragraph:0007 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: Statistic and average pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5062,
+        "keyword": 0.0,
+        "rerank": 0.1921,
+        "section": "POOLING STRATEGIES ::: Statistic and average pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In statistic pooling, we compute the first and second order statistics of the local features from the top layer of the ResNet model. The 3-D feature map is unfolded to create N features of D dimensions, and then we compu"
+      },
+      {
+        "rank": 16,
+        "source": "2002.01664:paragraph:0003 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.491,
+        "keyword": 0.0,
+        "rerank": 0.1865,
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "query_hits": "was",
+        "reasons": "body/table evidence",
+        "preview": "The NetVLAD pooling strategy was initially developed for place recognition by R. Arandjelovic et al. [11]. The NetVLAD is an extension to VLAD [18] approach where they were able to replace the hard assignment based clust"
+      },
+      {
+        "rank": 17,
+        "source": "2002.01664:paragraph:0008 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: Statistic and average pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4963,
+        "keyword": 0.0,
+        "rerank": 0.1689,
+        "section": "POOLING STRATEGIES ::: Statistic and average pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the Average pooling layer, we compute only the first-order statistics (mean) of the local features from the top layer of the CNN model. The feature map from the top layer of CNN is unfolded to create N features of D d"
+      },
+      {
+        "rank": 18,
+        "source": "2002.01664:paragraph:0006 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: GhostVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4622,
+        "keyword": 0.0,
+        "rerank": 0.1194,
+        "section": "POOLING STRATEGIES ::: GhostVLAD pooling",
+        "query_hits": "was",
+        "reasons": "body/table evidence",
+        "preview": "GhostVLAD is an extension of the NetVLAD approach, which we discussed in the previous section. The GhostVLAD model was proposed for face recognition by Y. Zhong [10]. GhostVLAD works exactly similar to NetVLAD except it "
+      },
+      {
+        "rank": 19,
+        "source": "2002.01664:paragraph:0017 | Identification of Indian Languages using Ghost-VLAD pooling / RESULTS ::: Visualization of embeddings",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4868,
+        "keyword": 0.0422,
+        "rerank": 0.1166,
+        "section": "RESULTS ::: Visualization of embeddings",
+        "query_hits": "data",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We visualize the embeddings generated by our approach to see the effectiveness. We extracted 512-dimensional embeddings for our testing data and reduced the dimensionality using t-sne projection. The t-sne plot of the em"
+      },
+      {
+        "rank": 20,
+        "source": "2002.01664:paragraph:0005 | Identification of Indian Languages using Ghost-VLAD pooling / POOLING STRATEGIES ::: NetVLAD pooling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4581,
+        "keyword": 0.0,
+        "rerank": 0.08,
+        "section": "POOLING STRATEGIES ::: NetVLAD pooling",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Where $w_k$,$b_k$ and $c_k$ are trainable parameters for the cluster $k$ and V(j,k) represents a point in the V matrix for (j,k)th location. The matrix is constructed using the equation (1) where the first term correspon"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6942,
+        "keyword": 0.3177,
+        "rerank": 0.99,
+        "section": "DATASET",
+        "query_hits": "audio, data",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.28,
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe our dataset collection process. We collected and curated around 635Hrs of audio data for 7 Indian languages, namely Kannada, Hindi, Telugu, Malayalam, Bengali, and English. We collected the d"
+      },
+      {
+        "rank": 2,
+        "source": "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6142,
+        "keyword": 0.1327,
+        "rerank": 0.629,
+        "section": "EXPERIMENTS",
+        "query_hits": "audio, data",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6033,
+        "novelty": 0.7052,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8976,
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe the feature extraction process and network architecture in detail. We use spectral features of 256 dimensions computed using 512 point FFT for every frame, and we add an energy feature for ev"
+      },
+      {
+        "rank": 3,
+        "source": "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5502,
+        "keyword": 0.073,
+        "rerank": 0.4235,
+        "section": "INTRODUCTION",
+        "query_hits": "audio, data",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3774,
+        "novelty": 0.6984,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8624,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we explore multiple pooling strategies for language identification task. Mainly we propose Ghost-VLAD based pooling method for language identification. Inspired by the recent work by W. Xie et al. [9] and "
+      },
+      {
+        "rank": 4,
+        "source": "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5821,
+        "keyword": 0.1435,
+        "rerank": 0.5645,
+        "section": "Abstract",
+        "query_hits": "audio, data",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5324,
+        "novelty": 0.6606,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8303,
+        "reasons": "body/table evidence",
+        "preview": "In this work, we propose a new pooling strategy for language identification by considering Indian languages. The idea is to obtain utterance level features for any variable length audio for robust language recognition. W"
+      },
+      {
+        "rank": 5,
+        "source": "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5487,
+        "keyword": 0.0124,
+        "rerank": 0.3627,
+        "section": "INTRODUCTION",
+        "query_hits": "audio, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3106,
+        "novelty": 0.552,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7044,
+        "reasons": "body/table evidence",
+        "preview": "The idea of language identification is to classify a given audio signal into a particular class using a classification algorithm. Commonly language identification task was done using i-vector systems [1]. A very well kno"
+      },
+      {
+        "rank": 6,
+        "source": "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5131,
+        "keyword": 0.0919,
+        "rerank": 0.3849,
+        "section": "Conclusion",
+        "query_hits": "audio, data, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.335,
+        "novelty": 0.5808,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6894,
+        "reasons": "body/table evidence",
+        "preview": "In this work, we use Ghost-VLAD pooling approach that was originally proposed for face recognition to improve language identification performance for Indian languages. We collected and curated 630 hrs audio data from new"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "audio",
+        "data",
+        "gathered",
+        "was"
+      ],
+      "covered_query_terms": [
+        "audio",
+        "data",
+        "was"
+      ],
+      "missing_query_terms": [
+        "gathered"
+      ],
+      "terms_by_chunk": {
+        "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET": [
+          "audio",
+          "data"
+        ],
+        "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS": [
+          "audio",
+          "data"
+        ],
+        "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION": [
+          "audio",
+          "data"
+        ],
+        "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract": [
+          "audio",
+          "data"
+        ],
+        "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION": [
+          "audio",
+          "was"
+        ],
+        "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion": [
+          "audio",
+          "data",
+          "was"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Conclusion",
+        "DATASET",
+        "EXPERIMENTS",
+        "INTRODUCTION"
+      ],
+      "chunks_by_section": {
+        "DATASET": [
+          "2002.01664:paragraph:0009 | Identification of Indian Languages using Ghost-VLAD pooling / DATASET"
+        ],
+        "EXPERIMENTS": [
+          "2002.01664:paragraph:0010 | Identification of Indian Languages using Ghost-VLAD pooling / EXPERIMENTS"
+        ],
+        "INTRODUCTION": [
+          "2002.01664:paragraph:0001 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION",
+          "2002.01664:paragraph:0000 | Identification of Indian Languages using Ghost-VLAD pooling / INTRODUCTION"
+        ],
+        "Abstract": [
+          "2002.01664:abstract:000 | Identification of Indian Languages using Ghost-VLAD pooling / Abstract"
+        ],
+        "Conclusion": [
+          "2002.01664:paragraph:0018 | Identification of Indian Languages using Ghost-VLAD pooling / Conclusion"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "The audio data was collected and curated to amount to around 635 hours for 7 Indian languages, specifically Kannada, Hindi, Telugu, Malayalam, Bengali, and English. The data was gathered from the All India Radio news channel, where an actor would read news for approximately 5-10 minutes. To ensure a variety of speakers, data was crawled from the years 2010 to 2019. Because the audio clips were very long for",
+    "retrieved_context_answer": "The audio data was collected and curated from the All India Radio news channel for 7 Indian languages, specifically Kannada, Hindi, Telugu, Malayalam, Bengali, and English. The data collection involved crawling information from 2010 to 2019, where an actor would read news for approximately 5-10 minutes.",
+    "closed_book_f1": 0.09090909090909091,
+    "gold_context_f1": 0.19753086419753085,
+    "retrieved_context_f1": 0.27586206896551724,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

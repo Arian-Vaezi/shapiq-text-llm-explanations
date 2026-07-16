@@ -1,0 +1,1585 @@
+{
+  "case": {
+    "case_id": "qasper_f7a89b9cd2792f23f2cb43d50a01b8218a6fbb24",
+    "paper_id": "1802.07862",
+    "paper_title": "Multimodal Named Entity Recognition for Short Social Media Posts",
+    "question_id": "f7a89b9cd2792f23f2cb43d50a01b8218a6fbb24",
+    "annotation_id": "cb6466b997427248e68f9235e7420a49a9d3d062",
+    "question": "Which types of named entities do they recognize?",
+    "gold_answer": "PER, LOC, ORG, MISC",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1802.07862:paragraph:0042"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1802.07862:paragraph:0001",
+      "score": 0.9349763314341438,
+      "title": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "text": "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with character-level features (e.g. CharLSTM/CNN), several additional challenges remain for recognizing named entities from extremely short and coarse text found in social media posts. For instance, short social media posts often do not provide enough textual contexts to resolve polysemous entities (e.g. \u201cmonopoly is da best \", where `monopoly' may refer to a board game (named entity) or a term in economics). In addition, noisy text includes a huge number of unknown tokens due to inconsistent lexical notations and frequent mentions of various newly trending entities (e.g. \u201cxoxo Marshmelloooo \", where `Marshmelloooo' is a mis-spelling of a known entity `Marshmello', a music producer), making word embeddings based neural networks NER models vulnerable."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1802.07862:paragraph:0000",
+      "score": 0.8046218957982775,
+      "title": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "text": "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social media posts, such as in free-form text or images without tags. Named entity recognition (NER), the task of recognizing named entities from free-form text, is thus a critical step for building structural information, allowing for its use in personalized assistance, recommendations, advertisement, etc."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1802.07862:paragraph:0042",
+      "score": 0.7692971788724696,
+      "title": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+      "text": "The SnapCaptions dataset is composed of 10K user-generated image (snap) and textual caption pairs where named entities in captions are manually labeled by expert human annotators (entity types: PER, LOC, ORG, MISC). These captions are collected exclusively from snaps submitted to public and crowd-sourced stories (aka Snapchat Live Stories or Our Stories). Examples of such public crowd-sourced stories are \u201cNew York Story\u201d or \u201cThanksgiving Story\u201d, which comprise snaps that are aggregated for various public events, venues, etc. All snaps were posted between year 2016 and 2017, and do not contain raw images or other associated information (only textual captions and obfuscated visual descriptor features extracted from the pre-trained InceptionNet are available). We split the dataset into train (70%), validation (15%), and test sets (15%). The captions data have average length of 30.7 characters (5.81 words) with vocabulary size 15,733, where 6,612 are considered unknown tokens from Stanford GloVE embeddings BIBREF22 . Named entities annotated in the SnapCaptions dataset include many of new and emerging entities, and they are found in various surface forms (various nicknames, typos, etc.) To the best of our knowledge, SnapCaptions is the only dataset that contains natural image-caption pairs with expert-annotated named entities."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1802.07862:paragraph:0037",
+      "score": 0.6343130110895489,
+      "title": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+      "text": "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the objective function (Eq. SECREF4 ) with modality attention (Eq. SECREF5 ) requires each modality to have the same dimension ( INLINEFORM5 ), and that the transformation via INLINEFORM6 essentially enforces each modality to be mapped into the same unified subspace, where the weighted average of which encodes discrimitive features for recognition of named entities."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1802.07862:paragraph:0003",
+      "score": 0.6056421109766814,
+      "title": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "text": "Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to extract context from. For example, the modality attention module lets the decoder attenuate the word-level signals for unknown word tokens (\u201cMarshmellooooo\" with trailing `o's) and amplifies character-level features intsead (capitalized first letter, lexical similarity to other known named entity token `Marshmello', etc.), thereby suppressing noise information (\u201cUNK\" token embedding) in decoding steps. Note that most of the previous literature in NER or other NLP tasks combine word and character-level information with naive concatenation, which is vulnerable to noisy social media posts. When an auxiliary image is available, the modality attention module determines to amplify this visual context in disambiguating polysemous entities, or to attenuate visual contexts when they are irrelevant to target named entities, selfies, etc. Note that the proposed modality attention module is distinct from how attention is used in other sequence-to-sequence literature (e.g. attending to a specific token within an input sequence). Section SECREF2 provides the detailed literature review."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1802.07862:paragraph:0057",
+      "score": 0.6996112984833482,
+      "title": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+      "text": "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in prediction of a given token. In the example of \u201cdisney word essential = coffee\" with visual tags selfie, phone, person, the modality attention successfully attenuates distracting visual signals and focuses on textual modalities, consequently making correct predictions. The named entities in the examples of \u201cBeautiful night atop The Space Needle\" and \u201cSplash Mountain\" are challenging to predict because they are composed of common nouns (space, needle, splash, mountain), and thus they often need additional contexts to correctly predict. In the training data, visual contexts make stronger indicators for these named entities (space needle, splash mountain), and the modality attention module successfully attends more to stronger signals."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+      "attribution": 0.07306512958166175
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+      "attribution": 0.012253419850267093
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "attribution": 0.011867498895878256
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "attribution": 0.0033064890994238968
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "attribution": 0.0025619820522858575
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+      "attribution": 0.0023990060712059413
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+      "attribution": 0.20909515673075352
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "attribution": 0.0028165590109643234
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+      "attribution": -0.0018376668567508848
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "attribution": 0.0018356126727701383
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+      "attribution": 0.0012745934586649806
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+      "attribution": -0.00025547269471866
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0000",
+      "interaction": -0.0054616858953357396
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0042",
+      "interaction": -0.019869121763176435
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0037",
+      "interaction": -0.013868276024060934
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": 0.0019421738553662658
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.012361684635950441
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0042",
+      "interaction": -0.01267319764609153
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0037",
+      "interaction": -0.005269872218871067
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": -0.013229696873251059
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.020536140070085245
+    },
+    {
+      "left": "1802.07862:paragraph:0042",
+      "right": "1802.07862:paragraph:0037",
+      "interaction": -0.01454286920074836
+    },
+    {
+      "left": "1802.07862:paragraph:0042",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": -0.00041494667026231876
+    },
+    {
+      "left": "1802.07862:paragraph:0042",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.013690461481967616
+    },
+    {
+      "left": "1802.07862:paragraph:0037",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": -0.009162983857201403
+    },
+    {
+      "left": "1802.07862:paragraph:0037",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.009531199637450307
+    },
+    {
+      "left": "1802.07862:paragraph:0003",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.008281642386287561
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0000",
+      "interaction": -0.006738227473072591
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0042",
+      "interaction": 0.0143662776760795
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0037",
+      "interaction": 0.002315461626796075
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": 0.006884146380934735
+    },
+    {
+      "left": "1802.07862:paragraph:0001",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.01283155887620838
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0042",
+      "interaction": 0.00338888589314887
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0037",
+      "interaction": 0.0007681888246838657
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": -0.0022096254672375696
+    },
+    {
+      "left": "1802.07862:paragraph:0000",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.014217947421083562
+    },
+    {
+      "left": "1802.07862:paragraph:0042",
+      "right": "1802.07862:paragraph:0037",
+      "interaction": 0.0022851486288584123
+    },
+    {
+      "left": "1802.07862:paragraph:0042",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": -0.0002410724981289383
+    },
+    {
+      "left": "1802.07862:paragraph:0042",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": 0.020108178951656785
+    },
+    {
+      "left": "1802.07862:paragraph:0037",
+      "right": "1802.07862:paragraph:0003",
+      "interaction": 0.0005414807245883607
+    },
+    {
+      "left": "1802.07862:paragraph:0037",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.008484994522778785
+    },
+    {
+      "left": "1802.07862:paragraph:0003",
+      "right": "1802.07862:paragraph:0057",
+      "interaction": -0.013051684497029353
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.10545352520735596
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "remaining_chunks": 5,
+        "score": 0.04206423210331023
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "remaining_chunks": 4,
+        "score": 0.044976418192380296
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.043007794000384125
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 2,
+        "score": -0.004048482513107021
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.04954269136659051
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "selected_chunks": 1,
+        "score": 0.12457989123605862
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "selected_chunks": 2,
+        "score": 0.10272996539464252
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "selected_chunks": 3,
+        "score": 0.10837725331684467
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "selected_chunks": 4,
+        "score": 0.11674812328476292
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "selected_chunks": 5,
+        "score": 0.10828603607895648
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "selected_chunks": 6,
+        "score": 0.10545352520735596
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.10545352520735596
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.09956004866626911
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.12039918068721134
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "remaining_chunks": 3,
+        "score": 0.013654978246892324
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "remaining_chunks": 2,
+        "score": -0.004048482513107021
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "remaining_chunks": 1,
+        "score": 0.02835804969723632
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.10545352520735596
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "remaining_chunks": 5,
+        "score": 0.04206423210331023
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.026142815357874105
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.050019640895083484
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "remaining_chunks": 2,
+        "score": 0.03784614489050819
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "remaining_chunks": 1,
+        "score": 0.047904503432463774
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.10545352520735587
+      },
+      {
+        "step": 1,
+        "score": 0.09018521172770623
+      },
+      {
+        "step": 2,
+        "score": 0.07604544730592686
+      },
+      {
+        "step": 3,
+        "score": 0.06792781615698708
+      },
+      {
+        "step": 4,
+        "score": 0.0452121279224512
+      },
+      {
+        "step": 5,
+        "score": 0.05717838619739491
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which types of named entities do they recognize?",
+    "expanded_queries": [
+      "Which types of named entities do they recognize?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1802.07862:paragraph:0052 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "dense": 0.6537,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Table TABREF6 shows the NER performance on the Snap Captions dataset. We report both entity types recognition (PER, LOC, ORG, MISC) and named entity segmentation (named entity or not) results."
+      },
+      {
+        "rank": 2,
+        "source": "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "dense": 0.648,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with"
+      },
+      {
+        "rank": 3,
+        "source": "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "dense": 0.6312,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social me"
+      },
+      {
+        "rank": 4,
+        "source": "1802.07862:paragraph:0054 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "dense": 0.6063,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Main Results: When visual context is available (W+C+V), we see that the model performance greatly improves over the textual models (W+C), showing that visual contexts are complimentary to textual information in named ent"
+      },
+      {
+        "rank": 5,
+        "source": "1802.07862:paragraph:0055 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "dense": 0.6029,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Error Analysis: Table TABREF17 shows example cases where incorporation of visual contexts affects prediction of named entities. For example, the token `curry' in the caption \u201cThe curry's \" is polysemous and may refer to "
+      },
+      {
+        "rank": 6,
+        "source": "1802.07862:paragraph:0059 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "dense": 0.5799,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Figure FIGREF19 (b) shows the cases where the modality attention led to incorrect predictions. For example, the model predicts missing tokens HUUUGE and Shampooer incorrectly as named entities by amplifying misleading ch"
+      },
+      {
+        "rank": 7,
+        "source": "1802.07862:paragraph:0011 | Multimodal Named Entity Recognition for Short Social Media Posts / Proposed Methods",
+        "dense": 0.562,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Methods",
+        "flags": "",
+        "preview": "Notations: Let INLINEFORM0 a sequence of input tokens with length INLINEFORM1 , with a corresponding label sequence INLINEFORM2 indicating named entities (e.g. in standard BIO formats). Each input token is composed of th"
+      },
+      {
+        "rank": 8,
+        "source": "1802.07862:paragraph:0046 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "dense": 0.554,
+        "page": 1,
+        "type": "body_text",
+        "section": "Baselines",
+        "flags": "",
+        "preview": "Bi-LSTM/CRF + Bi-CharLSTM (W+C) BIBREF0 : takes as input both word embeddings and character embeddings extracted from a Bi-CharLSTM. Entity LSTM takes concatenated vectors of word and character embeddings as input tokens"
+      },
+      {
+        "rank": 9,
+        "source": "1802.07862:paragraph:0004 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "dense": 0.5523,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Our contributions are three-fold: we propose (1) an LSTM-CNN hybrid multimodal NER network that takes as input both image and text for recognition of a named entity in text input. To the best of our knowledge, our approa"
+      },
+      {
+        "rank": 10,
+        "source": "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "dense": 0.5509,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in predic"
+      },
+      {
+        "rank": 11,
+        "source": "1802.07862:paragraph:0002 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "dense": 0.5468,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "To address the challenges above for social media posts, we build upon the state-of-the-art neural architecture for NER with the following two novel approaches (Figure FIGREF1 ). First, we propose to leverage auxiliary mo"
+      },
+      {
+        "rank": 12,
+        "source": "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "dense": 0.544,
+        "page": 1,
+        "type": "body_text",
+        "section": "Modality Attention",
+        "flags": "",
+        "preview": "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the ob"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1802.07862:paragraph:0059 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "keyword": 0.2011,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Figure FIGREF19 (b) shows the cases where the modality attention led to incorrect predictions. For example, the model predicts missing tokens HUUUGE and Shampooer incorrectly as named entities by amplifying misleading ch"
+      },
+      {
+        "rank": 2,
+        "source": "1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "keyword": 0.1748,
+        "page": 1,
+        "type": "body_text",
+        "section": "SnapCaptions Dataset",
+        "flags": "",
+        "preview": "The SnapCaptions dataset is composed of 10K user-generated image (snap) and textual caption pairs where named entities in captions are manually labeled by expert human annotators (entity types: PER, LOC, ORG, MISC). Thes"
+      },
+      {
+        "rank": 3,
+        "source": "1802.07862:paragraph:0052 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "keyword": 0.1727,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Table TABREF6 shows the NER performance on the Snap Captions dataset. We report both entity types recognition (PER, LOC, ORG, MISC) and named entity segmentation (named entity or not) results."
+      },
+      {
+        "rank": 4,
+        "source": "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "keyword": 0.1707,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with"
+      },
+      {
+        "rank": 5,
+        "source": "1802.07862:paragraph:0011 | Multimodal Named Entity Recognition for Short Social Media Posts / Proposed Methods",
+        "keyword": 0.1124,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Methods",
+        "flags": "",
+        "preview": "Notations: Let INLINEFORM0 a sequence of input tokens with length INLINEFORM1 , with a corresponding label sequence INLINEFORM2 indicating named entities (e.g. in standard BIO formats). Each input token is composed of th"
+      },
+      {
+        "rank": 6,
+        "source": "1802.07862:paragraph:0048 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "keyword": 0.1111,
+        "page": 1,
+        "type": "body_text",
+        "section": "Baselines",
+        "flags": "",
+        "preview": "Bi-LSTM/CRF + CharCNN (W+C) + Multi-task BIBREF8 : trains the model to perform both recognition (into multiple entity types) as well as segmentation (binary) tasks."
+      },
+      {
+        "rank": 7,
+        "source": "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "keyword": 0.1034,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in predic"
+      },
+      {
+        "rank": 8,
+        "source": "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "keyword": 0.1024,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social me"
+      },
+      {
+        "rank": 9,
+        "source": "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "keyword": 0.0875,
+        "page": 1,
+        "type": "body_text",
+        "section": "Modality Attention",
+        "flags": "",
+        "preview": "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the ob"
+      },
+      {
+        "rank": 10,
+        "source": "1802.07862:paragraph:0055 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "keyword": 0.0845,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results: SnapCaptions Dataset",
+        "flags": "",
+        "preview": "Error Analysis: Table TABREF17 shows example cases where incorporation of visual contexts affects prediction of named entities. For example, the token `curry' in the caption \u201cThe curry's \" is polysemous and may refer to "
+      },
+      {
+        "rank": 11,
+        "source": "1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "keyword": 0.0842,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to e"
+      },
+      {
+        "rank": 12,
+        "source": "1802.07862:abstract:000 | Multimodal Named Entity Recognition for Short Social Media Posts / Abstract",
+        "keyword": 0.0696,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "We introduce a new task called Multimodal Named Entity Recognition (MNER) for noisy user-generated data such as tweets or Snapchat captions, which comprise short text with accompanying images. These social media posts of"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.648,
+        "keyword": 0.1707,
+        "rerank": 0.935,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with"
+      },
+      {
+        "rank": 2,
+        "source": "1802.07862:paragraph:0052 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6537,
+        "keyword": 0.1727,
+        "rerank": 0.8476,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "named, types",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF6 shows the NER performance on the Snap Captions dataset. We report both entity types recognition (PER, LOC, ORG, MISC) and named entity segmentation (named entity or not) results."
+      },
+      {
+        "rank": 3,
+        "source": "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6312,
+        "keyword": 0.1024,
+        "rerank": 0.8046,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social me"
+      },
+      {
+        "rank": 4,
+        "source": "1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5116,
+        "keyword": 0.1748,
+        "rerank": 0.7693,
+        "section": "SnapCaptions Dataset",
+        "query_hits": "entities, named, they, types",
+        "reasons": "body/table evidence",
+        "preview": "The SnapCaptions dataset is composed of 10K user-generated image (snap) and textual caption pairs where named entities in captions are manually labeled by expert human annotators (entity types: PER, LOC, ORG, MISC). Thes"
+      },
+      {
+        "rank": 5,
+        "source": "1802.07862:paragraph:0059 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5799,
+        "keyword": 0.2011,
+        "rerank": 0.7648,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Figure FIGREF19 (b) shows the cases where the modality attention led to incorrect predictions. For example, the model predicts missing tokens HUUUGE and Shampooer incorrectly as named entities by amplifying misleading ch"
+      },
+      {
+        "rank": 6,
+        "source": "1802.07862:paragraph:0055 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6029,
+        "keyword": 0.0845,
+        "rerank": 0.7297,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "Error Analysis: Table TABREF17 shows example cases where incorporation of visual contexts affects prediction of named entities. For example, the token `curry' in the caption \u201cThe curry's \" is polysemous and may refer to "
+      },
+      {
+        "rank": 7,
+        "source": "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5509,
+        "keyword": 0.1034,
+        "rerank": 0.6996,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named, they",
+        "reasons": "body/table evidence",
+        "preview": "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in predic"
+      },
+      {
+        "rank": 8,
+        "source": "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.544,
+        "keyword": 0.0875,
+        "rerank": 0.6343,
+        "section": "Modality Attention",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the ob"
+      },
+      {
+        "rank": 9,
+        "source": "1802.07862:paragraph:0054 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6063,
+        "keyword": 0.0199,
+        "rerank": 0.6092,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "named",
+        "reasons": "body/table evidence",
+        "preview": "Main Results: When visual context is available (W+C+V), we see that the model performance greatly improves over the textual models (W+C), showing that visual contexts are complimentary to textual information in named ent"
+      },
+      {
+        "rank": 10,
+        "source": "1802.07862:paragraph:0002 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5468,
+        "keyword": 0.0658,
+        "rerank": 0.6066,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "To address the challenges above for social media posts, we build upon the state-of-the-art neural architecture for NER with the following two novel approaches (Figure FIGREF1 ). First, we propose to leverage auxiliary mo"
+      },
+      {
+        "rank": 11,
+        "source": "1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5124,
+        "keyword": 0.0842,
+        "rerank": 0.6056,
+        "section": "Introduction",
+        "query_hits": "entities, named, they",
+        "reasons": "body/table evidence",
+        "preview": "Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to e"
+      },
+      {
+        "rank": 12,
+        "source": "1802.07862:paragraph:0011 | Multimodal Named Entity Recognition for Short Social Media Posts / Proposed Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.562,
+        "keyword": 0.1124,
+        "rerank": 0.6019,
+        "section": "Proposed Methods",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Notations: Let INLINEFORM0 a sequence of input tokens with length INLINEFORM1 , with a corresponding label sequence INLINEFORM2 indicating named entities (e.g. in standard BIO formats). Each input token is composed of th"
+      },
+      {
+        "rank": 13,
+        "source": "1802.07862:abstract:000 | Multimodal Named Entity Recognition for Short Social Media Posts / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5279,
+        "keyword": 0.0696,
+        "rerank": 0.5803,
+        "section": "Abstract",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "We introduce a new task called Multimodal Named Entity Recognition (MNER) for noisy user-generated data such as tweets or Snapchat captions, which comprise short text with accompanying images. These social media posts of"
+      },
+      {
+        "rank": 14,
+        "source": "1802.07862:paragraph:0004 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5523,
+        "keyword": 0.0404,
+        "rerank": 0.548,
+        "section": "Introduction",
+        "query_hits": "named",
+        "reasons": "body/table evidence",
+        "preview": "Our contributions are three-fold: we propose (1) an LSTM-CNN hybrid multimodal NER network that takes as input both image and text for recognition of a named entity in text input. To the best of our knowledge, our approa"
+      },
+      {
+        "rank": 15,
+        "source": "1802.07862:paragraph:0048 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5374,
+        "keyword": 0.1111,
+        "rerank": 0.5282,
+        "section": "Baselines",
+        "query_hits": "types",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bi-LSTM/CRF + CharCNN (W+C) + Multi-task BIBREF8 : trains the model to perform both recognition (into multiple entity types) as well as segmentation (binary) tasks."
+      },
+      {
+        "rank": 16,
+        "source": "1802.07862:paragraph:0009 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5342,
+        "keyword": 0.064,
+        "rerank": 0.4526,
+        "section": "Related Work",
+        "query_hits": "named",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To the best of our knowledge, our approach is the first work to incorporate visual contexts for named entity recognition tasks."
+      },
+      {
+        "rank": 17,
+        "source": "1802.07862:paragraph:0005 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5132,
+        "keyword": 0.0,
+        "rerank": 0.4214,
+        "section": "Related Work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Neural models for NER have been recently proposed, producing state-of-the-art performance on standard NER tasks. For example, some of the end-to-end NER systems BIBREF4 , BIBREF2 , BIBREF3 , BIBREF0 , BIBREF1 use a recur"
+      },
+      {
+        "rank": 18,
+        "source": "1802.07862:paragraph:0058 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4725,
+        "keyword": 0.0213,
+        "rerank": 0.384,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities",
+        "reasons": "body/table evidence",
+        "preview": "For text-only model (W+C), we observe that performance gains mostly come from the modality attention module better handling tokens unseen during training or unknown tokens from the pre-trained word embeddings matrix. For"
+      },
+      {
+        "rank": 19,
+        "source": "1802.07862:paragraph:0010 | Multimodal Named Entity Recognition for Short Social Media Posts / Proposed Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4958,
+        "keyword": 0.0,
+        "rerank": 0.3619,
+        "section": "Proposed Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF2 illustrates the proposed multimodal NER (MNER) model. First, we obtain word embeddings, character embeddings, and visual features (Section SECREF3 ). A Bi-LSTM-CRF model then takes as input a sequence of t"
+      },
+      {
+        "rank": 20,
+        "source": "1802.07862:paragraph:0046 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.554,
+        "keyword": 0.0,
+        "rerank": 0.3608,
+        "section": "Baselines",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bi-LSTM/CRF + Bi-CharLSTM (W+C) BIBREF0 : takes as input both word embeddings and character embeddings extracted from a Bi-CharLSTM. Entity LSTM takes concatenated vectors of word and character embeddings as input tokens"
+      },
+      {
+        "rank": 21,
+        "source": "1802.07862:paragraph:0006 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4711,
+        "keyword": 0.0,
+        "rerank": 0.3499,
+        "section": "Related Work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Attention modules are widely applied in several deep learning tasks BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 . For example, they use an attention module to attend to a subset within a single input (a part/region of an i"
+      },
+      {
+        "rank": 22,
+        "source": "1802.07862:paragraph:0043 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4875,
+        "keyword": 0.0,
+        "rerank": 0.3477,
+        "section": "Baselines",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Task: given a caption and a paired image (if used), the goal is to label every token in a caption in BIO scheme (B: beginning, I: inside, O: outside) BIBREF27 . We report the performance of the following state-of-the-art"
+      },
+      {
+        "rank": 23,
+        "source": "1802.07862:paragraph:0008 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4841,
+        "keyword": 0.0,
+        "rerank": 0.3419,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The most relevant task to our multimodal NER system is the task of multimodal machine translation BIBREF16 , BIBREF17 , which aims at building a better machine translation system by taking as input a sentence in a source"
+      },
+      {
+        "rank": 24,
+        "source": "1802.07862:paragraph:0032 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.482,
+        "keyword": 0.0,
+        "rerank": 0.3384,
+        "section": "Modality Attention",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "A majority of the previous literature combine the word and character-level contexts by simply concatenating the word and character embeddings at each decoding step, e.g. INLINEFORM0 in Eq. SECREF4 . However, this naive c"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.648,
+        "keyword": 0.1707,
+        "rerank": 0.935,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with"
+      },
+      {
+        "rank": 2,
+        "source": "1802.07862:paragraph:0052 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6537,
+        "keyword": 0.1727,
+        "rerank": 0.8476,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "named, types",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF6 shows the NER performance on the Snap Captions dataset. We report both entity types recognition (PER, LOC, ORG, MISC) and named entity segmentation (named entity or not) results."
+      },
+      {
+        "rank": 3,
+        "source": "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6312,
+        "keyword": 0.1024,
+        "rerank": 0.8046,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social me"
+      },
+      {
+        "rank": 4,
+        "source": "1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5116,
+        "keyword": 0.1748,
+        "rerank": 0.7693,
+        "section": "SnapCaptions Dataset",
+        "query_hits": "entities, named, they, types",
+        "reasons": "body/table evidence",
+        "preview": "The SnapCaptions dataset is composed of 10K user-generated image (snap) and textual caption pairs where named entities in captions are manually labeled by expert human annotators (entity types: PER, LOC, ORG, MISC). Thes"
+      },
+      {
+        "rank": 5,
+        "source": "1802.07862:paragraph:0059 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5799,
+        "keyword": 0.2011,
+        "rerank": 0.7648,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Figure FIGREF19 (b) shows the cases where the modality attention led to incorrect predictions. For example, the model predicts missing tokens HUUUGE and Shampooer incorrectly as named entities by amplifying misleading ch"
+      },
+      {
+        "rank": 6,
+        "source": "1802.07862:paragraph:0055 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6029,
+        "keyword": 0.0845,
+        "rerank": 0.7297,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "Error Analysis: Table TABREF17 shows example cases where incorporation of visual contexts affects prediction of named entities. For example, the token `curry' in the caption \u201cThe curry's \" is polysemous and may refer to "
+      },
+      {
+        "rank": 7,
+        "source": "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5509,
+        "keyword": 0.1034,
+        "rerank": 0.6996,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named, they",
+        "reasons": "body/table evidence",
+        "preview": "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in predic"
+      },
+      {
+        "rank": 8,
+        "source": "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.544,
+        "keyword": 0.0875,
+        "rerank": 0.6343,
+        "section": "Modality Attention",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the ob"
+      },
+      {
+        "rank": 9,
+        "source": "1802.07862:paragraph:0054 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6063,
+        "keyword": 0.0199,
+        "rerank": 0.6092,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "named",
+        "reasons": "body/table evidence",
+        "preview": "Main Results: When visual context is available (W+C+V), we see that the model performance greatly improves over the textual models (W+C), showing that visual contexts are complimentary to textual information in named ent"
+      },
+      {
+        "rank": 10,
+        "source": "1802.07862:paragraph:0002 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5468,
+        "keyword": 0.0658,
+        "rerank": 0.6066,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "To address the challenges above for social media posts, we build upon the state-of-the-art neural architecture for NER with the following two novel approaches (Figure FIGREF1 ). First, we propose to leverage auxiliary mo"
+      },
+      {
+        "rank": 11,
+        "source": "1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5124,
+        "keyword": 0.0842,
+        "rerank": 0.6056,
+        "section": "Introduction",
+        "query_hits": "entities, named, they",
+        "reasons": "body/table evidence",
+        "preview": "Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to e"
+      },
+      {
+        "rank": 12,
+        "source": "1802.07862:paragraph:0011 | Multimodal Named Entity Recognition for Short Social Media Posts / Proposed Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.562,
+        "keyword": 0.1124,
+        "rerank": 0.6019,
+        "section": "Proposed Methods",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Notations: Let INLINEFORM0 a sequence of input tokens with length INLINEFORM1 , with a corresponding label sequence INLINEFORM2 indicating named entities (e.g. in standard BIO formats). Each input token is composed of th"
+      },
+      {
+        "rank": 13,
+        "source": "1802.07862:abstract:000 | Multimodal Named Entity Recognition for Short Social Media Posts / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5279,
+        "keyword": 0.0696,
+        "rerank": 0.5803,
+        "section": "Abstract",
+        "query_hits": "entities, named",
+        "reasons": "body/table evidence",
+        "preview": "We introduce a new task called Multimodal Named Entity Recognition (MNER) for noisy user-generated data such as tweets or Snapchat captions, which comprise short text with accompanying images. These social media posts of"
+      },
+      {
+        "rank": 14,
+        "source": "1802.07862:paragraph:0004 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5523,
+        "keyword": 0.0404,
+        "rerank": 0.548,
+        "section": "Introduction",
+        "query_hits": "named",
+        "reasons": "body/table evidence",
+        "preview": "Our contributions are three-fold: we propose (1) an LSTM-CNN hybrid multimodal NER network that takes as input both image and text for recognition of a named entity in text input. To the best of our knowledge, our approa"
+      },
+      {
+        "rank": 15,
+        "source": "1802.07862:paragraph:0048 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5374,
+        "keyword": 0.1111,
+        "rerank": 0.5282,
+        "section": "Baselines",
+        "query_hits": "types",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bi-LSTM/CRF + CharCNN (W+C) + Multi-task BIBREF8 : trains the model to perform both recognition (into multiple entity types) as well as segmentation (binary) tasks."
+      },
+      {
+        "rank": 16,
+        "source": "1802.07862:paragraph:0009 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5342,
+        "keyword": 0.064,
+        "rerank": 0.4526,
+        "section": "Related Work",
+        "query_hits": "named",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To the best of our knowledge, our approach is the first work to incorporate visual contexts for named entity recognition tasks."
+      },
+      {
+        "rank": 17,
+        "source": "1802.07862:paragraph:0005 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5132,
+        "keyword": 0.0,
+        "rerank": 0.4214,
+        "section": "Related Work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Neural models for NER have been recently proposed, producing state-of-the-art performance on standard NER tasks. For example, some of the end-to-end NER systems BIBREF4 , BIBREF2 , BIBREF3 , BIBREF0 , BIBREF1 use a recur"
+      },
+      {
+        "rank": 18,
+        "source": "1802.07862:paragraph:0058 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4725,
+        "keyword": 0.0213,
+        "rerank": 0.384,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities",
+        "reasons": "body/table evidence",
+        "preview": "For text-only model (W+C), we observe that performance gains mostly come from the modality attention module better handling tokens unseen during training or unknown tokens from the pre-trained word embeddings matrix. For"
+      },
+      {
+        "rank": 19,
+        "source": "1802.07862:paragraph:0010 | Multimodal Named Entity Recognition for Short Social Media Posts / Proposed Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4958,
+        "keyword": 0.0,
+        "rerank": 0.3619,
+        "section": "Proposed Methods",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF2 illustrates the proposed multimodal NER (MNER) model. First, we obtain word embeddings, character embeddings, and visual features (Section SECREF3 ). A Bi-LSTM-CRF model then takes as input a sequence of t"
+      },
+      {
+        "rank": 20,
+        "source": "1802.07862:paragraph:0046 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.554,
+        "keyword": 0.0,
+        "rerank": 0.3608,
+        "section": "Baselines",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Bi-LSTM/CRF + Bi-CharLSTM (W+C) BIBREF0 : takes as input both word embeddings and character embeddings extracted from a Bi-CharLSTM. Entity LSTM takes concatenated vectors of word and character embeddings as input tokens"
+      },
+      {
+        "rank": 21,
+        "source": "1802.07862:paragraph:0006 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4711,
+        "keyword": 0.0,
+        "rerank": 0.3499,
+        "section": "Related Work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Attention modules are widely applied in several deep learning tasks BIBREF10 , BIBREF11 , BIBREF12 , BIBREF13 . For example, they use an attention module to attend to a subset within a single input (a part/region of an i"
+      },
+      {
+        "rank": 22,
+        "source": "1802.07862:paragraph:0043 | Multimodal Named Entity Recognition for Short Social Media Posts / Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4875,
+        "keyword": 0.0,
+        "rerank": 0.3477,
+        "section": "Baselines",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Task: given a caption and a paired image (if used), the goal is to label every token in a caption in BIO scheme (B: beginning, I: inside, O: outside) BIBREF27 . We report the performance of the following state-of-the-art"
+      },
+      {
+        "rank": 23,
+        "source": "1802.07862:paragraph:0008 | Multimodal Named Entity Recognition for Short Social Media Posts / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4841,
+        "keyword": 0.0,
+        "rerank": 0.3419,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The most relevant task to our multimodal NER system is the task of multimodal machine translation BIBREF16 , BIBREF17 , which aims at building a better machine translation system by taking as input a sentence in a source"
+      },
+      {
+        "rank": 24,
+        "source": "1802.07862:paragraph:0032 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.482,
+        "keyword": 0.0,
+        "rerank": 0.3384,
+        "section": "Modality Attention",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "A majority of the previous literature combine the word and character-level contexts by simply concatenating the word and character embeddings at each decoding step, e.g. INLINEFORM0 in Eq. SECREF4 . However, this naive c"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.648,
+        "keyword": 0.1707,
+        "rerank": 0.935,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.44,
+        "reasons": "body/table evidence",
+        "preview": "While many previous approaches BIBREF0 , BIBREF1 , BIBREF2 , BIBREF3 on NER have shown success for well-formed text in recognizing named entities via word context resolution (e.g. LSTM with word embeddings) combined with"
+      },
+      {
+        "rank": 2,
+        "source": "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6312,
+        "keyword": 0.1024,
+        "rerank": 0.8046,
+        "section": "Introduction",
+        "query_hits": "entities, named",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8635,
+        "novelty": 0.4764,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2493,
+        "reasons": "body/table evidence",
+        "preview": "Social media with abundant user-generated posts provide a rich platform for understanding events, opinions and preferences of groups and individuals. These insights are primarily hidden in unstructured forms of social me"
+      },
+      {
+        "rank": 3,
+        "source": "1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5116,
+        "keyword": 0.1748,
+        "rerank": 0.7693,
+        "section": "SnapCaptions Dataset",
+        "query_hits": "entities, named, they, types",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8265,
+        "novelty": 0.8328,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1474,
+        "reasons": "body/table evidence",
+        "preview": "The SnapCaptions dataset is composed of 10K user-generated image (snap) and textual caption pairs where named entities in captions are manually labeled by expert human annotators (entity types: PER, LOC, ORG, MISC). Thes"
+      },
+      {
+        "rank": 4,
+        "source": "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.544,
+        "keyword": 0.0875,
+        "rerank": 0.6343,
+        "section": "Modality Attention",
+        "query_hits": "entities, named",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6852,
+        "novelty": 0.7377,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1325,
+        "reasons": "body/table evidence",
+        "preview": "where INLINEFORM0 is an attention vector at each decoding step INLINEFORM1 , and INLINEFORM2 is a final context vector at INLINEFORM3 that maximizes information gain for INLINEFORM4 . Note that the optimization of the ob"
+      },
+      {
+        "rank": 5,
+        "source": "1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5124,
+        "keyword": 0.0842,
+        "rerank": 0.6056,
+        "section": "Introduction",
+        "query_hits": "entities, named, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6551,
+        "novelty": 0.4505,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1065,
+        "reasons": "body/table evidence",
+        "preview": "Second, we also propose a general modality attention module which chooses per decoding step the most informative modality among available ones (in our case, word embeddings, character embeddings, or visual features) to e"
+      },
+      {
+        "rank": 6,
+        "source": "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5509,
+        "keyword": 0.1034,
+        "rerank": 0.6996,
+        "section": "Results: SnapCaptions Dataset",
+        "query_hits": "entities, named, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7535,
+        "novelty": 0.717,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0684,
+        "reasons": "body/table evidence",
+        "preview": "For the image-aided model (W+C+V; upper row in Figure FIGREF19 ), we confirm that the modality attention successfully attenuates irrelevant signals (selfies, etc.) and amplifies relevant modality-based contexts in predic"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "entities",
+        "named",
+        "recognize",
+        "they",
+        "types"
+      ],
+      "covered_query_terms": [
+        "entities",
+        "named",
+        "they",
+        "types"
+      ],
+      "missing_query_terms": [
+        "recognize"
+      ],
+      "terms_by_chunk": {
+        "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction": [
+          "entities",
+          "named"
+        ],
+        "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction": [
+          "entities",
+          "named"
+        ],
+        "1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset": [
+          "entities",
+          "named",
+          "they",
+          "types"
+        ],
+        "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention": [
+          "entities",
+          "named"
+        ],
+        "1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction": [
+          "entities",
+          "named",
+          "they"
+        ],
+        "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset": [
+          "entities",
+          "named",
+          "they"
+        ]
+      },
+      "section_titles": [
+        "Introduction",
+        "Modality Attention",
+        "Results: SnapCaptions Dataset",
+        "SnapCaptions Dataset"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1802.07862:paragraph:0001 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+          "1802.07862:paragraph:0000 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction",
+          "1802.07862:paragraph:0003 | Multimodal Named Entity Recognition for Short Social Media Posts / Introduction"
+        ],
+        "SnapCaptions Dataset": [
+          "1802.07862:paragraph:0042 | Multimodal Named Entity Recognition for Short Social Media Posts / SnapCaptions Dataset"
+        ],
+        "Modality Attention": [
+          "1802.07862:paragraph:0037 | Multimodal Named Entity Recognition for Short Social Media Posts / Modality Attention"
+        ],
+        "Results: SnapCaptions Dataset": [
+          "1802.07862:paragraph:0057 | Multimodal Named Entity Recognition for Short Social Media Posts / Results: SnapCaptions Dataset"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer this question.",
+    "gold_context_answer": "The SnapCaptions dataset includes named entities labeled with the following types: PER, LOC, ORG, and MISC.",
+    "retrieved_context_answer": "The SnapCaptions dataset manually labels named entities with the following types: PER, LOC, ORG, and MISC.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.4,
+    "retrieved_context_f1": 0.4,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

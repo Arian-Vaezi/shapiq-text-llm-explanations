@@ -28,10 +28,19 @@ dependencies = [
     "torch>=2.10.0",
     "accelerate>=1.13.0",
     "sentence-transformers>=5.5.1",
-    "google-genai>=2.8.0",
     "python-dotenv>=1.2.2",
+    "google-genai>=2.8.0",
+    "groq>=0.37.1,<1.0.0",
+    "langchain>=1.3.4",
+    "langchain-groq>=1.1.2",
+    "langchain-core>=1.4.2",
+    "langgraph>=1.2.4",
+    "agentevals>=0.0.9",
     "streamlit>=1.58.0",
-    "groq>=1.4.0",
+    "spacy>=3.7,<4",
+    # NOTE: groq is pinned <1.0.0 above because langchain-groq requires groq<1.0.0,>=0.30.0.
+    # The jailbreak demo reaches Groq only through demos/shared/api_model_wrapper.py, whose
+    # Groq(api_key=...) + chat.completions surface exists on 0.x, so it does not need 1.x.
     "tiktoken",  # required to load tiktoken-based tokenizers (e.g. lmsys/vicuna-7b-v1.5)
 ]
 authors = [
@@ -196,6 +205,33 @@ exclude = [
     "INP",   # demos can be an implicit namespace package
     "N999",  # demos can have camelCase module/file names
 ]
+"demos/rag_retrieval_explanation/tests/**/*.py" = [
+    "S101", # pytest uses assertions
+    "D",    # test docstrings are optional
+    "E501", # descriptive test data may use long lines
+    "ANN",  # fixture annotations are optional
+    "ARG",  # fixtures may require unused arguments
+    "INP",  # tests are collected as a package
+    "N",    # test helper names prioritize readability
+    "PTH",  # path style is not part of the production API
+    "S",    # security rules are relaxed for test fixtures
+    "PT",   # existing pytest style is accepted
+    "NPY",
+    "SLF",  # tests may inspect private helpers
+    "TRY",
+]
+"demos/rag_retrieval_explanation/backend/services.py" = [
+    "PLC0415",  # defer registry imports to avoid eager model setup
+]
+"demos/rag_retrieval_explanation/core/chunking.py" = [
+    "PLC0415",  # PDF parsers are optional dependencies
+]
+"demos/rag_retrieval_explanation/core/model_backends.py" = [
+    "PLC0415",  # llama-cpp-python is an optional dependency
+]
+"demos/rag_retrieval_explanation/core/retrieval.py" = [
+    "PLC0415",  # dense retrieval dependencies are optional
+]
 "docs/source/*.py" = [
     "A001",  # some conf.py variables shadow builtins which is okay here
     "ANN001",  # some magic functions I don't want to annotate
@@ -218,13 +254,18 @@ exclude = [
     "PTH",  # in script code we use a lot of os, which is okay
     "T201",  # scripts can have print statements
     "BLE001",  # scripts can have bare excepts
-    "TRY"
+    "TRY",
+    "PLC0415",  # scripts may defer optional heavyweight dependencies
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ty.src]
+# The RAG demo is intentionally not ty-gated: its optional deps (pypdf,
+# llama-cpp-python, fastapi, ...) are not installed in the lint CI job, so ty
+# cannot resolve them. Demos sit in the same "not type-checked" category as
+# tests/benchmark/scripts/shapiq_games below. ruff still lints/formats the demo.
 include = ["src/shapiq"]
 exclude = [
     "tests",
@@ -272,6 +313,13 @@ required-imports = ["from __future__ import annotations"]
 
 
 [dependency-groups]
+rag_demo = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "python-multipart>=0.0.20",
+    "pypdf",
+    "llama-cpp-python>=0.3.16",
+]
 all_ml = [
     "tabpfn>=2.1.3",
     "torchvision",

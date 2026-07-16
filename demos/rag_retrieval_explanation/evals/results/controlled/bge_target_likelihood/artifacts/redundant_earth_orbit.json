@@ -1,0 +1,3359 @@
+{
+  "case": {
+    "case_id": "redundant_earth_orbit",
+    "pattern": "redundant_evidence",
+    "question": "What object does Earth orbit?",
+    "gold_answer": "Earth orbits the Sun.",
+    "gold_evidence_ids": [
+      "redundant_orbit_a",
+      "redundant_orbit_b"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_orbit_a",
+        "right": "redundant_orbit_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "missing_hubble_orbit",
+      "score": 0.8492063055312717,
+      "title": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+      "text": "Some observatories operate in Earth orbit rather than on the ground."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_orbit_a",
+      "score": 0.7871391850121978,
+      "title": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+      "text": "Earth travels in an orbit around the Sun."
+    },
+    {
+      "rank": 3,
+      "passage_id": "missing_mars_orbit",
+      "score": 0.6025024546059714,
+      "title": "Retrieved 3: missing_mars_orbit | Mars orbit",
+      "text": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+    },
+    {
+      "rank": 4,
+      "passage_id": "conflict_earth_planet",
+      "score": 0.4732450775350827,
+      "title": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+      "text": "A false summary claims Earth is the closest planet to the Sun."
+    },
+    {
+      "rank": 5,
+      "passage_id": "redundant_orbit_moon",
+      "score": 0.5702735760224265,
+      "title": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+      "text": "The Moon orbits Earth."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_planet_earth",
+      "score": 0.49422434999169174,
+      "title": "Retrieved 6: conflict_planet_earth | Earth",
+      "text": "Earth is the largest of the Solar System's terrestrial planets."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+      "attribution": 0.09837458826555673
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_planet_earth | Earth",
+      "attribution": 0.0280258720607145
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+      "attribution": 0.027790623796268513
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_mars_orbit | Mars orbit",
+      "attribution": 0.025906658963177738
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+      "attribution": -0.013806721073290038
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+      "attribution": 0.006496270935398439
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+      "attribution": 0.10116531237116785
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+      "attribution": 0.07768715901784078
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+      "attribution": -0.013684248983442065
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: missing_mars_orbit | Mars orbit",
+      "attribution": 0.01040509825031615
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+      "attribution": 0.00685727638396516
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_planet_earth | Earth",
+      "attribution": 0.006066005567972668
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_orbit_a",
+      "right": "redundant_orbit_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_orbit_a",
+      "right": "redundant_orbit_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "missing_hubble_orbit",
+      "right": "redundant_orbit_a",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.031244126567015893,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "missing_mars_orbit",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.015153947010072364,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "conflict_earth_planet",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.02129913662330665,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "redundant_orbit_moon",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.034114356710129905,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.028957663638076843,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "missing_mars_orbit",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.05532631503556117,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "conflict_earth_planet",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.030317693735680325,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "redundant_orbit_moon",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.03354443878092263,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.04133756500568782,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "conflict_earth_planet",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.025882018736397793,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "redundant_orbit_moon",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.02768536903745733,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.021661751631557556,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "redundant_orbit_moon",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.050714363017823026,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.03717649858534199,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "conflict_planet_earth",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.04450800592252794,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "missing_hubble_orbit",
+      "right": "redundant_orbit_a",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.0030072893217929436,
+      "sign": "positive"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "missing_mars_orbit",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.0020998069066854685,
+      "sign": "positive"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "conflict_earth_planet",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.0060175481057839165,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "redundant_orbit_moon",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": 0.024591705014044105,
+      "sign": "positive"
+    },
+    {
+      "left": "missing_hubble_orbit",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.007251702833940688,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "missing_mars_orbit",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.017147986767803422,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "conflict_earth_planet",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.016645543368952485,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "redundant_orbit_moon",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": 0.10106773709983397,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_orbit_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.007995178245131242,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "conflict_earth_planet",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.00868130940340021,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "redundant_orbit_moon",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.0018079105727681222,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.005308213209141108,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "redundant_orbit_moon",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": 0.0025715339851683067,
+      "sign": "positive"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.014058405704914713,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "conflict_planet_earth",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.004909194094972353,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit"
+      ],
+      "score": 0.10167168003378368
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_orbit_a"
+      ],
+      "score": 0.18899411146220096
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_mars_orbit"
+      ],
+      "score": 0.12917338309417697
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_earth_planet"
+      ],
+      "score": 0.1578122708587078
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon"
+      ],
+      "score": 0.09582712951573696
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.15103562343539179
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a"
+      ],
+      "score": 0.19594865456620597
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit"
+      ],
+      "score": 0.14559557719445265
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1480871818823118
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.07228733988199132
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.172817424063323
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit"
+      ],
+      "score": 0.19558129782033284
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.20534890618535856
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.2016103432789108
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20469559964384465
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17188839034579861
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.10511267569827903
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.19214836292425858
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.050923868385579385
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.16058459218442123
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.12915580821964334
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit"
+      ],
+      "score": 0.19205065283495892
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.19486815504795085
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18489267631609269
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20275928254928555
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.14110371517231057
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.09511179848500761
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.16720860131427134
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.06645255519310656
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.16094440813051247
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": -0.009674006307927085
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.19996314348978467
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.20207670476056294
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1984400137860221
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.2081312423367982
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20771446655097547
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20746919182028556
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.058459350402037924
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.19815490939450692
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.061543852464205295
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07761087084988849
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1990643692215769
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18082338969367545
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.19451295759749593
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.19944704939705105
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.2002468747429903
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.19356714993952717
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.09311465598520552
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1555096513108699
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.10106172684746595
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.03898132962920414
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.20760207455945145
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.21264686189309906
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20693039757523918
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20590921169249404
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07849768020077086
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.19539315591541073
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20043782115564723
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1803647345894877
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.18932331298299843
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.10847444495373709
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.20188484509473908
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17278729166812323
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit"
+      ],
+      "score": -0.01654948870770373
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_orbit_a"
+      ],
+      "score": 0.06146390837440907
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "missing_mars_orbit"
+      ],
+      "score": 0.030335244300920383
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "conflict_earth_planet"
+      ],
+      "score": 0.04319375894125349
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon"
+      ],
+      "score": 0.050036646565622844
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.03950617736035811
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a"
+      ],
+      "score": 0.034403916666199075
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit"
+      ],
+      "score": 0.019872699263423166
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": -0.002414395819244075
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.04649350145905734
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": -0.00902177461634951
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit"
+      ],
+      "score": 0.06605386854136552
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.04409867015201768
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18183160922143454
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.05621246735568636
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.03751895832489993
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.07770996309335021
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.0424191969852597
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.07160069019699233
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01213223380899614
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06608467071851737
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit"
+      ],
+      "score": 0.03289050559284795
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.018900693612763086
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18714906119014008
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.030451434335562466
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.014468744578191195
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.06563781232480798
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.011833082860087107
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.05770595395166628
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": -0.009550578977763402
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.049446800555200454
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.05039654304180308
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.17985771774595455
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.051771427389494085
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18409395580822563
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.05005583515846124
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1789021988499222
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.07556101967661799
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04357385687666926
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06789967543155012
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06381177230880508
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet"
+      ],
+      "score": 0.010385216862634938
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18558072881144239
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_planet_earth"
+      ],
+      "score": 0.021410898983871884
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18650722557338512
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01682799937619045
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.181482759972804
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.06965247782636885
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.02386076977166318
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06433776115909279
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.053697116497047725
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18371002224119043
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04689523983775179
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.18578871440143052
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.18475748237422973
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07371877965798423
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.18851311974503748
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01694608488451471
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.188134116688496
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.18900697162857089
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.06474637649010834
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1886165413014576
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_hubble_orbit",
+        "redundant_orbit_a",
+        "missing_mars_orbit",
+        "conflict_earth_planet",
+        "redundant_orbit_moon",
+        "conflict_planet_earth"
+      ],
+      "score": 0.18849660302390714
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17278729166812323
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+        "remaining_chunks": 5,
+        "score": 0.10847444495373709
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 4,
+        "score": 0.09311465598520552
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 3,
+        "score": 0.09511179848500761
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 2,
+        "score": 0.07228733988199132
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 1,
+        "score": 0.10167168003378368
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+        "selected_chunks": 1,
+        "score": 0.18899411146220096
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "selected_chunks": 2,
+        "score": 0.20469559964384465
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+        "selected_chunks": 3,
+        "score": 0.20771446655097547
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: missing_mars_orbit | Mars orbit",
+        "selected_chunks": 4,
+        "score": 0.21264686189309906
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "selected_chunks": 5,
+        "score": 0.20188484509473908
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+        "selected_chunks": 6,
+        "score": 0.17278729166812323
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17278729166812323
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+        "remaining_chunks": 5,
+        "score": 0.20188484509473908
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+        "remaining_chunks": 4,
+        "score": 0.07849768020077086
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 3,
+        "score": 0.07761087084988849
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 2,
+        "score": 0.16058459218442123
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 1,
+        "score": 0.1578122708587078
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17278729166812323
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: redundant_orbit_a | Earth around the Sun",
+        "remaining_chunks": 5,
+        "score": 0.10847444495373709
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 4,
+        "score": 0.10106172684746595
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 3,
+        "score": -0.009674006307927085
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: conflict_planet_earth | Earth",
+        "remaining_chunks": 2,
+        "score": 0.07228733988199132
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 1,
+        "score": 0.10167168003378368
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: missing_hubble_orbit | Telescope orbit distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.17278729166812326
+      },
+      {
+        "step": 1,
+        "score": 0.18736630639644733
+      },
+      {
+        "step": 2,
+        "score": 0.1774100764205282
+      },
+      {
+        "step": 3,
+        "score": 0.1719234743233784
+      },
+      {
+        "step": 4,
+        "score": 0.16825648062745585
+      },
+      {
+        "step": 5,
+        "score": 0.14273397640953178
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What object does Earth orbit?",
+    "expanded_queries": [
+      "What object does Earth orbit?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "dense": 0.6783,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 2,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.6434,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "dense": 0.6203,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 4,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.6026,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 5,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "dense": 0.5899,
+        "page": 28,
+        "type": "body_text",
+        "section": "gravity_basics",
+        "flags": "",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 6,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "dense": 0.5836,
+        "page": 21,
+        "type": "body_text",
+        "section": "inner_planets",
+        "flags": "",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 7,
+        "source": "missing_mars_orbit | Mars orbit",
+        "dense": 0.5763,
+        "page": 10,
+        "type": "body_text",
+        "section": "mars_overview",
+        "flags": "",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "dense": 0.5749,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_planet_earth | Earth",
+        "dense": 0.5723,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "dense": 0.5628,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "dense": 0.5623,
+        "page": 41,
+        "type": "body_text",
+        "section": "closest_planet_sun",
+        "flags": "",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "dense": 0.5581,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.5137,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "keyword": 0.3376,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 3,
+        "source": "missing_mars_orbit | Mars orbit",
+        "keyword": 0.2256,
+        "page": 10,
+        "type": "body_text",
+        "section": "mars_overview",
+        "flags": "",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.1338,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.0995,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_pacific_a | Largest ocean",
+        "keyword": 0.0982,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "keyword": 0.0901,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "keyword": 0.0836,
+        "page": 41,
+        "type": "body_text",
+        "section": "closest_planet_sun",
+        "flags": "",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 9,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "keyword": 0.0831,
+        "page": 21,
+        "type": "body_text",
+        "section": "inner_planets",
+        "flags": "",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "keyword": 0.0804,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 11,
+        "source": "direct_everest_evidence | Highest mountain",
+        "keyword": 0.0796,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "keyword": 0.0769,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.6434,
+        "keyword": 0.5137,
+        "rerank": 0.8492,
+        "section": "space_telescope_notes",
+        "query_hits": "earth, orbit",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.6783,
+        "keyword": 0.3376,
+        "rerank": 0.7871,
+        "section": "earth_orbit",
+        "query_hits": "earth, orbit",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 3,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5763,
+        "keyword": 0.2256,
+        "rerank": 0.6025,
+        "section": "mars_overview",
+        "query_hits": "earth, orbit",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.6203,
+        "keyword": 0.1338,
+        "rerank": 0.5703,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.6026,
+        "keyword": 0.0753,
+        "rerank": 0.5154,
+        "section": "space_telescope_notes",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 6,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5836,
+        "keyword": 0.0831,
+        "rerank": 0.4979,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5723,
+        "keyword": 0.0995,
+        "rerank": 0.4942,
+        "section": "giant_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5749,
+        "keyword": 0.0769,
+        "rerank": 0.4841,
+        "section": "solar_system_center",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.0836,
+        "rerank": 0.4732,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5501,
+        "keyword": 0.0901,
+        "rerank": 0.4628,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 11,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5415,
+        "keyword": 0.0762,
+        "rerank": 0.4446,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.5899,
+        "keyword": 0.0,
+        "rerank": 0.4267,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5628,
+        "keyword": 0.0,
+        "rerank": 0.395,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5581,
+        "keyword": 0.0,
+        "rerank": 0.3895,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.477,
+        "keyword": 0.0982,
+        "rerank": 0.382,
+        "section": "world_oceans",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 16,
+        "source": "direct_gravity_evidence | Gravity definition",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.547,
+        "keyword": 0.0,
+        "rerank": 0.3765,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity is the attractive force that pulls objects with mass toward one another."
+      },
+      {
+        "rank": 17,
+        "source": "comp_inner_venus | Venus is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5452,
+        "keyword": 0.0,
+        "rerank": 0.3744,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Venus is one of the inner rocky planets, orbiting the Sun after Mercury."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_orbit_b | Earth's annual revolution",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.477,
+        "keyword": 0.0762,
+        "rerank": 0.3692,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One year corresponds approximately to one complete revolution of Earth around the Sun."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5296,
+        "keyword": 0.0,
+        "rerank": 0.3561,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5212,
+        "keyword": 0.0,
+        "rerank": 0.3464,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 21,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.4534,
+        "keyword": 0.0796,
+        "rerank": 0.3436,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 22,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5143,
+        "keyword": 0.0,
+        "rerank": 0.3383,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5132,
+        "keyword": 0.0,
+        "rerank": 0.337,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 24,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5062,
+        "keyword": 0.0,
+        "rerank": 0.3288,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.6434,
+        "keyword": 0.5137,
+        "rerank": 0.8492,
+        "section": "space_telescope_notes",
+        "query_hits": "earth, orbit",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.6783,
+        "keyword": 0.3376,
+        "rerank": 0.7871,
+        "section": "earth_orbit",
+        "query_hits": "earth, orbit",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 3,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5763,
+        "keyword": 0.2256,
+        "rerank": 0.6025,
+        "section": "mars_overview",
+        "query_hits": "earth, orbit",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.6203,
+        "keyword": 0.1338,
+        "rerank": 0.5703,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.6026,
+        "keyword": 0.0753,
+        "rerank": 0.5154,
+        "section": "space_telescope_notes",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 6,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5836,
+        "keyword": 0.0831,
+        "rerank": 0.4979,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5723,
+        "keyword": 0.0995,
+        "rerank": 0.4942,
+        "section": "giant_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_solar_earth | Solar system centre Earth conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5749,
+        "keyword": 0.0769,
+        "rerank": 0.4841,
+        "section": "solar_system_center",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An obsolete geocentric claim places Earth at the centre of the Solar System."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.0836,
+        "rerank": 0.4732,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5501,
+        "keyword": 0.0901,
+        "rerank": 0.4628,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 11,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5415,
+        "keyword": 0.0762,
+        "rerank": 0.4446,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.5899,
+        "keyword": 0.0,
+        "rerank": 0.4267,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5628,
+        "keyword": 0.0,
+        "rerank": 0.395,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_solar_planets_distractor | Solar planets distractor",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5581,
+        "keyword": 0.0,
+        "rerank": 0.3895,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Solar System includes planets, dwarf planets, moons, asteroids, and comets."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.477,
+        "keyword": 0.0982,
+        "rerank": 0.382,
+        "section": "world_oceans",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 16,
+        "source": "direct_gravity_evidence | Gravity definition",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.547,
+        "keyword": 0.0,
+        "rerank": 0.3765,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity is the attractive force that pulls objects with mass toward one another."
+      },
+      {
+        "rank": 17,
+        "source": "comp_inner_venus | Venus is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.5452,
+        "keyword": 0.0,
+        "rerank": 0.3744,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Venus is one of the inner rocky planets, orbiting the Sun after Mercury."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_orbit_b | Earth's annual revolution",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.477,
+        "keyword": 0.0762,
+        "rerank": 0.3692,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One year corresponds approximately to one complete revolution of Earth around the Sun."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_planet_saturn | Saturn",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5296,
+        "keyword": 0.0,
+        "rerank": 0.3561,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Saturn is the second-largest planet and has the Solar System's most prominent ring system."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.5212,
+        "keyword": 0.0,
+        "rerank": 0.3464,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 21,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.4534,
+        "keyword": 0.0796,
+        "rerank": 0.3436,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 22,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5143,
+        "keyword": 0.0,
+        "rerank": 0.3383,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 23,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5132,
+        "keyword": 0.0,
+        "rerank": 0.337,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 24,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5062,
+        "keyword": 0.0,
+        "rerank": 0.3288,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.6434,
+        "keyword": 0.5137,
+        "rerank": 0.8492,
+        "section": "space_telescope_notes",
+        "query_hits": "earth, orbit",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.6783,
+        "keyword": 0.3376,
+        "rerank": 0.7871,
+        "section": "earth_orbit",
+        "query_hits": "earth, orbit",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9286,
+        "novelty": 0.6533,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9901,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 3,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.5763,
+        "keyword": 0.2256,
+        "rerank": 0.6025,
+        "section": "mars_overview",
+        "query_hits": "earth, orbit",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7162,
+        "novelty": 0.6382,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9653,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.0836,
+        "rerank": 0.4732,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5675,
+        "novelty": 0.6625,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8008,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.6203,
+        "keyword": 0.1338,
+        "rerank": 0.5703,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6791,
+        "novelty": 0.44,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7056,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5723,
+        "keyword": 0.0995,
+        "rerank": 0.4942,
+        "section": "giant_planets",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5916,
+        "novelty": 0.69,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6654,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "does",
+        "earth",
+        "object",
+        "orbit"
+      ],
+      "covered_query_terms": [
+        "earth",
+        "orbit"
+      ],
+      "missing_query_terms": [
+        "does",
+        "object"
+      ],
+      "terms_by_chunk": {
+        "missing_hubble_orbit | Telescope orbit distractor": [
+          "earth",
+          "orbit"
+        ],
+        "redundant_orbit_a | Earth around the Sun": [
+          "earth",
+          "orbit"
+        ],
+        "missing_mars_orbit | Mars orbit": [
+          "earth",
+          "orbit"
+        ],
+        "conflict_earth_planet | Closest planet Earth conflict": [
+          "earth"
+        ],
+        "redundant_orbit_moon | Moon orbit": [
+          "earth"
+        ],
+        "conflict_planet_earth | Earth": [
+          "earth"
+        ]
+      },
+      "section_titles": [
+        "closest_planet_sun",
+        "earth_orbit",
+        "giant_planets",
+        "mars_overview",
+        "space_telescope_notes"
+      ],
+      "chunks_by_section": {
+        "space_telescope_notes": [
+          "missing_hubble_orbit | Telescope orbit distractor"
+        ],
+        "earth_orbit": [
+          "redundant_orbit_a | Earth around the Sun",
+          "redundant_orbit_moon | Moon orbit"
+        ],
+        "mars_overview": [
+          "missing_mars_orbit | Mars orbit"
+        ],
+        "closest_planet_sun": [
+          "conflict_earth_planet | Closest planet Earth conflict"
+        ],
+        "giant_planets": [
+          "conflict_planet_earth | Earth"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Earth travels in an orbit around the Sun.",
+    "retrieved_context_answer": "Earth travels in an orbit around the Sun. Additionally, the Moon orbits Earth.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5,
+    "retrieved_context_f1": 0.47058823529411764,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

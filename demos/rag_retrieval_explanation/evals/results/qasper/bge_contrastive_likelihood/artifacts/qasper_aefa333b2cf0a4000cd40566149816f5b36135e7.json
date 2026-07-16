@@ -1,0 +1,1567 @@
+{
+  "case": {
+    "case_id": "qasper_aefa333b2cf0a4000cd40566149816f5b36135e7",
+    "paper_id": "1604.05372",
+    "paper_title": "Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints",
+    "question_id": "aefa333b2cf0a4000cd40566149816f5b36135e7",
+    "annotation_id": "8a940d24bfe575b8657c6919bfa0762351e0ace3",
+    "question": "What evaluation metric do they use?",
+    "gold_answer": "ratio of correct `translations'",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1604.05372:paragraph:0031"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1604.05372:paragraph:0006",
+      "score": 0.8415981817674104,
+      "title": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+      "text": "The rest of the paper is structured as follows. In Section \"Related Work\" we describe the foundations of our approach and the related work. Section \"Academic texts as Comparable Corpora\" introduces the employed corpora and the story behind them. Section \"Learning to Translate: Ukrainian-to-Russian transformations\" is dedicated to learning the transformation matrix, and Section \"Experiment Design and Evaluation\" describes our experimental setting and evaluation results. We discuss the findings in Section \"Discussion\" and conclude in Section \"Conclusion and Future Work\" , also suggesting directions for future work."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1604.05372:paragraph:0015",
+      "score": 0.9194127257108199,
+      "title": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+      "text": "For evaluation, 3 topics were used, distant enough from each other and abundantly presented in both subcorpora: economics, law and history. We randomly selected 100 texts in each language for each topic. As an average length of Russian texts is significantly higher (them being full theses), we cropped them, leaving only the first 5 thousand words, to mimic the size of the Ukrainian summaries. These 600 documents in 3 classes are used as a test set (see Section \"Experiment Design and Evaluation\" for the description of the conducted experiments)."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1604.05372:paragraph:0005",
+      "score": 0.7273883395607659,
+      "title": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+      "text": "Our evaluation data consists of comparable corpora of Russian and Ukrainian academic texts. On this material, we show that the `translated semantic fingerprints' method represents documents in different languages precisely enough to allow almost exact clustering according to document topics, with only 5% of incorrect assignments. It significantly outperforms both naive bag-of-words baseline and the not-so-naive method of `orthographic translation' based on Damerau-Levenshtein distance, even enriched with dictionary mappings. At the same time, it does not require large parallel corpora or a ready-made statistical machine translation model."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1604.05372:paragraph:0032",
+      "score": 0.8034411725527361,
+      "title": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "text": "For reference, we also report the accuracy of `quazi-translation' via Damerau-Levenshtein edit distance BIBREF9 , as a sort of a baseline. As already stated, the two languages share many cognates, and a lot of Ukrainian words can be orthographically transformed into their Russian translations (and vice versa) by one or two character replacements. Thus, we extracted 50,000 most frequent nouns from our Russian corpora; then for each Ukrainian noun in the bilingual dictionary we found the closest Russian noun (or 5 closest nouns for @5 metric) by edit distance and calculated how often it turned out to be the correct translation. As the Table 1 shows, notwithstanding the orthographic similarity of the two languages, CBOW consistently outperforms this approach even on the test set. On the training set, its superiority is even more obvious."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1604.05372:paragraph:0031",
+      "score": 0.6625934178250016,
+      "title": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "text": "To test all the possible combinations of parameters, we divided the bilingual dictionary into 4500 noun pairs used as a training set and 500 noun pairs used as a test set. We then learned transformation matrices on the training set using both training algorithms (CBOW and SkipGram) and several values of regularization $\\lambda $ from 0 to 5, with a step of 0.5. The resulting matrices were applied to the Ukrainian vectors from the test set and the corresponding Russian `translations' were calculated. The ratio of correct `translations' (matches) was used as an evaluation measure. It came out that regularization only worsened the results for both algorithms, so in the Table 1 we report the results without regularization."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1604.05372:paragraph:0017",
+      "score": 0.5463424468009893,
+      "title": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "text": "As already stated, our main proposal is using neural embedding models to `project' documents in one language into the semantic space of another language. For this, we first trained a Continuous Bag-of-Words (CBOW) and a Continuous SkipGram model BIBREF0 for each of our monolingual subcorpora. The models were trained with identical hyperparameters: vector size of 300 components, symmetric window of 2 words, negative sampling with 10 samples, 5 iterations over the corpus, no down-sampling. The only language-dependent difference was that for the Ukrainian model we ignored words with the corpus frequency less than 10 and for the Russian model this threshold was set to 15 (as the Russian corpus is 3 times larger). All in all, the final Ukrainian model recognizes 429 215 words and the Russian one 271 720 words. Training was performed using CBOW and SkipGram implementation in Gensim library BIBREF7 ."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "attribution": 0.24952323430964188
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "attribution": 0.0733046362477494
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "attribution": 0.02704714057971202
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+      "attribution": -0.019934587282970186
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+      "attribution": 0.016991801191376138
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+      "attribution": 0.006534419648509028
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+      "attribution": 0.10203350090325841
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "attribution": 0.08732730887377882
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "attribution": 0.023363771121950108
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+      "attribution": 0.008023615220972601
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+      "attribution": 0.007722248541508087
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+      "attribution": 0.0034189864127569334
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0015",
+      "interaction": 0.028463759203281445
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0005",
+      "interaction": -0.01156244390779695
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0032",
+      "interaction": -0.015293772386896613
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.0219347193764742
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.020275349751149335
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0005",
+      "interaction": 0.01623032606054392
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0032",
+      "interaction": 0.015196957559596486
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.0004762633721798238
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": 0.017833721320536042
+    },
+    {
+      "left": "1604.05372:paragraph:0005",
+      "right": "1604.05372:paragraph:0032",
+      "interaction": -0.016432039940560042
+    },
+    {
+      "left": "1604.05372:paragraph:0005",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.04794747999669139
+    },
+    {
+      "left": "1604.05372:paragraph:0005",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.038747702281118165
+    },
+    {
+      "left": "1604.05372:paragraph:0032",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.07242558848434452
+    },
+    {
+      "left": "1604.05372:paragraph:0032",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.023392003314256657
+    },
+    {
+      "left": "1604.05372:paragraph:0031",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.07252361042675547
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0015",
+      "interaction": -0.004351019095940969
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0005",
+      "interaction": -0.003293483860885958
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0032",
+      "interaction": -0.00800844695888596
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.010345677196553363
+    },
+    {
+      "left": "1604.05372:paragraph:0006",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.007538921856346768
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0005",
+      "interaction": -0.010229972323912836
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0032",
+      "interaction": -0.009132094613811452
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.007465295676918428
+    },
+    {
+      "left": "1604.05372:paragraph:0015",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.005720041765588186
+    },
+    {
+      "left": "1604.05372:paragraph:0005",
+      "right": "1604.05372:paragraph:0032",
+      "interaction": -0.015778456341638897
+    },
+    {
+      "left": "1604.05372:paragraph:0005",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": 0.010684023915990527
+    },
+    {
+      "left": "1604.05372:paragraph:0005",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.004714777785388856
+    },
+    {
+      "left": "1604.05372:paragraph:0032",
+      "right": "1604.05372:paragraph:0031",
+      "interaction": -0.0007011344532896515
+    },
+    {
+      "left": "1604.05372:paragraph:0032",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.0041007585014106425
+    },
+    {
+      "left": "1604.05372:paragraph:0031",
+      "right": "1604.05372:paragraph:0017",
+      "interaction": -0.007268561868437198
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.353466643872663
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 5,
+        "score": 0.18210873919612336
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 4,
+        "score": 0.09977201635677391
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 3,
+        "score": 0.08510902558518607
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "remaining_chunks": 2,
+        "score": 0.06518882912409096
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.0403614286809979
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "selected_chunks": 1,
+        "score": 0.3866655682148258
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "selected_chunks": 2,
+        "score": 0.3934061792748652
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "selected_chunks": 3,
+        "score": 0.359495904695712
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "selected_chunks": 4,
+        "score": 0.32128893550915383
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "selected_chunks": 5,
+        "score": 0.35370774320388043
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "selected_chunks": 6,
+        "score": 0.353466643872663
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.353466643872663
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "remaining_chunks": 5,
+        "score": 0.3363335791085107
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.32984648288120133
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 3,
+        "score": 0.37178396769259303
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.3934061792748652
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 1,
+        "score": 0.174110668221513
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.353466643872663
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 5,
+        "score": 0.18210873919612336
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 4,
+        "score": 0.09977201635677391
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "remaining_chunks": 3,
+        "score": 0.09589249648634968
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.10096206532465601
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "remaining_chunks": 1,
+        "score": 0.09607247113116013
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.3534666438726633
+      },
+      {
+        "step": 1,
+        "score": 0.2978060484569436
+      },
+      {
+        "step": 2,
+        "score": 0.24770683137020022
+      },
+      {
+        "step": 3,
+        "score": 0.21643291239495158
+      },
+      {
+        "step": 4,
+        "score": 0.1687715939191878
+      },
+      {
+        "step": 5,
+        "score": 0.10882996461419822
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What evaluation metric do they use?",
+    "expanded_queries": [
+      "What evaluation metric do they use?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "dense": 0.5144,
+        "page": 1,
+        "type": "body_text",
+        "section": "Academic texts as Comparable Corpora",
+        "flags": "",
+        "preview": "For evaluation, 3 topics were used, distant enough from each other and abundantly presented in both subcorpora: economics, law and history. We randomly selected 100 texts in each language for each topic. As an average le"
+      },
+      {
+        "rank": 2,
+        "source": "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "dense": 0.5061,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The rest of the paper is structured as follows. In Section \"Related Work\" we describe the foundations of our approach and the related work. Section \"Academic texts as Comparable Corpora\" introduces the employed corpora a"
+      },
+      {
+        "rank": 3,
+        "source": "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "dense": 0.4933,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Our evaluation data consists of comparable corpora of Russian and Ukrainian academic texts. On this material, we show that the `translated semantic fingerprints' method represents documents in different languages precise"
+      },
+      {
+        "rank": 4,
+        "source": "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "dense": 0.4914,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "For reference, we also report the accuracy of `quazi-translation' via Damerau-Levenshtein edit distance BIBREF9 , as a sort of a baseline. As already stated, the two languages share many cognates, and a lot of Ukrainian "
+      },
+      {
+        "rank": 5,
+        "source": "1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "dense": 0.4794,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "As already stated, our main proposal is using neural embedding models to `project' documents in one language into the semantic space of another language. For this, we first trained a Continuous Bag-of-Words (CBOW) and a "
+      },
+      {
+        "rank": 6,
+        "source": "1604.05372:paragraph:0011 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "dense": 0.4756,
+        "page": 1,
+        "type": "body_text",
+        "section": "Academic texts as Comparable Corpora",
+        "flags": "",
+        "preview": "Both Russia and the Ukraine have common academic tradition that makes it easier to collect corpora, which are comparable in terms of both genre and strictly defined academic fields. We work with such a corpus of Russian "
+      },
+      {
+        "rank": 7,
+        "source": "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "dense": 0.4738,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "To test all the possible combinations of parameters, we divided the bilingual dictionary into 4500 noun pairs used as a training set and 500 noun pairs used as a test set. We then learned transformation matrices on the t"
+      },
+      {
+        "rank": 8,
+        "source": "1604.05372:paragraph:0026 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "dense": 0.4727,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "This matrix basically maps the Ukrainian vectors into the Russian ones. It is based on the assumption that the relations between semantic concepts in different languages are in fact very similar (students are close to te"
+      },
+      {
+        "rank": 9,
+        "source": "1604.05372:paragraph:0004 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "dense": 0.4619,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "This approach is evaluated in a setting, where the input is a collection of documents in several languages and some number of topics to which these documents belong (we also have large monolingual corpora to train distri"
+      },
+      {
+        "rank": 10,
+        "source": "1604.05372:abstract:000 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Abstract",
+        "dense": 0.4597,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "We present our experience in applying distributional semantics (neural word embeddings) to the problem of representing and clustering documents in a bilingual comparable corpus. Our data is a collection of Russian and Uk"
+      },
+      {
+        "rank": 11,
+        "source": "1604.05372:paragraph:0028 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "dense": 0.4522,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "We had to choose between CBOW or Continuous SkipGram models to use when learning the transformation matrix. Also, there was a question of whether to employ regularized or standard normal equations. Regularization is an a"
+      },
+      {
+        "rank": 12,
+        "source": "1604.05372:paragraph:0000 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "dense": 0.4475,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "This research addresses the problem of representing the semantics of text documents in multi-lingual comparable corpora. We present a new approach to this problem, based on neural embeddings, and test it on the task of c"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1604.05372:paragraph:0022 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0928,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "Thus, we use normal equation to find the optimal transformation matrix. The algebraic solution to each of 300 normal equations (one for each vector component $i$ ) is shown in the Equation 3 :"
+      },
+      {
+        "rank": 2,
+        "source": "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "keyword": 0.0803,
+        "page": 1,
+        "type": "body_text",
+        "section": "Academic texts as Comparable Corpora",
+        "flags": "",
+        "preview": "For evaluation, 3 topics were used, distant enough from each other and abundantly presented in both subcorpora: economics, law and history. We randomly selected 100 texts in each language for each topic. As an average le"
+      },
+      {
+        "rank": 3,
+        "source": "1604.05372:paragraph:0028 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0653,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "We had to choose between CBOW or Continuous SkipGram models to use when learning the transformation matrix. Also, there was a question of whether to employ regularized or standard normal equations. Regularization is an a"
+      },
+      {
+        "rank": 4,
+        "source": "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "keyword": 0.0624,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The rest of the paper is structured as follows. In Section \"Related Work\" we describe the foundations of our approach and the related work. Section \"Academic texts as Comparable Corpora\" introduces the employed corpora a"
+      },
+      {
+        "rank": 5,
+        "source": "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0614,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "For reference, we also report the accuracy of `quazi-translation' via Damerau-Levenshtein edit distance BIBREF9 , as a sort of a baseline. As already stated, the two languages share many cognates, and a lot of Ukrainian "
+      },
+      {
+        "rank": 6,
+        "source": "1604.05372:paragraph:0010 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "keyword": 0.0575,
+        "page": 1,
+        "type": "body_text",
+        "section": "Academic texts as Comparable Corpora",
+        "flags": "",
+        "preview": "The Russian and Ukrainian languages are mainly spoken in Russian Federation and the Ukraine and belong to the East-Slavic group of the Indo-European language family. They share many common morphosyntactic features: both "
+      },
+      {
+        "rank": 7,
+        "source": "1604.05372:paragraph:0007 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "keyword": 0.0429,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Clustering multi-lingual documents has received much attention in natural language processing. Among approaches not using some form of machine translation, one can mention BIBREF1 , who essentially employ a bilingual dic"
+      },
+      {
+        "rank": 8,
+        "source": "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "keyword": 0.0365,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Our evaluation data consists of comparable corpora of Russian and Ukrainian academic texts. On this material, we show that the `translated semantic fingerprints' method represents documents in different languages precise"
+      },
+      {
+        "rank": 9,
+        "source": "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0308,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "To test all the possible combinations of parameters, we divided the bilingual dictionary into 4500 noun pairs used as a training set and 500 noun pairs used as a test set. We then learned transformation matrices on the t"
+      },
+      {
+        "rank": 10,
+        "source": "1604.05372:paragraph:0030 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "Comparing to 3 , it adds the term $\\lambda * L$ , where $L$ is the identity matrix of the size equal to the number of features, with 0 at the top left cell, and $\\lambda $ is a real number used to tune the influence of r"
+      },
+      {
+        "rank": 11,
+        "source": "1604.05372:paragraph:0023 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "$$\\beta _i = (\\textbf {X}^\\intercal * \\textbf {X})^{-1} * \\textbf {X}^\\intercal * y_i$$ (Eq. 3)"
+      },
+      {
+        "rank": 12,
+        "source": "1604.05372:paragraph:0024 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "flags": "",
+        "preview": "where $\\textbf {X}$ is the matrix of 5 thousand Ukrainian word vectors (input), $y_i$ is the vector of the $i$ th components of 5 thousand corresponding Russian words (correct predictions), and $\\beta _i$ is our aim: the"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5144,
+        "keyword": 0.0803,
+        "rerank": 0.9194,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "For evaluation, 3 topics were used, distant enough from each other and abundantly presented in both subcorpora: economics, law and history. We randomly selected 100 texts in each language for each topic. As an average le"
+      },
+      {
+        "rank": 2,
+        "source": "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5061,
+        "keyword": 0.0624,
+        "rerank": 0.8416,
+        "section": "Introduction",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "The rest of the paper is structured as follows. In Section \"Related Work\" we describe the foundations of our approach and the related work. Section \"Academic texts as Comparable Corpora\" introduces the employed corpora a"
+      },
+      {
+        "rank": 3,
+        "source": "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4914,
+        "keyword": 0.0614,
+        "rerank": 0.8034,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "metric",
+        "reasons": "body/table evidence",
+        "preview": "For reference, we also report the accuracy of `quazi-translation' via Damerau-Levenshtein edit distance BIBREF9 , as a sort of a baseline. As already stated, the two languages share many cognates, and a lot of Ukrainian "
+      },
+      {
+        "rank": 4,
+        "source": "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4933,
+        "keyword": 0.0365,
+        "rerank": 0.7274,
+        "section": "Introduction",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "Our evaluation data consists of comparable corpora of Russian and Ukrainian academic texts. On this material, we show that the `translated semantic fingerprints' method represents documents in different languages precise"
+      },
+      {
+        "rank": 5,
+        "source": "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0308,
+        "rerank": 0.6626,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "To test all the possible combinations of parameters, we divided the bilingual dictionary into 4500 noun pairs used as a training set and 500 noun pairs used as a test set. We then learned transformation matrices on the t"
+      },
+      {
+        "rank": 6,
+        "source": "1604.05372:paragraph:0028 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4522,
+        "keyword": 0.0653,
+        "rerank": 0.6221,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We had to choose between CBOW or Continuous SkipGram models to use when learning the transformation matrix. Also, there was a question of whether to employ regularized or standard normal equations. Regularization is an a"
+      },
+      {
+        "rank": 7,
+        "source": "1604.05372:paragraph:0007 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4311,
+        "keyword": 0.0429,
+        "rerank": 0.5992,
+        "section": "Related Work",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "Clustering multi-lingual documents has received much attention in natural language processing. Among approaches not using some form of machine translation, one can mention BIBREF1 , who essentially employ a bilingual dic"
+      },
+      {
+        "rank": 8,
+        "source": "1604.05372:paragraph:0026 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4727,
+        "keyword": 0.0,
+        "rerank": 0.5603,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "This matrix basically maps the Ukrainian vectors into the Russian ones. It is based on the assumption that the relations between semantic concepts in different languages are in fact very similar (students are close to te"
+      },
+      {
+        "rank": 9,
+        "source": "1604.05372:paragraph:0022 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3839,
+        "keyword": 0.0928,
+        "rerank": 0.5476,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Thus, we use normal equation to find the optimal transformation matrix. The algebraic solution to each of 300 normal equations (one for each vector component $i$ ) is shown in the Equation 3 :"
+      },
+      {
+        "rank": 10,
+        "source": "1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4794,
+        "keyword": 0.0,
+        "rerank": 0.5463,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As already stated, our main proposal is using neural embedding models to `project' documents in one language into the semantic space of another language. For this, we first trained a Continuous Bag-of-Words (CBOW) and a "
+      },
+      {
+        "rank": 11,
+        "source": "1604.05372:paragraph:0011 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4756,
+        "keyword": 0.0,
+        "rerank": 0.5371,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Both Russia and the Ukraine have common academic tradition that makes it easier to collect corpora, which are comparable in terms of both genre and strictly defined academic fields. We work with such a corpus of Russian "
+      },
+      {
+        "rank": 12,
+        "source": "1604.05372:paragraph:0004 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4619,
+        "keyword": 0.0,
+        "rerank": 0.5045,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "This approach is evaluated in a setting, where the input is a collection of documents in several languages and some number of topics to which these documents belong (we also have large monolingual corpora to train distri"
+      },
+      {
+        "rank": 13,
+        "source": "1604.05372:abstract:000 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4597,
+        "keyword": 0.0,
+        "rerank": 0.4992,
+        "section": "Abstract",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We present our experience in applying distributional semantics (neural word embeddings) to the problem of representing and clustering documents in a bilingual comparable corpus. Our data is a collection of Russian and Uk"
+      },
+      {
+        "rank": 14,
+        "source": "1604.05372:paragraph:0000 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4475,
+        "keyword": 0.0,
+        "rerank": 0.4698,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "This research addresses the problem of representing the semantics of text documents in multi-lingual comparable corpora. We present a new approach to this problem, based on neural embeddings, and test it on the task of c"
+      },
+      {
+        "rank": 15,
+        "source": "1604.05372:paragraph:0008 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4431,
+        "keyword": 0.0,
+        "rerank": 0.4593,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF2 proposed training joint multi-lingual neural embedding models. Theoretically, this can be used to achieve our aim of language-independent semantic representations for documents. Unfortunately, it demands a large "
+      },
+      {
+        "rank": 16,
+        "source": "1604.05372:paragraph:0003 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4407,
+        "keyword": 0.0,
+        "rerank": 0.4536,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, a novel way of reducing the problem of cross-lingual document representation to a monolingual setting is proposed. Essentially, we train Continuous Bag-of-Words models BIBREF0 on large comparable monolingu"
+      },
+      {
+        "rank": 17,
+        "source": "1604.05372:paragraph:0009 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4333,
+        "keyword": 0.0,
+        "rerank": 0.436,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The approach described in this paper takes as an input only comparable monolingual corpora and bilingual dictionaries in the size of several thousand word pairs. Such resources are much easier to find and evaluate. We em"
+      },
+      {
+        "rank": 18,
+        "source": "1604.05372:paragraph:0020 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4307,
+        "keyword": 0.0,
+        "rerank": 0.4295,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Producing the transformation matrix is a linear regression problem: the input is 301 components of Ukrainian vectors (including the bias term) and the output is 300 components of Russian vectors. As we need 300 values as"
+      },
+      {
+        "rank": 19,
+        "source": "1604.05372:paragraph:0019 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4239,
+        "keyword": 0.0,
+        "rerank": 0.4134,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For all these words, their vectors were found in the models corresponding to the words' languages. It provided us with a matrix of 5 thousand of 300-dimensional Ukrainian vectors and the matrix of corresponding 5 thousan"
+      },
+      {
+        "rank": 20,
+        "source": "1604.05372:paragraph:0002 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4174,
+        "keyword": 0.0,
+        "rerank": 0.3978,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Of course, one obvious way to solve this problem is to translate all documents into one language, and then apply any clustering algorithm. However, this requires either buying human/machine translation services (which ca"
+      },
+      {
+        "rank": 21,
+        "source": "1604.05372:paragraph:0021 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4058,
+        "keyword": 0.0,
+        "rerank": 0.37,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "There are two main ways to solve a linear regression problem: one can either learn the optimal weights in an iterative way using some variant of gradient descent, or one can solve it numerically without iteration, using "
+      },
+      {
+        "rank": 22,
+        "source": "1604.05372:paragraph:0013 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4009,
+        "keyword": 0.0,
+        "rerank": 0.3583,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The documents were converted to plain text files from MS Word format in the case of the Ukrainian subcorpus and mainly from OCRed PDF files in the case of the Russian subcorpus. Because of this, the Russian documents oft"
+      },
+      {
+        "rank": 23,
+        "source": "1604.05372:paragraph:0016 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.442,
+        "keyword": 0.0,
+        "rerank": 0.3568,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The corpora (including test set) were PoS-tagged. Each word was replaced with its lemma followed by a PoS-tag (`russian\u0434\u0438\u0441\u0441\u0435\u0440\u0442\u0430\u0446\u0438\u044f_S', `russian\u0434\u0438\u0441\u0441\u0435\u0440\u0442\u0430\u0446i\u044f_N'). Functional parts of speech (conjunctions, pronouns, preposit"
+      },
+      {
+        "rank": 24,
+        "source": "1604.05372:paragraph:0018 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3972,
+        "keyword": 0.0,
+        "rerank": 0.3496,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "After the models were trained, we followed the path outlined in BIBREF4 to learn a linear transformation matrix from Ukrainian to Russian. First, we extracted all noun pairs from Russian-Ukrainian bilingual dictionary BI"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5144,
+        "keyword": 0.0803,
+        "rerank": 0.9194,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "For evaluation, 3 topics were used, distant enough from each other and abundantly presented in both subcorpora: economics, law and history. We randomly selected 100 texts in each language for each topic. As an average le"
+      },
+      {
+        "rank": 2,
+        "source": "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5061,
+        "keyword": 0.0624,
+        "rerank": 0.8416,
+        "section": "Introduction",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "The rest of the paper is structured as follows. In Section \"Related Work\" we describe the foundations of our approach and the related work. Section \"Academic texts as Comparable Corpora\" introduces the employed corpora a"
+      },
+      {
+        "rank": 3,
+        "source": "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4914,
+        "keyword": 0.0614,
+        "rerank": 0.8034,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "metric",
+        "reasons": "body/table evidence",
+        "preview": "For reference, we also report the accuracy of `quazi-translation' via Damerau-Levenshtein edit distance BIBREF9 , as a sort of a baseline. As already stated, the two languages share many cognates, and a lot of Ukrainian "
+      },
+      {
+        "rank": 4,
+        "source": "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4933,
+        "keyword": 0.0365,
+        "rerank": 0.7274,
+        "section": "Introduction",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "Our evaluation data consists of comparable corpora of Russian and Ukrainian academic texts. On this material, we show that the `translated semantic fingerprints' method represents documents in different languages precise"
+      },
+      {
+        "rank": 5,
+        "source": "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0308,
+        "rerank": 0.6626,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "To test all the possible combinations of parameters, we divided the bilingual dictionary into 4500 noun pairs used as a training set and 500 noun pairs used as a test set. We then learned transformation matrices on the t"
+      },
+      {
+        "rank": 6,
+        "source": "1604.05372:paragraph:0028 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4522,
+        "keyword": 0.0653,
+        "rerank": 0.6221,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We had to choose between CBOW or Continuous SkipGram models to use when learning the transformation matrix. Also, there was a question of whether to employ regularized or standard normal equations. Regularization is an a"
+      },
+      {
+        "rank": 7,
+        "source": "1604.05372:paragraph:0007 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4311,
+        "keyword": 0.0429,
+        "rerank": 0.5992,
+        "section": "Related Work",
+        "query_hits": "evaluation",
+        "reasons": "body/table evidence",
+        "preview": "Clustering multi-lingual documents has received much attention in natural language processing. Among approaches not using some form of machine translation, one can mention BIBREF1 , who essentially employ a bilingual dic"
+      },
+      {
+        "rank": 8,
+        "source": "1604.05372:paragraph:0026 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4727,
+        "keyword": 0.0,
+        "rerank": 0.5603,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "This matrix basically maps the Ukrainian vectors into the Russian ones. It is based on the assumption that the relations between semantic concepts in different languages are in fact very similar (students are close to te"
+      },
+      {
+        "rank": 9,
+        "source": "1604.05372:paragraph:0022 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3839,
+        "keyword": 0.0928,
+        "rerank": 0.5476,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Thus, we use normal equation to find the optimal transformation matrix. The algebraic solution to each of 300 normal equations (one for each vector component $i$ ) is shown in the Equation 3 :"
+      },
+      {
+        "rank": 10,
+        "source": "1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4794,
+        "keyword": 0.0,
+        "rerank": 0.5463,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As already stated, our main proposal is using neural embedding models to `project' documents in one language into the semantic space of another language. For this, we first trained a Continuous Bag-of-Words (CBOW) and a "
+      },
+      {
+        "rank": 11,
+        "source": "1604.05372:paragraph:0011 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4756,
+        "keyword": 0.0,
+        "rerank": 0.5371,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Both Russia and the Ukraine have common academic tradition that makes it easier to collect corpora, which are comparable in terms of both genre and strictly defined academic fields. We work with such a corpus of Russian "
+      },
+      {
+        "rank": 12,
+        "source": "1604.05372:paragraph:0004 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4619,
+        "keyword": 0.0,
+        "rerank": 0.5045,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "This approach is evaluated in a setting, where the input is a collection of documents in several languages and some number of topics to which these documents belong (we also have large monolingual corpora to train distri"
+      },
+      {
+        "rank": 13,
+        "source": "1604.05372:abstract:000 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4597,
+        "keyword": 0.0,
+        "rerank": 0.4992,
+        "section": "Abstract",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We present our experience in applying distributional semantics (neural word embeddings) to the problem of representing and clustering documents in a bilingual comparable corpus. Our data is a collection of Russian and Uk"
+      },
+      {
+        "rank": 14,
+        "source": "1604.05372:paragraph:0000 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4475,
+        "keyword": 0.0,
+        "rerank": 0.4698,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "This research addresses the problem of representing the semantics of text documents in multi-lingual comparable corpora. We present a new approach to this problem, based on neural embeddings, and test it on the task of c"
+      },
+      {
+        "rank": 15,
+        "source": "1604.05372:paragraph:0008 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4431,
+        "keyword": 0.0,
+        "rerank": 0.4593,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF2 proposed training joint multi-lingual neural embedding models. Theoretically, this can be used to achieve our aim of language-independent semantic representations for documents. Unfortunately, it demands a large "
+      },
+      {
+        "rank": 16,
+        "source": "1604.05372:paragraph:0003 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4407,
+        "keyword": 0.0,
+        "rerank": 0.4536,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, a novel way of reducing the problem of cross-lingual document representation to a monolingual setting is proposed. Essentially, we train Continuous Bag-of-Words models BIBREF0 on large comparable monolingu"
+      },
+      {
+        "rank": 17,
+        "source": "1604.05372:paragraph:0009 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4333,
+        "keyword": 0.0,
+        "rerank": 0.436,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The approach described in this paper takes as an input only comparable monolingual corpora and bilingual dictionaries in the size of several thousand word pairs. Such resources are much easier to find and evaluate. We em"
+      },
+      {
+        "rank": 18,
+        "source": "1604.05372:paragraph:0020 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4307,
+        "keyword": 0.0,
+        "rerank": 0.4295,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Producing the transformation matrix is a linear regression problem: the input is 301 components of Ukrainian vectors (including the bias term) and the output is 300 components of Russian vectors. As we need 300 values as"
+      },
+      {
+        "rank": 19,
+        "source": "1604.05372:paragraph:0019 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4239,
+        "keyword": 0.0,
+        "rerank": 0.4134,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For all these words, their vectors were found in the models corresponding to the words' languages. It provided us with a matrix of 5 thousand of 300-dimensional Ukrainian vectors and the matrix of corresponding 5 thousan"
+      },
+      {
+        "rank": 20,
+        "source": "1604.05372:paragraph:0002 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4174,
+        "keyword": 0.0,
+        "rerank": 0.3978,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Of course, one obvious way to solve this problem is to translate all documents into one language, and then apply any clustering algorithm. However, this requires either buying human/machine translation services (which ca"
+      },
+      {
+        "rank": 21,
+        "source": "1604.05372:paragraph:0021 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4058,
+        "keyword": 0.0,
+        "rerank": 0.37,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "There are two main ways to solve a linear regression problem: one can either learn the optimal weights in an iterative way using some variant of gradient descent, or one can solve it numerically without iteration, using "
+      },
+      {
+        "rank": 22,
+        "source": "1604.05372:paragraph:0013 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4009,
+        "keyword": 0.0,
+        "rerank": 0.3583,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The documents were converted to plain text files from MS Word format in the case of the Ukrainian subcorpus and mainly from OCRed PDF files in the case of the Russian subcorpus. Because of this, the Russian documents oft"
+      },
+      {
+        "rank": 23,
+        "source": "1604.05372:paragraph:0016 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.442,
+        "keyword": 0.0,
+        "rerank": 0.3568,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The corpora (including test set) were PoS-tagged. Each word was replaced with its lemma followed by a PoS-tag (`russian\u0434\u0438\u0441\u0441\u0435\u0440\u0442\u0430\u0446\u0438\u044f_S', `russian\u0434\u0438\u0441\u0441\u0435\u0440\u0442\u0430\u0446i\u044f_N'). Functional parts of speech (conjunctions, pronouns, preposit"
+      },
+      {
+        "rank": 24,
+        "source": "1604.05372:paragraph:0018 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3972,
+        "keyword": 0.0,
+        "rerank": 0.3496,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "After the models were trained, we followed the path outlined in BIBREF4 to learn a linear transformation matrix from Ukrainian to Russian. First, we extracted all noun pairs from Russian-Ukrainian bilingual dictionary BI"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5061,
+        "keyword": 0.0624,
+        "rerank": 0.8416,
+        "section": "Introduction",
+        "query_hits": "evaluation",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9033,
+        "novelty": 1.0,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3168,
+        "reasons": "body/table evidence",
+        "preview": "The rest of the paper is structured as follows. In Section \"Related Work\" we describe the foundations of our approach and the related work. Section \"Academic texts as Comparable Corpora\" introduces the employed corpora a"
+      },
+      {
+        "rank": 2,
+        "source": "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5144,
+        "keyword": 0.0803,
+        "rerank": 0.9194,
+        "section": "Academic texts as Comparable Corpora",
+        "query_hits": "evaluation",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7214,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.201,
+        "reasons": "body/table evidence",
+        "preview": "For evaluation, 3 topics were used, distant enough from each other and abundantly presented in both subcorpora: economics, law and history. We randomly selected 100 texts in each language for each topic. As an average le"
+      },
+      {
+        "rank": 3,
+        "source": "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4933,
+        "keyword": 0.0365,
+        "rerank": 0.7274,
+        "section": "Introduction",
+        "query_hits": "evaluation",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7613,
+        "novelty": 0.4702,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1206,
+        "reasons": "body/table evidence",
+        "preview": "Our evaluation data consists of comparable corpora of Russian and Ukrainian academic texts. On this material, we show that the `translated semantic fingerprints' method represents documents in different languages precise"
+      },
+      {
+        "rank": 4,
+        "source": "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4914,
+        "keyword": 0.0614,
+        "rerank": 0.8034,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "metric",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8559,
+        "novelty": 0.9038,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1026,
+        "reasons": "body/table evidence",
+        "preview": "For reference, we also report the accuracy of `quazi-translation' via Damerau-Levenshtein edit distance BIBREF9 , as a sort of a baseline. As already stated, the two languages share many cognates, and a lot of Ukrainian "
+      },
+      {
+        "rank": 5,
+        "source": "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0308,
+        "rerank": 0.6626,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "evaluation",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6808,
+        "novelty": 0.4237,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8848,
+        "reasons": "body/table evidence",
+        "preview": "To test all the possible combinations of parameters, we divided the bilingual dictionary into 4500 noun pairs used as a training set and 500 noun pairs used as a test set. We then learned transformation matrices on the t"
+      },
+      {
+        "rank": 6,
+        "source": "1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4794,
+        "keyword": 0.0,
+        "rerank": 0.5463,
+        "section": "Learning to Translate: Ukrainian-to-Russian transformations",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5363,
+        "novelty": 0.4522,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8845,
+        "reasons": "body/table evidence",
+        "preview": "As already stated, our main proposal is using neural embedding models to `project' documents in one language into the semantic space of another language. For this, we first trained a Continuous Bag-of-Words (CBOW) and a "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "evaluation",
+        "metric",
+        "they",
+        "use"
+      ],
+      "covered_query_terms": [
+        "evaluation",
+        "metric"
+      ],
+      "missing_query_terms": [
+        "they",
+        "use"
+      ],
+      "terms_by_chunk": {
+        "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction": [
+          "evaluation"
+        ],
+        "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora": [
+          "evaluation"
+        ],
+        "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction": [
+          "evaluation"
+        ],
+        "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations": [
+          "metric"
+        ],
+        "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations": [
+          "evaluation"
+        ]
+      },
+      "section_titles": [
+        "Academic texts as Comparable Corpora",
+        "Introduction",
+        "Learning to Translate: Ukrainian-to-Russian transformations"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1604.05372:paragraph:0006 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction",
+          "1604.05372:paragraph:0005 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Introduction"
+        ],
+        "Academic texts as Comparable Corpora": [
+          "1604.05372:paragraph:0015 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Academic texts as Comparable Corpora"
+        ],
+        "Learning to Translate: Ukrainian-to-Russian transformations": [
+          "1604.05372:paragraph:0032 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+          "1604.05372:paragraph:0031 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations",
+          "1604.05372:paragraph:0017 | Clustering Comparable Corpora of Russian and Ukrainian Academic Texts: Word Embeddings and Semantic Fingerprints / Learning to Translate: Ukrainian-to-Russian transformations"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The ratio of correct translations (matches) was used as an evaluation measure.",
+    "retrieved_context_answer": "The context mentions several evaluation metrics depending on the specific task or comparison being made:\n\n*   **Clustering:** The `translated semantic fingerprints` method was shown to allow for almost exact clustering according to document topics, with only 5% of incorrect assignments.\n*   **Translation Accuracy (Noun Pairs):** For testing transformation matrices, the ratio of correct `translations'` (matches) was used as an evaluation measure.\n*   **Baseline Comparisons:** The performance of methods",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5,
+    "retrieved_context_f1": 0.11594202898550725,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

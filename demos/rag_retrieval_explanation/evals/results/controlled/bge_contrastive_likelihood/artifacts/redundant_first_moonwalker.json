@@ -1,0 +1,3404 @@
+{
+  "case": {
+    "case_id": "redundant_first_moonwalker",
+    "pattern": "redundant_evidence",
+    "question": "Who was the first person to walk on the Moon?",
+    "gold_answer": "Neil Armstrong.",
+    "gold_evidence_ids": [
+      "redundant_neil_a",
+      "redundant_neil_b",
+      "redundant_neil_c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_neil_a",
+        "right": "redundant_neil_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_neil_a",
+        "right": "redundant_neil_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_neil_b",
+        "right": "redundant_neil_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_neil_a",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: redundant_neil_a | Armstrong first step",
+      "text": "Neil Armstrong was the first person to walk on the Moon."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_neil_c",
+      "score": 0.7310539441689788,
+      "title": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+      "text": "The first Moon walk was made by Neil Armstrong."
+    },
+    {
+      "rank": 3,
+      "passage_id": "redundant_neil_b",
+      "score": 0.509242505016001,
+      "title": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+      "text": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+    },
+    {
+      "rank": 4,
+      "passage_id": "redundant_neil_aldrin_distractor",
+      "score": 0.48266556537617455,
+      "title": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+      "text": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+    },
+    {
+      "rank": 5,
+      "passage_id": "redundant_orbit_moon",
+      "score": 0.3919234372941972,
+      "title": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+      "text": "The Moon orbits Earth."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_mars_orbit",
+      "score": 0.18360849715324967,
+      "title": "Retrieved 6: missing_mars_orbit | Mars orbit",
+      "text": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+      "attribution": 0.10162808820824523
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+      "attribution": 0.09789241098401609
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+      "attribution": 0.07835630073944348
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+      "attribution": 0.061682818717960775
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+      "attribution": 0.020175878848213286
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+      "attribution": 0.009518225164863937
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+      "attribution": 0.037708617148149486
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+      "attribution": 0.027416064655035807
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+      "attribution": 0.01970777355884767
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+      "attribution": -0.0032262718109970197
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+      "attribution": -0.002152816306341888
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+      "attribution": -0.001056526696382333
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.1179450082277275,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.14021778864689596,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.13593392792270978,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": 0.013773929792994705,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": 0.013227133418436872,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_neil_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": 0.042462235570454594,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.14021778864689596,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_b",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.1179450082277275,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_aldrin_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.10214458952152826,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_orbit_moon",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.03836940568182764,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "missing_mars_orbit",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.018965931865897404,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_neil_b",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.13593392792270978,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_neil_aldrin_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.09497214772352751,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_orbit_moon",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.027026334701571033,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "missing_mars_orbit",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.008119634572140063,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_neil_aldrin_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.093737717885496,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_orbit_moon",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.023630330074922865,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "missing_mars_orbit",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.007934443646254985,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_aldrin_distractor",
+      "right": "redundant_orbit_moon",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.01620909515738889,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_aldrin_distractor",
+      "right": "missing_mars_orbit",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.04058662145019995,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "missing_mars_orbit",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.03627109621591865,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_c",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.013227133418436872,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_b",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.013773929792994705,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_neil_aldrin_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.003071144140727344,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "redundant_orbit_moon",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0007553739133218544,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_a",
+      "right": "missing_mars_orbit",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.0011282101589698299,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_neil_b",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": 0.042462235570454594,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_neil_aldrin_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.006927514860421232,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "redundant_orbit_moon",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.00047087148962025925,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_c",
+      "right": "missing_mars_orbit",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": 0.0002508154392201949,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_neil_aldrin_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": 0.0015483230659905597,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "redundant_orbit_moon",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.0002207545401957174,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_b",
+      "right": "missing_mars_orbit",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.0019386180632096396,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_aldrin_distractor",
+      "right": "redundant_orbit_moon",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.0022106982683606407,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_neil_aldrin_distractor",
+      "right": "missing_mars_orbit",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.004519123588590106,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orbit_moon",
+      "right": "missing_mars_orbit",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": 0.00043980780111149643,
+      "sign": "positive"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_neil_a"
+      ],
+      "score": 0.4019875498443658
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_c"
+      ],
+      "score": 0.4131052123708898
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_b"
+      ],
+      "score": 0.3956291108124569
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.339655949859058
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon"
+      ],
+      "score": 0.13623586461782666
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit"
+      ],
+      "score": 0.10670714681888904
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c"
+      ],
+      "score": 0.36830639090790185
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b"
+      ],
+      "score": 0.3647183239161357
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.3474676311998596
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.36538649054045946
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3624394488871441
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b"
+      ],
+      "score": 0.3782759665439457
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.37704503122488775
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.40098158155414665
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3993392569244931
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.3630872423832231
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3872781067527622
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3836400132741067
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3311844848637514
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.2100867404304989
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.04849837633072562
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b"
+      ],
+      "score": 0.36967572606810195
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.3539549067799499
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3571678773324112
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3686980097754996
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.3592884450059678
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3732501001932148
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.37072705265538575
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3533361167975887
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3549756084769342
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3537562272409379
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.3689386020649489
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.38458107875333125
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3870144156648646
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3900818367538893
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.38969240145766204
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.40238301201576254
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.37330988608231563
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3779968578615046
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.38192146285329054
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3179496642971491
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.3632175201823383
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3718323156829929
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.38261974124873666
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3494507983255297
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3568077493232279
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.36289264540828536
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.3617264523358994
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.36593512235790815
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.37725907666572145
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.34110968595990243
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.38380250562180385
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.383752425351119
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3937752296400061
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3951679799978335
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.38007844676872615
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.37442430621862577
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3745241223469544
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3772479474800666
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3528060423754451
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.36241834660432604
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.3849088995543958
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.36925371977271704
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_neil_a"
+      ],
+      "score": 0.010587837808095912
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_c"
+      ],
+      "score": 0.011723723545625342
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_b"
+      ],
+      "score": -0.009727733049247345
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.009922803299539762
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon"
+      ],
+      "score": 0.0031463833574575384
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit"
+      ],
+      "score": 0.004656418646011851
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c"
+      ],
+      "score": 0.03640990355701257
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b"
+      ],
+      "score": 0.019553332850495653
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.012041750659071537
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon"
+      ],
+      "score": -0.003762747838508551
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "missing_mars_orbit"
+      ],
+      "score": 0.005305731811253711
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b"
+      ],
+      "score": 0.05086563879143713
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.0055299977509443154
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.003893929969940535
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.00821835285976713
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": -0.021386419035782978
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": -0.02224096524302377
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": -0.021999830705806966
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": -0.008058170572974699
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": -0.009718974479985598
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": -0.013141815774913523
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b"
+      ],
+      "score": 0.07725407769456027
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.031178970868587563
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.033162820175809404
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.033588937637705873
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.018308154593731585
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.008278671241142677
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.00940034771839604
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": -0.007184875134425339
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": -0.006515610918010728
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.0026708140263632663
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.037302516273733044
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.036522846428008404
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.038644588448101924
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": -0.017650657754434695
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": -0.016993129557858033
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.0019576971029394707
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": -0.021967527950036037
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": -0.026054669935635988
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": -0.02478887153016973
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": -0.0075608465035505446
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor"
+      ],
+      "score": 0.07787166415570612
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.07780759993587305
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.07802892103516634
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.02775119429840467
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.029061081686907464
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.03227613663254014
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.017822415652113732
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.017921493386109155
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.010527045834238469
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": -0.007498462042062781
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.03653158007610957
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.03739486215671217
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.037174358413547215
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": -0.019872123731174418
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": -0.02562140904553617
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon"
+      ],
+      "score": 0.07837933047772305
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.07846834793522883
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.07751190708405697
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.032499458126799996
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.018131319217570496
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.037363959467208496
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_neil_a",
+        "redundant_neil_c",
+        "redundant_neil_b",
+        "redundant_neil_aldrin_distractor",
+        "redundant_orbit_moon",
+        "missing_mars_orbit"
+      ],
+      "score": 0.0783968409551361
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.36925371977271704
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "remaining_chunks": 5,
+        "score": 0.36241834660432604
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+        "remaining_chunks": 4,
+        "score": 0.34110968595990243
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "remaining_chunks": 3,
+        "score": 0.3179496642971491
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "remaining_chunks": 2,
+        "score": 0.04849837633072562
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 1,
+        "score": 0.10670714681888904
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "selected_chunks": 1,
+        "score": 0.4131052123708898
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+        "selected_chunks": 2,
+        "score": 0.3782759665439457
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "selected_chunks": 3,
+        "score": 0.36967572606810195
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "selected_chunks": 4,
+        "score": 0.3632175201823383
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "selected_chunks": 5,
+        "score": 0.37442430621862577
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "selected_chunks": 6,
+        "score": 0.36925371977271704
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.36925371977271704
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "remaining_chunks": 5,
+        "score": 0.3849088995543958
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "remaining_chunks": 4,
+        "score": 0.38007844676872615
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+        "remaining_chunks": 3,
+        "score": 0.3179496642971491
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "remaining_chunks": 2,
+        "score": 0.04849837633072562
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 1,
+        "score": 0.10670714681888904
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.36925371977271704
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: redundant_neil_b | Apollo 11 first moonwalker",
+        "remaining_chunks": 5,
+        "score": 0.3528060423754451
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_neil_c | First lunar surface wording",
+        "remaining_chunks": 4,
+        "score": 0.34110968595990243
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 3,
+        "score": 0.3533361167975887
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: redundant_orbit_moon | Moon orbit",
+        "remaining_chunks": 2,
+        "score": 0.3474676311998596
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "remaining_chunks": 1,
+        "score": 0.4019875498443658
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: redundant_neil_a | Armstrong first step",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.3692537197727172
+      },
+      {
+        "step": 1,
+        "score": 0.36995130227600453
+      },
+      {
+        "step": 2,
+        "score": 0.3726020114243366
+      },
+      {
+        "step": 3,
+        "score": 0.37347310090724994
+      },
+      {
+        "step": 4,
+        "score": 0.3395666322785354
+      },
+      {
+        "step": 5,
+        "score": 0.2969014081856887
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who was the first person to walk on the Moon?",
+    "expanded_queries": [
+      "Who was the first person to walk on the Moon?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "dense": 0.8323,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "dense": 0.7832,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "dense": 0.7668,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "dense": 0.6881,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "dense": 0.5303,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 6,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "dense": 0.4766,
+        "page": 5,
+        "type": "body_text",
+        "section": "marie_curie_awards",
+        "flags": "",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 7,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "dense": 0.4541,
+        "page": 5,
+        "type": "body_text",
+        "section": "marie_curie_awards",
+        "flags": "",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 8,
+        "source": "comp_curie_family | Curie family",
+        "dense": 0.4188,
+        "page": 5,
+        "type": "body_text",
+        "section": "marie_curie_awards",
+        "flags": "",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "dense": 0.418,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "direct_everest_evidence | Highest mountain",
+        "dense": 0.4066,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_planet_neptune | Neptune",
+        "dense": 0.4055,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "dense": 0.4044,
+        "page": 27,
+        "type": "body_text",
+        "section": "solar_system_center",
+        "flags": "",
+        "preview": "The Sun is the central body of the Solar System."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "keyword": 0.7648,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "keyword": 0.3035,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.1681,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "keyword": 0.0877,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.8323,
+        "keyword": 0.7648,
+        "rerank": 0.95,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, person, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.7832,
+        "keyword": 0.3035,
+        "rerank": 0.7311,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.7668,
+        "keyword": 0.0,
+        "rerank": 0.5092,
+        "section": "apollo_11_first_step",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.6881,
+        "keyword": 0.0877,
+        "rerank": 0.4827,
+        "section": "apollo_11_first_step",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.1681,
+        "rerank": 0.3919,
+        "section": "earth_orbit",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 6,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.4766,
+        "keyword": 0.0,
+        "rerank": 0.2544,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 7,
+        "source": "comp_curie_family | Curie family",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.4188,
+        "keyword": 0.0,
+        "rerank": 0.2396,
+        "section": "marie_curie_awards",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 8,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.4541,
+        "keyword": 0.0,
+        "rerank": 0.2369,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.418,
+        "keyword": 0.0,
+        "rerank": 0.2089,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.4066,
+        "keyword": 0.0,
+        "rerank": 0.2001,
+        "section": "mount_everest",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4055,
+        "keyword": 0.0,
+        "rerank": 0.1993,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3663,
+        "keyword": 0.0,
+        "rerank": 0.1989,
+        "section": "english_novels",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.4044,
+        "keyword": 0.0,
+        "rerank": 0.1984,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.3975,
+        "keyword": 0.0,
+        "rerank": 0.1931,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3954,
+        "keyword": 0.0,
+        "rerank": 0.1914,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 16,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.3531,
+        "keyword": 0.0,
+        "rerank": 0.1886,
+        "section": "japan_capital",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3881,
+        "keyword": 0.0,
+        "rerank": 0.1858,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 18,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3853,
+        "keyword": 0.0,
+        "rerank": 0.1836,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.3843,
+        "keyword": 0.0,
+        "rerank": 0.1828,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.383,
+        "keyword": 0.0,
+        "rerank": 0.1819,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_b | Earth's annual revolution",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.3829,
+        "keyword": 0.0,
+        "rerank": 0.1818,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One year corresponds approximately to one complete revolution of Earth around the Sun."
+      },
+      {
+        "rank": 22,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3825,
+        "keyword": 0.0,
+        "rerank": 0.1814,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 23,
+        "source": "direct_gravity_newton | Newton and gravity",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3821,
+        "keyword": 0.0,
+        "rerank": 0.1811,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Isaac Newton described a universal law of gravitation for masses."
+      },
+      {
+        "rank": 24,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.3777,
+        "keyword": 0.0,
+        "rerank": 0.1777,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.8323,
+        "keyword": 0.7648,
+        "rerank": 0.95,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, person, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.7832,
+        "keyword": 0.3035,
+        "rerank": 0.7311,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, walk, was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.7668,
+        "keyword": 0.0,
+        "rerank": 0.5092,
+        "section": "apollo_11_first_step",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.6881,
+        "keyword": 0.0877,
+        "rerank": 0.4827,
+        "section": "apollo_11_first_step",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.1681,
+        "rerank": 0.3919,
+        "section": "earth_orbit",
+        "query_hits": "moon",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 6,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.4766,
+        "keyword": 0.0,
+        "rerank": 0.2544,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 7,
+        "source": "comp_curie_family | Curie family",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.4188,
+        "keyword": 0.0,
+        "rerank": 0.2396,
+        "section": "marie_curie_awards",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 8,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.4541,
+        "keyword": 0.0,
+        "rerank": 0.2369,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.418,
+        "keyword": 0.0,
+        "rerank": 0.2089,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 10,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.4066,
+        "keyword": 0.0,
+        "rerank": 0.2001,
+        "section": "mount_everest",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.4055,
+        "keyword": 0.0,
+        "rerank": 0.1993,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3663,
+        "keyword": 0.0,
+        "rerank": 0.1989,
+        "section": "english_novels",
+        "query_hits": "first",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 13,
+        "source": "conflict_solar_sun | Solar system centre correct",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.4044,
+        "keyword": 0.0,
+        "rerank": 0.1984,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sun is the central body of the Solar System."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.3975,
+        "keyword": 0.0,
+        "rerank": 0.1931,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_mercury_planet | Closest planet correct",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3954,
+        "keyword": 0.0,
+        "rerank": 0.1914,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is the planet closest to the Sun."
+      },
+      {
+        "rank": 16,
+        "source": "direct_tokyo_kyoto | Kyoto history",
+        "page": 30,
+        "type": "body_text",
+        "dense": 0.3531,
+        "keyword": 0.0,
+        "rerank": 0.1886,
+        "section": "japan_capital",
+        "query_hits": "was",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Kyoto was historically an imperial capital of Japan."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3881,
+        "keyword": 0.0,
+        "rerank": 0.1858,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 18,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3853,
+        "keyword": 0.0,
+        "rerank": 0.1836,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.3843,
+        "keyword": 0.0,
+        "rerank": 0.1828,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 20,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.383,
+        "keyword": 0.0,
+        "rerank": 0.1819,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_b | Earth's annual revolution",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.3829,
+        "keyword": 0.0,
+        "rerank": 0.1818,
+        "section": "earth_orbit",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "One year corresponds approximately to one complete revolution of Earth around the Sun."
+      },
+      {
+        "rank": 22,
+        "source": "direct_gravity_orbits | Gravity and orbits",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3825,
+        "keyword": 0.0,
+        "rerank": 0.1814,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Gravity helps keep planets, moons, and satellites in orbital motion."
+      },
+      {
+        "rank": 23,
+        "source": "direct_gravity_newton | Newton and gravity",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3821,
+        "keyword": 0.0,
+        "rerank": 0.1811,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Isaac Newton described a universal law of gravitation for masses."
+      },
+      {
+        "rank": 24,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.3777,
+        "keyword": 0.0,
+        "rerank": 0.1777,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.8323,
+        "keyword": 0.7648,
+        "rerank": 0.95,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, person, walk, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.7832,
+        "keyword": 0.3035,
+        "rerank": 0.7311,
+        "section": "apollo_11_first_step",
+        "query_hits": "first, moon, walk, was",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7743,
+        "novelty": 0.2292,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.838,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.7668,
+        "keyword": 0.0,
+        "rerank": 0.5092,
+        "section": "apollo_11_first_step",
+        "query_hits": "first",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5456,
+        "novelty": 0.4053,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.586,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.6881,
+        "keyword": 0.0877,
+        "rerank": 0.4827,
+        "section": "apollo_11_first_step",
+        "query_hits": "moon",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5182,
+        "novelty": 0.425,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5652,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.5303,
+        "keyword": 0.1681,
+        "rerank": 0.3919,
+        "section": "earth_orbit",
+        "query_hits": "moon",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4247,
+        "novelty": 0.7,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5232,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 6,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3853,
+        "keyword": 0.0,
+        "rerank": 0.1836,
+        "section": "mars_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2099,
+        "novelty": 0.7313,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4629,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "first",
+        "moon",
+        "person",
+        "walk",
+        "was"
+      ],
+      "covered_query_terms": [
+        "first",
+        "moon",
+        "person",
+        "walk",
+        "was"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_neil_a | Armstrong first step": [
+          "first",
+          "moon",
+          "person",
+          "walk",
+          "was"
+        ],
+        "redundant_neil_c | First lunar surface wording": [
+          "first",
+          "moon",
+          "walk",
+          "was"
+        ],
+        "redundant_neil_b | Apollo 11 first moonwalker": [
+          "first"
+        ],
+        "redundant_neil_aldrin_distractor | Buzz Aldrin distractor": [
+          "moon"
+        ],
+        "redundant_orbit_moon | Moon orbit": [
+          "moon"
+        ]
+      },
+      "section_titles": [
+        "apollo_11_first_step",
+        "earth_orbit",
+        "mars_overview"
+      ],
+      "chunks_by_section": {
+        "apollo_11_first_step": [
+          "redundant_neil_a | Armstrong first step",
+          "redundant_neil_c | First lunar surface wording",
+          "redundant_neil_b | Apollo 11 first moonwalker",
+          "redundant_neil_aldrin_distractor | Buzz Aldrin distractor"
+        ],
+        "earth_orbit": [
+          "redundant_orbit_moon | Moon orbit"
+        ],
+        "mars_overview": [
+          "missing_mars_orbit | Mars orbit"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "Neil Armstrong was the first person to walk on the Moon.",
+    "retrieved_context_answer": "Neil Armstrong was the first person to walk on the Moon.\n\nEvidence:\n*   [1] Neil Armstrong was the first person to walk on the Moon.\n*   [2] The first Moon walk was made by Neil Armstrong.\n*   [3] During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.3076923076923077,
+    "retrieved_context_f1": 0.07692307692307693,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

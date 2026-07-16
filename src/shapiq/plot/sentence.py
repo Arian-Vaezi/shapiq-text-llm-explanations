@@ -22,6 +22,65 @@ if TYPE_CHECKING:
     from shapiq.interaction_values import InteractionValues
 
 
+def interaction_matrix_from_explanation(
+    interaction_values: InteractionValues,
+    n_players: int,
+    *,
+    include_main_effects: bool = True,
+) -> np.ndarray:
+    """Build a dense player-by-player combined k-SII interaction matrix.
+
+    This is the single source of truth for the combined main-effect +
+    pairwise-interaction matrix: :func:`sentence_interaction_heatmap` and any
+    other consumer that needs the identical values (e.g. a fallback table, or
+    a "show full matrix" view) should call this instead of re-deriving their
+    own matrix, so every rendering path agrees on the same numbers.
+
+    Args:
+        interaction_values: The interaction values to read from. For a
+            meaningful diagonal, this must be the *unfiltered* explanation
+            containing both order-1 (singleton) and order-2 (pairwise)
+            interactions -- an explanation already restricted to order 2 (e.g.
+            via ``interaction_values.get_n_order(order=2)``) has no singleton
+            entries left, so its diagonal would silently come out as zero.
+        n_players: The expected number of players. Must match
+            ``interaction_values.n_players``.
+        include_main_effects: When ``True`` (default), the diagonal holds each
+            player's order-1 main effect (``interaction_values[(i,)]``). When
+            ``False``, the diagonal stays zero -- a pure pairwise-only matrix,
+            intended for internal use (e.g. ranking) rather than display.
+
+    Returns:
+        A dense ``(n_players, n_players)`` numpy array. Off-diagonal cell
+        ``[i, j]`` and its mirror ``[j, i]`` both hold the order-2 pairwise
+        interaction ``interaction_values[(i, j)]``.
+
+    Raises:
+        ValueError: If ``n_players`` does not match
+            ``interaction_values.n_players``.
+    """
+    if n_players != interaction_values.n_players:
+        msg = (
+            "n_players must match interaction_values.n_players. "
+            f"Got {n_players} and {interaction_values.n_players}."
+        )
+        raise ValueError(msg)
+
+    matrix = np.zeros((n_players, n_players))
+
+    if include_main_effects:
+        for i in range(n_players):
+            matrix[i, i] = interaction_values[(i,)]
+
+    for i in range(n_players):
+        for j in range(i + 1, n_players):
+            value = interaction_values[(i, j)]
+            matrix[i, j] = value
+            matrix[j, i] = value
+
+    return matrix
+
+
 def _get_color_and_alpha(max_value: float, value: float) -> tuple[str, float]:
     """Gets the color and alpha value for an interaction value."""
     color = RED.hex if value >= 0 else BLUE.hex
@@ -271,10 +330,16 @@ def sentence_interaction_heatmap(
     show: bool = False,
     max_score: float | None = None,  # color range of the heatmap
 ) -> tuple[Figure, Axes] | None:
-    """Plot a minimal pairwise interaction heatmap for sentence players."""
+    """Plot a combined main-effect + pairwise interaction heatmap for sentence players.
+
+    The diagonal shows each player's order-1 k-SII main effect; the
+    off-diagonal cells show the order-2 pairwise k-SII interaction between
+    each pair of players, built by :func:`interaction_matrix_from_explanation`
+    (the single shared implementation reused by any other consumer that needs
+    the identical matrix, e.g. a fallback table).
+    """
     # before: pass (Temporary placeholder)
     fig, ax = plt.subplots()
-    # 2d matrix init
     n_words = len(words)
 
     # player index debug
@@ -285,18 +350,9 @@ def sentence_interaction_heatmap(
         )
         raise ValueError(msg)
 
-    interaction_matrix = np.zeros((n_words, n_words))
-
-    # diagonal
-    for i in range(n_words):
-        interaction_matrix[i, i] = interaction_values[(i,)]
-
-    # pairwise interaction
-    for i in range(n_words):
-        for j in range(i + 1, n_words):
-            value = interaction_values[(i, j)]
-            interaction_matrix[i, j] = value
-            interaction_matrix[j, i] = value
+    interaction_matrix = interaction_matrix_from_explanation(
+        interaction_values, n_words, include_main_effects=True
+    )
 
     max_abs_score = np.max(np.abs(interaction_matrix)) if max_score is None else max_score
 
@@ -311,6 +367,30 @@ def sentence_interaction_heatmap(
         vmax=max_abs_score,
     )
 
+    if n_words <= 6:
+        annotation_fontsize = 9
+    elif n_words <= 10:
+        annotation_fontsize = 8
+    else:
+        annotation_fontsize = 7
+
+    # annotate every cell with its numeric value
+    for i in range(n_words):
+        for j in range(n_words):
+            value = interaction_matrix[i, j]
+            display_value = 0.0 if abs(value) < 0.0005 else value
+            normalized_intensity = abs(value) / max_abs_score if max_abs_score > 0 else 0.0
+            text_color = "white" if normalized_intensity >= 0.55 else "black"
+            ax.text(
+                j,
+                i,
+                f"{display_value:+.3f}",
+                ha="center",
+                va="center",
+                color=text_color,
+                fontsize=annotation_fontsize,
+            )
+
     # x&y achses show word/player lables
     ax.set_xticks(np.arange(n_words))
     ax.set_yticks(np.arange(n_words))
@@ -319,7 +399,7 @@ def sentence_interaction_heatmap(
 
     ax.set_xlabel("Player")
     ax.set_ylabel("Player")
-    ax.set_title("Pairwise sentence interaction heatmap")
+    ax.set_title("Main and pairwise sentence interaction heatmap")
 
     fig.colorbar(image, ax=ax)
     fig.tight_layout()

@@ -1,0 +1,2342 @@
+{
+  "case": {
+    "case_id": "direct_highest_mountain",
+    "pattern": "direct_evidence",
+    "question": "What is the highest mountain above sea level on Earth?",
+    "gold_answer": "Mount Everest.",
+    "gold_evidence_ids": [
+      "direct_everest_evidence"
+    ],
+    "top_k": 6,
+    "expected_interactions": []
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "direct_everest_evidence",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: direct_everest_evidence | Highest mountain",
+      "text": "Mount Everest is the highest mountain above sea level on Earth."
+    },
+    {
+      "rank": 2,
+      "passage_id": "direct_everest_k2",
+      "score": 0.7748962123164657,
+      "title": "Retrieved 2: direct_everest_k2 | K2 distractor",
+      "text": "K2 is the second-highest mountain above sea level."
+    },
+    {
+      "rank": 3,
+      "passage_id": "conflict_earth_planet",
+      "score": 0.2546491777739396,
+      "title": "Retrieved 3: conflict_earth_planet | Closest planet Earth conflict",
+      "text": "A false summary claims Earth is the closest planet to the Sun."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_mars_orbit",
+      "score": 0.21921208023303285,
+      "title": "Retrieved 4: missing_mars_orbit | Mars orbit",
+      "text": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+    },
+    {
+      "rank": 5,
+      "passage_id": "redundant_sahara_antarctica_distractor",
+      "score": 0.22909355051097496,
+      "title": "Retrieved 5: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "text": "Antarctica is the largest desert overall when cold polar deserts are included."
+    },
+    {
+      "rank": 6,
+      "passage_id": "redundant_pacific_a",
+      "score": 0.3761800354004734,
+      "title": "Retrieved 6: redundant_pacific_a | Largest ocean",
+      "text": "The Pacific Ocean is the largest ocean on Earth."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: direct_everest_evidence | Highest mountain",
+      "attribution": 0.909000064965147
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: direct_everest_k2 | K2 distractor",
+      "attribution": 0.02400001163598133
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": -0.022000022873556402
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: redundant_pacific_a | Largest ocean",
+      "attribution": -0.01700002721933074
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: conflict_earth_planet | Closest planet Earth conflict",
+      "attribution": -0.01700001279819818
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_mars_orbit | Mars orbit",
+      "attribution": -0.017000012520042854
+    }
+  ],
+  "generated_attributions": [],
+  "interactions": [],
+  "generated_interactions": [],
+  "gold_pairwise_interactions": [
+    {
+      "left": "direct_everest_evidence",
+      "right": "direct_everest_k2",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.09399999957228794,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_evidence",
+      "right": "conflict_earth_planet",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.016916664874867354,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_evidence",
+      "right": "missing_mars_orbit",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.01691666559943849,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_evidence",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.010250000499415685,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_evidence",
+      "right": "redundant_pacific_a",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.016916668548990436,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_k2",
+      "right": "conflict_earth_planet",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.01025000198092261,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_k2",
+      "right": "missing_mars_orbit",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.010250000368441876,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_k2",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.0102499988012242,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_everest_k2",
+      "right": "redundant_pacific_a",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.010249998405456663,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "missing_mars_orbit",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.01150000027637887,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.004833333090103194,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_earth_planet",
+      "right": "redundant_pacific_a",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.01149999878939444,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.004833333076919509,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_orbit",
+      "right": "redundant_pacific_a",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.011499999690487778,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "redundant_pacific_a",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.004833333577337225,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "direct_everest_evidence"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "direct_everest_k2"
+      ],
+      "score": 0.1
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "conflict_earth_planet"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_orbit"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "missing_mars_orbit"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "redundant_pacific_a"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet"
+      ],
+      "score": 0.12
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "missing_mars_orbit"
+      ],
+      "score": 0.12
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "redundant_pacific_a"
+      ],
+      "score": 0.12
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "missing_mars_orbit"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_pacific_a"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "redundant_pacific_a"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "redundant_pacific_a"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit"
+      ],
+      "score": 0.08499999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.08499999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "redundant_pacific_a"
+      ],
+      "score": 0.08499999999999999
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.08499999999999999
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.08499999999999999
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.08499999999999999
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "redundant_pacific_a"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.04999999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.04999999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.04999999999999999
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.04999999999999999
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_pacific_a"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.014999999999999986
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_everest_evidence",
+        "direct_everest_k2",
+        "conflict_earth_planet",
+        "missing_mars_orbit",
+        "redundant_sahara_antarctica_distractor",
+        "redundant_pacific_a"
+      ],
+      "score": 0.86
+    }
+  ],
+  "generated_coalition_scores": [],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: direct_everest_evidence | Highest mountain",
+        "remaining_chunks": 5,
+        "score": 0.014999999999999986
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: direct_everest_k2 | K2 distractor",
+        "remaining_chunks": 4,
+        "score": 0.0
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 3,
+        "score": 0.0
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 2,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: direct_everest_evidence | Highest mountain",
+        "selected_chunks": 1,
+        "score": 1.0
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: direct_everest_k2 | K2 distractor",
+        "selected_chunks": 2,
+        "score": 1.0
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "selected_chunks": 3,
+        "score": 0.965
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: redundant_pacific_a | Largest ocean",
+        "selected_chunks": 4,
+        "score": 0.9299999999999999
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: conflict_earth_planet | Closest planet Earth conflict",
+        "selected_chunks": 5,
+        "score": 0.895
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: missing_mars_orbit | Mars orbit",
+        "selected_chunks": 6,
+        "score": 0.86
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: direct_everest_evidence | Highest mountain",
+        "remaining_chunks": 5,
+        "score": 0.014999999999999986
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: direct_everest_k2 | K2 distractor",
+        "remaining_chunks": 4,
+        "score": 0.0
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 3,
+        "score": 0.0
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 2,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: direct_everest_evidence | Highest mountain",
+        "remaining_chunks": 5,
+        "score": 0.014999999999999986
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: direct_everest_k2 | K2 distractor",
+        "remaining_chunks": 4,
+        "score": 0.0
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 3,
+        "score": 0.0
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 2,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.8599999999999995
+      },
+      {
+        "step": 1,
+        "score": 0.7630000000000007
+      },
+      {
+        "step": 2,
+        "score": 0.6048333333333331
+      },
+      {
+        "step": 3,
+        "score": 0.48575000000000024
+      },
+      {
+        "step": 4,
+        "score": 0.31799999999999995
+      },
+      {
+        "step": 5,
+        "score": 0.2003333333333332
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the highest mountain above sea level on Earth?",
+    "expanded_queries": [
+      "What is the highest mountain above sea level on Earth?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "direct_everest_evidence | Highest mountain",
+        "dense": 0.8295,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "direct_everest_k2 | K2 distractor",
+        "dense": 0.6696,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "K2 is the second-highest mountain above sea level."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_pacific_a | Largest ocean",
+        "dense": 0.5856,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "direct_everest_location | Everest location",
+        "dense": 0.5507,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mount Everest lies in the Himalayas on the border of Nepal and China."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "dense": 0.5293,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_planet_earth | Earth",
+        "dense": 0.5186,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 7,
+        "source": "direct_everest_mauna_kea | Mauna Kea measurement",
+        "dense": 0.4844,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mauna Kea is very tall when measured from its underwater base."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "dense": 0.4772,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "dense": 0.4735,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "dense": 0.4717,
+        "page": 17,
+        "type": "body_text",
+        "section": "south_america_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "dense": 0.4691,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 12,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "dense": 0.4613,
+        "page": 21,
+        "type": "body_text",
+        "section": "inner_planets",
+        "flags": "",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "direct_everest_evidence | Highest mountain",
+        "keyword": 0.8163,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "direct_everest_k2 | K2 distractor",
+        "keyword": 0.7031,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "K2 is the second-highest mountain above sea level."
+      },
+      {
+        "rank": 3,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "keyword": 0.0843,
+        "page": 46,
+        "type": "body_text",
+        "section": "giant_panda_diet",
+        "flags": "",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 4,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "keyword": 0.0825,
+        "page": 45,
+        "type": "body_text",
+        "section": "canal_overview",
+        "flags": "",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 5,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "keyword": 0.0772,
+        "page": 45,
+        "type": "body_text",
+        "section": "canal_overview",
+        "flags": "",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.0733,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "keyword": 0.0615,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 8,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.0546,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_pacific_a | Largest ocean",
+        "keyword": 0.0538,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0501,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "keyword": 0.0494,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "keyword": 0.0458,
+        "page": 41,
+        "type": "body_text",
+        "section": "closest_planet_sun",
+        "flags": "",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.8295,
+        "keyword": 0.8163,
+        "rerank": 0.95,
+        "section": "mount_everest",
+        "query_hits": "above, earth, highest, level, mountain, sea",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "direct_everest_k2 | K2 distractor",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.6696,
+        "keyword": 0.7031,
+        "rerank": 0.7749,
+        "section": "mount_everest",
+        "query_hits": "above, level, mountain, sea",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "K2 is the second-highest mountain above sea level."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.5856,
+        "keyword": 0.0538,
+        "rerank": 0.3762,
+        "section": "world_oceans",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.5293,
+        "keyword": 0.0441,
+        "rerank": 0.3255,
+        "section": "largest_animals",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5186,
+        "keyword": 0.0546,
+        "rerank": 0.3205,
+        "section": "giant_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "direct_everest_location | Everest location",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.5507,
+        "keyword": 0.0,
+        "rerank": 0.2973,
+        "section": "mount_everest",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest lies in the Himalayas on the border of Nepal and China."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4735,
+        "keyword": 0.0409,
+        "rerank": 0.2778,
+        "section": "sahara_desert",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.433,
+        "keyword": 0.0413,
+        "rerank": 0.2742,
+        "section": "space_telescope_notes",
+        "query_hits": "above, earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4613,
+        "keyword": 0.0456,
+        "rerank": 0.2693,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4436,
+        "keyword": 0.0458,
+        "rerank": 0.2546,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4236,
+        "keyword": 0.0733,
+        "rerank": 0.2481,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4263,
+        "keyword": 0.0615,
+        "rerank": 0.246,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 13,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.4137,
+        "keyword": 0.0843,
+        "rerank": 0.2438,
+        "section": "giant_panda_diet",
+        "query_hits": "mountain",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 14,
+        "source": "direct_everest_mauna_kea | Mauna Kea measurement",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.4844,
+        "keyword": 0.0,
+        "rerank": 0.2419,
+        "section": "mount_everest",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mauna Kea is very tall when measured from its underwater base."
+      },
+      {
+        "rank": 15,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4262,
+        "keyword": 0.0418,
+        "rerank": 0.2386,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4772,
+        "keyword": 0.0,
+        "rerank": 0.2359,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.4717,
+        "keyword": 0.0,
+        "rerank": 0.2313,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4691,
+        "keyword": 0.0,
+        "rerank": 0.2291,
+        "section": "sahara_desert",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4574,
+        "keyword": 0.0,
+        "rerank": 0.2193,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 20,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.4032,
+        "keyword": 0.0411,
+        "rerank": 0.2192,
+        "section": "mars_overview",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.398,
+        "keyword": 0.0494,
+        "rerank": 0.2179,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.4553,
+        "keyword": 0.0,
+        "rerank": 0.2176,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 23,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4542,
+        "keyword": 0.0,
+        "rerank": 0.2166,
+        "section": "sahara_desert",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 24,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.4528,
+        "keyword": 0.0,
+        "rerank": 0.2154,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.8295,
+        "keyword": 0.8163,
+        "rerank": 0.95,
+        "section": "mount_everest",
+        "query_hits": "above, earth, highest, level, mountain, sea",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "direct_everest_k2 | K2 distractor",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.6696,
+        "keyword": 0.7031,
+        "rerank": 0.7749,
+        "section": "mount_everest",
+        "query_hits": "above, level, mountain, sea",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "K2 is the second-highest mountain above sea level."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.5856,
+        "keyword": 0.0538,
+        "rerank": 0.3762,
+        "section": "world_oceans",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.5293,
+        "keyword": 0.0441,
+        "rerank": 0.3255,
+        "section": "largest_animals",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5186,
+        "keyword": 0.0546,
+        "rerank": 0.3205,
+        "section": "giant_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "direct_everest_location | Everest location",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.5507,
+        "keyword": 0.0,
+        "rerank": 0.2973,
+        "section": "mount_everest",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest lies in the Himalayas on the border of Nepal and China."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4735,
+        "keyword": 0.0409,
+        "rerank": 0.2778,
+        "section": "sahara_desert",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.433,
+        "keyword": 0.0413,
+        "rerank": 0.2742,
+        "section": "space_telescope_notes",
+        "query_hits": "above, earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4613,
+        "keyword": 0.0456,
+        "rerank": 0.2693,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4436,
+        "keyword": 0.0458,
+        "rerank": 0.2546,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4236,
+        "keyword": 0.0733,
+        "rerank": 0.2481,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4263,
+        "keyword": 0.0615,
+        "rerank": 0.246,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 13,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.4137,
+        "keyword": 0.0843,
+        "rerank": 0.2438,
+        "section": "giant_panda_diet",
+        "query_hits": "mountain",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 14,
+        "source": "direct_everest_mauna_kea | Mauna Kea measurement",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.4844,
+        "keyword": 0.0,
+        "rerank": 0.2419,
+        "section": "mount_everest",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mauna Kea is very tall when measured from its underwater base."
+      },
+      {
+        "rank": 15,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4262,
+        "keyword": 0.0418,
+        "rerank": 0.2386,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4772,
+        "keyword": 0.0,
+        "rerank": 0.2359,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.4717,
+        "keyword": 0.0,
+        "rerank": 0.2313,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4691,
+        "keyword": 0.0,
+        "rerank": 0.2291,
+        "section": "sahara_desert",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.4574,
+        "keyword": 0.0,
+        "rerank": 0.2193,
+        "section": "world_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 20,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.4032,
+        "keyword": 0.0411,
+        "rerank": 0.2192,
+        "section": "mars_overview",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_rotation | Earth rotation",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.398,
+        "keyword": 0.0494,
+        "rerank": 0.2179,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth rotates on its axis roughly once every twenty-four hours."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.4553,
+        "keyword": 0.0,
+        "rerank": 0.2176,
+        "section": "largest_animals",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 23,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4542,
+        "keyword": 0.0,
+        "rerank": 0.2166,
+        "section": "sahara_desert",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 24,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.4528,
+        "keyword": 0.0,
+        "rerank": 0.2154,
+        "section": "south_america_oceans",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.8295,
+        "keyword": 0.8163,
+        "rerank": 0.95,
+        "section": "mount_everest",
+        "query_hits": "above, earth, highest, level, mountain, sea",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "direct_everest_k2 | K2 distractor",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.6696,
+        "keyword": 0.7031,
+        "rerank": 0.7749,
+        "section": "mount_everest",
+        "query_hits": "above, level, mountain, sea",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8195,
+        "novelty": 0.2962,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8862,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "K2 is the second-highest mountain above sea level."
+      },
+      {
+        "rank": 3,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4436,
+        "keyword": 0.0458,
+        "rerank": 0.2546,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2831,
+        "novelty": 0.7132,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5633,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 4,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.4032,
+        "keyword": 0.0411,
+        "rerank": 0.2192,
+        "section": "mars_overview",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2466,
+        "novelty": 0.6625,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5248,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4691,
+        "keyword": 0.0,
+        "rerank": 0.2291,
+        "section": "sahara_desert",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2568,
+        "novelty": 0.7389,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5043,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.5856,
+        "keyword": 0.0538,
+        "rerank": 0.3762,
+        "section": "world_oceans",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4084,
+        "novelty": 0.6429,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5013,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "above",
+        "earth",
+        "highest",
+        "level",
+        "mountain",
+        "sea"
+      ],
+      "covered_query_terms": [
+        "above",
+        "earth",
+        "highest",
+        "level",
+        "mountain",
+        "sea"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "direct_everest_evidence | Highest mountain": [
+          "above",
+          "earth",
+          "highest",
+          "level",
+          "mountain",
+          "sea"
+        ],
+        "direct_everest_k2 | K2 distractor": [
+          "above",
+          "level",
+          "mountain",
+          "sea"
+        ],
+        "conflict_earth_planet | Closest planet Earth conflict": [
+          "earth"
+        ],
+        "missing_mars_orbit | Mars orbit": [
+          "earth"
+        ],
+        "redundant_pacific_a | Largest ocean": [
+          "earth"
+        ]
+      },
+      "section_titles": [
+        "closest_planet_sun",
+        "mars_overview",
+        "mount_everest",
+        "sahara_desert",
+        "world_oceans"
+      ],
+      "chunks_by_section": {
+        "mount_everest": [
+          "direct_everest_evidence | Highest mountain",
+          "direct_everest_k2 | K2 distractor"
+        ],
+        "closest_planet_sun": [
+          "conflict_earth_planet | Closest planet Earth conflict"
+        ],
+        "mars_overview": [
+          "missing_mars_orbit | Mars orbit"
+        ],
+        "sahara_desert": [
+          "redundant_sahara_antarctica_distractor | Antarctic desert distractor"
+        ],
+        "world_oceans": [
+          "redundant_pacific_a | Largest ocean"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {}
+}

@@ -1,0 +1,1588 @@
+{
+  "case": {
+    "case_id": "qasper_12c50dea84f9a8845795fa8b8c1679328bd66246",
+    "paper_id": "1910.10781",
+    "paper_title": "Hierarchical Transformers for Long Document Classification",
+    "question_id": "12c50dea84f9a8845795fa8b8c1679328bd66246",
+    "annotation_id": "31512f80f4e90081e2398c721eba931ddb60f904",
+    "question": "What datasets did they use for evaluation?",
+    "gold_answer": "CSAT dataset; 20 newsgroups; Fisher Phase 1 corpus",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1910.10781:paragraph:0020",
+      "1910.10781:paragraph:0021",
+      "1910.10781:paragraph:0022",
+      "1910.10781:paragraph:0023"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1910.10781:paragraph:0007",
+      "score": 0.6374665462748592,
+      "title": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+      "text": "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify it using a simple linear classifiers BIBREF11, BIBREF12, BIBREF13, BIBREF4. In BIBREF14 hierarchical attention networks are used for document classification. They evaluate their model on several datasets with average number of words around 150. Character-level CNN are explored in BIBREF15 but it is prohibitive for very long documents. In BIBREF16, dataset collected from arXiv papers is used for classification. For classification, they sample random blocks of words and use them together for classification instead of using full document which may work well as arXiv papers are usually coherent and well written on a well defined topic. Their method may not work well on spoken conversations as random block of words usually do not represent topic of full conversation."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1910.10781:paragraph:0020",
+      "score": 0.8600000000000001,
+      "title": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+      "text": "We evaluated our models on 3 different datasets:"
+    },
+    {
+      "rank": 3,
+      "passage_id": "1910.10781:paragraph:0026",
+      "score": 0.6476822861291264,
+      "title": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+      "text": "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to be identified, with 11314 documents for training and 7532 for testing. In this work, we used only 90% of documents for training and the remaining 10% for validation. For fair comparison with other publications, we used 53160 words vocabulary set available in the datasets website."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1910.10781:paragraph:0036",
+      "score": 0.577233213357149,
+      "title": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+      "text": "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they helped slightly in CSAT prediction (an absolute improvement of 0.64% F1-score). We think that this is explained by the fact that Fisher and 20newsgroups are topic identification tasks, and the topic does not change much throughout these documents. However, CSAT may vary during the call, and in some cases a naive assumption that the sequential nature of the transcripts is irrelevant may lead to wrong conclusions."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1910.10781:paragraph:0002",
+      "score": 0.40955493300900586,
+      "title": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+      "text": "In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recurrent LSTM BIBREF10 network, or another Transformer, to perform the actual classification. We call these techniques Recurrence over BERT (RoBERT) and Transformer over BERT (ToBERT). Given that these models introduce a hierarchy of representations (segment-wise and document-wise), we refer to them as Hierarchical Transformers. To the best of our knowledge, no attempt has been done before to use the Transformer architecture for classification of such long sequences."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1910.10781:paragraph:0038",
+      "score": 0.523817243383771,
+      "title": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+      "text": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using 3 datasets: CSAT, 20newsgroups and Fisher. We observed that ToBERT outperforms RoBERT on pre-trained BERT features and fine-tuned BERT features for all our tasks. Also, we noticed that fine-tuned BERT performs better than pre-trained BERT. We have shown that both RoBERT and ToBERT improved the simple baselines of taking an average (or the most frequent) of segment-wise predictions for long documents to obtain final prediction. Position embeddings did not significantly affect our models performance, but slightly improved the accuracy on the CSAT task. We obtained the best results on Fisher dataset and good improvements for CSAT task compared to the CNN baseline. It is interesting to note that the longer the average input in a given task, the bigger improvement we observe w.r.t. the baseline for that task. Our results confirm that both RoBERT and ToBERT can be used for long sequences with competitive performance and quick fine-tuning procedure. For future work, we shall focus on training models on long documents directly (i.e. in an end-to-end manner)."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+      "attribution": 0.06483407500016038
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+      "attribution": 0.02641302212136522
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+      "attribution": 0.01834923997922432
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+      "attribution": 0.011204743779207263
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+      "attribution": -0.006004464192444479
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+      "attribution": 0.0047216754501850575
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+      "attribution": 0.09100779780421202
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+      "attribution": 0.057976699791769996
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+      "attribution": 0.021908964293678272
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+      "attribution": 0.006879711659082559
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+      "attribution": 0.00650235520542961
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+      "attribution": -0.002430906306898514
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0020",
+      "interaction": 0.005802955670175285
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0026",
+      "interaction": 0.0029052869893863094
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0036",
+      "interaction": 0.02002577549507089
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": 0.00947193922407498
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": 0.038647641432831524
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0026",
+      "interaction": -0.008728591351174536
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0036",
+      "interaction": 0.0025560889510484685
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": -0.005169200698287258
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": -0.007084073587231378
+    },
+    {
+      "left": "1910.10781:paragraph:0026",
+      "right": "1910.10781:paragraph:0036",
+      "interaction": -0.009040849425498203
+    },
+    {
+      "left": "1910.10781:paragraph:0026",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": 0.013385982271799936
+    },
+    {
+      "left": "1910.10781:paragraph:0026",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": -0.06172073829497637
+    },
+    {
+      "left": "1910.10781:paragraph:0036",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": 0.01550238047640132
+    },
+    {
+      "left": "1910.10781:paragraph:0036",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": -0.07720277726322222
+    },
+    {
+      "left": "1910.10781:paragraph:0002",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": -0.009195091857439816
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0020",
+      "interaction": 0.007929315231960589
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0026",
+      "interaction": 0.017724975865207604
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0036",
+      "interaction": 0.006256542084833339
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": -0.001541127902833898
+    },
+    {
+      "left": "1910.10781:paragraph:0007",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": 0.014299418342928178
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0026",
+      "interaction": 0.0013753274583540721
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0036",
+      "interaction": 0.0060566507453660885
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": 0.002589134461364412
+    },
+    {
+      "left": "1910.10781:paragraph:0020",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": 0.0033760340271656196
+    },
+    {
+      "left": "1910.10781:paragraph:0026",
+      "right": "1910.10781:paragraph:0036",
+      "interaction": -0.0008717261152109113
+    },
+    {
+      "left": "1910.10781:paragraph:0026",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": -0.001999297413690766
+    },
+    {
+      "left": "1910.10781:paragraph:0026",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": 0.0015117134626794469
+    },
+    {
+      "left": "1910.10781:paragraph:0036",
+      "right": "1910.10781:paragraph:0002",
+      "interaction": 0.0017488137594642787
+    },
+    {
+      "left": "1910.10781:paragraph:0036",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": -0.009328426820249047
+    },
+    {
+      "left": "1910.10781:paragraph:0002",
+      "right": "1910.10781:paragraph:0038",
+      "interaction": -0.002217299060232878
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.11951829188897467
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "remaining_chunks": 5,
+        "score": 0.08435638926895594
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "remaining_chunks": 4,
+        "score": 0.06385813149071018
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "remaining_chunks": 3,
+        "score": 0.045601698848947936
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "remaining_chunks": 2,
+        "score": -0.027243487333716787
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.013194417616969156
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "selected_chunks": 1,
+        "score": 0.09836081318111456
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "selected_chunks": 2,
+        "score": 0.09165115367028842
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "selected_chunks": 3,
+        "score": 0.14134803221930659
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "selected_chunks": 4,
+        "score": 0.11008692379996987
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "selected_chunks": 5,
+        "score": 0.11894669587988849
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "selected_chunks": 6,
+        "score": 0.11951829188897467
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.11951829188897467
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "remaining_chunks": 5,
+        "score": 0.11894669587988849
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "remaining_chunks": 4,
+        "score": 0.06849330969701983
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "remaining_chunks": 3,
+        "score": 0.04018478154341665
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "remaining_chunks": 2,
+        "score": 0.008162667265843804
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "remaining_chunks": 1,
+        "score": -0.029400071664059058
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.11951829188897467
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "remaining_chunks": 5,
+        "score": 0.06956182340412609
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "remaining_chunks": 4,
+        "score": 0.02531849655332774
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "remaining_chunks": 3,
+        "score": 0.045601698848947936
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "remaining_chunks": 2,
+        "score": 0.008162667265843804
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.07131686719535568
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.11951829188897457
+      },
+      {
+        "step": 1,
+        "score": 0.10878191336481227
+      },
+      {
+        "step": 2,
+        "score": 0.08175621328464679
+      },
+      {
+        "step": 3,
+        "score": 0.061871074206970134
+      },
+      {
+        "step": 4,
+        "score": 0.03468852630157052
+      },
+      {
+        "step": 5,
+        "score": 0.025554828224647178
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What datasets did they use for evaluation?",
+    "expanded_queries": [
+      "What datasets did they use for evaluation?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "dense": 0.6918,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We evaluated our models on 3 different datasets:"
+      },
+      {
+        "rank": 2,
+        "source": "1910.10781:paragraph:0024 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "dense": 0.6329,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: CSAT",
+        "flags": "",
+        "preview": "CSAT dataset consists of US English telephone speech from call centers. For each call in this dataset, customers participated in that call gave a rating on his experience with agent. Originally, this dataset has labels r"
+      },
+      {
+        "rank": 3,
+        "source": "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "dense": 0.609,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: 20 newsgroups",
+        "flags": "",
+        "preview": "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to "
+      },
+      {
+        "rank": 4,
+        "source": "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "dense": 0.5723,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify"
+      },
+      {
+        "rank": 5,
+        "source": "1910.10781:paragraph:0021 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "dense": 0.5709,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR)."
+      },
+      {
+        "rank": 6,
+        "source": "1910.10781:paragraph:0037 | Hierarchical Transformers for Long Document Classification / Results",
+        "dense": 0.5657,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF33 compares our results with previous works. It can be seen that our model ToBERT outperforms CNN based experiments by significant margin on CSAT and Fisher datasets. For CSAT dataset, we used multi-scale CNN"
+      },
+      {
+        "rank": 7,
+        "source": "1910.10781:paragraph:0008 | Hierarchical Transformers for Long Document Classification / Related work",
+        "dense": 0.5627,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "Several researchers addressed the problem of predicting customer satisfaction BIBREF6, BIBREF7, BIBREF8, BIBREF9. In most of these works, logistic regression, SVM, CNN are applied on different kinds of representations."
+      },
+      {
+        "rank": 8,
+        "source": "1910.10781:paragraph:0025 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "dense": 0.55,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: CSAT",
+        "flags": "",
+        "preview": "We obtained the transcripts by employing an ASR system. The ASR system uses TDNN-LSTM acoustic model trained on Fisher and Switchboard datasets with lattice-free maximum mutual information criterion BIBREF18. The word er"
+      },
+      {
+        "rank": 9,
+        "source": "1910.10781:paragraph:0023 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "dense": 0.5449,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);"
+      },
+      {
+        "rank": 10,
+        "source": "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "dense": 0.5398,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they hel"
+      },
+      {
+        "rank": 11,
+        "source": "1910.10781:paragraph:0027 | Hierarchical Transformers for Long Document Classification / Experiments ::: Fisher",
+        "dense": 0.5395,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Fisher",
+        "flags": "",
+        "preview": "Fisher Phase 1 US English corpus is often used for automatic speech recognition in speech community. In this work, we used it for topic identification as in BIBREF3. The documents are 10-minute long telephone conversatio"
+      },
+      {
+        "rank": 12,
+        "source": "1910.10781:paragraph:0035 | Hierarchical Transformers for Long Document Classification / Results",
+        "dense": 0.5377,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "It can be observed from Table TABREF27 that a simple averaging operation or taking most frequent predicted class works competitively for CSAT and 20newsgroups but not for the Fisher dataset. We believe the improvements f"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "keyword": 0.1212,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We evaluated our models on 3 different datasets:"
+      },
+      {
+        "rank": 2,
+        "source": "1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "keyword": 0.0851,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recur"
+      },
+      {
+        "rank": 3,
+        "source": "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "keyword": 0.0638,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they hel"
+      },
+      {
+        "rank": 4,
+        "source": "1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "keyword": 0.0577,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions",
+        "flags": "",
+        "preview": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using"
+      },
+      {
+        "rank": 5,
+        "source": "1910.10781:paragraph:0009 | Hierarchical Transformers for Long Document Classification / Related work",
+        "keyword": 0.0549,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "In BIBREF17, authors use BERT for document classification but the average document length is less than BERT maximum length 512. TransformerXL BIBREF2 is an extension to the Transformer architecture that allows it to bett"
+      },
+      {
+        "rank": 6,
+        "source": "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "keyword": 0.0546,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: 20 newsgroups",
+        "flags": "",
+        "preview": "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to "
+      },
+      {
+        "rank": 7,
+        "source": "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "keyword": 0.0526,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify"
+      },
+      {
+        "rank": 8,
+        "source": "1910.10781:paragraph:0015 | Hierarchical Transformers for Long Document Classification / Method ::: BERT",
+        "keyword": 0.0455,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method ::: BERT",
+        "flags": "",
+        "preview": "To investigate the effect of fine-tuning BERT on task performance, we use either the pre-trained BERT weights, or the weights from a BERT fine-tuned on the task-specific dataset on a segment-level (i.e. we preserve the o"
+      },
+      {
+        "rank": 9,
+        "source": "1910.10781:paragraph:0016 | Hierarchical Transformers for Long Document Classification / Method ::: Recurrence over BERT",
+        "keyword": 0.0436,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method ::: Recurrence over BERT",
+        "flags": "",
+        "preview": "Given that BERT is limited to a particular input length, we split the input sequence into segments of a fixed size with overlap. For each of these segments, we obtain H or P from BERT model. We then stack these segment-l"
+      },
+      {
+        "rank": 10,
+        "source": "1910.10781:paragraph:0019 | Hierarchical Transformers for Long Document Classification / Method ::: Transformer over BERT",
+        "keyword": 0.0396,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method ::: Transformer over BERT",
+        "flags": "",
+        "preview": "ToBERT's computational complexity $O(\\frac{n^2}{k^2})$ is asymptotically inferior to RoBERT, as the top-level Transformer model again suffers from quadratic complexity in the number of segments. However, in practice this"
+      },
+      {
+        "rank": 11,
+        "source": "1910.10781:paragraph:0025 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "keyword": 0.0345,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: CSAT",
+        "flags": "",
+        "preview": "We obtained the transcripts by employing an ASR system. The ASR system uses TDNN-LSTM acoustic model trained on Fisher and Switchboard datasets with lattice-free maximum mutual information criterion BIBREF18. The word er"
+      },
+      {
+        "rank": 12,
+        "source": "1910.10781:paragraph:0037 | Hierarchical Transformers for Long Document Classification / Results",
+        "keyword": 0.0331,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF33 compares our results with previous works. It can be seen that our model ToBERT outperforms CNN based experiments by significant margin on CSAT and Fisher datasets. For CSAT dataset, we used multi-scale CNN"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6918,
+        "keyword": 0.1212,
+        "rerank": 0.86,
+        "section": "Experiments",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluated our models on 3 different datasets:"
+      },
+      {
+        "rank": 2,
+        "source": "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.609,
+        "keyword": 0.0546,
+        "rerank": 0.6477,
+        "section": "Experiments ::: 20 newsgroups",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to "
+      },
+      {
+        "rank": 3,
+        "source": "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5723,
+        "keyword": 0.0526,
+        "rerank": 0.6375,
+        "section": "Related work",
+        "query_hits": "datasets, they, use",
+        "reasons": "body/table evidence",
+        "preview": "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify"
+      },
+      {
+        "rank": 4,
+        "source": "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5398,
+        "keyword": 0.0638,
+        "rerank": 0.5772,
+        "section": "Results",
+        "query_hits": "did, they",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they hel"
+      },
+      {
+        "rank": 5,
+        "source": "1910.10781:paragraph:0024 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6329,
+        "keyword": 0.0,
+        "rerank": 0.5251,
+        "section": "Experiments ::: CSAT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "CSAT dataset consists of US English telephone speech from call centers. For each call in this dataset, customers participated in that call gave a rating on his experience with agent. Originally, this dataset has labels r"
+      },
+      {
+        "rank": 6,
+        "source": "1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5183,
+        "keyword": 0.0577,
+        "rerank": 0.5238,
+        "section": "Conclusions",
+        "query_hits": "datasets, did",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using"
+      },
+      {
+        "rank": 7,
+        "source": "1910.10781:paragraph:0037 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5657,
+        "keyword": 0.0331,
+        "rerank": 0.5173,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF33 compares our results with previous works. It can be seen that our model ToBERT outperforms CNN based experiments by significant margin on CSAT and Fisher datasets. For CSAT dataset, we used multi-scale CNN"
+      },
+      {
+        "rank": 8,
+        "source": "1910.10781:paragraph:0015 | Hierarchical Transformers for Long Document Classification / Method ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5106,
+        "keyword": 0.0455,
+        "rerank": 0.45,
+        "section": "Method ::: BERT",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "To investigate the effect of fine-tuning BERT on task performance, we use either the pre-trained BERT weights, or the weights from a BERT fine-tuned on the task-specific dataset on a segment-level (i.e. we preserve the o"
+      },
+      {
+        "rank": 9,
+        "source": "1910.10781:paragraph:0030 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5276,
+        "keyword": 0.0187,
+        "rerank": 0.4138,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF25 presents results using pre-trained BERT features. We extracted features from the pooled output of final transformer block as these were shown to be working well for most of the tasks BIBREF1. The features "
+      },
+      {
+        "rank": 10,
+        "source": "1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4329,
+        "keyword": 0.0851,
+        "rerank": 0.4096,
+        "section": "Introduction",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recur"
+      },
+      {
+        "rank": 11,
+        "source": "1910.10781:paragraph:0009 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.471,
+        "keyword": 0.0549,
+        "rerank": 0.4024,
+        "section": "Related work",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In BIBREF17, authors use BERT for document classification but the average document length is less than BERT maximum length 512. TransformerXL BIBREF2 is an extension to the Transformer architecture that allows it to bett"
+      },
+      {
+        "rank": 12,
+        "source": "1910.10781:paragraph:0028 | Hierarchical Transformers for Long Document Classification / Experiments ::: Dataset Statistics",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5075,
+        "keyword": 0.0272,
+        "rerank": 0.3989,
+        "section": "Experiments ::: Dataset Statistics",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF22 shows statistics of our datasets. It can be observed that average length of Fisher is much higher than 20 newsgroups and CSAT. Cumulative distribution of document lengths for each dataset is shown in Fig. "
+      },
+      {
+        "rank": 13,
+        "source": "1910.10781:paragraph:0025 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.55,
+        "keyword": 0.0345,
+        "rerank": 0.3929,
+        "section": "Experiments ::: CSAT",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We obtained the transcripts by employing an ASR system. The ASR system uses TDNN-LSTM acoustic model trained on Fisher and Switchboard datasets with lattice-free maximum mutual information criterion BIBREF18. The word er"
+      },
+      {
+        "rank": 14,
+        "source": "1910.10781:paragraph:0027 | Hierarchical Transformers for Long Document Classification / Experiments ::: Fisher",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5395,
+        "keyword": 0.0,
+        "rerank": 0.3587,
+        "section": "Experiments ::: Fisher",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Fisher Phase 1 US English corpus is often used for automatic speech recognition in speech community. In this work, we used it for topic identification as in BIBREF3. The documents are 10-minute long telephone conversatio"
+      },
+      {
+        "rank": 15,
+        "source": "1910.10781:paragraph:0035 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5377,
+        "keyword": 0.0,
+        "rerank": 0.3554,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "It can be observed from Table TABREF27 that a simple averaging operation or taking most frequent predicted class works competitively for CSAT and 20newsgroups but not for the Fisher dataset. We believe the improvements f"
+      },
+      {
+        "rank": 16,
+        "source": "1910.10781:paragraph:0016 | Hierarchical Transformers for Long Document Classification / Method ::: Recurrence over BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4467,
+        "keyword": 0.0436,
+        "rerank": 0.3314,
+        "section": "Method ::: Recurrence over BERT",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "Given that BERT is limited to a particular input length, we split the input sequence into segments of a fixed size with overlap. For each of these segments, we obtain H or P from BERT model. We then stack these segment-l"
+      },
+      {
+        "rank": 17,
+        "source": "1910.10781:paragraph:0021 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5709,
+        "keyword": 0.0,
+        "rerank": 0.3145,
+        "section": "Experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR)."
+      },
+      {
+        "rank": 18,
+        "source": "1910.10781:paragraph:0008 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5627,
+        "keyword": 0.0,
+        "rerank": 0.2999,
+        "section": "Related work",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Several researchers addressed the problem of predicting customer satisfaction BIBREF6, BIBREF7, BIBREF8, BIBREF9. In most of these works, logistic regression, SVM, CNN are applied on different kinds of representations."
+      },
+      {
+        "rank": 19,
+        "source": "1910.10781:paragraph:0013 | Hierarchical Transformers for Long Document Classification / Method ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4898,
+        "keyword": 0.0,
+        "rerank": 0.2701,
+        "section": "Method ::: BERT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BERT has been shown to beat the state-of-the-art performance on 11 tasks with no modifications to the model architecture, besides adding a task-specific output layer BIBREF1. We follow same procedure suggested in BIBREF1"
+      },
+      {
+        "rank": 20,
+        "source": "1910.10781:paragraph:0023 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5449,
+        "keyword": 0.0,
+        "rerank": 0.2683,
+        "section": "Experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);"
+      },
+      {
+        "rank": 21,
+        "source": "1910.10781:paragraph:0001 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4806,
+        "keyword": 0.0,
+        "rerank": 0.2538,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "There are several natural language (NLP) processing tasks that involve such long sequences. Of particular interest are topic identification of spoken conversations BIBREF3, BIBREF4, BIBREF5 and call center customer satis"
+      },
+      {
+        "rank": 22,
+        "source": "1910.10781:paragraph:0000 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4588,
+        "keyword": 0.0,
+        "rerank": 0.2448,
+        "section": "Introduction",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Bidirectional Encoder Representations from Transformers (BERT) is a novel Transformer BIBREF0 model, which recently achieved state-of-the-art performance in several language understanding tasks, such as question answerin"
+      },
+      {
+        "rank": 23,
+        "source": "1910.10781:paragraph:0031 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.522,
+        "keyword": 0.0,
+        "rerank": 0.2275,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF27 presents results using fine-tuned BERT predictions instead of the pooled output from final transformer block. For each document, having obtained segment-wise predictions we can obtain final prediction for "
+      },
+      {
+        "rank": 24,
+        "source": "1910.10781:abstract:000 | Hierarchical Transformers for Long Document Classification / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4623,
+        "keyword": 0.0,
+        "rerank": 0.2211,
+        "section": "Abstract",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BERT, which stands for Bidirectional Encoder Representations from Transformers, is a recently introduced language representation model based upon the transfer learning paradigm. We extend its fine-tuning procedure to add"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6918,
+        "keyword": 0.1212,
+        "rerank": 0.86,
+        "section": "Experiments",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluated our models on 3 different datasets:"
+      },
+      {
+        "rank": 2,
+        "source": "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.609,
+        "keyword": 0.0546,
+        "rerank": 0.6477,
+        "section": "Experiments ::: 20 newsgroups",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to "
+      },
+      {
+        "rank": 3,
+        "source": "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5723,
+        "keyword": 0.0526,
+        "rerank": 0.6375,
+        "section": "Related work",
+        "query_hits": "datasets, they, use",
+        "reasons": "body/table evidence",
+        "preview": "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify"
+      },
+      {
+        "rank": 4,
+        "source": "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5398,
+        "keyword": 0.0638,
+        "rerank": 0.5772,
+        "section": "Results",
+        "query_hits": "did, they",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they hel"
+      },
+      {
+        "rank": 5,
+        "source": "1910.10781:paragraph:0024 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6329,
+        "keyword": 0.0,
+        "rerank": 0.5251,
+        "section": "Experiments ::: CSAT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "CSAT dataset consists of US English telephone speech from call centers. For each call in this dataset, customers participated in that call gave a rating on his experience with agent. Originally, this dataset has labels r"
+      },
+      {
+        "rank": 6,
+        "source": "1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5183,
+        "keyword": 0.0577,
+        "rerank": 0.5238,
+        "section": "Conclusions",
+        "query_hits": "datasets, did",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using"
+      },
+      {
+        "rank": 7,
+        "source": "1910.10781:paragraph:0037 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5657,
+        "keyword": 0.0331,
+        "rerank": 0.5173,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF33 compares our results with previous works. It can be seen that our model ToBERT outperforms CNN based experiments by significant margin on CSAT and Fisher datasets. For CSAT dataset, we used multi-scale CNN"
+      },
+      {
+        "rank": 8,
+        "source": "1910.10781:paragraph:0015 | Hierarchical Transformers for Long Document Classification / Method ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5106,
+        "keyword": 0.0455,
+        "rerank": 0.45,
+        "section": "Method ::: BERT",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "To investigate the effect of fine-tuning BERT on task performance, we use either the pre-trained BERT weights, or the weights from a BERT fine-tuned on the task-specific dataset on a segment-level (i.e. we preserve the o"
+      },
+      {
+        "rank": 9,
+        "source": "1910.10781:paragraph:0030 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5276,
+        "keyword": 0.0187,
+        "rerank": 0.4138,
+        "section": "Results",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF25 presents results using pre-trained BERT features. We extracted features from the pooled output of final transformer block as these were shown to be working well for most of the tasks BIBREF1. The features "
+      },
+      {
+        "rank": 10,
+        "source": "1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4329,
+        "keyword": 0.0851,
+        "rerank": 0.4096,
+        "section": "Introduction",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recur"
+      },
+      {
+        "rank": 11,
+        "source": "1910.10781:paragraph:0009 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.471,
+        "keyword": 0.0549,
+        "rerank": 0.4024,
+        "section": "Related work",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "In BIBREF17, authors use BERT for document classification but the average document length is less than BERT maximum length 512. TransformerXL BIBREF2 is an extension to the Transformer architecture that allows it to bett"
+      },
+      {
+        "rank": 12,
+        "source": "1910.10781:paragraph:0028 | Hierarchical Transformers for Long Document Classification / Experiments ::: Dataset Statistics",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5075,
+        "keyword": 0.0272,
+        "rerank": 0.3989,
+        "section": "Experiments ::: Dataset Statistics",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF22 shows statistics of our datasets. It can be observed that average length of Fisher is much higher than 20 newsgroups and CSAT. Cumulative distribution of document lengths for each dataset is shown in Fig. "
+      },
+      {
+        "rank": 13,
+        "source": "1910.10781:paragraph:0025 | Hierarchical Transformers for Long Document Classification / Experiments ::: CSAT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.55,
+        "keyword": 0.0345,
+        "rerank": 0.3929,
+        "section": "Experiments ::: CSAT",
+        "query_hits": "datasets",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We obtained the transcripts by employing an ASR system. The ASR system uses TDNN-LSTM acoustic model trained on Fisher and Switchboard datasets with lattice-free maximum mutual information criterion BIBREF18. The word er"
+      },
+      {
+        "rank": 14,
+        "source": "1910.10781:paragraph:0027 | Hierarchical Transformers for Long Document Classification / Experiments ::: Fisher",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5395,
+        "keyword": 0.0,
+        "rerank": 0.3587,
+        "section": "Experiments ::: Fisher",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Fisher Phase 1 US English corpus is often used for automatic speech recognition in speech community. In this work, we used it for topic identification as in BIBREF3. The documents are 10-minute long telephone conversatio"
+      },
+      {
+        "rank": 15,
+        "source": "1910.10781:paragraph:0035 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5377,
+        "keyword": 0.0,
+        "rerank": 0.3554,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "It can be observed from Table TABREF27 that a simple averaging operation or taking most frequent predicted class works competitively for CSAT and 20newsgroups but not for the Fisher dataset. We believe the improvements f"
+      },
+      {
+        "rank": 16,
+        "source": "1910.10781:paragraph:0016 | Hierarchical Transformers for Long Document Classification / Method ::: Recurrence over BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4467,
+        "keyword": 0.0436,
+        "rerank": 0.3314,
+        "section": "Method ::: Recurrence over BERT",
+        "query_hits": "use",
+        "reasons": "body/table evidence",
+        "preview": "Given that BERT is limited to a particular input length, we split the input sequence into segments of a fixed size with overlap. For each of these segments, we obtain H or P from BERT model. We then stack these segment-l"
+      },
+      {
+        "rank": 17,
+        "source": "1910.10781:paragraph:0021 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5709,
+        "keyword": 0.0,
+        "rerank": 0.3145,
+        "section": "Experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "CSAT dataset for CSAT prediction, consisting of spoken transcripts (automatic via ASR)."
+      },
+      {
+        "rank": 18,
+        "source": "1910.10781:paragraph:0008 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5627,
+        "keyword": 0.0,
+        "rerank": 0.2999,
+        "section": "Related work",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Several researchers addressed the problem of predicting customer satisfaction BIBREF6, BIBREF7, BIBREF8, BIBREF9. In most of these works, logistic regression, SVM, CNN are applied on different kinds of representations."
+      },
+      {
+        "rank": 19,
+        "source": "1910.10781:paragraph:0013 | Hierarchical Transformers for Long Document Classification / Method ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4898,
+        "keyword": 0.0,
+        "rerank": 0.2701,
+        "section": "Method ::: BERT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BERT has been shown to beat the state-of-the-art performance on 11 tasks with no modifications to the model architecture, besides adding a task-specific output layer BIBREF1. We follow same procedure suggested in BIBREF1"
+      },
+      {
+        "rank": 20,
+        "source": "1910.10781:paragraph:0023 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5449,
+        "keyword": 0.0,
+        "rerank": 0.2683,
+        "section": "Experiments",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Fisher Phase 1 corpus for topic identification task, consisting of spoken transcripts (manual);"
+      },
+      {
+        "rank": 21,
+        "source": "1910.10781:paragraph:0001 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4806,
+        "keyword": 0.0,
+        "rerank": 0.2538,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "There are several natural language (NLP) processing tasks that involve such long sequences. Of particular interest are topic identification of spoken conversations BIBREF3, BIBREF4, BIBREF5 and call center customer satis"
+      },
+      {
+        "rank": 22,
+        "source": "1910.10781:paragraph:0000 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4588,
+        "keyword": 0.0,
+        "rerank": 0.2448,
+        "section": "Introduction",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "Bidirectional Encoder Representations from Transformers (BERT) is a novel Transformer BIBREF0 model, which recently achieved state-of-the-art performance in several language understanding tasks, such as question answerin"
+      },
+      {
+        "rank": 23,
+        "source": "1910.10781:paragraph:0031 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.522,
+        "keyword": 0.0,
+        "rerank": 0.2275,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF27 presents results using fine-tuned BERT predictions instead of the pooled output from final transformer block. For each document, having obtained segment-wise predictions we can obtain final prediction for "
+      },
+      {
+        "rank": 24,
+        "source": "1910.10781:abstract:000 | Hierarchical Transformers for Long Document Classification / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4623,
+        "keyword": 0.0,
+        "rerank": 0.2211,
+        "section": "Abstract",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "BERT, which stands for Bidirectional Encoder Representations from Transformers, is a recently introduced language representation model based upon the transfer learning paradigm. We extend its fine-tuning procedure to add"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5723,
+        "keyword": 0.0526,
+        "rerank": 0.6375,
+        "section": "Related work",
+        "query_hits": "datasets, they, use",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7471,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1025,
+        "reasons": "body/table evidence",
+        "preview": "Several dimensionality reduction algorithms such as RBM, autoencoders, subspace multinomial models (SMM) are used to obtain a low dimensional representation of documents from a simple BOW representation and then classify"
+      },
+      {
+        "rank": 2,
+        "source": "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6918,
+        "keyword": 0.1212,
+        "rerank": 0.86,
+        "section": "Experiments",
+        "query_hits": "datasets",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7835,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0297,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We evaluated our models on 3 different datasets:"
+      },
+      {
+        "rank": 3,
+        "source": "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.609,
+        "keyword": 0.0546,
+        "rerank": 0.6477,
+        "section": "Experiments ::: 20 newsgroups",
+        "query_hits": "datasets",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7587,
+        "novelty": 0.7417,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9963,
+        "reasons": "body/table evidence",
+        "preview": "20 newsgroups data set is one of the frequently used datasets in the text processing community for text classification and text clustering. This data set contains approximately 20,000 English documents from 20 topics to "
+      },
+      {
+        "rank": 4,
+        "source": "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5398,
+        "keyword": 0.0638,
+        "rerank": 0.5772,
+        "section": "Results",
+        "query_hits": "did, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6787,
+        "novelty": 0.8377,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9809,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF32 presents the effect of position embeddings on the model performance. It can be observed that position embeddings did not significantly affect the model performance for Fisher and 20newsgroups, but they hel"
+      },
+      {
+        "rank": 5,
+        "source": "1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4329,
+        "keyword": 0.0851,
+        "rerank": 0.4096,
+        "section": "Introduction",
+        "query_hits": "use",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4881,
+        "novelty": 0.7303,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.922,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we propose a method that builds upon BERT's architecture. We split the input text sequence into shorter segments in order to obtain a representation for each of them using BERT. Then, we use either a recur"
+      },
+      {
+        "rank": 6,
+        "source": "1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5183,
+        "keyword": 0.0577,
+        "rerank": 0.5238,
+        "section": "Conclusions",
+        "query_hits": "datasets, did",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.618,
+        "novelty": 0.6714,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9055,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we presented two methods for long documents using BERT model: RoBERT and ToBERT. We evaluated our experiments on two classification tasks - customer satisfaction prediction and topic identification - using"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "datasets",
+        "did",
+        "evaluation",
+        "they",
+        "use"
+      ],
+      "covered_query_terms": [
+        "datasets",
+        "did",
+        "they",
+        "use"
+      ],
+      "missing_query_terms": [
+        "evaluation"
+      ],
+      "terms_by_chunk": {
+        "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work": [
+          "datasets",
+          "they",
+          "use"
+        ],
+        "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments": [
+          "datasets"
+        ],
+        "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups": [
+          "datasets"
+        ],
+        "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results": [
+          "did",
+          "they"
+        ],
+        "1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction": [
+          "use"
+        ],
+        "1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions": [
+          "datasets",
+          "did"
+        ]
+      },
+      "section_titles": [
+        "Conclusions",
+        "Experiments",
+        "Experiments ::: 20 newsgroups",
+        "Introduction",
+        "Related work",
+        "Results"
+      ],
+      "chunks_by_section": {
+        "Related work": [
+          "1910.10781:paragraph:0007 | Hierarchical Transformers for Long Document Classification / Related work"
+        ],
+        "Experiments": [
+          "1910.10781:paragraph:0020 | Hierarchical Transformers for Long Document Classification / Experiments"
+        ],
+        "Experiments ::: 20 newsgroups": [
+          "1910.10781:paragraph:0026 | Hierarchical Transformers for Long Document Classification / Experiments ::: 20 newsgroups"
+        ],
+        "Results": [
+          "1910.10781:paragraph:0036 | Hierarchical Transformers for Long Document Classification / Results"
+        ],
+        "Introduction": [
+          "1910.10781:paragraph:0002 | Hierarchical Transformers for Long Document Classification / Introduction"
+        ],
+        "Conclusions": [
+          "1910.10781:paragraph:0038 | Hierarchical Transformers for Long Document Classification / Conclusions"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "They evaluated their models on 3 different datasets. These included the CSAT dataset for CSAT prediction, which consists of spoken transcripts obtained automatically via ASR; 20 newsgroups for topic identification, consisting of written text; and the Fisher Phase 1 corpus for the topic identification task, which consists of manual spoken transcripts.",
+    "retrieved_context_answer": "The context mentions several datasets used in different contexts:\n\n*   **General/Related Work:** One reference mentioned using datasets with an average word count around 150, and another referenced a dataset collected from arXiv papers for classification.\n*   **Specific Experiments (in the paper):** The models were evaluated on three different datasets [2]. Specifically, the paper used the following three datasets for two classification tasks (customer satisfaction prediction and topic identification) [6]:",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.2711864406779661,
+    "retrieved_context_f1": 0.02631578947368421,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

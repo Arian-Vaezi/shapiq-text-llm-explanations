@@ -1,0 +1,3357 @@
+{
+  "case": {
+    "case_id": "redundant_largest_ocean",
+    "pattern": "redundant_evidence",
+    "question": "Which is the largest ocean on Earth?",
+    "gold_answer": "The Pacific Ocean is the largest ocean on Earth.",
+    "gold_evidence_ids": [
+      "redundant_pacific_a",
+      "redundant_pacific_b"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_pacific_a",
+        "right": "redundant_pacific_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_pacific_a",
+      "score": 0.92,
+      "title": "Retrieved 1: redundant_pacific_a | Largest ocean",
+      "text": "The Pacific Ocean is the largest ocean on Earth."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_pacific_atlantic",
+      "score": 0.6134303648831066,
+      "title": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+      "text": "The Atlantic Ocean is the world's second-largest ocean."
+    },
+    {
+      "rank": 3,
+      "passage_id": "redundant_blue_whale_a",
+      "score": 0.512119239711271,
+      "title": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+      "text": "The blue whale is the largest animal known to have lived on Earth."
+    },
+    {
+      "rank": 4,
+      "passage_id": "redundant_sahara_antarctica_distractor",
+      "score": 0.36153078246640524,
+      "title": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "text": "Antarctica is the largest desert overall when cold polar deserts are included."
+    },
+    {
+      "rank": 5,
+      "passage_id": "conflict_planet_earth",
+      "score": 0.4826684888442221,
+      "title": "Retrieved 5: conflict_planet_earth | Earth",
+      "text": "Earth is the largest of the Solar System's terrestrial planets."
+    },
+    {
+      "rank": 6,
+      "passage_id": "conflict_earth_planet",
+      "score": 0.3314360132518698,
+      "title": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+      "text": "A false summary claims Earth is the closest planet to the Sun."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_pacific_a | Largest ocean",
+      "attribution": 0.13481756105411
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+      "attribution": 0.029173510530334217
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+      "attribution": 0.0034383326312191374
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: conflict_planet_earth | Earth",
+      "attribution": 0.003004444303034878
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": 0.001166047016291335
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+      "attribution": 0.0010998336841300238
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_pacific_a | Largest ocean",
+      "attribution": 0.13481756105411
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+      "attribution": 0.029173510530334217
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+      "attribution": 0.0034383326312191374
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: conflict_planet_earth | Earth",
+      "attribution": 0.003004444303034878
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+      "attribution": 0.001166047016291335
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+      "attribution": 0.0010998336841300238
+    }
+  ],
+  "interactions": [
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_pacific_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_pacific_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": null,
+      "interaction_sign_correct": null,
+      "status": "undefined_missing_right"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_pacific_atlantic",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.048246632012578027,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_blue_whale_a",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.001217741824259652,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.004262803966348897,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0010478304576409928,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "conflict_earth_planet",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.002343680807854071,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "redundant_blue_whale_a",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.017377914200015734,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.02263353364368763,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.015129152338815595,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "conflict_earth_planet",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.011577855605061561,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.016100958816895206,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.011204806129404192,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "conflict_earth_planet",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.014443694074736285,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.010552020336033502,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "conflict_earth_planet",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.01001028674331211,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "conflict_earth_planet",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.010118185000969166,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_pacific_atlantic",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.048246632012578027,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_blue_whale_a",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": 0.001217741824259652,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": 0.004262803966348897,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0010478304576409928,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_a",
+      "right": "conflict_earth_planet",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.002343680807854071,
+      "sign": "positive"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "redundant_blue_whale_a",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.017377914200015734,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.02263353364368763,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "conflict_planet_earth",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.015129152338815595,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_pacific_atlantic",
+      "right": "conflict_earth_planet",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.011577855605061561,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "redundant_sahara_antarctica_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.016100958816895206,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "conflict_planet_earth",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.011204806129404192,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_blue_whale_a",
+      "right": "conflict_earth_planet",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.014443694074736285,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "conflict_planet_earth",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.010552020336033502,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_sahara_antarctica_distractor",
+      "right": "conflict_earth_planet",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.01001028674331211,
+      "sign": "negative"
+    },
+    {
+      "left": "conflict_planet_earth",
+      "right": "conflict_earth_planet",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.010118185000969166,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_pacific_a"
+      ],
+      "score": 0.172724421422771
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic"
+      ],
+      "score": 0.11475777263999243
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.057793831629729286
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.05500947247637544
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.04794627152029152
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet"
+      ],
+      "score": 0.04372680845785304
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic"
+      ],
+      "score": 0.1725729333108892
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.17250964158723725
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.17271125637110507
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17268731919823865
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1725200803621052
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.08370208263020595
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.05555325879747153
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07862063392290086
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "conflict_earth_planet"
+      ],
+      "score": 0.0787169320846931
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.012992019922107523
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.03020148969954528
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.019368235783637
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01954627305889689
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.016384351110564244
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.02241740747381482
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.17255212028543554
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.17274738091251862
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17231934016376638
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17226297829628257
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1727970238581572
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.172692568655199
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.172599583866471
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17280439280961968
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1724941196377866
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17267194854993972
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.043748264596787156
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.057441011555037225
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.05691521749392858
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.05408895546155024
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.0610628275188132
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.0667109137467361
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.02061514955740129
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.009027632395020357
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.010243964006830253
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.015069866234530216
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.17279088299588075
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1726809778068359
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1726523672221113
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17268613283548306
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17268687822138018
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17262241132099032
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17287668173640303
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17273541311680796
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17275825669900302
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17272695152940032
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04734280572477134
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.04399169387830004
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.049734541472557625
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.05275703380821217
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.009704846061043826
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17277926243808484
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17280545301886052
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17272425346459042
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17281553006967232
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1729070454734356
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.041445544689665104
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17269972883967344
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_pacific_a"
+      ],
+      "score": 0.172724421422771
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic"
+      ],
+      "score": 0.11475777263999243
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.057793831629729286
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.05500947247637544
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "conflict_planet_earth"
+      ],
+      "score": 0.04794627152029152
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "conflict_earth_planet"
+      ],
+      "score": 0.04372680845785304
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic"
+      ],
+      "score": 0.1725729333108892
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.17250964158723725
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.17271125637110507
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17268731919823865
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1725200803621052
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.08370208263020595
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.05555325879747153
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth"
+      ],
+      "score": 0.07862063392290086
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "conflict_earth_planet"
+      ],
+      "score": 0.0787169320846931
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.012992019922107523
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.03020148969954528
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.019368235783637
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.01954627305889689
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.016384351110564244
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.02241740747381482
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a"
+      ],
+      "score": 0.17255212028543554
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.17274738091251862
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17231934016376638
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17226297829628257
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.1727970238581572
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.172692568655199
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.172599583866471
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17280439280961968
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1724941196377866
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17267194854993972
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.043748264596787156
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.057441011555037225
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.05691521749392858
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.05408895546155024
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.0610628275188132
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.0667109137467361
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.02061514955740129
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.009027632395020357
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.010243964006830253
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.015069866234530216
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor"
+      ],
+      "score": 0.17279088299588075
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth"
+      ],
+      "score": 0.1726809778068359
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1726523672221113
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17268613283548306
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17268687822138018
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17262241132099032
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17287668173640303
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17273541311680796
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17275825669900302
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17272695152940032
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.04734280572477134
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.04399169387830004
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.049734541472557625
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.05275703380821217
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.009704846061043826
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth"
+      ],
+      "score": 0.17277926243808484
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17280545301886052
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17272425346459042
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17281553006967232
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.1729070454734356
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.041445544689665104
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_pacific_a",
+        "redundant_pacific_atlantic",
+        "redundant_blue_whale_a",
+        "redundant_sahara_antarctica_distractor",
+        "conflict_planet_earth",
+        "conflict_earth_planet"
+      ],
+      "score": 0.17269972883967344
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17269972883967344
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 5,
+        "score": 0.041445544689665104
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+        "remaining_chunks": 4,
+        "score": 0.009704846061043826
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 3,
+        "score": 0.015069866234530216
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: conflict_planet_earth | Earth",
+        "remaining_chunks": 2,
+        "score": 0.016384351110564244
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 1,
+        "score": 0.04372680845785304
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: redundant_pacific_a | Largest ocean",
+        "selected_chunks": 1,
+        "score": 0.172724421422771
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+        "selected_chunks": 2,
+        "score": 0.1725729333108892
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+        "selected_chunks": 3,
+        "score": 0.17255212028543554
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: conflict_planet_earth | Earth",
+        "selected_chunks": 4,
+        "score": 0.1726809778068359
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "selected_chunks": 5,
+        "score": 0.17277926243808484
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+        "selected_chunks": 6,
+        "score": 0.17269972883967344
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17269972883967344
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 5,
+        "score": 0.041445544689665104
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+        "remaining_chunks": 4,
+        "score": 0.009704846061043826
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 3,
+        "score": 0.015069866234530216
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: conflict_planet_earth | Earth",
+        "remaining_chunks": 2,
+        "score": 0.016384351110564244
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 1,
+        "score": 0.04372680845785304
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17269972883967344
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_pacific_a | Largest ocean",
+        "remaining_chunks": 5,
+        "score": 0.041445544689665104
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "remaining_chunks": 4,
+        "score": 0.049734541472557625
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: conflict_earth_planet | Closest planet Earth conflict",
+        "remaining_chunks": 3,
+        "score": 0.057441011555037225
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: conflict_planet_earth | Earth",
+        "remaining_chunks": 2,
+        "score": 0.08370208263020595
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: redundant_blue_whale_a | Blue whale direct",
+        "remaining_chunks": 1,
+        "score": 0.11475777263999243
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: redundant_pacific_atlantic | Atlantic Ocean",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.1726997288396734
+      },
+      {
+        "step": 1,
+        "score": 0.15310035973065622
+      },
+      {
+        "step": 2,
+        "score": 0.1252191697525712
+      },
+      {
+        "step": 3,
+        "score": 0.10615615029395885
+      },
+      {
+        "step": 4,
+        "score": 0.08078848120409575
+      },
+      {
+        "step": 5,
+        "score": 0.0865281286432306
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which is the largest ocean on Earth?",
+    "expanded_queries": [
+      "Which is the largest ocean on Earth?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "redundant_pacific_a | Largest ocean",
+        "dense": 0.8361,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "dense": 0.6984,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "dense": 0.6798,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "dense": 0.6368,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "dense": 0.6294,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "dense": 0.6193,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "dense": 0.5979,
+        "page": 17,
+        "type": "body_text",
+        "section": "south_america_oceans",
+        "flags": "",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      },
+      {
+        "rank": 8,
+        "source": "direct_everest_evidence | Highest mountain",
+        "dense": 0.5962,
+        "page": 29,
+        "type": "body_text",
+        "section": "mount_everest",
+        "flags": "",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "dense": 0.5904,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "dense": 0.5881,
+        "page": 17,
+        "type": "body_text",
+        "section": "south_america_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 11,
+        "source": "conflict_planet_correct | Largest planet",
+        "dense": 0.586,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "dense": 0.5797,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_pacific_a | Largest ocean",
+        "keyword": 0.7848,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "keyword": 0.4398,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "keyword": 0.1909,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "keyword": 0.1695,
+        "page": 15,
+        "type": "body_text",
+        "section": "giant_planets",
+        "flags": "",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "keyword": 0.1691,
+        "page": 17,
+        "type": "body_text",
+        "section": "south_america_oceans",
+        "flags": "",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "keyword": 0.165,
+        "page": 17,
+        "type": "body_text",
+        "section": "south_america_oceans",
+        "flags": "",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "keyword": 0.1587,
+        "page": 20,
+        "type": "body_text",
+        "section": "world_oceans",
+        "flags": "",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "keyword": 0.1369,
+        "page": 38,
+        "type": "body_text",
+        "section": "largest_animals",
+        "flags": "",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "keyword": 0.127,
+        "page": 36,
+        "type": "body_text",
+        "section": "sahara_desert",
+        "flags": "",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "keyword": 0.1098,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 11,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "keyword": 0.0922,
+        "page": 19,
+        "type": "body_text",
+        "section": "earth_orbit",
+        "flags": "",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_atlantic_a | Atlantic eastern border",
+        "keyword": 0.0911,
+        "page": 17,
+        "type": "body_text",
+        "section": "south_america_oceans",
+        "flags": "",
+        "preview": "The Atlantic Ocean borders South America along the continent's eastern side."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.8361,
+        "keyword": 0.7848,
+        "rerank": 0.92,
+        "section": "world_oceans",
+        "query_hits": "earth, largest, ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.6984,
+        "keyword": 0.4398,
+        "rerank": 0.6134,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.6798,
+        "keyword": 0.1369,
+        "rerank": 0.5121,
+        "section": "largest_animals",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6294,
+        "keyword": 0.1695,
+        "rerank": 0.4827,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.6368,
+        "keyword": 0.1909,
+        "rerank": 0.467,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.5979,
+        "keyword": 0.1691,
+        "rerank": 0.4263,
+        "section": "south_america_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5797,
+        "keyword": 0.127,
+        "rerank": 0.425,
+        "section": "sahara_desert",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.5881,
+        "keyword": 0.165,
+        "rerank": 0.4165,
+        "section": "south_america_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.5904,
+        "keyword": 0.1587,
+        "rerank": 0.416,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.6193,
+        "keyword": 0.0853,
+        "rerank": 0.4121,
+        "section": "largest_animals",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 11,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.5962,
+        "keyword": 0.0654,
+        "rerank": 0.3852,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.586,
+        "keyword": 0.078,
+        "rerank": 0.3815,
+        "section": "giant_planets",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.5777,
+        "keyword": 0.0731,
+        "rerank": 0.3727,
+        "section": "largest_animals",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_atlantic_a | Atlantic eastern border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.5653,
+        "keyword": 0.0911,
+        "rerank": 0.3693,
+        "section": "south_america_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean borders South America along the continent's eastern side."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5695,
+        "keyword": 0.0617,
+        "rerank": 0.3615,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5346,
+        "keyword": 0.0875,
+        "rerank": 0.3424,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5301,
+        "keyword": 0.0686,
+        "rerank": 0.3314,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4987,
+        "keyword": 0.0922,
+        "rerank": 0.3142,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5701,
+        "keyword": 0.0,
+        "rerank": 0.3085,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 20,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.492,
+        "keyword": 0.0776,
+        "rerank": 0.303,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4748,
+        "keyword": 0.1098,
+        "rerank": 0.3011,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_sahara_b | Largest hot desert wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4832,
+        "keyword": 0.0847,
+        "rerank": 0.2985,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Among hot deserts, the Sahara is the largest by area."
+      },
+      {
+        "rank": 23,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.4763,
+        "keyword": 0.0779,
+        "rerank": 0.2901,
+        "section": "early_voyages",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 24,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4808,
+        "keyword": 0.0626,
+        "rerank": 0.288,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.8361,
+        "keyword": 0.7848,
+        "rerank": 0.92,
+        "section": "world_oceans",
+        "query_hits": "earth, largest, ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.6984,
+        "keyword": 0.4398,
+        "rerank": 0.6134,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.6798,
+        "keyword": 0.1369,
+        "rerank": 0.5121,
+        "section": "largest_animals",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6294,
+        "keyword": 0.1695,
+        "rerank": 0.4827,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_pacific_b | Pacific surface area",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.6368,
+        "keyword": 0.1909,
+        "rerank": 0.467,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "By surface area, no ocean is larger than the Pacific Ocean."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_atlantic_b | South American ocean boundaries",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.5979,
+        "keyword": 0.1691,
+        "rerank": 0.4263,
+        "section": "south_america_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "South America has the Atlantic Ocean to its east and the Pacific Ocean to its west."
+      },
+      {
+        "rank": 7,
+        "source": "redundant_sahara_c | Sahara Africa wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5797,
+        "keyword": 0.127,
+        "rerank": 0.425,
+        "section": "sahara_desert",
+        "query_hits": "earth, largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Africa's Sahara is commonly identified as Earth's largest hot desert."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_atlantic_pacific | Pacific western border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.5881,
+        "keyword": 0.165,
+        "rerank": 0.4165,
+        "section": "south_america_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean forms the western ocean boundary of South America."
+      },
+      {
+        "rank": 9,
+        "source": "redundant_pacific_indian | Indian Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.5904,
+        "keyword": 0.1587,
+        "rerank": 0.416,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Indian Ocean lies between Africa, Asia, Australia, and the Southern Ocean."
+      },
+      {
+        "rank": 10,
+        "source": "redundant_blue_whale_b | Largest living animal",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.6193,
+        "keyword": 0.0853,
+        "rerank": 0.4121,
+        "section": "largest_animals",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The largest living animal is the blue whale."
+      },
+      {
+        "rank": 11,
+        "source": "direct_everest_evidence | Highest mountain",
+        "page": 29,
+        "type": "body_text",
+        "dense": 0.5962,
+        "keyword": 0.0654,
+        "rerank": 0.3852,
+        "section": "mount_everest",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mount Everest is the highest mountain above sea level on Earth."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_planet_correct | Largest planet",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.586,
+        "keyword": 0.078,
+        "rerank": 0.3815,
+        "section": "giant_planets",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jupiter is the largest planet in the Solar System by both mass and volume."
+      },
+      {
+        "rank": 13,
+        "source": "redundant_blue_whale_elephant_distractor | Elephant distractor",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.5777,
+        "keyword": 0.0731,
+        "rerank": 0.3727,
+        "section": "largest_animals",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The African elephant is the largest living land animal."
+      },
+      {
+        "rank": 14,
+        "source": "redundant_atlantic_a | Atlantic eastern border",
+        "page": 17,
+        "type": "body_text",
+        "dense": 0.5653,
+        "keyword": 0.0911,
+        "rerank": 0.3693,
+        "section": "south_america_oceans",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean borders South America along the continent's eastern side."
+      },
+      {
+        "rank": 15,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5695,
+        "keyword": 0.0617,
+        "rerank": 0.3615,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_sahara_a | Sahara direct",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5346,
+        "keyword": 0.0875,
+        "rerank": 0.3424,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Sahara is the largest hot desert in the world."
+      },
+      {
+        "rank": 17,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5301,
+        "keyword": 0.0686,
+        "rerank": 0.3314,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 18,
+        "source": "redundant_orbit_a | Earth around the Sun",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4987,
+        "keyword": 0.0922,
+        "rerank": 0.3142,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth travels in an orbit around the Sun."
+      },
+      {
+        "rank": 19,
+        "source": "conflict_planet_neptune | Neptune",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.5701,
+        "keyword": 0.0,
+        "rerank": 0.3085,
+        "section": "giant_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neptune is a large ice giant and the farthest recognised planet from the Sun."
+      },
+      {
+        "rank": 20,
+        "source": "missing_japan_tokyo | Tokyo",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.492,
+        "keyword": 0.0776,
+        "rerank": 0.303,
+        "section": "japan_overview",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Tokyo is Japan's capital and its largest metropolitan area."
+      },
+      {
+        "rank": 21,
+        "source": "redundant_orbit_moon | Moon orbit",
+        "page": 19,
+        "type": "body_text",
+        "dense": 0.4748,
+        "keyword": 0.1098,
+        "rerank": 0.3011,
+        "section": "earth_orbit",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Moon orbits Earth."
+      },
+      {
+        "rank": 22,
+        "source": "redundant_sahara_b | Largest hot desert wording",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.4832,
+        "keyword": 0.0847,
+        "rerank": 0.2985,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Among hot deserts, the Sahara is the largest by area."
+      },
+      {
+        "rank": 23,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "page": 50,
+        "type": "body_text",
+        "dense": 0.4763,
+        "keyword": 0.0779,
+        "rerank": 0.2901,
+        "section": "early_voyages",
+        "query_hits": "ocean",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 24,
+        "source": "comp_inner_earth | Earth is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.4808,
+        "keyword": 0.0626,
+        "rerank": 0.288,
+        "section": "inner_planets",
+        "query_hits": "earth",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is also an inner rocky planet and follows Venus in distance from the Sun."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_pacific_a | Largest ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.8361,
+        "keyword": 0.7848,
+        "rerank": 0.92,
+        "section": "world_oceans",
+        "query_hits": "earth, largest, ocean",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Pacific Ocean is the largest ocean on Earth."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_pacific_atlantic | Atlantic Ocean",
+        "page": 20,
+        "type": "body_text",
+        "dense": 0.6984,
+        "keyword": 0.4398,
+        "rerank": 0.6134,
+        "section": "world_oceans",
+        "query_hits": "ocean",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6739,
+        "novelty": 0.4,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6955,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Atlantic Ocean is the world's second-largest ocean."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.6798,
+        "keyword": 0.1369,
+        "rerank": 0.5121,
+        "section": "largest_animals",
+        "query_hits": "earth, largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5661,
+        "novelty": 0.6036,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6713,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_sahara_antarctica_distractor | Antarctic desert distractor",
+        "page": 36,
+        "type": "body_text",
+        "dense": 0.5695,
+        "keyword": 0.0617,
+        "rerank": 0.3615,
+        "section": "sahara_desert",
+        "query_hits": "largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4059,
+        "novelty": 0.6969,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6666,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Antarctica is the largest desert overall when cold polar deserts are included."
+      },
+      {
+        "rank": 5,
+        "source": "conflict_planet_earth | Earth",
+        "page": 15,
+        "type": "body_text",
+        "dense": 0.6294,
+        "keyword": 0.1695,
+        "rerank": 0.4827,
+        "section": "giant_planets",
+        "query_hits": "earth, largest",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5348,
+        "novelty": 0.6308,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6482,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Earth is the largest of the Solar System's terrestrial planets."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.5301,
+        "keyword": 0.0686,
+        "rerank": 0.3314,
+        "section": "closest_planet_sun",
+        "query_hits": "earth",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3739,
+        "novelty": 0.6842,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6373,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "earth",
+        "largest",
+        "ocean"
+      ],
+      "covered_query_terms": [
+        "earth",
+        "largest",
+        "ocean"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_pacific_a | Largest ocean": [
+          "earth",
+          "largest",
+          "ocean"
+        ],
+        "redundant_pacific_atlantic | Atlantic Ocean": [
+          "ocean"
+        ],
+        "redundant_blue_whale_a | Blue whale direct": [
+          "earth",
+          "largest"
+        ],
+        "redundant_sahara_antarctica_distractor | Antarctic desert distractor": [
+          "largest"
+        ],
+        "conflict_planet_earth | Earth": [
+          "earth",
+          "largest"
+        ],
+        "conflict_earth_planet | Closest planet Earth conflict": [
+          "earth"
+        ]
+      },
+      "section_titles": [
+        "closest_planet_sun",
+        "giant_planets",
+        "largest_animals",
+        "sahara_desert",
+        "world_oceans"
+      ],
+      "chunks_by_section": {
+        "world_oceans": [
+          "redundant_pacific_a | Largest ocean",
+          "redundant_pacific_atlantic | Atlantic Ocean"
+        ],
+        "largest_animals": [
+          "redundant_blue_whale_a | Blue whale direct"
+        ],
+        "sahara_desert": [
+          "redundant_sahara_antarctica_distractor | Antarctic desert distractor"
+        ],
+        "giant_planets": [
+          "conflict_planet_earth | Earth"
+        ],
+        "closest_planet_sun": [
+          "conflict_earth_planet | Closest planet Earth conflict"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The Pacific Ocean is the largest ocean on Earth.",
+    "retrieved_context_answer": "The Pacific Ocean is the largest ocean on Earth.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 1.0,
+    "retrieved_context_f1": 1.0,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 1.0,
+    "retrieved_context_exact_match": 1.0,
+    "knowledge_source_class": "retrieval_enabled"
+  }
+}

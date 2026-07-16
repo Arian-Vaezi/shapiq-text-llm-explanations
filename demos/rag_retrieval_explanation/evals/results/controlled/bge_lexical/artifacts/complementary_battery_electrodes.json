@@ -1,0 +1,2355 @@
+{
+  "case": {
+    "case_id": "complementary_battery_electrodes",
+    "pattern": "complementary_evidence",
+    "question": "Which two electrodes does an electrochemical cell have?",
+    "gold_answer": "An anode and a cathode.",
+    "gold_evidence_ids": [
+      "comp_battery_anode",
+      "comp_battery_cathode"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "comp_battery_anode",
+        "right": "comp_battery_cathode",
+        "relation": "complementary",
+        "expected_sign": "positive"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "comp_battery_anode",
+      "score": 0.9500000000000001,
+      "title": "Retrieved 1: comp_battery_anode | Battery anode",
+      "text": "An electrochemical cell has an anode, one of its two electrodes."
+    },
+    {
+      "rank": 2,
+      "passage_id": "comp_battery_cathode",
+      "score": 0.765977756834904,
+      "title": "Retrieved 2: comp_battery_cathode | Battery cathode",
+      "text": "An electrochemical cell also has a cathode, the other electrode."
+    },
+    {
+      "rank": 3,
+      "passage_id": "comp_battery_electrolyte",
+      "score": 0.646729947478893,
+      "title": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+      "text": "The electrolyte allows ions to move between parts of an electrochemical cell."
+    },
+    {
+      "rank": 4,
+      "passage_id": "comp_battery_voltage",
+      "score": 0.45374118969771315,
+      "title": "Retrieved 4: comp_battery_voltage | Battery voltage distractor",
+      "text": "Cell voltage depends on the chemistry and conditions of the battery."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_mars_missions",
+      "score": 0.15419701502869393,
+      "title": "Retrieved 5: missing_mars_missions | Mars exploration",
+      "text": "Orbiters, landers, and rovers have been used to study the Martian environment."
+    },
+    {
+      "rank": 6,
+      "passage_id": "direct_dna_evidence",
+      "score": 0.30025013782328713,
+      "title": "Retrieved 6: direct_dna_evidence | DNA molecular shape",
+      "text": "DNA has a double-helix structure formed by two complementary strands."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+      "attribution": 0.4583333481630908
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+      "attribution": 0.4283333655244367
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: comp_battery_voltage | Battery voltage distractor",
+      "attribution": -0.018333320265387008
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: direct_dna_evidence | DNA molecular shape",
+      "attribution": -0.013333354593565263
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+      "attribution": -0.0116666599317143
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_mars_missions | Mars exploration",
+      "attribution": -0.0033333789480241858
+    }
+  ],
+  "generated_attributions": [],
+  "interactions": [
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_cathode",
+      "relation": "complementary",
+      "expected_sign": "positive",
+      "observed_interaction": 0.16589932956639028,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [],
+  "gold_pairwise_interactions": [
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_cathode",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.16589932956639028,
+      "sign": "positive"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_electrolyte",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.023666667762803864,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_voltage",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.013666667329278107,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_mars_missions",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.0070000003147233664,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "direct_dna_evidence",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.027000000514888857,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "comp_battery_electrolyte",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.023666668532762686,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "comp_battery_voltage",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.013666666579584583,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_mars_missions",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.007000000784325391,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "direct_dna_evidence",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.00700000002502152,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "comp_battery_voltage",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.013666666459909566,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_mars_missions",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.0069999992762036405,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "direct_dna_evidence",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.006999998174483509,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_voltage",
+      "right": "missing_mars_missions",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.00699999908826622,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_voltage",
+      "right": "direct_dna_evidence",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.007000000749124837,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_missions",
+      "right": "direct_dna_evidence",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.007000000775977996,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "comp_battery_anode"
+      ],
+      "score": 0.42521700307457033
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "comp_battery_cathode"
+      ],
+      "score": 0.3852170030745703
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.039999999999999994
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_voltage"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_missions"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "direct_dna_evidence"
+      ],
+      "score": 0.019999999999999997
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode"
+      ],
+      "score": 0.96
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.42521700307457033
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_voltage"
+      ],
+      "score": 0.42521700307457033
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions"
+      ],
+      "score": 0.44521700307457035
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "direct_dna_evidence"
+      ],
+      "score": 0.42521700307457033
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.3852170030745703
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_voltage"
+      ],
+      "score": 0.3852170030745703
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions"
+      ],
+      "score": 0.4052170030745703
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "direct_dna_evidence"
+      ],
+      "score": 0.4052170030745703
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "comp_battery_voltage"
+      ],
+      "score": 0.039999999999999994
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.06
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "direct_dna_evidence"
+      ],
+      "score": 0.06
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.039999999999999994
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.039999999999999994
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.039999999999999994
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.9249999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_voltage"
+      ],
+      "score": 0.9249999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions"
+      ],
+      "score": 0.945
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "direct_dna_evidence"
+      ],
+      "score": 0.9249999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage"
+      ],
+      "score": 0.3902170030745703
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.4102170030745703
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3902170030745703
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.4102170030745703
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3902170030745703
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.4102170030745703
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage"
+      ],
+      "score": 0.35021700307457027
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.3702170030745703
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3702170030745703
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.3702170030745703
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3702170030745703
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3902170030745703
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.024999999999999994
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.024999999999999994
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.044999999999999984
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.024999999999999994
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage"
+      ],
+      "score": 0.8899999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.9099999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "direct_dna_evidence"
+      ],
+      "score": 0.8899999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.9099999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.8899999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.9099999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.37521700307457034
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3552170030745703
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.37521700307457034
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.37521700307457034
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.3352170030745703
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3352170030745703
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3552170030745703
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.3552170030745703
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.009999999999999981
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions"
+      ],
+      "score": 0.875
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "direct_dna_evidence"
+      ],
+      "score": 0.855
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.875
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.875
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.34021700307457037
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.32021700307457035
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "comp_battery_voltage",
+        "missing_mars_missions",
+        "direct_dna_evidence"
+      ],
+      "score": 0.84
+    }
+  ],
+  "generated_coalition_scores": [],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.84
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "remaining_chunks": 5,
+        "score": 0.32021700307457035
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "remaining_chunks": 4,
+        "score": 0.009999999999999981
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: comp_battery_voltage | Battery voltage distractor",
+        "remaining_chunks": 3,
+        "score": 0.044999999999999984
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: direct_dna_evidence | DNA molecular shape",
+        "remaining_chunks": 2,
+        "score": 0.06
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "selected_chunks": 1,
+        "score": 0.42521700307457033
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "selected_chunks": 2,
+        "score": 0.96
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: comp_battery_voltage | Battery voltage distractor",
+        "selected_chunks": 3,
+        "score": 0.9249999999999999
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: direct_dna_evidence | DNA molecular shape",
+        "selected_chunks": 4,
+        "score": 0.8899999999999999
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "selected_chunks": 5,
+        "score": 0.855
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: missing_mars_missions | Mars exploration",
+        "selected_chunks": 6,
+        "score": 0.84
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.84
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "remaining_chunks": 5,
+        "score": 0.32021700307457035
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "remaining_chunks": 4,
+        "score": 0.009999999999999981
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "remaining_chunks": 3,
+        "score": 0.024999999999999994
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: comp_battery_voltage | Battery voltage distractor",
+        "remaining_chunks": 2,
+        "score": 0.039999999999999994
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: direct_dna_evidence | DNA molecular shape",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.84
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "remaining_chunks": 5,
+        "score": 0.32021700307457035
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "remaining_chunks": 4,
+        "score": 0.009999999999999981
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 3,
+        "score": 0.024999999999999994
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "remaining_chunks": 2,
+        "score": 0.039999999999999994
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: comp_battery_voltage | Battery voltage distractor",
+        "remaining_chunks": 1,
+        "score": 0.019999999999999997
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: direct_dna_evidence | DNA molecular shape",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.8400000000000012
+      },
+      {
+        "step": 1,
+        "score": 0.7412173007173996
+      },
+      {
+        "step": 2,
+        "score": 0.5908548848193758
+      },
+      {
+        "step": 3,
+        "score": 0.4601446687163805
+      },
+      {
+        "step": 4,
+        "score": 0.3180432517934991
+      },
+      {
+        "step": 5,
+        "score": 0.18084041794773753
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which two electrodes does an electrochemical cell have?",
+    "expanded_queries": [
+      "Which two electrodes does an electrochemical cell have?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "dense": 0.7982,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "dense": 0.766,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "dense": 0.6878,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "dense": 0.6373,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "dense": 0.5314,
+        "page": 4,
+        "type": "body_text",
+        "section": "dna_structure",
+        "flags": "",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 6,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "dense": 0.5239,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "dense": 0.5228,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 8,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "dense": 0.483,
+        "page": 31,
+        "type": "body_text",
+        "section": "cell_biology",
+        "flags": "",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 9,
+        "source": "comp_water_salt | Salt water",
+        "dense": 0.4828,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 10,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "dense": 0.4769,
+        "page": 7,
+        "type": "body_text",
+        "section": "water_composition",
+        "flags": "",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 11,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "dense": 0.4755,
+        "page": 47,
+        "type": "body_text",
+        "section": "blood_transport",
+        "flags": "",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "dense": 0.4709,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "The human heart has four chambers."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "keyword": 0.7204,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "keyword": 0.4978,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "keyword": 0.3944,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "keyword": 0.1211,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.7982,
+        "keyword": 0.7204,
+        "rerank": 0.95,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical, electrodes, two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.766,
+        "keyword": 0.4978,
+        "rerank": 0.766,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.6878,
+        "keyword": 0.3944,
+        "rerank": 0.6467,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.6373,
+        "keyword": 0.1211,
+        "rerank": 0.4537,
+        "section": "battery_terminals",
+        "query_hits": "cell",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.5314,
+        "keyword": 0.0,
+        "rerank": 0.3003,
+        "section": "dna_structure",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 6,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.5239,
+        "keyword": 0.0,
+        "rerank": 0.2929,
+        "section": "water_composition",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.5228,
+        "keyword": 0.0,
+        "rerank": 0.2918,
+        "section": "human_heart_chambers",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 8,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.483,
+        "keyword": 0.0,
+        "rerank": 0.2231,
+        "section": "cell_biology",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 9,
+        "source": "comp_water_salt | Salt water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4828,
+        "keyword": 0.0,
+        "rerank": 0.2228,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 10,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4769,
+        "keyword": 0.0,
+        "rerank": 0.2171,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 11,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4755,
+        "keyword": 0.0,
+        "rerank": 0.2157,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.4709,
+        "keyword": 0.0,
+        "rerank": 0.2113,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 13,
+        "source": "direct_dna_bases | DNA bases",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.4651,
+        "keyword": 0.0,
+        "rerank": 0.2056,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA contains the bases adenine, thymine, cytosine, and guanine."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4633,
+        "keyword": 0.0,
+        "rerank": 0.2039,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.4612,
+        "keyword": 0.0,
+        "rerank": 0.2019,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_mercury_element_distractor | Mercury element distractor",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4544,
+        "keyword": 0.0,
+        "rerank": 0.1952,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is also the name of a chemical element with symbol Hg."
+      },
+      {
+        "rank": 17,
+        "source": "direct_gravity_magnetism | Magnetism distractor",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.452,
+        "keyword": 0.0,
+        "rerank": 0.1928,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Magnetism is a force involving magnetic fields and moving electric charges."
+      },
+      {
+        "rank": 18,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4502,
+        "keyword": 0.0,
+        "rerank": 0.1911,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 19,
+        "source": "comp_photosynthesis_output | Photosynthesis products",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.4423,
+        "keyword": 0.0,
+        "rerank": 0.1835,
+        "section": "photosynthesis_inputs",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Photosynthesis produces sugars and releases oxygen as a by-product."
+      },
+      {
+        "rank": 20,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.4391,
+        "keyword": 0.0,
+        "rerank": 0.1804,
+        "section": "central_dogma",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 21,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4325,
+        "keyword": 0.0,
+        "rerank": 0.1739,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 22,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.432,
+        "keyword": 0.0,
+        "rerank": 0.1734,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 23,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4316,
+        "keyword": 0.0,
+        "rerank": 0.173,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 24,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.428,
+        "keyword": 0.0,
+        "rerank": 0.1696,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.7982,
+        "keyword": 0.7204,
+        "rerank": 0.95,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical, electrodes, two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.766,
+        "keyword": 0.4978,
+        "rerank": 0.766,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.6878,
+        "keyword": 0.3944,
+        "rerank": 0.6467,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.6373,
+        "keyword": 0.1211,
+        "rerank": 0.4537,
+        "section": "battery_terminals",
+        "query_hits": "cell",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.5314,
+        "keyword": 0.0,
+        "rerank": 0.3003,
+        "section": "dna_structure",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 6,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.5239,
+        "keyword": 0.0,
+        "rerank": 0.2929,
+        "section": "water_composition",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 7,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.5228,
+        "keyword": 0.0,
+        "rerank": 0.2918,
+        "section": "human_heart_chambers",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 8,
+        "source": "direct_mitochondria_evidence | Mitochondria role",
+        "page": 31,
+        "type": "body_text",
+        "dense": 0.483,
+        "keyword": 0.0,
+        "rerank": 0.2231,
+        "section": "cell_biology",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mitochondria produce much of the ATP energy used by eukaryotic cells."
+      },
+      {
+        "rank": 9,
+        "source": "comp_water_salt | Salt water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4828,
+        "keyword": 0.0,
+        "rerank": 0.2228,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Seawater contains dissolved salts in addition to water molecules."
+      },
+      {
+        "rank": 10,
+        "source": "comp_water_oxygen | Oxygen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4769,
+        "keyword": 0.0,
+        "rerank": 0.2171,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The O in the formula H2O represents oxygen, with one oxygen atom in each molecule."
+      },
+      {
+        "rank": 11,
+        "source": "direct_hemoglobin_evidence | Hemoglobin role direct",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4755,
+        "keyword": 0.0,
+        "rerank": 0.2157,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hemoglobin is the protein in red blood cells that carries oxygen."
+      },
+      {
+        "rank": 12,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.4709,
+        "keyword": 0.0,
+        "rerank": 0.2113,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 13,
+        "source": "direct_dna_bases | DNA bases",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.4651,
+        "keyword": 0.0,
+        "rerank": 0.2056,
+        "section": "dna_structure",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA contains the bases adenine, thymine, cytosine, and guanine."
+      },
+      {
+        "rank": 14,
+        "source": "conflict_potassium_element | Potassium element",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4633,
+        "keyword": 0.0,
+        "rerank": 0.2039,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Potassium is an alkali metal with atomic number 19."
+      },
+      {
+        "rank": 15,
+        "source": "conflict_heart_chambers_three | Heart chambers conflict three",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.4612,
+        "keyword": 0.0,
+        "rerank": 0.2019,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false note claims the human heart has three chambers."
+      },
+      {
+        "rank": 16,
+        "source": "conflict_mercury_element_distractor | Mercury element distractor",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.4544,
+        "keyword": 0.0,
+        "rerank": 0.1952,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mercury is also the name of a chemical element with symbol Hg."
+      },
+      {
+        "rank": 17,
+        "source": "direct_gravity_magnetism | Magnetism distractor",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.452,
+        "keyword": 0.0,
+        "rerank": 0.1928,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Magnetism is a force involving magnetic fields and moving electric charges."
+      },
+      {
+        "rank": 18,
+        "source": "conflict_potassium_sodium | Sodium symbol",
+        "page": 14,
+        "type": "body_text",
+        "dense": 0.4502,
+        "keyword": 0.0,
+        "rerank": 0.1911,
+        "section": "chemical_symbols",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Sodium uses the chemical symbol Na."
+      },
+      {
+        "rank": 19,
+        "source": "comp_photosynthesis_output | Photosynthesis products",
+        "page": 6,
+        "type": "body_text",
+        "dense": 0.4423,
+        "keyword": 0.0,
+        "rerank": 0.1835,
+        "section": "photosynthesis_inputs",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Photosynthesis produces sugars and releases oxygen as a by-product."
+      },
+      {
+        "rank": 20,
+        "source": "comp_protein_lipid_distractor | Lipid distractor",
+        "page": 34,
+        "type": "body_text",
+        "dense": 0.4391,
+        "keyword": 0.0,
+        "rerank": 0.1804,
+        "section": "central_dogma",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Lipids are biological molecules that include fats and membrane components."
+      },
+      {
+        "rank": 21,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.4325,
+        "keyword": 0.0,
+        "rerank": 0.1739,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 22,
+        "source": "conflict_boiling_90c | Water boiling point conflict 90",
+        "page": 26,
+        "type": "body_text",
+        "dense": 0.432,
+        "keyword": 0.0,
+        "rerank": 0.1734,
+        "section": "water_boiling_point",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An inaccurate lab note states that water boils at 90 degrees Celsius."
+      },
+      {
+        "rank": 23,
+        "source": "comp_water_states | States of water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.4316,
+        "keyword": 0.0,
+        "rerank": 0.173,
+        "section": "water_composition",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Water can occur as solid ice, liquid water, or water vapour."
+      },
+      {
+        "rank": 24,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.428,
+        "keyword": 0.0,
+        "rerank": 0.1696,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.7982,
+        "keyword": 0.7204,
+        "rerank": 0.95,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical, electrodes, two",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.766,
+        "keyword": 0.4978,
+        "rerank": 0.766,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8103,
+        "novelty": 0.4125,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8546,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.6878,
+        "keyword": 0.3944,
+        "rerank": 0.6467,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6874,
+        "novelty": 0.4278,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.751,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.6373,
+        "keyword": 0.1211,
+        "rerank": 0.4537,
+        "section": "battery_terminals",
+        "query_hits": "cell",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4884,
+        "novelty": 0.4632,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5449,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3815,
+        "keyword": 0.0,
+        "rerank": 0.1542,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1796,
+        "novelty": 0.945,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5067,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 6,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.5314,
+        "keyword": 0.0,
+        "rerank": 0.3003,
+        "section": "dna_structure",
+        "query_hits": "two",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3302,
+        "novelty": 0.7389,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4474,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "cell",
+        "does",
+        "electrochemical",
+        "electrodes",
+        "have",
+        "two"
+      ],
+      "covered_query_terms": [
+        "cell",
+        "electrochemical",
+        "electrodes",
+        "have",
+        "two"
+      ],
+      "missing_query_terms": [
+        "does"
+      ],
+      "terms_by_chunk": {
+        "comp_battery_anode | Battery anode": [
+          "cell",
+          "electrochemical",
+          "electrodes",
+          "two"
+        ],
+        "comp_battery_cathode | Battery cathode": [
+          "cell",
+          "electrochemical"
+        ],
+        "comp_battery_electrolyte | Battery electrolyte distractor": [
+          "cell",
+          "electrochemical"
+        ],
+        "comp_battery_voltage | Battery voltage distractor": [
+          "cell"
+        ],
+        "missing_mars_missions | Mars exploration": [
+          "have"
+        ],
+        "direct_dna_evidence | DNA molecular shape": [
+          "two"
+        ]
+      },
+      "section_titles": [
+        "battery_terminals",
+        "dna_structure",
+        "mars_overview"
+      ],
+      "chunks_by_section": {
+        "battery_terminals": [
+          "comp_battery_anode | Battery anode",
+          "comp_battery_cathode | Battery cathode",
+          "comp_battery_electrolyte | Battery electrolyte distractor",
+          "comp_battery_voltage | Battery voltage distractor"
+        ],
+        "mars_overview": [
+          "missing_mars_missions | Mars exploration"
+        ],
+        "dna_structure": [
+          "direct_dna_evidence | DNA molecular shape"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {}
+}

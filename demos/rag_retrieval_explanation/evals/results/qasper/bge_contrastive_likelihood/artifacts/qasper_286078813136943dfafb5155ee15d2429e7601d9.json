@@ -1,0 +1,1585 @@
+{
+  "case": {
+    "case_id": "qasper_286078813136943dfafb5155ee15d2429e7601d9",
+    "paper_id": "1802.06024",
+    "paper_title": "Towards a Continuous Knowledge Learning Engine for Chatbots",
+    "question_id": "286078813136943dfafb5155ee15d2429e7601d9",
+    "annotation_id": "8358504a434f7414031f550d6b2d7eeaf258096c",
+    "question": "How much better than the baseline is LiLi?",
+    "gold_answer": "In case of Freebase knowledge base, LiLi model had better F1 score than the single model by 0.20 , 0.01, 0.159 for kwn, unk, and all test Rel type. The values for WordNet are 0.25, 0.1, 0.2.",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1802.06024:paragraph:0039",
+      "1802.06024:paragraph:0040",
+      "1802.06024:paragraph:0041",
+      "1802.06024:paragraph:0042",
+      "1802.06024:paragraph:0043",
+      "1802.06024:paragraph:0044",
+      "1802.06024:paragraph:0046"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1802.06024:paragraph:0046",
+      "score": 0.9341218100540869,
+      "title": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+      "text": "Evaluation-I: Strategy Formulation Ability. Table 5 shows the list of inference strategies formulated by LiLi for various INLINEFORM0 and INLINEFORM1 , which control the strategy formulation of LiLi. When INLINEFORM2 , LiLi cannot interact with user and works like a closed-world method. Thus, INLINEFORM3 drops significantly (0.47). When INLINEFORM4 , i.e. with only one interaction per query, LiLi acquires knowledge well for instances where either of the entities or relation is unknown. However, as one unknown entity may appear in multiple test triples, once the entity becomes known, LiLi doesn\u2019t need to ask for it again and can perform inference on future triples causing significant increase in INLINEFORM5 (0.97). When INLINEFORM6 , LiLi is able to perform inference on all instances and INLINEFORM7 becomes 1. For INLINEFORM8 , LiLi uses INLINEFORM9 only once (as only one MLQ satisfies INLINEFORM10 ) compared to INLINEFORM11 . In summary, LiLi\u2019s RL-model can effectively formulate query-specific inference strategies (based on specified parameter values). Evaluation-II: Predictive Performance. Table 6 shows the comparative performance of LiLi with baselines. To judge the overall improvements, we performed paired t-test considering +ve F1 scores on each relation as paired data. Considering both KBs and all relation types, LiLi outperforms Sep with INLINEFORM12 . If we set INLINEFORM13 (training with very few clues), LiLi outperforms Sep with INLINEFORM14 on Freebase considering MCC. Thus, the lifelong learning mechanism is effective in transferring helpful knowledge. Single model performs better than Sep for unknown relations due to the sharing of knowledge (weights) across tasks. However, for known relations, performance drops because, as a new relation arrives to the system, old weights get corrupted and catastrophic forgetting occurs. For unknown relations, as the relations are evaluated just after training, there is no chance for catastrophic forgetting. The performance improvement ( INLINEFORM15 ) of LiLi over F-th on Freebase signifies that the relation-specific threshold INLINEFORM16 works better than fixed threshold 0.5 because, if all prediction values for test instances lie above (or below) 0.5, F-th predicts all instances as +ve (-ve) which degrades its performance. Due to the utilization of contextual similarity (highly correlated with class labels) of entity-pairs, LiLi\u2019s guessing mechanism works better ( INLINEFORM17 ) than blind guessing (BG). The past task selection mechanism of LiLi also improves its performance over w/o PTS, as it acquires more clues during testing for poorly performed tasks (evaluated on validation set). For Freebase, due to a large number of past tasks [9 (25% of 38)], the performance difference is more significant ( INLINEFORM18 ). For WordNet, the number is relatively small [3 (25% of 14)] and hence, the difference is not significant."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1802.06024:abstract:000",
+      "score": 0.6543839302477271,
+      "title": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+      "text": "Although chatbots have been very popular in recent years, they still have some serious weaknesses which limit the scope of their applications. One major weakness is that they cannot learn new knowledge during the conversation process, i.e., their knowledge is fixed beforehand and cannot be expanded or updated during conversation. In this paper, we propose to build a general knowledge learning engine for chatbots to enable them to continuously and interactively learn new knowledge during conversations. As time goes by, they become more and more knowledgeable and better and better at learning and conversation. We model the task as an open-world knowledge base completion problem and propose a novel technique called lifelong interactive learning and inference (LiLi) to solve it. LiLi works by imitating how humans acquire knowledge and perform inference during an interactive conversation. Our experimental results show LiLi is highly promising."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1802.06024:paragraph:0047",
+      "score": 0.6647925443614996,
+      "title": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+      "text": "Evaluation-III: User Interaction vs. Performance. Table 7 shows the results of LiLi by varying clue acquisition rate ( INLINEFORM0 ). We use Freebase for tuning INLINEFORM1 due to its higher number of unknown test relations compared to WordNet. LiLi\u2019s performance improves significantly as it acquires more clues from the user. The results on INLINEFORM2 outperforms ( INLINEFORM3 ) that on INLINEFORM4 . Table 8 shows the results of LiLi on user responses to MLQ\u2019s and CLQ\u2019s. Answering MLQ\u2019s and CLQ\u2019s is very hard for simulated users (unlike crowd-sourcing) as often INLINEFORM5 lacks the required triple. Thus, we attempt to analyze how the performance is effected if the user does not respond at all. The results show a clear trend in overall performance improvement when the user responds. However, the improvement is not significant as the simulated user\u2019s query satisfaction rate (1% MLQs and 10% CLQs) is very small. But, the analysis shows the effectiveness of LiLi\u2019s guessing mechanism and continual learning ability that help in achieving avg. +ve F1 of 0.57 and 0.62 on FB and WN respectively with minimal participation of the user."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1802.06024:paragraph:0005",
+      "score": 0.5253381329941431,
+      "title": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+      "text": "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference using our existing knowledge. If our knowledge does not allow us to draw a conclusion, we typically ask questions to others to acquire related knowledge and use it in inference. The process typically involves an inference strategy (a sequence of actions), which interleaves a sequence of processing and interactive actions. A processing action can be the selection of related facts, deriving inference chain, etc., that advances the inference process. An interactive action can be deciding what to ask, formulating a suitable question, etc., that enable us to interact. The process helps grow the knowledge over time and the gained knowledge enables us to communicate better in the future. We call this lifelong interactive learning and inference (LiLi). Lifelong learning is reflected by the facts that the newly acquired facts are retained in the KB and used in inference for future queries, and that the accumulated knowledge in addition to the updated KB including past inference performances are leveraged to guide future interaction and learning. LiLi should have the following capabilities:"
+    },
+    {
+      "rank": 5,
+      "passage_id": "1802.06024:paragraph:0008",
+      "score": 0.5584172331919373,
+      "title": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+      "text": "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., \u201c(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions (see the interaction example in Figure 1, which will be further explained in \u00a73) and leverages the interactively acquired knowledge (supporting facts (SFs) in the figure) for continued inference. To do so, LiLi formulates a query-specific inference strategy and executes it. We design LiLi in a Reinforcement Learning (RL) setting that performs sub-tasks like formulating and executing strategy, training a prediction model for inference, and knowledge retention for future use. To the best of our knowledge, our work is the first to address the OKBC problem and to propose an interactive learning mechanism to solve it in a continuous or lifelong manner. We empirically verify the effectiveness of LiLi on two standard real-world KBs: Freebase and WordNet. Experimental results show that LiLi is highly effective in terms of its predictive performance and strategy formulation ability."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1802.06024:paragraph:0021",
+      "score": 0.4770958256017865,
+      "title": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+      "text": "LiLi's strategy formulation is modeled as a Markov Decision Process (MDP) with finite state ( INLINEFORM0 ) and action ( INLINEFORM1 ) spaces. A state INLINEFORM2 consists of 10 binary state variables (Table 2), each of which keeps track of results of an action INLINEFORM3 taken by LiLi and thus, records the progress in inference process made so far. INLINEFORM4 is the initial state with all state bits set as 0. If the data instance (query) is a clue [ INLINEFORM5 ], INLINEFORM6 [CLUE] is set as 1. INLINEFORM7 consists of 6 actions (Table 3). INLINEFORM8 , INLINEFORM9 , INLINEFORM10 are processing actions and INLINEFORM11 , INLINEFORM12 , INLINEFORM13 are interactive actions. Whenever INLINEFORM14 is executed, the MDP reaches the terminal state. Given an action INLINEFORM15 in state INLINEFORM16 , if INLINEFORM17 is invalid in INLINEFORM21 or the objective of INLINEFORM22 is unsatisfied (* marked the condition in INLINEFORM23 ), RL receives a negative reward (empirically set); else receives a positive reward.. We use Q-learning BIBREF38 with INLINEFORM24 -greedy strategy to learn the optimal policy for training the RL model. Note that, the inference strategy is independent of KB type and correctness of prediction. Thus, the RL-model is trained only once from scratch (reused thereafter for other KBs) and also, independently of the prediction model."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+      "attribution": 0.014759379925720103
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+      "attribution": 0.005410034448626895
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+      "attribution": 0.004830136340809969
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+      "attribution": -0.004608846058110084
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+      "attribution": -0.003037594203760741
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+      "attribution": 0.0023117720908911467
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+      "attribution": 0.17455502580104448
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+      "attribution": 0.02666586604784862
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+      "attribution": 0.011904633695181882
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+      "attribution": 0.007680124444905303
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+      "attribution": 0.0006934506836179956
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+      "attribution": -0.00018995377614027358
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:abstract:000",
+      "interaction": 0.002160606269040325
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0047",
+      "interaction": 0.011800484351500457
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0005",
+      "interaction": -0.0008402813128563594
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.009028924148747503
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.00262168064309574
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0047",
+      "interaction": 0.0036603315391312845
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0005",
+      "interaction": 0.00148109961387031
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": 0.0007442133055605878
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": 0.000544699357578019
+    },
+    {
+      "left": "1802.06024:paragraph:0047",
+      "right": "1802.06024:paragraph:0005",
+      "interaction": 0.005257796591229974
+    },
+    {
+      "left": "1802.06024:paragraph:0047",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.00239478208056606
+    },
+    {
+      "left": "1802.06024:paragraph:0047",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.001155438044942704
+    },
+    {
+      "left": "1802.06024:paragraph:0005",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.0029325290112406283
+    },
+    {
+      "left": "1802.06024:paragraph:0005",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.002877180945681249
+    },
+    {
+      "left": "1802.06024:paragraph:0008",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.004740910759172225
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:abstract:000",
+      "interaction": -0.0011565900208615298
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0047",
+      "interaction": -0.04705298284633921
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0005",
+      "interaction": -0.001814981375416038
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.015628901500286403
+    },
+    {
+      "left": "1802.06024:paragraph:0046",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.012920385912415434
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0047",
+      "interaction": 0.0004454710687792998
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0005",
+      "interaction": -0.001765636335218417
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.003346742896699733
+    },
+    {
+      "left": "1802.06024:abstract:000",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": 0.001611092494694747
+    },
+    {
+      "left": "1802.06024:paragraph:0047",
+      "right": "1802.06024:paragraph:0005",
+      "interaction": 0.00030345505252177474
+    },
+    {
+      "left": "1802.06024:paragraph:0047",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.014555812902159683
+    },
+    {
+      "left": "1802.06024:paragraph:0047",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.0046984837191642904
+    },
+    {
+      "left": "1802.06024:paragraph:0005",
+      "right": "1802.06024:paragraph:0008",
+      "interaction": -0.0010801179091580193
+    },
+    {
+      "left": "1802.06024:paragraph:0005",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": 0.0031796153857045093
+    },
+    {
+      "left": "1802.06024:paragraph:0008",
+      "right": "1802.06024:paragraph:0021",
+      "interaction": -0.009434148633478896
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.019664882470837752
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "remaining_chunks": 5,
+        "score": 0.010382500740520051
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.0027351404591955397
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "remaining_chunks": 3,
+        "score": 0.0002649426212298911
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "remaining_chunks": 2,
+        "score": -0.005158122172258861
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.0005131958113021584
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "selected_chunks": 1,
+        "score": 0.007812177127201392
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "selected_chunks": 2,
+        "score": 0.023999443990070257
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "selected_chunks": 3,
+        "score": 0.0267228416301295
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "selected_chunks": 4,
+        "score": 0.02449484247180711
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "selected_chunks": 5,
+        "score": 0.019062781660723838
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "selected_chunks": 6,
+        "score": 0.019664882470837752
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.019664882470837752
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "remaining_chunks": 5,
+        "score": 0.010382500740520051
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "remaining_chunks": 4,
+        "score": 0.01565028436754412
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "remaining_chunks": 3,
+        "score": 0.015960112330422604
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.010422954775501148
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.007906314300195949
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.019664882470837752
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "remaining_chunks": 5,
+        "score": 0.010382500740520051
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.007472152489200856
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "remaining_chunks": 3,
+        "score": 0.012341599699475014
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.019273769579811306
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "remaining_chunks": 1,
+        "score": 0.012817852041736688
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.019664882470837766
+      },
+      {
+        "step": 1,
+        "score": 0.020411984692075183
+      },
+      {
+        "step": 2,
+        "score": 0.016960205591052147
+      },
+      {
+        "step": 3,
+        "score": 0.012311967015042906
+      },
+      {
+        "step": 4,
+        "score": 0.01066653091007739
+      },
+      {
+        "step": 5,
+        "score": 0.0004133604952127714
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How much better than the baseline is LiLi?",
+    "expanded_queries": [
+      "How much better than the baseline is LiLi?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1802.06024:paragraph:0033 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "dense": 0.6364,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "We now evaluate LiLi in terms of its predictive performance and strategy formulation abilities."
+      },
+      {
+        "rank": 2,
+        "source": "1802.06024:paragraph:0039 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "dense": 0.6182,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Baselines. As none of the existing KBC methods can solve the OKBC problem, we choose various versions of LiLi as baselines."
+      },
+      {
+        "rank": 3,
+        "source": "1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "dense": 0.605,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Analysis",
+        "flags": "",
+        "preview": "Evaluation-III: User Interaction vs. Performance. Table 7 shows the results of LiLi by varying clue acquisition rate ( INLINEFORM0 ). We use Freebase for tuning INLINEFORM1 due to its higher number of unknown test relati"
+      },
+      {
+        "rank": 4,
+        "source": "1802.06024:paragraph:0035 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "dense": 0.582,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Parameter Settings. Unless specified, the empirically set parameters (see Table 1) of LiLi are: INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 , INLINEFORM4 , INLINEFORM5 , INLINEFORM6 , INLINEFORM7 , INLINEFORM8 "
+      },
+      {
+        "rank": 5,
+        "source": "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "dense": 0.5812,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Analysis",
+        "flags": "",
+        "preview": "Evaluation-I: Strategy Formulation Ability. Table 5 shows the list of inference strategies formulated by LiLi for various INLINEFORM0 and INLINEFORM1 , which control the strategy formulation of LiLi. When INLINEFORM2 , L"
+      },
+      {
+        "rank": 6,
+        "source": "1802.06024:paragraph:0045 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "dense": 0.5681,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Evaluation Metrics. To evaluate the strategy formulation ability, we introduce a measure called Coverage( INLINEFORM0 ), defined as the fraction of total query data instances, for which LiLi has successfully formulated s"
+      },
+      {
+        "rank": 7,
+        "source": "1802.06024:paragraph:0018 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "dense": 0.556,
+        "page": 1,
+        "type": "body_text",
+        "section": "Components of LiLi",
+        "flags": "",
+        "preview": "LiLi also uses a stack, called Inference Stack ( INLINEFORM0 ) to hold query and its state information for RL. LiLi always processes stack top ( INLINEFORM1 [top]). The clues from the user get stored in INLINEFORM2 on to"
+      },
+      {
+        "rank": 8,
+        "source": "1802.06024:paragraph:0012 | Towards a Continuous Knowledge Learning Engine for Chatbots / Interactive Knowledge Learning (LiLi)",
+        "dense": 0.545,
+        "page": 1,
+        "type": "body_text",
+        "section": "Interactive Knowledge Learning (LiLi)",
+        "flags": "",
+        "preview": "We design LiLi as a combination of two interconnected models: (1) a RL model that learns to formulate a query-specific inference strategy for performing the OKBC task, and (2) a lifelong prediction model to predict wheth"
+      },
+      {
+        "rank": 9,
+        "source": "1802.06024:paragraph:0026 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "dense": 0.539,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "In INLINEFORM0 , LiLi selects an incomplete path INLINEFORM1 from INLINEFORM2 to formulate MLQ, such that INLINEFORM3 is most frequently observed for INLINEFORM4 and INLINEFORM5 is high, given by INLINEFORM6 . Here, INLI"
+      },
+      {
+        "rank": 10,
+        "source": "1802.06024:paragraph:0015 | Towards a Continuous Knowledge Learning Engine for Chatbots / Interactive Knowledge Learning (LiLi)",
+        "dense": 0.5374,
+        "page": 1,
+        "type": "body_text",
+        "section": "Interactive Knowledge Learning (LiLi)",
+        "flags": "",
+        "preview": "3. Limitation in user knowledge. If the user is unable to respond to MLQs or CLQs, LiLi uses a guessing mechanism (discussed later) to fill the gap. This enables LiLi to continue its inference even if the user cannot ans"
+      },
+      {
+        "rank": 11,
+        "source": "1802.06024:paragraph:0028 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "dense": 0.5364,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "In INLINEFORM0 , LiLi extracts path features INLINEFORM1 between ( INLINEFORM2 , INLINEFORM3 ) and updates INLINEFORM4 with incomplete features from INLINEFORM5 . LiLi always trains the prediction model with complete fea"
+      },
+      {
+        "rank": 12,
+        "source": "1802.06024:paragraph:0044 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "dense": 0.5224,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "w/o PTS: LiLi does not ask for additional clues via past task selection for skillset improvement."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "keyword": 0.1664,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Analysis",
+        "flags": "",
+        "preview": "Evaluation-I: Strategy Formulation Ability. Table 5 shows the list of inference strategies formulated by LiLi for various INLINEFORM0 and INLINEFORM1 , which control the strategy formulation of LiLi. When INLINEFORM2 , L"
+      },
+      {
+        "rank": 2,
+        "source": "1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "keyword": 0.1659,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Although chatbots have been very popular in recent years, they still have some serious weaknesses which limit the scope of their applications. One major weakness is that they cannot learn new knowledge during the convers"
+      },
+      {
+        "rank": 3,
+        "source": "1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "keyword": 0.0673,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference"
+      },
+      {
+        "rank": 4,
+        "source": "1802.06024:paragraph:0023 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "keyword": 0.0634,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "Execution of Actions. At any given point in time, let ( INLINEFORM0 , INLINEFORM1 ) be the current INLINEFORM2 [top], INLINEFORM3 is the chosen action and the current version of KS components are INLINEFORM4 , INLINEFORM"
+      },
+      {
+        "rank": 5,
+        "source": "1802.06024:paragraph:0028 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "keyword": 0.059,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "In INLINEFORM0 , LiLi extracts path features INLINEFORM1 between ( INLINEFORM2 , INLINEFORM3 ) and updates INLINEFORM4 with incomplete features from INLINEFORM5 . LiLi always trains the prediction model with complete fea"
+      },
+      {
+        "rank": 6,
+        "source": "1802.06024:paragraph:0031 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "keyword": 0.0539,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "Models trained on a few examples (e.g., clues acquired for unknown INLINEFORM0 ) with randomly initialized weights often perform poorly due to underfitting. Thus, we transfer knowledge (weights) from the past most simila"
+      },
+      {
+        "rank": 7,
+        "source": "1802.06024:paragraph:0032 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "keyword": 0.0539,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "A Running Example. Considering the example shown in Figure 1, LiLi works as follows: first, LiLi executes INLINEFORM0 and detects that the source entity \u201cObama\" and query relation \u201cCitizenOf\" are unknown. Thus, LiLi exec"
+      },
+      {
+        "rank": 8,
+        "source": "1802.06024:paragraph:0048 | Towards a Continuous Knowledge Learning Engine for Chatbots / Conclusion",
+        "keyword": 0.0449,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we are interested in building a generic engine for continuous knowledge learning in human-machine conversations. We first showed that the problem underlying the engine can be formulated as an open-world kn"
+      },
+      {
+        "rank": 9,
+        "source": "1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "keyword": 0.0437,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., \u201c(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions "
+      },
+      {
+        "rank": 10,
+        "source": "1802.06024:paragraph:0024 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "keyword": 0.0405,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "In INLINEFORM0 , LiLi searches INLINEFORM1 , INLINEFORM2 , INLINEFORM3 in INLINEFORM4 and sets appropriate bits in INLINEFORM5 (see Table 2). If INLINEFORM6 was unknown before and is just added to INLINEFORM7 or is in th"
+      },
+      {
+        "rank": 11,
+        "source": "1802.06024:paragraph:0018 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "keyword": 0.0393,
+        "page": 1,
+        "type": "body_text",
+        "section": "Components of LiLi",
+        "flags": "",
+        "preview": "LiLi also uses a stack, called Inference Stack ( INLINEFORM0 ) to hold query and its state information for RL. LiLi always processes stack top ( INLINEFORM1 [top]). The clues from the user get stored in INLINEFORM2 on to"
+      },
+      {
+        "rank": 12,
+        "source": "1802.06024:paragraph:0030 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "keyword": 0.0372,
+        "page": 1,
+        "type": "body_text",
+        "section": "Working of LiLi",
+        "flags": "",
+        "preview": "Lifelong Relation Prediction. Given a relation INLINEFORM0 , LiLi uses INLINEFORM1 and INLINEFORM2 (see INLINEFORM3 ) to train a prediction model (say, INLINEFORM4 ) with parameters INLINEFORM5 . For a unknown INLINEFORM"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5812,
+        "keyword": 0.1664,
+        "rerank": 0.9341,
+        "section": "Results and Analysis",
+        "query_hits": "better, lili, than",
+        "reasons": "body/table evidence",
+        "preview": "Evaluation-I: Strategy Formulation Ability. Table 5 shows the list of inference strategies formulated by LiLi for various INLINEFORM0 and INLINEFORM1 , which control the strategy formulation of LiLi. When INLINEFORM2 , L"
+      },
+      {
+        "rank": 2,
+        "source": "1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.605,
+        "keyword": 0.0297,
+        "rerank": 0.6648,
+        "section": "Results and Analysis",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Evaluation-III: User Interaction vs. Performance. Table 7 shows the results of LiLi by varying clue acquisition rate ( INLINEFORM0 ). We use Freebase for tuning INLINEFORM1 due to its higher number of unknown test relati"
+      },
+      {
+        "rank": 3,
+        "source": "1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.421,
+        "keyword": 0.1659,
+        "rerank": 0.6544,
+        "section": "Abstract",
+        "query_hits": "better, lili",
+        "reasons": "body/table evidence",
+        "preview": "Although chatbots have been very popular in recent years, they still have some serious weaknesses which limit the scope of their applications. One major weakness is that they cannot learn new knowledge during the convers"
+      },
+      {
+        "rank": 4,
+        "source": "1802.06024:paragraph:0033 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6364,
+        "keyword": 0.0353,
+        "rerank": 0.6236,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We now evaluate LiLi in terms of its predictive performance and strategy formulation abilities."
+      },
+      {
+        "rank": 5,
+        "source": "1802.06024:paragraph:0028 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5364,
+        "keyword": 0.059,
+        "rerank": 0.611,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , LiLi extracts path features INLINEFORM1 between ( INLINEFORM2 , INLINEFORM3 ) and updates INLINEFORM4 with incomplete features from INLINEFORM5 . LiLi always trains the prediction model with complete fea"
+      },
+      {
+        "rank": 6,
+        "source": "1802.06024:paragraph:0018 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.556,
+        "keyword": 0.0393,
+        "rerank": 0.6058,
+        "section": "Components of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "LiLi also uses a stack, called Inference Stack ( INLINEFORM0 ) to hold query and its state information for RL. LiLi always processes stack top ( INLINEFORM1 [top]). The clues from the user get stored in INLINEFORM2 on to"
+      },
+      {
+        "rank": 7,
+        "source": "1802.06024:paragraph:0045 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5681,
+        "keyword": 0.0268,
+        "rerank": 0.6021,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Evaluation Metrics. To evaluate the strategy formulation ability, we introduce a measure called Coverage( INLINEFORM0 ), defined as the fraction of total query data instances, for which LiLi has successfully formulated s"
+      },
+      {
+        "rank": 8,
+        "source": "1802.06024:paragraph:0035 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.582,
+        "keyword": 0.0092,
+        "rerank": 0.5921,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Parameter Settings. Unless specified, the empirically set parameters (see Table 1) of LiLi are: INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 , INLINEFORM4 , INLINEFORM5 , INLINEFORM6 , INLINEFORM7 , INLINEFORM8 "
+      },
+      {
+        "rank": 9,
+        "source": "1802.06024:paragraph:0039 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6182,
+        "keyword": 0.0252,
+        "rerank": 0.5771,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Baselines. As none of the existing KBC methods can solve the OKBC problem, we choose various versions of LiLi as baselines."
+      },
+      {
+        "rank": 10,
+        "source": "1802.06024:paragraph:0032 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5144,
+        "keyword": 0.0539,
+        "rerank": 0.5675,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "A Running Example. Considering the example shown in Figure 1, LiLi works as follows: first, LiLi executes INLINEFORM0 and detects that the source entity \u201cObama\" and query relation \u201cCitizenOf\" are unknown. Thus, LiLi exec"
+      },
+      {
+        "rank": 11,
+        "source": "1802.06024:paragraph:0012 | Towards a Continuous Knowledge Learning Engine for Chatbots / Interactive Knowledge Learning (LiLi)",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.545,
+        "keyword": 0.0257,
+        "rerank": 0.5644,
+        "section": "Interactive Knowledge Learning (LiLi)",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "We design LiLi as a combination of two interconnected models: (1) a RL model that learns to formulate a query-specific inference strategy for performing the OKBC task, and (2) a lifelong prediction model to predict wheth"
+      },
+      {
+        "rank": 12,
+        "source": "1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5204,
+        "keyword": 0.0437,
+        "rerank": 0.5584,
+        "section": "Introduction",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., \u201c(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions "
+      },
+      {
+        "rank": 13,
+        "source": "1802.06024:paragraph:0026 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.539,
+        "keyword": 0.0179,
+        "rerank": 0.5409,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , LiLi selects an incomplete path INLINEFORM1 from INLINEFORM2 to formulate MLQ, such that INLINEFORM3 is most frequently observed for INLINEFORM4 and INLINEFORM5 is high, given by INLINEFORM6 . Here, INLI"
+      },
+      {
+        "rank": 14,
+        "source": "1802.06024:paragraph:0023 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.486,
+        "keyword": 0.0634,
+        "rerank": 0.5405,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Execution of Actions. At any given point in time, let ( INLINEFORM0 , INLINEFORM1 ) be the current INLINEFORM2 [top], INLINEFORM3 is the chosen action and the current version of KS components are INLINEFORM4 , INLINEFORM"
+      },
+      {
+        "rank": 15,
+        "source": "1802.06024:paragraph:0031 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4958,
+        "keyword": 0.0539,
+        "rerank": 0.5386,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Models trained on a few examples (e.g., clues acquired for unknown INLINEFORM0 ) with randomly initialized weights often perform poorly due to underfitting. Thus, we transfer knowledge (weights) from the past most simila"
+      },
+      {
+        "rank": 16,
+        "source": "1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4524,
+        "keyword": 0.0673,
+        "rerank": 0.5253,
+        "section": "Introduction",
+        "query_hits": "better, lili",
+        "reasons": "body/table evidence",
+        "preview": "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference"
+      },
+      {
+        "rank": 17,
+        "source": "1802.06024:paragraph:0030 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5008,
+        "keyword": 0.0372,
+        "rerank": 0.5164,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Lifelong Relation Prediction. Given a relation INLINEFORM0 , LiLi uses INLINEFORM1 and INLINEFORM2 (see INLINEFORM3 ) to train a prediction model (say, INLINEFORM4 ) with parameters INLINEFORM5 . For a unknown INLINEFORM"
+      },
+      {
+        "rank": 18,
+        "source": "1802.06024:paragraph:0017 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5155,
+        "keyword": 0.021,
+        "rerank": 0.51,
+        "section": "Components of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "The RL model learns even after training whenever it encounters an unseen state (in testing) and thus, gets updated over time. KS is updated continuously over time as a result of the execution of LiLi and takes part in fu"
+      },
+      {
+        "rank": 19,
+        "source": "1802.06024:paragraph:0022 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.507,
+        "keyword": 0.028,
+        "rerank": 0.5094,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Sometimes the training dataset may not be enough to learn optimal policy for all INLINEFORM0 . Thus, encountering an unseen state during test can make RL-model clueless about the action. Given a state INLINEFORM1 , whene"
+      },
+      {
+        "rank": 20,
+        "source": "1802.06024:paragraph:0029 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5013,
+        "keyword": 0.0318,
+        "rerank": 0.5074,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , if LiLi wins the episode, it adds INLINEFORM1 in one of data buffers INLINEFORM2 based on its mode INLINEFORM3 . E.g., if INLINEFORM4 or INLINEFORM5 , INLINEFORM6 is used for training and added to INLINE"
+      },
+      {
+        "rank": 21,
+        "source": "1802.06024:paragraph:0024 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4759,
+        "keyword": 0.0405,
+        "rerank": 0.4834,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , LiLi searches INLINEFORM1 , INLINEFORM2 , INLINEFORM3 in INLINEFORM4 and sets appropriate bits in INLINEFORM5 (see Table 2). If INLINEFORM6 was unknown before and is just added to INLINEFORM7 or is in th"
+      },
+      {
+        "rank": 22,
+        "source": "1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5023,
+        "keyword": 0.0142,
+        "rerank": 0.4771,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "LiLi's strategy formulation is modeled as a Markov Decision Process (MDP) with finite state ( INLINEFORM0 ) and action ( INLINEFORM1 ) spaces. A state INLINEFORM2 consists of 10 binary state variables (Table 2), each of "
+      },
+      {
+        "rank": 23,
+        "source": "1802.06024:paragraph:0015 | Towards a Continuous Knowledge Learning Engine for Chatbots / Interactive Knowledge Learning (LiLi)",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5374,
+        "keyword": 0.0372,
+        "rerank": 0.4731,
+        "section": "Interactive Knowledge Learning (LiLi)",
+        "query_hits": "lili",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "3. Limitation in user knowledge. If the user is unable to respond to MLQs or CLQs, LiLi uses a guessing mechanism (discussed later) to fill the gap. This enables LiLi to continue its inference even if the user cannot ans"
+      },
+      {
+        "rank": 24,
+        "source": "1802.06024:paragraph:0016 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4697,
+        "keyword": 0.0202,
+        "rerank": 0.4371,
+        "section": "Components of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "As lifelong learning needs to retain knowledge learned from past tasks and use it to help future learning BIBREF31 , LiLi uses a Knowledge Store (KS) for knowledge retention. KS has four components: (i) Knowledge Graph ("
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5812,
+        "keyword": 0.1664,
+        "rerank": 0.9341,
+        "section": "Results and Analysis",
+        "query_hits": "better, lili, than",
+        "reasons": "body/table evidence",
+        "preview": "Evaluation-I: Strategy Formulation Ability. Table 5 shows the list of inference strategies formulated by LiLi for various INLINEFORM0 and INLINEFORM1 , which control the strategy formulation of LiLi. When INLINEFORM2 , L"
+      },
+      {
+        "rank": 2,
+        "source": "1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.605,
+        "keyword": 0.0297,
+        "rerank": 0.6648,
+        "section": "Results and Analysis",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Evaluation-III: User Interaction vs. Performance. Table 7 shows the results of LiLi by varying clue acquisition rate ( INLINEFORM0 ). We use Freebase for tuning INLINEFORM1 due to its higher number of unknown test relati"
+      },
+      {
+        "rank": 3,
+        "source": "1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.421,
+        "keyword": 0.1659,
+        "rerank": 0.6544,
+        "section": "Abstract",
+        "query_hits": "better, lili",
+        "reasons": "body/table evidence",
+        "preview": "Although chatbots have been very popular in recent years, they still have some serious weaknesses which limit the scope of their applications. One major weakness is that they cannot learn new knowledge during the convers"
+      },
+      {
+        "rank": 4,
+        "source": "1802.06024:paragraph:0033 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6364,
+        "keyword": 0.0353,
+        "rerank": 0.6236,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We now evaluate LiLi in terms of its predictive performance and strategy formulation abilities."
+      },
+      {
+        "rank": 5,
+        "source": "1802.06024:paragraph:0028 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5364,
+        "keyword": 0.059,
+        "rerank": 0.611,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , LiLi extracts path features INLINEFORM1 between ( INLINEFORM2 , INLINEFORM3 ) and updates INLINEFORM4 with incomplete features from INLINEFORM5 . LiLi always trains the prediction model with complete fea"
+      },
+      {
+        "rank": 6,
+        "source": "1802.06024:paragraph:0018 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.556,
+        "keyword": 0.0393,
+        "rerank": 0.6058,
+        "section": "Components of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "LiLi also uses a stack, called Inference Stack ( INLINEFORM0 ) to hold query and its state information for RL. LiLi always processes stack top ( INLINEFORM1 [top]). The clues from the user get stored in INLINEFORM2 on to"
+      },
+      {
+        "rank": 7,
+        "source": "1802.06024:paragraph:0045 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5681,
+        "keyword": 0.0268,
+        "rerank": 0.6021,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Evaluation Metrics. To evaluate the strategy formulation ability, we introduce a measure called Coverage( INLINEFORM0 ), defined as the fraction of total query data instances, for which LiLi has successfully formulated s"
+      },
+      {
+        "rank": 8,
+        "source": "1802.06024:paragraph:0035 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.582,
+        "keyword": 0.0092,
+        "rerank": 0.5921,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Parameter Settings. Unless specified, the empirically set parameters (see Table 1) of LiLi are: INLINEFORM0 , INLINEFORM1 , INLINEFORM2 , INLINEFORM3 , INLINEFORM4 , INLINEFORM5 , INLINEFORM6 , INLINEFORM7 , INLINEFORM8 "
+      },
+      {
+        "rank": 9,
+        "source": "1802.06024:paragraph:0039 | Towards a Continuous Knowledge Learning Engine for Chatbots / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6182,
+        "keyword": 0.0252,
+        "rerank": 0.5771,
+        "section": "Experiments",
+        "query_hits": "lili",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Baselines. As none of the existing KBC methods can solve the OKBC problem, we choose various versions of LiLi as baselines."
+      },
+      {
+        "rank": 10,
+        "source": "1802.06024:paragraph:0032 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5144,
+        "keyword": 0.0539,
+        "rerank": 0.5675,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "A Running Example. Considering the example shown in Figure 1, LiLi works as follows: first, LiLi executes INLINEFORM0 and detects that the source entity \u201cObama\" and query relation \u201cCitizenOf\" are unknown. Thus, LiLi exec"
+      },
+      {
+        "rank": 11,
+        "source": "1802.06024:paragraph:0012 | Towards a Continuous Knowledge Learning Engine for Chatbots / Interactive Knowledge Learning (LiLi)",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.545,
+        "keyword": 0.0257,
+        "rerank": 0.5644,
+        "section": "Interactive Knowledge Learning (LiLi)",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "We design LiLi as a combination of two interconnected models: (1) a RL model that learns to formulate a query-specific inference strategy for performing the OKBC task, and (2) a lifelong prediction model to predict wheth"
+      },
+      {
+        "rank": 12,
+        "source": "1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5204,
+        "keyword": 0.0437,
+        "rerank": 0.5584,
+        "section": "Introduction",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., \u201c(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions "
+      },
+      {
+        "rank": 13,
+        "source": "1802.06024:paragraph:0026 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.539,
+        "keyword": 0.0179,
+        "rerank": 0.5409,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , LiLi selects an incomplete path INLINEFORM1 from INLINEFORM2 to formulate MLQ, such that INLINEFORM3 is most frequently observed for INLINEFORM4 and INLINEFORM5 is high, given by INLINEFORM6 . Here, INLI"
+      },
+      {
+        "rank": 14,
+        "source": "1802.06024:paragraph:0023 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.486,
+        "keyword": 0.0634,
+        "rerank": 0.5405,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Execution of Actions. At any given point in time, let ( INLINEFORM0 , INLINEFORM1 ) be the current INLINEFORM2 [top], INLINEFORM3 is the chosen action and the current version of KS components are INLINEFORM4 , INLINEFORM"
+      },
+      {
+        "rank": 15,
+        "source": "1802.06024:paragraph:0031 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4958,
+        "keyword": 0.0539,
+        "rerank": 0.5386,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Models trained on a few examples (e.g., clues acquired for unknown INLINEFORM0 ) with randomly initialized weights often perform poorly due to underfitting. Thus, we transfer knowledge (weights) from the past most simila"
+      },
+      {
+        "rank": 16,
+        "source": "1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4524,
+        "keyword": 0.0673,
+        "rerank": 0.5253,
+        "section": "Introduction",
+        "query_hits": "better, lili",
+        "reasons": "body/table evidence",
+        "preview": "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference"
+      },
+      {
+        "rank": 17,
+        "source": "1802.06024:paragraph:0030 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5008,
+        "keyword": 0.0372,
+        "rerank": 0.5164,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Lifelong Relation Prediction. Given a relation INLINEFORM0 , LiLi uses INLINEFORM1 and INLINEFORM2 (see INLINEFORM3 ) to train a prediction model (say, INLINEFORM4 ) with parameters INLINEFORM5 . For a unknown INLINEFORM"
+      },
+      {
+        "rank": 18,
+        "source": "1802.06024:paragraph:0017 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5155,
+        "keyword": 0.021,
+        "rerank": 0.51,
+        "section": "Components of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "The RL model learns even after training whenever it encounters an unseen state (in testing) and thus, gets updated over time. KS is updated continuously over time as a result of the execution of LiLi and takes part in fu"
+      },
+      {
+        "rank": 19,
+        "source": "1802.06024:paragraph:0022 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.507,
+        "keyword": 0.028,
+        "rerank": 0.5094,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "Sometimes the training dataset may not be enough to learn optimal policy for all INLINEFORM0 . Thus, encountering an unseen state during test can make RL-model clueless about the action. Given a state INLINEFORM1 , whene"
+      },
+      {
+        "rank": 20,
+        "source": "1802.06024:paragraph:0029 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5013,
+        "keyword": 0.0318,
+        "rerank": 0.5074,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , if LiLi wins the episode, it adds INLINEFORM1 in one of data buffers INLINEFORM2 based on its mode INLINEFORM3 . E.g., if INLINEFORM4 or INLINEFORM5 , INLINEFORM6 is used for training and added to INLINE"
+      },
+      {
+        "rank": 21,
+        "source": "1802.06024:paragraph:0024 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4759,
+        "keyword": 0.0405,
+        "rerank": 0.4834,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "In INLINEFORM0 , LiLi searches INLINEFORM1 , INLINEFORM2 , INLINEFORM3 in INLINEFORM4 and sets appropriate bits in INLINEFORM5 (see Table 2). If INLINEFORM6 was unknown before and is just added to INLINEFORM7 or is in th"
+      },
+      {
+        "rank": 22,
+        "source": "1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5023,
+        "keyword": 0.0142,
+        "rerank": 0.4771,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "LiLi's strategy formulation is modeled as a Markov Decision Process (MDP) with finite state ( INLINEFORM0 ) and action ( INLINEFORM1 ) spaces. A state INLINEFORM2 consists of 10 binary state variables (Table 2), each of "
+      },
+      {
+        "rank": 23,
+        "source": "1802.06024:paragraph:0015 | Towards a Continuous Knowledge Learning Engine for Chatbots / Interactive Knowledge Learning (LiLi)",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5374,
+        "keyword": 0.0372,
+        "rerank": 0.4731,
+        "section": "Interactive Knowledge Learning (LiLi)",
+        "query_hits": "lili",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "3. Limitation in user knowledge. If the user is unable to respond to MLQs or CLQs, LiLi uses a guessing mechanism (discussed later) to fill the gap. This enables LiLi to continue its inference even if the user cannot ans"
+      },
+      {
+        "rank": 24,
+        "source": "1802.06024:paragraph:0016 | Towards a Continuous Knowledge Learning Engine for Chatbots / Components of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4697,
+        "keyword": 0.0202,
+        "rerank": 0.4371,
+        "section": "Components of LiLi",
+        "query_hits": "lili",
+        "reasons": "body/table evidence",
+        "preview": "As lifelong learning needs to retain knowledge learned from past tasks and use it to help future learning BIBREF31 , LiLi uses a Knowledge Store (KS) for knowledge retention. KS has four components: (i) Knowledge Graph ("
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5812,
+        "keyword": 0.1664,
+        "rerank": 0.9341,
+        "section": "Results and Analysis",
+        "query_hits": "better, lili, than",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.4,
+        "reasons": "body/table evidence",
+        "preview": "Evaluation-I: Strategy Formulation Ability. Table 5 shows the list of inference strategies formulated by LiLi for various INLINEFORM0 and INLINEFORM1 , which control the strategy formulation of LiLi. When INLINEFORM2 , L"
+      },
+      {
+        "rank": 2,
+        "source": "1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.421,
+        "keyword": 0.1659,
+        "rerank": 0.6544,
+        "section": "Abstract",
+        "query_hits": "better, lili",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7068,
+        "novelty": 0.7345,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1507,
+        "reasons": "body/table evidence",
+        "preview": "Although chatbots have been very popular in recent years, they still have some serious weaknesses which limit the scope of their applications. One major weakness is that they cannot learn new knowledge during the convers"
+      },
+      {
+        "rank": 3,
+        "source": "1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.605,
+        "keyword": 0.0297,
+        "rerank": 0.6648,
+        "section": "Results and Analysis",
+        "query_hits": "lili",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7177,
+        "novelty": 0.4278,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0771,
+        "reasons": "body/table evidence",
+        "preview": "Evaluation-III: User Interaction vs. Performance. Table 7 shows the results of LiLi by varying clue acquisition rate ( INLINEFORM0 ). We use Freebase for tuning INLINEFORM1 due to its higher number of unknown test relati"
+      },
+      {
+        "rank": 4,
+        "source": "1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4524,
+        "keyword": 0.0673,
+        "rerank": 0.5253,
+        "section": "Introduction",
+        "query_hits": "better, lili",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5716,
+        "novelty": 0.6789,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0266,
+        "reasons": "body/table evidence",
+        "preview": "We solve the OKBC problem by mimicking how humans acquire knowledge and perform reasoning in an interactive conversation. Whenever we encounter an unknown concept or relation while answering a query, we perform inference"
+      },
+      {
+        "rank": 5,
+        "source": "1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5204,
+        "keyword": 0.0437,
+        "rerank": 0.5584,
+        "section": "Introduction",
+        "query_hits": "lili",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6062,
+        "novelty": 0.4435,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9835,
+        "reasons": "body/table evidence",
+        "preview": "Given an OKBC query ( INLINEFORM0 , INLINEFORM1 , INLINEFORM2 ) (e.g., \u201c(Obama, CitizenOf, USA), which means whether Obama a citizen of USA), LiLi interacts with the user (if needed) by dynamically formulating questions "
+      },
+      {
+        "rank": 6,
+        "source": "1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5023,
+        "keyword": 0.0142,
+        "rerank": 0.4771,
+        "section": "Working of LiLi",
+        "query_hits": "lili",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.521,
+        "novelty": 0.6936,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9452,
+        "reasons": "body/table evidence",
+        "preview": "LiLi's strategy formulation is modeled as a Markov Decision Process (MDP) with finite state ( INLINEFORM0 ) and action ( INLINEFORM1 ) spaces. A state INLINEFORM2 consists of 10 binary state variables (Table 2), each of "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "baseline",
+        "better",
+        "lili",
+        "much",
+        "than"
+      ],
+      "covered_query_terms": [
+        "better",
+        "lili",
+        "than"
+      ],
+      "missing_query_terms": [
+        "baseline",
+        "much"
+      ],
+      "terms_by_chunk": {
+        "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis": [
+          "better",
+          "lili",
+          "than"
+        ],
+        "1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract": [
+          "better",
+          "lili"
+        ],
+        "1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis": [
+          "lili"
+        ],
+        "1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction": [
+          "better",
+          "lili"
+        ],
+        "1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction": [
+          "lili"
+        ],
+        "1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi": [
+          "lili"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Introduction",
+        "Results and Analysis",
+        "Working of LiLi"
+      ],
+      "chunks_by_section": {
+        "Results and Analysis": [
+          "1802.06024:paragraph:0046 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis",
+          "1802.06024:paragraph:0047 | Towards a Continuous Knowledge Learning Engine for Chatbots / Results and Analysis"
+        ],
+        "Abstract": [
+          "1802.06024:abstract:000 | Towards a Continuous Knowledge Learning Engine for Chatbots / Abstract"
+        ],
+        "Introduction": [
+          "1802.06024:paragraph:0005 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction",
+          "1802.06024:paragraph:0008 | Towards a Continuous Knowledge Learning Engine for Chatbots / Introduction"
+        ],
+        "Working of LiLi": [
+          "1802.06024:paragraph:0021 | Towards a Continuous Knowledge Learning Engine for Chatbots / Working of LiLi"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The context indicates that LiLi's performance is compared against various baselines, including \"Sep\" and \"F-th.\"\n\nSpecific comparisons mentioned include:\n*   LiLi outperforms Sep with INLINEFORM12 when considering both KBs and all relation types for Predictive Performance.\n*   LiLi outperforms Sep with INLINEFORM13 (training with very few clues) on Freebase considering MCC.\n*   The performance improvement of LiLi over F-",
+    "retrieved_context_answer": "The context provides several comparisons of LiLi's performance against baselines, but it does not offer a single, definitive quantitative measure stating \"how much better\" LiLi is overall.\n\nSpecific comparative evidence includes:\n*   LiLi outperforms Sep with INLINEFORM12 when considering both KBs and all relation types in Evaluation-II: Predictive Performance.\n*   If INLINEFORM13 (training with very few clues) is set, LiLi outperforms Sep",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.16,
+    "retrieved_context_f1": 0.15384615384615383,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}
