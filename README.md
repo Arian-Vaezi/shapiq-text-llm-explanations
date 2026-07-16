@@ -8,6 +8,7 @@ Text imputers and Shapley interaction demos for explaining language models with 
 - `uv run gradio src/demos/SentimentAnalysis/app.py` : Run the sentiment analysis demo.
 - `uv sync`: Sync the project dependencies, it is needed before running the demos from other teammates.
 - `uv run streamlit run src/demos/JailbreakAnalysis/app.py`: run the jailbreak analysis demo.
-
+- `uv run streamlit run src/demos/agentic_tool_use_explanation/app.py`: Run the agentic tool-use explanation demo.
+  
 ## Adding Dependencies
 Implementing each demo might require adding new dependencies. It would be good practice to run `uv add <dependencies>` locally, and pushes `pyproject.toml` and `uv.lock` to repo. Other team members run `uv sync` to update dependencies.
