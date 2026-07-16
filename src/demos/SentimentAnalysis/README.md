@@ -15,9 +15,9 @@ together — capturing negation, redundancy, and sarcasm cues that SVs alone mis
 
 | File | Purpose |
 |---|---|
-| `sentiment_analysis.py` | Core logic — model registries, preloading, SV / k-SII computation, plots. No UI code. |
-| `encoderTextImputer.py` | Encoder game — `[MASK]` imputation + contrastive classification score. |
-| `sentimentDecoderGame.py` | Decoder game — word removal + contrastive log-odds over language-matched templates. |
+| `sentiment_analysis.py` | Core logic -> model registries, preloading, SV / k-SII computation, plots. No UI code. |
+| `encoderTextImputer.py` | Encoder game -> `[MASK]` imputation + contrastive classification score. |
+| `sentimentDecoderGame.py` | Decoder game -> word removal + contrastive log-odds over language-matched templates. |
 | `HFModelWrapper.py` | Causal-LM loading (incl. 4-bit) and batched continuation scoring. |
 | `app.py` | Live Streamlit app — type any sentence, pick a model, get SV + k-SII + plots. |
 | `results_app.py` | Dashboard for the pre-computed multilingual results, with a launcher for the live app. |
@@ -32,7 +32,7 @@ together — capturing negation, redundancy, and sarcasm cues that SVs alone mis
 Both pipelines are `shapiq.Game` subclasses and feed the **same** `KernelSHAP` /
 `KernelSHAPIQ` engine. Only the value function and the masking strategy differ.
 
-**Encoder** — `encoderTextImputer`
+**Encoder** -> `encoderTextImputer`
 
 ```
 v(S) = P(positive | masked_text) − P(negative | masked_text)      ∈ [−1, +1]
@@ -44,7 +44,7 @@ replaced with the tokenizer's mask token (`[MASK]` / `<mask>`). The baseline
 from `model.config.id2label`, case-insensitively, with a `NEG=0 / POS=1` fallback
 for models that only expose generic `LABEL_0` / `LABEL_1` names.
 
-**Decoder** — `sentimentDecoderGame`
+**Decoder** -> `sentimentDecoderGame`
 
 ```
 v(S) = mean log P(T⁺ | text(S)) − mean log P(T⁻ | text(S))        unbounded
@@ -70,7 +70,7 @@ Templates are selected by **language × register**, 2 positive + 2 negative each
 
 ## Models
 
-**Encoders** — swappable live in the app (`ENCODER_MODELS`)
+**Encoders** -> swappable live in the app (`ENCODER_MODELS`)
 
 | Key | Model | Domain |
 |---|---|---|
@@ -159,7 +159,7 @@ python -c "from huggingface_hub import login; login(token='YOUR_TOKEN')"
 
 ## Running
 
-**Live app** — type any sentence, choose a model, get an instant explanation:
+**Live app** -> type any sentence, choose a model, get an instant explanation:
 
 ```bash
 streamlit run app.py
@@ -169,7 +169,7 @@ streamlit run app.py
 `app.py` calls `preload_models()` at startup so that each click has zero
 model-loading cost. See known issues below.
 
-**Results dashboard** — browse the 24 pre-computed multilingual runs:
+**Results dashboard** -> browse the 24 pre-computed multilingual runs:
 
 ```bash
 streamlit run results_app.py
@@ -192,7 +192,7 @@ python build_diagrams.py --phenomenon sarcasm --lang fr
 
 Reads `results/summary.json`, writes to `figures/`.
 
-**SLURM experiments** — split across two jobs to fit the 8h window:
+**SLURM experiments** -> split across two jobs to fit the 8h window:
 
 ```bash
 sbatch run_experiments_half1.sbatch    # sentences 1-12
@@ -253,7 +253,7 @@ cannot represent.
 
 **Model-agnostic.** The same dominant `(not, bad)` pair appears across the encoder
 and decoder pipelines despite completely different value functions, masking
-strategies, and score scales — evidence the signal is linguistic, not an artifact
+strategies, and score scales, evidence the signal is linguistic, not an artifact
 of one model.
 
 **Sarcasm is hard.** Both models mostly fail to detect it; k-SII shows diffuse
@@ -263,39 +263,8 @@ honest null result — the method cannot reveal a phenomenon the model never lea
 
 ---
 
-## Known issues
-
-**`preload_models()` loads every model, including `gemma4`.** `google/gemma-4-E2B-it`
-is *not* a 2 GB model — "E2B" means *effective* 2B parameters (Per-Layer
-Embeddings + multimodal encoders), and it allocates ~18–19 GB. On a 4 GB GPU the
-app OOMs at startup before rendering anything. Until preloading is made lazy or
-gemma4 is gated behind a VRAM check, comment it out of `DECODER_MODELS` on small
-GPUs. Partially-loaded weights also produce **silent NaN Shapley values** rather
-than a clean error — if every SV is `nan`, suspect VRAM before suspecting the math.
-
-**Three different import paths for `HFModelWrapper`.** `sentiment_analysis.py`
-imports `demos.SentimentAnalysis.HFModelWrapper`, `sentimentDecoderGame.py`'s
-fallback imports `demos.shared.hf_model`, and `Experiments.py` imports it flat as
-`HFModelWrapper`. If `demos/shared/hf_model.py` still exists with the older
-`score_next_token` API, the fallback path raises
-`AttributeError: 'HFModelWrapper' object has no attribute 'score_continuations'`.
-Consolidate to one module.
-
-**Class names are `lowerCamelCase`** (`encoderTextImputer`, `sentimentDecoderGame`)
-while several imports assume `PascalCase` (`from EncoderTextImputer import
-EncoderTextImputer` in `Experiments.py`). This survives on Windows because the
-filesystem is case-insensitive, but breaks on macOS/Linux and violates PEP 8.
-Renaming to `EncoderTextImputer` / `SentimentDecoderGame` everywhere would fix
-both.
-
-**Minor:** `app.py` checks `model_choice == "gemma"` for its decoder label, but the
-key is `gemma3` — the label always falls through to "TinyLlama 1.1B".
-
----
-
 ## Reproducibility
 
-- Fixed random seed: `42` everywhere
 - Pinned model IDs (see Models)
 - Budgets as tabulated above; `Experiments.py` additionally saves exact ground
   truth (`EXACT_MAX_PLAYERS_DECODER = 20`)
