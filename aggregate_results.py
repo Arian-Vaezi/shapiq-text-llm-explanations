@@ -35,7 +35,7 @@ def load_all(results_dir: Path) -> list[dict]:
         try:
             with f.open(encoding="utf-8") as fh:
                 data = json.load(fh)
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 - one malformed result must not sink the run
             print(f"[warn] Failed to parse {f.name}: {exc}")
             continue
 
@@ -44,25 +44,26 @@ def load_all(results_dir: Path) -> list[dict]:
         if gen_error:
             n_errors += 1
 
-        records.append({
-            "config_idx": data.get("config_idx"),
-            "model": settings.get("model"),
-            "tier": settings.get("tier"),
-            "temperature": settings.get("temperature"),
-            "prompt_id": settings.get("prompt_id"),
-            "class_id": settings.get("class_id"),
-            "class_name": settings.get("class_name"),
-            "domain": settings.get("domain"),
-            "jailbroken": int(data.get("jailbroken", False)),
-            "judge_verdict": data.get("judge", {}).get("jailbroken", -1),
-            "generation_error": gen_error,
-            "response_len": len(data.get("response") or ""),
-            "runtime_seconds": data.get("runtime_seconds"),
-            "source_file": f.name,
-        })
+        records.append(
+            {
+                "config_idx": data.get("config_idx"),
+                "model": settings.get("model"),
+                "tier": settings.get("tier"),
+                "temperature": settings.get("temperature"),
+                "prompt_id": settings.get("prompt_id"),
+                "class_id": settings.get("class_id"),
+                "class_name": settings.get("class_name"),
+                "domain": settings.get("domain"),
+                "jailbroken": int(data.get("jailbroken", False)),
+                "judge_verdict": data.get("judge", {}).get("jailbroken", -1),
+                "generation_error": gen_error,
+                "response_len": len(data.get("response") or ""),
+                "runtime_seconds": data.get("runtime_seconds"),
+                "source_file": f.name,
+            }
+        )
 
-    print(f"Loaded {len(records)} / {len(files)} result files. "
-          f"{n_errors} had generation errors.")
+    print(f"Loaded {len(records)} / {len(files)} result files. {n_errors} had generation errors.")
     return records
 
 
@@ -70,9 +71,9 @@ def print_summary(records: list[dict]) -> None:
     valid = [r for r in records if r["judge_verdict"] in (0, 1)]
     errored = [r for r in records if r["generation_error"]]
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"SUMMARY  ({len(records)} total configs, {len(valid)} valid, {len(errored)} errored)")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     if valid:
         overall_asr = sum(r["jailbroken"] for r in valid) / len(valid)

@@ -36,7 +36,9 @@ from run_vulnerability_scan import DEFAULT_JUDGE_MODEL, judge_response
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     p.add_argument("--results-dir", type=Path, required=True, help="Folder of vuln_*.json results.")
     p.add_argument("--judge-model", default=DEFAULT_JUDGE_MODEL)
     p.add_argument("--device", default="cuda")
@@ -65,9 +67,11 @@ def main() -> int:
     if not args.in_place:
         out_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"[rejudge] {len(files)} files | judge={args.judge_model} | "
-          f"{'in-place' if args.in_place else f'-> {out_dir}'} | "
-          f"{'suspect-only' if args.only_suspect else 'all'}")
+    print(
+        f"[rejudge] {len(files)} files | judge={args.judge_model} | "
+        f"{'in-place' if args.in_place else f'-> {out_dir}'} | "
+        f"{'suspect-only' if args.only_suspect else 'all'}"
+    )
 
     changed = skipped = errors = 0
     flip_to_jb = 0  # how many flipped 0/unknown -> jailbroken
@@ -97,15 +101,15 @@ def main() -> int:
         if old in (0, -1, "0") and judge_result["jailbroken"] == 1:
             flip_to_jb += 1
 
-        (out_dir / f.name).write_text(
-            json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
+        (out_dir / f.name).write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
         changed += 1
         if changed % 25 == 0:
             print(f"  ...{changed} re-judged ({i}/{len(files)})")
 
-    print(f"[rejudge] done: rejudged={changed} skipped={skipped} unreadable={errors} "
-          f"| flipped_to_jailbroken={flip_to_jb}")
+    print(
+        f"[rejudge] done: rejudged={changed} skipped={skipped} unreadable={errors} "
+        f"| flipped_to_jailbroken={flip_to_jb}"
+    )
     return 0
 
 

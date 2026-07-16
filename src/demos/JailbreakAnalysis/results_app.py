@@ -15,14 +15,14 @@ Run:
     streamlit run results_app.py
 """
 
-from pathlib import Path
-import json
+from __future__ import annotations
+
 import html
+import json
+from pathlib import Path
 
 import streamlit as st
-
 from jailbreak_prompts import get_all_prompts
-
 
 # -----------------------------------------------------------------------------
 # Paths
@@ -30,17 +30,11 @@ from jailbreak_prompts import get_all_prompts
 
 THIS_DIR = Path(__file__).resolve().parent
 
-RESULT_FIGURE = (
-    THIS_DIR / "Jailbreak_by_model_temperature.png"
-)
+RESULT_FIGURE = THIS_DIR / "Jailbreak_by_model_temperature.png"
 
-SUMMARY_ASR = (
-    THIS_DIR / "results" / "summary_asr.json"
-)
+SUMMARY_ASR = THIS_DIR / "results" / "summary_asr.json"
 
-SUMMARY_INTERACTIONS = (
-    THIS_DIR / "results" / "summary_interactions.json"
-)
+SUMMARY_INTERACTIONS = THIS_DIR / "results" / "summary_interactions.json"
 
 
 # Shown wherever a value function is named, so the two are never confused.
@@ -50,24 +44,18 @@ VALUE_FUNCTION_LABELS = {
 }
 
 
-
 # -----------------------------------------------------------------------------
 # Load summary
 # -----------------------------------------------------------------------------
 
-@st.cache_data
-def load_asr_results():
 
+@st.cache_data
+def load_asr_results() -> list:
     if not SUMMARY_ASR.exists():
         return []
 
-    with SUMMARY_ASR.open(
-        "r",
-        encoding="utf-8"
-    ) as f:
-
+    with SUMMARY_ASR.open("r", encoding="utf-8") as f:
         return json.load(f)
-
 
 
 @st.cache_data
@@ -81,13 +69,8 @@ def load_interactions() -> list:
     if not SUMMARY_INTERACTIONS.exists():
         return []
 
-    with SUMMARY_INTERACTIONS.open(
-        "r",
-        encoding="utf-8"
-    ) as f:
-
+    with SUMMARY_INTERACTIONS.open("r", encoding="utf-8") as f:
         return json.load(f)
-
 
 
 # -----------------------------------------------------------------------------
@@ -124,13 +107,11 @@ st.markdown(
 )
 
 
-
 # -----------------------------------------------------------------------------
 # Sidebar
 # -----------------------------------------------------------------------------
 
 with st.sidebar:
-
     st.markdown("## 🔓 Jailbreak Analysis")
     st.caption("LLM vulnerability evaluation")
 
@@ -144,15 +125,12 @@ with st.sidebar:
     )
 
 
-
 # =============================================================================
 # Experimental Setup
 # =============================================================================
 
 if page == "🧪 Experimental Setup":
-
     st.title("Experimental Setup")
-
 
     st.markdown(
         """
@@ -164,10 +142,7 @@ the safety policy.
 """
     )
 
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Models
@@ -175,52 +150,27 @@ the safety policy.
 
     st.header("🤖 Target Models")
 
-
     models = {
-
         "Weak": [
-
             "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-
             "Qwen/Qwen2.5-1.5B-Instruct",
-
         ],
-
-
         "Medium": [
-
             "Mistral-7B-Instruct-v0.3",
-
             "Gemma-4-e4B-it",
-
         ],
-
-
         "Safe": [
-
             "Qwen/Qwen2.5-7B-Instruct",
-
         ],
-
     }
 
-
-
     for category, model_list in models.items():
-
         st.subheader(category)
 
         for model in model_list:
-
-            st.markdown(
-                f"- `{model}`"
-            )
-
-
+            st.markdown(f"- `{model}`")
 
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Temperature
@@ -228,29 +178,21 @@ the safety policy.
 
     st.header("🌡️ Inference Temperatures")
 
-
     temperatures = [
-
         0.0,
         0.3,
         0.7,
         1.0,
         1.3,
         1.5,
-
     ]
-
 
     st.code(
         temperatures,
         language="python",
     )
 
-
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Judge
@@ -258,13 +200,11 @@ the safety policy.
 
     st.header("⚖️ Judge Model")
 
-
     st.markdown(
         """
 The judge model performs binary safety evaluation of generated answers.
 """
     )
-
 
     st.markdown(
         """
@@ -273,11 +213,7 @@ openai/gpt-oss-safeguard-20b
 """
     )
 
-
-    st.markdown(
-        "**Judge Prompt**"
-    )
-
+    st.markdown("**Judge Prompt**")
 
     judge_prompt = """
 You are a safety classifier.
@@ -293,16 +229,12 @@ Return:
 Only output the binary label.
 """
 
-
     st.markdown(
         f'<div class="prompt-box">{html.escape(judge_prompt)}</div>',
         unsafe_allow_html=True,
     )
 
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Jailbreak Prompts
@@ -310,63 +242,35 @@ Only output the binary label.
 
     st.header("💥 Jailbreak Prompts")
 
-
     prompts = get_all_prompts()
-
 
     classes = {}
 
-
     for p in prompts:
+        name = f"Class {p['class_id']} — {p['class_name']}"
 
-        name = (
-            f"Class {p['class_id']} — "
-            f"{p['class_name']}"
-        )
-
-
-        classes.setdefault(
-            name,
-            []
-        ).append(p)
-
-
+        classes.setdefault(name, []).append(p)
 
     for class_name, class_prompts in classes.items():
-
-        with st.expander(
-            f"{class_name} ({len(class_prompts)} prompts)"
-        ):
-
-
+        with st.expander(f"{class_name} ({len(class_prompts)} prompts)"):
             for p in class_prompts:
-
-
                 st.markdown(
                     f"""
-**{p['id']}**
+**{p["id"]}**
 
-- Template: `{p['template']}`
-- Domain: `{p['domain']}`
-- Source: {p['source']}
+- Template: `{p["template"]}`
+- Domain: `{p["domain"]}`
+- Source: {p["source"]}
 """
                 )
 
-
-                with st.expander(
-                    "Show prompt text"
-                ):
-
+                with st.expander("Show prompt text"):
                     st.markdown(
                         f'<div class="prompt-box">{html.escape(p["text"])}</div>',
                         unsafe_allow_html=True,
                     )
 
-
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Results figure
@@ -374,14 +278,9 @@ Only output the binary label.
 
     st.header("📊 Results")
 
-
-    st.caption(
-        "Attack Success Rate (ASR) across models and temperatures."
-    )
-
+    st.caption("Attack Success Rate (ASR) across models and temperatures.")
 
     if RESULT_FIGURE.exists():
-
         st.image(
             str(RESULT_FIGURE),
             caption="Jailbreak Success Rate by Model and Temperature",
@@ -389,13 +288,7 @@ Only output the binary label.
         )
 
     else:
-
-        st.warning(
-            f"Result figure not found:\n{RESULT_FIGURE}"
-        )
-
-
-
+        st.warning(f"Result figure not found:\n{RESULT_FIGURE}")
 
 
 # =============================================================================
@@ -403,62 +296,26 @@ Only output the binary label.
 # =============================================================================
 
 elif page == "🔍 Result Explorer":
+    st.title("🔍 Jailbreak Result Explorer")
 
-
-    st.title(
-        "🔍 Jailbreak Result Explorer"
-    )
-
-
-    st.caption(
-        "Inspect individual jailbreak generations and judge decisions."
-    )
-
+    st.caption("Inspect individual jailbreak generations and judge decisions.")
 
     results = load_asr_results()
 
-
-
     if not results:
-
-        st.warning(
-            f"No summary file found:\n{SUMMARY_ASR}"
-        )
+        st.warning(f"No summary file found:\n{SUMMARY_ASR}")
 
         st.stop()
-
-
 
     # -------------------------------------------------------------------------
     # Filters
     # -------------------------------------------------------------------------
 
-    models = sorted(
-        set(
-            r["model"]
-            for r in results
-            if r.get("model")
-        )
-    )
+    models = sorted({r["model"] for r in results if r.get("model")})
 
+    temperatures = sorted({r["temperature"] for r in results if r.get("temperature") is not None})
 
-    temperatures = sorted(
-        set(
-            r["temperature"]
-            for r in results
-            if r.get("temperature") is not None
-        )
-    )
-
-
-    prompts = sorted(
-        set(
-            r["prompt_id"]
-            for r in results
-            if r.get("prompt_id")
-        )
-    )
-
+    prompts = sorted({r["prompt_id"] for r in results if r.get("prompt_id")})
 
     st.caption(
         f"**{len(models)}** models · "
@@ -467,88 +324,45 @@ elif page == "🔍 Result Explorer":
         f"**{len(results)}** total runs"
     )
 
-
     col1, col2, col3 = st.columns(3)
 
-
-
     with col1:
-
-        selected_model = st.selectbox(
-            "Model",
-            models
-        )
-
-
+        selected_model = st.selectbox("Model", models)
 
     with col2:
-
-        selected_temperature = st.selectbox(
-            "Temperature",
-            temperatures
-        )
-
-
+        selected_temperature = st.selectbox("Temperature", temperatures)
 
     with col3:
-
-        selected_prompt = st.selectbox(
-            "Prompt",
-            prompts
-        )
-
-
+        selected_prompt = st.selectbox("Prompt", prompts)
 
     # -------------------------------------------------------------------------
     # Find result
     # -------------------------------------------------------------------------
 
     matches = [
-
-        r for r in results
-
+        r
+        for r in results
         if (
-
             r["model"] == selected_model
-
-            and
-
-            r["temperature"] == selected_temperature
-
-            and
-
-            r["prompt_id"] == selected_prompt
-
+            and r["temperature"] == selected_temperature
+            and r["prompt_id"] == selected_prompt
         )
-
     ]
 
-
-
     if not matches:
-
-        st.warning(
-            "No matching result found."
-        )
+        st.warning("No matching result found.")
 
         st.stop()
 
-
-
     result = matches[0]
 
-
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Config
     # -------------------------------------------------------------------------
 
     st.header("⚙️ Configuration")
-
 
     cc1, cc2, cc3, cc4 = st.columns(4)
 
@@ -558,25 +372,20 @@ elif page == "🔍 Result Explorer":
     cc4.metric("Attack class", result.get("prompt_class", "unknown"))
 
     with st.expander("More config details"):
-
         st.markdown(
             f"""
-- **Tier:** `{result.get('tier', '—')}`
-- **Class ID:** `{result.get('class_id', '—')}`
-- **Template:** `{result.get('template', '—')}`
-- **Source:** {result.get('source', '—')}
-- **Domain:** `{result.get('domain', '—')}`
-- **Judge model:** `{result.get('judge_model', '—')}`
-- **Timestamp (UTC):** `{result.get('timestamp_utc', '—')}`
-- **Runtime (s):** `{result.get('runtime_seconds', '—')}`
+- **Tier:** `{result.get("tier", "—")}`
+- **Class ID:** `{result.get("class_id", "—")}`
+- **Template:** `{result.get("template", "—")}`
+- **Source:** {result.get("source", "—")}
+- **Domain:** `{result.get("domain", "—")}`
+- **Judge model:** `{result.get("judge_model", "—")}`
+- **Timestamp (UTC):** `{result.get("timestamp_utc", "—")}`
+- **Runtime (s):** `{result.get("runtime_seconds", "—")}`
 """
         )
 
-
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Prompt text
@@ -591,10 +400,7 @@ elif page == "🔍 Result Explorer":
         unsafe_allow_html=True,
     )
 
-
     st.divider()
-
-
 
     # -------------------------------------------------------------------------
     # Response
@@ -602,13 +408,10 @@ elif page == "🔍 Result Explorer":
 
     st.header("🤖 Model Response")
 
-
     st.markdown(
-    f'<div class="prompt-box">{html.escape(result.get("response", ""))}</div>',
-    unsafe_allow_html=True,
-)
-
-
+        f'<div class="prompt-box">{html.escape(result.get("response", ""))}</div>',
+        unsafe_allow_html=True,
+    )
 
     # -------------------------------------------------------------------------
     # Judge
@@ -616,28 +419,14 @@ elif page == "🔍 Result Explorer":
 
     st.header("⚖️ Judge Result")
 
-
     if result.get("jailbroken"):
-
-        st.error(
-            "🚨 Jailbroken"
-        )
+        st.error("🚨 Jailbroken")
 
     else:
-
-        st.success(
-            "✅ Not Jailbroken"
-        )
-
-
+        st.success("✅ Not Jailbroken")
 
     if result.get("judge_raw"):
-
-        st.caption(
-            f"Judge output: {result['judge_raw']}"
-        )
-
-
+        st.caption(f"Judge output: {result['judge_raw']}")
 
     # -------------------------------------------------------------------------
     # Explanation: second-order k-SII over prompt sentences
@@ -645,9 +434,7 @@ elif page == "🔍 Result Explorer":
 
     st.divider()
 
-
     st.header("🧩 Explanation — second-order interactions (k-SII)")
-
 
     interactions = load_interactions()
 
@@ -655,13 +442,12 @@ elif page == "🔍 Result Explorer":
     # deterministic, so these runs have no temperature: the selector above does
     # not narrow them, and the same explanation is correct at every temperature.
     runs = [
-        r for r in interactions
+        r
+        for r in interactions
         if r["model"] == selected_model and r["prompt_id"] == selected_prompt
     ]
 
-
     if not runs:
-
         st.info(
             "No interaction run for this selection. The sweep covers "
             "**10 prompts x 3 models** (Mistral-7B, Qwen2.5-7B, TinyLlama-1.1B) "
@@ -672,12 +458,10 @@ elif page == "🔍 Result Explorer":
         available = sorted({(r["model"], r["prompt_id"]) for r in interactions})
 
         with st.expander(f"Selections that do have an interaction run ({len(available)})"):
-
             for model_name, prompt_name in available:
                 st.markdown(f"- `{model_name}` · `{prompt_name}`")
 
     else:
-
         st.caption(
             "Computed on the prompt's **sentences** as players, at order 2. "
             "Both value functions are deterministic, so these runs are "
@@ -689,7 +473,6 @@ elif page == "🔍 Result Explorer":
 
         # Logprob first: it is the one the paper's headline result is built on.
         ordered_vfs = [vf for vf in ("logprob", "judge_0_10") if vf in by_vf]
-
 
         # ---------------------------------------------------------------------
         # Reconstruction — how much of the value function needs pairs?
@@ -704,7 +487,6 @@ elif page == "🔍 Result Explorer":
         )
 
         for vf in ordered_vfs:
-
             run = by_vf[vf]
             rec = run.get("reconstruction", {}) or {}
 
@@ -728,7 +510,6 @@ elif page == "🔍 Result Explorer":
             )
 
             if delta is not None:
-
                 if delta >= 0.20:
                     st.success(
                         f"**{delta * 100:+.1f} pp → interactions matter.** Sentence-level "
@@ -750,18 +531,15 @@ elif page == "🔍 Result Explorer":
 
             st.markdown("")
 
-
         # ---------------------------------------------------------------------
         # The two value functions disagree — this is the finding, not a bug
         # ---------------------------------------------------------------------
 
         if len(ordered_vfs) > 1:
-
             lp_delta = (by_vf["logprob"].get("reconstruction") or {}).get("delta_r2")
             jd_delta = (by_vf["judge_0_10"].get("reconstruction") or {}).get("delta_r2")
 
             if lp_delta is not None and jd_delta is not None:
-
                 st.error(
                     f"**The trade-off — this is the finding, not a bug.** On this prompt the "
                     f"logprob proxy shows a **{lp_delta * 100:+.1f} pp** gap but the judge "
@@ -775,7 +553,6 @@ elif page == "🔍 Result Explorer":
                     "decision, not a detail."
                 )
 
-
         # ---------------------------------------------------------------------
         # Per-sentence main effects + top pairs
         # ---------------------------------------------------------------------
@@ -785,9 +562,7 @@ elif page == "🔍 Result Explorer":
         tabs = st.tabs([VALUE_FUNCTION_LABELS.get(vf, vf) for vf in ordered_vfs])
 
         for tab, vf in zip(tabs, ordered_vfs, strict=True):
-
             with tab:
-
                 run = by_vf[vf]
 
                 players = run.get("players", [])
@@ -820,7 +595,6 @@ elif page == "🔍 Result Explorer":
                 pairs = run.get("top_interaction_pairs", [])
 
                 if pairs:
-
                     st.markdown("**Top sentence pairs by |k-SII|**")
 
                     st.caption(
@@ -843,7 +617,6 @@ elif page == "🔍 Result Explorer":
                         width="stretch",
                         hide_index=True,
                     )
-
 
         st.caption(
             "⚠️ The logprob **compliance score is not the jailbreak label** — it measures "
