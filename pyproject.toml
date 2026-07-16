@@ -38,6 +38,10 @@ dependencies = [
     "agentevals>=0.0.9",
     "streamlit>=1.58.0",
     "spacy>=3.7,<4",
+    # NOTE: groq is pinned <1.0.0 above because langchain-groq requires groq<1.0.0,>=0.30.0.
+    # The jailbreak demo reaches Groq only through demos/shared/api_model_wrapper.py, whose
+    # Groq(api_key=...) + chat.completions surface exists on 0.x, so it does not need 1.x.
+    "tiktoken",  # required to load tiktoken-based tokenizers (e.g. lmsys/vicuna-7b-v1.5)
 ]
 authors = [
     {name = "Maximilian Muschalik", email = "Maximilian.Muschalik@lmu.de"},
@@ -192,6 +196,24 @@ exclude = [
     "ANN001",  # type annotations are not required in examples
     "INP",  # examples are an implicit namespace package
 ]
+# Jailbreak experiment/analysis scripts. They sit at the repo root because they are run
+# directly (python run_vulnerability_scan.py) and from sbatch on the cluster, so they miss
+# the src/demos/**/*.py ignores below. They are scripts, not library code — same rationale
+# as demos and examples: they report progress on stdout, take no annotations, and must not
+# die on a single malformed row in the middle of a long GPU run.
+"{aggregate_results,result_filter,rejudge_results,run_vulnerability_scan,run_judge_interaction_pilot}.py" = [
+    "T20",     # scripts report progress on stdout
+    "D",       # docstrings are not required in scripts
+    "ANN",     # type annotations are not required in scripts
+    "INP",     # scripts are not an importable package
+    "FBT",     # boolean flags are fine for argparse-driven scripts
+    "EM102",   # inline f-strings in exception messages are fine here
+    "TRY003",  # long messages outside exception classes are fine here
+    "E402",    # sys.path setup must precede the local imports
+    "PTH123",  # open() is fine in scripts
+    "ICN001",  # scripts may import without the conventional alias
+]
+
 "src/demos/SentimentAnalysis/__init__.py" = [
     "N999",  # SentimentAnalysis is a demo folder name, not an importable public package
 ]
