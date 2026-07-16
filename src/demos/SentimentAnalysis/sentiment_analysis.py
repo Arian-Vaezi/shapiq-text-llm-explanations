@@ -64,7 +64,7 @@ DECODER_MODELS: dict[str, str] = {
 
 RANDOM_STATE: int = 42
 BUDGET_ENCODER: int = 256
-BUDGET_DECODER: int = 10
+BUDGET_DECODER: int = 64
 
 # ── Model cache ───────────────────────────────────────────────────────────────
 # Populated by preload_models() at app startup.
