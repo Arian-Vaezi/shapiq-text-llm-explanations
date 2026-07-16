@@ -15,3 +15,10 @@ rm -rf docs/source/generated docs/source/auto_examples && uv run sphinx-build -b
 ```bash
 uv run pre-commit run --all-files
 ```
+
+## Environment notes
+
+- 2026-06-16: In one Windows PowerShell session, `uv`, `python`, and `py` were not
+  available on PATH, and `.venv\Scripts\python.exe` pointed at a missing Python 3.12
+  install. If verification commands fail this way, repair the Python/uv environment
+  before assuming the tests themselves are broken.
