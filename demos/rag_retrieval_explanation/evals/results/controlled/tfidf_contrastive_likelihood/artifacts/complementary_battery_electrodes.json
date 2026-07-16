@@ -1,0 +1,3356 @@
+{
+  "case": {
+    "case_id": "complementary_battery_electrodes",
+    "pattern": "complementary_evidence",
+    "question": "Which two electrodes does an electrochemical cell have?",
+    "gold_answer": "An anode and a cathode.",
+    "gold_evidence_ids": [
+      "comp_battery_anode",
+      "comp_battery_cathode"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "comp_battery_anode",
+        "right": "comp_battery_cathode",
+        "relation": "complementary",
+        "expected_sign": "positive"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "comp_battery_anode",
+      "score": 0.88,
+      "title": "Retrieved 1: comp_battery_anode | Battery anode",
+      "text": "An electrochemical cell has an anode, one of its two electrodes."
+    },
+    {
+      "rank": 2,
+      "passage_id": "comp_battery_cathode",
+      "score": 0.5789872380447323,
+      "title": "Retrieved 2: comp_battery_cathode | Battery cathode",
+      "text": "An electrochemical cell also has a cathode, the other electrode."
+    },
+    {
+      "rank": 3,
+      "passage_id": "comp_battery_electrolyte",
+      "score": 0.4670018162172622,
+      "title": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+      "text": "The electrolyte allows ions to move between parts of an electrochemical cell."
+    },
+    {
+      "rank": 4,
+      "passage_id": "missing_mars_missions",
+      "score": 0.009999999999999995,
+      "title": "Retrieved 4: missing_mars_missions | Mars exploration",
+      "text": "Orbiters, landers, and rovers have been used to study the Martian environment."
+    },
+    {
+      "rank": 5,
+      "passage_id": "missing_suez_waterway",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+      "text": "Canals are artificial waterways built for transport, irrigation, or navigation."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_japan_islands",
+      "score": -0.020000000000000004,
+      "title": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+      "text": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+      "attribution": 0.10689002795840215
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+      "attribution": 0.0394451109757167
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_mars_missions | Mars exploration",
+      "attribution": -0.010047864175223301
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+      "attribution": 0.0051009025255878675
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+      "attribution": -0.004948563685137825
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+      "attribution": -0.0030187757883388716
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+      "attribution": 0.07088904261051046
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+      "attribution": 0.0563180855443275
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+      "attribution": 0.007797937677881344
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+      "attribution": 0.003930344854799852
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: missing_mars_missions | Mars exploration",
+      "attribution": 0.0036489177883404374
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+      "attribution": 0.0020281053683017226
+    }
+  ],
+  "interactions": [
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_cathode",
+      "relation": "complementary",
+      "expected_sign": "positive",
+      "observed_interaction": -0.0065255470999397045,
+      "interaction_sign_correct": false,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_cathode",
+      "relation": "complementary",
+      "expected_sign": "positive",
+      "observed_interaction": 0.0017677457509466632,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "gold_pairwise_interactions": [
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_cathode",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.0065255470999397045,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_electrolyte",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.03152210751387119,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_mars_missions",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.005355313511596681,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_suez_waterway",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.006868017501305092,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": 0.0005355474343856165,
+      "sign": "positive"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "comp_battery_electrolyte",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.017985685574602436,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_mars_missions",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": 0.008621787689581512,
+      "sign": "positive"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_suez_waterway",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.0039053457399821144,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.0008349624643270887,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_mars_missions",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.03071448214401011,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_suez_waterway",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.02568931452191274,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.01907374071908032,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_missions",
+      "right": "missing_suez_waterway",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.012707745733566521,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_missions",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.007791500185704669,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_waterway",
+      "right": "missing_japan_islands",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.010907456921037664,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_cathode",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": 0.0017677457509466632,
+      "sign": "positive"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "comp_battery_electrolyte",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.017353177807081288,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_mars_missions",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.008472228093076748,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_suez_waterway",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.006494521643708322,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_anode",
+      "right": "missing_japan_islands",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.0025500219288934894,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "comp_battery_electrolyte",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.0017820626810687039,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_mars_missions",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.0017187393050431717,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_suez_waterway",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.003165480000054047,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_cathode",
+      "right": "missing_japan_islands",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.001493770428221158,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_mars_missions",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.01699177626962111,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_suez_waterway",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.015376822196844634,
+      "sign": "negative"
+    },
+    {
+      "left": "comp_battery_electrolyte",
+      "right": "missing_japan_islands",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.012312316261718791,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_missions",
+      "right": "missing_suez_waterway",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.02326914553997899,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_mars_missions",
+      "right": "missing_japan_islands",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.02004682142458866,
+      "sign": "negative"
+    },
+    {
+      "left": "missing_suez_waterway",
+      "right": "missing_japan_islands",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.01622179617885405,
+      "sign": "negative"
+    }
+  ],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "comp_battery_anode"
+      ],
+      "score": 0.08059044575457586
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "comp_battery_cathode"
+      ],
+      "score": 0.1530560306369113
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.10568402742967808
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_missions"
+      ],
+      "score": 0.03738630485955341
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_waterway"
+      ],
+      "score": 0.05241865831232062
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.031085728397513668
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode"
+      ],
+      "score": 0.1539628107506853
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.07220979838639319
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions"
+      ],
+      "score": 0.05632799163776825
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_suez_waterway"
+      ],
+      "score": 0.058127910060304266
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_japan_islands"
+      ],
+      "score": 0.06919331000703588
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.10982987405756306
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions"
+      ],
+      "score": 0.10205996097304948
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_suez_waterway"
+      ],
+      "score": 0.10473975406627134
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_japan_islands"
+      ],
+      "score": 0.11159294771924388
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.0018413877684875235
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.026385361020127784
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.030115674338117016
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": -0.004930723802097081
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.006722045223609974
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.014136956233718134
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.14822471853847852
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions"
+      ],
+      "score": 0.1590355512292514
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_suez_waterway"
+      ],
+      "score": 0.14593540331598565
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_japan_islands"
+      ],
+      "score": 0.1459803731772531
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.020474452324440118
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.04729959546751794
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.06542619747967737
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.07842283082582435
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.0793043930866908
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.07738448389857822
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.09572217136112049
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.09647566968241617
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.10501056256612262
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.09994770366423955
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.10106157313385622
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.10549075071183456
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": -0.010462812888528739
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": -0.0017665253092896127
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": -0.013716265476392153
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": -0.028089391167931577
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.13860447092961203
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.1384419131736263
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.13597388694858425
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.1426848220344099
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.1395293824683168
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.14460720393063853
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.018333467437987694
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.01610446032727786
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.04020180714372634
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.021481633523938393
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.11032188356013906
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.10398524041530988
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.10402071043917283
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.1012498747442988
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": -0.010684770680543687
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.140407223567511
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.14108006136724793
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.14398178825938956
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.15272214242645743
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.0009945617910204207
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.1025658315216107
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.13342083760275103
+    }
+  ],
+  "generated_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "comp_battery_anode"
+      ],
+      "score": 0.09172028139057598
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "comp_battery_cathode"
+      ],
+      "score": 0.09508424521577685
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.06481614331316454
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "missing_mars_missions"
+      ],
+      "score": 0.0711707787365885
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "missing_suez_waterway"
+      ],
+      "score": 0.06556443615436336
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_japan_islands"
+      ],
+      "score": 0.05291086490205443
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode"
+      ],
+      "score": 0.14126590335375555
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.07550916571906097
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions"
+      ],
+      "score": 0.07082217186569195
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_suez_waterway"
+      ],
+      "score": 0.0724516164548431
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_japan_islands"
+      ],
+      "score": 0.07462832397815522
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.09853983475843175
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions"
+      ],
+      "score": 0.08355337945971575
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_suez_waterway"
+      ],
+      "score": 0.08660699712510134
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_japan_islands"
+      ],
+      "score": 0.0853298840443093
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.029770821212346088
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.03429473431750629
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.03792610472219238
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.0038231313191718908
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.006994297805819394
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.016493279934960525
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte"
+      ],
+      "score": 0.14314512297358062
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions"
+      ],
+      "score": 0.14062086997943501
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_suez_waterway"
+      ],
+      "score": 0.14322952308469317
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_japan_islands"
+      ],
+      "score": 0.14197996845237504
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.07522218041743911
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.07489827625757639
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.07941226883860875
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.08437421036351467
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.09081524370914573
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.09125353957470728
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.09149089532452048
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.08630449117334482
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.08965997563977446
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.07993109639178586
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.08250417639907315
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.08196646456779833
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.019372119149733802
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.01689549020246417
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.01072474706489035
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": -0.006981738580601249
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions"
+      ],
+      "score": 0.14319618815476542
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway"
+      ],
+      "score": 0.14368067331265555
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_japan_islands"
+      ],
+      "score": 0.14394045584597182
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.143344550083624
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.14396568329075599
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.14339986931149662
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.0617962576839014
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.06133037700883792
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.07276214321974939
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.06368081893622135
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.0881765832488206
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.08685938595526899
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.08951289202390278
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.08148219986114202
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.008048316011968204
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway"
+      ],
+      "score": 0.14432629635827343
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_japan_islands"
+      ],
+      "score": 0.1435757644971457
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.14394036701552904
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.14361244689461372
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.055920496396027586
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.08599435732556315
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "comp_battery_anode",
+        "comp_battery_cathode",
+        "comp_battery_electrolyte",
+        "missing_mars_missions",
+        "missing_suez_waterway",
+        "missing_japan_islands"
+      ],
+      "score": 0.14461243368413956
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.13342083760275103
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "remaining_chunks": 5,
+        "score": 0.0009945617910204207
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "remaining_chunks": 4,
+        "score": -0.010684770680543687
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 3,
+        "score": -0.013716265476392153
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "remaining_chunks": 2,
+        "score": 0.014136956233718134
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 1,
+        "score": 0.05241865831232062
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "selected_chunks": 1,
+        "score": 0.1530560306369113
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "selected_chunks": 2,
+        "score": 0.1539628107506853
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: missing_mars_missions | Mars exploration",
+        "selected_chunks": 3,
+        "score": 0.1590355512292514
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "selected_chunks": 4,
+        "score": 0.13860447092961203
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+        "selected_chunks": 5,
+        "score": 0.14108006136724793
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+        "selected_chunks": 6,
+        "score": 0.13342083760275103
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.13342083760275103
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "remaining_chunks": 5,
+        "score": 0.1025658315216107
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "remaining_chunks": 4,
+        "score": -0.010684770680543687
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "remaining_chunks": 3,
+        "score": -0.028089391167931577
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 2,
+        "score": 0.014136956233718134
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+        "remaining_chunks": 1,
+        "score": 0.031085728397513668
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.13342083760275103
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: comp_battery_cathode | Battery cathode",
+        "remaining_chunks": 5,
+        "score": 0.0009945617910204207
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: comp_battery_anode | Battery anode",
+        "remaining_chunks": 4,
+        "score": -0.010684770680543687
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: missing_japan_islands | Japanese archipelago",
+        "remaining_chunks": 3,
+        "score": -0.010462812888528739
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: missing_suez_waterway | Artificial waterways",
+        "remaining_chunks": 2,
+        "score": 0.0018413877684875235
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: missing_mars_missions | Mars exploration",
+        "remaining_chunks": 1,
+        "score": 0.10568402742967808
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: comp_battery_electrolyte | Battery electrolyte distractor",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.13342083760275086
+      },
+      {
+        "step": 1,
+        "score": 0.12681090654796184
+      },
+      {
+        "step": 2,
+        "score": 0.10148573658772034
+      },
+      {
+        "step": 3,
+        "score": 0.09248028632580287
+      },
+      {
+        "step": 4,
+        "score": 0.06759264350292643
+      },
+      {
+        "step": 5,
+        "score": 0.08132893643558288
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which two electrodes does an electrochemical cell have?",
+    "expanded_queries": [
+      "Which two electrodes does an electrochemical cell have?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 2,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 3,
+        "source": "missing_magellan_strait | Strait distractor",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 4,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "dense": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 5,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 6,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 8,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "dense": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "dense": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "keyword": 0.7204,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "keyword": 0.4978,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "keyword": 0.3944,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "keyword": 0.1211,
+        "page": 32,
+        "type": "body_text",
+        "section": "battery_terminals",
+        "flags": "",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 6,
+        "source": "missing_magellan_spice_trade | Spice trade distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "European expeditions often sought new routes to spice-producing regions."
+      },
+      {
+        "rank": 7,
+        "source": "missing_magellan_strait | Strait distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "The Strait of Magellan links the Atlantic and Pacific oceans near southern South America."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_voyage | Ocean voyages overview",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "Early modern ocean voyages connected Europe with routes across the Atlantic and Pacific."
+      },
+      {
+        "rank": 9,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 10,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.7204,
+        "rerank": 0.88,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical, electrodes, two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4978,
+        "rerank": 0.579,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3944,
+        "rerank": 0.467,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1211,
+        "rerank": 0.1411,
+        "section": "battery_terminals",
+        "query_hits": "cell",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "largest_animals",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "human_heart_chambers",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 7,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "dna_structure",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 8,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "water_composition",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_australia_states | State capitals",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "australian_cities",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 10,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 17,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 18,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 24,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.7204,
+        "rerank": 0.88,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical, electrodes, two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4978,
+        "rerank": 0.579,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3944,
+        "rerank": 0.467,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "comp_battery_voltage | Battery voltage distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.1211,
+        "rerank": 0.1411,
+        "section": "battery_terminals",
+        "query_hits": "cell",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Cell voltage depends on the chemistry and conditions of the battery."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_blue_whale_a | Blue whale direct",
+        "page": 38,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "largest_animals",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The blue whale is the largest animal known to have lived on Earth."
+      },
+      {
+        "rank": 6,
+        "source": "conflict_heart_chambers_two | Heart chambers conflict two",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "human_heart_chambers",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An incorrect diagram labels the human heart as having two chambers."
+      },
+      {
+        "rank": 7,
+        "source": "direct_dna_evidence | DNA molecular shape",
+        "page": 4,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "dna_structure",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "DNA has a double-helix structure formed by two complementary strands."
+      },
+      {
+        "rank": 8,
+        "source": "comp_water_hydrogen | Hydrogen in water",
+        "page": 7,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "water_composition",
+        "query_hits": "two",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The H in the formula H2O represents hydrogen, with two hydrogen atoms in each molecule."
+      },
+      {
+        "rank": 9,
+        "source": "conflict_australia_states | State capitals",
+        "page": 13,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "australian_cities",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Australia's states and territories each have their own capital cities."
+      },
+      {
+        "rank": 10,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 11,
+        "source": "missing_pythagorean_hypotenuse | Hypotenuse distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The hypotenuse is the side opposite the right angle in a right triangle."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      },
+      {
+        "rank": 13,
+        "source": "direct_hemoglobin_white_cells | White blood cells distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "White blood cells are involved in immune responses."
+      },
+      {
+        "rank": 14,
+        "source": "direct_hemoglobin_platelets | Platelets distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Platelets help blood clot after injury."
+      },
+      {
+        "rank": 15,
+        "source": "direct_hemoglobin_plasma | Blood plasma distractor",
+        "page": 47,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "blood_transport",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Plasma is the liquid component of blood."
+      },
+      {
+        "rank": 16,
+        "source": "missing_pythagorean_area | Triangle area distractor",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The area of a triangle can be computed from its base and height."
+      },
+      {
+        "rank": 17,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 18,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "page": 49,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "space_telescope_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 19,
+        "source": "direct_bamboo_panda_habitat | Panda habitat distractor",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas live in mountain forests in parts of China."
+      },
+      {
+        "rank": 20,
+        "source": "direct_bamboo_panda_evidence | Panda diet direct",
+        "page": 46,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "giant_panda_diet",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Giant pandas mainly eat bamboo."
+      },
+      {
+        "rank": 21,
+        "source": "missing_suez_mediterranean | Mediterranean shipping",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Mediterranean Sea is connected to many ports and trade routes."
+      },
+      {
+        "rank": 22,
+        "source": "missing_suez_panama | Panama Canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The Panama Canal connects the Atlantic and Pacific oceans through Panama."
+      },
+      {
+        "rank": 23,
+        "source": "missing_suez_shipping | Shipping canal distractor",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Major shipping canals can shorten sea routes between regions."
+      },
+      {
+        "rank": 24,
+        "source": "missing_pythagorean_geometry | Right triangle overview",
+        "page": 48,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "right_triangle_notes",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Right triangles contain one angle measuring 90 degrees."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "comp_battery_anode | Battery anode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.7204,
+        "rerank": 0.88,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical, electrodes, two",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell has an anode, one of its two electrodes."
+      },
+      {
+        "rank": 2,
+        "source": "comp_battery_cathode | Battery cathode",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.4978,
+        "rerank": 0.579,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6655,
+        "novelty": 0.4125,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7301,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "An electrochemical cell also has a cathode, the other electrode."
+      },
+      {
+        "rank": 3,
+        "source": "comp_battery_electrolyte | Battery electrolyte distractor",
+        "page": 32,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.3944,
+        "rerank": 0.467,
+        "section": "battery_terminals",
+        "query_hits": "cell, electrochemical",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5411,
+        "novelty": 0.4278,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6252,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The electrolyte allows ions to move between parts of an electrochemical cell."
+      },
+      {
+        "rank": 4,
+        "source": "missing_mars_missions | Mars exploration",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": 0.01,
+        "section": "mars_overview",
+        "query_hits": "have",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0333,
+        "novelty": 0.95,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.3817,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Orbiters, landers, and rovers have been used to study the Martian environment."
+      },
+      {
+        "rank": 5,
+        "source": "missing_suez_waterway | Artificial waterways",
+        "page": 45,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "canal_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.8,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.292,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Canals are artificial waterways built for transport, irrigation, or navigation."
+      },
+      {
+        "rank": 6,
+        "source": "missing_japan_islands | Japanese archipelago",
+        "page": 12,
+        "type": "body_text",
+        "dense": 0.0,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "japan_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.0,
+        "novelty": 0.7788,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.289,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Japan is an island country in East Asia with four large main islands and many smaller ones."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "cell",
+        "does",
+        "electrochemical",
+        "electrodes",
+        "have",
+        "two"
+      ],
+      "covered_query_terms": [
+        "cell",
+        "electrochemical",
+        "electrodes",
+        "have",
+        "two"
+      ],
+      "missing_query_terms": [
+        "does"
+      ],
+      "terms_by_chunk": {
+        "comp_battery_anode | Battery anode": [
+          "cell",
+          "electrochemical",
+          "electrodes",
+          "two"
+        ],
+        "comp_battery_cathode | Battery cathode": [
+          "cell",
+          "electrochemical"
+        ],
+        "comp_battery_electrolyte | Battery electrolyte distractor": [
+          "cell",
+          "electrochemical"
+        ],
+        "missing_mars_missions | Mars exploration": [
+          "have"
+        ]
+      },
+      "section_titles": [
+        "battery_terminals",
+        "canal_overview",
+        "japan_overview",
+        "mars_overview"
+      ],
+      "chunks_by_section": {
+        "battery_terminals": [
+          "comp_battery_anode | Battery anode",
+          "comp_battery_cathode | Battery cathode",
+          "comp_battery_electrolyte | Battery electrolyte distractor"
+        ],
+        "mars_overview": [
+          "missing_mars_missions | Mars exploration"
+        ],
+        "canal_overview": [
+          "missing_suez_waterway | Artificial waterways"
+        ],
+        "japan_overview": [
+          "missing_japan_islands | Japanese archipelago"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "An electrochemical cell has an anode and a cathode. The anode is one of its two electrodes, and the cathode is the other electrode.",
+    "retrieved_context_answer": "An electrochemical cell has an anode and a cathode, which are its two electrodes.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.3448275862068966,
+    "retrieved_context_f1": 0.5263157894736842,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  }
+}

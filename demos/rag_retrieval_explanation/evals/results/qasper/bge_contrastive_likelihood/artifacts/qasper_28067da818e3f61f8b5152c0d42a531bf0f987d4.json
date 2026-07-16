@@ -1,0 +1,1583 @@
+{
+  "case": {
+    "case_id": "qasper_28067da818e3f61f8b5152c0d42a531bf0f987d4",
+    "paper_id": "1906.01081",
+    "paper_title": "Handling Divergent Reference Texts when Evaluating Table-to-Text Generation",
+    "question_id": "28067da818e3f61f8b5152c0d42a531bf0f987d4",
+    "annotation_id": "d1bb221526f5e07b69775abe1bb58ae26f2bd593",
+    "question": "Ngrams of which length are aligned using PARENT?",
+    "gold_answer": "Answer with content missing: (Parent subsections) combine precisions for n-gram orders 1-4",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1906.01081:paragraph:0002",
+      "1906.01081:paragraph:0004"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1906.01081:paragraph:0018",
+      "score": 0.8769168035449074,
+      "title": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+      "text": "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems at a time, this test has very weak power in our case. Hence, we use the bootstrap samples to obtain a INLINEFORM0 confidence interval of the difference in correlation between PARENT and any other metric and check whether this is above 0 BIBREF27 ."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1906.01081:paragraph:0038",
+      "score": 0.7316553831267553,
+      "title": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+      "text": "After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and output vocabularies were set to 50000 most common words in the corpus, with additional special symbols for table attribute names (such as \u201cbirth-date\u201d). The embeddings of the tokens in the vocabulary were initialized with Glove BIBREF43 . Learning rate of INLINEFORM0 was used during training, with the Adam optimizer, and a dropout of INLINEFORM1 was also applied to the outputs of the biLSTM. Models were trained till the loss on the dev set stopped dropping. Maximum length of a decoded text was set to 40 tokens, and that of the tables was set to 120 tokens. Various beam sizes and length normalization penalties were applied for the table-to-text system, which are listed in the main paper. For the information extraction system, we found a beam size of 8 and no length penalty to produce the highest F-score on the dev set."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1906.01081:abstract:000",
+      "score": 0.8014754087200299,
+      "title": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+      "text": "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We show that metrics which rely solely on the reference texts, such as BLEU and ROUGE, show poor correlation with human judgments when those references diverge. We propose a new metric, PARENT, which aligns n-grams from the reference and generated texts to the semi-structured data before computing their precision and recall. Through a large scale human evaluation study of table-to-text models for WikiBio, we show that PARENT correlates with human judgments better than existing text generation metrics. We also adapt and evaluate the information extraction based evaluation proposed by Wiseman et al (2017), and show that PARENT has comparable correlation to it, while being easier to use. We show that PARENT is also applicable when the reference texts are elicited from humans using the data from the WebNLG challenge."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1906.01081:paragraph:0002",
+      "score": 0.6320878394908075,
+      "title": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+      "text": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (\u00a7 SECREF36 ). For many table-to-text generation tasks, the tables themselves are in a pseudo-natural language format (e.g., WikiBio, WebNLG BIBREF6 , and E2E-NLG BIBREF10 ). In such cases we propose to compare the generated text to the underlying table as well to improve evaluation. We develop a new metric, PARENT (Precision And Recall of Entailed N-grams from the Table) (\u00a7 SECREF3 ). When computing precision, PARENT effectively uses a union of the reference and the table, to reward correct information missing from the reference. When computing recall, it uses an intersection of the reference and the table, to ignore extra incorrect information in the reference. The union and intersection are computed with the help of an entailment model to decide if a text n-gram is entailed by the table. We show that this method is more effective than using the table as an additional reference. Our main contributions are:"
+    },
+    {
+      "rank": 5,
+      "passage_id": "1906.01081:paragraph:0020",
+      "score": 0.8067490714062805,
+      "title": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+      "text": "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for both settings. There is no significant difference among these for the hyperparams category, but for systems, PARENT-W is significantly better than the other two. While RG-F needs a full information extraction pipeline in its implementation, PARENT-C only relies on co-occurrence counts, and PARENT-W can be used out-of-the-box for any dataset. To our knowledge, this is the first rigorous evaluation of using information extraction for generation evaluation."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1906.01081:paragraph:0029",
+      "score": 0.6155418936921625,
+      "title": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+      "text": "While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring the fidelity of the content of the generation. A similar trend is seen comparing BLEU and BLEU-T. As modern neural text generation systems are typically very fluent, measuring their fidelity is of increasing importance. Between the two entailment models, PARENT-C is better due to its higher correlation with the grammaticality and fluency aspects."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+      "attribution": 0.023073378217092478
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+      "attribution": -0.020797262615583588
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+      "attribution": 0.00994742580545975
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+      "attribution": -0.008845961030351327
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+      "attribution": -0.006163224367213422
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+      "attribution": 0.003927846128548544
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+      "attribution": 0.13143997194576457
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+      "attribution": 0.013677428591836776
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+      "attribution": 0.011929660387566272
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+      "attribution": 0.010160867131984566
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+      "attribution": 0.009226950935046972
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+      "attribution": -0.0004692228201553378
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0038",
+      "interaction": -0.010368387468212713
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:abstract:000",
+      "interaction": -0.007958592693857687
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0002",
+      "interaction": -0.011373563581738187
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.0086921536896028
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.0031321767498637704
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:abstract:000",
+      "interaction": -0.0005289861711343145
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:paragraph:0002",
+      "interaction": -0.014584917601692641
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.01121510020334611
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.009245422104650644
+    },
+    {
+      "left": "1906.01081:abstract:000",
+      "right": "1906.01081:paragraph:0002",
+      "interaction": 0.010493943566874242
+    },
+    {
+      "left": "1906.01081:abstract:000",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.017302424006886967
+    },
+    {
+      "left": "1906.01081:abstract:000",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.011278280176657622
+    },
+    {
+      "left": "1906.01081:paragraph:0002",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.02678609694870507
+    },
+    {
+      "left": "1906.01081:paragraph:0002",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.024079292430084075
+    },
+    {
+      "left": "1906.01081:paragraph:0020",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": 0.021642712938886366
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0038",
+      "interaction": -0.012938950796173753
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:abstract:000",
+      "interaction": 0.009522790842485047
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0002",
+      "interaction": -0.016822136589617502
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.013100293091067515
+    },
+    {
+      "left": "1906.01081:paragraph:0018",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.008357562563137749
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:abstract:000",
+      "interaction": -0.015139622651656295
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:paragraph:0002",
+      "interaction": -0.010459285045814632
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.009816712756661995
+    },
+    {
+      "left": "1906.01081:paragraph:0038",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.008109163372656956
+    },
+    {
+      "left": "1906.01081:abstract:000",
+      "right": "1906.01081:paragraph:0002",
+      "interaction": -0.0024575115606087724
+    },
+    {
+      "left": "1906.01081:abstract:000",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.010902330445202892
+    },
+    {
+      "left": "1906.01081:abstract:000",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.01395708974039519
+    },
+    {
+      "left": "1906.01081:paragraph:0002",
+      "right": "1906.01081:paragraph:0020",
+      "interaction": -0.019914204140049557
+    },
+    {
+      "left": "1906.01081:paragraph:0002",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.02138865414943952
+    },
+    {
+      "left": "1906.01081:paragraph:0020",
+      "right": "1906.01081:paragraph:0029",
+      "interaction": -0.01260469212346646
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.0011422018209644724
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.015069270729511752
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.04350558340813071
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "remaining_chunks": 3,
+        "score": 0.03822482932973237
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "remaining_chunks": 2,
+        "score": 0.033861078022207614
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "remaining_chunks": 1,
+        "score": 0.038879989271059845
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "selected_chunks": 1,
+        "score": 0.08254140020858225
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "selected_chunks": 2,
+        "score": 0.06126409474838668
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "selected_chunks": 3,
+        "score": 0.06443193971960315
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "selected_chunks": 4,
+        "score": -0.0012091374668717347
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "selected_chunks": 5,
+        "score": 0.003787087497873931
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "selected_chunks": 6,
+        "score": 0.0011422018209644724
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.0011422018209644724
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "remaining_chunks": 5,
+        "score": 0.003787087497873931
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "remaining_chunks": 4,
+        "score": -0.0012091374668717347
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "remaining_chunks": 3,
+        "score": 0.041230096369308855
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "remaining_chunks": 2,
+        "score": 0.032041360607515945
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.022764074208146967
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.0011422018209644724
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.015069270729511752
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "remaining_chunks": 4,
+        "score": -0.010442645534032902
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "remaining_chunks": 3,
+        "score": -0.01090067726525945
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "remaining_chunks": 2,
+        "score": -0.015225351125621456
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "remaining_chunks": 1,
+        "score": 0.014575701616012071
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.0011422018209644724
+      },
+      {
+        "step": 1,
+        "score": 0.004105272695598295
+      },
+      {
+        "step": 2,
+        "score": 0.013038844575548084
+      },
+      {
+        "step": 3,
+        "score": 0.026001433688958568
+      },
+      {
+        "step": 4,
+        "score": 0.03635737296756271
+      },
+      {
+        "step": 5,
+        "score": 0.04168765583512821
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Ngrams of which length are aligned using PARENT?",
+    "expanded_queries": [
+      "Ngrams of which length are aligned using PARENT?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "dense": 0.6116,
+        "page": 1,
+        "type": "body_text",
+        "section": "Correlation Comparison",
+        "flags": "",
+        "preview": "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems a"
+      },
+      {
+        "rank": 2,
+        "source": "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "dense": 0.594,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We sh"
+      },
+      {
+        "rank": 3,
+        "source": "1906.01081:paragraph:0025 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "dense": 0.5914,
+        "page": 1,
+        "type": "body_text",
+        "section": "Analysis",
+        "flags": "",
+        "preview": "We check how different components in the computation of PARENT contribute to its correlation to human judgments. Specifically, we remove the probability INLINEFORM0 of an n-gram INLINEFORM1 being entailed by the table fr"
+      },
+      {
+        "rank": 4,
+        "source": "1906.01081:paragraph:0033 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Related Work",
+        "dense": 0.5854,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "PARENT draws inspiration from iBLEU BIBREF26 , a metric for evaluating paraphrase generation, which compares the generated text to both the source text and the reference. While iBLEU penalizes texts which match the sourc"
+      },
+      {
+        "rank": 5,
+        "source": "1906.01081:paragraph:0016 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Compared Metrics",
+        "dense": 0.5829,
+        "page": 1,
+        "type": "body_text",
+        "section": "Compared Metrics",
+        "flags": "",
+        "preview": "Text & Table: We compare a variant of BLEU, denoted as BLEU-T, where the values from the table are used as additional references. BLEU-T draws inspiration from iBLEU BIBREF26 but instead rewards n-grams which match the t"
+      },
+      {
+        "rank": 6,
+        "source": "1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "dense": 0.5731,
+        "page": 1,
+        "type": "body_text",
+        "section": "WebNLG Dataset",
+        "flags": "",
+        "preview": "While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring "
+      },
+      {
+        "rank": 7,
+        "source": "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "dense": 0.5729,
+        "page": 1,
+        "type": "body_text",
+        "section": "Correlation Comparison",
+        "flags": "",
+        "preview": "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for bot"
+      },
+      {
+        "rank": 8,
+        "source": "1906.01081:paragraph:0030 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "dense": 0.5616,
+        "page": 1,
+        "type": "body_text",
+        "section": "WebNLG Dataset",
+        "flags": "",
+        "preview": "The INLINEFORM0 parameter in the calculation of PARENT decides whether to compute recall against the table or the reference (Eq. EQREF22 ). Figure FIGREF50 shows the distribution of the values taken by INLINEFORM1 using "
+      },
+      {
+        "rank": 9,
+        "source": "1906.01081:paragraph:0028 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "dense": 0.5601,
+        "page": 1,
+        "type": "body_text",
+        "section": "WebNLG Dataset",
+        "flags": "",
+        "preview": "The human ratings were collected on 3 distinct aspects \u2013 grammaticality, fluency and semantics, where semantics corresponds to the degree to which a generated text agrees with the meaning of the underlying RDF triples. W"
+      },
+      {
+        "rank": 10,
+        "source": "1906.01081:paragraph:0011 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Data & Models",
+        "dense": 0.559,
+        "page": 1,
+        "type": "body_text",
+        "section": "Data & Models",
+        "flags": "",
+        "preview": "We divide these models into two categories and measure correlation separately for both the categories. The first category, WikiBio-Systems, includes one model each from the four families listed in Table TABREF32 . This c"
+      },
+      {
+        "rank": 11,
+        "source": "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "dense": 0.5555,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (\u00a7 SECREF36 ). For many table-to-text generation tasks, the tables them"
+      },
+      {
+        "rank": 12,
+        "source": "1906.01081:paragraph:0021 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "dense": 0.5555,
+        "page": 1,
+        "type": "body_text",
+        "section": "Correlation Comparison",
+        "flags": "",
+        "preview": "On this dataset, the word-overlap model showed higher correlation than the co-occurrence model for entailment. In \u00a7 SECREF47 we will show that for the WebNLG dataset, where more paraphrasing is involved between the table"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "keyword": 0.1438,
+        "page": 1,
+        "type": "body_text",
+        "section": "Hyperparameters",
+        "flags": "",
+        "preview": "After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and outp"
+      },
+      {
+        "rank": 2,
+        "source": "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "keyword": 0.1126,
+        "page": 1,
+        "type": "body_text",
+        "section": "Correlation Comparison",
+        "flags": "",
+        "preview": "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for bot"
+      },
+      {
+        "rank": 3,
+        "source": "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "keyword": 0.0896,
+        "page": 1,
+        "type": "body_text",
+        "section": "Correlation Comparison",
+        "flags": "",
+        "preview": "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems a"
+      },
+      {
+        "rank": 4,
+        "source": "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "keyword": 0.0793,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We sh"
+      },
+      {
+        "rank": 5,
+        "source": "1906.01081:paragraph:0016 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Compared Metrics",
+        "keyword": 0.0731,
+        "page": 1,
+        "type": "body_text",
+        "section": "Compared Metrics",
+        "flags": "",
+        "preview": "Text & Table: We compare a variant of BLEU, denoted as BLEU-T, where the values from the table are used as additional references. BLEU-T draws inspiration from iBLEU BIBREF26 but instead rewards n-grams which match the t"
+      },
+      {
+        "rank": 6,
+        "source": "1906.01081:paragraph:0025 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "keyword": 0.0716,
+        "page": 1,
+        "type": "body_text",
+        "section": "Analysis",
+        "flags": "",
+        "preview": "We check how different components in the computation of PARENT contribute to its correlation to human judgments. Specifically, we remove the probability INLINEFORM0 of an n-gram INLINEFORM1 being entailed by the table fr"
+      },
+      {
+        "rank": 7,
+        "source": "1906.01081:paragraph:0014 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Compared Metrics",
+        "keyword": 0.0711,
+        "page": 1,
+        "type": "body_text",
+        "section": "Compared Metrics",
+        "flags": "",
+        "preview": "Text only: We compare BLEU BIBREF8 , ROUGE BIBREF9 , METEOR BIBREF18 , CIDEr and CIDEr-D BIBREF25 using their publicly available implementations."
+      },
+      {
+        "rank": 8,
+        "source": "1906.01081:paragraph:0030 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "keyword": 0.0563,
+        "page": 1,
+        "type": "body_text",
+        "section": "WebNLG Dataset",
+        "flags": "",
+        "preview": "The INLINEFORM0 parameter in the calculation of PARENT decides whether to compute recall against the table or the reference (Eq. EQREF22 ). Figure FIGREF50 shows the distribution of the values taken by INLINEFORM1 using "
+      },
+      {
+        "rank": 9,
+        "source": "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "keyword": 0.0543,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (\u00a7 SECREF36 ). For many table-to-text generation tasks, the tables them"
+      },
+      {
+        "rank": 10,
+        "source": "1906.01081:paragraph:0011 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Data & Models",
+        "keyword": 0.0498,
+        "page": 1,
+        "type": "body_text",
+        "section": "Data & Models",
+        "flags": "",
+        "preview": "We divide these models into two categories and measure correlation separately for both the categories. The first category, WikiBio-Systems, includes one model each from the four families listed in Table TABREF32 . This c"
+      },
+      {
+        "rank": 11,
+        "source": "1906.01081:paragraph:0004 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / PARENT",
+        "keyword": 0.0432,
+        "page": 1,
+        "type": "body_text",
+        "section": "PARENT",
+        "flags": "",
+        "preview": "PARENT evaluates each instance INLINEFORM0 separately, by computing the precision and recall of INLINEFORM1 against both INLINEFORM2 and INLINEFORM3 ."
+      },
+      {
+        "rank": 12,
+        "source": "1906.01081:paragraph:0034 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Conclusions",
+        "keyword": 0.0424,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions",
+        "flags": "",
+        "preview": "We study the automatic evaluation of table-to-text systems when the references diverge from the table. We propose a new metric, PARENT, which shows the highest correlation with humans across a range of settings with dive"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6116,
+        "keyword": 0.0896,
+        "rerank": 0.8769,
+        "section": "Correlation Comparison",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems a"
+      },
+      {
+        "rank": 2,
+        "source": "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5729,
+        "keyword": 0.1126,
+        "rerank": 0.8067,
+        "section": "Correlation Comparison",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for bot"
+      },
+      {
+        "rank": 3,
+        "source": "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.594,
+        "keyword": 0.0793,
+        "rerank": 0.8015,
+        "section": "Abstract",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We sh"
+      },
+      {
+        "rank": 4,
+        "source": "1906.01081:paragraph:0025 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5914,
+        "keyword": 0.0716,
+        "rerank": 0.7477,
+        "section": "Analysis",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "We check how different components in the computation of PARENT contribute to its correlation to human judgments. Specifically, we remove the probability INLINEFORM0 of an n-gram INLINEFORM1 being entailed by the table fr"
+      },
+      {
+        "rank": 5,
+        "source": "1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5368,
+        "keyword": 0.1438,
+        "rerank": 0.7317,
+        "section": "Hyperparameters",
+        "query_hits": "length",
+        "reasons": "body/table evidence",
+        "preview": "After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and outp"
+      },
+      {
+        "rank": 6,
+        "source": "1906.01081:paragraph:0016 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Compared Metrics",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5829,
+        "keyword": 0.0731,
+        "rerank": 0.7247,
+        "section": "Compared Metrics",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "Text & Table: We compare a variant of BLEU, denoted as BLEU-T, where the values from the table are used as additional references. BLEU-T draws inspiration from iBLEU BIBREF26 but instead rewards n-grams which match the t"
+      },
+      {
+        "rank": 7,
+        "source": "1906.01081:paragraph:0033 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5854,
+        "keyword": 0.0364,
+        "rerank": 0.656,
+        "section": "Related Work",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "PARENT draws inspiration from iBLEU BIBREF26 , a metric for evaluating paraphrase generation, which compares the generated text to both the source text and the reference. While iBLEU penalizes texts which match the sourc"
+      },
+      {
+        "rank": 8,
+        "source": "1906.01081:paragraph:0030 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5616,
+        "keyword": 0.0563,
+        "rerank": 0.6548,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "The INLINEFORM0 parameter in the calculation of PARENT decides whether to compute recall against the table or the reference (Eq. EQREF22 ). Figure FIGREF50 shows the distribution of the values taken by INLINEFORM1 using "
+      },
+      {
+        "rank": 9,
+        "source": "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.0543,
+        "rerank": 0.6321,
+        "section": "Introduction",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (\u00a7 SECREF36 ). For many table-to-text generation tasks, the tables them"
+      },
+      {
+        "rank": 10,
+        "source": "1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5731,
+        "keyword": 0.035,
+        "rerank": 0.6155,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring "
+      },
+      {
+        "rank": 11,
+        "source": "1906.01081:paragraph:0011 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Data & Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.559,
+        "keyword": 0.0498,
+        "rerank": 0.6034,
+        "section": "Data & Models",
+        "query_hits": "length",
+        "reasons": "body/table evidence",
+        "preview": "We divide these models into two categories and measure correlation separately for both the categories. The first category, WikiBio-Systems, includes one model each from the four families listed in Table TABREF32 . This c"
+      },
+      {
+        "rank": 12,
+        "source": "1906.01081:paragraph:0028 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5601,
+        "keyword": 0.0405,
+        "rerank": 0.5875,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "The human ratings were collected on 3 distinct aspects \u2013 grammaticality, fluency and semantics, where semantics corresponds to the degree to which a generated text agrees with the meaning of the underlying RDF triples. W"
+      },
+      {
+        "rank": 13,
+        "source": "1906.01081:paragraph:0021 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.041,
+        "rerank": 0.5744,
+        "section": "Correlation Comparison",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "On this dataset, the word-overlap model showed higher correlation than the co-occurrence model for entailment. In \u00a7 SECREF47 we will show that for the WebNLG dataset, where more paraphrasing is involved between the table"
+      },
+      {
+        "rank": 14,
+        "source": "1906.01081:paragraph:0034 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5534,
+        "keyword": 0.0424,
+        "rerank": 0.5709,
+        "section": "Conclusions",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "We study the automatic evaluation of table-to-text systems when the references diverge from the table. We propose a new metric, PARENT, which shows the highest correlation with humans across a range of settings with dive"
+      },
+      {
+        "rank": 15,
+        "source": "1906.01081:paragraph:0037 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Information Extraction System",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.042,
+        "rerank": 0.4565,
+        "section": "Information Extraction System",
+        "query_hits": "using",
+        "reasons": "body/table evidence",
+        "preview": "Clearly, since the references are divergent, the model cannot be expected to produce the entire table, and we see some false information being hallucinated after training. Nevertheless, as we show in \u00a7 SECREF36 , this sy"
+      },
+      {
+        "rank": 16,
+        "source": "1906.01081:paragraph:0026 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5262,
+        "keyword": 0.0176,
+        "rerank": 0.4363,
+        "section": "Analysis",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF28 point out that hill-climbing on an automatic metric is meaningless if that metric has a low instance-level correlation to human judgments. In Table TABREF46 we show the average accuracy of the metrics in making "
+      },
+      {
+        "rank": 17,
+        "source": "1906.01081:paragraph:0024 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5188,
+        "keyword": 0.0278,
+        "rerank": 0.4348,
+        "section": "Analysis",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF40 shows the correlations as we vary the percent of entailed examples in the evaluation set of WikiBio. Each point is obtained by fixing the desired proportion of entailed examples, and sampling subsets from"
+      },
+      {
+        "rank": 18,
+        "source": "1906.01081:paragraph:0027 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5232,
+        "keyword": 0.0166,
+        "rerank": 0.425,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "To check how PARENT correlates with human judgments when the references are elicited from humans (and less likely to be divergent), we check its correlation with the human ratings provided for the systems competing in th"
+      },
+      {
+        "rank": 19,
+        "source": "1906.01081:paragraph:0003 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Table-to-Text Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5436,
+        "keyword": 0.0,
+        "rerank": 0.4225,
+        "section": "Table-to-Text Generation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We briefly review the task of generating natural language descriptions of semi-structured data, which we refer to as tables henceforth BIBREF11 , BIBREF12 . Tables can be expressed as set of records INLINEFORM0 , where e"
+      },
+      {
+        "rank": 20,
+        "source": "1906.01081:paragraph:0007 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Evaluation via Information Extraction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5347,
+        "keyword": 0.0,
+        "rerank": 0.3955,
+        "section": "Evaluation via Information Extraction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Given this information extraction system, we consider the following metrics for evaluation, along the lines of BIBREF1 . Content Selection (CS): F-score for the (attribute, value) pairs extracted from the generated text "
+      },
+      {
+        "rank": 21,
+        "source": "1906.01081:paragraph:0031 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5307,
+        "keyword": 0.0,
+        "rerank": 0.383,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Over the years several studies have evaluated automatic metrics for measuring text generation performance BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , BIBREF33 , BIBREF34 , BIBREF35 . The only consensus from these studies"
+      },
+      {
+        "rank": 22,
+        "source": "1906.01081:paragraph:0008 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Experiments & Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5273,
+        "keyword": 0.0,
+        "rerank": 0.3727,
+        "section": "Experiments & Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section we compare several automatic evaluation metrics by checking their correlation with the scores assigned by humans to table-to-text models. Specifically, given INLINEFORM0 models INLINEFORM1 , and their out"
+      },
+      {
+        "rank": 23,
+        "source": "1906.01081:paragraph:0022 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.529,
+        "keyword": 0.0421,
+        "rerank": 0.366,
+        "section": "Analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section we further analyze the performance of PARENT-W under different conditions, and compare to the other best metrics from Table TABREF37 ."
+      },
+      {
+        "rank": 24,
+        "source": "1906.01081:paragraph:0001 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5239,
+        "keyword": 0.0,
+        "rerank": 0.3625,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For text generation tasks, the only gold standard metric is to show the output to humans for judging its quality, but this is too expensive to apply repeatedly anytime small modifications are made to a system. Hence, aut"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6116,
+        "keyword": 0.0896,
+        "rerank": 0.8769,
+        "section": "Correlation Comparison",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems a"
+      },
+      {
+        "rank": 2,
+        "source": "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5729,
+        "keyword": 0.1126,
+        "rerank": 0.8067,
+        "section": "Correlation Comparison",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for bot"
+      },
+      {
+        "rank": 3,
+        "source": "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.594,
+        "keyword": 0.0793,
+        "rerank": 0.8015,
+        "section": "Abstract",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We sh"
+      },
+      {
+        "rank": 4,
+        "source": "1906.01081:paragraph:0025 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5914,
+        "keyword": 0.0716,
+        "rerank": 0.7477,
+        "section": "Analysis",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "We check how different components in the computation of PARENT contribute to its correlation to human judgments. Specifically, we remove the probability INLINEFORM0 of an n-gram INLINEFORM1 being entailed by the table fr"
+      },
+      {
+        "rank": 5,
+        "source": "1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5368,
+        "keyword": 0.1438,
+        "rerank": 0.7317,
+        "section": "Hyperparameters",
+        "query_hits": "length",
+        "reasons": "body/table evidence",
+        "preview": "After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and outp"
+      },
+      {
+        "rank": 6,
+        "source": "1906.01081:paragraph:0016 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Compared Metrics",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5829,
+        "keyword": 0.0731,
+        "rerank": 0.7247,
+        "section": "Compared Metrics",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "Text & Table: We compare a variant of BLEU, denoted as BLEU-T, where the values from the table are used as additional references. BLEU-T draws inspiration from iBLEU BIBREF26 but instead rewards n-grams which match the t"
+      },
+      {
+        "rank": 7,
+        "source": "1906.01081:paragraph:0033 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5854,
+        "keyword": 0.0364,
+        "rerank": 0.656,
+        "section": "Related Work",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "PARENT draws inspiration from iBLEU BIBREF26 , a metric for evaluating paraphrase generation, which compares the generated text to both the source text and the reference. While iBLEU penalizes texts which match the sourc"
+      },
+      {
+        "rank": 8,
+        "source": "1906.01081:paragraph:0030 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5616,
+        "keyword": 0.0563,
+        "rerank": 0.6548,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "The INLINEFORM0 parameter in the calculation of PARENT decides whether to compute recall against the table or the reference (Eq. EQREF22 ). Figure FIGREF50 shows the distribution of the values taken by INLINEFORM1 using "
+      },
+      {
+        "rank": 9,
+        "source": "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.0543,
+        "rerank": 0.6321,
+        "section": "Introduction",
+        "query_hits": "parent, using",
+        "reasons": "body/table evidence",
+        "preview": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (\u00a7 SECREF36 ). For many table-to-text generation tasks, the tables them"
+      },
+      {
+        "rank": 10,
+        "source": "1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5731,
+        "keyword": 0.035,
+        "rerank": 0.6155,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring "
+      },
+      {
+        "rank": 11,
+        "source": "1906.01081:paragraph:0011 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Data & Models",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.559,
+        "keyword": 0.0498,
+        "rerank": 0.6034,
+        "section": "Data & Models",
+        "query_hits": "length",
+        "reasons": "body/table evidence",
+        "preview": "We divide these models into two categories and measure correlation separately for both the categories. The first category, WikiBio-Systems, includes one model each from the four families listed in Table TABREF32 . This c"
+      },
+      {
+        "rank": 12,
+        "source": "1906.01081:paragraph:0028 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5601,
+        "keyword": 0.0405,
+        "rerank": 0.5875,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "The human ratings were collected on 3 distinct aspects \u2013 grammaticality, fluency and semantics, where semantics corresponds to the degree to which a generated text agrees with the meaning of the underlying RDF triples. W"
+      },
+      {
+        "rank": 13,
+        "source": "1906.01081:paragraph:0021 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.041,
+        "rerank": 0.5744,
+        "section": "Correlation Comparison",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "On this dataset, the word-overlap model showed higher correlation than the co-occurrence model for entailment. In \u00a7 SECREF47 we will show that for the WebNLG dataset, where more paraphrasing is involved between the table"
+      },
+      {
+        "rank": 14,
+        "source": "1906.01081:paragraph:0034 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5534,
+        "keyword": 0.0424,
+        "rerank": 0.5709,
+        "section": "Conclusions",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "We study the automatic evaluation of table-to-text systems when the references diverge from the table. We propose a new metric, PARENT, which shows the highest correlation with humans across a range of settings with dive"
+      },
+      {
+        "rank": 15,
+        "source": "1906.01081:paragraph:0037 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Information Extraction System",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.042,
+        "rerank": 0.4565,
+        "section": "Information Extraction System",
+        "query_hits": "using",
+        "reasons": "body/table evidence",
+        "preview": "Clearly, since the references are divergent, the model cannot be expected to produce the entire table, and we see some false information being hallucinated after training. Nevertheless, as we show in \u00a7 SECREF36 , this sy"
+      },
+      {
+        "rank": 16,
+        "source": "1906.01081:paragraph:0026 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5262,
+        "keyword": 0.0176,
+        "rerank": 0.4363,
+        "section": "Analysis",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF28 point out that hill-climbing on an automatic metric is meaningless if that metric has a low instance-level correlation to human judgments. In Table TABREF46 we show the average accuracy of the metrics in making "
+      },
+      {
+        "rank": 17,
+        "source": "1906.01081:paragraph:0024 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5188,
+        "keyword": 0.0278,
+        "rerank": 0.4348,
+        "section": "Analysis",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "Figure FIGREF40 shows the correlations as we vary the percent of entailed examples in the evaluation set of WikiBio. Each point is obtained by fixing the desired proportion of entailed examples, and sampling subsets from"
+      },
+      {
+        "rank": 18,
+        "source": "1906.01081:paragraph:0027 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5232,
+        "keyword": 0.0166,
+        "rerank": 0.425,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "reasons": "body/table evidence",
+        "preview": "To check how PARENT correlates with human judgments when the references are elicited from humans (and less likely to be divergent), we check its correlation with the human ratings provided for the systems competing in th"
+      },
+      {
+        "rank": 19,
+        "source": "1906.01081:paragraph:0003 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Table-to-Text Generation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5436,
+        "keyword": 0.0,
+        "rerank": 0.4225,
+        "section": "Table-to-Text Generation",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We briefly review the task of generating natural language descriptions of semi-structured data, which we refer to as tables henceforth BIBREF11 , BIBREF12 . Tables can be expressed as set of records INLINEFORM0 , where e"
+      },
+      {
+        "rank": 20,
+        "source": "1906.01081:paragraph:0007 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Evaluation via Information Extraction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5347,
+        "keyword": 0.0,
+        "rerank": 0.3955,
+        "section": "Evaluation via Information Extraction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Given this information extraction system, we consider the following metrics for evaluation, along the lines of BIBREF1 . Content Selection (CS): F-score for the (attribute, value) pairs extracted from the generated text "
+      },
+      {
+        "rank": 21,
+        "source": "1906.01081:paragraph:0031 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5307,
+        "keyword": 0.0,
+        "rerank": 0.383,
+        "section": "Related Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Over the years several studies have evaluated automatic metrics for measuring text generation performance BIBREF29 , BIBREF30 , BIBREF31 , BIBREF32 , BIBREF33 , BIBREF34 , BIBREF35 . The only consensus from these studies"
+      },
+      {
+        "rank": 22,
+        "source": "1906.01081:paragraph:0008 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Experiments & Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5273,
+        "keyword": 0.0,
+        "rerank": 0.3727,
+        "section": "Experiments & Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section we compare several automatic evaluation metrics by checking their correlation with the scores assigned by humans to table-to-text models. Specifically, given INLINEFORM0 models INLINEFORM1 , and their out"
+      },
+      {
+        "rank": 23,
+        "source": "1906.01081:paragraph:0022 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.529,
+        "keyword": 0.0421,
+        "rerank": 0.366,
+        "section": "Analysis",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section we further analyze the performance of PARENT-W under different conditions, and compare to the other best metrics from Table TABREF37 ."
+      },
+      {
+        "rank": 24,
+        "source": "1906.01081:paragraph:0001 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5239,
+        "keyword": 0.0,
+        "rerank": 0.3625,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For text generation tasks, the only gold standard metric is to show the output to humans for judging its quality, but this is too expensive to apply repeatedly anytime small modifications are made to a system. Hence, aut"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6116,
+        "keyword": 0.0896,
+        "rerank": 0.8769,
+        "section": "Correlation Comparison",
+        "query_hits": "parent, using",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.28,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF37 also indicates whether PARENT is significantly better than a baseline metric. BIBREF21 suggest using the William's test for this purpose, but since we are computing correlations between only 4/13 systems a"
+      },
+      {
+        "rank": 2,
+        "source": "1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5368,
+        "keyword": 0.1438,
+        "rerank": 0.7317,
+        "section": "Hyperparameters",
+        "query_hits": "length",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8324,
+        "novelty": 0.956,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2497,
+        "reasons": "body/table evidence",
+        "preview": "After tuning we found the same set of hyperparameters to work well for both the table-to-text PG-Net, and the inverse information extraction PG-Net. The hidden state size of the biLSTMs was set to 200. The input and outp"
+      },
+      {
+        "rank": 3,
+        "source": "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.594,
+        "keyword": 0.0793,
+        "rerank": 0.8015,
+        "section": "Abstract",
+        "query_hits": "parent, using",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.913,
+        "novelty": 0.7191,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1658,
+        "reasons": "body/table evidence",
+        "preview": "Automatically constructed datasets for generating text from semi-structured data (tables), such as WikiBio, often contain reference texts that diverge from the information in the corresponding semi-structured data. We sh"
+      },
+      {
+        "rank": 4,
+        "source": "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5555,
+        "keyword": 0.0543,
+        "rerank": 0.6321,
+        "section": "Introduction",
+        "query_hits": "parent, using",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7176,
+        "novelty": 0.6279,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.145,
+        "reasons": "body/table evidence",
+        "preview": "We show that existing automatic metrics, including BLEU, correlate poorly with human judgments when the evaluation sets contain divergent references (\u00a7 SECREF36 ). For many table-to-text generation tasks, the tables them"
+      },
+      {
+        "rank": 5,
+        "source": "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5729,
+        "keyword": 0.1126,
+        "rerank": 0.8067,
+        "section": "Correlation Comparison",
+        "query_hits": "parent, using",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9191,
+        "novelty": 0.4203,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1292,
+        "reasons": "body/table evidence",
+        "preview": "Among the extractive evaluation metrics, CS, which also only relies on the reference, has poor correlation in the hyperparams category. RG-F, and both variants of the PARENT metric achieve the highest correlation for bot"
+      },
+      {
+        "rank": 6,
+        "source": "1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5731,
+        "keyword": 0.035,
+        "rerank": 0.6155,
+        "section": "WebNLG Dataset",
+        "query_hits": "parent",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6985,
+        "novelty": 0.6959,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0981,
+        "reasons": "body/table evidence",
+        "preview": "While BLEU has the highest correlation for the grammar and fluency aspects, PARENT does best for semantics. This suggests that the inclusion of source tables into the evaluation orients the metric more towards measuring "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "aligned",
+        "length",
+        "ngrams",
+        "parent",
+        "using"
+      ],
+      "covered_query_terms": [
+        "length",
+        "parent",
+        "using"
+      ],
+      "missing_query_terms": [
+        "aligned",
+        "ngrams"
+      ],
+      "terms_by_chunk": {
+        "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison": [
+          "parent",
+          "using"
+        ],
+        "1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters": [
+          "length"
+        ],
+        "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract": [
+          "parent",
+          "using"
+        ],
+        "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction": [
+          "parent",
+          "using"
+        ],
+        "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison": [
+          "parent",
+          "using"
+        ],
+        "1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset": [
+          "parent"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Correlation Comparison",
+        "Hyperparameters",
+        "Introduction",
+        "WebNLG Dataset"
+      ],
+      "chunks_by_section": {
+        "Correlation Comparison": [
+          "1906.01081:paragraph:0018 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison",
+          "1906.01081:paragraph:0020 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Correlation Comparison"
+        ],
+        "Hyperparameters": [
+          "1906.01081:paragraph:0038 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Hyperparameters"
+        ],
+        "Abstract": [
+          "1906.01081:abstract:000 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Abstract"
+        ],
+        "Introduction": [
+          "1906.01081:paragraph:0002 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / Introduction"
+        ],
+        "WebNLG Dataset": [
+          "1906.01081:paragraph:0029 | Handling Divergent Reference Texts when Evaluating Table-to-Text Generation / WebNLG Dataset"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "The context does not specify the length of the n-grams aligned using PARENT.",
+    "retrieved_context_answer": "PARENT aligns n-grams from the reference and generated texts to the semi-structured data. The context does not specify a particular length for the n-grams that are aligned using PARENT.",
+    "closed_book_f1": 0.08333333333333333,
+    "gold_context_f1": 0.14285714285714285,
+    "retrieved_context_f1": 0.13043478260869562,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

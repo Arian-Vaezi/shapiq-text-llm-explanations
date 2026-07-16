@@ -1,0 +1,1557 @@
+{
+  "case": {
+    "case_id": "qasper_99e78c390932594bd833be0f5c890af5c605d808",
+    "paper_id": "1912.04961",
+    "paper_title": "Medication Regimen Extraction From Clinical Conversations",
+    "question_id": "99e78c390932594bd833be0f5c890af5c605d808",
+    "annotation_id": "500a750fe81dbb3800a3fd190ce0d231fb83e642",
+    "question": "What is the baseline?",
+    "gold_answer": "QA PGNet; Multi-decoder QA PGNet with lookup table embedding",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1912.04961:paragraph:0030"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1912.04961:paragraph:0031",
+      "score": 0.9600000000000001,
+      "title": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+      "text": "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the number nearest to the Medication Name as the prediction, and `none' if no number is mentioned or if the Medication Name is not detected in the input. For Frequency extraction, the baseline we consider is `Random Top-3' where we predict a random Frequency tag, from top-3 most frequent ones from our dataset - {`none', `daily', `twice a day'}."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1912.04961:paragraph:0014",
+      "score": 0.3134650558685744,
+      "title": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+      "text": "Out of overall 6,693 files, we set aside a random sample of 423 files (denoted as $\\mathcal {D}_{test}$) for final evaluation. The remaining 6,270 files are used for training with 80% train (5016), 10% validation (627), and 10% test (627) split. Overall, the 6,270 files contains 156,186 summaries and 32,000 MR tags out of which 8,654 MR tags contain values for at least one of the Dosage or Frequency, which we used for training to avoid overfitting (the remaining MR tags have both Dosage and Frequency as `none'). Note that we have two test datasets: `10% test' - used to evaluate all the models, and $\\mathcal {D}_{test}$ - used to measure the performance of best performing models on ASR transcripts."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1912.04961:paragraph:0052",
+      "score": 0.28966849962437086,
+      "title": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+      "text": "In this paper, we explore the Medication Regimen (MR) extraction task of extracting dosage and frequency for the medications mentioned in a doctor-patient conversation transcript. We explore different variations of abstractive QA models and new architecture in the intersection of QA and IE frameworks and provide a comparative performance analysis of the methods along with other techniques like pretraining to improve the overall performance. Finally, we demonstrate the performance of our best-performing models by automatically extracting MR tags from spontaneous doctor-patient conversations (using commercially available ASR). Our best model can correctly extract the dosage for 71.75% (interpretation of ROUGE-1 score) and frequency for 73.58% (on qualitative evaluation) of the medications discussed in the transcripts generated using Google Speech-To-Text. In summary, we demonstrate that research on NLP can be translated into real-world clinical settings to realize its benefits for both doctors and patients."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1912.04961:paragraph:0003",
+      "score": 0.27585332805886126,
+      "title": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+      "text": "Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogues, covers a variety of speech patterns, and the vocabulary can range from colloquial to complex domain-specific language. With recent advancements in Conversational Speech Recognition BIBREF7 rendering the systems less prone to errors, the subsequent challenge of understanding and extracting relevant information from the conversations is receiving increasing research focus BIBREF4, BIBREF8."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1912.04961:abstract:000",
+      "score": 0.3897330420791351,
+      "title": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+      "text": "Extracting relevant information from clinical conversations and providing it to doctors and patients might help in addressing doctor burnout and patient forgetfulness. In this paper, we focus on extracting the Medication Regimen (dosage and frequency for medications) discussed in a clinical conversation. We frame the problem as a Question Answering (QA) task and perform comparative analysis over: a QA approach, a new combined QA and Information Extraction approach and other baselines. We use a small corpus of 6,692 annotated doctor-patient conversations for the task. Clinical conversation corpora are costly to create, difficult to handle (because of data privacy concerns), and thus `scarce'. We address this data scarcity challenge through data augmentation methods, using publicly available embeddings and pretrain part of the network on a related task of summarization to improve the model's performance. Compared to the baseline, our best-performing models improve the dosage and frequency extractions' ROUGE-1 F1 scores from 54.28 and 37.13 to 89.57 and 45.94, respectively. Using our best-performing model, we present the first fully automated system that can extract Medication Regimen (MR) tags from spontaneous doctor-patient conversations with about ~71% accuracy."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1912.04961:paragraph:0004",
+      "score": 0.27374065227944294,
+      "title": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+      "text": "In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these transcripts, collectively referred to as Medication Regimen (MR) extraction. The information extraction is local as we extract the information from a segment of the transcript and not the entire transcript since doing the latter is difficult owing to the long meandering nature of the conversations often with multiple medication regimens and care plans being discussed."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+      "attribution": -0.026070928562244546
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+      "attribution": 0.02076330502871289
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+      "attribution": 0.014851411472985555
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+      "attribution": 0.010062939923675919
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+      "attribution": 0.0034952298718703423
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+      "attribution": 0.0021501009785315234
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+      "attribution": 0.15450785050927449
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+      "attribution": 0.011297252537223922
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+      "attribution": 0.00746653260312508
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+      "attribution": 0.006929423829735325
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+      "attribution": 0.0037649424206649186
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+      "attribution": 0.0035114550893888957
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0014",
+      "interaction": -0.0016216281089530416
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0052",
+      "interaction": -0.007548597028786498
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0003",
+      "interaction": 0.009670729806130065
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:abstract:000",
+      "interaction": 0.02015076880170716
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.004745124698098624
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:paragraph:0052",
+      "interaction": 0.005092515175471525
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:paragraph:0003",
+      "interaction": -0.0012927106735355798
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:abstract:000",
+      "interaction": -0.014479816714976298
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.0060977445651285295
+    },
+    {
+      "left": "1912.04961:paragraph:0052",
+      "right": "1912.04961:paragraph:0003",
+      "interaction": -0.0010462428915370043
+    },
+    {
+      "left": "1912.04961:paragraph:0052",
+      "right": "1912.04961:abstract:000",
+      "interaction": -0.011551753790443046
+    },
+    {
+      "left": "1912.04961:paragraph:0052",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.002261048392337655
+    },
+    {
+      "left": "1912.04961:paragraph:0003",
+      "right": "1912.04961:abstract:000",
+      "interaction": 0.0004441297401698103
+    },
+    {
+      "left": "1912.04961:paragraph:0003",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": 0.006950476584384813
+    },
+    {
+      "left": "1912.04961:abstract:000",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.029785127170722653
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0014",
+      "interaction": -0.01699003918492522
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0052",
+      "interaction": -0.005596330957702373
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0003",
+      "interaction": -0.0034061105228048046
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:abstract:000",
+      "interaction": 0.003049349200780551
+    },
+    {
+      "left": "1912.04961:paragraph:0031",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.00748959441869901
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:paragraph:0052",
+      "interaction": -0.008400486184955617
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:paragraph:0003",
+      "interaction": -0.0030766997581031224
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:abstract:000",
+      "interaction": -0.0002853174823657333
+    },
+    {
+      "left": "1912.04961:paragraph:0014",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.008345836169760206
+    },
+    {
+      "left": "1912.04961:paragraph:0052",
+      "right": "1912.04961:paragraph:0003",
+      "interaction": -0.003973332659074372
+    },
+    {
+      "left": "1912.04961:paragraph:0052",
+      "right": "1912.04961:abstract:000",
+      "interaction": -0.01563527284625732
+    },
+    {
+      "left": "1912.04961:paragraph:0052",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.007164115589891972
+    },
+    {
+      "left": "1912.04961:paragraph:0003",
+      "right": "1912.04961:abstract:000",
+      "interaction": -0.008965004529276744
+    },
+    {
+      "left": "1912.04961:paragraph:0003",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.004615238000263754
+    },
+    {
+      "left": "1912.04961:abstract:000",
+      "right": "1912.04961:paragraph:0004",
+      "interaction": -0.010127428883737456
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.025252058705415137
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "remaining_chunks": 5,
+        "score": 0.051291364166250575
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "remaining_chunks": 4,
+        "score": 0.06373696381195348
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "remaining_chunks": 3,
+        "score": 0.0323191251731757
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "remaining_chunks": 2,
+        "score": 0.03684238623529157
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.019824358940264353
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "selected_chunks": 1,
+        "score": 0.009182493495230482
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "selected_chunks": 2,
+        "score": 0.037584798837534183
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "selected_chunks": 3,
+        "score": 0.02901473573281177
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "selected_chunks": 4,
+        "score": 0.031796107573002
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "selected_chunks": 5,
+        "score": -0.009298682853533358
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "selected_chunks": 6,
+        "score": 0.025252058705415137
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.025252058705415137
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "remaining_chunks": 5,
+        "score": -0.017998127912453254
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "remaining_chunks": 4,
+        "score": 0.06373696381195348
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "remaining_chunks": 3,
+        "score": 0.04032062841418904
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "remaining_chunks": 2,
+        "score": 0.03684238623529157
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.04910486158229821
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.025252058705415137
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "remaining_chunks": 5,
+        "score": -0.017998127912453254
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "remaining_chunks": 4,
+        "score": -0.01072295974809856
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "remaining_chunks": 3,
+        "score": -0.024520559546349574
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "remaining_chunks": 2,
+        "score": -0.000178813926702881
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.009182493495230482
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.025252058705415175
+      },
+      {
+        "step": 1,
+        "score": 0.012246686947803849
+      },
+      {
+        "step": 2,
+        "score": 0.020092982387177095
+      },
+      {
+        "step": 3,
+        "score": 0.030699456005766623
+      },
+      {
+        "step": 4,
+        "score": 0.02982382603450038
+      },
+      {
+        "step": 5,
+        "score": 0.03152987132210091
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the baseline?",
+    "expanded_queries": [
+      "What is the baseline?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "dense": 0.6509,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Model variations",
+        "flags": "",
+        "preview": "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the numb"
+      },
+      {
+        "rank": 2,
+        "source": "1912.04961:paragraph:0026 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Data Processing",
+        "dense": 0.5367,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Data Processing",
+        "flags": "",
+        "preview": "We did the following basic preprocessing to our data, 1) added `none' to the beginning of the input utterance, so the network could point to it when there was no relevant information in the input, 2) filtered outliers wi"
+      },
+      {
+        "rank": 3,
+        "source": "1912.04961:paragraph:0011 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "dense": 0.5168,
+        "page": 1,
+        "type": "body_text",
+        "section": "Data",
+        "flags": "",
+        "preview": "The transcript of the conversations are annotated with summaries and Medication Regimen tags (MR tags), both grounded using the timestamps of the sentences from the transcript deemed relevant by the expert annotators, re"
+      },
+      {
+        "rank": 4,
+        "source": "1912.04961:paragraph:0012 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "dense": 0.5143,
+        "page": 1,
+        "type": "body_text",
+        "section": "Data",
+        "flags": "",
+        "preview": "The summaries (#words - $\\mu = 9.7; \\sigma = 10.1$) are medically relevant and local. The MR tags are also local and are of the form {Medication Name, Dosage, Frequency}. If dosage ($\\mu = 2.0; \\sigma = 0$) or frequency "
+      },
+      {
+        "rank": 5,
+        "source": "1912.04961:paragraph:0041 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Breakdown of Performance",
+        "dense": 0.5137,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Breakdown of Performance",
+        "flags": "",
+        "preview": "We categorize the 10% test dataset into different categories based on the complexity and type of the data and analyze the breakdown of the system's performance in Table TABREF11. We breakdown the Frequency extraction int"
+      },
+      {
+        "rank": 6,
+        "source": "1912.04961:paragraph:0030 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "dense": 0.5025,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Model variations",
+        "flags": "",
+        "preview": "We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below."
+      },
+      {
+        "rank": 7,
+        "source": "1912.04961:paragraph:0029 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Metrics",
+        "dense": 0.4947,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Metrics",
+        "flags": "",
+        "preview": "In our annotations, Frequency has conflicting tags (e.g. {`Once a day', `twice a day'} and `daily'), hence metrics like Exact Match will be erroneous. To address this issue, we use the ROUGE scores to compare different m"
+      },
+      {
+        "rank": 8,
+        "source": "1912.04961:paragraph:0016 | Medication Regimen Extraction From Clinical Conversations / Approach",
+        "dense": 0.4933,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach",
+        "flags": "",
+        "preview": "In the first approach, we frame the MR task as a QA task and generate questions using the template: \u201cWhat is the $ <$dosage/frequency$>$ for $<$Medication Name$>$\". Here, we use an abstractive QA model based on pointer-g"
+      },
+      {
+        "rank": 9,
+        "source": "1912.04961:paragraph:0028 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Metrics",
+        "dense": 0.4895,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Metrics",
+        "flags": "",
+        "preview": "For the MR extraction task, we measure the ROUGE-1 scores BIBREF14 for both the Dosage and Frequency extraction tasks. It should be noted that since Dosage is a single word token (after processing), both the reference an"
+      },
+      {
+        "rank": 10,
+        "source": "1912.04961:paragraph:0039 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Difference in networks and approaches",
+        "dense": 0.4892,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Difference in networks and approaches",
+        "flags": "",
+        "preview": "We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in"
+      },
+      {
+        "rank": 11,
+        "source": "1912.04961:paragraph:0045 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "dense": 0.4824,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "flags": "",
+        "preview": "To test the performance of our models on real-world conditions, we use commercially available ASR services (Google and IBM) to transcribe the $\\mathcal {D}_{test}$ files and measure the performance of our models without "
+      },
+      {
+        "rank": 12,
+        "source": "1912.04961:paragraph:0017 | Medication Regimen Extraction From Clinical Conversations / Approach",
+        "dense": 0.4785,
+        "page": 1,
+        "type": "body_text",
+        "section": "Approach",
+        "flags": "",
+        "preview": "In the second approach, we frame the problem as a conditioned IE task, where the information extracted depends on an entity (Medication Name). Here, we use a multi-decoder pointer-generator network augmented with coatten"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "keyword": 0.1819,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Model variations",
+        "flags": "",
+        "preview": "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the numb"
+      },
+      {
+        "rank": 2,
+        "source": "1912.04961:paragraph:0030 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "keyword": 0.1649,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Model variations",
+        "flags": "",
+        "preview": "We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below."
+      },
+      {
+        "rank": 3,
+        "source": "1912.04961:paragraph:0008 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "keyword": 0.1131,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's"
+      },
+      {
+        "rank": 4,
+        "source": "1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "keyword": 0.0558,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Extracting relevant information from clinical conversations and providing it to doctors and patients might help in addressing doctor burnout and patient forgetfulness. In this paper, we focus on extracting the Medication"
+      },
+      {
+        "rank": 5,
+        "source": "1912.04961:paragraph:0050 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "flags": "",
+        "preview": "On the Medications that were recognized correctly, the models can perform decently on ASR transcripts in comparison to human transcripts (within 5 points ROUGE-1 F1 for both tasks, refer to Table TABREF18). This shows th"
+      },
+      {
+        "rank": 6,
+        "source": "1912.04961:paragraph:0054 | Medication Regimen Extraction From Clinical Conversations / Acknowledgements",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Acknowledgements",
+        "flags": "",
+        "preview": "We thank: University of Pittsburgh Medical Center (UPMC), and Abridge AI Inc. for providing access to the de-identified data corpus; Dr. Shivdev Rao, a faculty member and practicing cardiologist in UPMC's Heart and Vascu"
+      },
+      {
+        "rank": 7,
+        "source": "1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we explore the Medication Regimen (MR) extraction task of extracting dosage and frequency for the medications mentioned in a doctor-patient conversation transcript. We explore different variations of abstr"
+      },
+      {
+        "rank": 8,
+        "source": "1912.04961:paragraph:0053 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "Using ASR transcripts in our training process to improve our performance on both the tasks and extending the medication regimen extraction network to extract other important medical information can be interesting lines o"
+      },
+      {
+        "rank": 9,
+        "source": "1912.04961:paragraph:0047 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "flags": "",
+        "preview": "In our $\\mathcal {D}_{test}$ dataset, on initial study we see a Word Error Rate of $\\sim $50% for the ASR APIs and this number is not accurate because, 1) of the de-identification, 2) disfluencies (verbatim) difference b"
+      },
+      {
+        "rank": 10,
+        "source": "1912.04961:paragraph:0046 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "flags": "",
+        "preview": "In our evaluations, we use Google Cloud Speech-to-Text (G-STT) and IBM Watson Speech to Text (IBM-STT) as these were among the top-performing ASR APIs on medical speech BIBREF19 and were readily available to us. We used "
+      },
+      {
+        "rank": 11,
+        "source": "1912.04961:paragraph:0044 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Training Dataset Size",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Training Dataset Size",
+        "flags": "",
+        "preview": "As expected, we see that the encoder pretrained models have higher performance on all the different training data sizes, i.e., they achieve higher performance on a lower number of data points, refer to Figure FIGREF12. T"
+      },
+      {
+        "rank": 12,
+        "source": "1912.04961:paragraph:0045 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "flags": "",
+        "preview": "To test the performance of our models on real-world conditions, we use commercially available ASR services (Google and IBM) to transcribe the $\\mathcal {D}_{test}$ files and measure the performance of our models without "
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6509,
+        "keyword": 0.1819,
+        "rerank": 0.96,
+        "section": "Experiments ::: Model variations",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence",
+        "preview": "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the numb"
+      },
+      {
+        "rank": 2,
+        "source": "1912.04961:paragraph:0030 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5025,
+        "keyword": 0.1649,
+        "rerank": 0.5628,
+        "section": "Experiments ::: Model variations",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below."
+      },
+      {
+        "rank": 3,
+        "source": "1912.04961:paragraph:0008 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4587,
+        "keyword": 0.1131,
+        "rerank": 0.3979,
+        "section": "Introduction",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's"
+      },
+      {
+        "rank": 4,
+        "source": "1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4512,
+        "keyword": 0.0558,
+        "rerank": 0.3897,
+        "section": "Abstract",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence",
+        "preview": "Extracting relevant information from clinical conversations and providing it to doctors and patients might help in addressing doctor burnout and patient forgetfulness. In this paper, we focus on extracting the Medication"
+      },
+      {
+        "rank": 5,
+        "source": "1912.04961:paragraph:0011 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5168,
+        "keyword": 0.0,
+        "rerank": 0.3867,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The transcript of the conversations are annotated with summaries and Medication Regimen tags (MR tags), both grounded using the timestamps of the sentences from the transcript deemed relevant by the expert annotators, re"
+      },
+      {
+        "rank": 6,
+        "source": "1912.04961:paragraph:0012 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5143,
+        "keyword": 0.0,
+        "rerank": 0.3821,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The summaries (#words - $\\mu = 9.7; \\sigma = 10.1$) are medically relevant and local. The MR tags are also local and are of the form {Medication Name, Dosage, Frequency}. If dosage ($\\mu = 2.0; \\sigma = 0$) or frequency "
+      },
+      {
+        "rank": 7,
+        "source": "1912.04961:paragraph:0041 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Breakdown of Performance",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5137,
+        "keyword": 0.0,
+        "rerank": 0.3811,
+        "section": "Results and Discussion ::: Breakdown of Performance",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We categorize the 10% test dataset into different categories based on the complexity and type of the data and analyze the breakdown of the system's performance in Table TABREF11. We breakdown the Frequency extraction int"
+      },
+      {
+        "rank": 8,
+        "source": "1912.04961:paragraph:0028 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Metrics",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4895,
+        "keyword": 0.0,
+        "rerank": 0.3372,
+        "section": "Experiments ::: Metrics",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the MR extraction task, we measure the ROUGE-1 scores BIBREF14 for both the Dosage and Frequency extraction tasks. It should be noted that since Dosage is a single word token (after processing), both the reference an"
+      },
+      {
+        "rank": 9,
+        "source": "1912.04961:paragraph:0039 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Difference in networks and approaches",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4892,
+        "keyword": 0.0,
+        "rerank": 0.3365,
+        "section": "Results and Discussion ::: Difference in networks and approaches",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in"
+      },
+      {
+        "rank": 10,
+        "source": "1912.04961:paragraph:0045 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4824,
+        "keyword": 0.0,
+        "rerank": 0.3242,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To test the performance of our models on real-world conditions, we use commercially available ASR services (Google and IBM) to transcribe the $\\mathcal {D}_{test}$ files and measure the performance of our models without "
+      },
+      {
+        "rank": 11,
+        "source": "1912.04961:paragraph:0026 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Data Processing",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5367,
+        "keyword": 0.0,
+        "rerank": 0.3227,
+        "section": "Experiments ::: Data Processing",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We did the following basic preprocessing to our data, 1) added `none' to the beginning of the input utterance, so the network could point to it when there was no relevant information in the input, 2) filtered outliers wi"
+      },
+      {
+        "rank": 12,
+        "source": "1912.04961:paragraph:0017 | Medication Regimen Extraction From Clinical Conversations / Approach",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4785,
+        "keyword": 0.0,
+        "rerank": 0.3172,
+        "section": "Approach",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the second approach, we frame the problem as a conditioned IE task, where the information extracted depends on an entity (Medication Name). Here, we use a multi-decoder pointer-generator network augmented with coatten"
+      },
+      {
+        "rank": 13,
+        "source": "1912.04961:paragraph:0021 | Medication Regimen Extraction From Clinical Conversations / Approach ::: QA PGNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4777,
+        "keyword": 0.0,
+        "rerank": 0.3157,
+        "section": "Approach ::: QA PGNet",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We first encode both the question - $H_Q = encoder(Q)$, and the input - $H_I = encoder(I)$, separately using encoders (with shared weights). Then, to condition $I$ on $Q$ (and vice versa), we use the coattention encoder "
+      },
+      {
+        "rank": 14,
+        "source": "1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4765,
+        "keyword": 0.0,
+        "rerank": 0.3135,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Out of overall 6,693 files, we set aside a random sample of 423 files (denoted as $\\mathcal {D}_{test}$) for final evaluation. The remaining 6,270 files are used for training with 80% train (5016), 10% validation (627), "
+      },
+      {
+        "rank": 15,
+        "source": "1912.04961:paragraph:0015 | Medication Regimen Extraction From Clinical Conversations / Approach",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4762,
+        "keyword": 0.0,
+        "rerank": 0.3129,
+        "section": "Approach",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We frame the Medication Regimen extraction problem as a Question Answering (QA) task, which forms the basis for our first approach. It can also be considered as a specific inference or relation extract task, since we ext"
+      },
+      {
+        "rank": 16,
+        "source": "1912.04961:paragraph:0051 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4741,
+        "keyword": 0.0,
+        "rerank": 0.3092,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "With G-STT, our best model obtained ROUGE-1 F1 of 71.75 (which equals to percentage of times dosage is correct in this case) for Dosage extraction and 40.13 for Frequency extraction tasks. To measure the percentage of ti"
+      },
+      {
+        "rank": 17,
+        "source": "1912.04961:paragraph:0027 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Data Processing",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0,
+        "rerank": 0.3087,
+        "section": "Experiments ::: Data Processing",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To improve performance, we 1) standardized all numbers (both digits and words) to words concatenated with a hyphen (e.g. 110 -$>$ one-hundred-ten), in both input and output, 2) removed units from Dosage as sometimes the "
+      },
+      {
+        "rank": 18,
+        "source": "1912.04961:paragraph:0048 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4736,
+        "keyword": 0.0,
+        "rerank": 0.3084,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "During this evaluation, we followed the same preprocessing methods we used during training. Then, we auto segment the transcript into small contiguous segments similar to the grounded sentences in the annotations for tag"
+      },
+      {
+        "rank": 19,
+        "source": "1912.04961:paragraph:0013 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4661,
+        "keyword": 0.0,
+        "rerank": 0.2947,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the MR tags, Medication Name and Dosage (usually a quantity followed by its units) can be relatively easily extracted from the transcript except for the units of the dosage which is sometimes inferred. In contrast, du"
+      },
+      {
+        "rank": 20,
+        "source": "1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4633,
+        "keyword": 0.0,
+        "rerank": 0.2897,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we explore the Medication Regimen (MR) extraction task of extracting dosage and frequency for the medications mentioned in a doctor-patient conversation transcript. We explore different variations of abstr"
+      },
+      {
+        "rank": 21,
+        "source": "1912.04961:paragraph:0050 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4587,
+        "keyword": 0.0,
+        "rerank": 0.2813,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "On the Medications that were recognized correctly, the models can perform decently on ASR transcripts in comparison to human transcripts (within 5 points ROUGE-1 F1 for both tasks, refer to Table TABREF18). This shows th"
+      },
+      {
+        "rank": 22,
+        "source": "1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4557,
+        "keyword": 0.0,
+        "rerank": 0.2759,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogue"
+      },
+      {
+        "rank": 23,
+        "source": "1912.04961:paragraph:0040 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Difference in networks and approaches",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4546,
+        "keyword": 0.0,
+        "rerank": 0.2738,
+        "section": "Results and Discussion ::: Difference in networks and approaches",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Almost all our models perform better than the naive baselines and the ones using lookup table embeddings, and our best performing models outperform them significantly. Among all the variations, the best performing models"
+      },
+      {
+        "rank": 24,
+        "source": "1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4546,
+        "keyword": 0.0,
+        "rerank": 0.2737,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these tran"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6509,
+        "keyword": 0.1819,
+        "rerank": 0.96,
+        "section": "Experiments ::: Model variations",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence",
+        "preview": "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the numb"
+      },
+      {
+        "rank": 2,
+        "source": "1912.04961:paragraph:0030 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5025,
+        "keyword": 0.1649,
+        "rerank": 0.5628,
+        "section": "Experiments ::: Model variations",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below."
+      },
+      {
+        "rank": 3,
+        "source": "1912.04961:paragraph:0008 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4587,
+        "keyword": 0.1131,
+        "rerank": 0.3979,
+        "section": "Introduction",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "On the MR extraction task, ELMo with encoder multi-decoder architecture and BERT with encoder-decoder with encoders pretrained on the summarization task perform the best. The best-performing models improve our baseline's"
+      },
+      {
+        "rank": 4,
+        "source": "1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4512,
+        "keyword": 0.0558,
+        "rerank": 0.3897,
+        "section": "Abstract",
+        "query_hits": "baseline",
+        "reasons": "body/table evidence",
+        "preview": "Extracting relevant information from clinical conversations and providing it to doctors and patients might help in addressing doctor burnout and patient forgetfulness. In this paper, we focus on extracting the Medication"
+      },
+      {
+        "rank": 5,
+        "source": "1912.04961:paragraph:0011 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5168,
+        "keyword": 0.0,
+        "rerank": 0.3867,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The transcript of the conversations are annotated with summaries and Medication Regimen tags (MR tags), both grounded using the timestamps of the sentences from the transcript deemed relevant by the expert annotators, re"
+      },
+      {
+        "rank": 6,
+        "source": "1912.04961:paragraph:0012 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5143,
+        "keyword": 0.0,
+        "rerank": 0.3821,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The summaries (#words - $\\mu = 9.7; \\sigma = 10.1$) are medically relevant and local. The MR tags are also local and are of the form {Medication Name, Dosage, Frequency}. If dosage ($\\mu = 2.0; \\sigma = 0$) or frequency "
+      },
+      {
+        "rank": 7,
+        "source": "1912.04961:paragraph:0041 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Breakdown of Performance",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5137,
+        "keyword": 0.0,
+        "rerank": 0.3811,
+        "section": "Results and Discussion ::: Breakdown of Performance",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We categorize the 10% test dataset into different categories based on the complexity and type of the data and analyze the breakdown of the system's performance in Table TABREF11. We breakdown the Frequency extraction int"
+      },
+      {
+        "rank": 8,
+        "source": "1912.04961:paragraph:0028 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Metrics",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4895,
+        "keyword": 0.0,
+        "rerank": 0.3372,
+        "section": "Experiments ::: Metrics",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For the MR extraction task, we measure the ROUGE-1 scores BIBREF14 for both the Dosage and Frequency extraction tasks. It should be noted that since Dosage is a single word token (after processing), both the reference an"
+      },
+      {
+        "rank": 9,
+        "source": "1912.04961:paragraph:0039 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Difference in networks and approaches",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4892,
+        "keyword": 0.0,
+        "rerank": 0.3365,
+        "section": "Results and Discussion ::: Difference in networks and approaches",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We also measure the performance of Multitask Question Answering Network (MQAN) BIBREF18 a QA model trained by the authors on the Decathlon multitask challenge. Since MQAN was not trained to produce the output sequence in"
+      },
+      {
+        "rank": 10,
+        "source": "1912.04961:paragraph:0045 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4824,
+        "keyword": 0.0,
+        "rerank": 0.3242,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To test the performance of our models on real-world conditions, we use commercially available ASR services (Google and IBM) to transcribe the $\\mathcal {D}_{test}$ files and measure the performance of our models without "
+      },
+      {
+        "rank": 11,
+        "source": "1912.04961:paragraph:0026 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Data Processing",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5367,
+        "keyword": 0.0,
+        "rerank": 0.3227,
+        "section": "Experiments ::: Data Processing",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We did the following basic preprocessing to our data, 1) added `none' to the beginning of the input utterance, so the network could point to it when there was no relevant information in the input, 2) filtered outliers wi"
+      },
+      {
+        "rank": 12,
+        "source": "1912.04961:paragraph:0017 | Medication Regimen Extraction From Clinical Conversations / Approach",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4785,
+        "keyword": 0.0,
+        "rerank": 0.3172,
+        "section": "Approach",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the second approach, we frame the problem as a conditioned IE task, where the information extracted depends on an entity (Medication Name). Here, we use a multi-decoder pointer-generator network augmented with coatten"
+      },
+      {
+        "rank": 13,
+        "source": "1912.04961:paragraph:0021 | Medication Regimen Extraction From Clinical Conversations / Approach ::: QA PGNet",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4777,
+        "keyword": 0.0,
+        "rerank": 0.3157,
+        "section": "Approach ::: QA PGNet",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We first encode both the question - $H_Q = encoder(Q)$, and the input - $H_I = encoder(I)$, separately using encoders (with shared weights). Then, to condition $I$ on $Q$ (and vice versa), we use the coattention encoder "
+      },
+      {
+        "rank": 14,
+        "source": "1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4765,
+        "keyword": 0.0,
+        "rerank": 0.3135,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Out of overall 6,693 files, we set aside a random sample of 423 files (denoted as $\\mathcal {D}_{test}$) for final evaluation. The remaining 6,270 files are used for training with 80% train (5016), 10% validation (627), "
+      },
+      {
+        "rank": 15,
+        "source": "1912.04961:paragraph:0015 | Medication Regimen Extraction From Clinical Conversations / Approach",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4762,
+        "keyword": 0.0,
+        "rerank": 0.3129,
+        "section": "Approach",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We frame the Medication Regimen extraction problem as a Question Answering (QA) task, which forms the basis for our first approach. It can also be considered as a specific inference or relation extract task, since we ext"
+      },
+      {
+        "rank": 16,
+        "source": "1912.04961:paragraph:0051 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4741,
+        "keyword": 0.0,
+        "rerank": 0.3092,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "With G-STT, our best model obtained ROUGE-1 F1 of 71.75 (which equals to percentage of times dosage is correct in this case) for Dosage extraction and 40.13 for Frequency extraction tasks. To measure the percentage of ti"
+      },
+      {
+        "rank": 17,
+        "source": "1912.04961:paragraph:0027 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Data Processing",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4738,
+        "keyword": 0.0,
+        "rerank": 0.3087,
+        "section": "Experiments ::: Data Processing",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To improve performance, we 1) standardized all numbers (both digits and words) to words concatenated with a hyphen (e.g. 110 -$>$ one-hundred-ten), in both input and output, 2) removed units from Dosage as sometimes the "
+      },
+      {
+        "rank": 18,
+        "source": "1912.04961:paragraph:0048 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4736,
+        "keyword": 0.0,
+        "rerank": 0.3084,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "During this evaluation, we followed the same preprocessing methods we used during training. Then, we auto segment the transcript into small contiguous segments similar to the grounded sentences in the annotations for tag"
+      },
+      {
+        "rank": 19,
+        "source": "1912.04961:paragraph:0013 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4661,
+        "keyword": 0.0,
+        "rerank": 0.2947,
+        "section": "Data",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In the MR tags, Medication Name and Dosage (usually a quantity followed by its units) can be relatively easily extracted from the transcript except for the units of the dosage which is sometimes inferred. In contrast, du"
+      },
+      {
+        "rank": 20,
+        "source": "1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4633,
+        "keyword": 0.0,
+        "rerank": 0.2897,
+        "section": "Conclusion",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we explore the Medication Regimen (MR) extraction task of extracting dosage and frequency for the medications mentioned in a doctor-patient conversation transcript. We explore different variations of abstr"
+      },
+      {
+        "rank": 21,
+        "source": "1912.04961:paragraph:0050 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Evaluating on ASR transcripts",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4587,
+        "keyword": 0.0,
+        "rerank": 0.2813,
+        "section": "Results and Discussion ::: Evaluating on ASR transcripts",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "On the Medications that were recognized correctly, the models can perform decently on ASR transcripts in comparison to human transcripts (within 5 points ROUGE-1 F1 for both tasks, refer to Table TABREF18). This shows th"
+      },
+      {
+        "rank": 22,
+        "source": "1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4557,
+        "keyword": 0.0,
+        "rerank": 0.2759,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogue"
+      },
+      {
+        "rank": 23,
+        "source": "1912.04961:paragraph:0040 | Medication Regimen Extraction From Clinical Conversations / Results and Discussion ::: Difference in networks and approaches",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4546,
+        "keyword": 0.0,
+        "rerank": 0.2738,
+        "section": "Results and Discussion ::: Difference in networks and approaches",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Almost all our models perform better than the naive baselines and the ones using lookup table embeddings, and our best performing models outperform them significantly. Among all the variations, the best performing models"
+      },
+      {
+        "rank": 24,
+        "source": "1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4546,
+        "keyword": 0.0,
+        "rerank": 0.2737,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these tran"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6509,
+        "keyword": 0.1819,
+        "rerank": 0.96,
+        "section": "Experiments ::: Model variations",
+        "query_hits": "baseline",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.24,
+        "reasons": "body/table evidence",
+        "preview": "Apart from learning-based baselines, we also create two naive baselines, one each for the Dosage and Frequency extraction tasks. For Dosage extraction, the baseline we consider is `Nearest Number', where we take the numb"
+      },
+      {
+        "rank": 2,
+        "source": "1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4765,
+        "keyword": 0.0,
+        "rerank": 0.3135,
+        "section": "Data",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3403,
+        "novelty": 0.7319,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7551,
+        "reasons": "body/table evidence",
+        "preview": "Out of overall 6,693 files, we set aside a random sample of 423 files (denoted as $\\mathcal {D}_{test}$) for final evaluation. The remaining 6,270 files are used for training with 80% train (5016), 10% validation (627), "
+      },
+      {
+        "rank": 3,
+        "source": "1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4633,
+        "keyword": 0.0,
+        "rerank": 0.2897,
+        "section": "Conclusion",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.316,
+        "novelty": 0.7193,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7325,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we explore the Medication Regimen (MR) extraction task of extracting dosage and frequency for the medications mentioned in a doctor-patient conversation transcript. We explore different variations of abstr"
+      },
+      {
+        "rank": 4,
+        "source": "1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4557,
+        "keyword": 0.0,
+        "rerank": 0.2759,
+        "section": "Introduction",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.3019,
+        "novelty": 0.7473,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.7242,
+        "reasons": "body/table evidence",
+        "preview": "Spontaneous clinical conversations happening between a doctor and a patient, have several distinguishing characteristics from a normal monologue or prepared speech: it involves multiple speakers with overlapping dialogue"
+      },
+      {
+        "rank": 5,
+        "source": "1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4512,
+        "keyword": 0.0558,
+        "rerank": 0.3897,
+        "section": "Abstract",
+        "query_hits": "baseline",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4181,
+        "novelty": 0.6392,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.689,
+        "reasons": "body/table evidence",
+        "preview": "Extracting relevant information from clinical conversations and providing it to doctors and patients might help in addressing doctor burnout and patient forgetfulness. In this paper, we focus on extracting the Medication"
+      },
+      {
+        "rank": 6,
+        "source": "1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4546,
+        "keyword": 0.0,
+        "rerank": 0.2737,
+        "section": "Introduction",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.2997,
+        "novelty": 0.44,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.6794,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we focus on local information extraction in transcribed clinical conversations. Specifically, we extract dosage (e.g. 5mg) and frequency (e.g. once a day) for the medications (e.g. aspirin) from these tran"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "baseline"
+      ],
+      "covered_query_terms": [
+        "baseline"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations": [
+          "baseline"
+        ],
+        "1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract": [
+          "baseline"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Conclusion",
+        "Data",
+        "Experiments ::: Model variations",
+        "Introduction"
+      ],
+      "chunks_by_section": {
+        "Experiments ::: Model variations": [
+          "1912.04961:paragraph:0031 | Medication Regimen Extraction From Clinical Conversations / Experiments ::: Model variations"
+        ],
+        "Data": [
+          "1912.04961:paragraph:0014 | Medication Regimen Extraction From Clinical Conversations / Data"
+        ],
+        "Conclusion": [
+          "1912.04961:paragraph:0052 | Medication Regimen Extraction From Clinical Conversations / Conclusion"
+        ],
+        "Introduction": [
+          "1912.04961:paragraph:0003 | Medication Regimen Extraction From Clinical Conversations / Introduction",
+          "1912.04961:paragraph:0004 | Medication Regimen Extraction From Clinical Conversations / Introduction"
+        ],
+        "Abstract": [
+          "1912.04961:abstract:000 | Medication Regimen Extraction From Clinical Conversations / Abstract"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "We consider QA PGNet and Multi-decoder QA PGNet with lookup table embedding as baseline models and improve on the baselines with other variations described below.",
+    "retrieved_context_answer": "The context describes several types of baselines:\n\n*   **Naive Baselines:** Two naive baselines are created for the Dosage and Frequency extraction tasks.\n    *   For **Dosage extraction**, the baseline is `Nearest Number`, which predicts the number nearest to the Medication Name, or `none` if no number is mentioned or the Medication Name is not detected.\n    *   For **Frequency extraction**, the baseline is `Random Top-3`, where a random",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.5555555555555556,
+    "retrieved_context_f1": 0.0,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

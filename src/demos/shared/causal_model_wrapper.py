@@ -1,0 +1,206 @@
+from __future__ import annotations
+
+from threading import Thread
+from typing import TYPE_CHECKING, ClassVar
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
+import numpy as np
+import torch
+from torch.nn.functional import log_softmax
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    TextIteratorStreamer,
+    pipeline,
+)
+
+from .device_utils import resolve_device
+
+
+class CausalModelWrapper:
+    """Wraps a causal language model (Llama, Mistral, Gemma, Qwen, …).
+
+    Responsibilities:
+    - Token-level log-probability scoring (score_next_token)
+    - Text generation, with optional chat-template formatting
+    - Streaming text generation
+    """
+
+    CAUSAL_MODELS: ClassVar[list[str]] = [
+        "mistral",
+        "llama",
+        "gemma",
+        "qwen",
+        "phi",
+        "tinyllama",
+        "stablelm",
+        "gpt-neo",
+        "gemma-2",
+    ]
+
+    def __init__(
+        self,
+        model_name: str,
+        device: str | int = "cuda",
+        hf_token: str | None = None,
+        temperature: float = 0.0,
+    ) -> None:
+        self.model_name = model_name
+        self.device = resolve_device(device)
+        self.is_causal = True
+        self.is_encoder = False
+        self.temperature = temperature
+
+        print(f"[CausalModelWrapper] Loading '{model_name}' on {self.device}")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            token=hf_token,
+            use_fast=True,
+        )
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+
+        dtype = torch.float16 if self.device == "cuda" else torch.float32
+
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=dtype,
+            device_map=None,
+            low_cpu_mem_usage=False,
+            token=hf_token,
+        )
+        self.model.to(self.device)
+        self.model.eval()
+
+        self.pipe = pipeline(
+            "text-generation",
+            model=self.model,
+            tokenizer=self.tokenizer,
+            device=self.device,
+        )
+
+    # =========================================================
+    # SCORING
+    # =========================================================
+
+    @torch.no_grad()
+    def score_next_token(self, prompts: list[str], target_text: str) -> np.ndarray:
+        """Sum of log-probabilities of target_text tokens given each prompt.
+
+        Args:
+            prompts: List of prompt strings.
+            target_text: Completion string to score.
+
+        Returns:
+            np.ndarray of shape (len(prompts),) with log-prob sums.
+        """
+        scores = []
+        max_length = min(getattr(self.tokenizer, "model_max_length", 2048), 2048)
+
+        for prompt in prompts:
+            inputs = self.tokenizer(
+                prompt + target_text,
+                return_tensors="pt",
+                padding=False,
+                truncation=True,
+                max_length=max_length,
+            ).to(self.device)
+
+            input_ids = inputs["input_ids"]
+            logits = self.model(input_ids=input_ids).logits
+
+            log_probs = log_softmax(logits[:, :-1, :], dim=-1)
+            target_ids = input_ids[:, 1:]
+            token_log_probs = log_probs.gather(-1, target_ids.unsqueeze(-1)).squeeze(-1)
+            scores.append(token_log_probs.sum().item())
+
+        return np.array(scores)
+
+    # =========================================================
+    # GENERATION
+    # =========================================================
+
+    def generate_text(
+        self,
+        prompt: str,
+        max_new_tokens: int = 32,
+        *,
+        chat: bool = False,
+        temperature: float | None = None,
+    ) -> str:
+        """Generate text from a prompt.
+
+        Args:
+            prompt: Input string.
+            max_new_tokens: Maximum tokens to generate.
+            chat: If True, wraps prompt in the model's chat template first.
+
+        Returns:
+            Generated text (prompt excluded).
+        """
+        if chat:
+            prompt = self.tokenizer.apply_chat_template(
+                [{"role": "user", "content": prompt}],
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+
+        temp = temperature if temperature is not None else self.temperature
+        do_sample = temp > 0.0
+
+        kwargs = {
+            "max_new_tokens": max_new_tokens,
+            "do_sample": do_sample,
+            "return_full_text": False,
+        }
+        if do_sample:
+            kwargs["temperature"] = temp
+
+        result = self.pipe(prompt, **kwargs)
+        return result[0]["generated_text"].strip()
+
+    def generate_text_stream(
+        self,
+        prompt: str,
+        max_new_tokens: int = 32,
+        *,
+        chat: bool = False,
+        temperature: float | None = None,
+    ) -> Iterator[str]:
+        """Same as generate_text but yields tokens as they are produced."""
+        if chat:
+            prompt = self.tokenizer.apply_chat_template(
+                [{"role": "user", "content": prompt}],
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+
+        inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        streamer = TextIteratorStreamer(
+            self.tokenizer,
+            skip_prompt=True,
+            skip_special_tokens=True,
+        )
+
+        temp = temperature if temperature is not None else self.temperature
+        do_sample = temp > 0.0
+
+        gen_kwargs = dict(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            streamer=streamer,
+        )
+        if do_sample:
+            gen_kwargs["temperature"] = temp
+
+        thread = Thread(
+            target=self.model.generate,
+            kwargs=gen_kwargs,
+        )
+        thread.start()
+        yield from streamer
+        thread.join()

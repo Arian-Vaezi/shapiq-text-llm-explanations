@@ -1,0 +1,1596 @@
+{
+  "case": {
+    "case_id": "qasper_37be0d479480211291e068d0d3823ad0c13321d3",
+    "paper_id": "1909.09587",
+    "paper_title": "Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model",
+    "question_id": "37be0d479480211291e068d0d3823ad0c13321d3",
+    "annotation_id": "4b08cf1a8af4de65f8b1732f377843e2b76304f6",
+    "question": "What is the model performance on target language reading comprehension?",
+    "gold_answer": "Table TABREF6; Table TABREF8",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1909.09587:paragraph:0007"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1909.09587:paragraph:0000",
+      "score": 0.9041295476176036,
+      "title": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+      "text": "Reading Comprehension (RC) has become a central task in natural language processing, with great practical value in various industries. In recent years, many large-scale RC datasets in English BIBREF0, BIBREF1, BIBREF2, BIBREF3, BIBREF4, BIBREF5, BIBREF6 have nourished the development of numerous powerful and diverse RC models BIBREF7, BIBREF8, BIBREF9, BIBREF10, BIBREF11. The state-of-the-art model BIBREF12 on SQuAD, one of the most widely used RC benchmarks, even surpasses human-level performance. Nonetheless, RC on languages other than English has been limited due to the absence of sufficient training data. Although some efforts have been made to create RC datasets for Chinese BIBREF13, BIBREF14 and Korean BIBREF15, it is not feasible to collect RC datasets for every language since annotation efforts to collect a new RC dataset are often far from trivial. Therefore, the setup of transfer learning, especially zero-shot learning, is of extraordinary importance."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1909.09587:abstract:000",
+      "score": 1.000076052210927,
+      "title": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+      "text": "Because it is not feasible to collect training data for every language, there is a growing interest in cross-lingual transfer learning. In this paper, we systematically explore zero-shot cross-lingual transfer learning on reading comprehension tasks with a language representation model pre-trained on multi-lingual corpus. The experimental results show that with pre-trained language representation zero-shot learning is feasible, and translating the source data into the target language is not necessary and even degrades the performance. We further explore what does the model learn in zero-shot setting."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1909.09587:paragraph:0010",
+      "score": 0.7953913588970525,
+      "title": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+      "text": "Here we discuss the case that the training data are translated. We consider each result is affected by at least three factors: (1) training corpus, (2) data size, (3) whether the source corpus is translated into the target language. To study the effect of data-size, we conducted an extra experiment where we down-sampled the size of English data to be the same as Chinese corpus, and used the down-sampled corpus to train. Then We carried out one-way ANOVA test and found out the significance of the three factors are ranked as below: (1) > (2) >> (3). The analysis supports that the characteristics of training data is more important than translated into target language or not. Therefore, although translation degrades the performance, whether translating the corpus into the target language is not critical."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1909.09587:paragraph:0008",
+      "score": 0.686672583797009,
+      "title": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+      "text": "In the lower half of Table TABREF8, the results are obtained by the translated training data. First, we found that when testing on English and Chinese, translation always degrades the performance (En v.s. En-XX, Zh v.s. Zh-XX). Even though we translate the training data into the same language as testing data, using the untranslated data still yield better results. For example, when testing on English, the F1 score of the model training on Chinese (Zh) is 53.8, while the F1 score is only 44.1 for the model training on Zh-En. This shows that translation degrades the quality of data. There are some exceptions when testing on Korean. Translating the English training data into Chinese, Japanese and Korean still improve the performance on Korean. We also found that when translated into the same language, the English training data is always better than the Chinese data (En-XX v.s. Zh-XX), with only one exception (En-Fr v.s. Zh-Fr when testing on KorQuAD). This may be because we have less Chinese training data than English. These results show that the quality and the size of dataset are much more important than whether the training and testing are in the same language or not."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1909.09587:paragraph:0002",
+      "score": 0.6743963972086954,
+      "title": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+      "text": "In this paper, we leverage pre-trained multilingual language representation, for example, BERT learned from multilingual un-annotated sentences (multi-BERT), in cross-lingual zero-shot RC. We fine-tune multi-BERT on the training set in source language, then test the model in target language, with a number of combinations of source-target language pair to explore the cross-lingual ability of multi-BERT. Surprisingly, we find that the models have the ability to transfer between low lexical similarity language pair, such as English and Chinese. Recent studies BIBREF17, BIBREF12, BIBREF18 show that cross-lingual language models have the ability to enable preliminary zero-shot transfer on simple natural language understanding tasks, but zero-shot transfer of RC has not been studied. To our knowledge, this is the first work systematically exploring the cross-lingual transferring ability of multi-BERT on RC tasks."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1909.09587:paragraph:0009",
+      "score": 0.805890374592673,
+      "title": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+      "text": "Table TABREF8 shows that fine-tuning on un-translated target language data achieves much better performance than data translated into the target language. Because the above statement is true across all the languages, it is a strong evidence that translation degrades the performance.We notice that the translated corpus and untranslated corpus are not the same. This may be another factor that influences the results. Conducting an experiment between un-translated and back-translated data may deal with this problem."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+      "attribution": 0.10170219668412324
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+      "attribution": 0.08765052484407986
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+      "attribution": 0.036021635241798036
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+      "attribution": -0.01733541031311721
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+      "attribution": 0.011837218938536854
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+      "attribution": -0.00706434206778472
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+      "attribution": 0.11301803974780968
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+      "attribution": 0.013714971842550567
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+      "attribution": 0.011488984868019157
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+      "attribution": 0.009406568531314333
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+      "attribution": -0.00107401698800837
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+      "attribution": -0.00048788016211955394
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:abstract:000",
+      "interaction": -0.0128563299726838
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0010",
+      "interaction": 0.0013028512071492076
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0008",
+      "interaction": -0.029518729416090565
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": -0.02845715604457355
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": -0.023955433950282597
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0010",
+      "interaction": -0.0013730172456566342
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0008",
+      "interaction": -0.004252361326668945
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": -0.0001368488032731908
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": 0.000788770099803692
+    },
+    {
+      "left": "1909.09587:paragraph:0010",
+      "right": "1909.09587:paragraph:0008",
+      "interaction": 0.0076525608981655785
+    },
+    {
+      "left": "1909.09587:paragraph:0010",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": 0.0036235348768445916
+    },
+    {
+      "left": "1909.09587:paragraph:0010",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": 0.01044854703123958
+    },
+    {
+      "left": "1909.09587:paragraph:0008",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": -0.008413631794206688
+    },
+    {
+      "left": "1909.09587:paragraph:0008",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": -0.14316114694225432
+    },
+    {
+      "left": "1909.09587:paragraph:0002",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": -0.002649325880444209
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:abstract:000",
+      "interaction": 0.003882278296336916
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0010",
+      "interaction": -0.0008439234762729817
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0008",
+      "interaction": 0.003893855513908519
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": 0.008626852395273015
+    },
+    {
+      "left": "1909.09587:paragraph:0000",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": -0.00036973363755164404
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0010",
+      "interaction": 0.003941795353406767
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0008",
+      "interaction": 0.012638763076674041
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": 0.0030159527328267634
+    },
+    {
+      "left": "1909.09587:abstract:000",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": 0.004830321092702907
+    },
+    {
+      "left": "1909.09587:paragraph:0010",
+      "right": "1909.09587:paragraph:0008",
+      "interaction": -0.0077422458902687225
+    },
+    {
+      "left": "1909.09587:paragraph:0010",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": 0.002368222172060365
+    },
+    {
+      "left": "1909.09587:paragraph:0010",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": -9.057414330529443e-05
+    },
+    {
+      "left": "1909.09587:paragraph:0008",
+      "right": "1909.09587:paragraph:0002",
+      "interaction": 0.00015310002532087
+    },
+    {
+      "left": "1909.09587:paragraph:0008",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": -0.020976116011370873
+    },
+    {
+      "left": "1909.09587:paragraph:0002",
+      "right": "1909.09587:paragraph:0009",
+      "interaction": 0.0027336781222482166
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2128118224448533
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "remaining_chunks": 5,
+        "score": 0.1772268799799407
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "remaining_chunks": 4,
+        "score": 0.06970534392116978
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.011317942081348176
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "remaining_chunks": 2,
+        "score": -0.002941276477962107
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "remaining_chunks": 1,
+        "score": -0.014879540661155988
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "selected_chunks": 1,
+        "score": 0.1941135331389353
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "selected_chunks": 2,
+        "score": 0.21528675261677288
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "selected_chunks": 3,
+        "score": 0.2288536950129093
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "selected_chunks": 4,
+        "score": 0.18676856711543355
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "selected_chunks": 5,
+        "score": 0.20603688750160531
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "selected_chunks": 6,
+        "score": 0.2128118224448533
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2128118224448533
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "remaining_chunks": 5,
+        "score": 0.22183962955416603
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.21684855824931926
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "remaining_chunks": 3,
+        "score": 0.18515556768457575
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "remaining_chunks": 2,
+        "score": 0.19640701234121338
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "remaining_chunks": 1,
+        "score": 0.05761203274789173
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.2128118224448533
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "remaining_chunks": 5,
+        "score": 0.1772268799799407
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "remaining_chunks": 4,
+        "score": 0.06970534392116978
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.04297412968774228
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "remaining_chunks": 2,
+        "score": -0.0438831935173809
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "remaining_chunks": 1,
+        "score": 0.008801981365266776
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.21281182244485344
+      },
+      {
+        "step": 1,
+        "score": 0.19599673112828506
+      },
+      {
+        "step": 2,
+        "score": 0.18435539551022798
+      },
+      {
+        "step": 3,
+        "score": 0.1684196861293416
+      },
+      {
+        "step": 4,
+        "score": 0.15607257218897738
+      },
+      {
+        "step": 5,
+        "score": 0.09403871209221934
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the model performance on target language reading comprehension?",
+    "expanded_queries": [
+      "What is the model performance on target language reading comprehension?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "dense": 0.7165,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Reading Comprehension (RC) has become a central task in natural language processing, with great practical value in various industries. In recent years, many large-scale RC datasets in English BIBREF0, BIBREF1, BIBREF2, B"
+      },
+      {
+        "rank": 2,
+        "source": "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "dense": 0.6939,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Because it is not feasible to collect training data for every language, there is a growing interest in cross-lingual transfer learning. In this paper, we systematically explore zero-shot cross-lingual transfer learning o"
+      },
+      {
+        "rank": 3,
+        "source": "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "dense": 0.6757,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "flags": "",
+        "preview": "In the lower half of Table TABREF8, the results are obtained by the translated training data. First, we found that when testing on English and Chinese, translation always degrades the performance (En v.s. En-XX, Zh v.s. "
+      },
+      {
+        "rank": 4,
+        "source": "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "dense": 0.6737,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "flags": "",
+        "preview": "Here we discuss the case that the training data are translated. We consider each result is affected by at least three factors: (1) training corpus, (2) data size, (3) whether the source corpus is translated into the targ"
+      },
+      {
+        "rank": 5,
+        "source": "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "dense": 0.6729,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "flags": "",
+        "preview": "Table TABREF8 shows that fine-tuning on un-translated target language data achieves much better performance than data translated into the target language. Because the above statement is true across all the languages, it "
+      },
+      {
+        "rank": 6,
+        "source": "1909.09587:paragraph:0007 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "dense": 0.6628,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "flags": "",
+        "preview": "Table TABREF6 shows the result of different models trained on either Chinese or English and tested on Chinese. In row (f), multi-BERT is fine-tuned on English but tested on Chinese, which achieves competitive performance"
+      },
+      {
+        "rank": 7,
+        "source": "1909.09587:paragraph:0015 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "dense": 0.6534,
+        "page": 1,
+        "type": "body_text",
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "flags": "",
+        "preview": "Table TABREF14 shows that on all the code-switching datasets, the EM/F1 score drops, indicating that the semantics of representations are not totally disentangled from language. However, the examples of the answers of th"
+      },
+      {
+        "rank": 8,
+        "source": "1909.09587:paragraph:0012 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "dense": 0.6396,
+        "page": 1,
+        "type": "body_text",
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "flags": "",
+        "preview": "To verify whether multi-BERT largely counts on a language independent strategy, we test the model on the languages unseen during pre-training. To make sure the languages have never been seen before, we artificially make "
+      },
+      {
+        "rank": 9,
+        "source": "1909.09587:paragraph:0011 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "dense": 0.6385,
+        "page": 1,
+        "type": "body_text",
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "flags": "",
+        "preview": "It has been shown that extractive QA tasks like SQuAD may be tackled by some language independent strategies, for example, matching words in questions and context BIBREF20. Is zero-shot learning feasible because the mode"
+      },
+      {
+        "rank": 10,
+        "source": "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "dense": 0.6353,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In this paper, we leverage pre-trained multilingual language representation, for example, BERT learned from multilingual un-annotated sentences (multi-BERT), in cross-lingual zero-shot RC. We fine-tune multi-BERT on the "
+      },
+      {
+        "rank": 11,
+        "source": "1909.09587:paragraph:0018 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "dense": 0.6266,
+        "page": 1,
+        "type": "body_text",
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "flags": "",
+        "preview": "Table TABREF23 shows that when we change the English typology order to SOV or OSV order, the performance on Korean is improved and worsen on English and Chinese, but very slightly. The results show that the typology mani"
+      },
+      {
+        "rank": 12,
+        "source": "1909.09587:paragraph:0021 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "dense": 0.6158,
+        "page": 1,
+        "type": "body_text",
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "flags": "",
+        "preview": "As all translated versions of SQuAD/DRCD are parallel to each other. Given a source-target language pair, we calculate cosine similarity of the mean pooling of tokens representation within corresponding answer-span as a "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "keyword": 0.2114,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Because it is not feasible to collect training data for every language, there is a growing interest in cross-lingual transfer learning. In this paper, we systematically explore zero-shot cross-lingual transfer learning o"
+      },
+      {
+        "rank": 2,
+        "source": "1909.09587:paragraph:0024 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering",
+        "keyword": 0.1954,
+        "page": 1,
+        "type": "body_text",
+        "section": "Supplemental Material ::: Improve Transfering",
+        "flags": "",
+        "preview": "To take a step further, while transfering model from source dataset to target dataset, we align representations in two proposed way, to improve performance on target dataset."
+      },
+      {
+        "rank": 3,
+        "source": "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "keyword": 0.1283,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "flags": "",
+        "preview": "Table TABREF8 shows that fine-tuning on un-translated target language data achieves much better performance than data translated into the target language. Because the above statement is true across all the languages, it "
+      },
+      {
+        "rank": 4,
+        "source": "1909.09587:paragraph:0001 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "keyword": 0.121,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Existing methods BIBREF16 of cross-lingual transfer learning on RC datasets often count on machine translation (MT) to translate data from source language into target language, or vice versa. These methods may not requir"
+      },
+      {
+        "rank": 5,
+        "source": "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "keyword": 0.1196,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "flags": "",
+        "preview": "Here we discuss the case that the training data are translated. We consider each result is affected by at least three factors: (1) training corpus, (2) data size, (3) whether the source corpus is translated into the targ"
+      },
+      {
+        "rank": 6,
+        "source": "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "keyword": 0.1086,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Reading Comprehension (RC) has become a central task in natural language processing, with great practical value in various industries. In recent years, many large-scale RC datasets in English BIBREF0, BIBREF1, BIBREF2, B"
+      },
+      {
+        "rank": 7,
+        "source": "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "keyword": 0.094,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "In this paper, we leverage pre-trained multilingual language representation, for example, BERT learned from multilingual un-annotated sentences (multi-BERT), in cross-lingual zero-shot RC. We fine-tune multi-BERT on the "
+      },
+      {
+        "rank": 8,
+        "source": "1909.09587:paragraph:0026 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering ::: Adversarial Method",
+        "keyword": 0.0683,
+        "page": 1,
+        "type": "body_text",
+        "section": "Supplemental Material ::: Improve Transfering ::: Adversarial Method",
+        "flags": "",
+        "preview": "In Adversarial Method, we add an additional transform layer to transform representations and a discrimination layer to discriminate between transformed representations from source language (training set) and target langu"
+      },
+      {
+        "rank": 9,
+        "source": "1909.09587:paragraph:0021 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "keyword": 0.0564,
+        "page": 1,
+        "type": "body_text",
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "flags": "",
+        "preview": "As all translated versions of SQuAD/DRCD are parallel to each other. Given a source-target language pair, we calculate cosine similarity of the mean pooling of tokens representation within corresponding answer-span as a "
+      },
+      {
+        "rank": 10,
+        "source": "1909.09587:paragraph:0012 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "keyword": 0.0498,
+        "page": 1,
+        "type": "body_text",
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "flags": "",
+        "preview": "To verify whether multi-BERT largely counts on a language independent strategy, we test the model on the languages unseen during pre-training. To make sure the languages have never been seen before, we artificially make "
+      },
+      {
+        "rank": 11,
+        "source": "1909.09587:paragraph:0011 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "keyword": 0.0443,
+        "page": 1,
+        "type": "body_text",
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "flags": "",
+        "preview": "It has been shown that extractive QA tasks like SQuAD may be tackled by some language independent strategies, for example, matching words in questions and context BIBREF20. Is zero-shot learning feasible because the mode"
+      },
+      {
+        "rank": 12,
+        "source": "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "keyword": 0.0398,
+        "page": 1,
+        "type": "body_text",
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "flags": "",
+        "preview": "In the lower half of Table TABREF8, the results are obtained by the translated training data. First, we found that when testing on English and Chinese, translation always degrades the performance (En v.s. En-XX, Zh v.s. "
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6939,
+        "keyword": 0.2114,
+        "rerank": 1.0001,
+        "section": "Abstract",
+        "query_hits": "comprehension, language, model, performance, reading, target",
+        "reasons": "body/table evidence",
+        "preview": "Because it is not feasible to collect training data for every language, there is a growing interest in cross-lingual transfer learning. In this paper, we systematically explore zero-shot cross-lingual transfer learning o"
+      },
+      {
+        "rank": 2,
+        "source": "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7165,
+        "keyword": 0.1086,
+        "rerank": 0.9041,
+        "section": "Introduction",
+        "query_hits": "comprehension, language, model, performance, reading",
+        "reasons": "body/table evidence",
+        "preview": "Reading Comprehension (RC) has become a central task in natural language processing, with great practical value in various industries. In recent years, many large-scale RC datasets in English BIBREF0, BIBREF1, BIBREF2, B"
+      },
+      {
+        "rank": 3,
+        "source": "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6729,
+        "keyword": 0.1283,
+        "rerank": 0.8059,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "query_hits": "language, performance, target",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF8 shows that fine-tuning on un-translated target language data achieves much better performance than data translated into the target language. Because the above statement is true across all the languages, it "
+      },
+      {
+        "rank": 4,
+        "source": "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6737,
+        "keyword": 0.1196,
+        "rerank": 0.7954,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "query_hits": "language, performance, target",
+        "reasons": "body/table evidence",
+        "preview": "Here we discuss the case that the training data are translated. We consider each result is affected by at least three factors: (1) training corpus, (2) data size, (3) whether the source corpus is translated into the targ"
+      },
+      {
+        "rank": 5,
+        "source": "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6757,
+        "keyword": 0.0398,
+        "rerank": 0.6867,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "query_hits": "language, model, performance",
+        "reasons": "body/table evidence",
+        "preview": "In the lower half of Table TABREF8, the results are obtained by the translated training data. First, we found that when testing on English and Chinese, translation always degrades the performance (En v.s. En-XX, Zh v.s. "
+      },
+      {
+        "rank": 6,
+        "source": "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6353,
+        "keyword": 0.094,
+        "rerank": 0.6744,
+        "section": "Introduction",
+        "query_hits": "language, model, target",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we leverage pre-trained multilingual language representation, for example, BERT learned from multilingual un-annotated sentences (multi-BERT), in cross-lingual zero-shot RC. We fine-tune multi-BERT on the "
+      },
+      {
+        "rank": 7,
+        "source": "1909.09587:paragraph:0001 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6086,
+        "keyword": 0.121,
+        "rerank": 0.6537,
+        "section": "Introduction",
+        "query_hits": "language, model, target",
+        "reasons": "body/table evidence",
+        "preview": "Existing methods BIBREF16 of cross-lingual transfer learning on RC datasets often count on machine translation (MT) to translate data from source language into target language, or vice versa. These methods may not requir"
+      },
+      {
+        "rank": 8,
+        "source": "1909.09587:paragraph:0007 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6628,
+        "keyword": 0.0268,
+        "rerank": 0.6398,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "query_hits": "language, model, performance",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF6 shows the result of different models trained on either Chinese or English and tested on Chinese. In row (f), multi-BERT is fine-tuned on English but tested on Chinese, which achieves competitive performance"
+      },
+      {
+        "rank": 9,
+        "source": "1909.09587:paragraph:0012 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6396,
+        "keyword": 0.0498,
+        "rerank": 0.621,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "query_hits": "language, model, performance",
+        "reasons": "body/table evidence",
+        "preview": "To verify whether multi-BERT largely counts on a language independent strategy, we test the model on the languages unseen during pre-training. To make sure the languages have never been seen before, we artificially make "
+      },
+      {
+        "rank": 10,
+        "source": "1909.09587:paragraph:0024 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5552,
+        "keyword": 0.1954,
+        "rerank": 0.5416,
+        "section": "Supplemental Material ::: Improve Transfering",
+        "query_hits": "model, performance, target",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To take a step further, while transfering model from source dataset to target dataset, we align representations in two proposed way, to improve performance on target dataset."
+      },
+      {
+        "rank": 11,
+        "source": "1909.09587:paragraph:0015 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6534,
+        "keyword": 0.0363,
+        "rerank": 0.5022,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "query_hits": "language, model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF14 shows that on all the code-switching datasets, the EM/F1 score drops, indicating that the semantics of representations are not totally disentangled from language. However, the examples of the answers of th"
+      },
+      {
+        "rank": 12,
+        "source": "1909.09587:paragraph:0018 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6266,
+        "keyword": 0.0172,
+        "rerank": 0.4862,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "query_hits": "performance",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF23 shows that when we change the English typology order to SOV or OSV order, the performance on Korean is improved and worsen on English and Chinese, but very slightly. The results show that the typology mani"
+      },
+      {
+        "rank": 13,
+        "source": "1909.09587:paragraph:0011 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6385,
+        "keyword": 0.0443,
+        "rerank": 0.4808,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "query_hits": "language, model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "It has been shown that extractive QA tasks like SQuAD may be tackled by some language independent strategies, for example, matching words in questions and context BIBREF20. Is zero-shot learning feasible because the mode"
+      },
+      {
+        "rank": 14,
+        "source": "1909.09587:paragraph:0019 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5965,
+        "keyword": 0.0267,
+        "rerank": 0.4334,
+        "section": "Conclusion",
+        "query_hits": "performance",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we systematically explore zero-shot cross-lingual transfer learning on RC with multi-BERT. The experimental results on English, Chinese and Korean corpora show that even when the languages for training and"
+      },
+      {
+        "rank": 15,
+        "source": "1909.09587:paragraph:0014 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5838,
+        "keyword": 0.0227,
+        "rerank": 0.4297,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "query_hits": "language, model",
+        "reasons": "body/table evidence",
+        "preview": "We observe linguistic-agnostic representations in the last subsection. If tokens are represented in a language-agnostic way, the model may be able to handle code-switching data. Because there is no code-switching data fo"
+      },
+      {
+        "rank": 16,
+        "source": "1909.09587:paragraph:0021 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6158,
+        "keyword": 0.0564,
+        "rerank": 0.418,
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "query_hits": "language",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "As all translated versions of SQuAD/DRCD are parallel to each other. Given a source-target language pair, we calculate cosine similarity of the mean pooling of tokens representation within corresponding answer-span as a "
+      },
+      {
+        "rank": 17,
+        "source": "1909.09587:paragraph:0016 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5993,
+        "keyword": 0.0081,
+        "rerank": 0.413,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "There are various types of typology in languages. For example, in English the typology order is subject-verb-object (SVO) order, but in Japanese and Korean the order is subject-object-verb (SOV). We construct a typology-"
+      },
+      {
+        "rank": 18,
+        "source": "1909.09587:paragraph:0025 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering ::: Linear Mapping Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5734,
+        "keyword": 0.0185,
+        "rerank": 0.3708,
+        "section": "Supplemental Material ::: Improve Transfering ::: Linear Mapping Method",
+        "query_hits": "target",
+        "reasons": "body/table evidence",
+        "preview": "Algorithms proposed in BIBREF23, BIBREF22, BIBREF26 to unsupervisedly learn linear mapping between two sets of embeddings are used here to align representations of source (training data) to those of target. We obtain the"
+      },
+      {
+        "rank": 19,
+        "source": "1909.09587:paragraph:0022 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT ::: SVCCA",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5715,
+        "keyword": 0.0087,
+        "rerank": 0.3525,
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT ::: SVCCA",
+        "query_hits": "language",
+        "reasons": "body/table evidence",
+        "preview": "Singular Vector Canonical Correlation Analysis (SVCCA) is a general method to compare the correlation of two sets of vector representations. SVCCA has been proposed to compare learned representations across language mode"
+      },
+      {
+        "rank": 20,
+        "source": "1909.09587:paragraph:0026 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering ::: Adversarial Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.0683,
+        "rerank": 0.3469,
+        "section": "Supplemental Material ::: Improve Transfering ::: Adversarial Method",
+        "query_hits": "language, target",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In Adversarial Method, we add an additional transform layer to transform representations and a discrimination layer to discriminate between transformed representations from source language (training set) and target langu"
+      },
+      {
+        "rank": 21,
+        "source": "1909.09587:paragraph:0003 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6071,
+        "keyword": 0.0105,
+        "rerank": 0.3337,
+        "section": "Zero-shot Transfer with Multi-BERT",
+        "query_hits": "language",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Multi-BERT has showcased its ability to enable cross-lingual zero-shot learning on the natural language understanding tasks including XNLI BIBREF19, NER, POS, Dependency Parsing, and so on. We now seek to know if a pre-t"
+      },
+      {
+        "rank": 22,
+        "source": "1909.09587:paragraph:0013 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Embedding in Multi-BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.58,
+        "keyword": 0.0,
+        "rerank": 0.3291,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Embedding in Multi-BERT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "PCA projection of hidden representations of the last layer of multi-BERT before and after fine-tuning are shown in Fig. FIGREF15. The red points represent Chinese tokens, and the blue points are for English. The results "
+      },
+      {
+        "rank": 23,
+        "source": "1909.09587:paragraph:0020 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5797,
+        "keyword": 0.0,
+        "rerank": 0.3284,
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The architecture of multi-BERT is a Transformer encoder BIBREF25. While fine-tuning on SQuAD-like dataset, the bottom layers of multi-BERT are initialized from Google-pretrained parameters, with an added output layer ini"
+      },
+      {
+        "rank": 24,
+        "source": "1909.09587:paragraph:0006 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Setup and Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5579,
+        "keyword": 0.0111,
+        "rerank": 0.3259,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Setup and Data",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "The pre-trained multi-BERT is the official released one. This multi-lingual version of BERT were pre-trained on corpus in 104 languages. Data in different languages were simply mixed in batches while pre-training, withou"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6939,
+        "keyword": 0.2114,
+        "rerank": 1.0001,
+        "section": "Abstract",
+        "query_hits": "comprehension, language, model, performance, reading, target",
+        "reasons": "body/table evidence",
+        "preview": "Because it is not feasible to collect training data for every language, there is a growing interest in cross-lingual transfer learning. In this paper, we systematically explore zero-shot cross-lingual transfer learning o"
+      },
+      {
+        "rank": 2,
+        "source": "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7165,
+        "keyword": 0.1086,
+        "rerank": 0.9041,
+        "section": "Introduction",
+        "query_hits": "comprehension, language, model, performance, reading",
+        "reasons": "body/table evidence",
+        "preview": "Reading Comprehension (RC) has become a central task in natural language processing, with great practical value in various industries. In recent years, many large-scale RC datasets in English BIBREF0, BIBREF1, BIBREF2, B"
+      },
+      {
+        "rank": 3,
+        "source": "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6729,
+        "keyword": 0.1283,
+        "rerank": 0.8059,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "query_hits": "language, performance, target",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF8 shows that fine-tuning on un-translated target language data achieves much better performance than data translated into the target language. Because the above statement is true across all the languages, it "
+      },
+      {
+        "rank": 4,
+        "source": "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6737,
+        "keyword": 0.1196,
+        "rerank": 0.7954,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "query_hits": "language, performance, target",
+        "reasons": "body/table evidence",
+        "preview": "Here we discuss the case that the training data are translated. We consider each result is affected by at least three factors: (1) training corpus, (2) data size, (3) whether the source corpus is translated into the targ"
+      },
+      {
+        "rank": 5,
+        "source": "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6757,
+        "keyword": 0.0398,
+        "rerank": 0.6867,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "query_hits": "language, model, performance",
+        "reasons": "body/table evidence",
+        "preview": "In the lower half of Table TABREF8, the results are obtained by the translated training data. First, we found that when testing on English and Chinese, translation always degrades the performance (En v.s. En-XX, Zh v.s. "
+      },
+      {
+        "rank": 6,
+        "source": "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6353,
+        "keyword": 0.094,
+        "rerank": 0.6744,
+        "section": "Introduction",
+        "query_hits": "language, model, target",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we leverage pre-trained multilingual language representation, for example, BERT learned from multilingual un-annotated sentences (multi-BERT), in cross-lingual zero-shot RC. We fine-tune multi-BERT on the "
+      },
+      {
+        "rank": 7,
+        "source": "1909.09587:paragraph:0001 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6086,
+        "keyword": 0.121,
+        "rerank": 0.6537,
+        "section": "Introduction",
+        "query_hits": "language, model, target",
+        "reasons": "body/table evidence",
+        "preview": "Existing methods BIBREF16 of cross-lingual transfer learning on RC datasets often count on machine translation (MT) to translate data from source language into target language, or vice versa. These methods may not requir"
+      },
+      {
+        "rank": 8,
+        "source": "1909.09587:paragraph:0007 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6628,
+        "keyword": 0.0268,
+        "rerank": 0.6398,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "query_hits": "language, model, performance",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF6 shows the result of different models trained on either Chinese or English and tested on Chinese. In row (f), multi-BERT is fine-tuned on English but tested on Chinese, which achieves competitive performance"
+      },
+      {
+        "rank": 9,
+        "source": "1909.09587:paragraph:0012 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6396,
+        "keyword": 0.0498,
+        "rerank": 0.621,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "query_hits": "language, model, performance",
+        "reasons": "body/table evidence",
+        "preview": "To verify whether multi-BERT largely counts on a language independent strategy, we test the model on the languages unseen during pre-training. To make sure the languages have never been seen before, we artificially make "
+      },
+      {
+        "rank": 10,
+        "source": "1909.09587:paragraph:0024 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5552,
+        "keyword": 0.1954,
+        "rerank": 0.5416,
+        "section": "Supplemental Material ::: Improve Transfering",
+        "query_hits": "model, performance, target",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To take a step further, while transfering model from source dataset to target dataset, we align representations in two proposed way, to improve performance on target dataset."
+      },
+      {
+        "rank": 11,
+        "source": "1909.09587:paragraph:0015 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6534,
+        "keyword": 0.0363,
+        "rerank": 0.5022,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "query_hits": "language, model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Table TABREF14 shows that on all the code-switching datasets, the EM/F1 score drops, indicating that the semantics of representations are not totally disentangled from language. However, the examples of the answers of th"
+      },
+      {
+        "rank": 12,
+        "source": "1909.09587:paragraph:0018 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6266,
+        "keyword": 0.0172,
+        "rerank": 0.4862,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "query_hits": "performance",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF23 shows that when we change the English typology order to SOV or OSV order, the performance on Korean is improved and worsen on English and Chinese, but very slightly. The results show that the typology mani"
+      },
+      {
+        "rank": 13,
+        "source": "1909.09587:paragraph:0011 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6385,
+        "keyword": 0.0443,
+        "rerank": 0.4808,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Unseen Language Dataset",
+        "query_hits": "language, model",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "It has been shown that extractive QA tasks like SQuAD may be tackled by some language independent strategies, for example, matching words in questions and context BIBREF20. Is zero-shot learning feasible because the mode"
+      },
+      {
+        "rank": 14,
+        "source": "1909.09587:paragraph:0019 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5965,
+        "keyword": 0.0267,
+        "rerank": 0.4334,
+        "section": "Conclusion",
+        "query_hits": "performance",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we systematically explore zero-shot cross-lingual transfer learning on RC with multi-BERT. The experimental results on English, Chinese and Korean corpora show that even when the languages for training and"
+      },
+      {
+        "rank": 15,
+        "source": "1909.09587:paragraph:0014 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5838,
+        "keyword": 0.0227,
+        "rerank": 0.4297,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Code-switching Dataset",
+        "query_hits": "language, model",
+        "reasons": "body/table evidence",
+        "preview": "We observe linguistic-agnostic representations in the last subsection. If tokens are represented in a language-agnostic way, the model may be able to handle code-switching data. Because there is no code-switching data fo"
+      },
+      {
+        "rank": 16,
+        "source": "1909.09587:paragraph:0021 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6158,
+        "keyword": 0.0564,
+        "rerank": 0.418,
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT ::: Cosine Similarity",
+        "query_hits": "language",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "As all translated versions of SQuAD/DRCD are parallel to each other. Given a source-target language pair, we calculate cosine similarity of the mean pooling of tokens representation within corresponding answer-span as a "
+      },
+      {
+        "rank": 17,
+        "source": "1909.09587:paragraph:0016 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5993,
+        "keyword": 0.0081,
+        "rerank": 0.413,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Typology-manipulated Dataset",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "There are various types of typology in languages. For example, in English the typology order is subject-verb-object (SVO) order, but in Japanese and Korean the order is subject-object-verb (SOV). We construct a typology-"
+      },
+      {
+        "rank": 18,
+        "source": "1909.09587:paragraph:0025 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering ::: Linear Mapping Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5734,
+        "keyword": 0.0185,
+        "rerank": 0.3708,
+        "section": "Supplemental Material ::: Improve Transfering ::: Linear Mapping Method",
+        "query_hits": "target",
+        "reasons": "body/table evidence",
+        "preview": "Algorithms proposed in BIBREF23, BIBREF22, BIBREF26 to unsupervisedly learn linear mapping between two sets of embeddings are used here to align representations of source (training data) to those of target. We obtain the"
+      },
+      {
+        "rank": 19,
+        "source": "1909.09587:paragraph:0022 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT ::: SVCCA",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5715,
+        "keyword": 0.0087,
+        "rerank": 0.3525,
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT ::: SVCCA",
+        "query_hits": "language",
+        "reasons": "body/table evidence",
+        "preview": "Singular Vector Canonical Correlation Analysis (SVCCA) is a general method to compare the correlation of two sets of vector representations. SVCCA has been proposed to compare learned representations across language mode"
+      },
+      {
+        "rank": 20,
+        "source": "1909.09587:paragraph:0026 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Improve Transfering ::: Adversarial Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5623,
+        "keyword": 0.0683,
+        "rerank": 0.3469,
+        "section": "Supplemental Material ::: Improve Transfering ::: Adversarial Method",
+        "query_hits": "language, target",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In Adversarial Method, we add an additional transform layer to transform representations and a discrimination layer to discriminate between transformed representations from source language (training set) and target langu"
+      },
+      {
+        "rank": 21,
+        "source": "1909.09587:paragraph:0003 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6071,
+        "keyword": 0.0105,
+        "rerank": 0.3337,
+        "section": "Zero-shot Transfer with Multi-BERT",
+        "query_hits": "language",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Multi-BERT has showcased its ability to enable cross-lingual zero-shot learning on the natural language understanding tasks including XNLI BIBREF19, NER, POS, Dependency Parsing, and so on. We now seek to know if a pre-t"
+      },
+      {
+        "rank": 22,
+        "source": "1909.09587:paragraph:0013 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / What Does Zero-shot Transfer Model Learn? ::: Embedding in Multi-BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.58,
+        "keyword": 0.0,
+        "rerank": 0.3291,
+        "section": "What Does Zero-shot Transfer Model Learn? ::: Embedding in Multi-BERT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "PCA projection of hidden representations of the last layer of multi-BERT before and after fine-tuning are shown in Fig. FIGREF15. The red points represent Chinese tokens, and the blue points are for English. The results "
+      },
+      {
+        "rank": 23,
+        "source": "1909.09587:paragraph:0020 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Supplemental Material ::: Internal Representation of multi-BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5797,
+        "keyword": 0.0,
+        "rerank": 0.3284,
+        "section": "Supplemental Material ::: Internal Representation of multi-BERT",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The architecture of multi-BERT is a Transformer encoder BIBREF25. While fine-tuning on SQuAD-like dataset, the bottom layers of multi-BERT are initialized from Google-pretrained parameters, with an added output layer ini"
+      },
+      {
+        "rank": 24,
+        "source": "1909.09587:paragraph:0006 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Setup and Data",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5579,
+        "keyword": 0.0111,
+        "rerank": 0.3259,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Setup and Data",
+        "query_hits": "model",
+        "reasons": "body/table evidence",
+        "preview": "The pre-trained multi-BERT is the official released one. This multi-lingual version of BERT were pre-trained on corpus in 104 languages. Data in different languages were simply mixed in batches while pre-training, withou"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7165,
+        "keyword": 0.1086,
+        "rerank": 0.9041,
+        "section": "Introduction",
+        "query_hits": "comprehension, language, model, performance, reading",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9059,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3991,
+        "reasons": "body/table evidence",
+        "preview": "Reading Comprehension (RC) has become a central task in natural language processing, with great practical value in various industries. In recent years, many large-scale RC datasets in English BIBREF0, BIBREF1, BIBREF2, B"
+      },
+      {
+        "rank": 2,
+        "source": "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6939,
+        "keyword": 0.2114,
+        "rerank": 1.0001,
+        "section": "Abstract",
+        "query_hits": "comprehension, language, model, performance, reading, target",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7322,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2825,
+        "reasons": "body/table evidence",
+        "preview": "Because it is not feasible to collect training data for every language, there is a growing interest in cross-lingual transfer learning. In this paper, we systematically explore zero-shot cross-lingual transfer learning o"
+      },
+      {
+        "rank": 3,
+        "source": "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6737,
+        "keyword": 0.1196,
+        "rerank": 0.7954,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "query_hits": "language, performance, target",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7993,
+        "novelty": 0.7165,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2677,
+        "reasons": "body/table evidence",
+        "preview": "Here we discuss the case that the training data are translated. We consider each result is affected by at least three factors: (1) training corpus, (2) data size, (3) whether the source corpus is translated into the targ"
+      },
+      {
+        "rank": 4,
+        "source": "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6757,
+        "keyword": 0.0398,
+        "rerank": 0.6867,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Experimental Results",
+        "query_hits": "language, model, performance",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6928,
+        "novelty": 0.6737,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1701,
+        "reasons": "body/table evidence",
+        "preview": "In the lower half of Table TABREF8, the results are obtained by the translated training data. First, we found that when testing on English and Chinese, translation always degrades the performance (En v.s. En-XX, Zh v.s. "
+      },
+      {
+        "rank": 5,
+        "source": "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6353,
+        "keyword": 0.094,
+        "rerank": 0.6744,
+        "section": "Introduction",
+        "query_hits": "language, model, target",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6807,
+        "novelty": 0.4061,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1223,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we leverage pre-trained multilingual language representation, for example, BERT learned from multilingual un-annotated sentences (multi-BERT), in cross-lingual zero-shot RC. We fine-tune multi-BERT on the "
+      },
+      {
+        "rank": 6,
+        "source": "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6729,
+        "keyword": 0.1283,
+        "rerank": 0.8059,
+        "section": "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "query_hits": "language, performance, target",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8096,
+        "novelty": 0.6648,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1094,
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF8 shows that fine-tuning on un-translated target language data achieves much better performance than data translated into the target language. Because the above statement is true across all the languages, it "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "comprehension",
+        "language",
+        "model",
+        "performance",
+        "reading",
+        "target"
+      ],
+      "covered_query_terms": [
+        "comprehension",
+        "language",
+        "model",
+        "performance",
+        "reading",
+        "target"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction": [
+          "comprehension",
+          "language",
+          "model",
+          "performance",
+          "reading"
+        ],
+        "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract": [
+          "comprehension",
+          "language",
+          "model",
+          "performance",
+          "reading",
+          "target"
+        ],
+        "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors": [
+          "language",
+          "performance",
+          "target"
+        ],
+        "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results": [
+          "language",
+          "model",
+          "performance"
+        ],
+        "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction": [
+          "language",
+          "model",
+          "target"
+        ],
+        "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation": [
+          "language",
+          "performance",
+          "target"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Introduction",
+        "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation",
+        "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors",
+        "Zero-shot Transfer with Multi-BERT ::: Experimental Results"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1909.09587:paragraph:0000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction",
+          "1909.09587:paragraph:0002 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Introduction"
+        ],
+        "Abstract": [
+          "1909.09587:abstract:000 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Abstract"
+        ],
+        "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors": [
+          "1909.09587:paragraph:0010 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Other Factors"
+        ],
+        "Zero-shot Transfer with Multi-BERT ::: Experimental Results": [
+          "1909.09587:paragraph:0008 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Experimental Results"
+        ],
+        "Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation": [
+          "1909.09587:paragraph:0009 | Zero-shot Reading Comprehension by Cross-lingual Transfer Learning with Multi-lingual Language Representation Model / Zero-shot Transfer with Multi-BERT ::: Discussion ::: The Effect of Machine Translation"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have any retrieved context to answer this question.",
+    "gold_context_answer": "The context provides information regarding the performance of multi-BERT in zero-shot Reading Comprehension (RC) when trained on English and tested on Chinese, noting that it achieves competitive performance compared to QANet trained on Chinese. It also mentions that multi-BERT trained on English has a relatively lower EM compared to the model with comparable F1 scores, suggesting that while the model can roughly identify answer spans in context, its accuracy is less. Furthermore, Table TABREF8 shows results",
+    "retrieved_context_answer": "The context provides several findings regarding model performance when testing on target languages, particularly in the context of zero-shot cross-lingual transfer learning:\n\n*   **General Trend:** In general, translating the source data into the target language tends to degrade performance. For instance, when testing on English and Chinese, translation consistently degrades performance (En v.s. En-XX, Zh v.s. Zh-XX).\n*   **Specific Example (English/Chinese):**",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.048192771084337345,
+    "retrieved_context_f1": 0.0,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}

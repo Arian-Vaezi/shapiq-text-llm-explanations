@@ -1,0 +1,1598 @@
+{
+  "case": {
+    "case_id": "qasper_31d695ba855d821d3e5cdb7bea638c7dbb7c87c7",
+    "paper_id": "1906.08593",
+    "paper_title": "Conflict as an Inverse of Attention in Sequence Relationship",
+    "question_id": "31d695ba855d821d3e5cdb7bea638c7dbb7c87c7",
+    "annotation_id": "48d4567d3a56f37f291b08a6696091e682386d90",
+    "question": "Which neural architecture do they use as a base for their attention conflict mechanisms?",
+    "gold_answer": "GRU-based encoder, interaction block, and classifier consisting of stacked fully-connected layers.",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1906.08593:paragraph:0023"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1906.08593:paragraph:0004",
+      "score": 0.7042932986130283,
+      "title": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+      "text": "Since attention always looks for matching word representations, it operates under the assumption that there is always a match to be found inside the sequences. We provide a theoretical limitation to it and propose another technique called conflict that looks for contrasting relationship between words in two sequences. We empirically verify that our proposed conflict mechanism combined with attention can outperform the performance of attention working solely."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1906.08593:abstract:000",
+      "score": 0.6050739416202439,
+      "title": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+      "text": "Attention is a very efficient way to model the relationship between two sequences by comparing how similar two intermediate representations are. Initially demonstrated in NMT, it is a standard in all NLU tasks today when efficient interaction between sequences is considered. However, we show that attention, by virtue of its composition, works best only when it is given that there is a match somewhere between two sequences. It does not very well adapt to cases when there is no similarity between two sequences or if the relationship is contrastive. We propose an Conflict model which is very similar to how attention works but which emphasizes mostly on how well two sequences repel each other and finally empirically show how this method in conjunction with attention can boost the overall performance."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1906.08593:paragraph:0042",
+      "score": 0.7247402193782152,
+      "title": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+      "text": "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on the examples which were incorrectly marked in attention model but correctly in attention-conflict model. We saw that 70% of those cases are the ones where the pair was incorrectly marked as duplicate in the previous model but our combined model correctly marked them as non-duplicate."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1906.08593:paragraph:0043",
+      "score": 0.7278007725550278,
+      "title": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+      "text": "In this work, we highlighted the limits of attention especially in cases where two sequences have a contradicting relationship based on the task it performs. To alleviate this problem and further improve the performance, we propose a conflict mechanism that tries to capture how two sequences repel each other. This acts like the inverse of attention and, empirically, we show that how conflict and attention together can improve the performance."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1906.08593:paragraph:0023",
+      "score": 0.553022398169752,
+      "title": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+      "text": "We create two models both of which constitutes of three main parts: encoder, interaction and classifier and take two sequences as input. Except interaction, all the other parts are exactly identical between the two models. The encoder is shared among the sequences simply uses two stacked GRU layers. The interaction part consists of only attention for one model while for the another one it consists of attention and conflict combined as shown in (eqn.11) . The classifier part is simply stacked fully-connected layers. Figure 3 shows a block diagram of how our model looks like."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1906.08593:paragraph:0005",
+      "score": 0.6486573195332782,
+      "title": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+      "text": "Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this except we use element wise difference instead of addition to build our conflict function. BIBREF3 came up with a scaled dot-product attention in their Transformer model which is fast and memory-efficient. Due to the scaling factor, it didn't have the issue of gradients zeroing out. On the other hand, BIBREF4 has experimented with global and local attention based on the how many hidden states the attention function takes into account. Their experiments have revolved around three attention functions - dot, concat and general. Their findings include that dot product works best for global attention. Our work also belongs to the global attention family as we consider all the hidden states of the sequence."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+      "attribution": 0.1305452362189722
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+      "attribution": -0.01990321876309147
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+      "attribution": -0.005728417482995659
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+      "attribution": -0.004225621387668176
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+      "attribution": -0.003221675442134911
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+      "attribution": -0.0016965165252473325
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+      "attribution": 0.11935736639564687
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+      "attribution": 0.006027499180452031
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+      "attribution": 0.004323506592114881
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+      "attribution": 0.004323062648474212
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+      "attribution": 0.003977122288761395
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+      "attribution": 0.0014047793008558477
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:abstract:000",
+      "interaction": -0.010781031450151102
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0042",
+      "interaction": -0.008403521562593132
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0043",
+      "interaction": -0.02076826396738198
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.00931061035719685
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.009998051837399668
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0042",
+      "interaction": -0.004419355677291381
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0043",
+      "interaction": -0.021022519026530018
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.0057689731940560865
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.016692052597360722
+    },
+    {
+      "left": "1906.08593:paragraph:0042",
+      "right": "1906.08593:paragraph:0043",
+      "interaction": -0.007422818414084872
+    },
+    {
+      "left": "1906.08593:paragraph:0042",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.0180597349392586
+    },
+    {
+      "left": "1906.08593:paragraph:0042",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": 0.004926950894513043
+    },
+    {
+      "left": "1906.08593:paragraph:0043",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.00019084338720308543
+    },
+    {
+      "left": "1906.08593:paragraph:0043",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.00949435634836516
+    },
+    {
+      "left": "1906.08593:paragraph:0023",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.02509852194016153
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:abstract:000",
+      "interaction": -0.006337463576106024
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0042",
+      "interaction": -0.00564883195416403
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0043",
+      "interaction": -0.007064743397276053
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.001097682886155674
+    },
+    {
+      "left": "1906.08593:paragraph:0004",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.007345738930956889
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0042",
+      "interaction": -0.002196359441025904
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0043",
+      "interaction": -0.0013883083160623549
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": 0.004257518893020572
+    },
+    {
+      "left": "1906.08593:abstract:000",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.0044701804444625
+    },
+    {
+      "left": "1906.08593:paragraph:0042",
+      "right": "1906.08593:paragraph:0043",
+      "interaction": -0.0046327014481229644
+    },
+    {
+      "left": "1906.08593:paragraph:0042",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.00031831360989065553
+    },
+    {
+      "left": "1906.08593:paragraph:0042",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.004304673983781591
+    },
+    {
+      "left": "1906.08593:paragraph:0043",
+      "right": "1906.08593:paragraph:0023",
+      "interaction": -0.0009242018417667658
+    },
+    {
+      "left": "1906.08593:paragraph:0043",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.005670384585000745
+    },
+    {
+      "left": "1906.08593:paragraph:0023",
+      "right": "1906.08593:paragraph:0005",
+      "interaction": -0.004116447863263434
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09576978606014186
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "remaining_chunks": 5,
+        "score": -0.01465201971692387
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "remaining_chunks": 4,
+        "score": 0.002066540871752065
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "remaining_chunks": 3,
+        "score": 0.020942319676991894
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "remaining_chunks": 2,
+        "score": 0.014112001817181419
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.011732480607675955
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "selected_chunks": 1,
+        "score": 0.16885049097940075
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "selected_chunks": 2,
+        "score": 0.11075031605973928
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "selected_chunks": 3,
+        "score": 0.12979138132827728
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "selected_chunks": 4,
+        "score": 0.1136949262874315
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "selected_chunks": 5,
+        "score": 0.11741578647192275
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "selected_chunks": 6,
+        "score": 0.09576978606014186
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09576978606014186
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "remaining_chunks": 5,
+        "score": 0.1269747804783985
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "remaining_chunks": 4,
+        "score": 0.11799531130406993
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.10907141604632542
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "remaining_chunks": 2,
+        "score": 0.1653624653193888
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.16885049097940075
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.09576978606014186
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "remaining_chunks": 5,
+        "score": -0.01465201971692387
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "remaining_chunks": 4,
+        "score": -0.024951159897903086
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "remaining_chunks": 3,
+        "score": -0.016690517788629622
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "remaining_chunks": 2,
+        "score": 0.010357239241717164
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.012110665558159539
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.09576978606014201
+      },
+      {
+        "step": 1,
+        "score": 0.08289463753946187
+      },
+      {
+        "step": 2,
+        "score": 0.07486649148113224
+      },
+      {
+        "step": 3,
+        "score": 0.06081464232410081
+      },
+      {
+        "step": 4,
+        "score": 0.0444252979105853
+      },
+      {
+        "step": 5,
+        "score": 0.04443827250724917
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Which neural architecture do they use as a base for their attention conflict mechanisms?",
+    "expanded_queries": [
+      "Which neural architecture do they use as a base for their attention conflict mechanisms?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "dense": 0.6933,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this work, we highlighted the limits of attention especially in cases where two sequences have a contradicting relationship based on the task it performs. To alleviate this problem and further improve the performance,"
+      },
+      {
+        "rank": 2,
+        "source": "1906.08593:paragraph:0021 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "dense": 0.6912,
+        "page": 1,
+        "type": "body_text",
+        "section": "Relation to Multi-Head attention",
+        "flags": "",
+        "preview": "Our combined model that contains both attention and conflict can be thought of as a 2-head attention model but both heads are different. Our conflict head explicitly captures difference between the inputs."
+      },
+      {
+        "rank": 3,
+        "source": "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "dense": 0.6783,
+        "page": 1,
+        "type": "body_text",
+        "section": "Analyzing the gains",
+        "flags": "",
+        "preview": "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on t"
+      },
+      {
+        "rank": 4,
+        "source": "1906.08593:paragraph:0020 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "dense": 0.6763,
+        "page": 1,
+        "type": "body_text",
+        "section": "Relation to Multi-Head attention",
+        "flags": "",
+        "preview": "Multi-head attention, as introduced in BIBREF3 , computes multiple identical attention mechanism parallelly on multiple linear projections of same inputs. The parameters of each attention and projections are different in"
+      },
+      {
+        "rank": 5,
+        "source": "1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "dense": 0.6756,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Since attention always looks for matching word representations, it operates under the assumption that there is always a match to be found inside the sequences. We provide a theoretical limitation to it and propose anothe"
+      },
+      {
+        "rank": 6,
+        "source": "1906.08593:paragraph:0017 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "dense": 0.6565,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conflict model",
+        "flags": "",
+        "preview": "It is good to note that conflict suffers from the same limitation that attention suffers from. This is when a pair of sentences are highly matching especially with multiple associations. But when the two methods work tog"
+      },
+      {
+        "rank": 7,
+        "source": "1906.08593:paragraph:0030 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "dense": 0.6505,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "We also show qualitative results where we can observe that our model with attention and conflict combined does better on cases where pairs are non-duplicate and has very small difference. We have observed that the confli"
+      },
+      {
+        "rank": 8,
+        "source": "1906.08593:paragraph:0019 | Conflict as an Inverse of Attention in Sequence Relationship / Combination of attention and conflict",
+        "dense": 0.6499,
+        "page": 1,
+        "type": "body_text",
+        "section": "Combination of attention and conflict",
+        "flags": "",
+        "preview": "where A and C denote that they are from attention and conflict models respectively."
+      },
+      {
+        "rank": 9,
+        "source": "1906.08593:paragraph:0029 | Conflict as an Inverse of Attention in Sequence Relationship / Quantitative Analysis",
+        "dense": 0.6436,
+        "page": 1,
+        "type": "body_text",
+        "section": "Quantitative Analysis",
+        "flags": "",
+        "preview": "We also show the training loss curve for both the models having attention and attention combined with conflict respectively. Figure 4 and 5 shows these curves for Task 1 and Task 2 respectively. The curves are smoothed u"
+      },
+      {
+        "rank": 10,
+        "source": "1906.08593:paragraph:0014 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "dense": 0.6404,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conflict model",
+        "flags": "",
+        "preview": "We propose a different mechanism that does the opposite of what attention does that is computing how much two sequences repel each other. This works very similar to how attention works but inversely."
+      },
+      {
+        "rank": 11,
+        "source": "1906.08593:paragraph:0039 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "dense": 0.6378,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 12,
+        "source": "1906.08593:paragraph:0034 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "dense": 0.6378,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "Attention+Conflict: 0"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1906.08593:paragraph:0039 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "keyword": 0.5856,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 2,
+        "source": "1906.08593:paragraph:0034 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "keyword": 0.5856,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 3,
+        "source": "1906.08593:paragraph:0038 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "keyword": 0.2539,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "Attention only: 1"
+      },
+      {
+        "rank": 4,
+        "source": "1906.08593:paragraph:0033 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "keyword": 0.2539,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "Attention only: 1"
+      },
+      {
+        "rank": 5,
+        "source": "1906.08593:paragraph:0019 | Conflict as an Inverse of Attention in Sequence Relationship / Combination of attention and conflict",
+        "keyword": 0.1977,
+        "page": 1,
+        "type": "body_text",
+        "section": "Combination of attention and conflict",
+        "flags": "",
+        "preview": "where A and C denote that they are from attention and conflict models respectively."
+      },
+      {
+        "rank": 6,
+        "source": "1906.08593:paragraph:0021 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "keyword": 0.1338,
+        "page": 1,
+        "type": "body_text",
+        "section": "Relation to Multi-Head attention",
+        "flags": "",
+        "preview": "Our combined model that contains both attention and conflict can be thought of as a 2-head attention model but both heads are different. Our conflict head explicitly captures difference between the inputs."
+      },
+      {
+        "rank": 7,
+        "source": "1906.08593:paragraph:0041 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "keyword": 0.1247,
+        "page": 1,
+        "type": "body_text",
+        "section": "Qualitative Comparison",
+        "flags": "",
+        "preview": "We provide two examples with predictions from the models with only attention and combination of attention and conflict. Each example is accompanied by the ground truth in our data."
+      },
+      {
+        "rank": 8,
+        "source": "1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "keyword": 0.1246,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this ex"
+      },
+      {
+        "rank": 9,
+        "source": "1906.08593:paragraph:0020 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "keyword": 0.1217,
+        "page": 1,
+        "type": "body_text",
+        "section": "Relation to Multi-Head attention",
+        "flags": "",
+        "preview": "Multi-head attention, as introduced in BIBREF3 , computes multiple identical attention mechanism parallelly on multiple linear projections of same inputs. The parameters of each attention and projections are different in"
+      },
+      {
+        "rank": 10,
+        "source": "1906.08593:paragraph:0029 | Conflict as an Inverse of Attention in Sequence Relationship / Quantitative Analysis",
+        "keyword": 0.1071,
+        "page": 1,
+        "type": "body_text",
+        "section": "Quantitative Analysis",
+        "flags": "",
+        "preview": "We also show the training loss curve for both the models having attention and attention combined with conflict respectively. Figure 4 and 5 shows these curves for Task 1 and Task 2 respectively. The curves are smoothed u"
+      },
+      {
+        "rank": 11,
+        "source": "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "keyword": 0.1071,
+        "page": 1,
+        "type": "body_text",
+        "section": "Analyzing the gains",
+        "flags": "",
+        "preview": "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on t"
+      },
+      {
+        "rank": 12,
+        "source": "1906.08593:paragraph:0044 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "keyword": 0.1059,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "Future research work should be based on alternative design of conflict mechanism using other difference operators other than element wise difference which we use."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1906.08593:paragraph:0039 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6378,
+        "keyword": 0.5856,
+        "rerank": 0.8155,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 2,
+        "source": "1906.08593:paragraph:0034 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6378,
+        "keyword": 0.5856,
+        "rerank": 0.8155,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 3,
+        "source": "1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6933,
+        "keyword": 0.0738,
+        "rerank": 0.7278,
+        "section": "Conclusion",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we highlighted the limits of attention especially in cases where two sequences have a contradicting relationship based on the task it performs. To alleviate this problem and further improve the performance,"
+      },
+      {
+        "rank": 4,
+        "source": "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6783,
+        "keyword": 0.1071,
+        "rerank": 0.7247,
+        "section": "Analyzing the gains",
+        "query_hits": "attention, they",
+        "reasons": "body/table evidence",
+        "preview": "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on t"
+      },
+      {
+        "rank": 5,
+        "source": "1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6756,
+        "keyword": 0.0742,
+        "rerank": 0.7043,
+        "section": "Introduction",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "Since attention always looks for matching word representations, it operates under the assumption that there is always a match to be found inside the sequences. We provide a theoretical limitation to it and propose anothe"
+      },
+      {
+        "rank": 6,
+        "source": "1906.08593:paragraph:0020 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6763,
+        "keyword": 0.1217,
+        "rerank": 0.6895,
+        "section": "Relation to Multi-Head attention",
+        "query_hits": "attention, conflict, they, use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Multi-head attention, as introduced in BIBREF3 , computes multiple identical attention mechanism parallelly on multiple linear projections of same inputs. The parameters of each attention and projections are different in"
+      },
+      {
+        "rank": 7,
+        "source": "1906.08593:paragraph:0030 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6505,
+        "keyword": 0.103,
+        "rerank": 0.6854,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We also show qualitative results where we can observe that our model with attention and conflict combined does better on cases where pairs are non-duplicate and has very small difference. We have observed that the confli"
+      },
+      {
+        "rank": 8,
+        "source": "1906.08593:paragraph:0029 | Conflict as an Inverse of Attention in Sequence Relationship / Quantitative Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6436,
+        "keyword": 0.1071,
+        "rerank": 0.6782,
+        "section": "Quantitative Analysis",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We also show the training loss curve for both the models having attention and attention combined with conflict respectively. Figure 4 and 5 shows these curves for Task 1 and Task 2 respectively. The curves are smoothed u"
+      },
+      {
+        "rank": 9,
+        "source": "1906.08593:paragraph:0019 | Conflict as an Inverse of Attention in Sequence Relationship / Combination of attention and conflict",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6499,
+        "keyword": 0.1977,
+        "rerank": 0.663,
+        "section": "Combination of attention and conflict",
+        "query_hits": "attention, conflict, they",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where A and C denote that they are from attention and conflict models respectively."
+      },
+      {
+        "rank": 10,
+        "source": "1906.08593:paragraph:0021 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6912,
+        "keyword": 0.1338,
+        "rerank": 0.6557,
+        "section": "Relation to Multi-Head attention",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our combined model that contains both attention and conflict can be thought of as a 2-head attention model but both heads are different. Our conflict head explicitly captures difference between the inputs."
+      },
+      {
+        "rank": 11,
+        "source": "1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5702,
+        "keyword": 0.1246,
+        "rerank": 0.6487,
+        "section": "Related Work",
+        "query_hits": "attention, conflict, neural, their, use",
+        "reasons": "body/table evidence",
+        "preview": "Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this ex"
+      },
+      {
+        "rank": 12,
+        "source": "1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6106,
+        "keyword": 0.0509,
+        "rerank": 0.6051,
+        "section": "Abstract",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "Attention is a very efficient way to model the relationship between two sequences by comparing how similar two intermediate representations are. Initially demonstrated in NMT, it is a standard in all NLU tasks today when"
+      },
+      {
+        "rank": 13,
+        "source": "1906.08593:paragraph:0022 | Conflict as an Inverse of Attention in Sequence Relationship / Visualizing attention and conflict",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5901,
+        "keyword": 0.1011,
+        "rerank": 0.6033,
+        "section": "Visualizing attention and conflict",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We observe how our conflict model learns the dissimilarities between word representations. We achieve that by visualizing the heatmap of the weight matrix INLINEFORM0 for both attention and conflict from eqns. (3) and (8"
+      },
+      {
+        "rank": 14,
+        "source": "1906.08593:paragraph:0017 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6565,
+        "keyword": 0.0415,
+        "rerank": 0.5619,
+        "section": "Conflict model",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "It is good to note that conflict suffers from the same limitation that attention suffers from. This is when a pair of sentences are highly matching especially with multiple associations. But when the two methods work tog"
+      },
+      {
+        "rank": 15,
+        "source": "1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5702,
+        "keyword": 0.0551,
+        "rerank": 0.553,
+        "section": "The model",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We create two models both of which constitutes of three main parts: encoder, interaction and classifier and take two sequences as input. Except interaction, all the other parts are exactly identical between the two model"
+      },
+      {
+        "rank": 16,
+        "source": "1906.08593:paragraph:0002 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5694,
+        "keyword": 0.0417,
+        "rerank": 0.5451,
+        "section": "Introduction",
+        "query_hits": "attention, neural",
+        "reasons": "body/table evidence",
+        "preview": "Attention works on creating neural alignment matrix using learnt weights without pre-computing alignment matrix and using them as features. The main objective of any attentive or alignment process is to look for matching"
+      },
+      {
+        "rank": 17,
+        "source": "1906.08593:paragraph:0015 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6026,
+        "keyword": 0.0125,
+        "rerank": 0.5447,
+        "section": "Conflict model",
+        "query_hits": "attention",
+        "reasons": "body/table evidence",
+        "preview": "We demonstrate a general model but we also realize that there can be other variants of it which may be worked out to perform better. Our approach consists of using element wise difference between two vectors followed by "
+      },
+      {
+        "rank": 18,
+        "source": "1906.08593:paragraph:0041 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6062,
+        "keyword": 0.1247,
+        "rerank": 0.5369,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We provide two examples with predictions from the models with only attention and combination of attention and conflict. Each example is accompanied by the ground truth in our data."
+      },
+      {
+        "rank": 19,
+        "source": "1906.08593:paragraph:0018 | Conflict as an Inverse of Attention in Sequence Relationship / Combination of attention and conflict",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6176,
+        "keyword": 0.0839,
+        "rerank": 0.5313,
+        "section": "Combination of attention and conflict",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We used two weighted representations of INLINEFORM0 using weights of attention and conflict as computed in Eqn. (4) and (8) respectively. Our final representation of a word representation INLINEFORM1 conditioned on INLIN"
+      },
+      {
+        "rank": 20,
+        "source": "1906.08593:paragraph:0013 | Conflict as an Inverse of Attention in Sequence Relationship / Limits of using only Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5526,
+        "keyword": 0.0193,
+        "rerank": 0.5111,
+        "section": "Limits of using only Attention",
+        "query_hits": "attention, their",
+        "reasons": "body/table evidence",
+        "preview": "For example, when we consider two sequences \"height of tom cruise\" and \"age of sun\", while computing the attention weights between the word \"height\" and all the words in the second sequence it can be observed that their "
+      },
+      {
+        "rank": 21,
+        "source": "1906.08593:paragraph:0014 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6404,
+        "keyword": 0.0359,
+        "rerank": 0.5074,
+        "section": "Conflict model",
+        "query_hits": "attention",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We propose a different mechanism that does the opposite of what attention does that is computing how much two sequences repel each other. This works very similar to how attention works but inversely."
+      },
+      {
+        "rank": 22,
+        "source": "1906.08593:paragraph:0028 | Conflict as an Inverse of Attention in Sequence Relationship / Quantitative Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5978,
+        "keyword": 0.0816,
+        "rerank": 0.5036,
+        "section": "Quantitative Analysis",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "For both tasks, we compute classification accuracy using three model variants and report the results in Table 1 and Table 2. We observe that model with both attention and conflict combined gives the best results."
+      },
+      {
+        "rank": 23,
+        "source": "1906.08593:paragraph:0009 | Conflict as an Inverse of Attention in Sequence Relationship / How attention works",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5767,
+        "keyword": 0.1054,
+        "rerank": 0.4875,
+        "section": "How attention works",
+        "query_hits": "attention, neural",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The word representations that attention operates on can be either embeddings like GloVe or hidden states from any recurrent neural network. We denote these representations as u = INLINEFORM0 and v = INLINEFORM1 . We prov"
+      },
+      {
+        "rank": 24,
+        "source": "1906.08593:paragraph:0003 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5223,
+        "keyword": 0.0115,
+        "rerank": 0.4364,
+        "section": "Introduction",
+        "query_hits": "attention",
+        "reasons": "body/table evidence",
+        "preview": "The general process of matching one sequence with another through attention includes computing the alignment matrix containing weight value between every pair of word representations belonging to both of the sequences. S"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1906.08593:paragraph:0039 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6378,
+        "keyword": 0.5856,
+        "rerank": 0.8155,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 2,
+        "source": "1906.08593:paragraph:0034 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6378,
+        "keyword": 0.5856,
+        "rerank": 0.8155,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Attention+Conflict: 0"
+      },
+      {
+        "rank": 3,
+        "source": "1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6933,
+        "keyword": 0.0738,
+        "rerank": 0.7278,
+        "section": "Conclusion",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "In this work, we highlighted the limits of attention especially in cases where two sequences have a contradicting relationship based on the task it performs. To alleviate this problem and further improve the performance,"
+      },
+      {
+        "rank": 4,
+        "source": "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6783,
+        "keyword": 0.1071,
+        "rerank": 0.7247,
+        "section": "Analyzing the gains",
+        "query_hits": "attention, they",
+        "reasons": "body/table evidence",
+        "preview": "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on t"
+      },
+      {
+        "rank": 5,
+        "source": "1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6756,
+        "keyword": 0.0742,
+        "rerank": 0.7043,
+        "section": "Introduction",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "Since attention always looks for matching word representations, it operates under the assumption that there is always a match to be found inside the sequences. We provide a theoretical limitation to it and propose anothe"
+      },
+      {
+        "rank": 6,
+        "source": "1906.08593:paragraph:0020 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6763,
+        "keyword": 0.1217,
+        "rerank": 0.6895,
+        "section": "Relation to Multi-Head attention",
+        "query_hits": "attention, conflict, they, use",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Multi-head attention, as introduced in BIBREF3 , computes multiple identical attention mechanism parallelly on multiple linear projections of same inputs. The parameters of each attention and projections are different in"
+      },
+      {
+        "rank": 7,
+        "source": "1906.08593:paragraph:0030 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6505,
+        "keyword": 0.103,
+        "rerank": 0.6854,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We also show qualitative results where we can observe that our model with attention and conflict combined does better on cases where pairs are non-duplicate and has very small difference. We have observed that the confli"
+      },
+      {
+        "rank": 8,
+        "source": "1906.08593:paragraph:0029 | Conflict as an Inverse of Attention in Sequence Relationship / Quantitative Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6436,
+        "keyword": 0.1071,
+        "rerank": 0.6782,
+        "section": "Quantitative Analysis",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We also show the training loss curve for both the models having attention and attention combined with conflict respectively. Figure 4 and 5 shows these curves for Task 1 and Task 2 respectively. The curves are smoothed u"
+      },
+      {
+        "rank": 9,
+        "source": "1906.08593:paragraph:0019 | Conflict as an Inverse of Attention in Sequence Relationship / Combination of attention and conflict",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6499,
+        "keyword": 0.1977,
+        "rerank": 0.663,
+        "section": "Combination of attention and conflict",
+        "query_hits": "attention, conflict, they",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "where A and C denote that they are from attention and conflict models respectively."
+      },
+      {
+        "rank": 10,
+        "source": "1906.08593:paragraph:0021 | Conflict as an Inverse of Attention in Sequence Relationship / Relation to Multi-Head attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6912,
+        "keyword": 0.1338,
+        "rerank": 0.6557,
+        "section": "Relation to Multi-Head attention",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our combined model that contains both attention and conflict can be thought of as a 2-head attention model but both heads are different. Our conflict head explicitly captures difference between the inputs."
+      },
+      {
+        "rank": 11,
+        "source": "1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5702,
+        "keyword": 0.1246,
+        "rerank": 0.6487,
+        "section": "Related Work",
+        "query_hits": "attention, conflict, neural, their, use",
+        "reasons": "body/table evidence",
+        "preview": "Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this ex"
+      },
+      {
+        "rank": 12,
+        "source": "1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6106,
+        "keyword": 0.0509,
+        "rerank": 0.6051,
+        "section": "Abstract",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "Attention is a very efficient way to model the relationship between two sequences by comparing how similar two intermediate representations are. Initially demonstrated in NMT, it is a standard in all NLU tasks today when"
+      },
+      {
+        "rank": 13,
+        "source": "1906.08593:paragraph:0022 | Conflict as an Inverse of Attention in Sequence Relationship / Visualizing attention and conflict",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5901,
+        "keyword": 0.1011,
+        "rerank": 0.6033,
+        "section": "Visualizing attention and conflict",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We observe how our conflict model learns the dissimilarities between word representations. We achieve that by visualizing the heatmap of the weight matrix INLINEFORM0 for both attention and conflict from eqns. (3) and (8"
+      },
+      {
+        "rank": 14,
+        "source": "1906.08593:paragraph:0017 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6565,
+        "keyword": 0.0415,
+        "rerank": 0.5619,
+        "section": "Conflict model",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "It is good to note that conflict suffers from the same limitation that attention suffers from. This is when a pair of sentences are highly matching especially with multiple associations. But when the two methods work tog"
+      },
+      {
+        "rank": 15,
+        "source": "1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5702,
+        "keyword": 0.0551,
+        "rerank": 0.553,
+        "section": "The model",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence",
+        "preview": "We create two models both of which constitutes of three main parts: encoder, interaction and classifier and take two sequences as input. Except interaction, all the other parts are exactly identical between the two model"
+      },
+      {
+        "rank": 16,
+        "source": "1906.08593:paragraph:0002 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5694,
+        "keyword": 0.0417,
+        "rerank": 0.5451,
+        "section": "Introduction",
+        "query_hits": "attention, neural",
+        "reasons": "body/table evidence",
+        "preview": "Attention works on creating neural alignment matrix using learnt weights without pre-computing alignment matrix and using them as features. The main objective of any attentive or alignment process is to look for matching"
+      },
+      {
+        "rank": 17,
+        "source": "1906.08593:paragraph:0015 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6026,
+        "keyword": 0.0125,
+        "rerank": 0.5447,
+        "section": "Conflict model",
+        "query_hits": "attention",
+        "reasons": "body/table evidence",
+        "preview": "We demonstrate a general model but we also realize that there can be other variants of it which may be worked out to perform better. Our approach consists of using element wise difference between two vectors followed by "
+      },
+      {
+        "rank": 18,
+        "source": "1906.08593:paragraph:0041 | Conflict as an Inverse of Attention in Sequence Relationship / Qualitative Comparison",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6062,
+        "keyword": 0.1247,
+        "rerank": 0.5369,
+        "section": "Qualitative Comparison",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We provide two examples with predictions from the models with only attention and combination of attention and conflict. Each example is accompanied by the ground truth in our data."
+      },
+      {
+        "rank": 19,
+        "source": "1906.08593:paragraph:0018 | Conflict as an Inverse of Attention in Sequence Relationship / Combination of attention and conflict",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6176,
+        "keyword": 0.0839,
+        "rerank": 0.5313,
+        "section": "Combination of attention and conflict",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We used two weighted representations of INLINEFORM0 using weights of attention and conflict as computed in Eqn. (4) and (8) respectively. Our final representation of a word representation INLINEFORM1 conditioned on INLIN"
+      },
+      {
+        "rank": 20,
+        "source": "1906.08593:paragraph:0013 | Conflict as an Inverse of Attention in Sequence Relationship / Limits of using only Attention",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5526,
+        "keyword": 0.0193,
+        "rerank": 0.5111,
+        "section": "Limits of using only Attention",
+        "query_hits": "attention, their",
+        "reasons": "body/table evidence",
+        "preview": "For example, when we consider two sequences \"height of tom cruise\" and \"age of sun\", while computing the attention weights between the word \"height\" and all the words in the second sequence it can be observed that their "
+      },
+      {
+        "rank": 21,
+        "source": "1906.08593:paragraph:0014 | Conflict as an Inverse of Attention in Sequence Relationship / Conflict model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6404,
+        "keyword": 0.0359,
+        "rerank": 0.5074,
+        "section": "Conflict model",
+        "query_hits": "attention",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "We propose a different mechanism that does the opposite of what attention does that is computing how much two sequences repel each other. This works very similar to how attention works but inversely."
+      },
+      {
+        "rank": 22,
+        "source": "1906.08593:paragraph:0028 | Conflict as an Inverse of Attention in Sequence Relationship / Quantitative Analysis",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5978,
+        "keyword": 0.0816,
+        "rerank": 0.5036,
+        "section": "Quantitative Analysis",
+        "query_hits": "attention, conflict",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "For both tasks, we compute classification accuracy using three model variants and report the results in Table 1 and Table 2. We observe that model with both attention and conflict combined gives the best results."
+      },
+      {
+        "rank": 23,
+        "source": "1906.08593:paragraph:0009 | Conflict as an Inverse of Attention in Sequence Relationship / How attention works",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5767,
+        "keyword": 0.1054,
+        "rerank": 0.4875,
+        "section": "How attention works",
+        "query_hits": "attention, neural",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The word representations that attention operates on can be either embeddings like GloVe or hidden states from any recurrent neural network. We denote these representations as u = INLINEFORM0 and v = INLINEFORM1 . We prov"
+      },
+      {
+        "rank": 24,
+        "source": "1906.08593:paragraph:0003 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5223,
+        "keyword": 0.0115,
+        "rerank": 0.4364,
+        "section": "Introduction",
+        "query_hits": "attention",
+        "reasons": "body/table evidence",
+        "preview": "The general process of matching one sequence with another through attention includes computing the alignment matrix containing weight value between every pair of word representations belonging to both of the sequences. S"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6756,
+        "keyword": 0.0742,
+        "rerank": 0.7043,
+        "section": "Introduction",
+        "query_hits": "attention, conflict",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8669,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2455,
+        "reasons": "body/table evidence",
+        "preview": "Since attention always looks for matching word representations, it operates under the assumption that there is always a match to be found inside the sequences. We provide a theoretical limitation to it and propose anothe"
+      },
+      {
+        "rank": 2,
+        "source": "1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6106,
+        "keyword": 0.0509,
+        "rerank": 0.6051,
+        "section": "Abstract",
+        "query_hits": "attention, conflict",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7481,
+        "novelty": 0.6778,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1783,
+        "reasons": "body/table evidence",
+        "preview": "Attention is a very efficient way to model the relationship between two sequences by comparing how similar two intermediate representations are. Initially demonstrated in NMT, it is a standard in all NLU tasks today when"
+      },
+      {
+        "rank": 3,
+        "source": "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6783,
+        "keyword": 0.1071,
+        "rerank": 0.7247,
+        "section": "Analyzing the gains",
+        "query_hits": "attention, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8914,
+        "novelty": 0.8301,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1628,
+        "reasons": "body/table evidence",
+        "preview": "We analyzed the gains in Task 1 which we get from the attention-conflict model in order to ensure that they are not due to randomness in weight initialization or simply additional parameters. We particularly focused on t"
+      },
+      {
+        "rank": 4,
+        "source": "1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6933,
+        "keyword": 0.0738,
+        "rerank": 0.7278,
+        "section": "Conclusion",
+        "query_hits": "attention, conflict",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.895,
+        "novelty": 0.6584,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1419,
+        "reasons": "body/table evidence",
+        "preview": "In this work, we highlighted the limits of attention especially in cases where two sequences have a contradicting relationship based on the task it performs. To alleviate this problem and further improve the performance,"
+      },
+      {
+        "rank": 5,
+        "source": "1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5702,
+        "keyword": 0.0551,
+        "rerank": 0.553,
+        "section": "The model",
+        "query_hits": "attention, conflict",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6858,
+        "novelty": 0.6969,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1274,
+        "reasons": "body/table evidence",
+        "preview": "We create two models both of which constitutes of three main parts: encoder, interaction and classifier and take two sequences as input. Except interaction, all the other parts are exactly identical between the two model"
+      },
+      {
+        "rank": 6,
+        "source": "1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5702,
+        "keyword": 0.1246,
+        "rerank": 0.6487,
+        "section": "Related Work",
+        "query_hits": "attention, conflict, neural, their, use",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8003,
+        "novelty": 0.837,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1254,
+        "reasons": "body/table evidence",
+        "preview": "Bahdanau et al. BIBREF2 introduced attention first in neural machine translation. It used a feed-forward network over addition of encoder and decoder states to compute alignment score. Our work is very similar to this ex"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "architecture",
+        "attention",
+        "base",
+        "conflict",
+        "mechanisms",
+        "neural",
+        "their",
+        "they",
+        "use"
+      ],
+      "covered_query_terms": [
+        "attention",
+        "conflict",
+        "neural",
+        "their",
+        "they",
+        "use"
+      ],
+      "missing_query_terms": [
+        "architecture",
+        "base",
+        "mechanisms"
+      ],
+      "terms_by_chunk": {
+        "1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction": [
+          "attention",
+          "conflict"
+        ],
+        "1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract": [
+          "attention",
+          "conflict"
+        ],
+        "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains": [
+          "attention",
+          "they"
+        ],
+        "1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion": [
+          "attention",
+          "conflict"
+        ],
+        "1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model": [
+          "attention",
+          "conflict"
+        ],
+        "1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work": [
+          "attention",
+          "conflict",
+          "neural",
+          "their",
+          "use"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Analyzing the gains",
+        "Conclusion",
+        "Introduction",
+        "Related Work",
+        "The model"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1906.08593:paragraph:0004 | Conflict as an Inverse of Attention in Sequence Relationship / Introduction"
+        ],
+        "Abstract": [
+          "1906.08593:abstract:000 | Conflict as an Inverse of Attention in Sequence Relationship / Abstract"
+        ],
+        "Analyzing the gains": [
+          "1906.08593:paragraph:0042 | Conflict as an Inverse of Attention in Sequence Relationship / Analyzing the gains"
+        ],
+        "Conclusion": [
+          "1906.08593:paragraph:0043 | Conflict as an Inverse of Attention in Sequence Relationship / Conclusion"
+        ],
+        "The model": [
+          "1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model"
+        ],
+        "Related Work": [
+          "1906.08593:paragraph:0005 | Conflict as an Inverse of Attention in Sequence Relationship / Related Work"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "[2] 1906.08593:paragraph:0023 | Conflict as an Inverse of Attention in Sequence Relationship / The model\nThe interaction part consists of only attention for one model while for the another one it consists of attention and conflict combined as shown in (eqn.11) . The classifier part is simply stacked fully-connected layers. Figure 3 shows a block diagram of how our model looks like.<end_of_",
+    "retrieved_context_answer": "The context does not explicitly state which neural architecture is used as a base for the attention conflict mechanisms. However, it mentions that the encoder part of the models uses two stacked GRU layers.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.22784810126582278,
+    "retrieved_context_f1": 0.21276595744680854,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

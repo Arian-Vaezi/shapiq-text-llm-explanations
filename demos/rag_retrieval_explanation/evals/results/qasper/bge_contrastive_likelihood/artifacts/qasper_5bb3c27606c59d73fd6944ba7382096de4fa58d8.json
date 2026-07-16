@@ -1,0 +1,1593 @@
+{
+  "case": {
+    "case_id": "qasper_5bb3c27606c59d73fd6944ba7382096de4fa58d8",
+    "paper_id": "1912.13337",
+    "paper_title": "What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge",
+    "question_id": "5bb3c27606c59d73fd6944ba7382096de4fa58d8",
+    "annotation_id": "677abb25656df57ddd31fc63532d69a5b564465b",
+    "question": "Do they focus on Reading Comprehension or multiple choice question answering?",
+    "gold_answer": "MULTIPLE CHOICE QUESTION ANSWERING",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1912.13337:paragraph:0000"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1912.13337:paragraph:0000",
+      "score": 1.02,
+      "title": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+      "text": "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and reasoning abilities. For example, knowing the answers to the two questions in Figure FIGREF1 requires identifying a specific ISA relation (i.e., that cooking is a type of learned behavior) as well as recalling the definition of a concept (i.e., that global warming is defined as a worldwide increase in temperature). In the multiple-choice setting, which is the variety of question-answering (QA) that we focus on in this paper, there is also pragmatic reasoning involved in selecting optimal answer choices (e.g., while greenhouse effect might in some other context be a reasonable answer to the second question in Figure FIGREF1, global warming is a preferable candidate)."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1912.13337:paragraph:0039",
+      "score": 0.732936026544221,
+      "title": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+      "text": "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)}_{c_{i}}) \\in \\mathbb {R}$ as above. Here we also experiment with using ESIM BIBREF47 to generate the contextual representations $r$, as well as a simpler VecSimilarity model that measures the average vector similarity between question and answer tokens: $\\alpha ^{(j)}_{q,i} = \\textsc {Sim}(\\textsc {embed}(q^{(j)}),\\textsc {embed}(c^{(j)}_{i}))$. In contrast to the models above, these sets of baselines are used to check for artifacts between questions and answers that are not captured in the partial-input baselines (see discussion in BIBREF49) and ensure that the overall MCQA tasks are sufficiently difficult for our transformer models."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1912.13337:paragraph:0009",
+      "score": 0.7423166033468739,
+      "title": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+      "text": "We follow recent work on constructing challenge datasets for probing neural models, which has primarily focused on the task of natural language inference (NLI) BIBREF14, BIBREF15, BIBREF16, BIBREF17, BIBREF18. Most of this work looks at constructing data through adversarial generation methods, which have also been found useful for creating stronger models BIBREF19. There has also been work on using synthetic data of the type we consider in this paper BIBREF20, BIBREF21, BIBREF22. We closely follow the methodology of BIBREF22, who use hand-constructed linguistic fragments to probe NLI models and study model re-training using a variant of the inoculation by fine-tuning strategy of BIBREF23. In contrast, we focus on probing open-domain MCQA models (see BIBREF24 for a related study in the reading comprehension setting) as well as constructing data from much larger sources of structured knowledge."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1912.13337:paragraph:0026",
+      "score": 0.7202314310829339,
+      "title": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+      "text": "To generate gold questions and answers, we use the same generation templates for definitions exemplified in Figure TABREF8 for WordNetQA. To generate distractors, we simply take alternative definitions for the target words that represent a different word sense (e.g., the alternative definitions of gift shown in Table TABREF14), as well as randomly chosen definitions if needed to create a 5-way multiple choice question. As above, we reserve a maximum of 3k examples for training. Since we have only 9k examples in total in this dataset (see WordSense in Table TABREF12), we also reserve 3k each for development and testing."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1912.13337:abstract:000",
+      "score": 0.7044255532269867,
+      "title": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+      "text": "Open-domain question answering (QA) is known to involve several underlying knowledge and reasoning challenges, but are models actually learning such knowledge when trained on benchmark tasks? To investigate this, we introduce several new challenge tasks that probe whether state-of-the-art QA models have general knowledge about word definitions and general taxonomic reasoning, both of which are fundamental to more complex forms of reasoning and are widespread in benchmark datasets. As an alternative to expensive crowd-sourcing, we introduce a methodology for automatically building datasets from various types of expert knowledge (e.g., knowledge graphs and lexical taxonomies), allowing for systematic control over the resulting probes and for a more comprehensive evaluation. We find automatically constructing probes to be vulnerable to annotation artifacts, which we carefully control for. Our evaluation confirms that transformer-based QA models are already predisposed to recognize certain types of structural lexical knowledge. However, it also reveals a more nuanced picture: their performance degrades substantially with even a slight increase in the number of hops in the underlying taxonomic hierarchy, or as more challenging distractor candidate answers are introduced. Further, even when these models succeed at the standard instance-level evaluation, they leave much room for improvement when assessed at the level of clusters of semantically connected probes (e.g., all Isa questions about a concept)."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1912.13337:paragraph:0005",
+      "score": 0.6051971792923548,
+      "title": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+      "text": "While our methodology is amenable to any knowledge source and set of models/benchmark tasks, we focus on probing state-of-the-art transformer models BIBREF7, BIBREF9 in the domain of science MCQA. For sources of expert knowledge, we use WordNet, a comprehensive lexical ontology, and other publicly available dictionary resources. We devise probes that measure model competence in definition and taxonomic knowledge in different settings (including hypernymy, hyponymy, and synonymy detection, and word sense disambiguation). This choice is motivated by fact that the science domain is considered particularly challenging for QA BIBREF10, BIBREF11, BIBREF12, and existing science benchmarks are known to involve widespread use of such knowledge (see BIBREF1, BIBREF13 for analysis), which is also arguably fundamental to more complex forms of reasoning."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+      "attribution": 0.02934775933769164
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+      "attribution": 0.020740177307154314
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+      "attribution": 0.016295020953593857
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+      "attribution": -0.01619359794703095
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+      "attribution": 0.0060306788903812985
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+      "attribution": 0.0005564336485700641
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+      "attribution": 0.09209426751488067
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+      "attribution": 0.07571346882902662
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+      "attribution": -0.009033013632088015
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+      "attribution": -0.00731269854541586
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+      "attribution": -0.0032410158901622333
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+      "attribution": 0.0016791148250115094
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0039",
+      "interaction": -0.025145068212087285
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0009",
+      "interaction": 0.013933183168471388
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0026",
+      "interaction": -0.018997031365150432
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:abstract:000",
+      "interaction": -0.010612702251564203
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": -0.014180208348192311
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:paragraph:0009",
+      "interaction": -0.018430917730799575
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:paragraph:0026",
+      "interaction": -0.025129441563449723
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:abstract:000",
+      "interaction": -0.004669458810297831
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": -0.021363492000525147
+    },
+    {
+      "left": "1912.13337:paragraph:0009",
+      "right": "1912.13337:paragraph:0026",
+      "interaction": -0.03636378226539462
+    },
+    {
+      "left": "1912.13337:paragraph:0009",
+      "right": "1912.13337:abstract:000",
+      "interaction": -0.0265854460552511
+    },
+    {
+      "left": "1912.13337:paragraph:0009",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": -0.010947790792937916
+    },
+    {
+      "left": "1912.13337:paragraph:0026",
+      "right": "1912.13337:abstract:000",
+      "interaction": -4.924424087577303e-05
+    },
+    {
+      "left": "1912.13337:paragraph:0026",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": -0.018133086294963584
+    },
+    {
+      "left": "1912.13337:abstract:000",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": -0.006439066406736516
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0039",
+      "interaction": 0.007394037609955533
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0009",
+      "interaction": 0.01705691008883825
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0026",
+      "interaction": 0.01630454586377277
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:abstract:000",
+      "interaction": 0.009180292463748234
+    },
+    {
+      "left": "1912.13337:paragraph:0000",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": 0.002641355063774919
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:paragraph:0009",
+      "interaction": 0.013547471435116972
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:paragraph:0026",
+      "interaction": 0.010842906847028686
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:abstract:000",
+      "interaction": 0.006053371388583425
+    },
+    {
+      "left": "1912.13337:paragraph:0039",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": 0.01333163247467763
+    },
+    {
+      "left": "1912.13337:paragraph:0009",
+      "right": "1912.13337:paragraph:0026",
+      "interaction": 0.010595785487641925
+    },
+    {
+      "left": "1912.13337:paragraph:0009",
+      "right": "1912.13337:abstract:000",
+      "interaction": -0.00022975546746128008
+    },
+    {
+      "left": "1912.13337:paragraph:0009",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": -0.002608035308115795
+    },
+    {
+      "left": "1912.13337:paragraph:0026",
+      "right": "1912.13337:abstract:000",
+      "interaction": 0.0029885373630952157
+    },
+    {
+      "left": "1912.13337:paragraph:0026",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": 0.0070781764125873664
+    },
+    {
+      "left": "1912.13337:abstract:000",
+      "right": "1912.13337:paragraph:0005",
+      "interaction": 0.004254312733655564
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.05677647172611111
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.03177699244541543
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "remaining_chunks": 4,
+        "score": 0.01103835729822733
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "remaining_chunks": 3,
+        "score": 0.00468440058506403
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "remaining_chunks": 2,
+        "score": 0.04591306639500037
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.048936444089343833
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "selected_chunks": 1,
+        "score": 0.08000130791800086
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "selected_chunks": 2,
+        "score": 0.10426520711219078
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "selected_chunks": 3,
+        "score": 0.06488620925002264
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "selected_chunks": 4,
+        "score": 0.06173082727553414
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "selected_chunks": 5,
+        "score": 0.05619594705785891
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "selected_chunks": 6,
+        "score": 0.05677647172611111
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.05677647172611111
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.03177699244541543
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "remaining_chunks": 4,
+        "score": 0.07179161615900587
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "remaining_chunks": 3,
+        "score": 0.075109160656742
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "remaining_chunks": 2,
+        "score": 0.04591306639500037
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.07366922354104255
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.05677647172611111
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "remaining_chunks": 5,
+        "score": 0.03177699244541543
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "remaining_chunks": 4,
+        "score": 0.01103835729822733
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 6: 1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "remaining_chunks": 3,
+        "score": -0.010061902215751428
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "remaining_chunks": 2,
+        "score": -0.00151815543934114
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "remaining_chunks": 1,
+        "score": 0.05441996000687299
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.05677647172611119
+      },
+      {
+        "step": 1,
+        "score": 0.05805944267021836
+      },
+      {
+        "step": 2,
+        "score": 0.05450549085316957
+      },
+      {
+        "step": 3,
+        "score": 0.05523354947405976
+      },
+      {
+        "step": 4,
+        "score": 0.06346701850248262
+      },
+      {
+        "step": 5,
+        "score": 0.07906218312397201
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Do they focus on Reading Comprehension or multiple choice question answering?",
+    "expanded_queries": [
+      "Do they focus on Reading Comprehension or multiple choice question answering?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "dense": 0.6669,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and "
+      },
+      {
+        "rank": 2,
+        "source": "1912.13337:paragraph:0001 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "dense": 0.6618,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Recent successes in QA, driven largely by the creation of new resources BIBREF2, BIBREF3, BIBREF4, BIBREF5 and advances in model pre-training BIBREF6, BIBREF7, raise a natural question: do state-of-the-art multiple-choic"
+      },
+      {
+        "rank": 3,
+        "source": "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "dense": 0.6442,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "flags": "",
+        "preview": "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)"
+      },
+      {
+        "rank": 4,
+        "source": "1912.13337:paragraph:0038 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "dense": 0.6321,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "flags": "",
+        "preview": "A slight variant of this model, the Choice-to-choice model, tries to single out a given answer choice relative to other choices by scoring all choice pairs $\\alpha _{i,i^{\\prime }}^{(j)} = \\textsc {Att}(r^{(j)}_{c_{i}},r"
+      },
+      {
+        "rank": 5,
+        "source": "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "dense": 0.6242,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Open-domain question answering (QA) is known to involve several underlying knowledge and reasoning challenges, but are models actually learning such knowledge when trained on benchmark tasks? To investigate this, we intr"
+      },
+      {
+        "rank": 6,
+        "source": "1912.13337:paragraph:0050 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "dense": 0.6215,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "flags": "",
+        "preview": "Using a more conventional set of Task-Specific QA models (i.e., the LSTM-based Question-to-Choice models trained directly on the probes), we can see that results are not particularly strong on any of the datasets, sugges"
+      },
+      {
+        "rank": 7,
+        "source": "1912.13337:paragraph:0012 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction",
+        "dense": 0.6194,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset Probes and Construction",
+        "flags": "",
+        "preview": "Our probing methodology starts by constructing challenge datasets (Figure FIGREF1, yellow box) from a target set of knowledge resources. Each of our probing datasets consists of multiple-choice questions that include a q"
+      },
+      {
+        "rank": 8,
+        "source": "1912.13337:paragraph:0030 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Question+Answer Encoder.",
+        "dense": 0.616,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Question+Answer Encoder.",
+        "flags": "",
+        "preview": "To model this, our investigation centers around the use of the transformer-based BIBREF25 BERT encoder and fine-tuning approach of BIBREF7 (see also BIBREF6). For each question and individual answer pair $q^{(j)}_{a_{i}}"
+      },
+      {
+        "rank": 9,
+        "source": "1912.13337:paragraph:0029 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "dense": 0.6159,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "flags": "",
+        "preview": "Given a dataset $D =\\lbrace (\\textbf {q}^{(d)}, \\lbrace a_{1}^{(d)},..., a_{N}^{(d)}\\rbrace ) \\rbrace _{d}^{\\mid D \\mid }$ consisting of pairs of questions stems $\\textbf {q}$ and answer choices $a_{i}$, the goal is to f"
+      },
+      {
+        "rank": 10,
+        "source": "1912.13337:paragraph:0048 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "dense": 0.6131,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "flags": "",
+        "preview": "As shown in Table TABREF25, most of our partial-input baselines (i.e., Choice-Only and Choice-to-Choice models) failed to perform well on our dataset probes across a wide range of models, showing that such probes are gen"
+      },
+      {
+        "rank": 11,
+        "source": "1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "dense": 0.6123,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "While our methodology is amenable to any knowledge source and set of models/benchmark tasks, we focus on probing state-of-the-art transformer models BIBREF7, BIBREF9 in the domain of science MCQA. For sources of expert k"
+      },
+      {
+        "rank": 12,
+        "source": "1912.13337:paragraph:0023 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+        "dense": 0.6118,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+        "flags": "",
+        "preview": "Based on how we generate data, for each concept $c$ (i.e., atomic WordNet synset) and probe type (i.e., definitions, hypernymy, etc.), we have a wide variety of questions related to $c$ that manipulate 1) the complexity "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "keyword": 0.1445,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and "
+      },
+      {
+        "rank": 2,
+        "source": "1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "keyword": 0.1035,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "flags": "",
+        "preview": "To generate gold questions and answers, we use the same generation templates for definitions exemplified in Figure TABREF8 for WordNetQA. To generate distractors, we simply take alternative definitions for the target wor"
+      },
+      {
+        "rank": 3,
+        "source": "1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "keyword": 0.1018,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "We follow recent work on constructing challenge datasets for probing neural models, which has primarily focused on the task of natural language inference (NLI) BIBREF14, BIBREF15, BIBREF16, BIBREF17, BIBREF18. Most of th"
+      },
+      {
+        "rank": 4,
+        "source": "1912.13337:paragraph:0001 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "keyword": 0.0843,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Recent successes in QA, driven largely by the creation of new resources BIBREF2, BIBREF3, BIBREF4, BIBREF5 and advances in model pre-training BIBREF6, BIBREF7, raise a natural question: do state-of-the-art multiple-choic"
+      },
+      {
+        "rank": 5,
+        "source": "1912.13337:paragraph:0029 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "keyword": 0.0677,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "flags": "",
+        "preview": "Given a dataset $D =\\lbrace (\\textbf {q}^{(d)}, \\lbrace a_{1}^{(d)},..., a_{N}^{(d)}\\rbrace ) \\rbrace _{d}^{\\mid D \\mid }$ consisting of pairs of questions stems $\\textbf {q}$ and answer choices $a_{i}$, the goal is to f"
+      },
+      {
+        "rank": 6,
+        "source": "1912.13337:paragraph:0012 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction",
+        "keyword": 0.0671,
+        "page": 1,
+        "type": "body_text",
+        "section": "Dataset Probes and Construction",
+        "flags": "",
+        "preview": "Our probing methodology starts by constructing challenge datasets (Figure FIGREF1, yellow box) from a target set of knowledge resources. Each of our probing datasets consists of multiple-choice questions that include a q"
+      },
+      {
+        "rank": 7,
+        "source": "1912.13337:paragraph:0038 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "keyword": 0.0575,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "flags": "",
+        "preview": "A slight variant of this model, the Choice-to-choice model, tries to single out a given answer choice relative to other choices by scoring all choice pairs $\\alpha _{i,i^{\\prime }}^{(j)} = \\textsc {Att}(r^{(j)}_{c_{i}},r"
+      },
+      {
+        "rank": 8,
+        "source": "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "keyword": 0.048,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "flags": "",
+        "preview": "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)"
+      },
+      {
+        "rank": 9,
+        "source": "1912.13337:paragraph:0048 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "keyword": 0.0467,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "flags": "",
+        "preview": "As shown in Table TABREF25, most of our partial-input baselines (i.e., Choice-Only and Choice-to-Choice models) failed to perform well on our dataset probes across a wide range of models, showing that such probes are gen"
+      },
+      {
+        "rank": 10,
+        "source": "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "keyword": 0.0439,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Open-domain question answering (QA) is known to involve several underlying knowledge and reasoning challenges, but are models actually learning such knowledge when trained on benchmark tasks? To investigate this, we intr"
+      },
+      {
+        "rank": 11,
+        "source": "1912.13337:paragraph:0049 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "keyword": 0.0425,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "flags": "",
+        "preview": "We had similar issues with the hypernymy probe which, even after a filtering step that used our Choice-to-Choice-GloVe model, still leads to high results on the BERT and RoBERTa choice-only models. Given that several att"
+      },
+      {
+        "rank": 12,
+        "source": "1912.13337:paragraph:0036 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "keyword": 0.0391,
+        "page": 1,
+        "type": "body_text",
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "flags": "",
+        "preview": "With these contextual representations, different baseline models can be constructed. For example, a Choice-Only model, which is a variant of the well-known hypothesis-only baseline used in NLI BIBREF46, scores each choic"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6669,
+        "keyword": 0.1445,
+        "rerank": 1.02,
+        "section": "Introduction",
+        "query_hits": "answering, focus, question",
+        "reasons": "body/table evidence",
+        "preview": "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and "
+      },
+      {
+        "rank": 2,
+        "source": "1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5912,
+        "keyword": 0.1018,
+        "rerank": 0.7423,
+        "section": "Related Work",
+        "query_hits": "comprehension, focus, reading",
+        "reasons": "body/table evidence",
+        "preview": "We follow recent work on constructing challenge datasets for probing neural models, which has primarily focused on the task of natural language inference (NLI) BIBREF14, BIBREF15, BIBREF16, BIBREF17, BIBREF18. Most of th"
+      },
+      {
+        "rank": 3,
+        "source": "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6442,
+        "keyword": 0.048,
+        "rerank": 0.7329,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "query_hits": "choice, question",
+        "reasons": "body/table evidence",
+        "preview": "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)"
+      },
+      {
+        "rank": 4,
+        "source": "1912.13337:paragraph:0001 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6618,
+        "keyword": 0.0843,
+        "rerank": 0.7221,
+        "section": "Introduction",
+        "query_hits": "question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Recent successes in QA, driven largely by the creation of new resources BIBREF2, BIBREF3, BIBREF4, BIBREF5 and advances in model pre-training BIBREF6, BIBREF7, raise a natural question: do state-of-the-art multiple-choic"
+      },
+      {
+        "rank": 5,
+        "source": "1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5809,
+        "keyword": 0.1035,
+        "rerank": 0.7202,
+        "section": "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "query_hits": "choice, multiple, question",
+        "reasons": "body/table evidence",
+        "preview": "To generate gold questions and answers, we use the same generation templates for definitions exemplified in Figure TABREF8 for WordNetQA. To generate distractors, we simply take alternative definitions for the target wor"
+      },
+      {
+        "rank": 6,
+        "source": "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6242,
+        "keyword": 0.0439,
+        "rerank": 0.7044,
+        "section": "Abstract",
+        "query_hits": "answering, question, they",
+        "reasons": "body/table evidence",
+        "preview": "Open-domain question answering (QA) is known to involve several underlying knowledge and reasoning challenges, but are models actually learning such knowledge when trained on benchmark tasks? To investigate this, we intr"
+      },
+      {
+        "rank": 7,
+        "source": "1912.13337:paragraph:0038 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6321,
+        "keyword": 0.0575,
+        "rerank": 0.6925,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "query_hits": "choice",
+        "reasons": "body/table evidence",
+        "preview": "A slight variant of this model, the Choice-to-choice model, tries to single out a given answer choice relative to other choices by scoring all choice pairs $\\alpha _{i,i^{\\prime }}^{(j)} = \\textsc {Att}(r^{(j)}_{c_{i}},r"
+      },
+      {
+        "rank": 8,
+        "source": "1912.13337:paragraph:0012 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6194,
+        "keyword": 0.0671,
+        "rerank": 0.6806,
+        "section": "Dataset Probes and Construction",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "Our probing methodology starts by constructing challenge datasets (Figure FIGREF1, yellow box) from a target set of knowledge resources. Each of our probing datasets consists of multiple-choice questions that include a q"
+      },
+      {
+        "rank": 9,
+        "source": "1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6123,
+        "keyword": 0.0249,
+        "rerank": 0.6052,
+        "section": "Introduction",
+        "query_hits": "choice, focus",
+        "reasons": "body/table evidence",
+        "preview": "While our methodology is amenable to any knowledge source and set of models/benchmark tasks, we focus on probing state-of-the-art transformer models BIBREF7, BIBREF9 in the domain of science MCQA. For sources of expert k"
+      },
+      {
+        "rank": 10,
+        "source": "1912.13337:paragraph:0048 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6131,
+        "keyword": 0.0467,
+        "rerank": 0.5928,
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As shown in Table TABREF25, most of our partial-input baselines (i.e., Choice-Only and Choice-to-Choice models) failed to perform well on our dataset probes across a wide range of models, showing that such probes are gen"
+      },
+      {
+        "rank": 11,
+        "source": "1912.13337:paragraph:0049 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6104,
+        "keyword": 0.0425,
+        "rerank": 0.577,
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We had similar issues with the hypernymy probe which, even after a filtering step that used our Choice-to-Choice-GloVe model, still leads to high results on the BERT and RoBERTa choice-only models. Given that several att"
+      },
+      {
+        "rank": 12,
+        "source": "1912.13337:paragraph:0010 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.61,
+        "keyword": 0.0122,
+        "rerank": 0.5734,
+        "section": "Related Work",
+        "query_hits": "focus, they",
+        "reasons": "body/table evidence",
+        "preview": "Our main study focuses on probing the BERT model and fine-tuning approach of BIBREF7, and other variants thereof, which are all based on the transformer architecture of BIBREF25. Related to our efforts, there have been r"
+      },
+      {
+        "rank": 13,
+        "source": "1912.13337:paragraph:0050 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6215,
+        "keyword": 0.0257,
+        "rerank": 0.5701,
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Using a more conventional set of Task-Specific QA models (i.e., the LSTM-based Question-to-Choice models trained directly on the probes), we can see that results are not particularly strong on any of the datasets, sugges"
+      },
+      {
+        "rank": 14,
+        "source": "1912.13337:paragraph:0018 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: WordNetQA ::: Example Generation @!START@$\\textsc {gen}(\\tau )$@!END@.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6081,
+        "keyword": 0.0266,
+        "rerank": 0.5683,
+        "section": "Dataset Probes and Construction ::: WordNetQA ::: Example Generation @!START@$\\textsc {gen}(\\tau )$@!END@.",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "For example, suppose we wish to create a question $\\textbf {q}$ about the definition of a target concept $c \\in \\mathcal {C}$. We first select a question template from $\\mathcal {Q}$ that first introduces the concept $c$"
+      },
+      {
+        "rank": 15,
+        "source": "1912.13337:paragraph:0045 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Evaluating Model Competence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6079,
+        "keyword": 0.021,
+        "rerank": 0.5563,
+        "section": "Probing Methodology and Modeling ::: Evaluating Model Competence",
+        "query_hits": "answering",
+        "reasons": "body/table evidence",
+        "preview": "The standard way to evaluate our MCQA models is by looking at the overall accuracy of the correct answer prediction, or what we call instance-level accuracy (as in Table TABREF25). Given the nature of our data and the ex"
+      },
+      {
+        "rank": 16,
+        "source": "1912.13337:paragraph:0015 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6064,
+        "keyword": 0.0213,
+        "rerank": 0.553,
+        "section": "Dataset Probes and Construction",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "To construct probe datasets, we rely on two heuristic functions, defined below for each individual probe: $\\textsc {gen}_{\\mathcal {Q}}(\\tau )$, which generates gold question-answer pairs $(\\textbf {q},\\textbf {a})$ from"
+      },
+      {
+        "rank": 17,
+        "source": "1912.13337:paragraph:0008 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6033,
+        "keyword": 0.0238,
+        "rerank": 0.5508,
+        "section": "Introduction",
+        "query_hits": "answering",
+        "reasons": "body/table evidence",
+        "preview": "Our comprehensive assessment reveals several interesting nuances to the overall positive trend. For example, the performance of even the best QA models degrades substantially on our hyponym probes (by 8-15%) when going f"
+      },
+      {
+        "rank": 18,
+        "source": "1912.13337:paragraph:0028 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6092,
+        "keyword": 0.0164,
+        "rerank": 0.5499,
+        "section": "Probing Methodology and Modeling",
+        "query_hits": "focus",
+        "reasons": "body/table evidence",
+        "preview": "Given the probes above, we now can start to answer the empirical questions posed at the beginning. Our main focus is on looking at transformer-based MCQA models trained in the science domain (using the benchmarks shown i"
+      },
+      {
+        "rank": 19,
+        "source": "1912.13337:paragraph:0029 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6159,
+        "keyword": 0.0677,
+        "rerank": 0.5433,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Given a dataset $D =\\lbrace (\\textbf {q}^{(d)}, \\lbrace a_{1}^{(d)},..., a_{N}^{(d)}\\rbrace ) \\rbrace _{d}^{\\mid D \\mid }$ consisting of pairs of questions stems $\\textbf {q}$ and answer choices $a_{i}$, the goal is to f"
+      },
+      {
+        "rank": 20,
+        "source": "1912.13337:paragraph:0023 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6118,
+        "keyword": 0.0,
+        "rerank": 0.4924,
+        "section": "Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Based on how we generate data, for each concept $c$ (i.e., atomic WordNet synset) and probe type (i.e., definitions, hypernymy, etc.), we have a wide variety of questions related to $c$ that manipulate 1) the complexity "
+      },
+      {
+        "rank": 21,
+        "source": "1912.13337:paragraph:0004 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6084,
+        "keyword": 0.0,
+        "rerank": 0.484,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we look at systematically constructing such tests by exploiting the vast amounts of structured information contained in various types of expert knowledge such as knowledge graphs and lexical taxonomies. Ou"
+      },
+      {
+        "rank": 22,
+        "source": "1912.13337:paragraph:0059 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are Models Consistent across Clusters?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6061,
+        "keyword": 0.0,
+        "rerank": 0.4783,
+        "section": "Results and Findings ::: Are Models Consistent across Clusters?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF32 shows cluster-level accuracies for the different WordNetQA probes. As with performance across the different inference/distractor categories, these results are mixed. For some probes, such as definitions, o"
+      },
+      {
+        "rank": 23,
+        "source": "1912.13337:paragraph:0030 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Question+Answer Encoder.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.616,
+        "keyword": 0.0183,
+        "rerank": 0.4709,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Question+Answer Encoder.",
+        "query_hits": "question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To model this, our investigation centers around the use of the transformer-based BIBREF25 BERT encoder and fine-tuning approach of BIBREF7 (see also BIBREF6). For each question and individual answer pair $q^{(j)}_{a_{i}}"
+      },
+      {
+        "rank": 24,
+        "source": "1912.13337:paragraph:0052 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: How well do pre-trained MCQA models do?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6028,
+        "keyword": 0.0,
+        "rerank": 0.47,
+        "section": "Results and Findings ::: How well do pre-trained MCQA models do?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Given the controlled nature of our probes, we can get a more detailed view of how well the science models are performing across different reasoning and distractor types, as shown in the first column of Figure FIGREF28 fo"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6669,
+        "keyword": 0.1445,
+        "rerank": 1.02,
+        "section": "Introduction",
+        "query_hits": "answering, focus, question",
+        "reasons": "body/table evidence",
+        "preview": "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and "
+      },
+      {
+        "rank": 2,
+        "source": "1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5912,
+        "keyword": 0.1018,
+        "rerank": 0.7423,
+        "section": "Related Work",
+        "query_hits": "comprehension, focus, reading",
+        "reasons": "body/table evidence",
+        "preview": "We follow recent work on constructing challenge datasets for probing neural models, which has primarily focused on the task of natural language inference (NLI) BIBREF14, BIBREF15, BIBREF16, BIBREF17, BIBREF18. Most of th"
+      },
+      {
+        "rank": 3,
+        "source": "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6442,
+        "keyword": 0.048,
+        "rerank": 0.7329,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "query_hits": "choice, question",
+        "reasons": "body/table evidence",
+        "preview": "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)"
+      },
+      {
+        "rank": 4,
+        "source": "1912.13337:paragraph:0001 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6618,
+        "keyword": 0.0843,
+        "rerank": 0.7221,
+        "section": "Introduction",
+        "query_hits": "question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Recent successes in QA, driven largely by the creation of new resources BIBREF2, BIBREF3, BIBREF4, BIBREF5 and advances in model pre-training BIBREF6, BIBREF7, raise a natural question: do state-of-the-art multiple-choic"
+      },
+      {
+        "rank": 5,
+        "source": "1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5809,
+        "keyword": 0.1035,
+        "rerank": 0.7202,
+        "section": "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "query_hits": "choice, multiple, question",
+        "reasons": "body/table evidence",
+        "preview": "To generate gold questions and answers, we use the same generation templates for definitions exemplified in Figure TABREF8 for WordNetQA. To generate distractors, we simply take alternative definitions for the target wor"
+      },
+      {
+        "rank": 6,
+        "source": "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6242,
+        "keyword": 0.0439,
+        "rerank": 0.7044,
+        "section": "Abstract",
+        "query_hits": "answering, question, they",
+        "reasons": "body/table evidence",
+        "preview": "Open-domain question answering (QA) is known to involve several underlying knowledge and reasoning challenges, but are models actually learning such knowledge when trained on benchmark tasks? To investigate this, we intr"
+      },
+      {
+        "rank": 7,
+        "source": "1912.13337:paragraph:0038 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6321,
+        "keyword": 0.0575,
+        "rerank": 0.6925,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "query_hits": "choice",
+        "reasons": "body/table evidence",
+        "preview": "A slight variant of this model, the Choice-to-choice model, tries to single out a given answer choice relative to other choices by scoring all choice pairs $\\alpha _{i,i^{\\prime }}^{(j)} = \\textsc {Att}(r^{(j)}_{c_{i}},r"
+      },
+      {
+        "rank": 8,
+        "source": "1912.13337:paragraph:0012 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6194,
+        "keyword": 0.0671,
+        "rerank": 0.6806,
+        "section": "Dataset Probes and Construction",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "Our probing methodology starts by constructing challenge datasets (Figure FIGREF1, yellow box) from a target set of knowledge resources. Each of our probing datasets consists of multiple-choice questions that include a q"
+      },
+      {
+        "rank": 9,
+        "source": "1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6123,
+        "keyword": 0.0249,
+        "rerank": 0.6052,
+        "section": "Introduction",
+        "query_hits": "choice, focus",
+        "reasons": "body/table evidence",
+        "preview": "While our methodology is amenable to any knowledge source and set of models/benchmark tasks, we focus on probing state-of-the-art transformer models BIBREF7, BIBREF9 in the domain of science MCQA. For sources of expert k"
+      },
+      {
+        "rank": 10,
+        "source": "1912.13337:paragraph:0048 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6131,
+        "keyword": 0.0467,
+        "rerank": 0.5928,
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As shown in Table TABREF25, most of our partial-input baselines (i.e., Choice-Only and Choice-to-Choice models) failed to perform well on our dataset probes across a wide range of models, showing that such probes are gen"
+      },
+      {
+        "rank": 11,
+        "source": "1912.13337:paragraph:0049 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6104,
+        "keyword": 0.0425,
+        "rerank": 0.577,
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We had similar issues with the hypernymy probe which, even after a filtering step that used our Choice-to-Choice-GloVe model, still leads to high results on the BERT and RoBERTa choice-only models. Given that several att"
+      },
+      {
+        "rank": 12,
+        "source": "1912.13337:paragraph:0010 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.61,
+        "keyword": 0.0122,
+        "rerank": 0.5734,
+        "section": "Related Work",
+        "query_hits": "focus, they",
+        "reasons": "body/table evidence",
+        "preview": "Our main study focuses on probing the BERT model and fine-tuning approach of BIBREF7, and other variants thereof, which are all based on the transformer architecture of BIBREF25. Related to our efforts, there have been r"
+      },
+      {
+        "rank": 13,
+        "source": "1912.13337:paragraph:0050 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6215,
+        "keyword": 0.0257,
+        "rerank": 0.5701,
+        "section": "Results and Findings ::: Are our Probes Sufficiently Challenging?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Using a more conventional set of Task-Specific QA models (i.e., the LSTM-based Question-to-Choice models trained directly on the probes), we can see that results are not particularly strong on any of the datasets, sugges"
+      },
+      {
+        "rank": 14,
+        "source": "1912.13337:paragraph:0018 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: WordNetQA ::: Example Generation @!START@$\\textsc {gen}(\\tau )$@!END@.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6081,
+        "keyword": 0.0266,
+        "rerank": 0.5683,
+        "section": "Dataset Probes and Construction ::: WordNetQA ::: Example Generation @!START@$\\textsc {gen}(\\tau )$@!END@.",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "For example, suppose we wish to create a question $\\textbf {q}$ about the definition of a target concept $c \\in \\mathcal {C}$. We first select a question template from $\\mathcal {Q}$ that first introduces the concept $c$"
+      },
+      {
+        "rank": 15,
+        "source": "1912.13337:paragraph:0045 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Evaluating Model Competence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6079,
+        "keyword": 0.021,
+        "rerank": 0.5563,
+        "section": "Probing Methodology and Modeling ::: Evaluating Model Competence",
+        "query_hits": "answering",
+        "reasons": "body/table evidence",
+        "preview": "The standard way to evaluate our MCQA models is by looking at the overall accuracy of the correct answer prediction, or what we call instance-level accuracy (as in Table TABREF25). Given the nature of our data and the ex"
+      },
+      {
+        "rank": 16,
+        "source": "1912.13337:paragraph:0015 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6064,
+        "keyword": 0.0213,
+        "rerank": 0.553,
+        "section": "Dataset Probes and Construction",
+        "query_hits": "question",
+        "reasons": "body/table evidence",
+        "preview": "To construct probe datasets, we rely on two heuristic functions, defined below for each individual probe: $\\textsc {gen}_{\\mathcal {Q}}(\\tau )$, which generates gold question-answer pairs $(\\textbf {q},\\textbf {a})$ from"
+      },
+      {
+        "rank": 17,
+        "source": "1912.13337:paragraph:0008 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6033,
+        "keyword": 0.0238,
+        "rerank": 0.5508,
+        "section": "Introduction",
+        "query_hits": "answering",
+        "reasons": "body/table evidence",
+        "preview": "Our comprehensive assessment reveals several interesting nuances to the overall positive trend. For example, the performance of even the best QA models degrades substantially on our hyponym probes (by 8-15%) when going f"
+      },
+      {
+        "rank": 18,
+        "source": "1912.13337:paragraph:0028 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6092,
+        "keyword": 0.0164,
+        "rerank": 0.5499,
+        "section": "Probing Methodology and Modeling",
+        "query_hits": "focus",
+        "reasons": "body/table evidence",
+        "preview": "Given the probes above, we now can start to answer the empirical questions posed at the beginning. Our main focus is on looking at transformer-based MCQA models trained in the science domain (using the benchmarks shown i"
+      },
+      {
+        "rank": 19,
+        "source": "1912.13337:paragraph:0029 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6159,
+        "keyword": 0.0677,
+        "rerank": 0.5433,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Given a dataset $D =\\lbrace (\\textbf {q}^{(d)}, \\lbrace a_{1}^{(d)},..., a_{N}^{(d)}\\rbrace ) \\rbrace _{d}^{\\mid D \\mid }$ consisting of pairs of questions stems $\\textbf {q}$ and answer choices $a_{i}$, the goal is to f"
+      },
+      {
+        "rank": 20,
+        "source": "1912.13337:paragraph:0023 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6118,
+        "keyword": 0.0,
+        "rerank": 0.4924,
+        "section": "Dataset Probes and Construction ::: WordNetQA ::: Perturbations and Semantic Clusters",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Based on how we generate data, for each concept $c$ (i.e., atomic WordNet synset) and probe type (i.e., definitions, hypernymy, etc.), we have a wide variety of questions related to $c$ that manipulate 1) the complexity "
+      },
+      {
+        "rank": 21,
+        "source": "1912.13337:paragraph:0004 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6084,
+        "keyword": 0.0,
+        "rerank": 0.484,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we look at systematically constructing such tests by exploiting the vast amounts of structured information contained in various types of expert knowledge such as knowledge graphs and lexical taxonomies. Ou"
+      },
+      {
+        "rank": 22,
+        "source": "1912.13337:paragraph:0059 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: Are Models Consistent across Clusters?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6061,
+        "keyword": 0.0,
+        "rerank": 0.4783,
+        "section": "Results and Findings ::: Are Models Consistent across Clusters?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF32 shows cluster-level accuracies for the different WordNetQA probes. As with performance across the different inference/distractor categories, these results are mixed. For some probes, such as definitions, o"
+      },
+      {
+        "rank": 23,
+        "source": "1912.13337:paragraph:0030 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Question+Answer Encoder.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.616,
+        "keyword": 0.0183,
+        "rerank": 0.4709,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Question+Answer Encoder.",
+        "query_hits": "question",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "To model this, our investigation centers around the use of the transformer-based BIBREF25 BERT encoder and fine-tuning approach of BIBREF7 (see also BIBREF6). For each question and individual answer pair $q^{(j)}_{a_{i}}"
+      },
+      {
+        "rank": 24,
+        "source": "1912.13337:paragraph:0052 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Results and Findings ::: How well do pre-trained MCQA models do?",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6028,
+        "keyword": 0.0,
+        "rerank": 0.47,
+        "section": "Results and Findings ::: How well do pre-trained MCQA models do?",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Given the controlled nature of our probes, we can get a more detailed view of how well the science models are performing across different reasoning and distractor types, as shown in the first column of Figure FIGREF28 fo"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6669,
+        "keyword": 0.1445,
+        "rerank": 1.02,
+        "section": "Introduction",
+        "query_hits": "answering, focus, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.48,
+        "reasons": "body/table evidence",
+        "preview": "Automatically answering questions, especially in the open-domain setting (i.e., where minimal or no contextual knowledge is explicitly provided), requires bringing to bear considerable amount of background knowledge and "
+      },
+      {
+        "rank": 2,
+        "source": "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6442,
+        "keyword": 0.048,
+        "rerank": 0.7329,
+        "section": "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "query_hits": "choice, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7163,
+        "novelty": 0.834,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1727,
+        "reasons": "body/table evidence",
+        "preview": "A Question-to-choice model, in contrast, uses the contextual representations for each question and individual choice and an attention model Att model to get a score $\\alpha ^{(j)}_{q,i} = \\textsc {Att}(r^{(j)}_{q},r^{(j)"
+      },
+      {
+        "rank": 3,
+        "source": "1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5912,
+        "keyword": 0.1018,
+        "rerank": 0.7423,
+        "section": "Related Work",
+        "query_hits": "comprehension, focus, reading",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7255,
+        "novelty": 0.862,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0646,
+        "reasons": "body/table evidence",
+        "preview": "We follow recent work on constructing challenge datasets for probing neural models, which has primarily focused on the task of natural language inference (NLI) BIBREF14, BIBREF15, BIBREF16, BIBREF17, BIBREF18. Most of th"
+      },
+      {
+        "rank": 4,
+        "source": "1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5809,
+        "keyword": 0.1035,
+        "rerank": 0.7202,
+        "section": "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "query_hits": "choice, multiple, question",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7037,
+        "novelty": 0.7801,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0344,
+        "reasons": "body/table evidence",
+        "preview": "To generate gold questions and answers, we use the same generation templates for definitions exemplified in Figure TABREF8 for WordNetQA. To generate distractors, we simply take alternative definitions for the target wor"
+      },
+      {
+        "rank": 5,
+        "source": "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6242,
+        "keyword": 0.0439,
+        "rerank": 0.7044,
+        "section": "Abstract",
+        "query_hits": "answering, question, they",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6881,
+        "novelty": 0.7764,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0204,
+        "reasons": "body/table evidence",
+        "preview": "Open-domain question answering (QA) is known to involve several underlying knowledge and reasoning challenges, but are models actually learning such knowledge when trained on benchmark tasks? To investigate this, we intr"
+      },
+      {
+        "rank": 6,
+        "source": "1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6123,
+        "keyword": 0.0249,
+        "rerank": 0.6052,
+        "section": "Introduction",
+        "query_hits": "choice, focus",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.59,
+        "novelty": 0.4365,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0085,
+        "reasons": "body/table evidence",
+        "preview": "While our methodology is amenable to any knowledge source and set of models/benchmark tasks, we focus on probing state-of-the-art transformer models BIBREF7, BIBREF9 in the domain of science MCQA. For sources of expert k"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "answering",
+        "choice",
+        "comprehension",
+        "focus",
+        "multiple",
+        "question",
+        "reading",
+        "they"
+      ],
+      "covered_query_terms": [
+        "answering",
+        "choice",
+        "comprehension",
+        "focus",
+        "multiple",
+        "question",
+        "reading",
+        "they"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction": [
+          "answering",
+          "focus",
+          "question"
+        ],
+        "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.": [
+          "choice",
+          "question"
+        ],
+        "1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work": [
+          "comprehension",
+          "focus",
+          "reading"
+        ],
+        "1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.": [
+          "choice",
+          "multiple",
+          "question"
+        ],
+        "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract": [
+          "answering",
+          "question",
+          "they"
+        ],
+        "1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction": [
+          "choice",
+          "focus"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.",
+        "Introduction",
+        "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.",
+        "Related Work"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1912.13337:paragraph:0000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction",
+          "1912.13337:paragraph:0005 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Introduction"
+        ],
+        "Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks.": [
+          "1912.13337:paragraph:0039 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Probing Methodology and Modeling ::: Task Definition and Modeling ::: Baselines and Sanity Checks."
+        ],
+        "Related Work": [
+          "1912.13337:paragraph:0009 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Related Work"
+        ],
+        "Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation.": [
+          "1912.13337:paragraph:0026 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Dataset Probes and Construction ::: DictionaryQA ::: Example and Distractor Generation."
+        ],
+        "Abstract": [
+          "1912.13337:abstract:000 | What Does My QA Model Know? Devising Controlled Probes using Expert Knowledge / Abstract"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "In the multiple-choice setting, which is the variety of question-answering (QA) that the paper focuses on, there is pragmatic reasoning involved in selecting optimal answer choices.",
+    "retrieved_context_answer": "The context indicates that the paper focuses on the multiple-choice setting for Question Answering (QA) [1]. Specifically, it mentions focusing on \"the multiple-choice setting, which is the variety of question-answering (QA) that we focus on in this paper\" [1].\n\nHowever, the context also notes that there has been work on probing open-domain MCQA models (which relates to multiple-choice QA) and references a related study in the reading",
+    "closed_book_f1": 0.14285714285714288,
+    "gold_context_f1": 0.25,
+    "retrieved_context_f1": 0.10526315789473684,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

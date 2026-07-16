@@ -1,0 +1,1586 @@
+{
+  "case": {
+    "case_id": "qasper_66c96c297c2cffdf5013bab5e95b59101cb38655",
+    "paper_id": "2003.03106",
+    "paper_title": "Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT",
+    "question_id": "66c96c297c2cffdf5013bab5e95b59101cb38655",
+    "annotation_id": "389ee0746c550138221e69a23a5bb366112eba76",
+    "question": "What is the performance of BERT on the task?",
+    "gold_answer": "F1 scores are: HUBES-PHI: Detection(0.965), Classification relaxed (0.95), Classification strict (0.937) Medoccan: Detection(0.972), Classification (0.967)",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "2003.03106:paragraph:0057",
+      "2003.03106:paragraph:0060"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "2003.03106:paragraph:0005",
+      "score": 0.8244335394420589,
+      "title": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+      "text": "The anonymisation systems based on NLP techniques perform reasonably well, but are far from perfect. Depending on the difficulty posed by each dataset or the amount of available data for training machine learning models, the performance achieved by these methods is not enough to fully rely on them in certain situations BIBREF0. However, in the last two years, the NLP community has reached an important milestone thanks to the appearance of the so-called Transformers neural network architectures BIBREF1. In this paper, we conduct several experiments in sensitive information detection and classification on Spanish clinical text using BERT (from `Bidirectional Encoder Representations from Transformers') BIBREF2 as the base for a sequence labelling approach. The experiments are carried out on two datasets: the MEDDOCAN: Medical Document Anonymization shared task dataset BIBREF3, and NUBes BIBREF4, a corpus of real medical reports in Spanish. In these experiments, we compare the performance of BERT with other machine-learning-based systems, some of which use language-specific features. Our aim is to evaluate how good a BERT-based model performs without language nor domain specialisation apart from the training data labelled for the task at hand."
+    },
+    {
+      "rank": 2,
+      "passage_id": "2003.03106:paragraph:0059",
+      "score": 0.8267613737943381,
+      "title": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+      "text": "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training data. A general downward trend can be observed, as one would expect: less training data leads to less accurate predictions. However, the BERT-based model is the most robust to training-data reduction, showing an steadily low performance loss. With 1% of the dataset (230 training instances), the BERT-based model only suffers a striking 7-point F1-score loss, in contrast to the 32 and 39 points lost by the CRF and spaCy models, respectively. This steep performance drop stems to a larger extent from recall decline, which is not that marked in the case of BERT. Overall, these results indicate that the transfer-learning achieved through the BERT multilingual pre-trained model not only helps obtain better results, but also lowers the need of manually labelled data for this application domain."
+    },
+    {
+      "rank": 3,
+      "passage_id": "2003.03106:paragraph:0063",
+      "score": 0.8943658440433635,
+      "title": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+      "text": "In order to assess the performance of BERT for Spanish clinical data anonymisation, we have conducted several experiments with a BERT-based sequence labelling approach using the pre-trained multilingual BERT model shared by Google as the starting point for the model training. We have compared this BERT-based sequence labelling against other methods and systems. One of the experiments uses the MEDDOCAN 2019 shared task dataset, while the other uses a novel Spanish clinical reports dataset called NUBes-PHI."
+    },
+    {
+      "rank": 4,
+      "passage_id": "2003.03106:paragraph:0061",
+      "score": 0.8167305651126059,
+      "title": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+      "text": "With regard to the winner of the MEDDOCAN shared task, the BERT-based model has not improved the scores obtained by neither the domain-dependent (S3) nor the domain-independent (S2) NLNDE model. However, attending to the obtained results, BERT remains only 0.3 F1-score points behind, and would have achieved the second position among all the MEDDOCAN shared task competitors. Taking into account that only 3% of the gold labels remain incorrectly annotated, the task can be considered almost solved, and it is not clear if the differences among the systems are actually significant, or whether they stem from minor variations in initialisation or a long-tail of minor labelling inconsistencies."
+    },
+    {
+      "rank": 5,
+      "passage_id": "2003.03106:paragraph:0035",
+      "score": 0.7534611641979037,
+      "title": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+      "text": "As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-Base Multilingual Cased with a Fully Connected (FC) layer on top to perform a fine-tuning of the whole model for an anonymisation task in Spanish clinical data. Our implementation is built on PyTorch and the PyTorch-Transformers library BIBREF1. The training phase consists in the following steps (roughly depicted in Figure ):"
+    },
+    {
+      "rank": 6,
+      "passage_id": "2003.03106:paragraph:0008",
+      "score": 0.5802951132303018,
+      "title": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+      "text": "The major change started with the Transformers model proposed by vaswani2017attention. It substituted the widely used recurrent and convolutional neural network architectures by another approach based solely on self-attention, obtaining an impressive performance gain. The original proposal was focused on an encoder-decoder architecture for machine translation, but soon the use of Transformers was made more general BIBREF1. There are several other popular models that use Transformers, such as Open AI's GPT and GPT2 BIBREF5, RoBERTa BIBREF6 and the most recent XLNet BIBREF7; still, BERT BIBREF2 is one of the most widespread Transformer-based models."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+      "attribution": 0.011297612433161349
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+      "attribution": 0.007355452775222255
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+      "attribution": 0.002482918334700904
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+      "attribution": -0.0024267096533490537
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+      "attribution": -0.0020797699368137307
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+      "attribution": -0.0018620106704256316
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+      "attribution": 0.10663559039274792
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+      "attribution": 0.0192896348525101
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+      "attribution": 0.01825405874134579
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+      "attribution": 0.01521504865493692
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+      "attribution": 0.0069544182813287
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+      "attribution": 0.0033467950066376705
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0059",
+      "interaction": -0.006539498336460427
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0063",
+      "interaction": -0.002607420736554918
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0061",
+      "interaction": -0.007156284242842438
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": -0.0024967300335560234
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.002269984602872912
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0063",
+      "interaction": -0.022589162211991684
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0061",
+      "interaction": -0.0012302793124171687
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": 0.010495976363733778
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.006097399746128014
+    },
+    {
+      "left": "2003.03106:paragraph:0063",
+      "right": "2003.03106:paragraph:0061",
+      "interaction": -0.0010393669995548832
+    },
+    {
+      "left": "2003.03106:paragraph:0063",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": -0.006517401521539538
+    },
+    {
+      "left": "2003.03106:paragraph:0063",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": 2.052946717565984e-05
+    },
+    {
+      "left": "2003.03106:paragraph:0061",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": 0.006378702717854143
+    },
+    {
+      "left": "2003.03106:paragraph:0061",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": 0.0024461388119051174
+    },
+    {
+      "left": "2003.03106:paragraph:0035",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.010913552049680725
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0059",
+      "interaction": -0.022057772429231345
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0063",
+      "interaction": -0.02392901991346222
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0061",
+      "interaction": 5.276626235971821e-05
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": -0.0040435408890785954
+    },
+    {
+      "left": "2003.03106:paragraph:0005",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.007244999551877406
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0063",
+      "interaction": -0.017142383512826542
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0061",
+      "interaction": -0.025788610715091146
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": -0.00337589704841335
+    },
+    {
+      "left": "2003.03106:paragraph:0059",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.0019496837462257153
+    },
+    {
+      "left": "2003.03106:paragraph:0063",
+      "right": "2003.03106:paragraph:0061",
+      "interaction": -0.0012821632086488402
+    },
+    {
+      "left": "2003.03106:paragraph:0063",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": -0.005146896738119431
+    },
+    {
+      "left": "2003.03106:paragraph:0063",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.008052028272959292
+    },
+    {
+      "left": "2003.03106:paragraph:0061",
+      "right": "2003.03106:paragraph:0035",
+      "interaction": -0.002254523905168571
+    },
+    {
+      "left": "2003.03106:paragraph:0061",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.006683545390903564
+    },
+    {
+      "left": "2003.03106:paragraph:0035",
+      "right": "2003.03106:paragraph:0008",
+      "interaction": -0.006211904180163535
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.01476749309295089
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "remaining_chunks": 5,
+        "score": 0.016512496377197095
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "remaining_chunks": 4,
+        "score": 0.0031999806754299254
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.012064424493384962
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "remaining_chunks": 2,
+        "score": -0.0038366607796824215
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "remaining_chunks": 1,
+        "score": 0.006807159975099952
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "selected_chunks": 1,
+        "score": 0.030987819054804966
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "selected_chunks": 2,
+        "score": 0.018537618548989276
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "selected_chunks": 3,
+        "score": 0.02605656467436157
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "selected_chunks": 4,
+        "score": 0.031518261229726785
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "selected_chunks": 5,
+        "score": 0.02477460155648059
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "selected_chunks": 6,
+        "score": 0.01476749309295089
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.01476749309295089
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "remaining_chunks": 5,
+        "score": 0.016512496377197095
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "remaining_chunks": 4,
+        "score": 0.0065274702244486615
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.006154539265300185
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "remaining_chunks": 2,
+        "score": 0.0023580763746775535
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "remaining_chunks": 1,
+        "score": 0.006807159975099952
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.01476749309295089
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 5: 2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "remaining_chunks": 5,
+        "score": 0.00888207985211753
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "remaining_chunks": 4,
+        "score": 0.006479973360123292
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "remaining_chunks": 3,
+        "score": 0.014141140111695094
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.01286879527939988
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "remaining_chunks": 1,
+        "score": 0.010193663804525688
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.01476749309295089
+      },
+      {
+        "step": 1,
+        "score": 0.016105623082907982
+      },
+      {
+        "step": 2,
+        "score": 0.017110893958329796
+      },
+      {
+        "step": 3,
+        "score": 0.017403262820426067
+      },
+      {
+        "step": 4,
+        "score": 0.01230357224118114
+      },
+      {
+        "step": 5,
+        "score": 0.011557389058805491
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "What is the performance of BERT on the task?",
+    "expanded_queries": [
+      "What is the performance of BERT on the task?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "dense": 0.7602,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "flags": "",
+        "preview": "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training da"
+      },
+      {
+        "rank": 2,
+        "source": "2003.03106:paragraph:0055 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "dense": 0.7561,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "flags": "",
+        "preview": "Regarding the detection scenario \u2013that is, the scenario concerned with a binary classification to determine whether each individual token conveys sensitive information or not\u2013, it can be observed that BERT outperforms it"
+      },
+      {
+        "rank": 3,
+        "source": "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "dense": 0.7556,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "flags": "",
+        "preview": "With regard to the winner of the MEDDOCAN shared task, the BERT-based model has not improved the scores obtained by neither the domain-dependent (S3) nor the domain-independent (S2) NLNDE model. However, attending to the"
+      },
+      {
+        "rank": 4,
+        "source": "2003.03106:paragraph:0057 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "dense": 0.7542,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "flags": "",
+        "preview": "To finish with this experiment set, Table also shows the strict classification precision, recall and F1-score for the compared systems. Despite the fact that, in general, the systems obtain high values, BERT outperforms "
+      },
+      {
+        "rank": 5,
+        "source": "2003.03106:paragraph:0066 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "dense": 0.7527,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions and Future Work",
+        "flags": "",
+        "preview": "The experiments with the MEDDOCAN 2019 shared task dataset follow the same pattern. In this case, the BERT-based model falls 0.3 F1-score points behind the shared task winning system, but it would have achieved the secon"
+      },
+      {
+        "rank": 6,
+        "source": "2003.03106:paragraph:0065 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "dense": 0.7412,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions and Future Work",
+        "flags": "",
+        "preview": "Further, we have conducted an additional experiment on this dataset by progressively reducing the training data for all the compared systems. The BERT-based model shows the highest robustness to training-data scarcity, l"
+      },
+      {
+        "rank": 7,
+        "source": "2003.03106:paragraph:0013 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "dense": 0.7405,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "At the same challenge, mao2019hadoken occupied the 8th position among 18 participants using BERT. According to the description of the system, the authors used BERT-Base Multilingual Cased and an output CRF layer. However"
+      },
+      {
+        "rank": 8,
+        "source": "2003.03106:paragraph:0067 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "dense": 0.7318,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions and Future Work",
+        "flags": "",
+        "preview": "Since we have used a pre-trained multilingual BERT model, the same approach is likely to work for other languages just by providing some labelled training data. Further, this is the simplest fine-tuning that can be perfo"
+      },
+      {
+        "rank": 9,
+        "source": "2003.03106:paragraph:0064 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "dense": 0.7181,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions and Future Work",
+        "flags": "",
+        "preview": "The results of the experiments show that, in NUBes-PHI, the BERT-based model outperforms the other systems without requiring any adaptation or domain-specific feature engineering, just by being trained on the provided la"
+      },
+      {
+        "rank": 10,
+        "source": "2003.03106:paragraph:0060 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "dense": 0.7168,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "flags": "",
+        "preview": "The results of the two MEDDOCAN scenarios \u2013detection and classification\u2013 are shown in Table . These results follow the same pattern as in the previous experiments, with the CRF classifier being the most precise of all, a"
+      },
+      {
+        "rank": 11,
+        "source": "2003.03106:paragraph:0010 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "dense": 0.7161,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "devlin2018bert have used fine-tuning to achieve state-of-the-art results on a wide variety of challenging natural language tasks, such as text classification, Question Answering (QA) and Named Entity Recognition and Clas"
+      },
+      {
+        "rank": 12,
+        "source": "2003.03106:paragraph:0047 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design ::: Experiment A: NUBes-PHI",
+        "dense": 0.7122,
+        "page": 1,
+        "type": "body_text",
+        "section": "Materials and Methods ::: Experimental design ::: Experiment A: NUBes-PHI",
+        "flags": "",
+        "preview": "In addition to the scenarios proposed, a subject worth being studied is the need of labelled data. Manually labelled data is an scarce and expensive resource, which for some application domains or languages is difficult "
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "keyword": 0.1908,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions and Future Work",
+        "flags": "",
+        "preview": "In order to assess the performance of BERT for Spanish clinical data anonymisation, we have conducted several experiments with a BERT-based sequence labelling approach using the pre-trained multilingual BERT model shared"
+      },
+      {
+        "rank": 2,
+        "source": "2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "keyword": 0.1574,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The anonymisation systems based on NLP techniques perform reasonably well, but are far from perfect. Depending on the difficulty posed by each dataset or the amount of available data for training machine learning models,"
+      },
+      {
+        "rank": 3,
+        "source": "2003.03106:paragraph:0022 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems",
+        "keyword": 0.1198,
+        "page": 1,
+        "type": "body_text",
+        "section": "Materials and Methods ::: Systems",
+        "flags": "",
+        "preview": "Apart from experimenting with a pre-trained BERT model, we have run experiments with other systems and baselines, to compare them and obtain a better perspective about BERT's performance in these datasets."
+      },
+      {
+        "rank": 4,
+        "source": "2003.03106:paragraph:0066 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "keyword": 0.091,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions and Future Work",
+        "flags": "",
+        "preview": "The experiments with the MEDDOCAN 2019 shared task dataset follow the same pattern. In this case, the BERT-based model falls 0.3 F1-score points behind the shared task winning system, but it would have achieved the secon"
+      },
+      {
+        "rank": 5,
+        "source": "2003.03106:paragraph:0007 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "keyword": 0.0891,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "The state of the art in the field of Natural Language Processing (NLP) has reached an important milestone in the last couple of years thanks to deep-learning architectures, increasing in several points the performance of"
+      },
+      {
+        "rank": 6,
+        "source": "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "keyword": 0.087,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "flags": "",
+        "preview": "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training da"
+      },
+      {
+        "rank": 7,
+        "source": "2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "keyword": 0.0863,
+        "page": 1,
+        "type": "body_text",
+        "section": "Materials and Methods ::: Systems ::: BERT",
+        "flags": "",
+        "preview": "As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-B"
+      },
+      {
+        "rank": 8,
+        "source": "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "keyword": 0.085,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "flags": "",
+        "preview": "With regard to the winner of the MEDDOCAN shared task, the BERT-based model has not improved the scores obtained by neither the domain-dependent (S3) nor the domain-independent (S2) NLNDE model. However, attending to the"
+      },
+      {
+        "rank": 9,
+        "source": "2003.03106:paragraph:0009 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "keyword": 0.0539,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "BERT trains its unsupervised language model using a Masked Language Model and Next Sentence Prediction. A common problem in NLP is the lack of enough training data. BERT can be pre-trained to learn general or specific la"
+      },
+      {
+        "rank": 10,
+        "source": "2003.03106:paragraph:0040 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design",
+        "keyword": 0.053,
+        "page": 1,
+        "type": "body_text",
+        "section": "Materials and Methods ::: Experimental design",
+        "flags": "",
+        "preview": "We have conducted experiments with BERT in the two datasets of Spanish clinical narrative presented in Section SECREF3 The first experiment set uses NUBes-PHI, a corpus of real medical reports manually annotated with sen"
+      },
+      {
+        "rank": 11,
+        "source": "2003.03106:abstract:000 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Abstract",
+        "keyword": 0.0517,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Massive digital data processing provides a wide range of opportunities and benefits, but at the cost of endangering personal data privacy. Anonymisation consists in removing or replacing sensitive information from data, "
+      },
+      {
+        "rank": 12,
+        "source": "2003.03106:paragraph:0057 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "keyword": 0.0505,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "flags": "",
+        "preview": "To finish with this experiment set, Table also shows the strict classification precision, recall and F1-score for the compared systems. Despite the fact that, in general, the systems obtain high values, BERT outperforms "
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6776,
+        "keyword": 0.1908,
+        "rerank": 0.8944,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert, performance, task",
+        "reasons": "body/table evidence",
+        "preview": "In order to assess the performance of BERT for Spanish clinical data anonymisation, we have conducted several experiments with a BERT-based sequence labelling approach using the pre-trained multilingual BERT model shared"
+      },
+      {
+        "rank": 2,
+        "source": "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7602,
+        "keyword": 0.087,
+        "rerank": 0.8268,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert, performance",
+        "reasons": "body/table evidence",
+        "preview": "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training da"
+      },
+      {
+        "rank": 3,
+        "source": "2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6662,
+        "keyword": 0.1574,
+        "rerank": 0.8244,
+        "section": "Introduction",
+        "query_hits": "bert, performance, task",
+        "reasons": "body/table evidence",
+        "preview": "The anonymisation systems based on NLP techniques perform reasonably well, but are far from perfect. Depending on the difficulty posed by each dataset or the amount of available data for training machine learning models,"
+      },
+      {
+        "rank": 4,
+        "source": "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7556,
+        "keyword": 0.085,
+        "rerank": 0.8167,
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "With regard to the winner of the MEDDOCAN shared task, the BERT-based model has not improved the scores obtained by neither the domain-dependent (S3) nor the domain-independent (S2) NLNDE model. However, attending to the"
+      },
+      {
+        "rank": 5,
+        "source": "2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.693,
+        "keyword": 0.0863,
+        "rerank": 0.7535,
+        "section": "Materials and Methods ::: Systems ::: BERT",
+        "query_hits": "bert, performance, task",
+        "reasons": "body/table evidence",
+        "preview": "As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-B"
+      },
+      {
+        "rank": 6,
+        "source": "2003.03106:paragraph:0057 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7542,
+        "keyword": 0.0505,
+        "rerank": 0.7303,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "To finish with this experiment set, Table also shows the strict classification precision, recall and F1-score for the compared systems. Despite the fact that, in general, the systems obtain high values, BERT outperforms "
+      },
+      {
+        "rank": 7,
+        "source": "2003.03106:paragraph:0055 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7561,
+        "keyword": 0.0286,
+        "rerank": 0.6988,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Regarding the detection scenario \u2013that is, the scenario concerned with a binary classification to determine whether each individual token conveys sensitive information or not\u2013, it can be observed that BERT outperforms it"
+      },
+      {
+        "rank": 8,
+        "source": "2003.03106:paragraph:0066 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7527,
+        "keyword": 0.091,
+        "rerank": 0.6918,
+        "section": "Conclusions and Future Work",
+        "query_hits": "task",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The experiments with the MEDDOCAN 2019 shared task dataset follow the same pattern. In this case, the BERT-based model falls 0.3 F1-score points behind the shared task winning system, but it would have achieved the secon"
+      },
+      {
+        "rank": 9,
+        "source": "2003.03106:paragraph:0065 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7412,
+        "keyword": 0.0333,
+        "rerank": 0.6834,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Further, we have conducted an additional experiment on this dataset by progressively reducing the training data for all the compared systems. The BERT-based model shows the highest robustness to training-data scarcity, l"
+      },
+      {
+        "rank": 10,
+        "source": "2003.03106:paragraph:0067 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7318,
+        "keyword": 0.0382,
+        "rerank": 0.6768,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Since we have used a pre-trained multilingual BERT model, the same approach is likely to work for other languages just by providing some labelled training data. Further, this is the simplest fine-tuning that can be perfo"
+      },
+      {
+        "rank": 11,
+        "source": "2003.03106:paragraph:0040 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6955,
+        "keyword": 0.053,
+        "rerank": 0.6749,
+        "section": "Materials and Methods ::: Experimental design",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "We have conducted experiments with BERT in the two datasets of Spanish clinical narrative presented in Section SECREF3 The first experiment set uses NUBes-PHI, a corpus of real medical reports manually annotated with sen"
+      },
+      {
+        "rank": 12,
+        "source": "2003.03106:paragraph:0060 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7168,
+        "keyword": 0.033,
+        "rerank": 0.6459,
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "The results of the two MEDDOCAN scenarios \u2013detection and classification\u2013 are shown in Table . These results follow the same pattern as in the previous experiments, with the CRF classifier being the most precise of all, a"
+      },
+      {
+        "rank": 13,
+        "source": "2003.03106:paragraph:0022 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6707,
+        "keyword": 0.1198,
+        "rerank": 0.6424,
+        "section": "Materials and Methods ::: Systems",
+        "query_hits": "bert, performance",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Apart from experimenting with a pre-trained BERT model, we have run experiments with other systems and baselines, to compare them and obtain a better perspective about BERT's performance in these datasets."
+      },
+      {
+        "rank": 14,
+        "source": "2003.03106:paragraph:0009 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6678,
+        "keyword": 0.0539,
+        "rerank": 0.6343,
+        "section": "Related Work",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "BERT trains its unsupervised language model using a Masked Language Model and Next Sentence Prediction. A common problem in NLP is the lack of enough training data. BERT can be pre-trained to learn general or specific la"
+      },
+      {
+        "rank": 15,
+        "source": "2003.03106:paragraph:0056 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7102,
+        "keyword": 0.0305,
+        "rerank": 0.6319,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "The table also shows the results for the relaxed metric that only takes into account the entity type detected, regardless of the BIO label (i.e., ignoring whether the token is at the beginning or in the middle of a sensi"
+      },
+      {
+        "rank": 16,
+        "source": "2003.03106:paragraph:0047 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7122,
+        "keyword": 0.0245,
+        "rerank": 0.6256,
+        "section": "Materials and Methods ::: Experimental design ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "In addition to the scenarios proposed, a subject worth being studied is the need of labelled data. Manually labelled data is an scarce and expensive resource, which for some application domains or languages is difficult "
+      },
+      {
+        "rank": 17,
+        "source": "2003.03106:paragraph:0064 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7181,
+        "keyword": 0.0288,
+        "rerank": 0.6113,
+        "section": "Conclusions and Future Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The results of the experiments show that, in NUBes-PHI, the BERT-based model outperforms the other systems without requiring any adaptation or domain-specific feature engineering, just by being trained on the provided la"
+      },
+      {
+        "rank": 18,
+        "source": "2003.03106:paragraph:0013 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7405,
+        "keyword": 0.0378,
+        "rerank": 0.5894,
+        "section": "Related Work",
+        "query_hits": "bert",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At the same challenge, mao2019hadoken occupied the 8th position among 18 participants using BERT. According to the description of the system, the authors used BERT-Base Multilingual Cased and an output CRF layer. However"
+      },
+      {
+        "rank": 19,
+        "source": "2003.03106:paragraph:0037 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.699,
+        "keyword": 0.0133,
+        "rerank": 0.5878,
+        "section": "Materials and Methods ::: Systems ::: BERT",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Fine-tuning: the pre-processed sequence is fed into the model. BERT outputs the contextual embeddings that encode each of the inputted tokens. This embedding representation for each token is fed into the FC linear layer "
+      },
+      {
+        "rank": 20,
+        "source": "2003.03106:paragraph:0014 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7032,
+        "keyword": 0.049,
+        "rerank": 0.5803,
+        "section": "Materials and Methods",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The aim of this paper is to evaluate BERT's multilingual model and compare it to other established machine-learning algorithms in a specific task: sensitive data detection and classification in Spanish clinical free text"
+      },
+      {
+        "rank": 21,
+        "source": "2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6431,
+        "keyword": 0.0435,
+        "rerank": 0.5803,
+        "section": "Related Work",
+        "query_hits": "bert, performance",
+        "reasons": "body/table evidence",
+        "preview": "The major change started with the Transformers model proposed by vaswani2017attention. It substituted the widely used recurrent and convolutional neural network architectures by another approach based solely on self-atte"
+      },
+      {
+        "rank": 22,
+        "source": "2003.03106:abstract:000 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6304,
+        "keyword": 0.0517,
+        "rerank": 0.5738,
+        "section": "Abstract",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "Massive digital data processing provides a wide range of opportunities and benefits, but at the cost of endangering personal data privacy. Anonymisation consists in removing or replacing sensitive information from data, "
+      },
+      {
+        "rank": 23,
+        "source": "2003.03106:paragraph:0048 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6359,
+        "keyword": 0.0458,
+        "rerank": 0.573,
+        "section": "Materials and Methods ::: Experimental design ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "In this experiment set, our BERT implementation is compared to several systems that participated in the MEDDOCAN challenge: a CRF classifier BIBREF18, a spaCy entity recogniser BIBREF18, and NLNDE BIBREF12, the winner of"
+      },
+      {
+        "rank": 24,
+        "source": "2003.03106:paragraph:0058 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6836,
+        "keyword": 0.0298,
+        "rerank": 0.5603,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Upon manual inspection of the errors committed by the BERT-based model, we discovered that it has a slight tendency towards producing ill-formed BIO sequences (e.g, starting a sensitive span with `Inside' instead of `Beg"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6776,
+        "keyword": 0.1908,
+        "rerank": 0.8944,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert, performance, task",
+        "reasons": "body/table evidence",
+        "preview": "In order to assess the performance of BERT for Spanish clinical data anonymisation, we have conducted several experiments with a BERT-based sequence labelling approach using the pre-trained multilingual BERT model shared"
+      },
+      {
+        "rank": 2,
+        "source": "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7602,
+        "keyword": 0.087,
+        "rerank": 0.8268,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert, performance",
+        "reasons": "body/table evidence",
+        "preview": "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training da"
+      },
+      {
+        "rank": 3,
+        "source": "2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6662,
+        "keyword": 0.1574,
+        "rerank": 0.8244,
+        "section": "Introduction",
+        "query_hits": "bert, performance, task",
+        "reasons": "body/table evidence",
+        "preview": "The anonymisation systems based on NLP techniques perform reasonably well, but are far from perfect. Depending on the difficulty posed by each dataset or the amount of available data for training machine learning models,"
+      },
+      {
+        "rank": 4,
+        "source": "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7556,
+        "keyword": 0.085,
+        "rerank": 0.8167,
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "With regard to the winner of the MEDDOCAN shared task, the BERT-based model has not improved the scores obtained by neither the domain-dependent (S3) nor the domain-independent (S2) NLNDE model. However, attending to the"
+      },
+      {
+        "rank": 5,
+        "source": "2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.693,
+        "keyword": 0.0863,
+        "rerank": 0.7535,
+        "section": "Materials and Methods ::: Systems ::: BERT",
+        "query_hits": "bert, performance, task",
+        "reasons": "body/table evidence",
+        "preview": "As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-B"
+      },
+      {
+        "rank": 6,
+        "source": "2003.03106:paragraph:0057 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7542,
+        "keyword": 0.0505,
+        "rerank": 0.7303,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "To finish with this experiment set, Table also shows the strict classification precision, recall and F1-score for the compared systems. Despite the fact that, in general, the systems obtain high values, BERT outperforms "
+      },
+      {
+        "rank": 7,
+        "source": "2003.03106:paragraph:0055 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7561,
+        "keyword": 0.0286,
+        "rerank": 0.6988,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Regarding the detection scenario \u2013that is, the scenario concerned with a binary classification to determine whether each individual token conveys sensitive information or not\u2013, it can be observed that BERT outperforms it"
+      },
+      {
+        "rank": 8,
+        "source": "2003.03106:paragraph:0066 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7527,
+        "keyword": 0.091,
+        "rerank": 0.6918,
+        "section": "Conclusions and Future Work",
+        "query_hits": "task",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The experiments with the MEDDOCAN 2019 shared task dataset follow the same pattern. In this case, the BERT-based model falls 0.3 F1-score points behind the shared task winning system, but it would have achieved the secon"
+      },
+      {
+        "rank": 9,
+        "source": "2003.03106:paragraph:0065 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7412,
+        "keyword": 0.0333,
+        "rerank": 0.6834,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Further, we have conducted an additional experiment on this dataset by progressively reducing the training data for all the compared systems. The BERT-based model shows the highest robustness to training-data scarcity, l"
+      },
+      {
+        "rank": 10,
+        "source": "2003.03106:paragraph:0067 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7318,
+        "keyword": 0.0382,
+        "rerank": 0.6768,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Since we have used a pre-trained multilingual BERT model, the same approach is likely to work for other languages just by providing some labelled training data. Further, this is the simplest fine-tuning that can be perfo"
+      },
+      {
+        "rank": 11,
+        "source": "2003.03106:paragraph:0040 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6955,
+        "keyword": 0.053,
+        "rerank": 0.6749,
+        "section": "Materials and Methods ::: Experimental design",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "We have conducted experiments with BERT in the two datasets of Spanish clinical narrative presented in Section SECREF3 The first experiment set uses NUBes-PHI, a corpus of real medical reports manually annotated with sen"
+      },
+      {
+        "rank": 12,
+        "source": "2003.03106:paragraph:0060 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7168,
+        "keyword": 0.033,
+        "rerank": 0.6459,
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "The results of the two MEDDOCAN scenarios \u2013detection and classification\u2013 are shown in Table . These results follow the same pattern as in the previous experiments, with the CRF classifier being the most precise of all, a"
+      },
+      {
+        "rank": 13,
+        "source": "2003.03106:paragraph:0022 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6707,
+        "keyword": 0.1198,
+        "rerank": 0.6424,
+        "section": "Materials and Methods ::: Systems",
+        "query_hits": "bert, performance",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Apart from experimenting with a pre-trained BERT model, we have run experiments with other systems and baselines, to compare them and obtain a better perspective about BERT's performance in these datasets."
+      },
+      {
+        "rank": 14,
+        "source": "2003.03106:paragraph:0009 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6678,
+        "keyword": 0.0539,
+        "rerank": 0.6343,
+        "section": "Related Work",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "BERT trains its unsupervised language model using a Masked Language Model and Next Sentence Prediction. A common problem in NLP is the lack of enough training data. BERT can be pre-trained to learn general or specific la"
+      },
+      {
+        "rank": 15,
+        "source": "2003.03106:paragraph:0056 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7102,
+        "keyword": 0.0305,
+        "rerank": 0.6319,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "The table also shows the results for the relaxed metric that only takes into account the entity type detected, regardless of the BIO label (i.e., ignoring whether the token is at the beginning or in the middle of a sensi"
+      },
+      {
+        "rank": 16,
+        "source": "2003.03106:paragraph:0047 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7122,
+        "keyword": 0.0245,
+        "rerank": 0.6256,
+        "section": "Materials and Methods ::: Experimental design ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "In addition to the scenarios proposed, a subject worth being studied is the need of labelled data. Manually labelled data is an scarce and expensive resource, which for some application domains or languages is difficult "
+      },
+      {
+        "rank": 17,
+        "source": "2003.03106:paragraph:0064 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7181,
+        "keyword": 0.0288,
+        "rerank": 0.6113,
+        "section": "Conclusions and Future Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The results of the experiments show that, in NUBes-PHI, the BERT-based model outperforms the other systems without requiring any adaptation or domain-specific feature engineering, just by being trained on the provided la"
+      },
+      {
+        "rank": 18,
+        "source": "2003.03106:paragraph:0013 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7405,
+        "keyword": 0.0378,
+        "rerank": 0.5894,
+        "section": "Related Work",
+        "query_hits": "bert",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "At the same challenge, mao2019hadoken occupied the 8th position among 18 participants using BERT. According to the description of the system, the authors used BERT-Base Multilingual Cased and an output CRF layer. However"
+      },
+      {
+        "rank": 19,
+        "source": "2003.03106:paragraph:0037 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.699,
+        "keyword": 0.0133,
+        "rerank": 0.5878,
+        "section": "Materials and Methods ::: Systems ::: BERT",
+        "query_hits": "bert",
+        "reasons": "body/table evidence",
+        "preview": "Fine-tuning: the pre-processed sequence is fed into the model. BERT outputs the contextual embeddings that encode each of the inputted tokens. This embedding representation for each token is fed into the FC linear layer "
+      },
+      {
+        "rank": 20,
+        "source": "2003.03106:paragraph:0014 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7032,
+        "keyword": 0.049,
+        "rerank": 0.5803,
+        "section": "Materials and Methods",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The aim of this paper is to evaluate BERT's multilingual model and compare it to other established machine-learning algorithms in a specific task: sensitive data detection and classification in Spanish clinical free text"
+      },
+      {
+        "rank": 21,
+        "source": "2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6431,
+        "keyword": 0.0435,
+        "rerank": 0.5803,
+        "section": "Related Work",
+        "query_hits": "bert, performance",
+        "reasons": "body/table evidence",
+        "preview": "The major change started with the Transformers model proposed by vaswani2017attention. It substituted the widely used recurrent and convolutional neural network architectures by another approach based solely on self-atte"
+      },
+      {
+        "rank": 22,
+        "source": "2003.03106:abstract:000 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6304,
+        "keyword": 0.0517,
+        "rerank": 0.5738,
+        "section": "Abstract",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "Massive digital data processing provides a wide range of opportunities and benefits, but at the cost of endangering personal data privacy. Anonymisation consists in removing or replacing sensitive information from data, "
+      },
+      {
+        "rank": 23,
+        "source": "2003.03106:paragraph:0048 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Experimental design ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6359,
+        "keyword": 0.0458,
+        "rerank": 0.573,
+        "section": "Materials and Methods ::: Experimental design ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert, task",
+        "reasons": "body/table evidence",
+        "preview": "In this experiment set, our BERT implementation is compared to several systems that participated in the MEDDOCAN challenge: a CRF classifier BIBREF18, a spaCy entity recogniser BIBREF18, and NLNDE BIBREF12, the winner of"
+      },
+      {
+        "rank": 24,
+        "source": "2003.03106:paragraph:0058 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6836,
+        "keyword": 0.0298,
+        "rerank": 0.5603,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Upon manual inspection of the errors committed by the BERT-based model, we discovered that it has a slight tendency towards producing ill-formed BIO sequences (e.g, starting a sensitive span with `Inside' instead of `Beg"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6662,
+        "keyword": 0.1574,
+        "rerank": 0.8244,
+        "section": "Introduction",
+        "query_hits": "bert, performance, task",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9235,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.4142,
+        "reasons": "body/table evidence",
+        "preview": "The anonymisation systems based on NLP techniques perform reasonably well, but are far from perfect. Depending on the difficulty posed by each dataset or the amount of available data for training machine learning models,"
+      },
+      {
+        "rank": 2,
+        "source": "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7602,
+        "keyword": 0.087,
+        "rerank": 0.8268,
+        "section": "Results ::: Experiment A: NUBes-PHI",
+        "query_hits": "bert, performance",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9261,
+        "novelty": 0.7115,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.336,
+        "reasons": "body/table evidence",
+        "preview": "Finally, Figure shows the impact of decreasing the amount of training data in the detection scenario. It shows the difference in precision, recall, and F1-score with respect to that obtained using 100% of the training da"
+      },
+      {
+        "rank": 3,
+        "source": "2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6776,
+        "keyword": 0.1908,
+        "rerank": 0.8944,
+        "section": "Conclusions and Future Work",
+        "query_hits": "bert, performance, task",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.6708,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2739,
+        "reasons": "body/table evidence",
+        "preview": "In order to assess the performance of BERT for Spanish clinical data anonymisation, we have conducted several experiments with a BERT-based sequence labelling approach using the pre-trained multilingual BERT model shared"
+      },
+      {
+        "rank": 4,
+        "source": "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7556,
+        "keyword": 0.085,
+        "rerank": 0.8167,
+        "section": "Results ::: Experiment B: MEDDOCAN",
+        "query_hits": "bert, task",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9151,
+        "novelty": 0.7112,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1665,
+        "reasons": "body/table evidence",
+        "preview": "With regard to the winner of the MEDDOCAN shared task, the BERT-based model has not improved the scores obtained by neither the domain-dependent (S3) nor the domain-independent (S2) NLNDE model. However, attending to the"
+      },
+      {
+        "rank": 5,
+        "source": "2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.693,
+        "keyword": 0.0863,
+        "rerank": 0.7535,
+        "section": "Materials and Methods ::: Systems ::: BERT",
+        "query_hits": "bert, performance, task",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8459,
+        "novelty": 0.6625,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1402,
+        "reasons": "body/table evidence",
+        "preview": "As introduced earlier, BERT has shown an outstanding performance in NERC-like tasks, improving the start-of-the-art results for almost every dataset and language. We take the same approach here, by using the model BERT-B"
+      },
+      {
+        "rank": 6,
+        "source": "2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6431,
+        "keyword": 0.0435,
+        "rerank": 0.5803,
+        "section": "Related Work",
+        "query_hits": "bert, performance",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6565,
+        "novelty": 0.714,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1046,
+        "reasons": "body/table evidence",
+        "preview": "The major change started with the Transformers model proposed by vaswani2017attention. It substituted the widely used recurrent and convolutional neural network architectures by another approach based solely on self-atte"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "bert",
+        "performance",
+        "task"
+      ],
+      "covered_query_terms": [
+        "bert",
+        "performance",
+        "task"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction": [
+          "bert",
+          "performance",
+          "task"
+        ],
+        "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI": [
+          "bert",
+          "performance"
+        ],
+        "2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work": [
+          "bert",
+          "performance",
+          "task"
+        ],
+        "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN": [
+          "bert",
+          "task"
+        ],
+        "2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT": [
+          "bert",
+          "performance",
+          "task"
+        ],
+        "2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work": [
+          "bert",
+          "performance"
+        ]
+      },
+      "section_titles": [
+        "Conclusions and Future Work",
+        "Introduction",
+        "Materials and Methods ::: Systems ::: BERT",
+        "Related Work",
+        "Results ::: Experiment A: NUBes-PHI",
+        "Results ::: Experiment B: MEDDOCAN"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "2003.03106:paragraph:0005 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Introduction"
+        ],
+        "Results ::: Experiment A: NUBes-PHI": [
+          "2003.03106:paragraph:0059 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment A: NUBes-PHI"
+        ],
+        "Conclusions and Future Work": [
+          "2003.03106:paragraph:0063 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Conclusions and Future Work"
+        ],
+        "Results ::: Experiment B: MEDDOCAN": [
+          "2003.03106:paragraph:0061 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Results ::: Experiment B: MEDDOCAN"
+        ],
+        "Materials and Methods ::: Systems ::: BERT": [
+          "2003.03106:paragraph:0035 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Materials and Methods ::: Systems ::: BERT"
+        ],
+        "Related Work": [
+          "2003.03106:paragraph:0008 | Sensitive Data Detection and Classification in Spanish Clinical Text: Experiments with BERT / Related Work"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "BERT's performance varies across the tasks mentioned in the context:\n\n*   **Experiment A: NUBes-PHI:** BERT outperforms the compared systems, achieving an F1-score that is 1.9 points higher than the next most competitive result, and its recall is about 5 points higher.\n*   **Experiment B: MEDDOCAN:** BERT outperforms both the CRF and spaCy classifiers due to its greater recall.",
+    "retrieved_context_answer": "The context provides several specific findings regarding BERT's performance on tasks related to sensitive data detection and classification in Spanish clinical text, but it does not offer a single, general metric for \"the task.\"\n\nDistinct evidence regarding BERT's performance includes:\n\n*   **Robustness to Data Reduction (NUBes-PHI):** When tested with the NUBes-PHI dataset, the BERT-based model was noted as being the most robust to training-data reduction.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.04819277108433735,
+    "retrieved_context_f1": 0.06451612903225808,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "retrieval_miss"
+}
