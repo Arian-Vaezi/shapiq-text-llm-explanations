@@ -7,8 +7,19 @@ The common idea across the project: turn one concrete LLM behavior into a **coop
 `v : 2^N → ℝ` — pick the *players* (sentences, words, passages, request segments), define a
 *value function* that scores any subset of them, and let shapiq attribute the behavior to players
 (Shapley values) and player *pairs* (second-order k-SII interactions). Each demo instantiates this
-recipe for a different task, and each reports a **faithfulness check**: how much of the value
-function an additive, first-order explanation misses.
+recipe for a different task. Several demos also report task-specific diagnostics—such as
+reconstruction gains or deletion curves—to show when an additive, first-order explanation misses
+important structure.
+
+```mermaid
+flowchart LR
+    A["text input<br/>prompt · sentence · passages · request"] --> B["players N<br/>segments of the input"]
+    B --> C["coalitions S ⊆ N<br/>masked / reduced variants"]
+    C --> D["value function<br/>v(S) ∈ ℝ"]
+    D --> E["shapiq<br/>KernelSHAP · KernelSHAP-IQ"]
+    E --> F["Shapley values per player<br/>+ pairwise k-SII interactions"]
+    F --> G["diagnostics<br/>order-1 vs order-1+2 fit"]
+```
 
 ## The four demos
 
@@ -30,37 +41,44 @@ uv sync                          # all demos except RAG
 uv sync --group rag_demo         # additionally, for the RAG demo
 ```
 
-The results dashboards below run **offline from committed result files** — no GPU, no API key,
-no model download. The *live* apps (typing your own inputs) load Hugging Face models locally and
-optionally use API models (`GROQ_API_KEY` / `HF_TOKEN` in a `.env` file; gated models such as
-Llama‑3.x and Gemma need `HF_TOKEN`).
+The precomputed Jailbreak and Sentiment results dashboards run **offline from committed result
+files** — no GPU, API key, or model download. The *live* apps load Hugging Face models locally and
+can optionally use API models. Set `GROQ_API_KEY` or `GEMINI_API_KEY` for API backends and
+expose `HF_TOKEN` in the environment (or authenticate with Hugging Face) for gated models such as
+Llama‑3.x and Gemma. The API wrappers load a local `.env`; the provided vulnerability-scan Slurm
+script can also source `.env`, while direct scan CLI runs read the process environment.
 
 ---
 
 ### 1 · Jailbreak Analysis
 
-Players are the **sentences of an adversarial prompt**; a coalition is the prompt with only those
-sentences kept. Two value functions are implemented and compared:
+The reported experiments use the **sentences of an adversarial prompt** as players; a coalition is
+the prompt with only those sentences kept. They compare two value-function designs:
 
 - **Logprob contrast** — `mean log P(comply-style continuation) − mean log P(refusal-style)`,
-  baseline-centered so `v(∅) = 0`. Deterministic, one forward pass, interaction-rich — but a
-  *proxy* for compliance.
-- **LLM-as-a-judge** — generate a response and grade it 0–10. Faithful, but near-binary in
-  practice, so interactions vanish. The trade-off between the two is a central finding.
+  baseline-centered so `v(∅) = 0`. Deterministic and interaction-rich, with no response
+  generation — but still a *proxy* for compliance.
+- **LLM-as-a-judge pilot** — generate a response and grade it 0–10. This is a more direct
+  behavioral proxy, but it was near-binary in the seven committed pilot runs, so pairwise
+  interactions were small. The trade-off between the two is a central finding.
 
 Reported results: a **5 models × 6 temperatures × 15 prompts** vulnerability scan (binary
-`gpt-oss-safeguard-20b` judge; 449 valid verdicts, 178 jailbroken) and a **30-run second-order
-k-SII sweep** with an order-1 vs order-1+2 reconstruction diagnostic (ΔR² up to +60 pp).
+`gpt-oss-safeguard-20b` judge; 450 configurations, 449 parseable verdicts, 178 jailbroken) and a
+**30-run second-order k-SII sweep** with an order-1 vs order-1+2 reconstruction diagnostic
+(ΔR² up to +60 pp).
+
+![Jailbreak rate by model and temperature: model choice changes the rate 4×, temperature barely
+moves it](src/demos/JailbreakAnalysis/jailbreak_by_model_temperature.png)
 
 ```bash
 # Offline results explorer (scan results + per-prompt Shapley/k-SII/reconstruction):
 uv run streamlit run src/demos/JailbreakAnalysis/results_app.py
 
-# Live app (local HF models; optional API models via GROQ_API_KEY / HF_TOKEN):
+# Live app (local HF models; optional API models via GROQ_API_KEY / GEMINI_API_KEY):
 uv run streamlit run src/demos/JailbreakAnalysis/app.py
 
-# Reproduce the vulnerability scan (GPU; Slurm scripts provided):
-python run_vulnerability_scan.py --list-grid
+# Inspect the vulnerability-scan grid (GPU required only for actual runs):
+uv run python run_vulnerability_scan.py --list-grid
 ```
 
 ### 2 · Sentiment Analysis
@@ -125,16 +143,18 @@ tests/                           library + demo tests
 
 ```bash
 uv run pytest tests/shapiq            # library tests
-uv run pre-commit run --all-files     # lint + format (ruff, ty) — what CI runs
+uv run pre-commit run --all-files     # file checks, Ruff lint/format, and ty
 ```
 
 ## Notes for reviewers
 
-- Every dashboard above runs from **committed result files** immediately after `uv sync` — heavy
-  artifacts (raw sweep outputs, model weights) are deliberately not in git, and derived summaries
-  are.
-- GPU experiments were run on an A100 (LRZ) via the provided `*.sbatch` scripts; `pyproject.toml`
-  pins CUDA-matched torch builds per platform.
+- The Jailbreak and Sentiment results dashboards, plus the static RAG evaluation report, use
+  versioned result data. Live apps may require local models or API access. Selected raw runs and
+  derived summaries are committed; model weights and some larger experiment directories are not.
+- GPU experiments were run on an A100 (LRZ) via the provided `*.sbatch` scripts. `pyproject.toml`
+  selects platform-specific PyTorch indexes, and `uv.lock` locks the resolved dependency versions.
+- Hugging Face model IDs are recorded, but the current loaders do not pin model revisions. Exact
+  reruns may therefore drift if an upstream model repository changes.
 - Before submitting a root or RAG `*.sbatch` job that writes to `logs/`, create that directory
   from the repository root with `mkdir -p logs`; Slurm opens output files before the job starts.
 - This repository is a fork of [mmschlk/shapiq](https://github.com/mmschlk/shapiq); the library
