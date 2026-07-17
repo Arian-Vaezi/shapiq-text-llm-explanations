@@ -89,4 +89,3 @@ measures how much of the value function only appears once pairs are allowed in
 | `build_summary_asr.py` / `build_summary_interactions.py` | fold raw runs into the committed `results/*.json` |
 | `interaction_prompts/` | the 10 multi-sentence prompts used in the sweep |
 | `run_vulnerability_scan.py` + `*.sbatch` | the scan and its Slurm scripts (at the repo root) |
-| `PROJECT_NOTES.md` | deeper design notes (segmentation, masking, budget, papers) |

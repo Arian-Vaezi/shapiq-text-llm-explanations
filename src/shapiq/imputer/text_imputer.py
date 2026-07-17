@@ -106,7 +106,6 @@ class TextImputer(Imputer):
         self.normalization_value = self.empty_prediction
 
     # ------------------- Masking -------------------
-    # TODO @yuanyuan-yili: implement [MASK] replacement and token removal strategy (#8)
     def _token_coalition_to_tokens(self, coalition: np.ndarray) -> np.ndarray:
         """Convert a token-level coalition mask into token ids."""
         if self.mask_strategy == "remove":

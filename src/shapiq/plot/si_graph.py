@@ -360,7 +360,6 @@ def si_graph_plot(
     return None
 
 
-# TODO(advueu963): This function is not used at all. If not given an axis it will also crash. What is the meaning of this function # noqa: TD003
 def get_legend(axis: Axes) -> tuple[Legend, Legend]:
     """Gets the legend for the SI graph plot.
 

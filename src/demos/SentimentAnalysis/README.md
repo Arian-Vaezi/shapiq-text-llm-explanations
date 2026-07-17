@@ -2,7 +2,7 @@
 
 Explaining sentiment models with **Shapley Values (SV)** and **pairwise Shapley
 Interactions (k-SII)**, built on the [`shapiq`](https://github.com/mmschlk/shapiq)
-library. Part of the `shapiq-text-llm-explanations` project (Demo 1).
+library. Part of the `shapiq-text-llm-explanations` project.
 
 The central question: sentiment is *compositional*. "not bad" is positive even
 though "not" and "bad" look weak or negative individually. First-order Shapley
@@ -16,8 +16,8 @@ together, capturing negation, redundancy, and sarcasm cues that SVs alone miss.
 | File | Purpose |
 |---|---|
 | `sentiment_analysis.py` | Core logic -> model registries, preloading, SV / k-SII computation, plots. No UI code. |
-| `encoderTextImputer.py` | Encoder game -> `[MASK]` imputation + contrastive classification score. |
-| `sentimentDecoderGame.py` | Decoder game -> word removal + contrastive log-odds over language-matched templates. |
+| `EncoderTextImputer.py` | Encoder game -> `[MASK]` imputation + contrastive classification score. |
+| `SentimentDecoderGame.py` | Decoder game -> word removal + contrastive log-odds over language-matched templates. |
 | `HFModelWrapper.py` | Causal-LM loading (incl. 4-bit) and batched continuation scoring. |
 | `app.py` | Live Streamlit app -> type any sentence, pick a model, get SV + k-SII + plots. |
 | `results_app.py` | Dashboard for the pre-computed multilingual results, with a launcher for the live app. |
@@ -119,13 +119,13 @@ a deliberate speed/accuracy tradeoff:
 
 | | Encoder | Decoder | Exact ground truth |
 |---|---|---|---|
-| `sentiment_analysis.py` (live app) | 256 | **10** | never |
+| `sentiment_analysis.py` (live app) | 256 | **64** | never |
 | `Experiments.py` (SLURM) | 512 | 512 | encoder: always · decoder: if n ≤ 20 |
 
-The live decoder budget of 10 is very low -> each coalition costs 4 forward passes
-(2 positive + 2 negative templates), so a realistic budget would make the app
-unusably slow. Treat live decoder numbers as indicative; the SLURM runs are the
-ones to cite.
+The live decoder budget of 64 is intentionally small -> each coalition costs 4
+forward passes (2 positive + 2 negative templates), so a much larger budget would
+make the app slow. Treat live decoder numbers as indicative; the higher-budget
+SLURM runs are the ones to cite.
 
 ---
 
@@ -139,11 +139,7 @@ uv sync
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 ```
 
-Extra dependencies for the apps:
-
-```bash
-uv pip install streamlit matplotlib pillow
-```
+Streamlit, Matplotlib, and Pillow are included in the locked project environment.
 
 For gated models (Gemma), authenticate with Hugging Face:
 
@@ -162,7 +158,7 @@ python -c "from huggingface_hub import login; login(token='YOUR_TOKEN')"
 **Live app** -> type any sentence, choose a model, get an instant explanation:
 
 ```bash
-streamlit run app.py
+uv run streamlit run src/demos/SentimentAnalysis/app.py
 # → http://localhost:8501
 ```
 
@@ -172,7 +168,7 @@ model-loading cost. See known issues below.
 **Results dashboard** -> browse the 24 pre-computed multilingual runs:
 
 ```bash
-streamlit run results_app.py
+uv run streamlit run src/demos/SentimentAnalysis/results_app.py
 # → http://localhost:8501
 ```
 
@@ -265,7 +261,7 @@ honest null result, the method cannot reveal a phenomenon the model never learne
 
 ## Reproducibility
 
-- Pinned model IDs (see Models)
+- Model IDs are listed under Models; immutable Hugging Face revisions are not yet pinned
 - Budgets as tabulated above; `Experiments.py` additionally saves exact ground
   truth (`EXACT_MAX_PLAYERS_DECODER = 20`)
 - Encoder pipeline runs comfortably on CPU; decoders want a GPU (and `gemma4`

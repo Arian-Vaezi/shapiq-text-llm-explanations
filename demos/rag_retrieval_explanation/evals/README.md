@@ -76,3 +76,10 @@ The Slurm files in `slurm/` record the model, retrieval, and GPU settings used
 for the submitted model-backed results. A new run should not replace a published
 result until its manifest, summary, and full set of case artifacts have been
 checked.
+
+Create the log directory from the repository root before submitting one of these
+jobs, because Slurm opens the configured output files before the job starts:
+
+```bash
+mkdir -p logs
+```

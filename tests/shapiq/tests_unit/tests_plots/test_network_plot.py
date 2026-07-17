@@ -15,7 +15,7 @@ def test_network_plot():
     n_players = 5
     n_values = n_players + int(sp.special.binom(n_players, 2))
     iv = InteractionValues(
-        values=np.random.rand(n_values),
+        values=np.linspace(0.1, 1.0, n_values),
         index="k-SII",
         n_players=n_players,
         min_order=1,
@@ -26,10 +26,3 @@ def test_network_plot():
     assert fig is not None
     assert axes is not None
     plt.close(fig)
-
-    # TODO(advueu963): Check whether this test is still valid # noqa: TD003
-    # # value error if neither first_order_values nor interaction_values are given
-    # with pytest.raises(TypeError):
-    #     network_plot() # noqa: ERA001
-
-    assert True

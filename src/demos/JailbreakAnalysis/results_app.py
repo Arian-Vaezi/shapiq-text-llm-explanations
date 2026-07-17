@@ -36,7 +36,7 @@ from shapiq.plot import sentence_interaction_heatmap, sentence_plot
 
 THIS_DIR = Path(__file__).resolve().parent
 
-RESULT_FIGURE = THIS_DIR / "Jailbreak_by_model_temperature.png"
+RESULT_FIGURE = THIS_DIR / "jailbreak_by_model_temperature.png"
 
 SUMMARY_ASR = THIS_DIR / "results" / "summary_asr_with_explanations.json"
 
@@ -742,7 +742,9 @@ elif page == "🔍 Result Explorer":
 
         with tab2:
             st.markdown(
-                "**Interaction Heatmap**: Pairwise interactions between prompt sentences. Red shows synergetic jailbreaking impact."
+                "**Interaction Heatmap**: Pairwise prompt-sentence interactions. "
+                "Red is positive (above-additive); blue is negative (below-additive). "
+                "The sign does not by itself indicate jailbreak direction."
             )
             try:
                 fig, ax = sentence_interaction_heatmap(sii_obj, short_labels, show=False)
@@ -1074,8 +1076,9 @@ elif page == "🧩 Explanation Explorer":
 
     with tab2:
         st.markdown(
-            "Pairwise interactions between prompt sentences. "
-            "**Red** = synergy (reinforce jailbreak), **Blue** = redundancy."
+            "Pairwise prompt-sentence interactions. "
+            "**Red** is positive (above-additive); **blue** is negative (below-additive). "
+            "The sign does not by itself indicate jailbreak direction."
         )
         try:
             fig, _ = sentence_interaction_heatmap(sii_obj, short_labels, show=False)
