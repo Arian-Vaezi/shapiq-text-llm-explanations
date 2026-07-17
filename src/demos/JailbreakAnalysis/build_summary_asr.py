@@ -85,7 +85,7 @@ def build_summary() -> None:
 
             summary.append(entry)
 
-        except Exception as e:  # noqa: BLE001 - one malformed run must not sink the whole summary
+        except Exception as e:  # noqa: BLE001
             print(f"Failed reading {file}: {e}")
 
     with OUTPUT_FILE.open("w", encoding="utf-8") as f:

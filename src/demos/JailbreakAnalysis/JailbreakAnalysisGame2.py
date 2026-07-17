@@ -57,14 +57,12 @@ class JailbreakGame(Game):
         )
 
         # =====================================================
-        # JUDGE model (only needed for llm-as-a-judge scoring)
+        # JUDGE model (lazy used but initialized here)
         # =====================================================
-        self.judge_model = None
-        if self.scoring_mode == "llm-as-a-judge":
-            self.judge_model = HFModelWrapper(
-                model_name=judge_model_name,
-                device=device or self.text_generation_model.device,
-            )
+        self.judge_model = HFModelWrapper(
+            model_name=judge_model_name,
+            device=device or self.text_generation_model.device,
+        )
 
         # =====================================================
         # Embedding model (semantic segmentation)
@@ -244,10 +242,18 @@ class JailbreakGame(Game):
     Score:""".strip()
 
     def _judge_score(self, prompts: list[str], responses: list[str]) -> np.ndarray:
-        if self.judge_model is None:
-            msg = "Judge model is only initialized for llm-as-a-judge scoring."
-            raise RuntimeError(msg)
+        """G-Eval style continuous judge score.
 
+        Instead of sampling a completion and parsing it (noisy, hard to
+        reproduce, and effectively discrete/binary in practice), we read the
+        judge model's log-probabilities over the single next token for each
+        candidate digit "0".."9" (reusing the same ``score_next_token``
+        primitive used for the logprob scoring modes), softmax them into a
+        probability distribution, and take the probability-weighted
+        expectation over 0-9. This gives a smooth, continuous,
+        deterministic-given-logits score, normalized to [0, 1], which is far
+        better suited to KernelSHAP's regression than a sampled/parsed value.
+        """
         scores = []
 
         for p, r in zip(prompts, responses, strict=True):
