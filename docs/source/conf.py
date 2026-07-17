@@ -14,7 +14,6 @@ from sphinx.builders.html import StandaloneHTMLBuilder
 
 root = Path(__file__).resolve().parents[2]  # ../../ from this file
 sys.path.insert(0, str(root))
-sys.path.insert(0, str(root / "shapiq"))
 sys.path.insert(0, str(root / "examples"))
 sys.path.insert(0, str(root / "src"))  # get the shapiq package
 

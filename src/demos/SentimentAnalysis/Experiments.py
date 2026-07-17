@@ -279,8 +279,7 @@ def load_encoder():
 def load_decoder():
     """Load the decoder model wrapper once.
 
-    Uses 4-bit quantization — Qwen/Qwen3.5-9B needs ~18GB in fp16,
-    too large for an 8GB GPU. 4-bit quantization reduces this to ~5-6GB.
+    Uses 4-bit quantization so Qwen/Qwen3.5-4B fits on an 8GB GPU.
 
     Returns:
         HFModelWrapper instance.

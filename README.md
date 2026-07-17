@@ -135,5 +135,7 @@ uv run pre-commit run --all-files     # lint + format (ruff, ty) — what CI run
   are.
 - GPU experiments were run on an A100 (LRZ) via the provided `*.sbatch` scripts; `pyproject.toml`
   pins CUDA-matched torch builds per platform.
+- Before submitting a root or RAG `*.sbatch` job that writes to `logs/`, create that directory
+  from the repository root with `mkdir -p logs`; Slurm opens output files before the job starts.
 - This repository is a fork of [mmschlk/shapiq](https://github.com/mmschlk/shapiq); the library
   parts remain under the upstream MIT license.

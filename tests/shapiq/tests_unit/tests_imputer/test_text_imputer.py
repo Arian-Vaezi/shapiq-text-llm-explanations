@@ -239,7 +239,7 @@ def test_sentence_plot_with_word_players():
 
     words = imputer.players.tolist()
 
-    values = np.random.rand(len(words))
+    values = np.linspace(0.1, 1.0, len(words))
 
     iv = InteractionValues(
         values=values,

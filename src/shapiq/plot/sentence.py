@@ -338,11 +338,9 @@ def sentence_interaction_heatmap(
     (the single shared implementation reused by any other consumer that needs
     the identical matrix, e.g. a fallback table).
     """
-    # before: pass (Temporary placeholder)
     fig, ax = plt.subplots()
     n_words = len(words)
 
-    # player index debug
     if n_words != interaction_values.n_players:
         msg = (
             f"Number of words must match number of players. "
@@ -391,7 +389,7 @@ def sentence_interaction_heatmap(
                 fontsize=annotation_fontsize,
             )
 
-    # x&y achses show word/player lables
+    # The axes show word/player labels.
     ax.set_xticks(np.arange(n_words))
     ax.set_yticks(np.arange(n_words))
     ax.set_xticklabels(words, rotation=45, ha="right")

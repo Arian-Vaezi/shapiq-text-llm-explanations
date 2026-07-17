@@ -20,9 +20,10 @@ The development version can be installed from
 Development
 ~~~~~~~~~~~
 
-Additional packages required for the development of ``shapiq`` (documentation, tests) can be installed with:
+From a repository checkout, install the documentation or development/test
+dependency groups with ``uv``:
 
 .. code::
 
-   pip install shapiq[docs]
-   pip install shapiq[dev] # includes docs
+   uv sync --group docs
+   uv sync --group dev
