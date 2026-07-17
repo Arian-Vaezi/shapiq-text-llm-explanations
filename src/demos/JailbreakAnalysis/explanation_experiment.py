@@ -21,9 +21,9 @@ import json
 from pathlib import Path
 
 import numpy as np
-import shapiq
-
 from JailbreakAnalysisGame import JailbreakGame
+
+import shapiq
 from demos.shared.hf_model import HFModelWrapper
 
 # =====================================================
@@ -40,9 +40,7 @@ DEVICE = "cuda"
 
 # Full run: all three scoring modes, including llm-as-a-judge.
 RUN_JUDGE_MODE = True
-SCORING_MODES = ["abs-logprob", "contra-logprob"] + (
-    ["llm-as-a-judge"] if RUN_JUDGE_MODE else []
-)
+SCORING_MODES = ["abs-logprob", "contra-logprob"] + (["llm-as-a-judge"] if RUN_JUDGE_MODE else [])
 
 
 # =====================================================
@@ -196,7 +194,9 @@ def main() -> None:
     with OUTPUT_PATH.open("w") as f:
         json.dump(results, f, indent=2)
 
-    print(f"Saved {len(results)} game results ({len(entries)}x{len(SCORING_MODES)}) to {OUTPUT_PATH}")
+    print(
+        f"Saved {len(results)} game results ({len(entries)}x{len(SCORING_MODES)}) to {OUTPUT_PATH}"
+    )
 
 
 if __name__ == "__main__":

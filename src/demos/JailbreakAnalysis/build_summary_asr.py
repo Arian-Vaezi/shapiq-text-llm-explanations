@@ -11,6 +11,7 @@ Output:
 """
 
 from __future__ import annotations
+from __future__ import annotations
 
 import json
 from pathlib import Path
@@ -35,7 +36,7 @@ OUTPUT_FILE = OUTPUT_DIR / "summary_asr.json"
 # ----------------------------------------------------------------------
 
 
-def build_summary() -> None:
+def build_summary():
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     summary = []
@@ -85,9 +86,13 @@ def build_summary() -> None:
 
             summary.append(entry)
 
-        except Exception as e:  # noqa: BLE001 - one malformed run must not sink the whole summary
+        except Exception as e:
             print(f"Failed reading {file}: {e}")
 
+    with OUTPUT_FILE.open("w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
+
+    print(f"Saved {len(summary)} entries to {OUTPUT_FILE}")
     with OUTPUT_FILE.open("w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2, ensure_ascii=False)
 
@@ -96,3 +101,4 @@ def build_summary() -> None:
 
 if __name__ == "__main__":
     build_summary()
+
