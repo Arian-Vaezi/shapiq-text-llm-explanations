@@ -5,6 +5,8 @@ Aggregates the Shapiq explanations from interactions_95428/ into summary_asr.jso
 producing a new summary_asr_with_explanations.json.
 """
 
+from __future__ import annotations
+
 import json
 from pathlib import Path
 
@@ -14,7 +16,8 @@ INTERACTIONS_DIR = THIS_DIR / "interactions_95428"
 SUMMARY_ASR_PATH = RESULTS_DIR / "summary_asr.json"
 OUTPUT_PATH = RESULTS_DIR / "summary_asr_with_explanations.json"
 
-def main():
+
+def main() -> None:
     if not SUMMARY_ASR_PATH.exists():
         print(f"Error: {SUMMARY_ASR_PATH} does not exist.")
         return
@@ -28,16 +31,16 @@ def main():
         for file_path in json_files:
             if file_path.name.endswith("_interaction_values.json"):
                 continue
-            
+
             try:
                 with file_path.open("r", encoding="utf-8") as f:
                     data = json.load(f)
-                
+
                 settings = data.get("settings", {})
                 model = settings.get("model")
                 if not model:
                     continue
-                
+
                 # Extract prompt_id from the filename
                 # e.g., "mistralai_Mistral-7B-Instruct-v0.3_c1_dan_malware.json"
                 # The model identifier matches the model name with / replaced by _
@@ -45,7 +48,7 @@ def main():
                 model_prefix = model.replace("/", "_")
                 filename_stem = file_path.stem
                 if filename_stem.startswith(model_prefix + "_"):
-                    prompt_id = filename_stem[len(model_prefix) + 1:]
+                    prompt_id = filename_stem[len(model_prefix) + 1 :]
                 else:
                     # Fallback matching
                     continue
@@ -54,9 +57,9 @@ def main():
                     "players": data.get("players"),
                     "player_values": data.get("player_values"),
                     "all_interactions": data.get("all_interactions"),
-                    "top_interaction_pairs": data.get("top_interaction_pairs")
+                    "top_interaction_pairs": data.get("top_interaction_pairs"),
                 }
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - one malformed file must not sink the aggregation
                 print(f"Failed to read explanation file {file_path}: {e}")
 
     print(f"Loaded {len(explanations)} explanations from {INTERACTIONS_DIR}")
@@ -70,7 +73,7 @@ def main():
     for entry in summary_data:
         model = entry.get("model")
         prompt_id = entry.get("prompt_id")
-        
+
         key = (model, prompt_id)
         if key in explanations:
             explanation = explanations[key]
@@ -80,12 +83,15 @@ def main():
             entry["top_interaction_pairs"] = explanation["top_interaction_pairs"]
             merged_count += 1
 
-    print(f"Merged explanations into {merged_count} out of {len(summary_data)} summary configurations.")
+    print(
+        f"Merged explanations into {merged_count} out of {len(summary_data)} summary configurations."
+    )
 
     # 4. Save to summary_asr_with_explanations.json
     with OUTPUT_PATH.open("w", encoding="utf-8") as f:
         json.dump(summary_data, f, indent=2, ensure_ascii=False)
     print(f"Saved aggregated results to {OUTPUT_PATH}")
+
 
 if __name__ == "__main__":
     main()

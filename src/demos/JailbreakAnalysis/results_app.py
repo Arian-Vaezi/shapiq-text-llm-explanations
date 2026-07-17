@@ -21,13 +21,14 @@ import html
 import json
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import shapiq
-from shapiq.plot import sentence_plot, sentence_interaction_heatmap
-import matplotlib.pyplot as plt
 import streamlit as st
 from jailbreak_prompts import get_all_prompts
+
+import shapiq
+from shapiq.plot import sentence_interaction_heatmap, sentence_plot
 
 # -----------------------------------------------------------------------------
 # Paths
@@ -37,9 +38,9 @@ THIS_DIR = Path(__file__).resolve().parent
 
 RESULT_FIGURE = THIS_DIR / "Jailbreak_by_model_temperature.png"
 
-SUMMARY_ASR = (
-    THIS_DIR / "results" / "summary_asr_with_explanations.json"
-)
+SUMMARY_ASR = THIS_DIR / "results" / "summary_asr_with_explanations.json"
+
+SUMMARY_INTERACTIONS = THIS_DIR / "results" / "summary_interactions.json"
 
 
 # Shown wherever a value function is named, so the two are never confused.
@@ -500,6 +501,65 @@ elif page == "🔍 Result Explorer":
             order2 = rec.get("order2_r2")
             delta = rec.get("delta_r2")
 
+            st.markdown(f"**{VALUE_FUNCTION_LABELS.get(vf, vf)}**")
+
+            m1, m2, m3, m4 = st.columns(4)
+
+            m1.metric("Order-1 R²", f"{order1:.3f}" if order1 is not None else "—")
+            m2.metric("Order-1+2 R²", f"{order2:.3f}" if order2 is not None else "—")
+            m3.metric(
+                "ΔR² gap",
+                f"{delta * 100:+.1f} pp" if delta is not None else "—",
+            )
+            m4.metric(
+                run["score_label"].replace("_", " ").title(),
+                f"{run['score']:.2f}" if isinstance(run["score"], int | float) else "—",
+            )
+
+            if delta is not None:
+                if delta >= 0.20:
+                    st.success(
+                        f"**{delta * 100:+.1f} pp → interactions matter.** Sentence-level "
+                        "effects alone miss a large part of this value function; the pairs "
+                        "carry it."
+                    )
+
+                elif delta >= 0.10:
+                    st.warning(
+                        f"**{delta * 100:+.1f} pp → interactions contribute.** An additive "
+                        "explanation is incomplete but captures most of the signal."
+                    )
+
+                else:
+                    st.info(
+                        f"**{delta * 100:+.1f} pp → close to additive.** Per-sentence effects "
+                        "already explain almost all of this value function."
+                    )
+
+            st.markdown("")
+
+        # ---------------------------------------------------------------------
+        # The two value functions disagree — this is the finding, not a bug
+        # ---------------------------------------------------------------------
+
+        if len(ordered_vfs) > 1:
+            lp_delta = (by_vf["logprob"].get("reconstruction") or {}).get("delta_r2")
+            jd_delta = (by_vf["judge_0_10"].get("reconstruction") or {}).get("delta_r2")
+
+            if lp_delta is not None and jd_delta is not None:
+                st.error(
+                    f"**The trade-off — this is the finding, not a bug.** On this prompt the "
+                    f"logprob proxy shows a **{lp_delta * 100:+.1f} pp** gap but the judge "
+                    f"shows **{jd_delta * 100:+.1f} pp**.\n\n"
+                    "The judge is the *faithful* target (it scores what we actually care about) "
+                    "but it is near-binary, so the payload sentence is necessary **and** "
+                    "sufficient and absorbs almost all the value — leaving little for pairs. "
+                    "The logprob value function is interaction-rich but is only a **proxy** for "
+                    "compliance. Faithful value function → few interactions; interaction-rich "
+                    "value function → only a proxy. Picking a value function is a modelling "
+                    "decision, not a detail."
+                )
+
     # -------------------------------------------------------------------------
     # Explanation
     # -------------------------------------------------------------------------
@@ -529,34 +589,45 @@ elif page == "🔍 Result Explorer":
         # --- Section 1: Legend Mapping ---
         st.subheader("📝 Players (Prompt Sentences) Mapping")
         legend_data = []
-        for i, (short_lbl, full_txt, val) in enumerate(zip(short_labels, players, player_values)):
-            legend_data.append({
-                "Index": i,
-                "Short Label": short_lbl,
-                "Full Text of prompt sentence": full_txt,
-                "Shapley Value": val
-            })
+        for i, (short_lbl, full_txt, val) in enumerate(
+            zip(short_labels, players, player_values, strict=False)
+        ):
+            legend_data.append(
+                {
+                    "Index": i,
+                    "Short Label": short_lbl,
+                    "Full Text of prompt sentence": full_txt,
+                    "Shapley Value": val,
+                }
+            )
         st.dataframe(
             pd.DataFrame(legend_data),
             column_config={
                 "Index": st.column_config.NumberColumn("Index", width="small"),
                 "Short Label": st.column_config.TextColumn("Short Label", width="medium"),
-                "Full Text of prompt sentence": st.column_config.TextColumn("Full Text of prompt sentence", width="large"),
-                "Shapley Value": st.column_config.NumberColumn("Shapley Value", format="%.4f")
+                "Full Text of prompt sentence": st.column_config.TextColumn(
+                    "Full Text of prompt sentence", width="large"
+                ),
+                "Shapley Value": st.column_config.NumberColumn("Shapley Value", format="%.4f"),
             },
             hide_index=True,
-            use_container_width=True
+            use_container_width=True,
         )
 
         col_left, col_right = st.columns(2)
 
         with col_left:
             st.subheader("🏆 Top Shapley Values Ranked")
-            sv_df = pd.DataFrame({
-                "Player": short_labels,
-                "Shapley Value": player_values,
-                "Safety Impact": ["🛡️ Pushing towards refusal" if v < 0 else "🚨 Towards compliance" for v in player_values]
-            }).sort_values(by="Shapley Value", ascending=True)
+            sv_df = pd.DataFrame(
+                {
+                    "Player": short_labels,
+                    "Shapley Value": player_values,
+                    "Safety Impact": [
+                        "🛡️ Pushing towards refusal" if v < 0 else "🚨 Towards compliance"
+                        for v in player_values
+                    ],
+                }
+            ).sort_values(by="Shapley Value", ascending=True)
             st.dataframe(sv_df, use_container_width=True, hide_index=True)
 
         with col_right:
@@ -566,30 +637,34 @@ elif page == "🔍 Result Explorer":
                 for pair in top_interaction_pairs:
                     p_i = pair.get("player_i")
                     p_j = pair.get("player_j")
-                    
+
                     # Find indices of players in the original list
                     idx_i = players.index(p_i) if p_i in players else -1
                     idx_j = players.index(p_j) if p_j in players else -1
-                    
+
                     lbl_i = short_labels[idx_i] if idx_i != -1 else p_i
                     lbl_j = short_labels[idx_j] if idx_j != -1 else p_j
-                    
+
                     val = pair.get("k_sii", 0.0)
-                    interactions_ranked.append({
-                        "Player 1": lbl_i,
-                        "Player 2": lbl_j,
-                        "k-SII Value": val,
-                        "Relationship": "🔥 Synergy" if val > 0 else "❄️ Redundancy"
-                    })
-                
-                sii_df = pd.DataFrame(interactions_ranked).sort_values(by="k-SII Value", key=abs, ascending=False)
+                    interactions_ranked.append(
+                        {
+                            "Player 1": lbl_i,
+                            "Player 2": lbl_j,
+                            "k-SII Value": val,
+                            "Relationship": "🔥 Synergy" if val > 0 else "❄️ Redundancy",
+                        }
+                    )
+
+                sii_df = pd.DataFrame(interactions_ranked).sort_values(
+                    by="k-SII Value", key=abs, ascending=False
+                )
                 st.dataframe(sii_df, use_container_width=True, hide_index=True)
             else:
                 st.info("No pairwise interaction data available.")
 
         # --- Section 2: Plots ---
         st.subheader("📊 Shapiq Visualizations")
-        
+
         # Build shapiq objects
         # 1. SV (Order 1)
         lookup_sv = {(i,): i for i in range(n_players)}
@@ -640,14 +715,18 @@ elif page == "🔍 Result Explorer":
         )
 
         # Display plots in tabs
-        tab1, tab2, tab3 = st.tabs([
-            "📈 Sentence Attribution Plot (SV)", 
-            "🌡️ Interaction Heatmap (k-SII)", 
-            "🕸️ Interaction Network (k-SII)"
-        ])
+        tab1, tab2, tab3 = st.tabs(
+            [
+                "📈 Sentence Attribution Plot (SV)",
+                "🌡️ Interaction Heatmap (k-SII)",
+                "🕸️ Interaction Network (k-SII)",
+            ]
+        )
 
         with tab1:
-            st.markdown("**Sentence Attribution Plot**: Words highlighted in red increase safety, blue decreases safety (jailbreak contributing).")
+            st.markdown(
+                "**Sentence Attribution Plot**: Words highlighted in red increase safety, blue decreases safety (jailbreak contributing)."
+            )
             try:
                 fig, ax = sentence_plot(sv_obj, short_labels, show=False, chars_per_line=80)
                 if fig is not None:
@@ -658,11 +737,13 @@ elif page == "🔍 Result Explorer":
                     plt.close(fig)
                 else:
                     st.warning("Sentence plot returned empty figure.")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
                 st.error(f"Failed to generate sentence plot: {e}")
 
         with tab2:
-            st.markdown("**Interaction Heatmap**: Pairwise interactions between prompt sentences. Red shows synergetic jailbreaking impact.")
+            st.markdown(
+                "**Interaction Heatmap**: Pairwise interactions between prompt sentences. Red shows synergetic jailbreaking impact."
+            )
             try:
                 fig, ax = sentence_interaction_heatmap(sii_obj, short_labels, show=False)
                 if fig is not None:
@@ -673,11 +754,13 @@ elif page == "🔍 Result Explorer":
                     plt.close(fig)
                 else:
                     st.warning("Heatmap plot returned empty figure.")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
                 st.error(f"Failed to generate interaction heatmap: {e}")
 
         with tab3:
-            st.markdown("**Interaction Network**: Graph representation of player interactions. Stronger connections show higher synergy/redundancy.")
+            st.markdown(
+                "**Interaction Network**: Graph representation of player interactions. Stronger connections show higher synergy/redundancy."
+            )
             try:
                 result_net = sii_obj.plot_network(feature_names=short_labels, show=False)
                 if result_net is not None:
@@ -688,16 +771,15 @@ elif page == "🔍 Result Explorer":
                     plt.close(fig)
                 else:
                     st.warning("Network plot returned empty figure.")
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
                 st.error(f"Failed to generate interaction network: {e}")
 
 
 # =============================================================================
-# Explanation Explorer  –  pre-filtered to configs WITH shapiq data
+# Explanation Explorer - pre-filtered to configs WITH shapiq data
 # =============================================================================
 
 elif page == "🧩 Explanation Explorer":
-
     st.title("🧩 Explanation Explorer")
     st.caption(
         "Browse only the configurations that have precomputed Shapiq explanations "
@@ -731,9 +813,11 @@ elif page == "🧩 Explanation Explorer":
     # Explanation-aware filters
     # -------------------------------------------------------------------------
 
-    exp_models = sorted(set(r["model"] for r in explained if r.get("model")))
-    exp_prompts = sorted(set(r["prompt_id"] for r in explained if r.get("prompt_id")))
-    exp_temperatures = sorted(set(r["temperature"] for r in explained if r.get("temperature") is not None))
+    exp_models = sorted({r["model"] for r in explained if r.get("model")})
+    exp_prompts = sorted({r["prompt_id"] for r in explained if r.get("prompt_id")})
+    exp_temperatures = sorted(
+        {r["temperature"] for r in explained if r.get("temperature") is not None}
+    )
 
     col1, col2 = st.columns(2)
 
@@ -743,7 +827,7 @@ elif page == "🧩 Explanation Explorer":
     with col2:
         # Filter prompts to those available for the selected model
         prompts_for_model = sorted(
-            set(r["prompt_id"] for r in explained if r.get("model") == sel_model)
+            {r["prompt_id"] for r in explained if r.get("model") == sel_model}
         )
         sel_prompt = st.selectbox("Prompt", prompts_for_model, key="exp_prompt")
 
@@ -755,10 +839,7 @@ elif page == "🧩 Explanation Explorer":
     # default to the t=0.7 run (falling back to whichever run is available).
     # This is a known simplification — the explanation shown does not
     # necessarily correspond 1:1 to the specific response shown below.
-    candidates = [
-        r for r in explained
-        if r["model"] == sel_model and r["prompt_id"] == sel_prompt
-    ]
+    candidates = [r for r in explained if r["model"] == sel_model and r["prompt_id"] == sel_prompt]
 
     if not candidates:
         st.warning("No matching result found.")
@@ -788,12 +869,12 @@ elif page == "🧩 Explanation Explorer":
     with st.expander("More config details"):
         st.markdown(
             f"""
-- **Tier:** `{result.get('tier', '—')}`
-- **Class ID:** `{result.get('class_id', '—')}`
-- **Template:** `{result.get('template', '—')}`
-- **Source:** {result.get('source', '—')}
-- **Domain:** `{result.get('domain', '—')}`
-- **Judge model:** `{result.get('judge_model', '—')}`
+- **Tier:** `{result.get("tier", "—")}`
+- **Class ID:** `{result.get("class_id", "—")}`
+- **Template:** `{result.get("template", "—")}`
+- **Source:** {result.get("source", "—")}
+- **Domain:** `{result.get("domain", "—")}`
+- **Judge model:** `{result.get("judge_model", "—")}`
 """
         )
 
@@ -919,9 +1000,7 @@ elif page == "🧩 Explanation Explorer":
                         "Relationship": "🔥 Synergy" if val > 0 else "❄️ Redundancy",
                     }
                 )
-            sii_df = pd.DataFrame(rows).sort_values(
-                by="k-SII Value", key=abs, ascending=False
-            )
+            sii_df = pd.DataFrame(rows).sort_values(by="k-SII Value", key=abs, ascending=False)
             st.dataframe(sii_df, use_container_width=True, hide_index=True)
         else:
             st.info("No pairwise interaction data available.")
@@ -990,7 +1069,7 @@ elif page == "🧩 Explanation Explorer":
                 fig.tight_layout()
                 st.pyplot(fig)
                 plt.close(fig)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
             st.error(f"Sentence plot error: {e}")
 
     with tab2:
@@ -1006,7 +1085,7 @@ elif page == "🧩 Explanation Explorer":
                 fig.tight_layout()
                 st.pyplot(fig)
                 plt.close(fig)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
             st.error(f"Heatmap error: {e}")
 
     with tab3:
@@ -1022,5 +1101,5 @@ elif page == "🧩 Explanation Explorer":
                 fig.set_size_inches(8, 8)
                 st.pyplot(fig)
                 plt.close(fig)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
             st.error(f"Network plot error: {e}")

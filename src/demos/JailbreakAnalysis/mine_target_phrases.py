@@ -13,11 +13,12 @@ Output:
     results/mined_target_phrases.json
 """
 
-from pathlib import Path
+from __future__ import annotations
+
 import json
 import re
 from collections import Counter
-
+from pathlib import Path
 
 # ---------------------------------------------------------------------
 # Paths
@@ -41,38 +42,71 @@ MIN_DOCUMENTS = 3
 
 # common English stopwords
 STOPWORDS = {
-    "the","a","an","of","to","and","or","in","on","for","with",
-    "at","by","is","are","was","were","be","been","being",
-    "this","that","these","those","it","its","as","from",
-    "if","then","than","into","about","your","you","our",
-    "their","his","her","they","them","we","us"
+    "the",
+    "a",
+    "an",
+    "of",
+    "to",
+    "and",
+    "or",
+    "in",
+    "on",
+    "for",
+    "with",
+    "at",
+    "by",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "been",
+    "being",
+    "this",
+    "that",
+    "these",
+    "those",
+    "it",
+    "its",
+    "as",
+    "from",
+    "if",
+    "then",
+    "than",
+    "into",
+    "about",
+    "your",
+    "you",
+    "our",
+    "their",
+    "his",
+    "her",
+    "they",
+    "them",
+    "we",
+    "us",
 }
 
 
 # ---------------------------------------------------------------------
 
-def tokenize(text: str):
 
+def tokenize(text: str) -> list[str]:
     text = text.lower()
 
     text = re.sub(r"\s+", " ", text)
 
-    tokens = re.findall(r"[a-z']+", text)
-
-    return tokens
+    return re.findall(r"[a-z']+", text)
 
 
-def extract_phrases(text):
-
+def extract_phrases(text: str) -> set[str]:
     words = tokenize(text)
 
-    phrases = set()      # IMPORTANT: document frequency
+    phrases = set()  # IMPORTANT: document frequency
 
     for n in range(MIN_N, MAX_N + 1):
-
         for i in range(len(words) - n + 1):
-
-            gram = words[i:i+n]
+            gram = words[i : i + n]
 
             # skip phrases consisting entirely of stopwords
             if all(w in STOPWORDS for w in gram):
@@ -85,7 +119,7 @@ def extract_phrases(text):
 
 # ---------------------------------------------------------------------
 
-with open(INPUT, encoding="utf-8") as f:
+with INPUT.open(encoding="utf-8") as f:
     data = json.load(f)
 
 jailbreak_counter = Counter()
@@ -96,7 +130,6 @@ num_refusal = 0
 
 
 for sample in data:
-
     response = sample.get("response", "")
 
     if not response:
@@ -105,46 +138,35 @@ for sample in data:
     phrases = extract_phrases(response)
 
     if sample["jailbroken"]:
-
         num_jailbreak += 1
         jailbreak_counter.update(phrases)
 
     else:
-
         num_refusal += 1
         refusal_counter.update(phrases)
 
 
 # ---------------------------------------------------------------------
 
-def build(counter_a, counter_b):
 
+def build(counter_a: Counter, counter_b: Counter) -> list[dict]:
     results = []
 
     all_phrases = set(counter_a) | set(counter_b)
 
     for phrase in all_phrases:
-
         a = counter_a[phrase]
         b = counter_b[phrase]
 
         if a + b < MIN_DOCUMENTS:
             continue
 
-        results.append({
-
-            "phrase": phrase,
-            "class_count": a,
-            "other_count": b,
-            "ratio": round(a / (b + 1), 3)
-
-        })
+        results.append(
+            {"phrase": phrase, "class_count": a, "other_count": b, "ratio": round(a / (b + 1), 3)}
+        )
 
     results.sort(
-        key=lambda x: (
-            x["ratio"],
-            x["class_count"]
-        ),
+        key=lambda x: (x["ratio"], x["class_count"]),
         reverse=True,
     )
 
@@ -165,28 +187,17 @@ refusal = build(
 # ---------------------------------------------------------------------
 
 result = {
-
     "statistics": {
-
         "total": len(data),
         "jailbroken": num_jailbreak,
         "refusal": num_refusal,
-
     },
-
     "jailbreak_phrases": jailbreak[:100],
-
     "refusal_phrases": refusal[:100],
-
 }
 
 
-with open(
-    OUTPUT,
-    "w",
-    encoding="utf-8",
-) as f:
-
+with OUTPUT.open("w", encoding="utf-8") as f:
     json.dump(
         result,
         f,
@@ -211,28 +222,14 @@ print()
 print("Top jailbreak phrases:")
 
 for x in jailbreak[:20]:
-
-    print(
-        f"{x['phrase']:<30}"
-        f"{x['class_count']:>4}"
-        f" vs "
-        f"{x['other_count']:<4}"
-        f"(ratio={x['ratio']})"
-    )
+    print(f"{x['phrase']:<30}{x['class_count']:>4} vs {x['other_count']:<4}(ratio={x['ratio']})")
 
 print()
 
 print("Top refusal phrases:")
 
 for x in refusal[:20]:
-
-    print(
-        f"{x['phrase']:<30}"
-        f"{x['class_count']:>4}"
-        f" vs "
-        f"{x['other_count']:<4}"
-        f"(ratio={x['ratio']})"
-    )
+    print(f"{x['phrase']:<30}{x['class_count']:>4} vs {x['other_count']:<4}(ratio={x['ratio']})")
 
 print()
 print(f"Saved to {OUTPUT}")
