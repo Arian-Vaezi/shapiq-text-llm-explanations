@@ -1,0 +1,79 @@
+#!/bin/bash
+# Batch sweep of the headless jailbreak runner across models x examples x segmentations.
+# Submit:  sbatch run_jailbreak_sweep.sbatch
+# Monitor: squeue -M hlai -u $USER ;  tail -f logs/jb-sweep-<jobid>.out
+# Retrieve (from your LAPTOP): scp -r <user>@cool.hpc.lrz.de:~/projects/shapiq-text-llm-explanations/results/sweep_<jobid> ./
+#
+#SBATCH --clusters=hlai
+#SBATCH --job-name=jb-sweep
+#SBATCH --output=logs/jb-sweep-%j.out
+#SBATCH --error=logs/jb-sweep-%j.out
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=48G
+#SBATCH --time=08:00:00
+
+export SLURM_CONF="/lrz/sys/share/CMUC4/etc/slurm_hlai.conf"
+# ALL caches go on SCRATCH (petabytes), never $HOME (small, shared quota -> the
+# "Disk quota exceeded" failure - applies to the HF model cache, uv's build cache,
+# and tempfiles). Fall back to the known LRZ scratch path if $SCRATCH isn't inherited.
+: "${SCRATCH:=/dss/lxclscratch/04/$USER}"
+export HF_HOME="$SCRATCH/hf_cache"
+export UV_CACHE_DIR="$SCRATCH/uv_cache"
+export TMPDIR="$SCRATCH/tmp"
+export TOKENIZERS_PARALLELISM=false
+mkdir -p "$HF_HOME" "$UV_CACHE_DIR" "$TMPDIR"
+echo "HF_HOME=$HF_HOME  UV_CACHE_DIR=$UV_CACHE_DIR  TMPDIR=$TMPDIR"
+
+# Run in whatever directory the job was submitted from (so this works from your own
+# clone, e.g. on scratch), not a hardcoded shared path.
+cd "${SLURM_SUBMIT_DIR:-$PWD}"
+OUTDIR="results/sweep_${SLURM_JOB_ID:-manual}"
+mkdir -p logs "$OUTDIR"
+source .venv/bin/activate
+
+echo "Job ${SLURM_JOB_ID:-<none>} on $(hostname) -> $OUTDIR"
+nvidia-smi || true
+
+# No `set -e`: one failed config must not abort the whole sweep.
+set -uo pipefail
+
+# All four models. Caches (~26 GB total) land in HF_HOME on SCRATCH, set above, so
+# they don't touch the home quota. All are ungated (no HF license acceptance) and
+# recognized by CausalModelWrapper.
+MODELS=(
+  "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+  "Qwen/Qwen2.5-1.5B-Instruct"
+  "microsoft/Phi-3-mini-4k-instruct"
+  "mistralai/Mistral-7B-Instruct-v0.3"
+)
+EXAMPLES=(0 1 2 3)
+
+run() {  # args: model example segmentation order
+  local model="$1" ex="$2" seg="$3" order="$4"
+  local tag; tag="$(echo "$model" | tr '/' '_')_ex${ex}_${seg}_o${order}"
+  echo ">>> $(date +%H:%M:%S)  $tag"
+  uv run python src/demos/JailbreakAnalysis/run_experiment.py \
+      --model "$model" --example "$ex" \
+      --segmentation "$seg" --order "$order" \
+      --scoring-mode logprob --quality Auto \
+      --output "${OUTDIR}/${tag}.json" \
+    || echo "!!! FAILED: $tag"
+}
+
+for m in "${MODELS[@]}"; do
+  for ex in "${EXAMPLES[@]}"; do
+    # sentence & semantic: both orders (few enough players for readable order-2 plots)
+    run "$m" "$ex" sentence 1
+    run "$m" "$ex" sentence 2
+    run "$m" "$ex" semantic 1
+    run "$m" "$ex" semantic 2
+    # word: order-1 only — long JBB prompts give 60-80+ players, so order-2 is both
+    # very expensive (quadratic in players) and unreadable as a heatmap. Add an
+    # explicit `run "$m" "$ex" word 2` here if you specifically want it.
+    run "$m" "$ex" word 1
+  done
+done
+
+echo "Sweep complete: $OUTDIR"
+ls -1 "$OUTDIR" | wc -l

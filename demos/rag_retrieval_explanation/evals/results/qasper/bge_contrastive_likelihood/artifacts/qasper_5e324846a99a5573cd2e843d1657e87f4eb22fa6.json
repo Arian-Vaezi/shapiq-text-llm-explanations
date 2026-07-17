@@ -1,0 +1,1591 @@
+{
+  "case": {
+    "case_id": "qasper_5e324846a99a5573cd2e843d1657e87f4eb22fa6",
+    "paper_id": "1710.07960",
+    "paper_title": "How big is big enough? Unsupervised word sense disambiguation using a very large corpus",
+    "question_id": "5e324846a99a5573cd2e843d1657e87f4eb22fa6",
+    "annotation_id": "38daaceb6d56558a0887c1ec6aeb642b681223ff",
+    "question": "How do they deal with unknown distribution senses?",
+    "gold_answer": "The N\u00e4ive-Bayes classifier is corrected so it is not biased to most frequent classes",
+    "answer_type": "free_form",
+    "gold_evidence_ids": [
+      "1710.07960:paragraph:0003",
+      "1710.07960:paragraph:0013"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1710.07960:paragraph:0003",
+      "score": 0.8406317722288952,
+      "title": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+      "text": "Monosemous relatives have been employed multiple times (see Section 2), but results remain unsatisfactory. The aim of my study is to explore the limitations of this technique by implementing and evaluating such a tool for Polish. Firstly, the method is expanded by waiving the requirement of monosemy and proposing several new sources of relatives. These previously unexplored sources are based on wordnet data and help gather many training cases from the corpus. Secondly, a well-known problem of uneven yet unknown distribution of word senses is alleviated by modifying a na\u00efve Bayesian classifier. Thanks to this correction, the classifier is no longer biased towards senses that have more training data. Finally, a very large corpus (600 million documents), gathered from the web by a Polish search engine NEKST, is used to build models based on training corpora of different sizes. Those experiments show what amount of data is sufficient for such a task. The proposed solution is compared to baselines that use wordnet structure only, with no training corpora."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1710.07960:paragraph:0057",
+      "score": 0.804530399041701,
+      "title": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+      "text": "In this paper the limitations and improvements of unsupervised word sense disambiguation have been investigated. The main problem \u2013 insufficient number and quality of replacements has been tackled by adding new rich sources of replacements. The quality of the models has indeed improved, especially thanks to replacements based on sense ordering in plWordNet. To deal with the problem of unknown sense distribution, the Bayesian classifier has been modified, removing the bias towards frequent labels in the training data. Finally, the experiments with very large corpus have shown the sufficient amount of training data for this task, which is only 6 million documents."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1710.07960:paragraph:0054",
+      "score": 0.8716124533867156,
+      "title": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+      "text": "First of all, the new sources of replacements proposed in this work indeed seem to improve the models from 70.86% (only traditional monosemous relatives) to 77.96% (all proposed relatives). The biggest gain is obtained by including the polysemous relatives taking into account only their first meaning. This technique relies on two assumptions: a strong domination of one of the senses and that sense being listed first in plWordNet. While the former is almost always true, if the second assumption is false then the created model are adversely affected. In the case of two target words the senses, the first sense in each case (stopie\u0144 as a musical concept and forma as a synonym of polynomial) was so peculiar that they were unknown to the author of this study and couldn't be assigned to any of the coarse-grained NCP senses. Clearly, not only the method of unsupervised WSD using relatives, but also other solutions related to polysemy would definitely benefit from a reliable ordering of senses in wordnets, especially as increasingly uncommon senses are added to them with time. It is however not clear how such knowledge could be obtained without solving the WSD task first. What is more, sense distributions obviously change with genre, time, author, etc."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1710.07960:abstract:000",
+      "score": 0.8221220727481778,
+      "title": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+      "text": "In this paper, the problem of disambiguating a target word for Polish is approached by searching for related words with known meaning. These relatives are used to build a training corpus from unannotated text. This technique is improved by proposing new rich sources of replacements that substitute the traditional requirement of monosemy with heuristics based on wordnet relations. The na\\\"ive Bayesian classifier has been modified to account for an unknown distribution of senses. A corpus of 600 million web documents (594 billion tokens), gathered by the NEKST search engine allows us to assess the relationship between training set size and disambiguation accuracy. The classifier is evaluated using both a wordnet baseline and a corpus with 17,314 manually annotated occurrences of 54 ambiguous words."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1710.07960:paragraph:0013",
+      "score": 0.829856051598031,
+      "title": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+      "text": "The algorithm works as follows. First, a set of relatives is obtained for each sense of a target word using the Polish wordnet: plWordNet BIBREF18 . Some of the replacements may have multiple senses, however usually one of them covers most cases. Secondly, a set of context features is extracted from occurrences of relatives in the NEKST corpus. Finally, the aggregated feature values corresponding to target word senses are used to build a na\u00efve Bayesian classifier adjusted to a situation of unknown a priori probabilities."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1710.07960:paragraph:0047",
+      "score": 0.8103246022815406,
+      "title": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+      "text": "To properly judge the results, we need to start with the baselines. Without knowing the distribution of senses, three basic possibilities seem reasonable: we can either 1) select a meaning randomly, 2) base on the sense numbering in NCP or 3) use plWordNet in the same way. To have a better comparison with ontology-based methods, the results also include a word similarity baseline configuration, which selects the sense with the strongest similarity to any of the words in context (sentence). For that purpose the Leacock&Chodorow similarity measure (implemented using all relations between synsets in plWordNet) is employed, as it has been previously used in WSD BIBREF21 and also correlates well with human judgement of similarity BIBREF22 . The baseline results, shown in Table TABREF27 , support the claim of intentional sense ordering in plWordNet."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+      "attribution": 0.03192440535155859
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+      "attribution": -0.023626184536509626
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+      "attribution": -0.019931785164599748
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+      "attribution": 0.014495019540613165
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+      "attribution": 0.011810081034423658
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+      "attribution": -0.005643279124333847
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+      "attribution": 0.1936979779399421
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+      "attribution": 0.036791854377606306
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+      "attribution": 0.02403619381925613
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+      "attribution": -0.0143295997462847
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+      "attribution": 0.007584998491986714
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+      "attribution": -0.0005648975433164926
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0057",
+      "interaction": 0.025009721241842038
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0054",
+      "interaction": -0.013615563387469026
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:abstract:000",
+      "interaction": 0.052732432007434854
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": 0.046236583424793316
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.0018430505436795145
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:paragraph:0054",
+      "interaction": -0.0037591317422883417
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:abstract:000",
+      "interaction": 0.0463318543756642
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": 0.02984241140644963
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.013444226724870948
+    },
+    {
+      "left": "1710.07960:paragraph:0054",
+      "right": "1710.07960:abstract:000",
+      "interaction": -0.0032808228893419305
+    },
+    {
+      "left": "1710.07960:paragraph:0054",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": -0.016407855837241046
+    },
+    {
+      "left": "1710.07960:paragraph:0054",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": 0.002679322605417149
+    },
+    {
+      "left": "1710.07960:abstract:000",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": 0.06686712572365688
+    },
+    {
+      "left": "1710.07960:abstract:000",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.01064790972955693
+    },
+    {
+      "left": "1710.07960:paragraph:0013",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.003288612473088286
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0057",
+      "interaction": -0.04005016986066727
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0054",
+      "interaction": -0.015346158484439607
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:abstract:000",
+      "interaction": -0.004480305155207696
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": 0.02656564886664336
+    },
+    {
+      "left": "1710.07960:paragraph:0003",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": 0.0030502712970074002
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:paragraph:0054",
+      "interaction": -0.00849208261419607
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:abstract:000",
+      "interaction": -0.03246615511705872
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": 0.020576747119464424
+    },
+    {
+      "left": "1710.07960:paragraph:0057",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.0002694244033077307
+    },
+    {
+      "left": "1710.07960:paragraph:0054",
+      "right": "1710.07960:abstract:000",
+      "interaction": 0.0018978169198789595
+    },
+    {
+      "left": "1710.07960:paragraph:0054",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": -0.013411350631300568
+    },
+    {
+      "left": "1710.07960:paragraph:0054",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.010953837126238949
+    },
+    {
+      "left": "1710.07960:abstract:000",
+      "right": "1710.07960:paragraph:0013",
+      "interaction": 0.020924650113553815
+    },
+    {
+      "left": "1710.07960:abstract:000",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.010161492352469815
+    },
+    {
+      "left": "1710.07960:paragraph:0013",
+      "right": "1710.07960:paragraph:0047",
+      "interaction": -0.008469312139376788
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.009028258039754267
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "remaining_chunks": 5,
+        "score": -0.04461922219915271
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "remaining_chunks": 4,
+        "score": -0.05980131148459805
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "remaining_chunks": 3,
+        "score": -0.08554443042289495
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.03709200937556589
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "remaining_chunks": 1,
+        "score": 0.02473066167517457
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "selected_chunks": 1,
+        "score": -0.030333148963992196
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "selected_chunks": 2,
+        "score": -0.07986544122302447
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "selected_chunks": 3,
+        "score": -0.030693957982503295
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "selected_chunks": 4,
+        "score": 0.012701371064832934
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "selected_chunks": 5,
+        "score": 0.018681647091451592
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "selected_chunks": 6,
+        "score": 0.009028258039754267
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.009028258039754267
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "remaining_chunks": 5,
+        "score": 0.018681647091451592
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "remaining_chunks": 4,
+        "score": -0.029950957308432558
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "remaining_chunks": 3,
+        "score": -0.05962349085181223
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "remaining_chunks": 2,
+        "score": -0.03927393908994986
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "remaining_chunks": 1,
+        "score": -0.030333148963992196
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.009028258039754267
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 2: 1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "remaining_chunks": 5,
+        "score": -0.04461922219915271
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "remaining_chunks": 4,
+        "score": -0.11600969613109324
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "remaining_chunks": 3,
+        "score": -0.11024007238805578
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "remaining_chunks": 2,
+        "score": -0.14453081555455494
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "remaining_chunks": 1,
+        "score": 0.02473066167517457
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.009028258039754267
+      },
+      {
+        "step": 1,
+        "score": -0.004591561383188328
+      },
+      {
+        "step": 2,
+        "score": -0.035786678323755594
+      },
+      {
+        "step": 3,
+        "score": -0.05384803756029968
+      },
+      {
+        "step": 4,
+        "score": -0.06885453005931687
+      },
+      {
+        "step": 5,
+        "score": -0.04440282904992456
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How do they deal with unknown distribution senses?",
+    "expanded_queries": [
+      "How do they deal with unknown distribution senses?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1710.07960:paragraph:0040 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Classification",
+        "dense": 0.5735,
+        "page": 1,
+        "type": "body_text",
+        "section": "Classification",
+        "flags": "",
+        "preview": "The expression has been formulated as a product of two factors: INLINEFORM0 , independent from observed features and corresponding to empty word context, and INLINEFORM1 that depends on observed context. To weaken the in"
+      },
+      {
+        "rank": 2,
+        "source": "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "dense": 0.5637,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method",
+        "flags": "",
+        "preview": "The algorithm works as follows. First, a set of relatives is obtained for each sense of a target word using the Polish wordnet: plWordNet BIBREF18 . Some of the replacements may have multiple senses, however usually one "
+      },
+      {
+        "rank": 3,
+        "source": "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "dense": 0.5595,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "First of all, the new sources of replacements proposed in this work indeed seem to improve the models from 70.86% (only traditional monosemous relatives) to 77.96% (all proposed relatives). The biggest gain is obtained b"
+      },
+      {
+        "rank": 4,
+        "source": "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "dense": 0.559,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "To properly judge the results, we need to start with the baselines. Without knowing the distribution of senses, three basic possibilities seem reasonable: we can either 1) select a meaning randomly, 2) base on the sense "
+      },
+      {
+        "rank": 5,
+        "source": "1710.07960:paragraph:0044 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "dense": 0.5528,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "The senses used for annotation are coarse-grained \u2013 with one sense covering a range of related usages. Each word has between two and four senses. To employ the method described in previous section, the NCP senses have be"
+      },
+      {
+        "rank": 6,
+        "source": "1710.07960:paragraph:0010 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "dense": 0.5404,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "The majority of classification techniques are built on an assumption that the training data approximately reflects the true distribution of the target classes. However, that is not the case when using monosemous relative"
+      },
+      {
+        "rank": 7,
+        "source": "1710.07960:paragraph:0008 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "dense": 0.5392,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "Unsupervised methods use no previously labelled examples. Instead an external knowledge source is employed, e.g. a machine-readable dictionary or wordnet. In the simplest unsupervised solution, called the Lesk algorithm "
+      },
+      {
+        "rank": 8,
+        "source": "1710.07960:paragraph:0053 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "dense": 0.5352,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "Although many different configurations have been tested in this study, all of them remain below the accuracy level of 80%, approximately equal to average share of dominating senses in this dataset. This is obviously unsa"
+      },
+      {
+        "rank": 9,
+        "source": "1710.07960:paragraph:0014 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Relatives",
+        "dense": 0.5293,
+        "page": 1,
+        "type": "body_text",
+        "section": "Relatives",
+        "flags": "",
+        "preview": "In order to obtain training cases from unannotated corpora, we aim to select relatives which are semantically similar to a given sense of a target word. An example of this process, concerning the word j\u0119zyk (tongue) in o"
+      },
+      {
+        "rank": 10,
+        "source": "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "dense": 0.5274,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Monosemous relatives have been employed multiple times (see Section 2), but results remain unsatisfactory. The aim of my study is to explore the limitations of this technique by implementing and evaluating such a tool fo"
+      },
+      {
+        "rank": 11,
+        "source": "1710.07960:paragraph:0046 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "dense": 0.5263,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "The algorithm works using plWordNet synsets and its output is mapped to NCP meaning to measure its quality. Accuracy measures what percentage of the programme's guesses agree with manually assigned senses. To assess the "
+      },
+      {
+        "rank": 12,
+        "source": "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "dense": 0.5158,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions",
+        "flags": "",
+        "preview": "In this paper the limitations and improvements of unsupervised word sense disambiguation have been investigated. The main problem \u2013 insufficient number and quality of replacements has been tackled by adding new rich sour"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "keyword": 0.1435,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "In this paper, the problem of disambiguating a target word for Polish is approached by searching for related words with known meaning. These relatives are used to build a training corpus from unannotated text. This techn"
+      },
+      {
+        "rank": 2,
+        "source": "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "keyword": 0.1062,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Monosemous relatives have been employed multiple times (see Section 2), but results remain unsatisfactory. The aim of my study is to explore the limitations of this technique by implementing and evaluating such a tool fo"
+      },
+      {
+        "rank": 3,
+        "source": "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "keyword": 0.1011,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusions",
+        "flags": "",
+        "preview": "In this paper the limitations and improvements of unsupervised word sense disambiguation have been investigated. The main problem \u2013 insufficient number and quality of replacements has been tackled by adding new rich sour"
+      },
+      {
+        "rank": 4,
+        "source": "1710.07960:paragraph:0044 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "keyword": 0.0993,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "The senses used for annotation are coarse-grained \u2013 with one sense covering a range of related usages. Each word has between two and four senses. To employ the method described in previous section, the NCP senses have be"
+      },
+      {
+        "rank": 5,
+        "source": "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "keyword": 0.0872,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "First of all, the new sources of replacements proposed in this work indeed seem to improve the models from 70.86% (only traditional monosemous relatives) to 77.96% (all proposed relatives). The biggest gain is obtained b"
+      },
+      {
+        "rank": 6,
+        "source": "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "keyword": 0.0772,
+        "page": 1,
+        "type": "body_text",
+        "section": "Method",
+        "flags": "",
+        "preview": "The algorithm works as follows. First, a set of relatives is obtained for each sense of a target word using the Polish wordnet: plWordNet BIBREF18 . Some of the replacements may have multiple senses, however usually one "
+      },
+      {
+        "rank": 7,
+        "source": "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "keyword": 0.0728,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "To properly judge the results, we need to start with the baselines. Without knowing the distribution of senses, three basic possibilities seem reasonable: we can either 1) select a meaning randomly, 2) base on the sense "
+      },
+      {
+        "rank": 8,
+        "source": "1710.07960:paragraph:0000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "keyword": 0.047,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "The focus of the word sense disambiguation (WSD) task is polysemy, i.e. words having several substantially different meanings. Two common examples are bank (riverside or financial institution) and bass (fish or musical i"
+      },
+      {
+        "rank": 9,
+        "source": "1710.07960:paragraph:0010 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "keyword": 0.0459,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related work",
+        "flags": "",
+        "preview": "The majority of classification techniques are built on an assumption that the training data approximately reflects the true distribution of the target classes. However, that is not the case when using monosemous relative"
+      },
+      {
+        "rank": 10,
+        "source": "1710.07960:paragraph:0040 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Classification",
+        "keyword": 0.0343,
+        "page": 1,
+        "type": "body_text",
+        "section": "Classification",
+        "flags": "",
+        "preview": "The expression has been formulated as a product of two factors: INLINEFORM0 , independent from observed features and corresponding to empty word context, and INLINEFORM1 that depends on observed context. To weaken the in"
+      },
+      {
+        "rank": 11,
+        "source": "1710.07960:paragraph:0053 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "keyword": 0.0313,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "Although many different configurations have been tested in this study, all of them remain below the accuracy level of 80%, approximately equal to average share of dominating senses in this dataset. This is obviously unsa"
+      },
+      {
+        "rank": 12,
+        "source": "1710.07960:paragraph:0046 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "keyword": 0.0258,
+        "page": 1,
+        "type": "body_text",
+        "section": "Evaluation",
+        "flags": "",
+        "preview": "The algorithm works using plWordNet synsets and its output is mapped to NCP meaning to measure its quality. Accuracy measures what percentage of the programme's guesses agree with manually assigned senses. To assess the "
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5595,
+        "keyword": 0.0872,
+        "rerank": 0.8716,
+        "section": "Discussion",
+        "query_hits": "senses, they, unknown",
+        "reasons": "body/table evidence",
+        "preview": "First of all, the new sources of replacements proposed in this work indeed seem to improve the models from 70.86% (only traditional monosemous relatives) to 77.96% (all proposed relatives). The biggest gain is obtained b"
+      },
+      {
+        "rank": 2,
+        "source": "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5274,
+        "keyword": 0.1062,
+        "rerank": 0.8406,
+        "section": "Introduction",
+        "query_hits": "distribution, senses, unknown",
+        "reasons": "body/table evidence",
+        "preview": "Monosemous relatives have been employed multiple times (see Section 2), but results remain unsatisfactory. The aim of my study is to explore the limitations of this technique by implementing and evaluating such a tool fo"
+      },
+      {
+        "rank": 3,
+        "source": "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5637,
+        "keyword": 0.0772,
+        "rerank": 0.8299,
+        "section": "Method",
+        "query_hits": "senses, unknown",
+        "reasons": "body/table evidence",
+        "preview": "The algorithm works as follows. First, a set of relatives is obtained for each sense of a target word using the Polish wordnet: plWordNet BIBREF18 . Some of the replacements may have multiple senses, however usually one "
+      },
+      {
+        "rank": 4,
+        "source": "1710.07960:paragraph:0044 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5528,
+        "keyword": 0.0993,
+        "rerank": 0.8222,
+        "section": "Evaluation",
+        "query_hits": "senses",
+        "reasons": "body/table evidence",
+        "preview": "The senses used for annotation are coarse-grained \u2013 with one sense covering a range of related usages. Each word has between two and four senses. To employ the method described in previous section, the NCP senses have be"
+      },
+      {
+        "rank": 5,
+        "source": "1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4834,
+        "keyword": 0.1435,
+        "rerank": 0.8221,
+        "section": "Abstract",
+        "query_hits": "distribution, senses, unknown",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, the problem of disambiguating a target word for Polish is approached by searching for related words with known meaning. These relatives are used to build a training corpus from unannotated text. This techn"
+      },
+      {
+        "rank": 6,
+        "source": "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.559,
+        "keyword": 0.0728,
+        "rerank": 0.8103,
+        "section": "Evaluation",
+        "query_hits": "distribution, senses",
+        "reasons": "body/table evidence",
+        "preview": "To properly judge the results, we need to start with the baselines. Without knowing the distribution of senses, three basic possibilities seem reasonable: we can either 1) select a meaning randomly, 2) base on the sense "
+      },
+      {
+        "rank": 7,
+        "source": "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5158,
+        "keyword": 0.1011,
+        "rerank": 0.8045,
+        "section": "Conclusions",
+        "query_hits": "deal, distribution, unknown",
+        "reasons": "body/table evidence",
+        "preview": "In this paper the limitations and improvements of unsupervised word sense disambiguation have been investigated. The main problem \u2013 insufficient number and quality of replacements has been tackled by adding new rich sour"
+      },
+      {
+        "rank": 8,
+        "source": "1710.07960:paragraph:0010 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5404,
+        "keyword": 0.0459,
+        "rerank": 0.7431,
+        "section": "Related work",
+        "query_hits": "distribution, senses, they",
+        "reasons": "body/table evidence",
+        "preview": "The majority of classification techniques are built on an assumption that the training data approximately reflects the true distribution of the target classes. However, that is not the case when using monosemous relative"
+      },
+      {
+        "rank": 9,
+        "source": "1710.07960:paragraph:0040 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5735,
+        "keyword": 0.0343,
+        "rerank": 0.6317,
+        "section": "Classification",
+        "query_hits": "distribution",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The expression has been formulated as a product of two factors: INLINEFORM0 , independent from observed features and corresponding to empty word context, and INLINEFORM1 that depends on observed context. To weaken the in"
+      },
+      {
+        "rank": 10,
+        "source": "1710.07960:paragraph:0000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4981,
+        "keyword": 0.047,
+        "rerank": 0.6224,
+        "section": "Introduction",
+        "query_hits": "deal, they",
+        "reasons": "body/table evidence",
+        "preview": "The focus of the word sense disambiguation (WSD) task is polysemy, i.e. words having several substantially different meanings. Two common examples are bank (riverside or financial institution) and bass (fish or musical i"
+      },
+      {
+        "rank": 11,
+        "source": "1710.07960:paragraph:0002 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5115,
+        "keyword": 0.0254,
+        "rerank": 0.5769,
+        "section": "Introduction",
+        "query_hits": "senses",
+        "reasons": "body/table evidence",
+        "preview": "The method of monosemous relatives, which is the focus of this work, bypasses the bottleneck by gathering occurences of words related to the target word, but free from ambiguity, and treating them as training cases of th"
+      },
+      {
+        "rank": 12,
+        "source": "1710.07960:paragraph:0053 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5352,
+        "keyword": 0.0313,
+        "rerank": 0.5413,
+        "section": "Discussion",
+        "query_hits": "senses",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Although many different configurations have been tested in this study, all of them remain below the accuracy level of 80%, approximately equal to average share of dominating senses in this dataset. This is obviously unsa"
+      },
+      {
+        "rank": 13,
+        "source": "1710.07960:paragraph:0008 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5392,
+        "keyword": 0.0246,
+        "rerank": 0.5362,
+        "section": "Related work",
+        "query_hits": "senses",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Unsupervised methods use no previously labelled examples. Instead an external knowledge source is employed, e.g. a machine-readable dictionary or wordnet. In the simplest unsupervised solution, called the Lesk algorithm "
+      },
+      {
+        "rank": 14,
+        "source": "1710.07960:paragraph:0014 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Relatives",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5293,
+        "keyword": 0.0,
+        "rerank": 0.5328,
+        "section": "Relatives",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In order to obtain training cases from unannotated corpora, we aim to select relatives which are semantically similar to a given sense of a target word. An example of this process, concerning the word j\u0119zyk (tongue) in o"
+      },
+      {
+        "rank": 15,
+        "source": "1710.07960:paragraph:0046 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5263,
+        "keyword": 0.0258,
+        "rerank": 0.5101,
+        "section": "Evaluation",
+        "query_hits": "senses",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The algorithm works using plWordNet synsets and its output is mapped to NCP meaning to measure its quality. Accuracy measures what percentage of the programme's guesses agree with manually assigned senses. To assess the "
+      },
+      {
+        "rank": 16,
+        "source": "1710.07960:paragraph:0006 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5007,
+        "keyword": 0.0,
+        "rerank": 0.4999,
+        "section": "Related work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "There are a variety of approaches to solve the WSD problem, which can be grouped based upon how they use their data \u2013 see reviews BIBREF4 , BIBREF5 . In supervised solutions a large sense-tagged corpus is available for t"
+      },
+      {
+        "rank": 17,
+        "source": "1710.07960:paragraph:0016 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Relatives",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5129,
+        "keyword": 0.0,
+        "rerank": 0.4968,
+        "section": "Relatives",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Finally, we also make use of a well-known principle called one word per discourse BIBREF19 , which states that a polysemous word is very unlikely to take different meanings in a single document. In this study, the princi"
+      },
+      {
+        "rank": 18,
+        "source": "1710.07960:paragraph:0009 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.499,
+        "keyword": 0.0,
+        "rerank": 0.4962,
+        "section": "Related work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "If lack of definitions make the Lesk algorithm infeasible, we can exploit relations between words. This study focuses on monosemous relatives, i.e. words or collocations, selected using wordnet, being related to a disamb"
+      },
+      {
+        "rank": 19,
+        "source": "1710.07960:paragraph:0037 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4984,
+        "keyword": 0.0,
+        "rerank": 0.4649,
+        "section": "Classification",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "After gathering the values of features from occurrences of relatives, a na\u00efve Bayesian classification model is built. However, as many researchers in the field have noticed BIBREF13 , BIBREF9 , BIBREF11 , there is a majo"
+      },
+      {
+        "rank": 20,
+        "source": "1710.07960:paragraph:0005 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4952,
+        "keyword": 0.0,
+        "rerank": 0.4578,
+        "section": "Related work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The problem of WSD has received a lot of attention since the beginning of natural language processing research. WSD is typically expected to improve the results of real-world applications: originally machine translation "
+      },
+      {
+        "rank": 21,
+        "source": "1710.07960:paragraph:0051 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4932,
+        "keyword": 0.0,
+        "rerank": 0.4534,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF26 shows the accuracy of disambiguation in the configuration outlined above with respect to the target word. The easiest words have meanings corresponding to distinct physical objects, e.g. in Polish pi\u0142ka (1"
+      },
+      {
+        "rank": 22,
+        "source": "1710.07960:paragraph:0055 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4742,
+        "keyword": 0.0,
+        "rerank": 0.4419,
+        "section": "Discussion",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "When it comes to feature selection, the most unexpected phenomenon observed in this study is low usefulness of the interpretation-based features. According to Table TABREF22 , adding interpretations of neighbouring words"
+      },
+      {
+        "rank": 23,
+        "source": "1710.07960:paragraph:0011 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4867,
+        "keyword": 0.0,
+        "rerank": 0.4392,
+        "section": "Related work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Preparing a corpus for finding relatives poses a challenge as well. It should contain a lot of text, as many monosemous words are scarce. Some researchers use snippets retrieved from search engines, i.e. AltaVista BIBREF"
+      },
+      {
+        "rank": 24,
+        "source": "1710.07960:paragraph:0001 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4788,
+        "keyword": 0.0,
+        "rerank": 0.4219,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The most effective solution, called supervised WSD, is to use a large number of sense-annotated occurrences of the target word to build a machine learning model to label test cases. However, this approach suffers from a "
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5595,
+        "keyword": 0.0872,
+        "rerank": 0.8716,
+        "section": "Discussion",
+        "query_hits": "senses, they, unknown",
+        "reasons": "body/table evidence",
+        "preview": "First of all, the new sources of replacements proposed in this work indeed seem to improve the models from 70.86% (only traditional monosemous relatives) to 77.96% (all proposed relatives). The biggest gain is obtained b"
+      },
+      {
+        "rank": 2,
+        "source": "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5274,
+        "keyword": 0.1062,
+        "rerank": 0.8406,
+        "section": "Introduction",
+        "query_hits": "distribution, senses, unknown",
+        "reasons": "body/table evidence",
+        "preview": "Monosemous relatives have been employed multiple times (see Section 2), but results remain unsatisfactory. The aim of my study is to explore the limitations of this technique by implementing and evaluating such a tool fo"
+      },
+      {
+        "rank": 3,
+        "source": "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5637,
+        "keyword": 0.0772,
+        "rerank": 0.8299,
+        "section": "Method",
+        "query_hits": "senses, unknown",
+        "reasons": "body/table evidence",
+        "preview": "The algorithm works as follows. First, a set of relatives is obtained for each sense of a target word using the Polish wordnet: plWordNet BIBREF18 . Some of the replacements may have multiple senses, however usually one "
+      },
+      {
+        "rank": 4,
+        "source": "1710.07960:paragraph:0044 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5528,
+        "keyword": 0.0993,
+        "rerank": 0.8222,
+        "section": "Evaluation",
+        "query_hits": "senses",
+        "reasons": "body/table evidence",
+        "preview": "The senses used for annotation are coarse-grained \u2013 with one sense covering a range of related usages. Each word has between two and four senses. To employ the method described in previous section, the NCP senses have be"
+      },
+      {
+        "rank": 5,
+        "source": "1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4834,
+        "keyword": 0.1435,
+        "rerank": 0.8221,
+        "section": "Abstract",
+        "query_hits": "distribution, senses, unknown",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, the problem of disambiguating a target word for Polish is approached by searching for related words with known meaning. These relatives are used to build a training corpus from unannotated text. This techn"
+      },
+      {
+        "rank": 6,
+        "source": "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.559,
+        "keyword": 0.0728,
+        "rerank": 0.8103,
+        "section": "Evaluation",
+        "query_hits": "distribution, senses",
+        "reasons": "body/table evidence",
+        "preview": "To properly judge the results, we need to start with the baselines. Without knowing the distribution of senses, three basic possibilities seem reasonable: we can either 1) select a meaning randomly, 2) base on the sense "
+      },
+      {
+        "rank": 7,
+        "source": "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5158,
+        "keyword": 0.1011,
+        "rerank": 0.8045,
+        "section": "Conclusions",
+        "query_hits": "deal, distribution, unknown",
+        "reasons": "body/table evidence",
+        "preview": "In this paper the limitations and improvements of unsupervised word sense disambiguation have been investigated. The main problem \u2013 insufficient number and quality of replacements has been tackled by adding new rich sour"
+      },
+      {
+        "rank": 8,
+        "source": "1710.07960:paragraph:0010 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5404,
+        "keyword": 0.0459,
+        "rerank": 0.7431,
+        "section": "Related work",
+        "query_hits": "distribution, senses, they",
+        "reasons": "body/table evidence",
+        "preview": "The majority of classification techniques are built on an assumption that the training data approximately reflects the true distribution of the target classes. However, that is not the case when using monosemous relative"
+      },
+      {
+        "rank": 9,
+        "source": "1710.07960:paragraph:0040 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5735,
+        "keyword": 0.0343,
+        "rerank": 0.6317,
+        "section": "Classification",
+        "query_hits": "distribution",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The expression has been formulated as a product of two factors: INLINEFORM0 , independent from observed features and corresponding to empty word context, and INLINEFORM1 that depends on observed context. To weaken the in"
+      },
+      {
+        "rank": 10,
+        "source": "1710.07960:paragraph:0000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4981,
+        "keyword": 0.047,
+        "rerank": 0.6224,
+        "section": "Introduction",
+        "query_hits": "deal, they",
+        "reasons": "body/table evidence",
+        "preview": "The focus of the word sense disambiguation (WSD) task is polysemy, i.e. words having several substantially different meanings. Two common examples are bank (riverside or financial institution) and bass (fish or musical i"
+      },
+      {
+        "rank": 11,
+        "source": "1710.07960:paragraph:0002 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5115,
+        "keyword": 0.0254,
+        "rerank": 0.5769,
+        "section": "Introduction",
+        "query_hits": "senses",
+        "reasons": "body/table evidence",
+        "preview": "The method of monosemous relatives, which is the focus of this work, bypasses the bottleneck by gathering occurences of words related to the target word, but free from ambiguity, and treating them as training cases of th"
+      },
+      {
+        "rank": 12,
+        "source": "1710.07960:paragraph:0053 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5352,
+        "keyword": 0.0313,
+        "rerank": 0.5413,
+        "section": "Discussion",
+        "query_hits": "senses",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Although many different configurations have been tested in this study, all of them remain below the accuracy level of 80%, approximately equal to average share of dominating senses in this dataset. This is obviously unsa"
+      },
+      {
+        "rank": 13,
+        "source": "1710.07960:paragraph:0008 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5392,
+        "keyword": 0.0246,
+        "rerank": 0.5362,
+        "section": "Related work",
+        "query_hits": "senses",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Unsupervised methods use no previously labelled examples. Instead an external knowledge source is employed, e.g. a machine-readable dictionary or wordnet. In the simplest unsupervised solution, called the Lesk algorithm "
+      },
+      {
+        "rank": 14,
+        "source": "1710.07960:paragraph:0014 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Relatives",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5293,
+        "keyword": 0.0,
+        "rerank": 0.5328,
+        "section": "Relatives",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In order to obtain training cases from unannotated corpora, we aim to select relatives which are semantically similar to a given sense of a target word. An example of this process, concerning the word j\u0119zyk (tongue) in o"
+      },
+      {
+        "rank": 15,
+        "source": "1710.07960:paragraph:0046 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5263,
+        "keyword": 0.0258,
+        "rerank": 0.5101,
+        "section": "Evaluation",
+        "query_hits": "senses",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The algorithm works using plWordNet synsets and its output is mapped to NCP meaning to measure its quality. Accuracy measures what percentage of the programme's guesses agree with manually assigned senses. To assess the "
+      },
+      {
+        "rank": 16,
+        "source": "1710.07960:paragraph:0006 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5007,
+        "keyword": 0.0,
+        "rerank": 0.4999,
+        "section": "Related work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "There are a variety of approaches to solve the WSD problem, which can be grouped based upon how they use their data \u2013 see reviews BIBREF4 , BIBREF5 . In supervised solutions a large sense-tagged corpus is available for t"
+      },
+      {
+        "rank": 17,
+        "source": "1710.07960:paragraph:0016 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Relatives",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5129,
+        "keyword": 0.0,
+        "rerank": 0.4968,
+        "section": "Relatives",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Finally, we also make use of a well-known principle called one word per discourse BIBREF19 , which states that a polysemous word is very unlikely to take different meanings in a single document. In this study, the princi"
+      },
+      {
+        "rank": 18,
+        "source": "1710.07960:paragraph:0009 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.499,
+        "keyword": 0.0,
+        "rerank": 0.4962,
+        "section": "Related work",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "If lack of definitions make the Lesk algorithm infeasible, we can exploit relations between words. This study focuses on monosemous relatives, i.e. words or collocations, selected using wordnet, being related to a disamb"
+      },
+      {
+        "rank": 19,
+        "source": "1710.07960:paragraph:0037 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Classification",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4984,
+        "keyword": 0.0,
+        "rerank": 0.4649,
+        "section": "Classification",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "After gathering the values of features from occurrences of relatives, a na\u00efve Bayesian classification model is built. However, as many researchers in the field have noticed BIBREF13 , BIBREF9 , BIBREF11 , there is a majo"
+      },
+      {
+        "rank": 20,
+        "source": "1710.07960:paragraph:0005 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4952,
+        "keyword": 0.0,
+        "rerank": 0.4578,
+        "section": "Related work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The problem of WSD has received a lot of attention since the beginning of natural language processing research. WSD is typically expected to improve the results of real-world applications: originally machine translation "
+      },
+      {
+        "rank": 21,
+        "source": "1710.07960:paragraph:0051 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4932,
+        "keyword": 0.0,
+        "rerank": 0.4534,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF26 shows the accuracy of disambiguation in the configuration outlined above with respect to the target word. The easiest words have meanings corresponding to distinct physical objects, e.g. in Polish pi\u0142ka (1"
+      },
+      {
+        "rank": 22,
+        "source": "1710.07960:paragraph:0055 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4742,
+        "keyword": 0.0,
+        "rerank": 0.4419,
+        "section": "Discussion",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "When it comes to feature selection, the most unexpected phenomenon observed in this study is low usefulness of the interpretation-based features. According to Table TABREF22 , adding interpretations of neighbouring words"
+      },
+      {
+        "rank": 23,
+        "source": "1710.07960:paragraph:0011 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Related work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4867,
+        "keyword": 0.0,
+        "rerank": 0.4392,
+        "section": "Related work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Preparing a corpus for finding relatives poses a challenge as well. It should contain a lot of text, as many monosemous words are scarce. Some researchers use snippets retrieved from search engines, i.e. AltaVista BIBREF"
+      },
+      {
+        "rank": 24,
+        "source": "1710.07960:paragraph:0001 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4788,
+        "keyword": 0.0,
+        "rerank": 0.4219,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "The most effective solution, called supervised WSD, is to use a large number of sense-annotated occurrences of the target word to build a machine learning model to label test cases. However, this approach suffers from a "
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5274,
+        "keyword": 0.1062,
+        "rerank": 0.8406,
+        "section": "Introduction",
+        "query_hits": "distribution, senses, unknown",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9653,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.4501,
+        "reasons": "body/table evidence",
+        "preview": "Monosemous relatives have been employed multiple times (see Section 2), but results remain unsatisfactory. The aim of my study is to explore the limitations of this technique by implementing and evaluating such a tool fo"
+      },
+      {
+        "rank": 2,
+        "source": "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5158,
+        "keyword": 0.1011,
+        "rerank": 0.8045,
+        "section": "Conclusions",
+        "query_hits": "deal, distribution, unknown",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9248,
+        "novelty": 0.7215,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3763,
+        "reasons": "body/table evidence",
+        "preview": "In this paper the limitations and improvements of unsupervised word sense disambiguation have been investigated. The main problem \u2013 insufficient number and quality of replacements has been tackled by adding new rich sour"
+      },
+      {
+        "rank": 3,
+        "source": "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5595,
+        "keyword": 0.0872,
+        "rerank": 0.8716,
+        "section": "Discussion",
+        "query_hits": "senses, they, unknown",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.7917,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2908,
+        "reasons": "body/table evidence",
+        "preview": "First of all, the new sources of replacements proposed in this work indeed seem to improve the models from 70.86% (only traditional monosemous relatives) to 77.96% (all proposed relatives). The biggest gain is obtained b"
+      },
+      {
+        "rank": 4,
+        "source": "1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4834,
+        "keyword": 0.1435,
+        "rerank": 0.8221,
+        "section": "Abstract",
+        "query_hits": "distribution, senses, unknown",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9445,
+        "novelty": 0.6429,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2223,
+        "reasons": "body/table evidence",
+        "preview": "In this paper, the problem of disambiguating a target word for Polish is approached by searching for related words with known meaning. These relatives are used to build a training corpus from unannotated text. This techn"
+      },
+      {
+        "rank": 5,
+        "source": "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5637,
+        "keyword": 0.0772,
+        "rerank": 0.8299,
+        "section": "Method",
+        "query_hits": "senses, unknown",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9532,
+        "novelty": 0.684,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1955,
+        "reasons": "body/table evidence",
+        "preview": "The algorithm works as follows. First, a set of relatives is obtained for each sense of a target word using the Polish wordnet: plWordNet BIBREF18 . Some of the replacements may have multiple senses, however usually one "
+      },
+      {
+        "rank": 6,
+        "source": "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.559,
+        "keyword": 0.0728,
+        "rerank": 0.8103,
+        "section": "Evaluation",
+        "query_hits": "distribution, senses",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9313,
+        "novelty": 0.7224,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.182,
+        "reasons": "body/table evidence",
+        "preview": "To properly judge the results, we need to start with the baselines. Without knowing the distribution of senses, three basic possibilities seem reasonable: we can either 1) select a meaning randomly, 2) base on the sense "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "deal",
+        "distribution",
+        "senses",
+        "they",
+        "unknown"
+      ],
+      "covered_query_terms": [
+        "deal",
+        "distribution",
+        "senses",
+        "they",
+        "unknown"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction": [
+          "distribution",
+          "senses",
+          "unknown"
+        ],
+        "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions": [
+          "deal",
+          "distribution",
+          "unknown"
+        ],
+        "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion": [
+          "senses",
+          "they",
+          "unknown"
+        ],
+        "1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract": [
+          "distribution",
+          "senses",
+          "unknown"
+        ],
+        "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method": [
+          "senses",
+          "unknown"
+        ],
+        "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation": [
+          "distribution",
+          "senses"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Conclusions",
+        "Discussion",
+        "Evaluation",
+        "Introduction",
+        "Method"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1710.07960:paragraph:0003 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Introduction"
+        ],
+        "Conclusions": [
+          "1710.07960:paragraph:0057 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Conclusions"
+        ],
+        "Discussion": [
+          "1710.07960:paragraph:0054 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Discussion"
+        ],
+        "Abstract": [
+          "1710.07960:abstract:000 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Abstract"
+        ],
+        "Method": [
+          "1710.07960:paragraph:0013 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Method"
+        ],
+        "Evaluation": [
+          "1710.07960:paragraph:0047 | How big is big enough? Unsupervised word sense disambiguation using a very large corpus / Evaluation"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "A na\u00efve Bayesian classifier is modified to alleviate the problem of uneven yet unknown distribution of word senses. This modification ensures that the classifier is not biased toward senses that possess more training data.",
+    "retrieved_context_answer": "The Bayesian classifier was modified to address the problem of an unknown sense distribution. Specifically, this modification removes the bias towards frequent labels found in the training data.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.27450980392156865,
+    "retrieved_context_f1": 0.18181818181818182,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

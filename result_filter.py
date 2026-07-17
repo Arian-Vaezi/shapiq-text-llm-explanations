@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from pathlib import Path
 
@@ -8,7 +10,7 @@ kept = 0
 
 for file in folder.glob("*.json"):
     try:
-        with open(file, "r", encoding="utf-8") as f:
+        with open(file, encoding="utf-8") as f:
             data = json.load(f)
 
         # Delete if generation_error is NOT null
@@ -18,7 +20,7 @@ for file in folder.glob("*.json"):
         else:
             kept += 1
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - one malformed file must not sink the filter
         print(f"Skipping {file}: {e}")
 
 print(f"Deleted: {deleted}")

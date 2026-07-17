@@ -1,0 +1,1572 @@
+{
+  "case": {
+    "case_id": "qasper_31735ec3d83c40b79d11df5c34154849aeb3fb47",
+    "paper_id": "2002.03407",
+    "paper_title": "Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis",
+    "question_id": "31735ec3d83c40b79d11df5c34154849aeb3fb47",
+    "annotation_id": "67c5fec2bf2c3efdb763b106df3dbca7a0d3073f",
+    "question": "Who were the human evaluators used?",
+    "gold_answer": "20 evaluators were recruited from our institution and asked to each perform 20 annotations",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "2002.03407:paragraph:0040"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "2002.03407:paragraph:0040",
+      "score": 1.02,
+      "title": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+      "text": "Human Evaluation Results. While automated evaluation metrics like ROUGE measure lexical similarity between machine and human summaries, humans can better measure how coherent and readable a summary is. Our evaluation study investigates whether tuning the PG-net model increases summary coherence, by asking evaluators to select which of three summaries for the same document they like most: the PG-net model trained on CNN/DM; the model trained on student reflections; and finally the model trained on CNN/DM and tuned on student reflections. 20 evaluators were recruited from our institution and asked to each perform 20 annotations. Summaries are presented to evaluators in random order. Evaluators are then asked to select the summary they feel to be most readable and coherent. Unlike ROUGE, which measures the coverage of a generated summary relative to a reference summary, our evaluators don't read the reflections or reference summary. They choose the summary that is most coherent and readable, regardless of the source of the summary. For both courses, the majority of selected summaries were produced by the tuned model (49% for CS and 41% for Stat2015), compared to (31% for CS and 30.9% for Stat2015) for CNN/DM model, and (19.7% for CS and 28.5% for Stat2015) for student reflections model. These results again suggest that domain transfer can remedy the size of in-domain data and improve performance."
+    },
+    {
+      "rank": 2,
+      "passage_id": "2002.03407:paragraph:0014",
+      "score": 0.6835699424928862,
+      "title": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+      "text": "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We thus use a hybrid metric to score candidates, where the metric is a weighted sum of two scores and is calculated using Equations 1, 2, and 3. Eq.1 measures coherency using a language model (LM), Eq.2 measures how close a candidate is to a human summary using ROUGE scores, while Eq.3 picks the highest scored $N$ candidates as the final synthetic set."
+    },
+    {
+      "rank": 3,
+      "passage_id": "2002.03407:paragraph:0028",
+      "score": 0.49409769769883255,
+      "title": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "text": "Extractive Baselines (for testing H1). While BIBREF0 used Lead-3 as an extractive baseline, in our data sentence order doesn't matter as reflections are independent. We thus use a similar in concept baseline: randomly select N reflections. Since the baseline is random we report the average result of 100 runs. Following BIBREF5, we compare results to MEAD BIBREF20 and to BIBREF5's extractive phrase-based model. Since these models extracted 5 phrases as extractive summary, we use N=5 for our three extractive baselines. Additionally we compare to running only the extractive part of Fast-RL."
+    },
+    {
+      "rank": 4,
+      "passage_id": "2002.03407:paragraph:0034",
+      "score": 0.4500349337098228,
+      "title": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "text": "Template-based Summarization (for testing H6). While the proposed template-based model was intended for data synthesis, with minor modification it can be adapted for summarization itself. Because the modifications introduce few parameters, the model is suitable for small datasets. Recall that for data synthesis, the input to the template method is a summary. Since for summarization the input instead is a set of reflections, we perform keyword extraction over the set of reflections. We then add an extra logistic regression classifier that uses the set of reflections as input and predicts a cluster of templates constructed from other courses. Using the keywords and the predicted cluster of templates, we use the same rewriting model to produce candidate summaries. The last step in the pipeline is scoring. In data synthesis, a reference summary is used for scoring; however, in summarization we don't have such a reference. To score the candidate summaries, the model only uses the language model and produces the candidate with the highest score."
+    },
+    {
+      "rank": 5,
+      "passage_id": "2002.03407:paragraph:0016",
+      "score": 0.42236692908296486,
+      "title": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+      "text": "Model Training. Before using the synthesis model, some of the constructing modules (rewriting module, scoring LM) need training. To train the rewriting model, we use another dataset consisting of a set of samples, where each sample can be a text snippet (sentence, paragraph, etc.). For each sample, keywords are extracted using RAKE, then removed. The keywords plus the sample with no keywords are then passed to the rewriting model. The training objective of this model is to reconstruct the original sample, which can be seen as trying to inject extracted keywords back into a template. Model Usage. To use the synthesis model to generate new samples, the set of human summaries are fed to the model, passing through the sub-modules in the following order:"
+    },
+    {
+      "rank": 6,
+      "passage_id": "2002.03407:paragraph:0033",
+      "score": 0.47676731700382935,
+      "title": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "text": "Template Synthesis Model (for testing H4, H5). To synthesize summaries, we use the same leave one course out approach. For each course, we use the data from the other three courses to train the rewriting module and tune the scoring language model. We can also use the summaries from CNN/DM data as additional samples to further train the rewriting module. We then start synthesizing data using that training data as input. First templates are constructed. The templates are then clustered into 8 clusters. We decided to use 8 to avoid clustering templates from POI with MP, as the templates from both prompts would contain very different supporting words. We also wanted to avoid a high level of dissimilarity within each cluster, and allow some diversity. Following the clustering, the rewriting model produces candidate summaries for each human summary. The rewriting model is another PG-net with the same exact parameters. After producing the candidate summaries, a language model is used to score them. The language model is a single layer LSTM language model trained on 36K sentences from Wikipedia and fine tuned using student reflections. In this work we decided to pick only the highest 3 scored candidate summaries as synthetic data, to avoid adding ill-formed summaries to the training data. Since we are adding $N$ synthetic summaries for each set of reflections, that means we are essentially duplicating the size of our original reflection training data by $N$, which is 3 in our case. Table TABREF11 shows a human summary, the keywords extracted, then the output of injecting keywords in a different template using rewriting."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+      "attribution": 0.26655966505799206
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+      "attribution": 0.004194251065529983
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "attribution": -0.001016454176247105
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+      "attribution": 0.0009208607819647879
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "attribution": 0.0004418889635286093
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "attribution": 0.0002787771630439999
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+      "attribution": 0.22515997906609164
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "attribution": 0.009008406584175193
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+      "attribution": 0.006595729773447851
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+      "attribution": -0.00416804975732738
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "attribution": -0.000400525842166891
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+      "attribution": 0.0001404534025704684
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0014",
+      "interaction": 0.006165300325199875
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0028",
+      "interaction": 0.003973222879084254
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0034",
+      "interaction": 0.00441134374077604
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": 0.005651237347205253
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": 0.00241232184126161
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0028",
+      "interaction": -0.012947283214458498
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0034",
+      "interaction": -0.005305863307281653
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": -0.008245398313779906
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.015028013315057563
+    },
+    {
+      "left": "2002.03407:paragraph:0028",
+      "right": "2002.03407:paragraph:0034",
+      "interaction": -0.0044091323321011665
+    },
+    {
+      "left": "2002.03407:paragraph:0028",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": -0.004430420929024572
+    },
+    {
+      "left": "2002.03407:paragraph:0028",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.011505919821888177
+    },
+    {
+      "left": "2002.03407:paragraph:0034",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": -0.0017658541983041917
+    },
+    {
+      "left": "2002.03407:paragraph:0034",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.013879448392856404
+    },
+    {
+      "left": "2002.03407:paragraph:0016",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.016812836336116434
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0014",
+      "interaction": -0.009358939605480968
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0028",
+      "interaction": -0.0013497533657429134
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0034",
+      "interaction": 0.0016364320164505334
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": 0.0006308781138305853
+    },
+    {
+      "left": "2002.03407:paragraph:0040",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": 0.013100174969553584
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0028",
+      "interaction": 0.002523654447879526
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0034",
+      "interaction": 0.004419053256715798
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": -0.014666368033779544
+    },
+    {
+      "left": "2002.03407:paragraph:0014",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.003975181975725946
+    },
+    {
+      "left": "2002.03407:paragraph:0028",
+      "right": "2002.03407:paragraph:0034",
+      "interaction": -0.0005530934335764174
+    },
+    {
+      "left": "2002.03407:paragraph:0028",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": -0.00179088261576986
+    },
+    {
+      "left": "2002.03407:paragraph:0028",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.002037873478027405
+    },
+    {
+      "left": "2002.03407:paragraph:0034",
+      "right": "2002.03407:paragraph:0016",
+      "interaction": -0.00081846883522065
+    },
+    {
+      "left": "2002.03407:paragraph:0034",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": -0.005258602419410853
+    },
+    {
+      "left": "2002.03407:paragraph:0016",
+      "right": "2002.03407:paragraph:0033",
+      "interaction": 0.002217921013329197
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.27137898888674905
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "remaining_chunks": 5,
+        "score": -0.015370620539446433
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "remaining_chunks": 4,
+        "score": -0.012221970896066803
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 3,
+        "score": -0.015288830515150231
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "remaining_chunks": 2,
+        "score": -0.005654272788572778
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 1,
+        "score": 0.03191121190986934
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "selected_chunks": 1,
+        "score": 0.2641361840622938
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "selected_chunks": 2,
+        "score": 0.2725607373567791
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "selected_chunks": 3,
+        "score": 0.2677735361944351
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "selected_chunks": 4,
+        "score": 0.2826844858212805
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "selected_chunks": 5,
+        "score": 0.2687873112592699
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "selected_chunks": 6,
+        "score": 0.27137898888674905
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.27137898888674905
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "remaining_chunks": 5,
+        "score": -0.015370620539446433
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "remaining_chunks": 4,
+        "score": -0.008854655444574644
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 3,
+        "score": -0.01925082609131845
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 2,
+        "score": 0.01373949376472261
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 1,
+        "score": 0.028766123105072205
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.27137898888674905
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "remaining_chunks": 5,
+        "score": -0.015370620539446433
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 4,
+        "score": -0.009395446968321453
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: 2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "remaining_chunks": 3,
+        "score": -0.015288830515150231
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 3: 2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 2,
+        "score": -0.0011013132404794068
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "remaining_chunks": 1,
+        "score": 0.050163218256955355
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.2713789888867489
+      },
+      {
+        "step": 1,
+        "score": 0.2266914767139939
+      },
+      {
+        "step": 2,
+        "score": 0.16657435656478267
+      },
+      {
+        "step": 3,
+        "score": 0.11872986649053212
+      },
+      {
+        "step": 4,
+        "score": 0.07103689386328339
+      },
+      {
+        "step": 5,
+        "score": 0.07385175829185284
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who were the human evaluators used?",
+    "expanded_queries": [
+      "Who were the human evaluators used?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "dense": 0.5162,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Human Evaluation Results. While automated evaluation metrics like ROUGE measure lexical similarity between machine and human summaries, humans can better measure how coherent and readable a summary is. Our evaluation stu"
+      },
+      {
+        "rank": 2,
+        "source": "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "dense": 0.5035,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We t"
+      },
+      {
+        "rank": 3,
+        "source": "2002.03407:paragraph:0035 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "dense": 0.4858,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "ROUGE Evaluation Results."
+      },
+      {
+        "rank": 4,
+        "source": "2002.03407:paragraph:0013 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "dense": 0.4609,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "3. Summary rewriting: An encoder-attention-decoder with pointer network is trained to perform the rewriting task. The model is trained to inject keywords into a template and perform rewriting into a coherent paragraph. T"
+      },
+      {
+        "rank": 5,
+        "source": "2002.03407:paragraph:0011 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "dense": 0.4486,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "1. Template extraction: To convert human summaries into templates, we remove keywords in the summary to leave only non-keywords. We use Rapid Automatic Keyword Extraction (RAKE) BIBREF18 to identify keywords."
+      },
+      {
+        "rank": 6,
+        "source": "2002.03407:paragraph:0015 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "dense": 0.4427,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "CS and HS are a candidate and human summary. $P(w)$ is the probability of word $w$ using a language model. $\\alpha , \\beta $ are weighting parameters. In this work we use $\\alpha =\\beta =1$ for all experiments. $R_{i}(CS"
+      },
+      {
+        "rank": 7,
+        "source": "2002.03407:paragraph:0017 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "dense": 0.4402,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "1. Human summaries first pass through the template extraction module, converting each summary $s_i$ into template $t_i$ and the corresponding keywords $kw_i$."
+      },
+      {
+        "rank": 8,
+        "source": "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "dense": 0.437,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Extractive Baselines (for testing H1). While BIBREF0 used Lead-3 as an extractive baseline, in our data sentence order doesn't matter as reflections are independent. We thus use a similar in concept baseline: randomly se"
+      },
+      {
+        "rank": 9,
+        "source": "2002.03407:paragraph:0007 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Reflection Summarization Dataset",
+        "dense": 0.4295,
+        "page": 1,
+        "type": "body_text",
+        "section": "Reflection Summarization Dataset",
+        "flags": "",
+        "preview": "For each reflection document, at least one human (either a TA or domain expert) created summaries. Table TABREF4 shows example reference summary produced by one annotator for the CS course. Table TABREF5 summarizes the d"
+      },
+      {
+        "rank": 10,
+        "source": "2002.03407:paragraph:0036 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "dense": 0.4288,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF13 presents summarization performance results for the 4 extractive baselines, for the original and proposed variants of PG-net, and finally for template-summarization. Following BIBREF0, performance is evalua"
+      },
+      {
+        "rank": 11,
+        "source": "2002.03407:paragraph:0038 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "dense": 0.4264,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "To validate our next set of hypothesises (H3, H4. H5), we use the synthesized data in two settings: either using it for training (rows 7, 8 and 19, 20) or tuning (rows 10, 11 and 22, 23). Table TABREF13 supports H4 by sh"
+      },
+      {
+        "rank": 12,
+        "source": "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "dense": 0.4227,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Template-based Summarization (for testing H6). While the proposed template-based model was intended for data synthesis, with minor modification it can be adapted for summarization itself. Because the modifications introd"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "keyword": 0.2417,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Human Evaluation Results. While automated evaluation metrics like ROUGE measure lexical similarity between machine and human summaries, humans can better measure how coherent and readable a summary is. Our evaluation stu"
+      },
+      {
+        "rank": 2,
+        "source": "2002.03407:paragraph:0002 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Related Work",
+        "keyword": 0.1064,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Abstractive Summarization. Abstractive summarization aims to generate coherent summaries with high readability, and has seen increasing interest and improved performance due to the emergence of seq2seq models BIBREF8 and"
+      },
+      {
+        "rank": 3,
+        "source": "2002.03407:paragraph:0030 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "keyword": 0.1056,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "To observe the impact of using out-of-domain (news) data for pretraining to compensate for low resource in-domain (reflection) data, we train 3 variants of PG-net: model training on CNN/DM; model training on reflections;"
+      },
+      {
+        "rank": 4,
+        "source": "2002.03407:paragraph:0017 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "keyword": 0.0536,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "1. Human summaries first pass through the template extraction module, converting each summary $s_i$ into template $t_i$ and the corresponding keywords $kw_i$."
+      },
+      {
+        "rank": 5,
+        "source": "2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "keyword": 0.0482,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Template Synthesis Model (for testing H4, H5). To synthesize summaries, we use the same leave one course out approach. For each course, we use the data from the other three courses to train the rewriting module and tune "
+      },
+      {
+        "rank": 6,
+        "source": "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "keyword": 0.0457,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We t"
+      },
+      {
+        "rank": 7,
+        "source": "2002.03407:paragraph:0011 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "keyword": 0.0394,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "1. Template extraction: To convert human summaries into templates, we remove keywords in the summary to leave only non-keywords. We use Rapid Automatic Keyword Extraction (RAKE) BIBREF18 to identify keywords."
+      },
+      {
+        "rank": 8,
+        "source": "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "keyword": 0.0332,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Extractive Baselines (for testing H1). While BIBREF0 used Lead-3 as an extractive baseline, in our data sentence order doesn't matter as reflections are independent. We thus use a similar in concept baseline: randomly se"
+      },
+      {
+        "rank": 9,
+        "source": "2002.03407:paragraph:0012 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "keyword": 0.0315,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "2. Template clustering: Upon converting human summaries into templates, we cluster them into $N$ clusters with the goal of using any template from the same cluster interchangeably. A template is first converted into embe"
+      },
+      {
+        "rank": 10,
+        "source": "2002.03407:paragraph:0015 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "keyword": 0.0305,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Template-Based Synthesis Model",
+        "flags": "",
+        "preview": "CS and HS are a candidate and human summary. $P(w)$ is the probability of word $w$ using a language model. $\\alpha , \\beta $ are weighting parameters. In this work we use $\\alpha =\\beta =1$ for all experiments. $R_{i}(CS"
+      },
+      {
+        "rank": 11,
+        "source": "2002.03407:paragraph:0007 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Reflection Summarization Dataset",
+        "keyword": 0.0288,
+        "page": 1,
+        "type": "body_text",
+        "section": "Reflection Summarization Dataset",
+        "flags": "",
+        "preview": "For each reflection document, at least one human (either a TA or domain expert) created summaries. Table TABREF4 shows example reference summary produced by one annotator for the CS course. Table TABREF5 summarizes the d"
+      },
+      {
+        "rank": 12,
+        "source": "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "keyword": 0.0279,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments",
+        "flags": "",
+        "preview": "Template-based Summarization (for testing H6). While the proposed template-based model was intended for data synthesis, with minor modification it can be adapted for summarization itself. Because the modifications introd"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.2417,
+        "rerank": 1.02,
+        "section": "Results",
+        "query_hits": "evaluators, human, were",
+        "reasons": "body/table evidence",
+        "preview": "Human Evaluation Results. While automated evaluation metrics like ROUGE measure lexical similarity between machine and human summaries, humans can better measure how coherent and readable a summary is. Our evaluation stu"
+      },
+      {
+        "rank": 2,
+        "source": "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5035,
+        "keyword": 0.0457,
+        "rerank": 0.6836,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We t"
+      },
+      {
+        "rank": 3,
+        "source": "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.437,
+        "keyword": 0.0332,
+        "rerank": 0.4941,
+        "section": "Experiments",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Extractive Baselines (for testing H1). While BIBREF0 used Lead-3 as an extractive baseline, in our data sentence order doesn't matter as reflections are independent. We thus use a similar in concept baseline: randomly se"
+      },
+      {
+        "rank": 4,
+        "source": "2002.03407:paragraph:0030 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3972,
+        "keyword": 0.1056,
+        "rerank": 0.4798,
+        "section": "Experiments",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "To observe the impact of using out-of-domain (news) data for pretraining to compensate for low resource in-domain (reflection) data, we train 3 variants of PG-net: model training on CNN/DM; model training on reflections;"
+      },
+      {
+        "rank": 5,
+        "source": "2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4118,
+        "keyword": 0.0482,
+        "rerank": 0.4768,
+        "section": "Experiments",
+        "query_hits": "human, used",
+        "reasons": "body/table evidence",
+        "preview": "Template Synthesis Model (for testing H4, H5). To synthesize summaries, we use the same leave one course out approach. For each course, we use the data from the other three courses to train the rewriting module and tune "
+      },
+      {
+        "rank": 6,
+        "source": "2002.03407:paragraph:0007 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Reflection Summarization Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4295,
+        "keyword": 0.0288,
+        "rerank": 0.4689,
+        "section": "Reflection Summarization Dataset",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "For each reflection document, at least one human (either a TA or domain expert) created summaries. Table TABREF4 shows example reference summary produced by one annotator for the CS course. Table TABREF5 summarizes the d"
+      },
+      {
+        "rank": 7,
+        "source": "2002.03407:paragraph:0035 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4858,
+        "keyword": 0.0,
+        "rerank": 0.4504,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "ROUGE Evaluation Results."
+      },
+      {
+        "rank": 8,
+        "source": "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4227,
+        "keyword": 0.0279,
+        "rerank": 0.45,
+        "section": "Experiments",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Template-based Summarization (for testing H6). While the proposed template-based model was intended for data synthesis, with minor modification it can be adapted for summarization itself. Because the modifications introd"
+      },
+      {
+        "rank": 9,
+        "source": "2002.03407:paragraph:0011 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4486,
+        "keyword": 0.0394,
+        "rerank": 0.4321,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "1. Template extraction: To convert human summaries into templates, we remove keywords in the summary to leave only non-keywords. We use Rapid Automatic Keyword Extraction (RAKE) BIBREF18 to identify keywords."
+      },
+      {
+        "rank": 10,
+        "source": "2002.03407:paragraph:0002 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3771,
+        "keyword": 0.1064,
+        "rerank": 0.4283,
+        "section": "Related Work",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Abstractive Summarization. Abstractive summarization aims to generate coherent summaries with high readability, and has seen increasing interest and improved performance due to the emergence of seq2seq models BIBREF8 and"
+      },
+      {
+        "rank": 11,
+        "source": "2002.03407:paragraph:0017 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4402,
+        "keyword": 0.0536,
+        "rerank": 0.4277,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "1. Human summaries first pass through the template extraction module, converting each summary $s_i$ into template $t_i$ and the corresponding keywords $kw_i$."
+      },
+      {
+        "rank": 12,
+        "source": "2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.416,
+        "keyword": 0.0197,
+        "rerank": 0.4224,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "Model Training. Before using the synthesis model, some of the constructing modules (rewriting module, scoring LM) need training. To train the rewriting model, we use another dataset consisting of a set of samples, where "
+      },
+      {
+        "rank": 13,
+        "source": "2002.03407:paragraph:0015 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4427,
+        "keyword": 0.0305,
+        "rerank": 0.4055,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "CS and HS are a candidate and human summary. $P(w)$ is the probability of word $w$ using a language model. $\\alpha , \\beta $ are weighting parameters. In this work we use $\\alpha =\\beta =1$ for all experiments. $R_{i}(CS"
+      },
+      {
+        "rank": 14,
+        "source": "2002.03407:paragraph:0036 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4288,
+        "keyword": 0.0,
+        "rerank": 0.4014,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF13 presents summarization performance results for the 4 extractive baselines, for the original and proposed variants of PG-net, and finally for template-summarization. Following BIBREF0, performance is evalua"
+      },
+      {
+        "rank": 15,
+        "source": "2002.03407:paragraph:0038 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4264,
+        "keyword": 0.0,
+        "rerank": 0.3951,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To validate our next set of hypothesises (H3, H4. H5), we use the synthesized data in two settings: either using it for training (rows 7, 8 and 19, 20) or tuning (rows 10, 11 and 22, 23). Table TABREF13 supports H4 by sh"
+      },
+      {
+        "rank": 16,
+        "source": "2002.03407:paragraph:0013 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4609,
+        "keyword": 0.0,
+        "rerank": 0.3854,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "3. Summary rewriting: An encoder-attention-decoder with pointer network is trained to perform the rewriting task. The model is trained to inject keywords into a template and perform rewriting into a coherent paragraph. T"
+      },
+      {
+        "rank": 17,
+        "source": "2002.03407:paragraph:0006 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Reflection Summarization Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4072,
+        "keyword": 0.0,
+        "rerank": 0.3748,
+        "section": "Reflection Summarization Dataset",
+        "query_hits": "were",
+        "reasons": "body/table evidence",
+        "preview": "Student reflections are comments provided by students in response to a set of instructor prompts. The prompts are directed towards gathering students' feedback on course material. Student reflections are collected direct"
+      },
+      {
+        "rank": 18,
+        "source": "2002.03407:abstract:000 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3932,
+        "keyword": 0.0151,
+        "rerank": 0.3569,
+        "section": "Abstract",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "Training abstractive summarization models typically requires large amounts of data, which can be a limitation for many domains. In this paper we explore using domain transfer and data synthesis to improve the performance"
+      },
+      {
+        "rank": 19,
+        "source": "2002.03407:paragraph:0012 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.421,
+        "keyword": 0.0315,
+        "rerank": 0.3501,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "2. Template clustering: Upon converting human summaries into templates, we cluster them into $N$ clusters with the goal of using any template from the same cluster interchangeably. A template is first converted into embe"
+      },
+      {
+        "rank": 20,
+        "source": "2002.03407:paragraph:0041 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4016,
+        "keyword": 0.0,
+        "rerank": 0.3302,
+        "section": "Conclusions and Future Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We explored improving the performance of neural abstractive summarizers when applied to the low resource domain of student reflections using three approaches: domain transfer, data synthesis and the combination of both. "
+      },
+      {
+        "rank": 21,
+        "source": "2002.03407:paragraph:0039 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3994,
+        "keyword": 0.0,
+        "rerank": 0.3245,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Finally, while the goal of our template model was to synthesize data, using it for summarization is surprisingly competitive, supporting H6. We believe that training the model with little data is doable due to the small "
+      },
+      {
+        "rank": 22,
+        "source": "2002.03407:paragraph:0005 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3768,
+        "keyword": 0.0217,
+        "rerank": 0.3221,
+        "section": "Related Work",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "Data Synthesis. Data synthesis for text summarization is underexplored, with most prior work focusing on machine translation, and text normalization. BIBREF12 proposed doing data augmentation through word replacement, us"
+      },
+      {
+        "rank": 23,
+        "source": "2002.03407:paragraph:0037 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3964,
+        "keyword": 0.0,
+        "rerank": 0.3167,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As for our second hypothesis (H2), table TABREF13 shows that it is a valid one. For PG-net, comparing the CNN/DM out-of-domain and Student Reflection in-domain results in rows (5 and 6) and (17 and 18) with their corresp"
+      },
+      {
+        "rank": 24,
+        "source": "2002.03407:paragraph:0008 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Explored Approaches for Limited Resources",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3886,
+        "keyword": 0.0,
+        "rerank": 0.2961,
+        "section": "Explored Approaches for Limited Resources",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To overcome the size issue of the student reflection dataset, we first explore the effect of incorporating domain transfer into a recent abstractive summarization model: pointer networks with coverage mechanism (PG-net)B"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.2417,
+        "rerank": 1.02,
+        "section": "Results",
+        "query_hits": "evaluators, human, were",
+        "reasons": "body/table evidence",
+        "preview": "Human Evaluation Results. While automated evaluation metrics like ROUGE measure lexical similarity between machine and human summaries, humans can better measure how coherent and readable a summary is. Our evaluation stu"
+      },
+      {
+        "rank": 2,
+        "source": "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5035,
+        "keyword": 0.0457,
+        "rerank": 0.6836,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We t"
+      },
+      {
+        "rank": 3,
+        "source": "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.437,
+        "keyword": 0.0332,
+        "rerank": 0.4941,
+        "section": "Experiments",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Extractive Baselines (for testing H1). While BIBREF0 used Lead-3 as an extractive baseline, in our data sentence order doesn't matter as reflections are independent. We thus use a similar in concept baseline: randomly se"
+      },
+      {
+        "rank": 4,
+        "source": "2002.03407:paragraph:0030 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3972,
+        "keyword": 0.1056,
+        "rerank": 0.4798,
+        "section": "Experiments",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "To observe the impact of using out-of-domain (news) data for pretraining to compensate for low resource in-domain (reflection) data, we train 3 variants of PG-net: model training on CNN/DM; model training on reflections;"
+      },
+      {
+        "rank": 5,
+        "source": "2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4118,
+        "keyword": 0.0482,
+        "rerank": 0.4768,
+        "section": "Experiments",
+        "query_hits": "human, used",
+        "reasons": "body/table evidence",
+        "preview": "Template Synthesis Model (for testing H4, H5). To synthesize summaries, we use the same leave one course out approach. For each course, we use the data from the other three courses to train the rewriting module and tune "
+      },
+      {
+        "rank": 6,
+        "source": "2002.03407:paragraph:0007 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Reflection Summarization Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4295,
+        "keyword": 0.0288,
+        "rerank": 0.4689,
+        "section": "Reflection Summarization Dataset",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "For each reflection document, at least one human (either a TA or domain expert) created summaries. Table TABREF4 shows example reference summary produced by one annotator for the CS course. Table TABREF5 summarizes the d"
+      },
+      {
+        "rank": 7,
+        "source": "2002.03407:paragraph:0035 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4858,
+        "keyword": 0.0,
+        "rerank": 0.4504,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "ROUGE Evaluation Results."
+      },
+      {
+        "rank": 8,
+        "source": "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4227,
+        "keyword": 0.0279,
+        "rerank": 0.45,
+        "section": "Experiments",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Template-based Summarization (for testing H6). While the proposed template-based model was intended for data synthesis, with minor modification it can be adapted for summarization itself. Because the modifications introd"
+      },
+      {
+        "rank": 9,
+        "source": "2002.03407:paragraph:0011 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4486,
+        "keyword": 0.0394,
+        "rerank": 0.4321,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "1. Template extraction: To convert human summaries into templates, we remove keywords in the summary to leave only non-keywords. We use Rapid Automatic Keyword Extraction (RAKE) BIBREF18 to identify keywords."
+      },
+      {
+        "rank": 10,
+        "source": "2002.03407:paragraph:0002 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3771,
+        "keyword": 0.1064,
+        "rerank": 0.4283,
+        "section": "Related Work",
+        "query_hits": "used",
+        "reasons": "body/table evidence",
+        "preview": "Abstractive Summarization. Abstractive summarization aims to generate coherent summaries with high readability, and has seen increasing interest and improved performance due to the emergence of seq2seq models BIBREF8 and"
+      },
+      {
+        "rank": 11,
+        "source": "2002.03407:paragraph:0017 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4402,
+        "keyword": 0.0536,
+        "rerank": 0.4277,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "1. Human summaries first pass through the template extraction module, converting each summary $s_i$ into template $t_i$ and the corresponding keywords $kw_i$."
+      },
+      {
+        "rank": 12,
+        "source": "2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.416,
+        "keyword": 0.0197,
+        "rerank": 0.4224,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "Model Training. Before using the synthesis model, some of the constructing modules (rewriting module, scoring LM) need training. To train the rewriting model, we use another dataset consisting of a set of samples, where "
+      },
+      {
+        "rank": 13,
+        "source": "2002.03407:paragraph:0015 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4427,
+        "keyword": 0.0305,
+        "rerank": 0.4055,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "CS and HS are a candidate and human summary. $P(w)$ is the probability of word $w$ using a language model. $\\alpha , \\beta $ are weighting parameters. In this work we use $\\alpha =\\beta =1$ for all experiments. $R_{i}(CS"
+      },
+      {
+        "rank": 14,
+        "source": "2002.03407:paragraph:0036 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4288,
+        "keyword": 0.0,
+        "rerank": 0.4014,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF13 presents summarization performance results for the 4 extractive baselines, for the original and proposed variants of PG-net, and finally for template-summarization. Following BIBREF0, performance is evalua"
+      },
+      {
+        "rank": 15,
+        "source": "2002.03407:paragraph:0038 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4264,
+        "keyword": 0.0,
+        "rerank": 0.3951,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To validate our next set of hypothesises (H3, H4. H5), we use the synthesized data in two settings: either using it for training (rows 7, 8 and 19, 20) or tuning (rows 10, 11 and 22, 23). Table TABREF13 supports H4 by sh"
+      },
+      {
+        "rank": 16,
+        "source": "2002.03407:paragraph:0013 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4609,
+        "keyword": 0.0,
+        "rerank": 0.3854,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "3. Summary rewriting: An encoder-attention-decoder with pointer network is trained to perform the rewriting task. The model is trained to inject keywords into a template and perform rewriting into a coherent paragraph. T"
+      },
+      {
+        "rank": 17,
+        "source": "2002.03407:paragraph:0006 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Reflection Summarization Dataset",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4072,
+        "keyword": 0.0,
+        "rerank": 0.3748,
+        "section": "Reflection Summarization Dataset",
+        "query_hits": "were",
+        "reasons": "body/table evidence",
+        "preview": "Student reflections are comments provided by students in response to a set of instructor prompts. The prompts are directed towards gathering students' feedback on course material. Student reflections are collected direct"
+      },
+      {
+        "rank": 18,
+        "source": "2002.03407:abstract:000 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3932,
+        "keyword": 0.0151,
+        "rerank": 0.3569,
+        "section": "Abstract",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "Training abstractive summarization models typically requires large amounts of data, which can be a limitation for many domains. In this paper we explore using domain transfer and data synthesis to improve the performance"
+      },
+      {
+        "rank": 19,
+        "source": "2002.03407:paragraph:0012 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.421,
+        "keyword": 0.0315,
+        "rerank": 0.3501,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "2. Template clustering: Upon converting human summaries into templates, we cluster them into $N$ clusters with the goal of using any template from the same cluster interchangeably. A template is first converted into embe"
+      },
+      {
+        "rank": 20,
+        "source": "2002.03407:paragraph:0041 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Conclusions and Future Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4016,
+        "keyword": 0.0,
+        "rerank": 0.3302,
+        "section": "Conclusions and Future Work",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We explored improving the performance of neural abstractive summarizers when applied to the low resource domain of student reflections using three approaches: domain transfer, data synthesis and the combination of both. "
+      },
+      {
+        "rank": 21,
+        "source": "2002.03407:paragraph:0039 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3994,
+        "keyword": 0.0,
+        "rerank": 0.3245,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Finally, while the goal of our template model was to synthesize data, using it for summarization is surprisingly competitive, supporting H6. We believe that training the model with little data is doable due to the small "
+      },
+      {
+        "rank": 22,
+        "source": "2002.03407:paragraph:0005 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3768,
+        "keyword": 0.0217,
+        "rerank": 0.3221,
+        "section": "Related Work",
+        "query_hits": "human",
+        "reasons": "body/table evidence",
+        "preview": "Data Synthesis. Data synthesis for text summarization is underexplored, with most prior work focusing on machine translation, and text normalization. BIBREF12 proposed doing data augmentation through word replacement, us"
+      },
+      {
+        "rank": 23,
+        "source": "2002.03407:paragraph:0037 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3964,
+        "keyword": 0.0,
+        "rerank": 0.3167,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "As for our second hypothesis (H2), table TABREF13 shows that it is a valid one. For PG-net, comparing the CNN/DM out-of-domain and Student Reflection in-domain results in rows (5 and 6) and (17 and 18) with their corresp"
+      },
+      {
+        "rank": 24,
+        "source": "2002.03407:paragraph:0008 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Explored Approaches for Limited Resources",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.3886,
+        "keyword": 0.0,
+        "rerank": 0.2961,
+        "section": "Explored Approaches for Limited Resources",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "To overcome the size issue of the student reflection dataset, we first explore the effect of incorporating domain transfer into a recent abstractive summarization model: pointer networks with coverage mechanism (PG-net)B"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5162,
+        "keyword": 0.2417,
+        "rerank": 1.02,
+        "section": "Results",
+        "query_hits": "evaluators, human, were",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.48,
+        "reasons": "body/table evidence",
+        "preview": "Human Evaluation Results. While automated evaluation metrics like ROUGE measure lexical similarity between machine and human summaries, humans can better measure how coherent and readable a summary is. Our evaluation stu"
+      },
+      {
+        "rank": 2,
+        "source": "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5035,
+        "keyword": 0.0457,
+        "rerank": 0.6836,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6765,
+        "novelty": 0.7381,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.0851,
+        "reasons": "body/table evidence",
+        "preview": "4. Summary selection: After producing candidate summaries, we need to pick the best ones. We argue that the best candidates are those that are coherent and also convey the same meaning as the original human summary. We t"
+      },
+      {
+        "rank": 3,
+        "source": "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.437,
+        "keyword": 0.0332,
+        "rerank": 0.4941,
+        "section": "Experiments",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4943,
+        "novelty": 0.9189,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9538,
+        "reasons": "body/table evidence",
+        "preview": "Extractive Baselines (for testing H1). While BIBREF0 used Lead-3 as an extractive baseline, in our data sentence order doesn't matter as reflections are independent. We thus use a similar in concept baseline: randomly se"
+      },
+      {
+        "rank": 4,
+        "source": "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4227,
+        "keyword": 0.0279,
+        "rerank": 0.45,
+        "section": "Experiments",
+        "query_hits": "used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.452,
+        "novelty": 0.4597,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.853,
+        "reasons": "body/table evidence",
+        "preview": "Template-based Summarization (for testing H6). While the proposed template-based model was intended for data synthesis, with minor modification it can be adapted for summarization itself. Because the modifications introd"
+      },
+      {
+        "rank": 5,
+        "source": "2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.416,
+        "keyword": 0.0197,
+        "rerank": 0.4224,
+        "section": "Proposed Template-Based Synthesis Model",
+        "query_hits": "human",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4254,
+        "novelty": 0.459,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8301,
+        "reasons": "body/table evidence",
+        "preview": "Model Training. Before using the synthesis model, some of the constructing modules (rewriting module, scoring LM) need training. To train the rewriting model, we use another dataset consisting of a set of samples, where "
+      },
+      {
+        "rank": 6,
+        "source": "2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4118,
+        "keyword": 0.0482,
+        "rerank": 0.4768,
+        "section": "Experiments",
+        "query_hits": "human, used",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4777,
+        "novelty": 0.4155,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.28,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.829,
+        "reasons": "body/table evidence",
+        "preview": "Template Synthesis Model (for testing H4, H5). To synthesize summaries, we use the same leave one course out approach. For each course, we use the data from the other three courses to train the rewriting module and tune "
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "evaluators",
+        "human",
+        "used",
+        "were"
+      ],
+      "covered_query_terms": [
+        "evaluators",
+        "human",
+        "used",
+        "were"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results": [
+          "evaluators",
+          "human",
+          "were"
+        ],
+        "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model": [
+          "human"
+        ],
+        "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments": [
+          "used"
+        ],
+        "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments": [
+          "used"
+        ],
+        "2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model": [
+          "human"
+        ],
+        "2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments": [
+          "human",
+          "used"
+        ]
+      },
+      "section_titles": [
+        "Experiments",
+        "Proposed Template-Based Synthesis Model",
+        "Results"
+      ],
+      "chunks_by_section": {
+        "Results": [
+          "2002.03407:paragraph:0040 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Results"
+        ],
+        "Proposed Template-Based Synthesis Model": [
+          "2002.03407:paragraph:0014 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model",
+          "2002.03407:paragraph:0016 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Proposed Template-Based Synthesis Model"
+        ],
+        "Experiments": [
+          "2002.03407:paragraph:0028 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+          "2002.03407:paragraph:0034 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments",
+          "2002.03407:paragraph:0033 | Abstractive Summarization for Low Resource Data using Domain Transfer and Data Synthesis / Experiments"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I cannot answer this question because no context was provided.",
+    "gold_context_answer": "20 evaluators were recruited from the institution where the study was conducted. These evaluators were asked to perform 20 annotations each, and they selected which of three summaries for the same document they liked most based on readability and coherence.",
+    "retrieved_context_answer": "The context states that 20 evaluators were recruited from the institution for the evaluation study.",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.48148148148148157,
+    "retrieved_context_f1": 0.4137931034482759,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

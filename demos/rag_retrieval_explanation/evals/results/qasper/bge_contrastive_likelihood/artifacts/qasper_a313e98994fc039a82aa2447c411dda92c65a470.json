@@ -1,0 +1,1556 @@
+{
+  "case": {
+    "case_id": "qasper_a313e98994fc039a82aa2447c411dda92c65a470",
+    "paper_id": "1811.00383",
+    "paper_title": "Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages",
+    "question_id": "a313e98994fc039a82aa2447c411dda92c65a470",
+    "annotation_id": "b6fd3b68fce94f81a56667e705bba1d2df03f66e",
+    "question": "How do they match words before reordering them?",
+    "gold_answer": "CFILT-preorder system",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1811.00383:paragraph:0017"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1811.00383:paragraph:0017",
+      "score": 0.9900000000000001,
+      "title": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+      "text": "We use the CFILT-preorder system for reordering English sentences to match the Indian language word order. It contains two re-ordering systems: (1) generic rules that apply to all Indian languages BIBREF17 , and (2) hindi-tuned rules which improve the generic rules by incorporating improvements found through an error analysis of English-Hindi reordering BIBREF28 . These Hindi-tuned rules have been found to improve reordering for many English to Indian language pairs BIBREF29 ."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1811.00383:paragraph:0002",
+      "score": 0.6464745451153703,
+      "title": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+      "text": "To see how word order divergence can be detrimental, let us consider the case of the standard RNN (Bi-LSTM) encoder-attention-decoder architecture BIBREF13 . The encoder generates contextual representations (annotation vectors) for each source word, which are used by the attention network to match the source words to the current decoder state. The contextual representation is word-order dependent. Hence, if the assisting and the source languages do not have similar word order the generated contextual representations will not be consistent. The attention network (and hence the decoder) sees different contextual representations for similar words in parallel sentences across different languages. This makes it difficult to transfer knowledge learned from the assisting language to the source language."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1811.00383:paragraph:0004",
+      "score": 0.5818558625371006,
+      "title": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+      "text": "To address this word order divergence, we propose to pre-order the assisting language sentences to match the word order of the source language. We consider an extremely resource constrained scenario, where we do not have any parallel corpus for the child task. We are limited to a bilingual dictionary for transfer information from the assisting to the source language. From our experiments, we show that there is a significant increase in the translation accuracy for the unseen source-target language pair."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1811.00383:paragraph:0010",
+      "score": 0.7111159786367757,
+      "title": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+      "text": "For instance, consider the English sentence Anurag will meet Thakur. One of the pre-ordering rule swaps the position of the noun phrase followed by a transitive verb with the transitive verb. The original and the resulting re-ordered parse tree will be as shown in the Table TABREF5 . Applying this reordering rule to the above sentence Anurag will meet Thakur will yield the reordered sentence Anurag Thakur will meet. Additionally, the Table TABREF5 shows the parse trees for the above sentence with and without pre-ordering."
+    },
+    {
+      "rank": 5,
+      "passage_id": "1811.00383:paragraph:0020",
+      "score": 0.6388397874908425,
+      "title": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+      "text": "An analysis of the outputs revealed that pre-ordering significantly reducing the number of UNK tokens (placeholder for unknown words) in the test output (Table TABREF14 ). We hypothesize that due to word order divergence between English and Indian languages, the encoder representation generated is not consistent leading to decoder generating unknown words. However, the pre-ordered models generate better contextual representations leading to less number of unknown tokens and better translation which is also reflected in the BLEU scores."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1811.00383:paragraph:0006",
+      "score": 0.3918319064856462,
+      "title": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+      "text": "To the best of our knowledge, no work has addressed word order divergence in transfer learning for multilingual NMT. However, some work exists for other NLP tasks that could potentially address word order. For Named Entity Recognition (NER), BIBREF14 use a self-attention layer after the Bi-LSTM layer to address word-order divergence for Named Entity Recognition (NER) task. The approach does not show any significant improvements over multiple languages. A possible reason is that the divergence has to be addressed before/during construction of the contextual embeddings in the Bi-LSTM layer, and the subsequent self-attention layer does not address word-order divergence. BIBREF15 use adversarial training for cross-lingual question-question similarity ranking in community question answering. The adversarial training tries to force the encoder representations of similar sentences from different input languages to have similar representations."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+      "attribution": 0.38228515861591156
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+      "attribution": 0.023113479997461092
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+      "attribution": 0.01312453835881936
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+      "attribution": 0.003990454089380459
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+      "attribution": -0.003685923779589738
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+      "attribution": 0.0007459943516237097
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+      "attribution": 0.10419893869650225
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+      "attribution": 0.050014951177896574
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+      "attribution": 0.027317096032794547
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+      "attribution": 0.008147704866108503
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+      "attribution": 0.006287612219729655
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+      "attribution": 0.005951422783416074
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0002",
+      "interaction": -0.005152638175020418
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0004",
+      "interaction": -0.035335455992940655
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0010",
+      "interaction": -0.0026410067229856583
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": -0.0030022424270396246
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": 0.024591905271270444
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0004",
+      "interaction": -0.004096935574729448
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0010",
+      "interaction": -0.0023548736688874766
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": 0.0014954849925982135
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.004816806545900308
+    },
+    {
+      "left": "1811.00383:paragraph:0004",
+      "right": "1811.00383:paragraph:0010",
+      "interaction": -0.02428572277454372
+    },
+    {
+      "left": "1811.00383:paragraph:0004",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": -0.01405960947256556
+    },
+    {
+      "left": "1811.00383:paragraph:0004",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.011349580968925344
+    },
+    {
+      "left": "1811.00383:paragraph:0010",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": -0.002725440557013427
+    },
+    {
+      "left": "1811.00383:paragraph:0010",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.010740062255223736
+    },
+    {
+      "left": "1811.00383:paragraph:0020",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.010403954998245014
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0002",
+      "interaction": 0.0010486580397987577
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0004",
+      "interaction": -0.0015707046396976911
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0010",
+      "interaction": 0.02272690349702946
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": 0.001966543236097548
+    },
+    {
+      "left": "1811.00383:paragraph:0017",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.0037234178133418202
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0004",
+      "interaction": 0.0028323006938632666
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0010",
+      "interaction": -0.005320228582933263
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": -0.0014486347000521515
+    },
+    {
+      "left": "1811.00383:paragraph:0002",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.005390763975331154
+    },
+    {
+      "left": "1811.00383:paragraph:0004",
+      "right": "1811.00383:paragraph:0010",
+      "interaction": 0.0043498699764239574
+    },
+    {
+      "left": "1811.00383:paragraph:0004",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": -0.005306104943881279
+    },
+    {
+      "left": "1811.00383:paragraph:0004",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.006839920817175247
+    },
+    {
+      "left": "1811.00383:paragraph:0010",
+      "right": "1811.00383:paragraph:0020",
+      "interaction": -0.005460072504032703
+    },
+    {
+      "left": "1811.00383:paragraph:0010",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.010041658915872293
+    },
+    {
+      "left": "1811.00383:paragraph:0020",
+      "right": "1811.00383:paragraph:0006",
+      "interaction": -0.005167217241172084
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.4195737014408564
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "remaining_chunks": 5,
+        "score": 0.02293555551663129
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "remaining_chunks": 4,
+        "score": 0.018701765306437634
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "remaining_chunks": 3,
+        "score": 0.0016984874242774728
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "remaining_chunks": 2,
+        "score": 0.0035011196108778453
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.02711571602149576
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "selected_chunks": 1,
+        "score": 0.41817758463840227
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "selected_chunks": 2,
+        "score": 0.4055646793678195
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "selected_chunks": 3,
+        "score": 0.41024433834084284
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "selected_chunks": 4,
+        "score": 0.41476313329184555
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "selected_chunks": 5,
+        "score": 0.40517648561920316
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "selected_chunks": 6,
+        "score": 0.4195737014408564
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.4195737014408564
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "remaining_chunks": 5,
+        "score": 0.02293555551663129
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "remaining_chunks": 4,
+        "score": 0.04645317538743976
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.03823982113461577
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "remaining_chunks": 2,
+        "score": 0.0545131061679045
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.02711571602149576
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.4195737014408564
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: 1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "remaining_chunks": 5,
+        "score": 0.02293555551663129
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 6: 1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "remaining_chunks": 4,
+        "score": 0.07604084286931645
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 4: 1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "remaining_chunks": 3,
+        "score": 0.05617253866046379
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "remaining_chunks": 2,
+        "score": 0.05224424966190944
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "remaining_chunks": 1,
+        "score": 0.08942848262526959
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.41957370144085687
+      },
+      {
+        "step": 1,
+        "score": 0.3563639319858875
+      },
+      {
+        "step": 2,
+        "score": 0.27087906488506247
+      },
+      {
+        "step": 3,
+        "score": 0.21183300180052747
+      },
+      {
+        "step": 4,
+        "score": 0.12888924210754635
+      },
+      {
+        "step": 5,
+        "score": 0.10041099565825413
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "How do they match words before reordering them?",
+    "expanded_queries": [
+      "How do they match words before reordering them?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "dense": 0.7407,
+        "page": 1,
+        "type": "body_text",
+        "section": "Network",
+        "flags": "",
+        "preview": "We use the CFILT-preorder system for reordering English sentences to match the Indian language word order. It contains two re-ordering systems: (1) generic rules that apply to all Indian languages BIBREF17 , and (2) hind"
+      },
+      {
+        "rank": 2,
+        "source": "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "dense": 0.7295,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Solution",
+        "flags": "",
+        "preview": "For instance, consider the English sentence Anurag will meet Thakur. One of the pre-ordering rule swaps the position of the noun phrase followed by a transitive verb with the transitive verb. The original and the resulti"
+      },
+      {
+        "rank": 3,
+        "source": "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "dense": 0.6733,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "To address this word order divergence, we propose to pre-order the assisting language sentences to match the word order of the source language. We consider an extremely resource constrained scenario, where we do not have"
+      },
+      {
+        "rank": 4,
+        "source": "1811.00383:paragraph:0009 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "dense": 0.6607,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Solution",
+        "flags": "",
+        "preview": "Since the source language and the assisting language (English) have different word order, we hypothesize that it leads to inconsistencies in the contextual representations generated by the encoder for the two languages. "
+      },
+      {
+        "rank": 5,
+        "source": "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "dense": 0.6395,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "An analysis of the outputs revealed that pre-ordering significantly reducing the number of UNK tokens (placeholder for unknown words) in the test output (Table TABREF14 ). We hypothesize that due to word order divergence"
+      },
+      {
+        "rank": 6,
+        "source": "1811.00383:paragraph:0007 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Use of Pre-ordering",
+        "dense": 0.6358,
+        "page": 1,
+        "type": "body_text",
+        "section": "Use of Pre-ordering",
+        "flags": "",
+        "preview": "Pre-ordering the source language sentences to match the target language word order has been useful in addressing word-order divergence for Phrase-Based SMT BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 . Recently, BIBREF20 p"
+      },
+      {
+        "rank": 7,
+        "source": "1811.00383:paragraph:0021 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Conclusion",
+        "dense": 0.6274,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we show that handling word-order divergence between source and assisting languages is crucial for the success of multilingual NMT in an extremely low-resource setting. We show that pre-ordering the assisti"
+      },
+      {
+        "rank": 8,
+        "source": "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "dense": 0.6239,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "To see how word order divergence can be detrimental, let us consider the case of the standard RNN (Bi-LSTM) encoder-attention-decoder architecture BIBREF13 . The encoder generates contextual representations (annotation v"
+      },
+      {
+        "rank": 9,
+        "source": "1811.00383:paragraph:0018 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "dense": 0.6128,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "In this section, we describe the results from our experiments on NMT task. We report the results on X-Hindi pair, where X is one of Bengali, Gujarati, Marathi, Tamil, and Malayalam. The results are presented in the Table"
+      },
+      {
+        "rank": 10,
+        "source": "1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "dense": 0.6045,
+        "page": 1,
+        "type": "body_text",
+        "section": "Addressing Word Order Divergence",
+        "flags": "",
+        "preview": "To the best of our knowledge, no work has addressed word order divergence in transfer learning for multilingual NMT. However, some work exists for other NLP tasks that could potentially address word order. For Named Enti"
+      },
+      {
+        "rank": 11,
+        "source": "1811.00383:abstract:000 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Abstract",
+        "dense": 0.5943,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Transfer learning approaches for Neural Machine Translation (NMT) train a NMT model on the assisting-target language pair (parent model) which is later fine-tuned for the source-target language pair of interest (child mo"
+      },
+      {
+        "rank": 12,
+        "source": "1811.00383:paragraph:0003 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "dense": 0.5904,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We illustrate this by visualizing the contextual representations generated by the encoder of an English to Hindi NMT system for two versions of the English input: (a) original word order (SVO) (b) word order of the sourc"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "keyword": 0.1958,
+        "page": 1,
+        "type": "body_text",
+        "section": "Network",
+        "flags": "",
+        "preview": "We use the CFILT-preorder system for reordering English sentences to match the Indian language word order. It contains two re-ordering systems: (1) generic rules that apply to all Indian languages BIBREF17 , and (2) hind"
+      },
+      {
+        "rank": 2,
+        "source": "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "keyword": 0.1217,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "To see how word order divergence can be detrimental, let us consider the case of the standard RNN (Bi-LSTM) encoder-attention-decoder architecture BIBREF13 . The encoder generates contextual representations (annotation v"
+      },
+      {
+        "rank": 3,
+        "source": "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "keyword": 0.1163,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "An analysis of the outputs revealed that pre-ordering significantly reducing the number of UNK tokens (placeholder for unknown words) in the test output (Table TABREF14 ). We hypothesize that due to word order divergence"
+      },
+      {
+        "rank": 4,
+        "source": "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "keyword": 0.0477,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Solution",
+        "flags": "",
+        "preview": "For instance, consider the English sentence Anurag will meet Thakur. One of the pre-ordering rule swaps the position of the noun phrase followed by a transitive verb with the transitive verb. The original and the resulti"
+      },
+      {
+        "rank": 5,
+        "source": "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "keyword": 0.0356,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "To address this word order divergence, we propose to pre-order the assisting language sentences to match the word order of the source language. We consider an extremely resource constrained scenario, where we do not have"
+      },
+      {
+        "rank": 6,
+        "source": "1811.00383:paragraph:0021 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Conclusion",
+        "keyword": 0.0322,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "In this paper, we show that handling word-order divergence between source and assisting languages is crucial for the success of multilingual NMT in an extremely low-resource setting. We show that pre-ordering the assisti"
+      },
+      {
+        "rank": 7,
+        "source": "1811.00383:paragraph:0009 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "keyword": 0.0307,
+        "page": 1,
+        "type": "body_text",
+        "section": "Proposed Solution",
+        "flags": "",
+        "preview": "Since the source language and the assisting language (English) have different word order, we hypothesize that it leads to inconsistencies in the contextual representations generated by the encoder for the two languages. "
+      },
+      {
+        "rank": 8,
+        "source": "1811.00383:abstract:000 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Abstract",
+        "keyword": 0.0219,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Transfer learning approaches for Neural Machine Translation (NMT) train a NMT model on the assisting-target language pair (parent model) which is later fine-tuned for the source-target language pair of interest (child mo"
+      },
+      {
+        "rank": 9,
+        "source": "1811.00383:paragraph:0007 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Use of Pre-ordering",
+        "keyword": 0.0196,
+        "page": 1,
+        "type": "body_text",
+        "section": "Use of Pre-ordering",
+        "flags": "",
+        "preview": "Pre-ordering the source language sentences to match the target language word order has been useful in addressing word-order divergence for Phrase-Based SMT BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 . Recently, BIBREF20 p"
+      },
+      {
+        "rank": 10,
+        "source": "1811.00383:paragraph:0018 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "In this section, we describe the results from our experiments on NMT task. We report the results on X-Hindi pair, where X is one of Bengali, Gujarati, Marathi, Tamil, and Malayalam. The results are presented in the Table"
+      },
+      {
+        "rank": 11,
+        "source": "1811.00383:paragraph:0019 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "These results support our hypothesis that word-order divergence can limit the benefits of multilingual translation. Reducing the word order divergence can improve translation in extremely low-resource scenarios."
+      },
+      {
+        "rank": 12,
+        "source": "1811.00383:paragraph:0015 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "keyword": 0.0,
+        "page": 1,
+        "type": "body_text",
+        "section": "Network",
+        "flags": "",
+        "preview": "We use OpenNMT-Torch BIBREF24 to train the NMT system. We use the standard sequence-to-sequence architecture with attention BIBREF13 . We use an encoder which contains two layers of bidirectional LSTMs with 500 neurons e"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7407,
+        "keyword": 0.1958,
+        "rerank": 0.99,
+        "section": "Network",
+        "query_hits": "match, reordering",
+        "reasons": "body/table evidence",
+        "preview": "We use the CFILT-preorder system for reordering English sentences to match the Indian language word order. It contains two re-ordering systems: (1) generic rules that apply to all Indian languages BIBREF17 , and (2) hind"
+      },
+      {
+        "rank": 2,
+        "source": "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7295,
+        "keyword": 0.0477,
+        "rerank": 0.7111,
+        "section": "Proposed Solution",
+        "query_hits": "reordering",
+        "reasons": "body/table evidence",
+        "preview": "For instance, consider the English sentence Anurag will meet Thakur. One of the pre-ordering rule swaps the position of the noun phrase followed by a transitive verb with the transitive verb. The original and the resulti"
+      },
+      {
+        "rank": 3,
+        "source": "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6239,
+        "keyword": 0.1217,
+        "rerank": 0.6465,
+        "section": "Introduction",
+        "query_hits": "match, words",
+        "reasons": "body/table evidence",
+        "preview": "To see how word order divergence can be detrimental, let us consider the case of the standard RNN (Bi-LSTM) encoder-attention-decoder architecture BIBREF13 . The encoder generates contextual representations (annotation v"
+      },
+      {
+        "rank": 4,
+        "source": "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6395,
+        "keyword": 0.1163,
+        "rerank": 0.6388,
+        "section": "Results",
+        "query_hits": "words",
+        "reasons": "body/table evidence",
+        "preview": "An analysis of the outputs revealed that pre-ordering significantly reducing the number of UNK tokens (placeholder for unknown words) in the test output (Table TABREF14 ). We hypothesize that due to word order divergence"
+      },
+      {
+        "rank": 5,
+        "source": "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6733,
+        "keyword": 0.0356,
+        "rerank": 0.5819,
+        "section": "Introduction",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "To address this word order divergence, we propose to pre-order the assisting language sentences to match the word order of the source language. We consider an extremely resource constrained scenario, where we do not have"
+      },
+      {
+        "rank": 6,
+        "source": "1811.00383:paragraph:0009 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6607,
+        "keyword": 0.0307,
+        "rerank": 0.5495,
+        "section": "Proposed Solution",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "Since the source language and the assisting language (English) have different word order, we hypothesize that it leads to inconsistencies in the contextual representations generated by the encoder for the two languages. "
+      },
+      {
+        "rank": 7,
+        "source": "1811.00383:paragraph:0007 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Use of Pre-ordering",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6358,
+        "keyword": 0.0196,
+        "rerank": 0.5136,
+        "section": "Use of Pre-ordering",
+        "query_hits": "match, they",
+        "reasons": "body/table evidence",
+        "preview": "Pre-ordering the source language sentences to match the target language word order has been useful in addressing word-order divergence for Phrase-Based SMT BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 . Recently, BIBREF20 p"
+      },
+      {
+        "rank": 8,
+        "source": "1811.00383:paragraph:0021 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6274,
+        "keyword": 0.0322,
+        "rerank": 0.4863,
+        "section": "Conclusion",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we show that handling word-order divergence between source and assisting languages is crucial for the success of multilingual NMT in an extremely low-resource setting. We show that pre-ordering the assisti"
+      },
+      {
+        "rank": 9,
+        "source": "1811.00383:abstract:000 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5943,
+        "keyword": 0.0219,
+        "rerank": 0.4055,
+        "section": "Abstract",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning approaches for Neural Machine Translation (NMT) train a NMT model on the assisting-target language pair (parent model) which is later fine-tuned for the source-target language pair of interest (child mo"
+      },
+      {
+        "rank": 10,
+        "source": "1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6045,
+        "keyword": 0.0,
+        "rerank": 0.3918,
+        "section": "Addressing Word Order Divergence",
+        "query_hits": "before",
+        "reasons": "body/table evidence",
+        "preview": "To the best of our knowledge, no work has addressed word order divergence in transfer learning for multilingual NMT. However, some work exists for other NLP tasks that could potentially address word order. For Named Enti"
+      },
+      {
+        "rank": 11,
+        "source": "1811.00383:paragraph:0018 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6128,
+        "keyword": 0.0,
+        "rerank": 0.3783,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe the results from our experiments on NMT task. We report the results on X-Hindi pair, where X is one of Bengali, Gujarati, Marathi, Tamil, and Malayalam. The results are presented in the Table"
+      },
+      {
+        "rank": 12,
+        "source": "1811.00383:paragraph:0003 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5904,
+        "keyword": 0.0,
+        "rerank": 0.3342,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We illustrate this by visualizing the contextual representations generated by the encoder of an English to Hindi NMT system for two versions of the English input: (a) original word order (SVO) (b) word order of the sourc"
+      },
+      {
+        "rank": 13,
+        "source": "1811.00383:paragraph:0016 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5466,
+        "keyword": 0.0,
+        "rerank": 0.2479,
+        "section": "Network",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "English vocabulary consists of INLINEFORM0 tokens appearing at least 2 times in the English training corpus. For constructing the Hindi vocabulary we considered only those tokens appearing at least 5 times in the trainin"
+      },
+      {
+        "rank": 14,
+        "source": "1811.00383:paragraph:0005 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Lexical Divergence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5248,
+        "keyword": 0.0,
+        "rerank": 0.2351,
+        "section": "Addressing Lexical Divergence",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF3 explored transfer learning for NMT on low-resource languages. They studied the influence of language divergence between languages chosen for training the parent and child model, and showed that choosing similar l"
+      },
+      {
+        "rank": 15,
+        "source": "1811.00383:paragraph:0019 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5893,
+        "keyword": 0.0,
+        "rerank": 0.232,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "These results support our hypothesis that word-order divergence can limit the benefits of multilingual translation. Reducing the word order divergence can improve translation in extremely low-resource scenarios."
+      },
+      {
+        "rank": 16,
+        "source": "1811.00383:paragraph:0014 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0,
+        "rerank": 0.2307,
+        "section": "Datasets",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For training English-Hindi NMT systems, we use the IITB English-Hindi parallel corpus BIBREF22 ( INLINEFORM0 sentences from the training set) and the ILCI English-Hindi parallel corpus ( INLINEFORM1 sentences). The ILCI "
+      },
+      {
+        "rank": 17,
+        "source": "1811.00383:paragraph:0001 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5321,
+        "keyword": 0.0,
+        "rerank": 0.2194,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning has also been explored in the multilingual Neural Machine Translation BIBREF3 , BIBREF9 , BIBREF10 . The goal is to improve the NMT performance on the source to target language pair (child task) using a"
+      },
+      {
+        "rank": 18,
+        "source": "1811.00383:paragraph:0013 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Languages",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5268,
+        "keyword": 0.0,
+        "rerank": 0.209,
+        "section": "Languages",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We experimented with English INLINEFORM0 Hindi translation as the parent task. English is the assisting source language. Bengali, Gujarati, Marathi, Malayalam and Tamil are the primary source languages, and translation f"
+      },
+      {
+        "rank": 19,
+        "source": "1811.00383:paragraph:0011 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.576,
+        "keyword": 0.0,
+        "rerank": 0.2058,
+        "section": "Proposed Solution",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pre-ordering should also be beneficial for other word order divergence scenarios (e.g., SOV to SVO), but we leave verification of these additional scenarios for future work."
+      },
+      {
+        "rank": 20,
+        "source": "1811.00383:paragraph:0008 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5138,
+        "keyword": 0.0,
+        "rerank": 0.1833,
+        "section": "Proposed Solution",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Consider the task of translating from an extremely low-resource language (source) to a target language. The parallel corpus between the two languages if available may be too small to train a NMT model. Similar to existin"
+      },
+      {
+        "rank": 21,
+        "source": "1811.00383:paragraph:0015 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5094,
+        "keyword": 0.0,
+        "rerank": 0.1748,
+        "section": "Network",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We use OpenNMT-Torch BIBREF24 to train the NMT system. We use the standard sequence-to-sequence architecture with attention BIBREF13 . We use an encoder which contains two layers of bidirectional LSTMs with 500 neurons e"
+      },
+      {
+        "rank": 22,
+        "source": "1811.00383:paragraph:0000 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4938,
+        "keyword": 0.0,
+        "rerank": 0.144,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Deep Learning approaches have achieved impressive results on various NLP tasks BIBREF0 , BIBREF1 , BIBREF2 and have become the de facto approach for any NLP task. However, these deep learning techniques have found to be "
+      },
+      {
+        "rank": 23,
+        "source": "1811.00383:paragraph:0012 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Experimental Setup",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4613,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "Experimental Setup",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we describe the languages experimented with, datasets used, the network hyper-parameters used in our experiments."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7407,
+        "keyword": 0.1958,
+        "rerank": 0.99,
+        "section": "Network",
+        "query_hits": "match, reordering",
+        "reasons": "body/table evidence",
+        "preview": "We use the CFILT-preorder system for reordering English sentences to match the Indian language word order. It contains two re-ordering systems: (1) generic rules that apply to all Indian languages BIBREF17 , and (2) hind"
+      },
+      {
+        "rank": 2,
+        "source": "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7295,
+        "keyword": 0.0477,
+        "rerank": 0.7111,
+        "section": "Proposed Solution",
+        "query_hits": "reordering",
+        "reasons": "body/table evidence",
+        "preview": "For instance, consider the English sentence Anurag will meet Thakur. One of the pre-ordering rule swaps the position of the noun phrase followed by a transitive verb with the transitive verb. The original and the resulti"
+      },
+      {
+        "rank": 3,
+        "source": "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6239,
+        "keyword": 0.1217,
+        "rerank": 0.6465,
+        "section": "Introduction",
+        "query_hits": "match, words",
+        "reasons": "body/table evidence",
+        "preview": "To see how word order divergence can be detrimental, let us consider the case of the standard RNN (Bi-LSTM) encoder-attention-decoder architecture BIBREF13 . The encoder generates contextual representations (annotation v"
+      },
+      {
+        "rank": 4,
+        "source": "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6395,
+        "keyword": 0.1163,
+        "rerank": 0.6388,
+        "section": "Results",
+        "query_hits": "words",
+        "reasons": "body/table evidence",
+        "preview": "An analysis of the outputs revealed that pre-ordering significantly reducing the number of UNK tokens (placeholder for unknown words) in the test output (Table TABREF14 ). We hypothesize that due to word order divergence"
+      },
+      {
+        "rank": 5,
+        "source": "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6733,
+        "keyword": 0.0356,
+        "rerank": 0.5819,
+        "section": "Introduction",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "To address this word order divergence, we propose to pre-order the assisting language sentences to match the word order of the source language. We consider an extremely resource constrained scenario, where we do not have"
+      },
+      {
+        "rank": 6,
+        "source": "1811.00383:paragraph:0009 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6607,
+        "keyword": 0.0307,
+        "rerank": 0.5495,
+        "section": "Proposed Solution",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "Since the source language and the assisting language (English) have different word order, we hypothesize that it leads to inconsistencies in the contextual representations generated by the encoder for the two languages. "
+      },
+      {
+        "rank": 7,
+        "source": "1811.00383:paragraph:0007 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Use of Pre-ordering",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6358,
+        "keyword": 0.0196,
+        "rerank": 0.5136,
+        "section": "Use of Pre-ordering",
+        "query_hits": "match, they",
+        "reasons": "body/table evidence",
+        "preview": "Pre-ordering the source language sentences to match the target language word order has been useful in addressing word-order divergence for Phrase-Based SMT BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 . Recently, BIBREF20 p"
+      },
+      {
+        "rank": 8,
+        "source": "1811.00383:paragraph:0021 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6274,
+        "keyword": 0.0322,
+        "rerank": 0.4863,
+        "section": "Conclusion",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "In this paper, we show that handling word-order divergence between source and assisting languages is crucial for the success of multilingual NMT in an extremely low-resource setting. We show that pre-ordering the assisti"
+      },
+      {
+        "rank": 9,
+        "source": "1811.00383:abstract:000 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5943,
+        "keyword": 0.0219,
+        "rerank": 0.4055,
+        "section": "Abstract",
+        "query_hits": "match",
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning approaches for Neural Machine Translation (NMT) train a NMT model on the assisting-target language pair (parent model) which is later fine-tuned for the source-target language pair of interest (child mo"
+      },
+      {
+        "rank": 10,
+        "source": "1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6045,
+        "keyword": 0.0,
+        "rerank": 0.3918,
+        "section": "Addressing Word Order Divergence",
+        "query_hits": "before",
+        "reasons": "body/table evidence",
+        "preview": "To the best of our knowledge, no work has addressed word order divergence in transfer learning for multilingual NMT. However, some work exists for other NLP tasks that could potentially address word order. For Named Enti"
+      },
+      {
+        "rank": 11,
+        "source": "1811.00383:paragraph:0018 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6128,
+        "keyword": 0.0,
+        "rerank": 0.3783,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "In this section, we describe the results from our experiments on NMT task. We report the results on X-Hindi pair, where X is one of Bengali, Gujarati, Marathi, Tamil, and Malayalam. The results are presented in the Table"
+      },
+      {
+        "rank": 12,
+        "source": "1811.00383:paragraph:0003 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5904,
+        "keyword": 0.0,
+        "rerank": 0.3342,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We illustrate this by visualizing the contextual representations generated by the encoder of an English to Hindi NMT system for two versions of the English input: (a) original word order (SVO) (b) word order of the sourc"
+      },
+      {
+        "rank": 13,
+        "source": "1811.00383:paragraph:0016 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5466,
+        "keyword": 0.0,
+        "rerank": 0.2479,
+        "section": "Network",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "English vocabulary consists of INLINEFORM0 tokens appearing at least 2 times in the English training corpus. For constructing the Hindi vocabulary we considered only those tokens appearing at least 5 times in the trainin"
+      },
+      {
+        "rank": 14,
+        "source": "1811.00383:paragraph:0005 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Lexical Divergence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5248,
+        "keyword": 0.0,
+        "rerank": 0.2351,
+        "section": "Addressing Lexical Divergence",
+        "query_hits": "they",
+        "reasons": "body/table evidence",
+        "preview": "BIBREF3 explored transfer learning for NMT on low-resource languages. They studied the influence of language divergence between languages chosen for training the parent and child model, and showed that choosing similar l"
+      },
+      {
+        "rank": 15,
+        "source": "1811.00383:paragraph:0019 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5893,
+        "keyword": 0.0,
+        "rerank": 0.232,
+        "section": "Results",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "These results support our hypothesis that word-order divergence can limit the benefits of multilingual translation. Reducing the word order divergence can improve translation in extremely low-resource scenarios."
+      },
+      {
+        "rank": 16,
+        "source": "1811.00383:paragraph:0014 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5378,
+        "keyword": 0.0,
+        "rerank": 0.2307,
+        "section": "Datasets",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "For training English-Hindi NMT systems, we use the IITB English-Hindi parallel corpus BIBREF22 ( INLINEFORM0 sentences from the training set) and the ILCI English-Hindi parallel corpus ( INLINEFORM1 sentences). The ILCI "
+      },
+      {
+        "rank": 17,
+        "source": "1811.00383:paragraph:0001 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5321,
+        "keyword": 0.0,
+        "rerank": 0.2194,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Transfer learning has also been explored in the multilingual Neural Machine Translation BIBREF3 , BIBREF9 , BIBREF10 . The goal is to improve the NMT performance on the source to target language pair (child task) using a"
+      },
+      {
+        "rank": 18,
+        "source": "1811.00383:paragraph:0013 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Languages",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5268,
+        "keyword": 0.0,
+        "rerank": 0.209,
+        "section": "Languages",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We experimented with English INLINEFORM0 Hindi translation as the parent task. English is the assisting source language. Bengali, Gujarati, Marathi, Malayalam and Tamil are the primary source languages, and translation f"
+      },
+      {
+        "rank": 19,
+        "source": "1811.00383:paragraph:0011 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.576,
+        "keyword": 0.0,
+        "rerank": 0.2058,
+        "section": "Proposed Solution",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pre-ordering should also be beneficial for other word order divergence scenarios (e.g., SOV to SVO), but we leave verification of these additional scenarios for future work."
+      },
+      {
+        "rank": 20,
+        "source": "1811.00383:paragraph:0008 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5138,
+        "keyword": 0.0,
+        "rerank": 0.1833,
+        "section": "Proposed Solution",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Consider the task of translating from an extremely low-resource language (source) to a target language. The parallel corpus between the two languages if available may be too small to train a NMT model. Similar to existin"
+      },
+      {
+        "rank": 21,
+        "source": "1811.00383:paragraph:0015 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.5094,
+        "keyword": 0.0,
+        "rerank": 0.1748,
+        "section": "Network",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "We use OpenNMT-Torch BIBREF24 to train the NMT system. We use the standard sequence-to-sequence architecture with attention BIBREF13 . We use an encoder which contains two layers of bidirectional LSTMs with 500 neurons e"
+      },
+      {
+        "rank": 22,
+        "source": "1811.00383:paragraph:0000 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4938,
+        "keyword": 0.0,
+        "rerank": 0.144,
+        "section": "Introduction",
+        "query_hits": "",
+        "reasons": "body/table evidence",
+        "preview": "Deep Learning approaches have achieved impressive results on various NLP tasks BIBREF0 , BIBREF1 , BIBREF2 and have become the de facto approach for any NLP task. However, these deep learning techniques have found to be "
+      },
+      {
+        "rank": 23,
+        "source": "1811.00383:paragraph:0012 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Experimental Setup",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.4613,
+        "keyword": 0.0,
+        "rerank": -0.02,
+        "section": "Experimental Setup",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "In this section, we describe the languages experimented with, datasets used, the network hyper-parameters used in our experiments."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7407,
+        "keyword": 0.1958,
+        "rerank": 0.99,
+        "section": "Network",
+        "query_hits": "match, reordering",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.28,
+        "reasons": "body/table evidence",
+        "preview": "We use the CFILT-preorder system for reordering English sentences to match the Indian language word order. It contains two re-ordering systems: (1) generic rules that apply to all Indian languages BIBREF17 , and (2) hind"
+      },
+      {
+        "rank": 2,
+        "source": "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6239,
+        "keyword": 0.1217,
+        "rerank": 0.6465,
+        "section": "Introduction",
+        "query_hits": "match, words",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6599,
+        "novelty": 0.8229,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1227,
+        "reasons": "body/table evidence",
+        "preview": "To see how word order divergence can be detrimental, let us consider the case of the standard RNN (Bi-LSTM) encoder-attention-decoder architecture BIBREF13 . The encoder generates contextual representations (annotation v"
+      },
+      {
+        "rank": 3,
+        "source": "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6733,
+        "keyword": 0.0356,
+        "rerank": 0.5819,
+        "section": "Introduction",
+        "query_hits": "match",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.5959,
+        "novelty": 0.4272,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9723,
+        "reasons": "body/table evidence",
+        "preview": "To address this word order divergence, we propose to pre-order the assisting language sentences to match the word order of the source language. We consider an extremely resource constrained scenario, where we do not have"
+      },
+      {
+        "rank": 4,
+        "source": "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7295,
+        "keyword": 0.0477,
+        "rerank": 0.7111,
+        "section": "Proposed Solution",
+        "query_hits": "reordering",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7239,
+        "novelty": 0.744,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9667,
+        "reasons": "body/table evidence",
+        "preview": "For instance, consider the English sentence Anurag will meet Thakur. One of the pre-ordering rule swaps the position of the noun phrase followed by a transitive verb with the transitive verb. The original and the resulti"
+      },
+      {
+        "rank": 5,
+        "source": "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6395,
+        "keyword": 0.1163,
+        "rerank": 0.6388,
+        "section": "Results",
+        "query_hits": "words",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.6523,
+        "novelty": 0.6931,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.898,
+        "reasons": "body/table evidence",
+        "preview": "An analysis of the outputs revealed that pre-ordering significantly reducing the number of UNK tokens (placeholder for unknown words) in the test output (Table TABREF14 ). We hypothesize that due to word order divergence"
+      },
+      {
+        "rank": 6,
+        "source": "1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6045,
+        "keyword": 0.0,
+        "rerank": 0.3918,
+        "section": "Addressing Word Order Divergence",
+        "query_hits": "before",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4078,
+        "novelty": 0.8942,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.8759,
+        "reasons": "body/table evidence",
+        "preview": "To the best of our knowledge, no work has addressed word order divergence in transfer learning for multilingual NMT. However, some work exists for other NLP tasks that could potentially address word order. For Named Enti"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "before",
+        "match",
+        "reordering",
+        "them",
+        "they",
+        "words"
+      ],
+      "covered_query_terms": [
+        "before",
+        "match",
+        "reordering",
+        "words"
+      ],
+      "missing_query_terms": [
+        "them",
+        "they"
+      ],
+      "terms_by_chunk": {
+        "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network": [
+          "match",
+          "reordering"
+        ],
+        "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction": [
+          "match",
+          "words"
+        ],
+        "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction": [
+          "match"
+        ],
+        "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution": [
+          "reordering"
+        ],
+        "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results": [
+          "words"
+        ],
+        "1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence": [
+          "before"
+        ]
+      },
+      "section_titles": [
+        "Addressing Word Order Divergence",
+        "Introduction",
+        "Network",
+        "Proposed Solution",
+        "Results"
+      ],
+      "chunks_by_section": {
+        "Network": [
+          "1811.00383:paragraph:0017 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Network"
+        ],
+        "Introduction": [
+          "1811.00383:paragraph:0002 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction",
+          "1811.00383:paragraph:0004 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Introduction"
+        ],
+        "Proposed Solution": [
+          "1811.00383:paragraph:0010 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Proposed Solution"
+        ],
+        "Results": [
+          "1811.00383:paragraph:0020 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Results"
+        ],
+        "Addressing Word Order Divergence": [
+          "1811.00383:paragraph:0006 | Addressing word-order Divergence in Multilingual Neural Machine Translation for extremely Low Resource Languages / Addressing Word Order Divergence"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the retrieved context to answer your question.",
+    "gold_context_answer": "The context mentions the CFILT-preorder system is used for reordering English sentences to match the Indian language word order, and it includes two re-ordering systems: generic rules applicable to all Indian languages and hindi-tuned rules that improve the generic rules based on an error analysis of English-Hindi reordering. However, the context does not explain how they match words before reordering them.",
+    "retrieved_context_answer": "The provided context describes methods for addressing word-order divergence, such as pre-ordering sentences to match the target language's word order [3]. For example, one re-ordering system uses generic rules applicable to all Indian languages and another uses Hindi-tuned rules that improve generic rules based on an error analysis of English-Hindi reordering [1]. An example of a specific reordering rule involves swapping the position of a noun phrase followed by a transitive verb with the transitive verb",
+    "closed_book_f1": 0.0,
+    "gold_context_f1": 0.08823529411764706,
+    "retrieved_context_f1": 0.023529411764705882,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

@@ -1,0 +1,1620 @@
+{
+  "case": {
+    "case_id": "qasper_d087539e6a38c42f0a521ff2173ef42c0733878e",
+    "paper_id": "1909.11687",
+    "paper_title": "Extreme Language Model Compression with Optimal Subwords and Shared Projections",
+    "question_id": "d087539e6a38c42f0a521ff2173ef42c0733878e",
+    "annotation_id": "cbd59a250f25681b5f3c85e4e4a9f8d6c721d59f",
+    "question": "Why are prior knowledge distillation techniques models are ineffective in producing student models with vocabularies different from the original teacher models?",
+    "gold_answer": "distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes.",
+    "answer_type": "extractive",
+    "gold_evidence_ids": [
+      "1909.11687:paragraph:0002"
+    ],
+    "top_k": 6
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "1909.11687:paragraph:0005",
+      "score": 0.8075154865307655,
+      "title": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "text": "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-tokenized and student vocabulary-tokenized words within a single sequence. Coupled with the masked language modeling task, this encourages an implicit alignment of the teacher and student WordPiece embeddings, since the student vocabulary embedding may be used as context to predict a word tokenized by the teacher vocabulary and vice versa."
+    },
+    {
+      "rank": 2,
+      "passage_id": "1909.11687:paragraph:0029",
+      "score": 0.8051269546578457,
+      "title": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+      "text": "For the language modeling evaluation, we also evaluate a baseline without knowledge distillation (termed NoKD), with a model parameterized identically to the distilled student models but trained directly on the teacher model objective from scratch. For downstream tasks, we compare with NoKD as well as Patient Knowledge Distillation (PKD) from BIBREF34, who distill the 12-layer BERTBASE model into 3 and 6-layer BERT models by using the teacher model's hidden states."
+    },
+    {
+      "rank": 3,
+      "passage_id": "1909.11687:abstract:000",
+      "score": 0.9771590631685614,
+      "title": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+      "text": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractical for a number of scenarios, especially on mobile and edge devices. In particular, the input word embedding matrix accounts for a significant proportion of the model's memory footprint, due to the large input vocabulary and embedding dimensions. Knowledge distillation techniques have had success at compressing large neural network models, but they are ineffective at yielding student models with vocabularies different from the original teacher models. We introduce a novel knowledge distillation technique for training a student model with a significantly smaller vocabulary as well as lower embedding and hidden state dimensions. Specifically, we employ a dual-training mechanism that trains the teacher and student models simultaneously to obtain optimal word embeddings for the student vocabulary. We combine this approach with learning shared projection matrices that transfer layer-wise knowledge from the teacher model to the student model. Our method is able to compress the BERT_BASE model by more than 60x, with only a minor drop in downstream task metrics, resulting in a language model with a footprint of under 7MB. Experimental results also demonstrate higher compression efficiency and accuracy when compared with other state-of-the-art compression techniques."
+    },
+    {
+      "rank": 4,
+      "passage_id": "1909.11687:paragraph:0003",
+      "score": 0.7342882179516879,
+      "title": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "text": "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propose to use a significantly smaller vocabulary for the student model learned during distillation. In addition, instead of distilling solely on the teacher model's final-layer outputs, our model leverages layer-wise teacher model parameters to directly optimize the parameters of the corresponding layers in the student model. Specifically, our contributions are:"
+    },
+    {
+      "rank": 5,
+      "passage_id": "1909.11687:paragraph:0017",
+      "score": 0.8839960454917878,
+      "title": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "text": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the masked language modeling task may not align. Even with the high overlap between the two vocabularies, the need to train the student embedding from scratch, and the change in embedding dimension precludes existing knowledge distillation techniques, which rely on the alignment of both models' output spaces. As a result, we explore two alternative approaches that enable implicit transfer of knowledge to the student model, which we describe below."
+    },
+    {
+      "rank": 6,
+      "passage_id": "1909.11687:paragraph:0002",
+      "score": 0.7272165915781458,
+      "title": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "text": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model parameters. For instance, the embedding table of the BERTBASE model, comprising over 30K WordPiece tokens BIBREF14, accounts for over $21\\%$ of the model size. While there has been existing work on reducing NLP model vocabulary sizes BIBREF15, distillation techniques cannot utilize these, since they require the student and teacher models to share the same vocabulary and output space. This profoundly limits their potential to further reduce model sizes."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "attribution": 0.22306017581541174
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "attribution": -0.0314687567284751
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+      "attribution": -0.0116241846028549
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+      "attribution": -0.005338441802517796
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "attribution": 0.004654029660186103
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "attribution": -0.004435999081135107
+    }
+  ],
+  "generated_attributions": [
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+      "attribution": 0.09434835748688791
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "attribution": 0.022630425890299972
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+      "attribution": 0.015291925311615258
+    },
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "attribution": 0.0068135358499552025
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+      "attribution": -0.0027819446031830553
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+      "attribution": 5.66864990151685e-05
+    }
+  ],
+  "gold_interactions": [
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0029",
+      "interaction": 0.006744776254124423
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:abstract:000",
+      "interaction": 0.001878844157513958
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0003",
+      "interaction": -0.0013483915045756233
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": 0.00011423099511084919
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.0007237588553448322
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:abstract:000",
+      "interaction": -0.003093312149906006
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:paragraph:0003",
+      "interaction": -0.0029681341381716203
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": -0.005859310316637657
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.008652768902996724
+    },
+    {
+      "left": "1909.11687:abstract:000",
+      "right": "1909.11687:paragraph:0003",
+      "interaction": 0.005443166417199795
+    },
+    {
+      "left": "1909.11687:abstract:000",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": 0.009329503837126902
+    },
+    {
+      "left": "1909.11687:abstract:000",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": -0.0048213311352454935
+    },
+    {
+      "left": "1909.11687:paragraph:0003",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": -0.011793046595748324
+    },
+    {
+      "left": "1909.11687:paragraph:0003",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": -0.010099376507426186
+    },
+    {
+      "left": "1909.11687:paragraph:0017",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.0412403172674114
+    }
+  ],
+  "generated_interactions": [
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0029",
+      "interaction": -0.0006651546366426805
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:abstract:000",
+      "interaction": 0.005018987150092622
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0003",
+      "interaction": 0.0033829816807680463
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": -0.015137049730810096
+    },
+    {
+      "left": "1909.11687:paragraph:0005",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.003070317873035549
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:abstract:000",
+      "interaction": 0.0074260554409837885
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:paragraph:0003",
+      "interaction": 0.002879328080639304
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": 0.0006927361119442922
+    },
+    {
+      "left": "1909.11687:paragraph:0029",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.0037479273607143246
+    },
+    {
+      "left": "1909.11687:abstract:000",
+      "right": "1909.11687:paragraph:0003",
+      "interaction": 0.0035248786389781785
+    },
+    {
+      "left": "1909.11687:abstract:000",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": 0.01581750526693975
+    },
+    {
+      "left": "1909.11687:abstract:000",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.0035163717378146387
+    },
+    {
+      "left": "1909.11687:paragraph:0003",
+      "right": "1909.11687:paragraph:0017",
+      "interaction": -0.003804608834756426
+    },
+    {
+      "left": "1909.11687:paragraph:0003",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": -0.0020874842268481827
+    },
+    {
+      "left": "1909.11687:paragraph:0017",
+      "right": "1909.11687:paragraph:0002",
+      "interaction": 0.03727034637792461
+    }
+  ],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17484682346927827
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.062024564932214976
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "remaining_chunks": 4,
+        "score": -0.018285163128175186
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "remaining_chunks": 3,
+        "score": -0.010179036937591368
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "remaining_chunks": 2,
+        "score": 0.005423660924008922
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 1,
+        "score": -0.00905983816573197
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "selected_chunks": 1,
+        "score": 0.2011752510341417
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "selected_chunks": 2,
+        "score": 0.1782603654644339
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "selected_chunks": 3,
+        "score": 0.1843265086876099
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "selected_chunks": 4,
+        "score": 0.16369883497866278
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "selected_chunks": 5,
+        "score": 0.1757934428830663
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "selected_chunks": 6,
+        "score": 0.17484682346927827
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17484682346927827
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "remaining_chunks": 5,
+        "score": 0.1862433439168114
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "remaining_chunks": 4,
+        "score": 0.20064907606157079
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 3,
+        "score": 0.21087071949760228
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "remaining_chunks": 2,
+        "score": 0.1881337870718628
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 1,
+        "score": 0.2011752510341417
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.17484682346927827
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 6: 1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 5,
+        "score": -0.062024564932214976
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 1: 1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 4,
+        "score": -0.07103048885750335
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 2: 1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "remaining_chunks": 3,
+        "score": -0.05149187901980051
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: 1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "remaining_chunks": 2,
+        "score": -0.060862362300121486
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: 1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "remaining_chunks": 1,
+        "score": -0.020133391653227806
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: 1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.1748468234692784
+      },
+      {
+        "step": 1,
+        "score": 0.15873585083305247
+      },
+      {
+        "step": 2,
+        "score": 0.12464909171653303
+      },
+      {
+        "step": 3,
+        "score": 0.09505159444127068
+      },
+      {
+        "step": 4,
+        "score": 0.06759307552171195
+      },
+      {
+        "step": 5,
+        "score": 0.030324193626359516
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Why are prior knowledge distillation techniques models are ineffective in producing student models with vocabularies different from the original teacher models?",
+    "expanded_queries": [
+      "Why are prior knowledge distillation techniques models are ineffective in producing student models with vocabularies different from the original teacher models?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "dense": 0.7434,
+        "page": 1,
+        "type": "body_text",
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "flags": "",
+        "preview": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the ma"
+      },
+      {
+        "rank": 2,
+        "source": "1909.11687:paragraph:0011 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Related Work",
+        "dense": 0.7432,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Knowledge distillation BIBREF12, BIBREF13 differs from the other discussed approaches: the smaller student model may be parametrized differently from the bigger teacher model, affording more modeling freedom. Teaching a "
+      },
+      {
+        "rank": 3,
+        "source": "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "dense": 0.715,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-t"
+      },
+      {
+        "rank": 4,
+        "source": "1909.11687:paragraph:0018 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "dense": 0.7125,
+        "page": 1,
+        "type": "body_text",
+        "section": "Methodology ::: Dual Training",
+        "flags": "",
+        "preview": "During distillation, for a given training sequence input to the teacher model, we propose to mix the teacher and student vocabularies by randomly selecting (with a probability $p_{DT}$, a hyperparameter) tokens from the "
+      },
+      {
+        "rank": 5,
+        "source": "1909.11687:paragraph:0043 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Discussion",
+        "dense": 0.7102,
+        "page": 1,
+        "type": "body_text",
+        "section": "Discussion",
+        "flags": "",
+        "preview": "Order of distillation and fine-tuning: Most of the existing work on distilling language models such as BERT and reporting results on downstream tasks, including some of the baselines in this work, first fine-tune a teach"
+      },
+      {
+        "rank": 6,
+        "source": "1909.11687:paragraph:0019 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "dense": 0.7054,
+        "page": 1,
+        "type": "body_text",
+        "section": "Methodology ::: Dual Training",
+        "flags": "",
+        "preview": "The expectation is that the student embeddings can be learned effectively this way from the teacher embeddings as well as model parameters $\\theta _{t}$. Note that we perform dual training only for the teacher model inpu"
+      },
+      {
+        "rank": 7,
+        "source": "1909.11687:paragraph:0001 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "dense": 0.7035,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 t"
+      },
+      {
+        "rank": 8,
+        "source": "1909.11687:paragraph:0012 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Related Work",
+        "dense": 0.6999,
+        "page": 1,
+        "type": "body_text",
+        "section": "Related Work",
+        "flags": "",
+        "preview": "Not limited to the teacher model outputs, some approaches perform knowledge distillation via attention transfer BIBREF29, or via feature maps or intermediate model outputs BIBREF30, BIBREF31, BIBREF32. More relevant to c"
+      },
+      {
+        "rank": 9,
+        "source": "1909.11687:paragraph:0025 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Language Model Training",
+        "dense": 0.6987,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Language Model Training",
+        "flags": "",
+        "preview": "During the distillation of the teacher BERT model to train the student BERT language model, we utilize the same corpus as was used to train the teacher i.e. BooksCorpus BIBREF37 and English Wikipedia, with whitespaces us"
+      },
+      {
+        "rank": 10,
+        "source": "1909.11687:paragraph:0013 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology",
+        "dense": 0.6979,
+        "page": 1,
+        "type": "body_text",
+        "section": "Methodology",
+        "flags": "",
+        "preview": "Our knowledge distillation approach is centered around reducing the number of WordPiece tokens in the model vocabulary. In this section, we first discuss the rationale behind this reduction and the challenges it introduc"
+      },
+      {
+        "rank": 11,
+        "source": "1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "dense": 0.6972,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propo"
+      },
+      {
+        "rank": 12,
+        "source": "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "dense": 0.6962,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Models and Baselines",
+        "flags": "",
+        "preview": "For the language modeling evaluation, we also evaluate a baseline without knowledge distillation (termed NoKD), with a model parameterized identically to the distilled student models but trained directly on the teacher m"
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "keyword": 0.2943,
+        "page": 1,
+        "type": "body_text",
+        "section": "Abstract",
+        "flags": "",
+        "preview": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractic"
+      },
+      {
+        "rank": 2,
+        "source": "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "keyword": 0.1314,
+        "page": 1,
+        "type": "body_text",
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "flags": "",
+        "preview": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the ma"
+      },
+      {
+        "rank": 3,
+        "source": "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "keyword": 0.119,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Models and Baselines",
+        "flags": "",
+        "preview": "For the language modeling evaluation, we also evaluate a baseline without knowledge distillation (termed NoKD), with a model parameterized identically to the distilled student models but trained directly on the teacher m"
+      },
+      {
+        "rank": 4,
+        "source": "1909.11687:paragraph:0030 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Evaluation Tasks and Datasets",
+        "keyword": 0.1077,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Evaluation Tasks and Datasets",
+        "flags": "",
+        "preview": "For explicit evaluation of the generalized language perspective of the distilled student language models, we use the Reddit dataset BIBREF40 to measure word mask prediction accuracy of the student models, since the langu"
+      },
+      {
+        "rank": 5,
+        "source": "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "keyword": 0.0955,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-t"
+      },
+      {
+        "rank": 6,
+        "source": "1909.11687:paragraph:0044 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Conclusion",
+        "keyword": 0.0924,
+        "page": 1,
+        "type": "body_text",
+        "section": "Conclusion",
+        "flags": "",
+        "preview": "We proposed two novel ideas to improve the effectiveness of knowledge distillation for BERT, focusing on using a significantly smaller vocabulary, as well as smaller embedding and hidden dimensions for the student BERT l"
+      },
+      {
+        "rank": 7,
+        "source": "1909.11687:paragraph:0028 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "keyword": 0.0875,
+        "page": 1,
+        "type": "body_text",
+        "section": "Experiments ::: Models and Baselines",
+        "flags": "",
+        "preview": "We evaluate three variants of our distilled student models: with only dual training of the teacher and student vocabularies (DualTrain) and with dual training along with down-projection (DualTrain + SharedProjDown) or up"
+      },
+      {
+        "rank": 8,
+        "source": "1909.11687:paragraph:0037 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Results",
+        "keyword": 0.0791,
+        "page": 1,
+        "type": "body_text",
+        "section": "Results",
+        "flags": "",
+        "preview": "Table TABREF20 contains masked word prediction accuracy figures for the different models and the NoKD baseline. We observe that dual training significantly improves over the baseline for all model dimensions, and that bo"
+      },
+      {
+        "rank": 9,
+        "source": "1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "keyword": 0.0784,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model paramete"
+      },
+      {
+        "rank": 10,
+        "source": "1909.11687:paragraph:0001 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "keyword": 0.0775,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 t"
+      },
+      {
+        "rank": 11,
+        "source": "1909.11687:paragraph:0006 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "keyword": 0.0704,
+        "page": 1,
+        "type": "body_text",
+        "section": "Introduction",
+        "flags": "",
+        "preview": "Shared Variable Projections: To minimize the loss of information from reducing the hidden state dimension, we introduce a separate loss to align the teacher and student models' trainable variables. This allows for more d"
+      },
+      {
+        "rank": 12,
+        "source": "1909.11687:paragraph:0019 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "keyword": 0.063,
+        "page": 1,
+        "type": "body_text",
+        "section": "Methodology ::: Dual Training",
+        "flags": "",
+        "preview": "The expectation is that the student embeddings can be learned effectively this way from the teacher embeddings as well as model parameters $\\theta _{t}$. Note that we perform dual training only for the teacher model inpu"
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6914,
+        "keyword": 0.2943,
+        "rerank": 0.9772,
+        "section": "Abstract",
+        "query_hits": "different, distillation, ineffective, knowledge, models, original, student, teacher, techniques, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractic"
+      },
+      {
+        "rank": 2,
+        "source": "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7434,
+        "keyword": 0.1314,
+        "rerank": 0.884,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "distillation, knowledge, models, student, teacher, techniques, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the ma"
+      },
+      {
+        "rank": 3,
+        "source": "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.715,
+        "keyword": 0.0955,
+        "rerank": 0.8075,
+        "section": "Introduction",
+        "query_hits": "different, distillation, models, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-t"
+      },
+      {
+        "rank": 4,
+        "source": "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6962,
+        "keyword": 0.119,
+        "rerank": 0.8051,
+        "section": "Experiments ::: Models and Baselines",
+        "query_hits": "distillation, knowledge, models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "For the language modeling evaluation, we also evaluate a baseline without knowledge distillation (termed NoKD), with a model parameterized identically to the distilled student models but trained directly on the teacher m"
+      },
+      {
+        "rank": 5,
+        "source": "1909.11687:paragraph:0011 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7432,
+        "keyword": 0.0406,
+        "rerank": 0.791,
+        "section": "Related Work",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Knowledge distillation BIBREF12, BIBREF13 differs from the other discussed approaches: the smaller student model may be parametrized differently from the bigger teacher model, affording more modeling freedom. Teaching a "
+      },
+      {
+        "rank": 6,
+        "source": "1909.11687:paragraph:0019 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7054,
+        "keyword": 0.063,
+        "rerank": 0.761,
+        "section": "Methodology ::: Dual Training",
+        "query_hits": "different, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "The expectation is that the student embeddings can be learned effectively this way from the teacher embeddings as well as model parameters $\\theta _{t}$. Note that we perform dual training only for the teacher model inpu"
+      },
+      {
+        "rank": 7,
+        "source": "1909.11687:paragraph:0018 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7125,
+        "keyword": 0.045,
+        "rerank": 0.7526,
+        "section": "Methodology ::: Dual Training",
+        "query_hits": "distillation, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "During distillation, for a given training sequence input to the teacher model, we propose to mix the teacher and student vocabularies by randomly selecting (with a probability $p_{DT}$, a hyperparameter) tokens from the "
+      },
+      {
+        "rank": 8,
+        "source": "1909.11687:paragraph:0012 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6999,
+        "keyword": 0.0602,
+        "rerank": 0.7504,
+        "section": "Related Work",
+        "query_hits": "distillation, knowledge, student, teacher, techniques, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Not limited to the teacher model outputs, some approaches perform knowledge distillation via attention transfer BIBREF29, or via feature maps or intermediate model outputs BIBREF30, BIBREF31, BIBREF32. More relevant to c"
+      },
+      {
+        "rank": 9,
+        "source": "1909.11687:paragraph:0028 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6731,
+        "keyword": 0.0875,
+        "rerank": 0.7408,
+        "section": "Experiments ::: Models and Baselines",
+        "query_hits": "models, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate three variants of our distilled student models: with only dual training of the teacher and student vocabularies (DualTrain) and with dual training along with down-projection (DualTrain + SharedProjDown) or up"
+      },
+      {
+        "rank": 10,
+        "source": "1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6972,
+        "keyword": 0.0481,
+        "rerank": 0.7343,
+        "section": "Introduction",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propo"
+      },
+      {
+        "rank": 11,
+        "source": "1909.11687:paragraph:0044 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6648,
+        "keyword": 0.0924,
+        "rerank": 0.7341,
+        "section": "Conclusion",
+        "query_hits": "distillation, knowledge, models, student, teacher, techniques",
+        "reasons": "body/table evidence",
+        "preview": "We proposed two novel ideas to improve the effectiveness of knowledge distillation for BERT, focusing on using a significantly smaller vocabulary, as well as smaller embedding and hidden dimensions for the student BERT l"
+      },
+      {
+        "rank": 12,
+        "source": "1909.11687:paragraph:0043 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7102,
+        "keyword": 0.0582,
+        "rerank": 0.7328,
+        "section": "Discussion",
+        "query_hits": "distillation, models, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Order of distillation and fine-tuning: Most of the existing work on distilling language models such as BERT and reporting results on downstream tasks, including some of the baselines in this work, first fine-tune a teach"
+      },
+      {
+        "rank": 13,
+        "source": "1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6701,
+        "keyword": 0.0784,
+        "rerank": 0.7272,
+        "section": "Introduction",
+        "query_hits": "distillation, models, student, teacher, techniques",
+        "reasons": "body/table evidence",
+        "preview": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model paramete"
+      },
+      {
+        "rank": 14,
+        "source": "1909.11687:paragraph:0030 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Evaluation Tasks and Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6277,
+        "keyword": 0.1077,
+        "rerank": 0.6978,
+        "section": "Experiments ::: Evaluation Tasks and Datasets",
+        "query_hits": "different, models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "For explicit evaluation of the generalized language perspective of the distilled student language models, we use the Reddit dataset BIBREF40 to measure word mask prediction accuracy of the student models, since the langu"
+      },
+      {
+        "rank": 15,
+        "source": "1909.11687:paragraph:0037 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6478,
+        "keyword": 0.0791,
+        "rerank": 0.6967,
+        "section": "Results",
+        "query_hits": "different, models, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF20 contains masked word prediction accuracy figures for the different models and the NoKD baseline. We observe that dual training significantly improves over the baseline for all model dimensions, and that bo"
+      },
+      {
+        "rank": 16,
+        "source": "1909.11687:paragraph:0025 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Language Model Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6987,
+        "keyword": 0.0282,
+        "rerank": 0.6862,
+        "section": "Experiments ::: Language Model Training",
+        "query_hits": "distillation, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "During the distillation of the teacher BERT model to train the student BERT language model, we utilize the same corpus as was used to train the teacher i.e. BooksCorpus BIBREF37 and English Wikipedia, with whitespaces us"
+      },
+      {
+        "rank": 17,
+        "source": "1909.11687:paragraph:0024 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6651,
+        "keyword": 0.0449,
+        "rerank": 0.6861,
+        "section": "Experiments",
+        "query_hits": "distillation, knowledge, models, student",
+        "reasons": "body/table evidence",
+        "preview": "To evaluate our knowledge distillation approach, we design two classes of experiments. First, we evaluate the distilled student language models using the masked word prediction task on an unseen evaluation corpus, for an"
+      },
+      {
+        "rank": 18,
+        "source": "1909.11687:paragraph:0001 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7035,
+        "keyword": 0.0775,
+        "rerank": 0.6731,
+        "section": "Introduction",
+        "query_hits": "distillation, knowledge, student, teacher, techniques",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 t"
+      },
+      {
+        "rank": 19,
+        "source": "1909.11687:paragraph:0014 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6507,
+        "keyword": 0.0438,
+        "rerank": 0.6648,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "We follow the general knowledge distillation paradigm of training a small student model from a large teacher model. Our teacher model is a 12-layer uncased BERTBASE, trained with 30522 WordPiece tokens and 768-dimensiona"
+      },
+      {
+        "rank": 20,
+        "source": "1909.11687:paragraph:0045 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6638,
+        "keyword": 0.0457,
+        "rerank": 0.6551,
+        "section": "Conclusion",
+        "query_hits": "models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "One future direction of interest is to combine our approach with existing work to reduce the number of layers in the student models and explore other approaches such as low-rank matrix factorization to transfer model par"
+      },
+      {
+        "rank": 21,
+        "source": "1909.11687:paragraph:0016 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6697,
+        "keyword": 0.0375,
+        "rerank": 0.655,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "original, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Since we seek to train a general-purpose student language model, we elect to reuse the teacher model's original training objective to optimize the student model, i.e., masked language modeling and next sentence predictio"
+      },
+      {
+        "rank": 22,
+        "source": "1909.11687:paragraph:0013 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6979,
+        "keyword": 0.0614,
+        "rerank": 0.6188,
+        "section": "Methodology",
+        "query_hits": "distillation, knowledge, techniques",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our knowledge distillation approach is centered around reducing the number of WordPiece tokens in the model vocabulary. In this section, we first discuss the rationale behind this reduction and the challenges it introduc"
+      },
+      {
+        "rank": 23,
+        "source": "1909.11687:paragraph:0040 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6391,
+        "keyword": 0.0421,
+        "rerank": 0.6169,
+        "section": "Discussion",
+        "query_hits": "models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Shared projections and model performance: We see that for downstream task performance, dual training still consistently improves upon the direct fine-tuning approach for virtually all experiments. The effect of shared va"
+      },
+      {
+        "rank": 24,
+        "source": "1909.11687:paragraph:0038 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6287,
+        "keyword": 0.0498,
+        "rerank": 0.61,
+        "section": "Results",
+        "query_hits": "models, teacher, techniques",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF21 shows results on the downstream language understanding tasks, as well as model sizes, for our approaches, the BERTBASE teacher model, and the PKD and NoKD baselines. We note that models trained with our pr"
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6914,
+        "keyword": 0.2943,
+        "rerank": 0.9772,
+        "section": "Abstract",
+        "query_hits": "different, distillation, ineffective, knowledge, models, original, student, teacher, techniques, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractic"
+      },
+      {
+        "rank": 2,
+        "source": "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7434,
+        "keyword": 0.1314,
+        "rerank": 0.884,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "distillation, knowledge, models, student, teacher, techniques, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the ma"
+      },
+      {
+        "rank": 3,
+        "source": "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.715,
+        "keyword": 0.0955,
+        "rerank": 0.8075,
+        "section": "Introduction",
+        "query_hits": "different, distillation, models, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-t"
+      },
+      {
+        "rank": 4,
+        "source": "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6962,
+        "keyword": 0.119,
+        "rerank": 0.8051,
+        "section": "Experiments ::: Models and Baselines",
+        "query_hits": "distillation, knowledge, models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "For the language modeling evaluation, we also evaluate a baseline without knowledge distillation (termed NoKD), with a model parameterized identically to the distilled student models but trained directly on the teacher m"
+      },
+      {
+        "rank": 5,
+        "source": "1909.11687:paragraph:0011 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7432,
+        "keyword": 0.0406,
+        "rerank": 0.791,
+        "section": "Related Work",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Knowledge distillation BIBREF12, BIBREF13 differs from the other discussed approaches: the smaller student model may be parametrized differently from the bigger teacher model, affording more modeling freedom. Teaching a "
+      },
+      {
+        "rank": 6,
+        "source": "1909.11687:paragraph:0019 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7054,
+        "keyword": 0.063,
+        "rerank": 0.761,
+        "section": "Methodology ::: Dual Training",
+        "query_hits": "different, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "The expectation is that the student embeddings can be learned effectively this way from the teacher embeddings as well as model parameters $\\theta _{t}$. Note that we perform dual training only for the teacher model inpu"
+      },
+      {
+        "rank": 7,
+        "source": "1909.11687:paragraph:0018 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Dual Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7125,
+        "keyword": 0.045,
+        "rerank": 0.7526,
+        "section": "Methodology ::: Dual Training",
+        "query_hits": "distillation, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "During distillation, for a given training sequence input to the teacher model, we propose to mix the teacher and student vocabularies by randomly selecting (with a probability $p_{DT}$, a hyperparameter) tokens from the "
+      },
+      {
+        "rank": 8,
+        "source": "1909.11687:paragraph:0012 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Related Work",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6999,
+        "keyword": 0.0602,
+        "rerank": 0.7504,
+        "section": "Related Work",
+        "query_hits": "distillation, knowledge, student, teacher, techniques, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Not limited to the teacher model outputs, some approaches perform knowledge distillation via attention transfer BIBREF29, or via feature maps or intermediate model outputs BIBREF30, BIBREF31, BIBREF32. More relevant to c"
+      },
+      {
+        "rank": 9,
+        "source": "1909.11687:paragraph:0028 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6731,
+        "keyword": 0.0875,
+        "rerank": 0.7408,
+        "section": "Experiments ::: Models and Baselines",
+        "query_hits": "models, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "We evaluate three variants of our distilled student models: with only dual training of the teacher and student vocabularies (DualTrain) and with dual training along with down-projection (DualTrain + SharedProjDown) or up"
+      },
+      {
+        "rank": 10,
+        "source": "1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6972,
+        "keyword": 0.0481,
+        "rerank": 0.7343,
+        "section": "Introduction",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propo"
+      },
+      {
+        "rank": 11,
+        "source": "1909.11687:paragraph:0044 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6648,
+        "keyword": 0.0924,
+        "rerank": 0.7341,
+        "section": "Conclusion",
+        "query_hits": "distillation, knowledge, models, student, teacher, techniques",
+        "reasons": "body/table evidence",
+        "preview": "We proposed two novel ideas to improve the effectiveness of knowledge distillation for BERT, focusing on using a significantly smaller vocabulary, as well as smaller embedding and hidden dimensions for the student BERT l"
+      },
+      {
+        "rank": 12,
+        "source": "1909.11687:paragraph:0043 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7102,
+        "keyword": 0.0582,
+        "rerank": 0.7328,
+        "section": "Discussion",
+        "query_hits": "distillation, models, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Order of distillation and fine-tuning: Most of the existing work on distilling language models such as BERT and reporting results on downstream tasks, including some of the baselines in this work, first fine-tune a teach"
+      },
+      {
+        "rank": 13,
+        "source": "1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6701,
+        "keyword": 0.0784,
+        "rerank": 0.7272,
+        "section": "Introduction",
+        "query_hits": "distillation, models, student, teacher, techniques",
+        "reasons": "body/table evidence",
+        "preview": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model paramete"
+      },
+      {
+        "rank": 14,
+        "source": "1909.11687:paragraph:0030 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Evaluation Tasks and Datasets",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6277,
+        "keyword": 0.1077,
+        "rerank": 0.6978,
+        "section": "Experiments ::: Evaluation Tasks and Datasets",
+        "query_hits": "different, models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "For explicit evaluation of the generalized language perspective of the distilled student language models, we use the Reddit dataset BIBREF40 to measure word mask prediction accuracy of the student models, since the langu"
+      },
+      {
+        "rank": 15,
+        "source": "1909.11687:paragraph:0037 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6478,
+        "keyword": 0.0791,
+        "rerank": 0.6967,
+        "section": "Results",
+        "query_hits": "different, models, student, teacher, vocabularies",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF20 contains masked word prediction accuracy figures for the different models and the NoKD baseline. We observe that dual training significantly improves over the baseline for all model dimensions, and that bo"
+      },
+      {
+        "rank": 16,
+        "source": "1909.11687:paragraph:0025 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Language Model Training",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6987,
+        "keyword": 0.0282,
+        "rerank": 0.6862,
+        "section": "Experiments ::: Language Model Training",
+        "query_hits": "distillation, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "During the distillation of the teacher BERT model to train the student BERT language model, we utilize the same corpus as was used to train the teacher i.e. BooksCorpus BIBREF37 and English Wikipedia, with whitespaces us"
+      },
+      {
+        "rank": 17,
+        "source": "1909.11687:paragraph:0024 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6651,
+        "keyword": 0.0449,
+        "rerank": 0.6861,
+        "section": "Experiments",
+        "query_hits": "distillation, knowledge, models, student",
+        "reasons": "body/table evidence",
+        "preview": "To evaluate our knowledge distillation approach, we design two classes of experiments. First, we evaluate the distilled student language models using the masked word prediction task on an unseen evaluation corpus, for an"
+      },
+      {
+        "rank": 18,
+        "source": "1909.11687:paragraph:0001 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7035,
+        "keyword": 0.0775,
+        "rerank": 0.6731,
+        "section": "Introduction",
+        "query_hits": "distillation, knowledge, student, teacher, techniques",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Besides utilizing model quantization techniques BIBREF10, BIBREF11 which aim to reduce the floating-point accuracy of the parameters, significant recent research has focused on knowledge distillation BIBREF12, BIBREF13 t"
+      },
+      {
+        "rank": 19,
+        "source": "1909.11687:paragraph:0014 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6507,
+        "keyword": 0.0438,
+        "rerank": 0.6648,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "We follow the general knowledge distillation paradigm of training a small student model from a large teacher model. Our teacher model is a 12-layer uncased BERTBASE, trained with 30522 WordPiece tokens and 768-dimensiona"
+      },
+      {
+        "rank": 20,
+        "source": "1909.11687:paragraph:0045 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Conclusion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6638,
+        "keyword": 0.0457,
+        "rerank": 0.6551,
+        "section": "Conclusion",
+        "query_hits": "models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "One future direction of interest is to combine our approach with existing work to reduce the number of layers in the student models and explore other approaches such as low-rank matrix factorization to transfer model par"
+      },
+      {
+        "rank": 21,
+        "source": "1909.11687:paragraph:0016 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6697,
+        "keyword": 0.0375,
+        "rerank": 0.655,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "original, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Since we seek to train a general-purpose student language model, we elect to reuse the teacher model's original training objective to optimize the student model, i.e., masked language modeling and next sentence predictio"
+      },
+      {
+        "rank": 22,
+        "source": "1909.11687:paragraph:0013 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6979,
+        "keyword": 0.0614,
+        "rerank": 0.6188,
+        "section": "Methodology",
+        "query_hits": "distillation, knowledge, techniques",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Our knowledge distillation approach is centered around reducing the number of WordPiece tokens in the model vocabulary. In this section, we first discuss the rationale behind this reduction and the challenges it introduc"
+      },
+      {
+        "rank": 23,
+        "source": "1909.11687:paragraph:0040 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Discussion",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6391,
+        "keyword": 0.0421,
+        "rerank": 0.6169,
+        "section": "Discussion",
+        "query_hits": "models, student, teacher",
+        "reasons": "body/table evidence",
+        "preview": "Shared projections and model performance: We see that for downstream task performance, dual training still consistently improves upon the direct fine-tuning approach for virtually all experiments. The effect of shared va"
+      },
+      {
+        "rank": 24,
+        "source": "1909.11687:paragraph:0038 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Results",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6287,
+        "keyword": 0.0498,
+        "rerank": 0.61,
+        "section": "Results",
+        "query_hits": "models, teacher, techniques",
+        "reasons": "body/table evidence",
+        "preview": "Table TABREF21 shows results on the downstream language understanding tasks, as well as model sizes, for our approaches, the BERTBASE teacher model, and the PKD and NoKD baselines. We note that models trained with our pr"
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.715,
+        "keyword": 0.0955,
+        "rerank": 0.8075,
+        "section": "Introduction",
+        "query_hits": "different, distillation, models, student, teacher, vocabularies",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8299,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.3337,
+        "reasons": "body/table evidence",
+        "preview": "Dual Training: Our teacher and student models have different vocabularies and incompatible tokenizations for the same sequence. To address this during distillation, we feed the teacher model a mix of teacher vocabulary-t"
+      },
+      {
+        "rank": 2,
+        "source": "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6962,
+        "keyword": 0.119,
+        "rerank": 0.8051,
+        "section": "Experiments ::: Models and Baselines",
+        "query_hits": "distillation, knowledge, models, student, teacher",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.8275,
+        "novelty": 0.7464,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2961,
+        "reasons": "body/table evidence",
+        "preview": "For the language modeling evaluation, we also evaluate a baseline without knowledge distillation (termed NoKD), with a model parameterized identically to the distilled student models but trained directly on the teacher m"
+      },
+      {
+        "rank": 3,
+        "source": "1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6914,
+        "keyword": 0.2943,
+        "rerank": 0.9772,
+        "section": "Abstract",
+        "query_hits": "different, distillation, ineffective, knowledge, models, original, student, teacher, techniques, vocabularies",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 0.77,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.2878,
+        "reasons": "body/table evidence",
+        "preview": "Pre-trained deep neural network language models such as ELMo, GPT, BERT and XLNet have recently achieved state-of-the-art performance on a variety of language understanding tasks. However, their size makes them impractic"
+      },
+      {
+        "rank": 4,
+        "source": "1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6972,
+        "keyword": 0.0481,
+        "rerank": 0.7343,
+        "section": "Introduction",
+        "query_hits": "distillation, knowledge, student, teacher",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7564,
+        "novelty": 0.4574,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1946,
+        "reasons": "body/table evidence",
+        "preview": "We present two novel ideas to improve the effectiveness of knowledge distillation, in particular for BERT, with the focus on bringing down model sizes to as much as a few mega-bytes. Our model is among the first to propo"
+      },
+      {
+        "rank": 5,
+        "source": "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.7434,
+        "keyword": 0.1314,
+        "rerank": 0.884,
+        "section": "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation",
+        "query_hits": "distillation, knowledge, models, student, teacher, techniques, vocabularies",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9066,
+        "novelty": 0.6469,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.2,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1902,
+        "reasons": "body/table evidence",
+        "preview": "However, since the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently. As a result, the outputs of the teacher and student model for the ma"
+      },
+      {
+        "rank": 6,
+        "source": "1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.6701,
+        "keyword": 0.0784,
+        "rerank": 0.7272,
+        "section": "Introduction",
+        "query_hits": "distillation, models, student, teacher, techniques",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.7493,
+        "novelty": 0.4475,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.36,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.1871,
+        "reasons": "body/table evidence",
+        "preview": "However, a significant bottleneck that has been overlooked by previous efforts is the input vocabulary size and its corresponding word embedding matrix, often accounting for a significant proportion of all model paramete"
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "different",
+        "distillation",
+        "ineffective",
+        "knowledge",
+        "models",
+        "original",
+        "prior",
+        "producing",
+        "student",
+        "teacher",
+        "techniques",
+        "vocabularies"
+      ],
+      "covered_query_terms": [
+        "different",
+        "distillation",
+        "ineffective",
+        "knowledge",
+        "models",
+        "original",
+        "student",
+        "teacher",
+        "techniques",
+        "vocabularies"
+      ],
+      "missing_query_terms": [
+        "prior",
+        "producing"
+      ],
+      "terms_by_chunk": {
+        "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction": [
+          "different",
+          "distillation",
+          "models",
+          "student",
+          "teacher",
+          "vocabularies"
+        ],
+        "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines": [
+          "distillation",
+          "knowledge",
+          "models",
+          "student",
+          "teacher"
+        ],
+        "1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract": [
+          "different",
+          "distillation",
+          "ineffective",
+          "knowledge",
+          "models",
+          "original",
+          "student",
+          "teacher",
+          "techniques",
+          "vocabularies"
+        ],
+        "1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction": [
+          "distillation",
+          "knowledge",
+          "student",
+          "teacher"
+        ],
+        "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation": [
+          "distillation",
+          "knowledge",
+          "models",
+          "student",
+          "teacher",
+          "techniques",
+          "vocabularies"
+        ],
+        "1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction": [
+          "distillation",
+          "models",
+          "student",
+          "teacher",
+          "techniques"
+        ]
+      },
+      "section_titles": [
+        "Abstract",
+        "Experiments ::: Models and Baselines",
+        "Introduction",
+        "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation"
+      ],
+      "chunks_by_section": {
+        "Introduction": [
+          "1909.11687:paragraph:0005 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+          "1909.11687:paragraph:0003 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction",
+          "1909.11687:paragraph:0002 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Introduction"
+        ],
+        "Experiments ::: Models and Baselines": [
+          "1909.11687:paragraph:0029 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Experiments ::: Models and Baselines"
+        ],
+        "Abstract": [
+          "1909.11687:abstract:000 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Abstract"
+        ],
+        "Methodology ::: Optimal Subword Embeddings via Knowledge Distillation": [
+          "1909.11687:paragraph:0017 | Extreme Language Model Compression with Optimal Subwords and Shared Projections / Methodology ::: Optimal Subword Embeddings via Knowledge Distillation"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {
+    "closed_book_answer": "I do not have the necessary context to answer your question.",
+    "gold_context_answer": "Distillation techniques are unable to utilize vocabulary size reduction because they necessitate that the student and teacher models share the same vocabulary and output space.",
+    "retrieved_context_answer": "Knowledge distillation techniques are ineffective at yielding student models with vocabularies different from the original teacher models because, in general, these techniques require the student and teacher models to share the same vocabulary and output space.\n\nSpecific reasons include:\n*   When the student vocabulary is not a complete subset of the teacher vocabulary, the two vocabularies may tokenize the same words differently, which can cause the outputs of the teacher and student model for the masked language modeling task to not align.",
+    "closed_book_f1": 0.09523809523809523,
+    "gold_context_f1": 0.6071428571428571,
+    "retrieved_context_f1": 0.33928571428571425,
+    "closed_book_exact_match": 0.0,
+    "gold_context_exact_match": 0.0,
+    "retrieved_context_exact_match": 0.0,
+    "knowledge_source_class": "generation_or_model_failure"
+  },
+  "failure_category": "generation_failure_with_gold_context"
+}

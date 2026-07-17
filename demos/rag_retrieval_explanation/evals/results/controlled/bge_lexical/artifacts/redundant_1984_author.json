@@ -1,0 +1,2371 @@
+{
+  "case": {
+    "case_id": "redundant_1984_author",
+    "pattern": "redundant_evidence",
+    "question": "Who wrote Nineteen Eighty-Four?",
+    "gold_answer": "George Orwell.",
+    "gold_evidence_ids": [
+      "redundant_orwell_a",
+      "redundant_orwell_b",
+      "redundant_orwell_c"
+    ],
+    "top_k": 6,
+    "expected_interactions": [
+      {
+        "left": "redundant_orwell_a",
+        "right": "redundant_orwell_b",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_orwell_a",
+        "right": "redundant_orwell_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      },
+      {
+        "left": "redundant_orwell_b",
+        "right": "redundant_orwell_c",
+        "relation": "redundant",
+        "expected_sign": "negative"
+      }
+    ]
+  },
+  "retrieved": [
+    {
+      "rank": 1,
+      "passage_id": "redundant_orwell_a",
+      "score": 0.9063398968617508,
+      "title": "Retrieved 1: redundant_orwell_a | 1984 author direct",
+      "text": "George Orwell wrote the novel Nineteen Eighty-Four."
+    },
+    {
+      "rank": 2,
+      "passage_id": "redundant_orwell_b",
+      "score": 0.8271218276558259,
+      "title": "Retrieved 2: redundant_orwell_b | 1984 by Orwell",
+      "text": "Nineteen Eighty-Four is a dystopian novel by George Orwell."
+    },
+    {
+      "rank": 3,
+      "passage_id": "direct_austen_bronte",
+      "score": 0.35168909345718047,
+      "title": "Retrieved 3: direct_austen_bronte | Jane Eyre",
+      "text": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+    },
+    {
+      "rank": 4,
+      "passage_id": "redundant_orwell_huxley_distractor",
+      "score": 0.3829726918288472,
+      "title": "Retrieved 4: redundant_orwell_huxley_distractor | Brave New World distractor",
+      "text": "Aldous Huxley wrote Brave New World, another dystopian novel."
+    },
+    {
+      "rank": 5,
+      "passage_id": "redundant_orwell_c",
+      "score": 0.40973563772463123,
+      "title": "Retrieved 5: redundant_orwell_c | Orwell novel wording",
+      "text": "The book 1984 belongs to the works of George Orwell."
+    },
+    {
+      "rank": 6,
+      "passage_id": "missing_mars_orbit",
+      "score": 0.16336201708924974,
+      "title": "Retrieved 6: missing_mars_orbit | Mars orbit",
+      "text": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+    }
+  ],
+  "gold_attributions": [
+    {
+      "player": 1,
+      "chunk": "Retrieved 1: redundant_orwell_a | 1984 author direct",
+      "attribution": 0.3249167169225994
+    },
+    {
+      "player": 2,
+      "chunk": "Retrieved 2: redundant_orwell_b | 1984 by Orwell",
+      "attribution": 0.31491670743431543
+    },
+    {
+      "player": 5,
+      "chunk": "Retrieved 5: redundant_orwell_c | Orwell novel wording",
+      "attribution": 0.26991662632460267
+    },
+    {
+      "player": 6,
+      "chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+      "attribution": -0.02325004926125289
+    },
+    {
+      "player": 4,
+      "chunk": "Retrieved 4: redundant_orwell_huxley_distractor | Brave New World distractor",
+      "attribution": -0.013249997774411966
+    },
+    {
+      "player": 3,
+      "chunk": "Retrieved 3: direct_austen_bronte | Jane Eyre",
+      "attribution": -0.013249996615019256
+    }
+  ],
+  "generated_attributions": [],
+  "interactions": [
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_b",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.53675000641265,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.4467499917519419,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    },
+    {
+      "left": "redundant_orwell_b",
+      "right": "redundant_orwell_c",
+      "relation": "redundant",
+      "expected_sign": "negative",
+      "observed_interaction": -0.44674999836277196,
+      "interaction_sign_correct": true,
+      "status": "evaluable"
+    }
+  ],
+  "generated_interactions": [],
+  "gold_pairwise_interactions": [
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_b",
+      "left_rank": 1,
+      "right_rank": 2,
+      "interaction": -0.53675000641265,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "direct_austen_bronte",
+      "left_rank": 1,
+      "right_rank": 3,
+      "interaction": -0.022166665412671045,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 1,
+      "right_rank": 4,
+      "interaction": -0.022166667733857084,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "redundant_orwell_c",
+      "left_rank": 1,
+      "right_rank": 5,
+      "interaction": -0.4467499917519419,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_a",
+      "right": "missing_mars_orbit",
+      "left_rank": 1,
+      "right_rank": 6,
+      "interaction": -0.007166661882213565,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_b",
+      "right": "direct_austen_bronte",
+      "left_rank": 2,
+      "right_rank": 3,
+      "interaction": -0.007166665160126702,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_b",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 2,
+      "right_rank": 4,
+      "interaction": -0.007166659928977144,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_b",
+      "right": "redundant_orwell_c",
+      "left_rank": 2,
+      "right_rank": 5,
+      "interaction": -0.44674999836277196,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_b",
+      "right": "missing_mars_orbit",
+      "left_rank": 2,
+      "right_rank": 6,
+      "interaction": -0.0071666633288077165,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_austen_bronte",
+      "right": "redundant_orwell_huxley_distractor",
+      "left_rank": 3,
+      "right_rank": 4,
+      "interaction": -0.02175000038894834,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_austen_bronte",
+      "right": "redundant_orwell_c",
+      "left_rank": 3,
+      "right_rank": 5,
+      "interaction": -0.00716666843524892,
+      "sign": "negative"
+    },
+    {
+      "left": "direct_austen_bronte",
+      "right": "missing_mars_orbit",
+      "left_rank": 3,
+      "right_rank": 6,
+      "interaction": -0.006749993796338598,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_huxley_distractor",
+      "right": "redundant_orwell_c",
+      "left_rank": 4,
+      "right_rank": 5,
+      "interaction": -0.007166662799473768,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_huxley_distractor",
+      "right": "missing_mars_orbit",
+      "left_rank": 4,
+      "right_rank": 6,
+      "interaction": -0.006750002342076923,
+      "sign": "negative"
+    },
+    {
+      "left": "redundant_orwell_c",
+      "right": "missing_mars_orbit",
+      "left_rank": 5,
+      "right_rank": 6,
+      "interaction": -0.007166671843896643,
+      "sign": "negative"
+    }
+  ],
+  "generated_pairwise_interactions": [],
+  "gold_coalition_scores": [
+    {
+      "players": [],
+      "passage_ids": [],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1
+      ],
+      "passage_ids": [
+        "redundant_orwell_a"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2
+      ],
+      "passage_ids": [
+        "redundant_orwell_b"
+      ],
+      "score": 0.97
+    },
+    {
+      "players": [
+        3
+      ],
+      "passage_ids": [
+        "direct_austen_bronte"
+      ],
+      "score": 0.03
+    },
+    {
+      "players": [
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.03
+    },
+    {
+      "players": [
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_c"
+      ],
+      "score": 0.88
+    },
+    {
+      "players": [
+        6
+      ],
+      "passage_ids": [
+        "missing_mars_orbit"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        1,
+        2
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        3
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_c"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        1,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "missing_mars_orbit"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 1.0
+    },
+    {
+      "players": [
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "redundant_orwell_c"
+      ],
+      "score": 0.97
+    },
+    {
+      "players": [
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.97
+    },
+    {
+      "players": [
+        3,
+        4
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.03
+    },
+    {
+      "players": [
+        3,
+        5
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "redundant_orwell_c"
+      ],
+      "score": 0.91
+    },
+    {
+      "players": [
+        3,
+        6
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "missing_mars_orbit"
+      ],
+      "score": 0.03
+    },
+    {
+      "players": [
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.91
+    },
+    {
+      "players": [
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.03
+    },
+    {
+      "players": [
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.88
+    },
+    {
+      "players": [
+        1,
+        2,
+        3
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "redundant_orwell_c"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        2,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "redundant_orwell_c"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        1,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_c"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.965
+    },
+    {
+      "players": [
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9349999999999999
+    },
+    {
+      "players": [
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.875
+    },
+    {
+      "players": [
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.0
+    },
+    {
+      "players": [
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.875
+    },
+    {
+      "players": [
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.875
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_c"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        1,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.9299999999999999
+    },
+    {
+      "players": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.8400000000000001
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "missing_mars_orbit"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.895
+    },
+    {
+      "players": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "passage_ids": [
+        "redundant_orwell_a",
+        "redundant_orwell_b",
+        "direct_austen_bronte",
+        "redundant_orwell_huxley_distractor",
+        "redundant_orwell_c",
+        "missing_mars_orbit"
+      ],
+      "score": 0.86
+    }
+  ],
+  "generated_coalition_scores": [],
+  "faithfulness_curves": {
+    "gold_shapley_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_orwell_a | 1984 author direct",
+        "remaining_chunks": 5,
+        "score": 0.895
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_orwell_b | 1984 by Orwell",
+        "remaining_chunks": 4,
+        "score": 0.8400000000000001
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: redundant_orwell_c | Orwell novel wording",
+        "remaining_chunks": 3,
+        "score": 0.0
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 2,
+        "score": 0.03
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 4: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "remaining_chunks": 1,
+        "score": 0.03
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 3: direct_austen_bronte | Jane Eyre",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "gold_shapley_insertion": [
+      {
+        "step": 0,
+        "added_chunk": "none",
+        "selected_chunks": 0,
+        "score": 0.0
+      },
+      {
+        "step": 1,
+        "added_chunk": "Retrieved 1: redundant_orwell_a | 1984 author direct",
+        "selected_chunks": 1,
+        "score": 1.0
+      },
+      {
+        "step": 2,
+        "added_chunk": "Retrieved 2: redundant_orwell_b | 1984 by Orwell",
+        "selected_chunks": 2,
+        "score": 1.0
+      },
+      {
+        "step": 3,
+        "added_chunk": "Retrieved 5: redundant_orwell_c | Orwell novel wording",
+        "selected_chunks": 3,
+        "score": 0.965
+      },
+      {
+        "step": 4,
+        "added_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "selected_chunks": 4,
+        "score": 0.9299999999999999
+      },
+      {
+        "step": 5,
+        "added_chunk": "Retrieved 4: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "selected_chunks": 5,
+        "score": 0.895
+      },
+      {
+        "step": 6,
+        "added_chunk": "Retrieved 3: direct_austen_bronte | Jane Eyre",
+        "selected_chunks": 6,
+        "score": 0.86
+      }
+    ],
+    "retrieval_score_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_orwell_a | 1984 author direct",
+        "remaining_chunks": 5,
+        "score": 0.895
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_orwell_b | 1984 by Orwell",
+        "remaining_chunks": 4,
+        "score": 0.8400000000000001
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 5: redundant_orwell_c | Orwell novel wording",
+        "remaining_chunks": 3,
+        "score": 0.0
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "remaining_chunks": 2,
+        "score": 0.03
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 3: direct_austen_bronte | Jane Eyre",
+        "remaining_chunks": 1,
+        "score": 0.0
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "leave_one_out_deletion": [
+      {
+        "step": 0,
+        "removed_chunk": "none",
+        "remaining_chunks": 6,
+        "score": 0.86
+      },
+      {
+        "step": 1,
+        "removed_chunk": "Retrieved 1: redundant_orwell_a | 1984 author direct",
+        "remaining_chunks": 5,
+        "score": 0.895
+      },
+      {
+        "step": 2,
+        "removed_chunk": "Retrieved 2: redundant_orwell_b | 1984 by Orwell",
+        "remaining_chunks": 4,
+        "score": 0.8400000000000001
+      },
+      {
+        "step": 3,
+        "removed_chunk": "Retrieved 3: direct_austen_bronte | Jane Eyre",
+        "remaining_chunks": 3,
+        "score": 0.875
+      },
+      {
+        "step": 4,
+        "removed_chunk": "Retrieved 4: redundant_orwell_huxley_distractor | Brave New World distractor",
+        "remaining_chunks": 2,
+        "score": 0.88
+      },
+      {
+        "step": 5,
+        "removed_chunk": "Retrieved 5: redundant_orwell_c | Orwell novel wording",
+        "remaining_chunks": 1,
+        "score": 0.0
+      },
+      {
+        "step": 6,
+        "removed_chunk": "Retrieved 6: missing_mars_orbit | Mars orbit",
+        "remaining_chunks": 0,
+        "score": 0.0
+      }
+    ],
+    "random_deletion_mean": [
+      {
+        "step": 0,
+        "score": 0.8599999999999995
+      },
+      {
+        "step": 1,
+        "score": 0.8950000000000011
+      },
+      {
+        "step": 2,
+        "score": 0.9254999999999999
+      },
+      {
+        "step": 3,
+        "score": 0.8936666666666678
+      },
+      {
+        "step": 4,
+        "score": 0.7541666666666667
+      },
+      {
+        "step": 5,
+        "score": 0.5481666666666666
+      },
+      {
+        "step": 6,
+        "score": 0.0
+      }
+    ]
+  },
+  "retrieval_debug": {
+    "query_intent": "narrow_factual",
+    "original_query": "Who wrote Nineteen Eighty-Four?",
+    "expanded_queries": [
+      "Who wrote Nineteen Eighty-Four?"
+    ],
+    "raw_dense_results": [
+      {
+        "rank": 1,
+        "source": "redundant_orwell_b | 1984 by Orwell",
+        "dense": 0.7282,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "Nineteen Eighty-Four is a dystopian novel by George Orwell."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "dense": 0.7132,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orwell_c | Orwell novel wording",
+        "dense": 0.596,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "The book 1984 belongs to the works of George Orwell."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "dense": 0.4796,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 5,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "dense": 0.4492,
+        "page": 3,
+        "type": "body_text",
+        "section": "english_novels",
+        "flags": "",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "dense": 0.4059,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 7,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "dense": 0.3833,
+        "page": 3,
+        "type": "body_text",
+        "section": "english_novels",
+        "flags": "",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "dense": 0.3712,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_london | London 2012",
+        "dense": 0.356,
+        "page": 1,
+        "type": "body_text",
+        "section": "olympics_2008",
+        "flags": "",
+        "preview": "London hosted the Summer Olympics in 2012, four years after the Beijing games."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "dense": 0.3467,
+        "page": 43,
+        "type": "body_text",
+        "section": "human_heart_chambers",
+        "flags": "",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 11,
+        "source": "comp_curie_family | Curie family",
+        "dense": 0.3382,
+        "page": 5,
+        "type": "body_text",
+        "section": "marie_curie_awards",
+        "flags": "",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "dense": 0.3373,
+        "page": 39,
+        "type": "body_text",
+        "section": "apollo_11_first_step",
+        "flags": "",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      }
+    ],
+    "raw_keyword_results": [
+      {
+        "rank": 1,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "keyword": 0.5976,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orwell_b | 1984 by Orwell",
+        "keyword": 0.4724,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "Nineteen Eighty-Four is a dystopian novel by George Orwell."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "keyword": 0.1317,
+        "page": 24,
+        "type": "body_text",
+        "section": "hamlet_authorship",
+        "flags": "",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "keyword": 0.098,
+        "page": 37,
+        "type": "body_text",
+        "section": "nineteen_eighty_four",
+        "flags": "",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 5,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "keyword": 0.0976,
+        "page": 3,
+        "type": "body_text",
+        "section": "english_novels",
+        "flags": "",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 6,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "keyword": 0.0907,
+        "page": 3,
+        "type": "body_text",
+        "section": "english_novels",
+        "flags": "",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 7,
+        "source": "missing_hubble_orbit | Telescope orbit distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Some observatories operate in Earth orbit rather than on the ground."
+      },
+      {
+        "rank": 8,
+        "source": "missing_magellan_circumnavigation | Circumnavigation distractor",
+        "keyword": 0.0,
+        "page": 50,
+        "type": "body_text",
+        "section": "early_voyages",
+        "flags": "",
+        "preview": "A circumnavigation is a voyage that travels all the way around the world."
+      },
+      {
+        "rank": 9,
+        "source": "missing_hubble_astronomy | Space telescope overview",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Space telescopes observe astronomical objects from above Earth's atmosphere."
+      },
+      {
+        "rank": 10,
+        "source": "missing_hubble_deep_field | Deep field distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "Deep field observations can reveal many distant galaxies in a small patch of sky."
+      },
+      {
+        "rank": 11,
+        "source": "missing_hubble_webb | Webb telescope distractor",
+        "keyword": 0.0,
+        "page": 49,
+        "type": "body_text",
+        "section": "space_telescope_notes",
+        "flags": "",
+        "preview": "The James Webb Space Telescope observes primarily in infrared wavelengths."
+      },
+      {
+        "rank": 12,
+        "source": "missing_pythagorean_angles | Triangle angles distractor",
+        "keyword": 0.0,
+        "page": 48,
+        "type": "body_text",
+        "section": "right_triangle_notes",
+        "flags": "",
+        "preview": "The three interior angles of a triangle sum to 180 degrees."
+      }
+    ],
+    "raw_rerank_order": [
+      {
+        "rank": 1,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.7132,
+        "keyword": 0.5976,
+        "rerank": 0.9063,
+        "section": "nineteen_eighty_four",
+        "query_hits": "eighty-four, nineteen, wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orwell_b | 1984 by Orwell",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.7282,
+        "keyword": 0.4724,
+        "rerank": 0.8271,
+        "section": "nineteen_eighty_four",
+        "query_hits": "eighty-four, nineteen",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Nineteen Eighty-Four is a dystopian novel by George Orwell."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orwell_c | Orwell novel wording",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.596,
+        "keyword": 0.0,
+        "rerank": 0.4097,
+        "section": "nineteen_eighty_four",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The book 1984 belongs to the works of George Orwell."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.4796,
+        "keyword": 0.098,
+        "rerank": 0.383,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 5,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.4492,
+        "keyword": 0.0907,
+        "rerank": 0.3517,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3712,
+        "keyword": 0.1317,
+        "rerank": 0.3013,
+        "section": "hamlet_authorship",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 7,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3833,
+        "keyword": 0.0976,
+        "rerank": 0.2951,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.4059,
+        "keyword": 0.0,
+        "rerank": 0.2367,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_london | London 2012",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.356,
+        "keyword": 0.0,
+        "rerank": 0.1913,
+        "section": "olympics_2008",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "London hosted the Summer Olympics in 2012, four years after the Beijing games."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.3467,
+        "keyword": 0.0,
+        "rerank": 0.1829,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 11,
+        "source": "comp_curie_family | Curie family",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3382,
+        "keyword": 0.0,
+        "rerank": 0.1751,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.3373,
+        "keyword": 0.0,
+        "rerank": 0.1743,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 13,
+        "source": "direct_gravity_newton | Newton and gravity",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3352,
+        "keyword": 0.0,
+        "rerank": 0.1723,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Isaac Newton described a universal law of gravitation for masses."
+      },
+      {
+        "rank": 14,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.3271,
+        "keyword": 0.0,
+        "rerank": 0.165,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 15,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3253,
+        "keyword": 0.0,
+        "rerank": 0.1634,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.325,
+        "keyword": 0.0,
+        "rerank": 0.1631,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.3228,
+        "keyword": 0.0,
+        "rerank": 0.1611,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 18,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3227,
+        "keyword": 0.0,
+        "rerank": 0.161,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.3204,
+        "keyword": 0.0,
+        "rerank": 0.1589,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.3202,
+        "keyword": 0.0,
+        "rerank": 0.1587,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 21,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3141,
+        "keyword": 0.0,
+        "rerank": 0.1532,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 22,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3099,
+        "keyword": 0.0,
+        "rerank": 0.1493,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 23,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3081,
+        "keyword": 0.0,
+        "rerank": 0.1477,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.3065,
+        "keyword": 0.0,
+        "rerank": 0.1463,
+        "section": "japan_currency",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      }
+    ],
+    "reranked_results": [
+      {
+        "rank": 1,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.7132,
+        "keyword": 0.5976,
+        "rerank": 0.9063,
+        "section": "nineteen_eighty_four",
+        "query_hits": "eighty-four, nineteen, wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orwell_b | 1984 by Orwell",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.7282,
+        "keyword": 0.4724,
+        "rerank": 0.8271,
+        "section": "nineteen_eighty_four",
+        "query_hits": "eighty-four, nineteen",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Nineteen Eighty-Four is a dystopian novel by George Orwell."
+      },
+      {
+        "rank": 3,
+        "source": "redundant_orwell_c | Orwell novel wording",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.596,
+        "keyword": 0.0,
+        "rerank": 0.4097,
+        "section": "nineteen_eighty_four",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The book 1984 belongs to the works of George Orwell."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.4796,
+        "keyword": 0.098,
+        "rerank": 0.383,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 5,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.4492,
+        "keyword": 0.0907,
+        "rerank": 0.3517,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 6,
+        "source": "redundant_hamlet_a | Hamlet author direct",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3712,
+        "keyword": 0.1317,
+        "rerank": 0.3013,
+        "section": "hamlet_authorship",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "William Shakespeare wrote the tragedy Hamlet."
+      },
+      {
+        "rank": 7,
+        "source": "direct_austen_evidence | Pride and Prejudice authorship",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.3833,
+        "keyword": 0.0976,
+        "rerank": 0.2951,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Jane Austen wrote the novel Pride and Prejudice, first published in 1813."
+      },
+      {
+        "rank": 8,
+        "source": "redundant_hamlet_b | Hamlet by Shakespeare",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.4059,
+        "keyword": 0.0,
+        "rerank": 0.2367,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Hamlet is a play authored by William Shakespeare."
+      },
+      {
+        "rank": 9,
+        "source": "direct_olympics_london | London 2012",
+        "page": 1,
+        "type": "body_text",
+        "dense": 0.356,
+        "keyword": 0.0,
+        "rerank": 0.1913,
+        "section": "olympics_2008",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "London hosted the Summer Olympics in 2012, four years after the Beijing games."
+      },
+      {
+        "rank": 10,
+        "source": "conflict_heart_chambers_four | Heart chambers correct",
+        "page": 43,
+        "type": "body_text",
+        "dense": 0.3467,
+        "keyword": 0.0,
+        "rerank": 0.1829,
+        "section": "human_heart_chambers",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The human heart has four chambers."
+      },
+      {
+        "rank": 11,
+        "source": "comp_curie_family | Curie family",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3382,
+        "keyword": 0.0,
+        "rerank": 0.1751,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Pierre Curie was Marie Curie's husband and a collaborator in radioactivity research."
+      },
+      {
+        "rank": 12,
+        "source": "redundant_neil_aldrin_distractor | Buzz Aldrin distractor",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.3373,
+        "keyword": 0.0,
+        "rerank": 0.1743,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Buzz Aldrin also walked on the Moon during Apollo 11, shortly after Armstrong."
+      },
+      {
+        "rank": 13,
+        "source": "direct_gravity_newton | Newton and gravity",
+        "page": 28,
+        "type": "body_text",
+        "dense": 0.3352,
+        "keyword": 0.0,
+        "rerank": 0.1723,
+        "section": "gravity_basics",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Isaac Newton described a universal law of gravitation for masses."
+      },
+      {
+        "rank": 14,
+        "source": "comp_inner_mars | Mars is an inner rocky planet",
+        "page": 21,
+        "type": "body_text",
+        "dense": 0.3271,
+        "keyword": 0.0,
+        "rerank": 0.165,
+        "section": "inner_planets",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth inner rocky planet and orbits beyond Earth."
+      },
+      {
+        "rank": 15,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3253,
+        "keyword": 0.0,
+        "rerank": 0.1634,
+        "section": "mars_overview",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      },
+      {
+        "rank": 16,
+        "source": "redundant_neil_b | Apollo 11 first moonwalker",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.325,
+        "keyword": 0.0,
+        "rerank": 0.1631,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "During Apollo 11, Neil Armstrong became the first human to step onto the lunar surface."
+      },
+      {
+        "rank": 17,
+        "source": "redundant_neil_c | First lunar surface wording",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.3228,
+        "keyword": 0.0,
+        "rerank": 0.1611,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The first Moon walk was made by Neil Armstrong."
+      },
+      {
+        "rank": 18,
+        "source": "comp_curie_chemistry | 1911 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3227,
+        "keyword": 0.0,
+        "rerank": 0.161,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie received the 1911 Nobel Prize in Chemistry for work on radium and polonium."
+      },
+      {
+        "rank": 19,
+        "source": "redundant_neil_a | Armstrong first step",
+        "page": 39,
+        "type": "body_text",
+        "dense": 0.3204,
+        "keyword": 0.0,
+        "rerank": 0.1589,
+        "section": "apollo_11_first_step",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Neil Armstrong was the first person to walk on the Moon."
+      },
+      {
+        "rank": 20,
+        "source": "conflict_solar_jupiter | Solar system centre Jupiter conflict",
+        "page": 27,
+        "type": "body_text",
+        "dense": 0.3202,
+        "keyword": 0.0,
+        "rerank": 0.1587,
+        "section": "solar_system_center",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A wrong summary claims Jupiter is the centre of the Solar System."
+      },
+      {
+        "rank": 21,
+        "source": "comp_curie_physics | 1903 Nobel Prize",
+        "page": 5,
+        "type": "body_text",
+        "dense": 0.3141,
+        "keyword": 0.0,
+        "rerank": 0.1532,
+        "section": "marie_curie_awards",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Marie Curie shared the 1903 Nobel Prize in Physics for research on radiation phenomena."
+      },
+      {
+        "rank": 22,
+        "source": "conflict_earth_planet | Closest planet Earth conflict",
+        "page": 41,
+        "type": "body_text",
+        "dense": 0.3099,
+        "keyword": 0.0,
+        "rerank": 0.1493,
+        "section": "closest_planet_sun",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "A false summary claims Earth is the closest planet to the Sun."
+      },
+      {
+        "rank": 23,
+        "source": "redundant_hamlet_c | Shakespearean tragedy",
+        "page": 24,
+        "type": "body_text",
+        "dense": 0.3081,
+        "keyword": 0.0,
+        "rerank": 0.1477,
+        "section": "hamlet_authorship",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The tragedy of Hamlet belongs to the works of Shakespeare."
+      },
+      {
+        "rank": 24,
+        "source": "conflict_japan_won | Japan currency won conflict",
+        "page": 25,
+        "type": "body_text",
+        "dense": 0.3065,
+        "keyword": 0.0,
+        "rerank": 0.1463,
+        "section": "japan_currency",
+        "query_hits": "",
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Another incorrect summary claims Japan uses the won."
+      }
+    ],
+    "selected_context": [
+      {
+        "rank": 1,
+        "source": "redundant_orwell_a | 1984 author direct",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.7132,
+        "keyword": 0.5976,
+        "rerank": 0.9063,
+        "section": "nineteen_eighty_four",
+        "query_hits": "eighty-four, nineteen, wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 1.0,
+        "novelty": 1.0,
+        "concept_coverage": 1.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 1.14,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "George Orwell wrote the novel Nineteen Eighty-Four."
+      },
+      {
+        "rank": 2,
+        "source": "redundant_orwell_b | 1984 by Orwell",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.7282,
+        "keyword": 0.4724,
+        "rerank": 0.8271,
+        "section": "nineteen_eighty_four",
+        "query_hits": "eighty-four, nineteen",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.9145,
+        "novelty": 0.3,
+        "concept_coverage": 0.6667,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.9285,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Nineteen Eighty-Four is a dystopian novel by George Orwell."
+      },
+      {
+        "rank": 3,
+        "source": "direct_austen_bronte | Jane Eyre",
+        "page": 3,
+        "type": "body_text",
+        "dense": 0.4492,
+        "keyword": 0.0907,
+        "rerank": 0.3517,
+        "section": "english_novels",
+        "query_hits": "wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4012,
+        "novelty": 0.7214,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.5061,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Charlotte Bronte wrote Jane Eyre, another nineteenth-century English novel."
+      },
+      {
+        "rank": 4,
+        "source": "redundant_orwell_huxley_distractor | Brave New World distractor",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.4796,
+        "keyword": 0.098,
+        "rerank": 0.383,
+        "section": "nineteen_eighty_four",
+        "query_hits": "wrote",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.435,
+        "novelty": 0.44,
+        "concept_coverage": 0.3333,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4957,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Aldous Huxley wrote Brave New World, another dystopian novel."
+      },
+      {
+        "rank": 5,
+        "source": "redundant_orwell_c | Orwell novel wording",
+        "page": 37,
+        "type": "body_text",
+        "dense": 0.596,
+        "keyword": 0.0,
+        "rerank": 0.4097,
+        "section": "nineteen_eighty_four",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.4639,
+        "novelty": 0.4231,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.02,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4782,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "The book 1984 belongs to the works of George Orwell."
+      },
+      {
+        "rank": 6,
+        "source": "missing_mars_orbit | Mars orbit",
+        "page": 10,
+        "type": "body_text",
+        "dense": 0.3253,
+        "keyword": 0.0,
+        "rerank": 0.1634,
+        "section": "mars_overview",
+        "query_hits": "",
+        "selection_reason": "included by relevance score",
+        "query_intent": "narrow_factual",
+        "lambda": 0.86,
+        "relevance": 0.1979,
+        "novelty": 0.7725,
+        "concept_coverage": 0.0,
+        "quality_bonus": 0.18,
+        "narrow_subsection_penalty": 0.0,
+        "final_selection_score": 0.4584,
+        "reasons": "body/table evidence; downweighted: short chunk",
+        "preview": "Mars is the fourth planet from the Sun and follows an orbit outside Earth's."
+      }
+    ],
+    "coverage_summary": {
+      "query_terms": [
+        "eighty-four",
+        "nineteen",
+        "wrote"
+      ],
+      "covered_query_terms": [
+        "eighty-four",
+        "nineteen",
+        "wrote"
+      ],
+      "missing_query_terms": [],
+      "terms_by_chunk": {
+        "redundant_orwell_a | 1984 author direct": [
+          "eighty-four",
+          "nineteen",
+          "wrote"
+        ],
+        "redundant_orwell_b | 1984 by Orwell": [
+          "eighty-four",
+          "nineteen"
+        ],
+        "direct_austen_bronte | Jane Eyre": [
+          "wrote"
+        ],
+        "redundant_orwell_huxley_distractor | Brave New World distractor": [
+          "wrote"
+        ]
+      },
+      "section_titles": [
+        "english_novels",
+        "mars_overview",
+        "nineteen_eighty_four"
+      ],
+      "chunks_by_section": {
+        "nineteen_eighty_four": [
+          "redundant_orwell_a | 1984 author direct",
+          "redundant_orwell_b | 1984 by Orwell",
+          "redundant_orwell_huxley_distractor | Brave New World distractor",
+          "redundant_orwell_c | Orwell novel wording"
+        ],
+        "english_novels": [
+          "direct_austen_bronte | Jane Eyre"
+        ],
+        "mars_overview": [
+          "missing_mars_orbit | Mars orbit"
+        ]
+      },
+      "chunk_types": {
+        "body_text": 6
+      }
+    }
+  },
+  "generation": {}
+}

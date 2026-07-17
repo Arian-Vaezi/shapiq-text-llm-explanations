@@ -1,6 +1,6 @@
 """
 SVARMIQ
-=======
+========
 
 Stratified Monte Carlo with coalition-size and intersection stratification
 using :class:`~shapiq.SVARMIQ` :footcite:t:`Kolpaczki.2024a`.
