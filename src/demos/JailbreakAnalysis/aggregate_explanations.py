@@ -17,7 +17,7 @@ SUMMARY_ASR_PATH = RESULTS_DIR / "summary_asr.json"
 OUTPUT_PATH = RESULTS_DIR / "summary_asr_with_explanations.json"
 
 
-def main() -> None:
+def main():  # noqa: ANN201
     if not SUMMARY_ASR_PATH.exists():
         print(f"Error: {SUMMARY_ASR_PATH} does not exist.")
         return
@@ -59,7 +59,7 @@ def main() -> None:
                     "all_interactions": data.get("all_interactions"),
                     "top_interaction_pairs": data.get("top_interaction_pairs"),
                 }
-            except Exception as e:  # noqa: BLE001 - one malformed file must not sink the aggregation
+            except Exception as e:  # noqa: BLE001
                 print(f"Failed to read explanation file {file_path}: {e}")
 
     print(f"Loaded {len(explanations)} explanations from {INTERACTIONS_DIR}")

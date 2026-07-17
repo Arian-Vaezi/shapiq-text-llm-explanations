@@ -1070,6 +1070,7 @@ elif page == "🧩 Explanation Explorer":
                 st.pyplot(fig)
                 plt.close(fig)
         except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
+        except Exception as e:  # noqa: BLE001
             st.error(f"Sentence plot error: {e}")
 
     with tab2:
@@ -1086,6 +1087,7 @@ elif page == "🧩 Explanation Explorer":
                 st.pyplot(fig)
                 plt.close(fig)
         except Exception as e:  # noqa: BLE001 - a failed plot must not crash the app
+        except Exception as e:  # noqa: BLE001
             st.error(f"Heatmap error: {e}")
 
     with tab3:
